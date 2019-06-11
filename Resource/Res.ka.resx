@@ -1,0 +1,3001 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActivateDate" xml:space="preserve">
+    <value>გააქტიურების თარიღი</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>აქტიური</value>
+  </data>
+  <data name="ActualVatAmount" xml:space="preserve">
+    <value>დღგ-ს ფაქტობრივი თანხა</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>დამატება</value>
+  </data>
+  <data name="AddonConnectedSuccesfully" xml:space="preserve">
+    <value>დაკავშირება წარმატებით განხორციელდა! დაელოდეთ AddOn-ის ჩატვირთვას!</value>
+  </data>
+  <data name="AddonLoadingSuccesfully" xml:space="preserve">
+    <value>AddOn-ის ჩატვირთვა წარმატებით განხორციელდა!</value>
+  </data>
+  <data name="AddressSection" xml:space="preserve">
+    <value>სამისამართო განყოფილება</value>
+  </data>
+  <data name="AmntAfterCorrection" xml:space="preserve">
+    <value>თანხა კორექტირების შემდეგ</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>თანხა</value>
+  </data>
+  <data name="AmountAfterCorrection" xml:space="preserve">
+    <value>თანხა კორექტირების შემდეგ</value>
+  </data>
+  <data name="AmountWithoutVAT" xml:space="preserve">
+    <value>თანხა დღგ-ის გარეშე</value>
+  </data>
+  <data name="AmountWithVat" xml:space="preserve">
+    <value>თანხა დღგ-ის ჩათვლით</value>
+  </data>
+  <data name="AmountСorrection" xml:space="preserve">
+    <value>თანხის კორექტირება</value>
+  </data>
+  <data name="And" xml:space="preserve">
+    <value>და</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>აპრილი</value>
+  </data>
+  <data name="ARCreditMemo" xml:space="preserve">
+    <value>რეალიზაციის კორექტირება</value>
+  </data>
+  <data name="ARInvoice" xml:space="preserve">
+    <value>რეალიზაცია</value>
+  </data>
+  <data name="Article" xml:space="preserve">
+    <value>არტიკული</value>
+  </data>
+  <data name="AttachedToTheDeclaration" xml:space="preserve">
+    <value>დეკლარაციაზე მიბმა</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>აგვისტო</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>საავტომობილო</value>
+  </data>
+  <data name="AutoOtherCountry" xml:space="preserve">
+    <value>საავტომობილო - უცხო ქვეყნის</value>
+  </data>
+  <data name="AutoTransporter" xml:space="preserve">
+    <value>გადამზიდავი - საავტომობილო</value>
+  </data>
+  <data name="Aviation" xml:space="preserve">
+    <value>საავიაციო</value>
+  </data>
+  <data name="Barcode" xml:space="preserve">
+    <value>შტრიხკოდი</value>
+  </data>
+  <data name="BaseDocument" xml:space="preserve">
+    <value>საფუძველი დოკუმენტი</value>
+  </data>
+  <data name="BaseDocumentType" xml:space="preserve">
+    <value>საფუძველი დოკუმენტს ტიპი</value>
+  </data>
+  <data name="BPCardCode" xml:space="preserve">
+    <value>BP კოდი</value>
+  </data>
+  <data name="BPCatalogueDescription" xml:space="preserve">
+    <value>ბიზნეს პარტნიორების კატალოგის განმარტება</value>
+  </data>
+  <data name="BPControledOnRSLinkWaybillDocument" xml:space="preserve">
+    <value>ბიზნეს პარტნიორზე ჩართულია კონტროლი RS მონაცემების მიხედვით, მიამაგრეთ დოკუმენტს ზედნადები!</value>
+  </data>
+  <data name="BPName" xml:space="preserve">
+    <value>BP სახელი</value>
+  </data>
+  <data name="BPNotFound" xml:space="preserve">
+    <value>ბიზნესპარტნიორი არ მოიძებნა!</value>
+  </data>
+  <data name="BPTin" xml:space="preserve">
+    <value>BP გსნ</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>მარკა</value>
+  </data>
+  <data name="Buyer" xml:space="preserve">
+    <value>მყიდველი</value>
+  </data>
+  <data name="ByOrganization" xml:space="preserve">
+    <value>ორგანიზაციის მიხედვით</value>
+  </data>
+  <data name="ByUser" xml:space="preserve">
+    <value>მომხმარებლის მიხედვით</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>გაუქმებული</value>
+  </data>
+  <data name="CanceledTaxOperation" xml:space="preserve">
+    <value>გაუქმებულია დასაბეგრი ოპერაცია</value>
+  </data>
+  <data name="CancellationProcess" xml:space="preserve">
+    <value>გაუქმების პროცესში</value>
+  </data>
+  <data name="CancelLinkTaxInvoice" xml:space="preserve">
+    <value>ა/ფ-ის ბმის გაუქმება</value>
+  </data>
+  <data name="CannotActivateWaybillWithAutoTransporter" xml:space="preserve">
+    <value>ზედნადების ტრანსპორტირების ტიპით "გადამზიდი საავტომობილო" გააქტიურება შეუძლებელია!</value>
+  </data>
+  <data name="CannotBeEarlierThan" xml:space="preserve">
+    <value>არ შეიძლება იყოს ნაკლები ვიდრე</value>
+  </data>
+  <data name="CannotFindVATCodeDocumentNotCreated" xml:space="preserve">
+    <value>ვერ მოიძებნა შესაბამისი დღგ-ის კოდი,ზედნადებზე დოკუმენტი არ გაფორმდება</value>
+  </data>
+  <data name="CannotObtainUIDBy" xml:space="preserve">
+    <value>ვერ მოხერხდა გადამხდელის უნიკალური ნომრის მიღება საიდენტიფიკაციო კოდით :</value>
+  </data>
+  <data name="CanNotReceiveNotLinkedTaxInvoice" xml:space="preserve">
+    <value>არ შეიძლება მიუბმელი ფაქტურის ჩათვლა</value>
+  </data>
+  <data name="CantDeleteGoodsInTaxInvoice" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურაში ვერ მოხერხდა პოზიციის წაშლა საქონლისთვის : "</value>
+  </data>
+  <data name="CantDeleteWBInTaxInvoice" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურაში ვერ მოხერხდა პოზიციის წაშლა ზედნადებისთვის № : "</value>
+  </data>
+  <data name="CantFixGoodsItemInTaxInvoice" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურაში ვერ მოხერხდა პოზიციის დაფიქსირება საქონლისთვის : "</value>
+  </data>
+  <data name="CantFixWBInTaxInvoice" xml:space="preserve">
+    <value>ვერ მოხერხდა სასაქონლო ზედნადების დაფიქსირება ანგარიშ-ფაქტურაში! ზედნადების ნომერი :</value>
+  </data>
+  <data name="CantReceiveDeclarationDate" xml:space="preserve">
+    <value>ვერ მოხერხდა დეკლარაციის ნომრის მიღება </value>
+  </data>
+  <data name="ChangedAgreementAmountPricesDecrease" xml:space="preserve">
+    <value>ფასების შემცირების ან სხვა მიზეზით შეცვლილია ოპერაციაზე ადრე შეთანხმებული კომპენსაციის თანხა</value>
+  </data>
+  <data name="ChangedTaxOperationType" xml:space="preserve">
+    <value>შეცვლილია დასაბეგრი ოპერაციის სახე</value>
+  </data>
+  <data name="ChooseTaxInvoice" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის არჩევა</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>დახურვა</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>კოდი</value>
+  </data>
+  <data name="Commandite" xml:space="preserve">
+    <value>კომანდიტური საზოგადოება</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>კომენტარი</value>
+  </data>
+  <data name="ConfirmationDate" xml:space="preserve">
+    <value>დადასტურებ. თარიღი</value>
+  </data>
+  <data name="ConfirmationInfoID" xml:space="preserve">
+    <value>დადასტურების ინფორმაცია (ID)</value>
+  </data>
+  <data name="ConfirmationInfoName" xml:space="preserve">
+    <value>დადასტურების ინფორმაცია (სახელი)</value>
+  </data>
+  <data name="ConfirmationPerson" xml:space="preserve">
+    <value>დამდასტურებელი პირი</value>
+  </data>
+  <data name="Confirmed" xml:space="preserve">
+    <value>დადასტურებული</value>
+  </data>
+  <data name="ConfirmedCorrected" xml:space="preserve">
+    <value>დადასტურებული კორექტირებული</value>
+  </data>
+  <data name="ControlPositionsAmount" xml:space="preserve">
+    <value>პოზიციების მიხედვით</value>
+  </data>
+  <data name="ControlTotalAmount" xml:space="preserve">
+    <value>მთლიანი თანხის მიხედვით</value>
+  </data>
+  <data name="Cooperative" xml:space="preserve">
+    <value>კოოპერატივი</value>
+  </data>
+  <data name="Corrected" xml:space="preserve">
+    <value>კორექტირებული</value>
+  </data>
+  <data name="CorrectedTaxInvoice" xml:space="preserve">
+    <value>დაკორექტირებული ა/ფ</value>
+  </data>
+  <data name="CorrectedTaxInvoiceData" xml:space="preserve">
+    <value>კორექტირებული ფაქტურის მონაცემები</value>
+  </data>
+  <data name="Correction" xml:space="preserve">
+    <value>კორექტირება</value>
+  </data>
+  <data name="CorrectionAmount" xml:space="preserve">
+    <value>კორექტირების თანხა</value>
+  </data>
+  <data name="CorrectionConfirmed" xml:space="preserve">
+    <value>კორექტირება დადასტურებული</value>
+  </data>
+  <data name="CorrectionDenied" xml:space="preserve">
+    <value>კორექტირება უარყოფილი</value>
+  </data>
+  <data name="CorrectionDocument" xml:space="preserve">
+    <value>კორექტირების დოკუმენტი</value>
+  </data>
+  <data name="CorrectionDocumentID" xml:space="preserve">
+    <value>კორექტირების დოკუმენტის ID</value>
+  </data>
+  <data name="CorrectionReasonNotIndicated" xml:space="preserve">
+    <value>არ არის შევსებული კორექტირების მიზეზი!</value>
+  </data>
+  <data name="CorrectionReceived" xml:space="preserve">
+    <value>კორექტირება მიღებული</value>
+  </data>
+  <data name="CorrectionTaxAmount" xml:space="preserve">
+    <value>კორექტირებული გადასახადის თანხა</value>
+  </data>
+  <data name="CorrectionType" xml:space="preserve">
+    <value>კორექტირების ტიპი</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>შექმნილი</value>
+  </data>
+  <data name="CreateDate" xml:space="preserve">
+    <value>შექმნის თარიღი</value>
+  </data>
+  <data name="CreatedCorrected" xml:space="preserve">
+    <value>შექმნილი კორექტირებული</value>
+  </data>
+  <data name="CreatedDocumentBasedOnWaybill" xml:space="preserve">
+    <value>ზედნადების საფუძველზე შეიქმნა დოკუმენტი</value>
+  </data>
+  <data name="CreatedIncompletely" xml:space="preserve">
+    <value>არასრულად შექმნილი</value>
+  </data>
+  <data name="CreateDocument" xml:space="preserve">
+    <value>დოკუმენტების გაფორმება</value>
+  </data>
+  <data name="CreateNotSucceededSellerWoutVAT" xml:space="preserve">
+    <value>ოპერაცია "შექმნა" წარუმატებლად დასრულდა! შესაძლოა მყიდველი არ არის დღგ-ის გადამხდელი!</value>
+  </data>
+  <data name="CreateTaxInvoice" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის შექმნა</value>
+  </data>
+  <data name="CreateTaxInvoiceAllowedOnlyForReturnType" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის გამოწერა შესაძლებელია მხოლოდ დაბრუნების ტიპის დოკუმენტზე!</value>
+  </data>
+  <data name="CreateWaybill" xml:space="preserve">
+    <value>ზედნადების შექმნა</value>
+  </data>
+  <data name="CreateWaybillAllowedBasedOnlyOtherDocument" xml:space="preserve">
+    <value>ზედნადების დოკუმენტის გაფორმება შესაძლებელია მხოლოდ სხვა დოკუმენტის საფუძველზე!</value>
+  </data>
+  <data name="CreateWaybillAllowedOnlyForReturnType" xml:space="preserve">
+    <value>ზედნადების გამოწერა შესაძლებელია მხოლოდ დაბრუნების ტიპის დოკუმენტზე!</value>
+  </data>
+  <data name="Creator" xml:space="preserve">
+    <value>ავტორი</value>
+  </data>
+  <data name="CreditNoteType" xml:space="preserve">
+    <value>დაბრუნების ტიპი</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>ვალუტა</value>
+  </data>
+  <data name="CurrencyCode" xml:space="preserve">
+    <value>ვალუტის კოდი</value>
+  </data>
+  <data name="DataAfterCorrection" xml:space="preserve">
+    <value>მონაცემები კორექტირების შემდეგ</value>
+  </data>
+  <data name="DataForRS" xml:space="preserve">
+    <value>საგადასახადო სამსახური</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>თარიღი</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>დეკემბერი</value>
+  </data>
+  <data name="Declaration" xml:space="preserve">
+    <value>დეკლარაცია</value>
+  </data>
+  <data name="DeclarationDate" xml:space="preserve">
+    <value>დეკლარაციის თვე</value>
+  </data>
+  <data name="DeclarationNumber" xml:space="preserve">
+    <value>დეკლარაციის ნომერი</value>
+  </data>
+  <data name="DeclarationStatus" xml:space="preserve">
+    <value>დეკლარაციის სტატუსი</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>წაშლა</value>
+  </data>
+  <data name="deleted" xml:space="preserve">
+    <value>წაშლილი</value>
+  </data>
+  <data name="DeliveryDate" xml:space="preserve">
+    <value>მიწოდების თარიღი</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>უარყოფილი</value>
+  </data>
+  <data name="DocEntry" xml:space="preserve">
+    <value>დოკუმენტი</value>
+  </data>
+  <data name="DocNum" xml:space="preserve">
+    <value>ნომერი</value>
+  </data>
+  <data name="Document" xml:space="preserve">
+    <value>დოკუმენტი</value>
+  </data>
+  <data name="DocumentLinkedToTaxInvoice" xml:space="preserve">
+    <value>დოკუმენტზე უკვე მიბმულია ფაქტურა!</value>
+  </data>
+  <data name="DocumentLinkedToTaxInvoiceCancel" xml:space="preserve">
+    <value>დოკუმენტზე უკვე მიბმულია ფაქტურა! გაუქმდეს ბმა?</value>
+  </data>
+  <data name="DocumentLinkedToWaybill" xml:space="preserve">
+    <value>დოკუმენტზე უკვე მიბმულია ზედნადები!</value>
+  </data>
+  <data name="DocumentLinkedToWaybillCancel" xml:space="preserve">
+    <value>დოკუმენტზე მიბმულია ზედნადები! გსურთ გაუქმდეს ბმა?</value>
+  </data>
+  <data name="DocumentStatusMustBe" xml:space="preserve">
+    <value>დოკუმენტის სტატუსი უნდა იყოს</value>
+  </data>
+  <data name="DocumentStatusMustBeOpen" xml:space="preserve">
+    <value>დოკუმენტის სტატუსი უნდა იყოს "ღია"!</value>
+  </data>
+  <data name="DocumentType" xml:space="preserve">
+    <value>დოკუმენტის ტიპი</value>
+  </data>
+  <data name="DocumentTypeMustBeItem" xml:space="preserve">
+    <value>დოკუმენტის ტიპი უნდა იყოს "საქონელი"!</value>
+  </data>
+  <data name="DoneSuccessfully" xml:space="preserve">
+    <value>წარმატებით დასრულდა!</value>
+  </data>
+  <data name="DoneWithErrors" xml:space="preserve">
+    <value>წარუმატებლად დასრულდა!</value>
+  </data>
+  <data name="DoNotNeedSendWaybill" xml:space="preserve">
+    <value>ზედნადების გაგზავნა არ არის საჭირო</value>
+  </data>
+  <data name="DoYouWantForDocuementsExecute" xml:space="preserve">
+    <value>განახლდეს ბაზაში არსებული დოკუმენტები</value>
+  </data>
+  <data name="DoYouWantTaxInvoiceWithReturn" xml:space="preserve">
+    <value>გსურთ შეიქმნას ერთიანი ფაქტურები რეალიზაციის საფუძველზე შექმნილი კორექტირებების გათვალისწინებით?</value>
+  </data>
+  <data name="Driver" xml:space="preserve">
+    <value>მძღოლი</value>
+  </data>
+  <data name="DriverCode" xml:space="preserve">
+    <value>მძღოლი</value>
+  </data>
+  <data name="DriverMasterData" xml:space="preserve">
+    <value>მძღოლების ცნობარი</value>
+  </data>
+  <data name="DriverNotResident" xml:space="preserve">
+    <value>მძღოლი არ არის რეზიდენტი</value>
+  </data>
+  <data name="DriverTin" xml:space="preserve">
+    <value>მძღოლის პირადი ნომერი</value>
+  </data>
+  <data name="ElectricTaxInvoice" xml:space="preserve">
+    <value>ელექტრონული ა/ფ</value>
+  </data>
+  <data name="Electronic" xml:space="preserve">
+    <value>ელექტრონული</value>
+  </data>
+  <data name="EmptyStatus" xml:space="preserve">
+    <value>ცარიელი სტატუსი</value>
+  </data>
+  <data name="EndAddress" xml:space="preserve">
+    <value>მიწოდების მისამართი</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>დასრულების თარიღი</value>
+  </data>
+  <data name="EnterStartEndDates" xml:space="preserve">
+    <value>შეიყვანეთ საწყისი და საბოლოო თარიღები</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>შეცდომა</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>შეცდომის განმარტება</value>
+  </data>
+  <data name="ErrorOfCurrencyList" xml:space="preserve">
+    <value>შეცდომა მოხდა ვალუტის სიის აღებისას!</value>
+  </data>
+  <data name="ErrorOfDocumentAdd" xml:space="preserve">
+    <value>შეცდომა მოხდა დოკუმენტის დამატებისას!</value>
+  </data>
+  <data name="ErrorOfFieldAdd" xml:space="preserve">
+    <value>შეცდომა მოხდა ველის დამატებისას!</value>
+  </data>
+  <data name="ErrorOfFormAdd" xml:space="preserve">
+    <value>შეცდომა მოხდა ფორმის დამატებისას!</value>
+  </data>
+  <data name="ErrorOfFormItemAdd" xml:space="preserve">
+    <value>შეცდომა მოხდა ფორმაზე ელემენტის დამატებისას!</value>
+  </data>
+  <data name="ErrorOfMainCurrency" xml:space="preserve">
+    <value>შეცდომა მოხდა მთავარი ვალუტის აღებისას!</value>
+  </data>
+  <data name="ErrorOfRSSettings" xml:space="preserve">
+    <value>შეცდომა მოხდა RS-ის აწყობების აღებისას!</value>
+  </data>
+  <data name="ErrorOfTableAdd" xml:space="preserve">
+    <value>შეცდომა მოხდა ცხრილის დამატებისას!</value>
+  </data>
+  <data name="ErrorOfValueAdd" xml:space="preserve">
+    <value>შეცდომა მოხდა მნიშვნელობის დამატებისას!</value>
+  </data>
+  <data name="ErrorWhileDocumentEdit" xml:space="preserve">
+    <value>შეცდომა დოკუმენტის რედაქტირებისას!</value>
+  </data>
+  <data name="ErrorWhileImportRateServiceCall" xml:space="preserve">
+    <value>შეცდომა მოხდა კურსების ჩამოტვირთვის სერვისის გამოძახებისას!</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>თებერვალი</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>შევსება</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>შერჩევა</value>
+  </data>
+  <data name="finished" xml:space="preserve">
+    <value>დასრულებული</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>სახელი</value>
+  </data>
+  <data name="ForCorrection" xml:space="preserve">
+    <value>დასაკორექტირებლად</value>
+  </data>
+  <data name="ForeignEnterpriseBranch" xml:space="preserve">
+    <value>უცხოური საწარმოს ფილიალი</value>
+  </data>
+  <data name="ForeignEnterpriseLegalEntity" xml:space="preserve">
+    <value>უცხოური საწარმო - იურიდიული პირი</value>
+  </data>
+  <data name="ForeignEnterprisePhysicalEntity" xml:space="preserve">
+    <value>უცხოური საწარმო - ფიზიკური პირი</value>
+  </data>
+  <data name="Form" xml:space="preserve">
+    <value>ფორმა</value>
+  </data>
+  <data name="FormError" xml:space="preserve">
+    <value>ფორმის შეცდომა</value>
+  </data>
+  <data name="FormItem" xml:space="preserve">
+    <value>ფორმის ელემენტი</value>
+  </data>
+  <data name="ForPasswordSetChooseServiceUser" xml:space="preserve">
+    <value>პაროლის დასანიშნად ჯერ აირჩიეთ სერვის მომხმარებელი!</value>
+  </data>
+  <data name="ForStatusUpdateFillID" xml:space="preserve">
+    <value>სტატუსების განახლებისთვის აუცილებელია ID - ის შევსება!</value>
+  </data>
+  <data name="GoodsTableNotMatchedESTable" xml:space="preserve">
+    <value>საქონლის ცხრილი არ შეესაბამება RS-ზე ზედნადების ცხრილს</value>
+  </data>
+  <data name="GovernmentBody" xml:space="preserve">
+    <value>სახელმწიფო ორგანო</value>
+  </data>
+  <data name="ImportRate" xml:space="preserve">
+    <value>კურსების ჩამოტვირთვა</value>
+  </data>
+  <data name="IncompleteReceived" xml:space="preserve">
+    <value>არასრულად მიღებული</value>
+  </data>
+  <data name="IndicateType" xml:space="preserve">
+    <value>მიუთითეთ ტიპი</value>
+  </data>
+  <data name="IndividualEnterpreneur" xml:space="preserve">
+    <value>ინდივიდუალური მეწარმე</value>
+  </data>
+  <data name="IndividualLinkAllowdOnlyFromDocumentForm" xml:space="preserve">
+    <value>ინდივიდუალური მიმაგრება შესაძლებელია მხოლოდ დოკუმენტის ფორმიდან</value>
+  </data>
+  <data name="InventoryTransfer" xml:space="preserve">
+    <value>მარაგის გადაადგილება</value>
+  </data>
+  <data name="TaxInvoiceIsAlreadyCreatedBasedOnARCreditNote" xml:space="preserve">
+    <value>კორექტირების დოკუმენტზე უკვე გამოწერილია ა/ფ</value>
+  </data>
+  <data name="InvoiceNumber" xml:space="preserve">
+    <value>ინვოისის ნომერი</value>
+  </data>
+  <data name="ItemCode" xml:space="preserve">
+    <value>საქონლის კოდი</value>
+  </data>
+  <data name="ItemCodeForWaybill" xml:space="preserve">
+    <value>საქონლის კოდი ზედნადებისთვის</value>
+  </data>
+  <data name="ItemMappingControl" xml:space="preserve">
+    <value>საქონლის შესაბამისობის კონტროლი</value>
+  </data>
+  <data name="ItemName" xml:space="preserve">
+    <value>საქონლის დასახელება</value>
+  </data>
+  <data name="ItemsAreCorrected" xml:space="preserve">
+    <value>ნომენკლატურები სრულად დაკორექტირდა</value>
+  </data>
+  <data name="ItemSearchParameter" xml:space="preserve">
+    <value>საქონლის ძიების პარამეტრი</value>
+  </data>
+  <data name="ItemServiceReturnedToSeller" xml:space="preserve">
+    <value>საქონელი (მომსახურება) სრულად ან ნაწილობრივ უბრუნდება გამყიდველს</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>იანვარი</value>
+  </data>
+  <data name="JLC" xml:space="preserve">
+    <value>სოლიდარული პასუხისმგებლობის საზოგადოება</value>
+  </data>
+  <data name="JSC" xml:space="preserve">
+    <value>სააქციო საზოგადოება</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>ივლისი</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>ივნისი</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>გვარი</value>
+  </data>
+  <data name="LEPL" xml:space="preserve">
+    <value>საჯარო სამართლის იურიდიული პირი</value>
+  </data>
+  <data name="Linked" xml:space="preserve">
+    <value>მიბმული</value>
+  </data>
+  <data name="LinkedPartial" xml:space="preserve">
+    <value>ნაწილობრივ მიბმული</value>
+  </data>
+  <data name="LinkStatus" xml:space="preserve">
+    <value>მიბმის სტატუსი</value>
+  </data>
+  <data name="LinkToDocument" xml:space="preserve">
+    <value>დოკუმენტთან მიბმა</value>
+  </data>
+  <data name="LinkWaybill" xml:space="preserve">
+    <value>მიებას ზედნადები</value>
+  </data>
+  <data name="LTD" xml:space="preserve">
+    <value>შეზღუდული პასუხისმგებლობის საზოგადოება</value>
+  </data>
+  <data name="MainBarcode" xml:space="preserve">
+    <value>ძირითადი შტრიხკოდი</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>მარტი</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>მაისი</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>დასახელება</value>
+  </data>
+  <data name="NameMismatchFromEnregDoYouWantEdit" xml:space="preserve">
+    <value>კონტრაგენტის დასახელება განსხვავდება სამეწარმეო რეესტრში არსებული დასახელებისგან! გსურთ შეიცვალოს მიმდინარე დასახელება?</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>არა</value>
+  </data>
+  <data name="BaseARInvoiceCouldNotFound" xml:space="preserve">
+    <value>არ არსებობს საფუძველი რეალიზაციის დოკუმენტი</value>
+  </data>
+  <data name="NoBaseSaleFoundTaxInvoiceUnion" xml:space="preserve">
+    <value>გაერთიანებულ ფაქტურაში არ მოიძებნა საფუძველი გაყიდვის დოკუმენტი კორექტირებისთვის/დაბრუნებისთვის:</value>
+  </data>
+  <data name="NonCommercialLegalEntity" xml:space="preserve">
+    <value>არაკომერციული იურიდიული პირი</value>
+  </data>
+  <data name="NoNeedTaxInvoice" xml:space="preserve">
+    <value>არ საჭიროებს ანგარიშ-ფაქტურის გამოწერას</value>
+  </data>
+  <data name="NoPostingPurchaseWithoutWaybill" xml:space="preserve">
+    <value>ზედნადების გარეშე შესყიდვის აკრძალვა</value>
+  </data>
+  <data name="NoTaxInvoiceConfirmed" xml:space="preserve">
+    <value>არ არის დადასტურებული ანგარიშ-ფაქტურა</value>
+  </data>
+  <data name="NoTaxInvoiceSaved" xml:space="preserve">
+    <value>არ არის გამოწერილი ანგარიშ-ფაქტურა</value>
+  </data>
+  <data name="NotBeComplete" xml:space="preserve">
+    <value>არ შესრულდება</value>
+  </data>
+  <data name="NotControl" xml:space="preserve">
+    <value>არ გაკონტროლდეს</value>
+  </data>
+  <data name="NotLinked" xml:space="preserve">
+    <value>არაა მიბმული</value>
+  </data>
+  <data name="NotRecognizeObjectByTINInEnreg" xml:space="preserve">
+    <value>სამეწარმეო რეესტრში მითითებული გსნ-თი ვერ მოიძებნა ობიექტი!</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>ნოემბერი</value>
+  </data>
+  <data name="Numb" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>ნომერი</value>
+  </data>
+  <data name="Octomber" xml:space="preserve">
+    <value>ოქტომბერი</value>
+  </data>
+  <data name="OnTheBaseARInvoice" xml:space="preserve">
+    <value>საფუძველ რეალიზაციაზე</value>
+  </data>
+  <data name="OnThePreviousARCreditNote" xml:space="preserve">
+    <value>წინა რეალიზაციის კორექტირებაზე</value>
+  </data>
+  <data name="Operation" xml:space="preserve">
+    <value>ოპერაცია</value>
+  </data>
+  <data name="OperationCompletedSuccessfully" xml:space="preserve">
+    <value>ოპერაცია წარმატებით დასრულდა</value>
+  </data>
+  <data name="OperationDate" xml:space="preserve">
+    <value>ოპერაციის თარიღი</value>
+  </data>
+  <data name="OperationForSomeDocumentFinishedWithErrorSeeLog" xml:space="preserve">
+    <value>ოპერაცია ნაწილი დოკუმენტებისთვის დასრულდა შეცდომით. იხილეთ შეტყობინებების ლოგი</value>
+  </data>
+  <data name="OperationImpossibleInMode" xml:space="preserve">
+    <value>ოპერაციის შესრულება ამ რეჟიმზე შეუძლებელია!</value>
+  </data>
+  <data name="OperationMonth" xml:space="preserve">
+    <value>ოპერაციის თვე</value>
+  </data>
+  <data name="OperationPeriod" xml:space="preserve">
+    <value>ოპერაციის პერიოდი</value>
+  </data>
+  <data name="Operations" xml:space="preserve">
+    <value>ოპერაციები</value>
+  </data>
+  <data name="OperationType" xml:space="preserve">
+    <value>ოპერაციის ტიპი</value>
+  </data>
+  <data name="OperationUnsuccesfullSeeLog" xml:space="preserve">
+    <value>ოპერაცია დასრულდა შეცდომებით. იხილეთ შეტყობინებების ლოგი</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>ან</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>პირველადი</value>
+  </data>
+  <data name="other" xml:space="preserve">
+    <value>სხვა</value>
+  </data>
+  <data name="OtherInfo" xml:space="preserve">
+    <value>სხვა ინფორმაცია</value>
+  </data>
+  <data name="Paper" xml:space="preserve">
+    <value>ქაღალდის</value>
+  </data>
+  <data name="Partnership" xml:space="preserve">
+    <value>ამხანაგობა</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>პაროლი</value>
+  </data>
+  <data name="ServiceUserPassword" xml:space="preserve">
+    <value>სერვისის მომხმარებლის პაროლი</value>
+  </data>
+  <data name="PaymentForTransportation" xml:space="preserve">
+    <value>გადასახადი ტრანსპორტირებისთვის</value>
+  </data>
+  <data name="PhysicalEntity" xml:space="preserve">
+    <value>ფიზიკური პირი</value>
+  </data>
+  <data name="PostReturnWithoutQuantNotAllowed" xml:space="preserve">
+    <value>დაბრუნების დოკუმენტის გატარება რაოდენობის გარეშე აკრძალულია</value>
+  </data>
+  <data name="ProgramCode" xml:space="preserve">
+    <value>პროგრამის კოდი</value>
+  </data>
+  <data name="ProjectVatAmount" xml:space="preserve">
+    <value>პროექტის დღგ-ს თანხა</value>
+  </data>
+  <data name="ProtocolMode" xml:space="preserve">
+    <value>პროტოკოლის რეჟიმი</value>
+  </data>
+  <data name="ProtocolTypeForRS" xml:space="preserve">
+    <value>პროტოკოლის ტიპი RS.GE-ზე</value>
+  </data>
+  <data name="Purchase" xml:space="preserve">
+    <value>შესყიდვა</value>
+  </data>
+  <data name="Railway" xml:space="preserve">
+    <value>სარკინიგზო</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>მიზეზი</value>
+  </data>
+  <data name="ReasonIs" xml:space="preserve">
+    <value>მიზეზით</value>
+  </data>
+  <data name="ReceiveAddDeclaration" xml:space="preserve">
+    <value>ჩათვლა/დეკლარაციაში დამატება</value>
+  </data>
+  <data name="Received" xml:space="preserve">
+    <value>მიღებულია</value>
+  </data>
+  <data name="ReceiveDate" xml:space="preserve">
+    <value>მიღების თარიღი</value>
+  </data>
+  <data name="ReceiveDateNotFilled" xml:space="preserve">
+    <value>ჩათვლის თვე არ არის შევსებული!</value>
+  </data>
+  <data name="ReceivedConfirmed" xml:space="preserve">
+    <value>მიღებული დადასტურებული</value>
+  </data>
+  <data name="ReceiverInfo" xml:space="preserve">
+    <value>მიმღები</value>
+  </data>
+  <data name="ReceiverInfoName" xml:space="preserve">
+    <value>მიმღები სახელი</value>
+  </data>
+  <data name="ReceiveVat" xml:space="preserve">
+    <value>ჩათვლა</value>
+  </data>
+  <data name="ReceptionInfo" xml:space="preserve">
+    <value>გამშვები</value>
+  </data>
+  <data name="ReceptionInfoName" xml:space="preserve">
+    <value>გამშვების სახელი</value>
+  </data>
+  <data name="Refill" xml:space="preserve">
+    <value>გადავსება</value>
+  </data>
+  <data name="RegistrationDate" xml:space="preserve">
+    <value>რეგისტრაციის თარიღი</value>
+  </data>
+  <data name="RegistrationPeriod" xml:space="preserve">
+    <value>რეგისტრაციის პერიოდი</value>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>შენიშვნა</value>
+  </data>
+  <data name="Removed" xml:space="preserve">
+    <value>წაშლილი</value>
+  </data>
+  <data name="Replaced" xml:space="preserve">
+    <value>ჩანაცვლებული</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>დაბრუნება</value>
+  </data>
+  <data name="RSActivation" xml:space="preserve">
+    <value>აქტივაცია</value>
+  </data>
+  <data name="RSAddDeclaration" xml:space="preserve">
+    <value>დამატება დეკლარაციაში</value>
+  </data>
+  <data name="RSCancel" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+  <data name="RsCode" xml:space="preserve">
+    <value>RS კოდი</value>
+  </data>
+  <data name="RSConfirm" xml:space="preserve">
+    <value>დადასტურება</value>
+  </data>
+  <data name="RSCorrection" xml:space="preserve">
+    <value>კორექტირება</value>
+  </data>
+  <data name="RSCreate" xml:space="preserve">
+    <value>შექმნა</value>
+  </data>
+  <data name="RSDownload" xml:space="preserve">
+    <value>RS ჩამოტვირთვა</value>
+  </data>
+  <data name="RSFinish" xml:space="preserve">
+    <value>დასრულება</value>
+  </data>
+  <data name="RSSendToTransporter" xml:space="preserve">
+    <value>გადამზიდავთან გადაგზავნა</value>
+  </data>
+  <data name="RSUpdate" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+  <data name="RSUpdateStatus" xml:space="preserve">
+    <value>სტატუსების განახლება</value>
+  </data>
+  <data name="Sale" xml:space="preserve">
+    <value>გაყიდვა</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>შენახვა</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>შენახული</value>
+  </data>
+  <data name="SaveEditPassword" xml:space="preserve">
+    <value>პაროლის დანიშვნა/რედაქტირება</value>
+  </data>
+  <data name="SavePassword" xml:space="preserve">
+    <value>პაროლის დანიშვნა</value>
+  </data>
+  <data name="SaveUnitedTaxInvoice" xml:space="preserve">
+    <value>გაერთიანებული ფაქტურის შენახვა</value>
+  </data>
+  <data name="Seller" xml:space="preserve">
+    <value>გამყიდველი</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>გაგზავნა</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>გადაგზავნილი</value>
+  </data>
+  <data name="SentCorrected" xml:space="preserve">
+    <value>გადაგზავნილი კორექტირებული</value>
+  </data>
+  <data name="SentDate" xml:space="preserve">
+    <value>გაგზავნის თარიღი</value>
+  </data>
+  <data name="SentToTransporter" xml:space="preserve">
+    <value>გადამზიდავთან გადაგზავნილი</value>
+  </data>
+  <data name="Septempet" xml:space="preserve">
+    <value>სექტემბერი</value>
+  </data>
+  <data name="Series" xml:space="preserve">
+    <value>სერია/№</value>
+  </data>
+  <data name="SeriesNumber" xml:space="preserve">
+    <value>ა/ფ სერია/ნომერი</value>
+  </data>
+  <data name="ServiceUser" xml:space="preserve">
+    <value>სერვისის მომხმარებელი</value>
+  </data>
+  <data name="ServiceUserPasswordNotCorrect" xml:space="preserve">
+    <value>სერვის მომხმარებელი და პაროლი არასწორია ან არ არის შევსებული!</value>
+  </data>
+  <data name="StartAddress" xml:space="preserve">
+    <value>დატვირთვის მისამართი</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>დაწყების თარიღი</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>სტატუსი</value>
+  </data>
+  <data name="StatusRequestedForCanceling" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის სტატუსი უნდა იყოს "დადასტურებული" ან "დადასტურებული კორექტირებული" და არ უნდა იყოს დეკლარაციაზე მიბმული!</value>
+  </data>
+  <data name="StatusRequestedForDeclaring" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის სტატუსი უნდა იყოს "პირველადი", "კორექტირებული", "დადასტურებული" ან "დადასტურებული კორექტირებული"!</value>
+  </data>
+  <data name="StatusRequestedForDeleting" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის სტატუსი უნდა იყოს "შექმნილი", "შექმნილი კორექტირებული", "არასრულად შექმნილი", "გადაგზავნილი", "გადაგზავნილი კორექტირებული" ან "უარყოფილი"!</value>
+  </data>
+  <data name="SynchronisationViolatedCorrectWaybill" xml:space="preserve">
+    <value>დარღვეულია სინქრონიზაცია სერვერთან! სინქრონიზაციის აღსადგენად დააკორექტირეთ ელექტრონული ზედნადები!</value>
+  </data>
+  <data name="SynchronisationViolatedUpdateStatus" xml:space="preserve">
+    <value>სინქრონიზაცია დარღვეულია, სცადეთ სტატუსების განახლება</value>
+  </data>
+  <data name="SynchronizationViolated" xml:space="preserve">
+    <value>დარღვეულია სინქრონიზაცია</value>
+  </data>
+  <data name="TableRow" xml:space="preserve">
+    <value>სტრიქონი</value>
+  </data>
+  <data name="TaxAccountForBudget" xml:space="preserve">
+    <value>ბიუჯეტის ანგარიში</value>
+  </data>
+  <data name="TaxAmntCorrection" xml:space="preserve">
+    <value>დღგ თანხის კორექტირება</value>
+  </data>
+  <data name="TaxAmountAfterCorrection" xml:space="preserve">
+    <value>გადასახადის თანხა კორექტირების შემდეგ</value>
+  </data>
+  <data name="TaxInvoceJournal" xml:space="preserve">
+    <value>ა/ფ ჟურნალი</value>
+  </data>
+  <data name="TaxInvoceStatus" xml:space="preserve">
+    <value>ა/ფ სტატუსი</value>
+  </data>
+  <data name="TaxInvoceStatusRs" xml:space="preserve">
+    <value>ა/ფ სტატუსი RS</value>
+  </data>
+  <data name="TaxInvoice" xml:space="preserve">
+    <value>ა/ფ დოკუმენტი</value>
+  </data>
+  <data name="TaxInvoiceAlreadyCanceledOnSite" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურა უკვე გაუქმებულია საიტზე</value>
+  </data>
+  <data name="TaxInvoiceAlreadyConfirmed" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურა უკვე დადასტურებულია</value>
+  </data>
+  <data name="TaxInvoiceAlreadyCreated" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურა უკვე შექმნილია</value>
+  </data>
+  <data name="TaxInvoiceAlreadyDeclared" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურა უკვე დეკლარირებულია</value>
+  </data>
+  <data name="TaxInvoiceAlreadyDeletedOnSite" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურა უკვე წაშლილია საიტზე</value>
+  </data>
+  <data name="TaxInvoiceAlreadyReceived" xml:space="preserve">
+    <value>ფაქტურა უკვე ჩათვლილია</value>
+  </data>
+  <data name="TaxInvoiceAmountsNotEqualSiteNotUpdated" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის თანხები განსხვავებულია საიტზე არსებულისგან. არ მოხდება ანგარიშ-ფაქტურის დოკუმენტის დადასტურება</value>
+  </data>
+  <data name="TaxInvoiceBaseDocsListEmpty" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის საფუძველი დოკუმენტების სია ცარიელია!</value>
+  </data>
+  <data name="TaxInvoiceDate" xml:space="preserve">
+    <value>ა/ფ თარიღი</value>
+  </data>
+  <data name="TaxInvoiceID" xml:space="preserve">
+    <value>ა/ფ ID</value>
+  </data>
+  <data name="TaxInvoiceIDNotFilled" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის ID არ არის შევსებული!</value>
+  </data>
+  <data name="TaxInvoiceNotCorrected" xml:space="preserve">
+    <value>ვერ დაკორექტირდა ანგარიშ-ფაქტურა</value>
+  </data>
+  <data name="TaxInvoiceNotFound" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურა ამ პერიოდში არ მოიძებნა!</value>
+  </data>
+  <data name="TaxInvoiceNotFoundOnSite" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურა არ მოიძებნა საიტზე!</value>
+  </data>
+  <data name="TaxInvoiceNumber" xml:space="preserve">
+    <value>ა/ფ ნომერი</value>
+  </data>
+  <data name="TaxInvoicePeriod" xml:space="preserve">
+    <value>ფაქტურის პერიოდი</value>
+  </data>
+  <data name="TaxInvoiceReceived" xml:space="preserve">
+    <value>ა/ფ მიღებული</value>
+  </data>
+  <data name="TaxInvoiceSent" xml:space="preserve">
+    <value>ა/ფ გაცემული</value>
+  </data>
+  <data name="TaxInvoiceSeries" xml:space="preserve">
+    <value>ა/ფ სერია</value>
+  </data>
+  <data name="TaxInvoiceShouldBeCreatedCorrectedOrDeclined" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის სტატუსი უნდა იყოს "შექმნილი", "შექმნილი კორექტირებული" ან "უარყოფილი"!</value>
+  </data>
+  <data name="TaxInvoiceShouldBeReceivedCorrectionReceived" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის სტატუსი უნდა იყოს "მიღებული" ან "კორექტირება მიღებული"!</value>
+  </data>
+  <data name="TaxInvoicesUpdated" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურები განახლდა</value>
+  </data>
+  <data name="TaxInvoiceTableEmpty" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის ცხრილური ნაწილი ცარიელია!</value>
+  </data>
+  <data name="TaxInvoiceWaybills" xml:space="preserve">
+    <value>ა/ფ ზედნადებები</value>
+  </data>
+  <data name="Tin" xml:space="preserve">
+    <value>გსნ</value>
+  </data>
+  <data name="TINNotFill" xml:space="preserve">
+    <value>გსნ შევსებული არ არის!</value>
+  </data>
+  <data name="ToCompleteOperationWriteDocument" xml:space="preserve">
+    <value>ოპერაციის დასასრულებლად ჯერ ჩაწერეთ დოკუმენტი!</value>
+  </data>
+  <data name="ToCreateTaxInvoiceWriteDocument" xml:space="preserve">
+    <value>ანგარიშ-ფაქტურის შესაქმნელად ჯერ ჩაწერეთ დოკუმენტი!</value>
+  </data>
+  <data name="ToCreateWaybillWriteDocument" xml:space="preserve">
+    <value>ზედნადების შესაქმნელად ჯერ ჩაწერეთ დოკუმენტი!</value>
+  </data>
+  <data name="TrailerNumber" xml:space="preserve">
+    <value>მისაბმელის სახ. ნომერი</value>
+  </data>
+  <data name="TransBeginDate" xml:space="preserve">
+    <value>ტრანს. დაწყების თარიღი</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>გადაადგილება</value>
+  </data>
+  <data name="Transportation" xml:space="preserve">
+    <value>ტრასპორტირება</value>
+  </data>
+  <data name="TransportationExpense" xml:space="preserve">
+    <value>ტრანსპორტირების ხარჯი</value>
+  </data>
+  <data name="Transporter" xml:space="preserve">
+    <value>გადამზიდი</value>
+  </data>
+  <data name="TransporterName" xml:space="preserve">
+    <value>გადამზიდის სახელი</value>
+  </data>
+  <data name="TransporterTin" xml:space="preserve">
+    <value>გადამზიდის გსნ</value>
+  </data>
+  <data name="TransportSection" xml:space="preserve">
+    <value>სატრანსპორტო განყოფილება</value>
+  </data>
+  <data name="TransportType" xml:space="preserve">
+    <value>ტრანსპორტირების ტიპი</value>
+  </data>
+  <data name="TxAmntAfterCorrection" xml:space="preserve">
+    <value>დღგ კორექტირების შემდეგ</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>ტიპი</value>
+  </data>
+  <data name="UnableOperationForThisStatus" xml:space="preserve">
+    <value>მიმდინარე სტატუსით შეუძლებელია ოპერაციის შესრულება</value>
+  </data>
+  <data name="UnionTableMustContainAtLeastOneInvoice" xml:space="preserve">
+    <value>გაერთიანებული ფაქტურა უნდა შეიცავდეს მინიმუმ ერთ გაყიდვის დოკუმენტს</value>
+  </data>
+  <data name="UnitOfMeasurement" xml:space="preserve">
+    <value>ერთეული</value>
+  </data>
+  <data name="UomCode" xml:space="preserve">
+    <value>ერთეულის კოდი</value>
+  </data>
+  <data name="UomEntry" xml:space="preserve">
+    <value>ერთეული</value>
+  </data>
+  <data name="UomName" xml:space="preserve">
+    <value>ერთეულის დასახელება</value>
+  </data>
+  <data name="UomRsCode" xml:space="preserve">
+    <value>ერთეულის RS კოდი</value>
+  </data>
+  <data name="UomRsCodes" xml:space="preserve">
+    <value>RS ერთეულების კოდები</value>
+  </data>
+  <data name="UoMRsCodesUpdateSuccess" xml:space="preserve">
+    <value>ზომის ერთეულების RS კოდები წარმატებით განახლდა!</value>
+  </data>
+  <data name="UpdateConfirmedTaxInvoiceNotAllowed" xml:space="preserve">
+    <value>დადასტურებული ფაქტურის დოკუმენტის განახლება შეუძლებელია</value>
+  </data>
+  <data name="UpdateDate" xml:space="preserve">
+    <value>განახლების თარიღი</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>მომხმარებელი</value>
+  </data>
+  <data name="UserCode" xml:space="preserve">
+    <value>მომხმარებლის კოდი</value>
+  </data>
+  <data name="UserNameForRS" xml:space="preserve">
+    <value>RS.GE -ის მომხმარებელი</value>
+  </data>
+  <data name="UserTable" xml:space="preserve">
+    <value>მომხმარებლების ცხრილი</value>
+  </data>
+  <data name="UserTypeForRS" xml:space="preserve">
+    <value>მომხმარებლის ტიპი RS.GE-ზე</value>
+  </data>
+  <data name="VatAmount" xml:space="preserve">
+    <value>დღგ-ს თანხა</value>
+  </data>
+  <data name="VatGroup" xml:space="preserve">
+    <value>გადასახადის ჯგუფი</value>
+  </data>
+  <data name="VatPercent" xml:space="preserve">
+    <value>დღგ-ს განაკვეთი</value>
+  </data>
+  <data name="VATReceived" xml:space="preserve">
+    <value>ჩათვლილი</value>
+  </data>
+  <data name="VATReceiveDate" xml:space="preserve">
+    <value>ჩათვლის თვე</value>
+  </data>
+  <data name="VATReceivedDate" xml:space="preserve">
+    <value>დღგ-ს ჩათვლის თარიღი</value>
+  </data>
+  <data name="VATType0" xml:space="preserve">
+    <value>დღგ-ს ტიპი 0%</value>
+  </data>
+  <data name="VATTypeNone" xml:space="preserve">
+    <value>დღგ-ს გარეშე</value>
+  </data>
+  <data name="VATTypeNormal" xml:space="preserve">
+    <value>დღგ-ს ტიპი ნორმალური</value>
+  </data>
+  <data name="Vehicle" xml:space="preserve">
+    <value>სატრანსპორტო საშუალება</value>
+  </data>
+  <data name="VehicleMasterData" xml:space="preserve">
+    <value>სატრანსპორტო საშუალების ცნობარი</value>
+  </data>
+  <data name="VehicleNumber" xml:space="preserve">
+    <value>სატრანსპორტო საშუალების ნომერი</value>
+  </data>
+  <data name="Vehicles" xml:space="preserve">
+    <value>ავტომანქანები</value>
+  </data>
+  <data name="Warehouse" xml:space="preserve">
+    <value>საწყობი</value>
+  </data>
+  <data name="WaybillActivateSuccesfully" xml:space="preserve">
+    <value>ზედნადები წარმატებით გააქტიურდა!</value>
+  </data>
+  <data name="WaybillCanceledSuccesfully" xml:space="preserve">
+    <value>წარმატებით გაუქმდა ზედნადების დოკუმენტი!</value>
+  </data>
+  <data name="WaybillCorrectedSuccesfully" xml:space="preserve">
+    <value>ზედნადები წარმატებით დაკორექტირდა!</value>
+  </data>
+  <data name="WaybillCreatedSuccesfully" xml:space="preserve">
+    <value>წარმატებით შეიქმნა ზედნადების დოკუმენტი!</value>
+  </data>
+  <data name="WaybillDocEntry" xml:space="preserve">
+    <value>ზედნადების დოკუმენტი</value>
+  </data>
+  <data name="WaybillFinishedSuccesfully" xml:space="preserve">
+    <value>ზედნადები წარმატებით დასრულდა!</value>
+  </data>
+  <data name="WaybillID" xml:space="preserve">
+    <value>ზედნადების ID</value>
+  </data>
+  <data name="WaybillNumber" xml:space="preserve">
+    <value>ზედნადების ნომერი</value>
+  </data>
+  <data name="WaybillReceived" xml:space="preserve">
+    <value>მიღებული ზედნადებები</value>
+  </data>
+  <data name="Waybills" xml:space="preserve">
+    <value>ზედნადებები</value>
+  </data>
+  <data name="WaybillSentToTransporterSuccesfully" xml:space="preserve">
+    <value>ზედნადები წარმატებით გადაიგზავნა გადამზიდავთან!</value>
+  </data>
+  <data name="WaybillsSent" xml:space="preserve">
+    <value>გაგზავნილი ზედნადებები</value>
+  </data>
+  <data name="WaybillStatus" xml:space="preserve">
+    <value>ზედნადების სტატუსი</value>
+  </data>
+  <data name="WaybillTableIsEmpty" xml:space="preserve">
+    <value>ზედნადების ცხრილური ნაწილი ცარიელია!</value>
+  </data>
+  <data name="WaybillTranportTypeIsNotAutoTransporter" xml:space="preserve">
+    <value>ზედნადების ტრანსპორტირების ტიპი არ არის "გადამზიდი საავტომობილო"!</value>
+  </data>
+  <data name="WaybillType" xml:space="preserve">
+    <value>ზედნადების ტიპი</value>
+  </data>
+  <data name="WaybillTypeDefault" xml:space="preserve">
+    <value>ზედნადების ტიპი (მინიშნების გარეშე)</value>
+  </data>
+  <data name="WaybillUpdatedStatusSuccesfully" xml:space="preserve">
+    <value>წარმატებით განახლდა ზედნადების დოკუმენტის სტატუსი!</value>
+  </data>
+  <data name="Wb" xml:space="preserve">
+    <value>ს/ზ</value>
+  </data>
+  <data name="WhileAdd" xml:space="preserve">
+    <value>დამატებისას</value>
+  </data>
+  <data name="WhileUpdate" xml:space="preserve">
+    <value>განახლებისას</value>
+  </data>
+  <data name="WithDeclaration" xml:space="preserve">
+    <value>დეკლარაციით</value>
+  </data>
+  <data name="WithoutDeclaration" xml:space="preserve">
+    <value>დეკლარაციის გარეშე</value>
+  </data>
+  <data name="WithoutFilter" xml:space="preserve">
+    <value>შერჩევის გარეშე</value>
+  </data>
+  <data name="WithoutTransport" xml:space="preserve">
+    <value>ტრანსპორტირების გარეშე</value>
+  </data>
+  <data name="WithTransport" xml:space="preserve">
+    <value>ტრანსპორტირებით</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>დიახ</value>
+  </data>
+  <data name="RSDelete" xml:space="preserve">
+    <value>წაშლა</value>
+  </data>
+  <data name="RSDeny" xml:space="preserve">
+    <value>უარყოფა</value>
+  </data>
+  <data name="RSSave" xml:space="preserve">
+    <value>შენახვა</value>
+  </data>
+  <data name="RSSend" xml:space="preserve">
+    <value>გაგზავნა</value>
+  </data>
+  <data name="DoYouWantForDocuementsExecuteUpdate" xml:space="preserve">
+    <value>განახლდეს ბაზაში არსებული დოკუმენტები?</value>
+  </data>
+  <data name="DeclDateNotFilled" xml:space="preserve">
+    <value>დეკლარაციის თვე არ არის შევსებული!</value>
+  </data>
+  <data name="CheckVatGroupAccounts" xml:space="preserve">
+    <value>გადაამოწმეთ დღგს ჯგუფზე მთითებული ანგარიშები!</value>
+  </data>
+  <data name="AmountCorrection" xml:space="preserve">
+    <value>კორექტირების თანხა</value>
+  </data>
+  <data name="ARCreditNote" xml:space="preserve">
+    <value>რეალიზაციის კორექტირება</value>
+  </data>
+  <data name="EndsWithErrorCheckMessageLog" xml:space="preserve">
+    <value>დასრულდა შეცდომებით. გადაამოწმეთ ლოგი!</value>
+  </data>
+  <data name="TransBeginTime" xml:space="preserve">
+    <value>ტრანსპორტირების დაწყების დრო</value>
+  </data>
+  <data name="CheckVatGroupForBP" xml:space="preserve">
+    <value>გადაამოწმეთ ბიზნეს პარტნიორზე მითითებული დღგ</value>
+  </data>
+  <data name="AdditionalEntry" xml:space="preserve">
+    <value>დამ.გატარება</value>
+  </data>
+  <data name="ErrorDocumentAddEdit" xml:space="preserve">
+    <value>შეცდომა დოკუმენტის დამატებისას ან რედაქტირებისას</value>
+  </data>
+  <data name="RSTaxInvoicesDownloaded" xml:space="preserve">
+    <value>ფაქტურები ჩამოიტვირთა</value>
+  </data>
+  <data name="ErrorOfFormUpdate" xml:space="preserve">
+    <value>შეცდომა მოხდა ფორმის განახლებისას!</value>
+  </data>
+  <data name="AttachToWaybill" xml:space="preserve">
+    <value>ზედნადებზე მიბმა</value>
+  </data>
+  <data name="RSSaveUnitedTaxInvoice" xml:space="preserve">
+    <value>გაერთიანებული ფაქტური შენახვა</value>
+  </data>
+  <data name="ActivationDate" xml:space="preserve">
+    <value>აქტივაციის თარიღი</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>ფასი</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>რაოდენობა</value>
+  </data>
+  <data name="CheckBPTin" xml:space="preserve">
+    <value>შეამოწმეთ ბიზნესპარტნიორის გსნ</value>
+  </data>
+  <data name="ReceiveWaybill" xml:space="preserve">
+    <value>ზედნადების მიღება</value>
+  </data>
+  <data name="CheckVatGroupForWHT" xml:space="preserve">
+    <value>გადაამოწმეთ საშემოსავლოზე მითითებული დღგ-ს ჯგუფი!</value>
+  </data>
+  <data name="RSOperations" xml:space="preserve">
+    <value>RS ოპერაციები</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>ცხრილი</value>
+  </data>
+  <data name="ItemsTotalAmountsNotMatch" xml:space="preserve">
+    <value>არ ემთხვევა საქონლის ჯამური თანხა</value>
+  </data>
+  <data name="SubjectWithholdingTaxVAT" xml:space="preserve">
+    <value>Subject withholding tax VAT</value>
+  </data>
+  <data name="Approver" xml:space="preserve">
+    <value>დამდასტურებელი</value>
+  </data>
+  <data name="CorrectionTaxInvoice" xml:space="preserve">
+    <value>მაკორექტირებელი ა/ფ</value>
+  </data>
+  <data name="APCreditNote" xml:space="preserve">
+    <value>შესყიდვის კორექტირება</value>
+  </data>
+  <data name="APInvoice" xml:space="preserve">
+    <value>შესყიდვა</value>
+  </data>
+  <data name="CustomerCode" xml:space="preserve">
+    <value>მყიდველის კოდი</value>
+  </data>
+  <data name="CustomerTIN" xml:space="preserve">
+    <value>მყიდველის გსნ</value>
+  </data>
+  <data name="InvoiceStatus" xml:space="preserve">
+    <value>ა/ფ სტატუსი</value>
+  </data>
+  <data name="SupplierCode" xml:space="preserve">
+    <value>მომწოდებლის კოდი</value>
+  </data>
+  <data name="SupplierTIN" xml:space="preserve">
+    <value>მომწოდებლის გსნ</value>
+  </data>
+  <data name="Waybill" xml:space="preserve">
+    <value>ზედნადები</value>
+  </data>
+  <data name="TaxType" xml:space="preserve">
+    <value>სამართლებრივი ფორმა</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>მდე</value>
+  </data>
+  <data name="NotSetDefaultReportForWayBillDocument" xml:space="preserve">
+    <value>არ არის დაყენებული ზედნადების დოკუმენტისთვის საბეჭდი ფორმა!</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>ბეჭდვა</value>
+  </data>
+  <data name="draft" xml:space="preserve">
+    <value>დროებით შენახული</value>
+  </data>
+  <data name="failed" xml:space="preserve">
+    <value>უარყოფილი</value>
+  </data>
+  <data name="finishedWithErrors" xml:space="preserve">
+    <value>დასრულებულია შეცდომებით</value>
+  </data>
+  <data name="forSigning" xml:space="preserve">
+    <value>ხელმოსაწერი</value>
+  </data>
+  <data name="initialState" xml:space="preserve">
+    <value>შექმნილი</value>
+  </data>
+  <data name="inProgress" xml:space="preserve">
+    <value>დამუშავების პროცესში</value>
+  </data>
+  <data name="readyToLoad" xml:space="preserve">
+    <value>მომზადებულია გადასატვირთად</value>
+  </data>
+  <data name="registered" xml:space="preserve">
+    <value>დამატებული</value>
+  </data>
+  <data name="waitingForCertification" xml:space="preserve">
+    <value>ავტორიზაციის მოლოდინში</value>
+  </data>
+  <data name="UpdateStatus" xml:space="preserve">
+    <value>სტატუსის განახლება</value>
+  </data>
+  <data name="notToUpload" xml:space="preserve">
+    <value>არ გადაიტვირთოს</value>
+  </data>
+  <data name="LoginRequired" xml:space="preserve">
+    <value>საჭიროა ავტორიზაცია</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>პაროლის შეცვლა</value>
+  </data>
+  <data name="Digipass" xml:space="preserve">
+    <value>დიჯიპასი</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>მომხმარებელი</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>იმპორტი</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>პაროლის დადასტურება</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>ახალი პაროლი</value>
+  </data>
+  <data name="ThesePasswordsDontMatchTryAgain" xml:space="preserve">
+    <value>პაროლები არ ემთხვევა ერთმანეთს. თავიდან სცადეთ!</value>
+  </data>
+  <data name="YouCantLeaveEmpty" xml:space="preserve">
+    <value>არ შეიძლება იყოს ცარიელი!</value>
+  </data>
+  <data name="ModeIsNotChosen" xml:space="preserve">
+    <value>რეჟიმი არ არის არჩეული</value>
+  </data>
+  <data name="currencyExchange" xml:space="preserve">
+    <value>კონვერტაცია</value>
+  </data>
+  <data name="transferToOwnAccount" xml:space="preserve">
+    <value>გადარიცხვა პირად ანგარიშზე</value>
+  </data>
+  <data name="treasuryTransfer" xml:space="preserve">
+    <value>სახაზინო გადარიცხვა</value>
+  </data>
+  <data name="TreasuryCode" xml:space="preserve">
+    <value>სახაზინო კოდი</value>
+  </data>
+  <data name="CreditAccount" xml:space="preserve">
+    <value>მიმღები ანგარიში</value>
+  </data>
+  <data name="ChargeDetails" xml:space="preserve">
+    <value>ხარჯი</value>
+  </data>
+  <data name="PaymentID" xml:space="preserve">
+    <value>ტრანზაქციის ID</value>
+  </data>
+  <data name="OUR" xml:space="preserve">
+    <value>მიმღები მიიღებს სრულ თანხას, გადარიცხვის საკომისიოს დაემატება 20USD/30EUR (OUR)</value>
+  </data>
+  <data name="SHA" xml:space="preserve">
+    <value>მიმღები მიიღებს შუამავალი ბანკის საკომისიოთი ნაკლებ თანხას (SHA)</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>დანიშნულება</value>
+  </data>
+  <data name="AdditionalDescription" xml:space="preserve">
+    <value>დამატებითი დანიშნულება</value>
+  </data>
+  <data name="InternetBanking" xml:space="preserve">
+    <value>ინტერნეტბანკი</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>პერიოდი</value>
+  </data>
+  <data name="BatchPayment" xml:space="preserve">
+    <value>პაკეტური გადარიცხვა</value>
+  </data>
+  <data name="SinglePayment" xml:space="preserve">
+    <value>ინდივიდუალური გადარიცხვა</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>ანგარიში</value>
+  </data>
+  <data name="AllDocuments" xml:space="preserve">
+    <value>ყველა დოკუმენტი</value>
+  </data>
+  <data name="BatchName" xml:space="preserve">
+    <value>პაკეტის დასახელება</value>
+  </data>
+  <data name="BatchPaymentID" xml:space="preserve">
+    <value>პაკეტური ტრანზაქციის ID</value>
+  </data>
+  <data name="BatchStatus" xml:space="preserve">
+    <value>პაკეტის სტატუსი</value>
+  </data>
+  <data name="BeneficiaryAddress" xml:space="preserve">
+    <value>მიმღები მისამართი</value>
+  </data>
+  <data name="BeneficiaryBankCode" xml:space="preserve">
+    <value>მიმღები ბანკის კოდი</value>
+  </data>
+  <data name="BeneficiaryBankName" xml:space="preserve">
+    <value>მიმღები ბანკი</value>
+  </data>
+  <data name="BeneficiaryName" xml:space="preserve">
+    <value>მიმღები</value>
+  </data>
+  <data name="BeneficiaryTaxCode" xml:space="preserve">
+    <value>მიმღების გსნ</value>
+  </data>
+  <data name="ButTheDocumentFailedToUpdate" xml:space="preserve">
+    <value>მაგრამ ვერ მოხერხდა დოკუმენტის განახლება</value>
+  </data>
+  <data name="cancelled" xml:space="preserve">
+    <value>გაუქმებული</value>
+  </data>
+  <data name="CannotSetStatus" xml:space="preserve">
+    <value>ვერ მიენიჭა სტატუსი</value>
+  </data>
+  <data name="CardCode" xml:space="preserve">
+    <value>ბიზნესპარტნიორი</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>კომენტარი</value>
+  </data>
+  <data name="CreditAccountCurrencyCode" xml:space="preserve">
+    <value>მიმღები ანგარიშის ვალუტა</value>
+  </data>
+  <data name="CurrencyForExchangeAndTheCreditAccountSCurrencyIsDifferent" xml:space="preserve">
+    <value>კონვერტაციის ვალუტა და მიმღები ანგარიშის ვალუტა განსხვავდება</value>
+  </data>
+  <data name="DataForExport" xml:space="preserve">
+    <value>მონაცემები ატვირთვისთვის</value>
+  </data>
+  <data name="DebitAccount" xml:space="preserve">
+    <value>გამგზავნი ანგარიშის ნომერი</value>
+  </data>
+  <data name="DebitAccountCurrencyCode" xml:space="preserve">
+    <value>გამგზავნი ანგარიშის ვალუტა</value>
+  </data>
+  <data name="DocDate" xml:space="preserve">
+    <value>თარიღი</value>
+  </data>
+  <data name="DocumentSCurrencyAndTheCreditAccountSCurrencyIsDifferent" xml:space="preserve">
+    <value>დოკუმენტის ვალუტა და მიმღები ანგარიშის ვალუტა განსხვავდება</value>
+  </data>
+  <data name="DocumentSStatusShouldBeTheOneFromTheList" xml:space="preserve">
+    <value>დოკუმენტის სტატუსი უნდა იყოს ერთ-ერთი სიიდან</value>
+  </data>
+  <data name="DocumentStatus" xml:space="preserve">
+    <value>დოკუმენტის სტატუსი</value>
+  </data>
+  <data name="empty" xml:space="preserve">
+    <value>space</value>
+    <comment> ეს ასე დატოვეთ</comment>
+  </data>
+  <data name="HighlightTheRowsToPerformAnOperation" xml:space="preserve">
+    <value>ოპერაციის შესასრულებლად მონიშნეთ სასურველი სტრიქონები</value>
+  </data>
+  <data name="ExportTypeTBC" xml:space="preserve">
+    <value>ექსპორტის ტიპი</value>
+  </data>
+  <data name="MakeSureToFillInTheDocuments" xml:space="preserve">
+    <value>გადაამოწმეთ დოკუმენტების შევსების სისწორე</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>რეჟიმი</value>
+  </data>
+  <data name="NoDocumentsForOperation" xml:space="preserve">
+    <value>ოპერაციისთვის დოკუმენტები არ არსებობს</value>
+  </data>
+  <data name="OnlyUploadDocuments" xml:space="preserve">
+    <value>მხოლოდ ასატვირთი დოკუმენტები</value>
+  </data>
+  <data name="Program" xml:space="preserve">
+    <value>პროგრამა</value>
+  </data>
+  <data name="real" xml:space="preserve">
+    <value>რეალური</value>
+  </data>
+  <data name="resend" xml:space="preserve">
+    <value>ხელახლა გადაიტვირთოს</value>
+  </data>
+  <data name="SelectedDocumentsStatusWillBe" xml:space="preserve">
+    <value>მონიშნული დოკუმენტების სტატუსი გახდება</value>
+  </data>
+  <data name="SelectFillType" xml:space="preserve">
+    <value>მიუთითეთ შევსების ტიპი</value>
+  </data>
+  <data name="SetStatus" xml:space="preserve">
+    <value>სტატუსის დაყენება</value>
+  </data>
+  <data name="SuccessfullySetStatus" xml:space="preserve">
+    <value>წარმატებით მიენიჭა სტატუსი</value>
+  </data>
+  <data name="test" xml:space="preserve">
+    <value>სატესტო</value>
+  </data>
+  <data name="TheDocumentIsNotForInternetBanking" xml:space="preserve">
+    <value>დოკუმენტი არ არის განკუთვნილი ინტერნეტბანკში გადატვირთვისთვის</value>
+  </data>
+  <data name="TheDocumentSStatusHasBeenUpdatedSuccessfully" xml:space="preserve">
+    <value>სტატუსების განახლება წარმატებით შესრულდა</value>
+  </data>
+  <data name="TheFollowingFieldIsMandatory" xml:space="preserve">
+    <value>აუცილებელია შემდეგი ველის შევსება</value>
+  </data>
+  <data name="TheFollowingFieldsAreMandatory" xml:space="preserve">
+    <value>აუცილებელია შემდეგი ველების შევსება</value>
+  </data>
+  <data name="TheRequestHasBeenSubmittedSuccessfully" xml:space="preserve">
+    <value>თქვენი დავალება წარმატებით გაიგზავნა</value>
+  </data>
+  <data name="TransferToOtherBankForeignCurrencyPaymentOrderIo" xml:space="preserve">
+    <value>გადარიცხვა სხვა ბანკში (უცხოური ვალუტა)</value>
+  </data>
+  <data name="TransferToOtherBankNationalCurrencyPaymentOrderIo" xml:space="preserve">
+    <value>გადარიცხვა სხვა ბანკში (ეროვნული ვალუტა)</value>
+  </data>
+  <data name="TransferToOwnAccountPaymentOrderIo" xml:space="preserve">
+    <value>გადარიცხვა საკუთარ ანგარიშზე/კონვერტაცია</value>
+  </data>
+  <data name="TransferType" xml:space="preserve">
+    <value>გადარიცხვის ტიპი</value>
+  </data>
+  <data name="TransferWithinBankPaymentOrderIo" xml:space="preserve">
+    <value>გადარიცხვა თიბისი ბანკის ფილიალებში</value>
+  </data>
+  <data name="TreasuryTransferPaymentOrderIo" xml:space="preserve">
+    <value>საბიუჯეტო გადარიცხვა</value>
+  </data>
+  <data name="WouldYouWantToContinueTheOperation" xml:space="preserve">
+    <value>გსურთ ოპერაციის გაგრძელება</value>
+  </data>
+  <data name="YouCannotTransferMoreThan10DocumentWhenImportTypeIs" xml:space="preserve">
+    <value>არ შეიძლება 10 დოკუმენტზე მეტის გადარიცხვა როცა იმპორტის ტიპი არის</value>
+  </data>
+  <data name="GLAccountMustBeUniqueDuplicateGLAccounts" xml:space="preserve">
+    <value>ბუღალტრული ანგარიში უნდა იყოს უნიკალური! დუბლირებული ბუღალტრული ანგარიშები</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>დისტრიბუცია</value>
+  </data>
+  <data name="InternalShipment" xml:space="preserve">
+    <value>შიდა გადაზიდვა</value>
+  </data>
+  <data name="SentWaybillsAnalysis" xml:space="preserve">
+    <value>გაცემული ზედნადებების ანალიზი</value>
+  </data>
+  <data name="AmountsNotEqual" xml:space="preserve">
+    <value>თანხები განსხვავებულია</value>
+  </data>
+  <data name="Collapse" xml:space="preserve">
+    <value>აკეცვა</value>
+  </data>
+  <data name="CompareStatus" xml:space="preserve">
+    <value>შესაბამისობის სტატუსი</value>
+  </data>
+  <data name="CompSt" xml:space="preserve">
+    <value>შესაბ. სტ.</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>დეტალური</value>
+  </data>
+  <data name="EqualAmounts" xml:space="preserve">
+    <value>თანხები შეესაბამება</value>
+  </data>
+  <data name="Expand" xml:space="preserve">
+    <value>გაშლა</value>
+  </data>
+  <data name="FromWarehouse" xml:space="preserve">
+    <value>გამგზავნი საწყობი</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>საერთო</value>
+  </data>
+  <data name="NotPosted" xml:space="preserve">
+    <value>გატარებული არ არის</value>
+  </data>
+  <data name="OnlyOnProgram" xml:space="preserve">
+    <value>არსებობს მხოლოდ პროგრამაში</value>
+  </data>
+  <data name="OnlyOnSite" xml:space="preserve">
+    <value>არსებობს მხოლოდ საიტზე</value>
+  </data>
+  <data name="Option" xml:space="preserve">
+    <value>ვარიანტი</value>
+  </data>
+  <data name="SavedStatus" xml:space="preserve">
+    <value>შენახულია სტატუსის მქონე</value>
+  </data>
+  <data name="SubWaybill" xml:space="preserve">
+    <value>ქვე-ზედნადები</value>
+  </data>
+  <data name="ToWarehouse" xml:space="preserve">
+    <value>მიმღები საწყობი</value>
+  </data>
+  <data name="ReceivedWaybillsAnalysis" xml:space="preserve">
+    <value>მიღებული ზედნადებების ანალიზი</value>
+  </data>
+  <data name="NotFoundOnSiteOnThisPeriod" xml:space="preserve">
+    <value>არ არის ნაპოვნი საიტზე მიმდინარე პერიოდში</value>
+  </data>
+  <data name="ReceivedTaxAnalysis" xml:space="preserve">
+    <value>მიღებული ფაქტურების ანალიზი</value>
+  </data>
+  <data name="Waybill_Number" xml:space="preserve">
+    <value>ს/ზ ნომერი</value>
+  </data>
+  <data name="FillVatRates" xml:space="preserve">
+    <value>დღგ შევსება</value>
+  </data>
+  <data name="UoMNameDuplicated" xml:space="preserve">
+    <value>ერთეულის დასახელებები დუბლირებულია</value>
+  </data>
+  <data name="BaseType" xml:space="preserve">
+    <value>ობიექტის ტიპი</value>
+  </data>
+  <data name="ProfitTaxBaseMasterData" xml:space="preserve">
+    <value>მოგების გადასახადის დაბეგვრის ობიექტების ცნობარი</value>
+  </data>
+  <data name="ProfitTaxBaseTypeMasterData" xml:space="preserve">
+    <value>მოგების გადასახადის დაბეგვრის ობიექტების ტიპების ცნობარი</value>
+  </data>
+  <data name="ProfitTaxAccrual" xml:space="preserve">
+    <value>მოგების გადასახადის დარიცხვა</value>
+  </data>
+  <data name="ProfitTxType" xml:space="preserve">
+    <value>დაბეგვრის ტიპი</value>
+  </data>
+  <data name="AmountTaxable" xml:space="preserve">
+    <value>დასაბეგრი თანხა</value>
+  </data>
+  <data name="ProfitTaxAmount" xml:space="preserve">
+    <value>მოგების გადასახადი</value>
+  </data>
+  <data name="Accrual" xml:space="preserve">
+    <value>დარიცხვა</value>
+  </data>
+  <data name="Uncrediting" xml:space="preserve">
+    <value>ჩათვლა</value>
+  </data>
+  <data name="PostingDate" xml:space="preserve">
+    <value>გატარების თარიღი</value>
+  </data>
+  <data name="TransactionNo" xml:space="preserve">
+    <value>ტრანზაქ. ნომერი</value>
+  </data>
+  <data name="ProfitTaxExempt" xml:space="preserve">
+    <value>გათავისუფლებული მოგების გადასახადისგან</value>
+  </data>
+  <data name="RegisteredInOffshore" xml:space="preserve">
+    <value>ოფშორულ ქვეყნებში რეგისტრირებული</value>
+  </data>
+  <data name="LiableToProfitTax" xml:space="preserve">
+    <value>იბეგრება განაწილებული მოგებით</value>
+  </data>
+  <data name="SetGridColor" xml:space="preserve">
+    <value>განსხვავებები ფერებით</value>
+  </data>
+  <data name="LiableToVat" xml:space="preserve">
+    <value>იბეგრება დღგ-ით</value>
+  </data>
+  <data name="Capital" xml:space="preserve">
+    <value>კაპიტალის</value>
+  </data>
+  <data name="DifferenceBetweenTheGrossIncomeAndTheDeductions" xml:space="preserve">
+    <value>სხვაობა ერთობლივი შემოსავლისა და გამოქვითვების თანხებს შორის</value>
+  </data>
+  <data name="ExpensesOfNonEconomicExpenses" xml:space="preserve">
+    <value>არაეკონომიკურ საქმიანობასთან დაკავშირებული ხარჯები</value>
+  </data>
+  <data name="GoodsAndServicesDeliveredFreeOfCharge" xml:space="preserve">
+    <value>საქონლის/მომსახურების უსასყიდლო მიწოდება/გაწევა, ფულადი სახსრების გადაცემა</value>
+  </data>
+  <data name="IsNot" xml:space="preserve">
+    <value>არ არის</value>
+  </data>
+  <data name="NonEconomicExpenses" xml:space="preserve">
+    <value>არაეკონომიკური ხარჯი</value>
+  </data>
+  <data name="PaymentsForNonEconomicActivities" xml:space="preserve">
+    <value>არაეკონომიკურ საქმიანობასთან დაკავშირებული გადახდები</value>
+  </data>
+  <data name="ProfitSharing" xml:space="preserve">
+    <value>განაწილებული მოგება</value>
+  </data>
+  <data name="ProfitSharingTax" xml:space="preserve">
+    <value>განაწილებული მოგება</value>
+  </data>
+  <data name="ProfitTaxPayable" xml:space="preserve">
+    <value>მოგების გადასახადის ბიუჯეტთან ანგარიშსწორების</value>
+  </data>
+  <data name="ProfitTaxSystem" xml:space="preserve">
+    <value>მოგების გადასახადის დაბეგვრის სისტემა</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>განაკვეთი</value>
+  </data>
+  <data name="RepresentationalExpensesAbovePredefinedLevel" xml:space="preserve">
+    <value>წარმომადგენლობითი ხარჯი, რომელიც აღემატება ზღვრულ ოდენობას</value>
+  </data>
+  <data name="TaxableObject" xml:space="preserve">
+    <value>დაბეგვრის ობიექტი</value>
+  </data>
+  <data name="Taxes" xml:space="preserve">
+    <value>გადასახადები</value>
+  </data>
+  <data name="VatExpense" xml:space="preserve">
+    <value>დღგ-ს ხარჯში ჩამოწერის</value>
+  </data>
+  <data name="ModeIsNotSelected" xml:space="preserve">
+    <value>რეჟიმი არ არის არჩეული</value>
+  </data>
+  <data name="TaxAccounts" xml:space="preserve">
+    <value>მოგების გადასახადის ანგარიშები</value>
+  </data>
+  <data name="DispatchType" xml:space="preserve">
+    <value>გადარიცხვის მეთოდი</value>
+  </data>
+  <data name="GeneralError" xml:space="preserve">
+    <value>ზოგადი შეცდომა</value>
+  </data>
+  <data name="signed" xml:space="preserve">
+    <value>ხელმოწერილი</value>
+  </data>
+  <data name="TheDocumentSStatusHasNotBeenUpdatedSuccessfully" xml:space="preserve">
+    <value>სტატუსების განახლება წარუმატებლად შესრულდა</value>
+  </data>
+  <data name="TransferToForeignCurrencyPaymentOrderIo" xml:space="preserve">
+    <value>გადარიცხვა (უცხოური ვალუტა)</value>
+  </data>
+  <data name="TransferToNationalCurrencyPaymentOrderIo" xml:space="preserve">
+    <value>გადარიცხვა (ეროვნული ვალუტა)</value>
+  </data>
+  <data name="BankStatus" xml:space="preserve">
+    <value>სტატუსი ბანკში</value>
+  </data>
+  <data name="CurrencyExchangePaymentOrderIo" xml:space="preserve">
+    <value>კონვერტაცია</value>
+  </data>
+  <data name="OperationCompletedUnSuccessfully" xml:space="preserve">
+    <value>ოპერაცია წარუმატებლად დასრულდა</value>
+  </data>
+  <data name="BankProgramIsNotFilled" xml:space="preserve">
+    <value>ბანკთან გაცვლის პროგრამა არ არის შევსებული</value>
+  </data>
+  <data name="DocRate" xml:space="preserve">
+    <value>კურსი</value>
+  </data>
+  <data name="GetTheToken" xml:space="preserve">
+    <value>მიიღეთ თოქენი</value>
+  </data>
+  <data name="GoodsList" xml:space="preserve">
+    <value>Goods List</value>
+  </data>
+  <data name="Field" xml:space="preserve">
+    <value>ველი</value>
+  </data>
+  <data name="DeleteUDF" xml:space="preserve">
+    <value>UDF-ის წაშლა</value>
+  </data>
+  <data name="ErrorRemovingUDF" xml:space="preserve">
+    <value>შეცდომა UDF-ის წაშლისას</value>
+  </data>
+  <data name="AliasID" xml:space="preserve">
+    <value>სინონიმის ID</value>
+  </data>
+  <data name="Descr" xml:space="preserve">
+    <value>აღწერა</value>
+  </data>
+  <data name="FieldID" xml:space="preserve">
+    <value>Field ID</value>
+  </data>
+  <data name="AdditionalTools" xml:space="preserve">
+    <value>დამატებითი ინსტრუმენტები</value>
+  </data>
+  <data name="CurrencyForExchange" xml:space="preserve">
+    <value>ვალუტა კონვერტაციისთვის</value>
+  </data>
+  <data name="FixedPaying" xml:space="preserve">
+    <value>ფიქსირებული გადამხდელი</value>
+  </data>
+  <data name="MicroBusinessStatus" xml:space="preserve">
+    <value>მიკრო ბიზნესის სტატუსი</value>
+  </data>
+  <data name="ImportingCurrencies" xml:space="preserve">
+    <value>მიმდინარეობს კურსების ჩამოტვირთვა</value>
+  </data>
+  <data name="CurrenciesHaveBeenImportedSuccessfully" xml:space="preserve">
+    <value>კურსები წარმატებით ჩამოიტვირთა</value>
+  </data>
+  <data name="CurrenciesHaveBeenImportedUnSuccessfully" xml:space="preserve">
+    <value>კურსების ჩამოტვირთვა ვერ მოხერხდა</value>
+  </data>
+  <data name="GoodsIssue" xml:space="preserve">
+    <value>ჩამოწერა</value>
+  </data>
+  <data name="DefaultTaxableObjects" xml:space="preserve">
+    <value>მინიშნების გარეშე დაბეგვრის ობიექტები</value>
+  </data>
+  <data name="DefaulfTaxableObjectDownPaymentToProfitTaxExemptEntities" xml:space="preserve">
+    <value>გათავისუფლებული პირისთვის ავანსის გადახდა</value>
+  </data>
+  <data name="DefaulfTaxableObjectGoodsAndServicesDeliveredFreeOfCharge" xml:space="preserve">
+    <value>საქონლის/მომსახურების უსასყიდლოდ მიწოდება</value>
+  </data>
+  <data name="Acct" xml:space="preserve">
+    <value>ანგ.</value>
+  </data>
+  <data name="RecordIsUsedInDocuments" xml:space="preserve">
+    <value>ჩანაწერი გამოყენებულია დოკუმენტებში</value>
+  </data>
+  <data name="DownPaymentInvoice" xml:space="preserve">
+    <value>ავანსის ა/ფ</value>
+  </data>
+  <data name="ARDownPaymentInvoice" xml:space="preserve">
+    <value>მიღებული ავანსი</value>
+  </data>
+  <data name="ExpenseAccount" xml:space="preserve">
+    <value>ხარჯის ანგარიში</value>
+  </data>
+  <data name="Expenses" xml:space="preserve">
+    <value>ხარჯის აღრიცხვა</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>პროექტი</value>
+  </data>
+  <data name="DocType" xml:space="preserve">
+    <value>დოკუმენტის ტიპი</value>
+  </data>
+  <data name="ARDownPaymentRequest" xml:space="preserve">
+    <value>მიღებული ავანსის მოთხოვნა</value>
+  </data>
+  <data name="DocumentSNumberIs" xml:space="preserve">
+    <value>დოკუმენტის ნომერია</value>
+  </data>
+  <data name="DocumentsSNumbersAre" xml:space="preserve">
+    <value>დოკუმენტის ნომრებია</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>ინვოისი</value>
+  </data>
+  <data name="ARCDocumentsOnARIDoYouWantToCreateUnitedTaxInvoiceIncludingTheseDocuments" xml:space="preserve">
+    <value>არსებობს რეალიზაციის დოკუმენტზე რეალიზაციის კორექტირების დოკუმენტები(ა/ფ-ის გარეშე), გსურთ შეიქმნას ერთიანი ფაქტურა ამ დოკუმენტების გათვალისწინებით</value>
+  </data>
+  <data name="CannotBeCreated" xml:space="preserve">
+    <value>ვერ გამოწერთ</value>
+  </data>
+  <data name="OnARDownPaymentRequestThereIsAnotherARDownPaymentInvoiceWithTaxInvoiceSentTheStatusOfWhichShouldBeFromThisList" xml:space="preserve">
+    <value>მიღებული ავანსის მოთხოვნა - ის დოკუმენტზე არსებობს სხვა მიღებული ავანსი, რომელზეც გაფორმებული ა/ფ გაცემული - ის სტატუსი უნდა იყოს ერთ-ერთი სიიდან</value>
+  </data>
+  <data name="UnitedTaxInvoiceCanNotContainDocumentWithType" xml:space="preserve">
+    <value>გაერთიანებული ა/ფ არ შეიძლება შეიცავდეს დოკუმენტს ტიპით</value>
+  </data>
+  <data name="paymentToEmployee" xml:space="preserve">
+    <value>თანამშრომლისთვის ანაზღაურება</value>
+  </data>
+  <data name="salaryPayment" xml:space="preserve">
+    <value>ხელფასის გადახდა</value>
+  </data>
+  <data name="OpType" xml:space="preserve">
+    <value>ოპერაციის ტიპი</value>
+  </data>
+  <data name="BeneficiaryCode" xml:space="preserve">
+    <value>მიმღების კოდი</value>
+  </data>
+  <data name="ExportIntBank" xml:space="preserve">
+    <value>ექსპორტი ინტერნეტბანკში</value>
+  </data>
+  <data name="FilterCombinations" xml:space="preserve">
+    <value>ფილტრის კომბინაციები</value>
+  </data>
+  <data name="GetMovementByID" xml:space="preserve">
+    <value>საბუთის ნომრით</value>
+  </data>
+  <data name="GetMovementsByLastMovementTimestamp" xml:space="preserve">
+    <value>ბოლო თარიღით</value>
+  </data>
+  <data name="GetMovementsByOtherFilteringParameters" xml:space="preserve">
+    <value>სხვა პარამეტრებით</value>
+  </data>
+  <data name="ImportIntBank" xml:space="preserve">
+    <value>იმპორტი ინტერნეტბანკიდან</value>
+  </data>
+  <data name="LastMovementTimestamp" xml:space="preserve">
+    <value>ბოლო თარიღი</value>
+  </data>
+  <data name="MovementID" xml:space="preserve">
+    <value>საბუთის ნომერი</value>
+  </data>
+  <data name="GetData" xml:space="preserve">
+    <value>მონაცემების მიღება</value>
+  </data>
+  <data name="CurrencyAndTheAccountSCurrencyIsDifferent" xml:space="preserve">
+    <value>ვალუტა და ანგარიშის ვალუტა განსხვავდება</value>
+  </data>
+  <data name="StatementGenerationStatementGeneralInformationFirst1000Record" xml:space="preserve">
+    <value>ამონაწერის გენერაცია – ამონაწერზე ზოგადი ინფორმაცია – პირველი 1000 ჩანაწერი</value>
+  </data>
+  <data name="StatementGlobalAndDailyBalances" xml:space="preserve">
+    <value>ამონაწერის გლობალური და ყოველდღიური ნაშთები</value>
+  </data>
+  <data name="StatementRecordOnPages" xml:space="preserve">
+    <value>ამონაწერის ჩანაწერები მითითებულ გვერდზე</value>
+  </data>
+  <data name="ChiefAccountant" xml:space="preserve">
+    <value>მთავარი ბუღალტერი</value>
+  </data>
+  <data name="IncomingPayment" xml:space="preserve">
+    <value>შემომავალი გადახდა</value>
+  </data>
+  <data name="OutgoingPayment" xml:space="preserve">
+    <value>Outgoing Payment</value>
+  </data>
+  <data name="EmployeesMustNotBeDifferent" xml:space="preserve">
+    <value>თანამშრომლები არ უნდა იყვნენ განსხვავებულები</value>
+  </data>
+  <data name="CreateNewQuestion" xml:space="preserve">
+    <value>შეიქმნას ახალი</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>კლიენტი</value>
+  </data>
+  <data name="DuplicateLictTradNumBP" xml:space="preserve">
+    <value>ამავე ტიპის ბიზნეს პარტნიორი მითითებული გსნ-ით უკვე არსებობს</value>
+  </data>
+  <data name="DuplicateLictTradNumBPofType" xml:space="preserve">
+    <value>არსებული გსნ-ით ბაზაში უკვე არსებობს ბიზნეს პარტნიორი ტიპით</value>
+  </data>
+  <data name="Supplier" xml:space="preserve">
+    <value>მომწოდებელი</value>
+  </data>
+  <data name="CreateDocuments" xml:space="preserve">
+    <value>დოკუმენტების შექმნა</value>
+  </data>
+  <data name="BillMobilePhoneFinePayments" xml:space="preserve">
+    <value>კომუნალური, მობილური, ჯარიმები</value>
+  </data>
+  <data name="Income" xml:space="preserve">
+    <value>შემოსავლები</value>
+  </data>
+  <data name="OtherExpenses" xml:space="preserve">
+    <value>სხვა ხარჯები</value>
+  </data>
+  <data name="TransferBetweenOwnAccounts" xml:space="preserve">
+    <value>საკუთარ ანგარიშებს შორის გადარიცხვა</value>
+  </data>
+  <data name="TransferOutAndCashWithdrawal" xml:space="preserve">
+    <value>გადარიცხვა და თანხის გატანა</value>
+  </data>
+  <data name="TreasuryTransfers" xml:space="preserve">
+    <value>საბიუჯეტო გადარიცხვები</value>
+  </data>
+  <data name="CheckGLAccountForHouseBankAccount" xml:space="preserve">
+    <value>ვერ მოიძებნა ბუღ. ანგარიში კომპანიის ანგარიშისთვის</value>
+  </data>
+  <data name="CouldNotFindBankChargeAccount" xml:space="preserve">
+    <value>ვერ მოიძებნა ბანკის საკომისიოს ანგარიში</value>
+  </data>
+  <data name="CouldNotFindCurrency" xml:space="preserve">
+    <value>ვერ მოიძებნა ვალუტა</value>
+  </data>
+  <data name="CouldNotFindHouseBankAccount" xml:space="preserve">
+    <value>ვერ მოიძებნა კომპანიის ანგარიში</value>
+  </data>
+  <data name="GLAccount" xml:space="preserve">
+    <value>ბუღ. ანგარიში</value>
+  </data>
+  <data name="CashFlowLineItemID" xml:space="preserve">
+    <value>ფულ. ნაკადების ID</value>
+  </data>
+  <data name="InternetBankingIntegrationServicesRules" xml:space="preserve">
+    <value>ინტერნეტ ბანკთან ინტეგრაციის წესები</value>
+  </data>
+  <data name="CashFlowLineItemName" xml:space="preserve">
+    <value>ფულ. ნაკადების დასახ.</value>
+  </data>
+  <data name="AccountCode" xml:space="preserve">
+    <value>ანგარიშის კოდი</value>
+  </data>
+  <data name="AccountName" xml:space="preserve">
+    <value>ანგარიშის დასახელება</value>
+  </data>
+  <data name="BankCharge" xml:space="preserve">
+    <value>ბანკის საკომისიო</value>
+  </data>
+  <data name="OtherIncomes" xml:space="preserve">
+    <value>სხვა შემოსვლები</value>
+  </data>
+  <data name="TransferFromBP" xml:space="preserve">
+    <value>ბიზნეს პარტნიორისგან ჩარიცხვა</value>
+  </data>
+  <data name="TransferToBP" xml:space="preserve">
+    <value>ბიზნეს პარტნიორისთვის გადარიცხვა</value>
+  </data>
+  <data name="CheckCurrencies" xml:space="preserve">
+    <value>შეამოწმეთ ვალუტები</value>
+  </data>
+  <data name="downloadedFromTheBank" xml:space="preserve">
+    <value>ჩამოტვირთულია ბანკიდან</value>
+  </data>
+  <data name="OutgoingReference" xml:space="preserve">
+    <value>გადარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="AccountNumber" xml:space="preserve">
+    <value>ანგარიში</value>
+  </data>
+  <data name="ChargeDetail" xml:space="preserve">
+    <value>ხარჯი</value>
+  </data>
+  <data name="DebitCredit" xml:space="preserve">
+    <value>მოძრაობა</value>
+  </data>
+  <data name="DocumentDate" xml:space="preserve">
+    <value>თარიღი</value>
+  </data>
+  <data name="DocumentNumber" xml:space="preserve">
+    <value>საბუთის №</value>
+  </data>
+  <data name="ExternalPaymentID" xml:space="preserve">
+    <value>გარე ტრანზაქციის ID</value>
+  </data>
+  <data name="GLAccountCode" xml:space="preserve">
+    <value>ბუღ. ანგარიში</value>
+  </data>
+  <data name="Input" xml:space="preserve">
+    <value>შემოსვლა</value>
+  </data>
+  <data name="OperationCode" xml:space="preserve">
+    <value>ოპ. კოდი</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>გასვლა</value>
+  </data>
+  <data name="PartnerAccountNumber" xml:space="preserve">
+    <value>პარტ. ანგარიში</value>
+  </data>
+  <data name="PartnerBank" xml:space="preserve">
+    <value>პარტნიორის ბანკი</value>
+  </data>
+  <data name="PartnerBankCode" xml:space="preserve">
+    <value>პარტნიორის ბანკის კოდი</value>
+  </data>
+  <data name="PartnerCurrency" xml:space="preserve">
+    <value>ვალუტა</value>
+  </data>
+  <data name="PartnerName" xml:space="preserve">
+    <value>პარტნიორი</value>
+  </data>
+  <data name="PartnerTaxCode" xml:space="preserve">
+    <value>პარტნიორის გსნ</value>
+  </data>
+  <data name="TransactionType" xml:space="preserve">
+    <value>ტრანზაქციის ტიპი</value>
+  </data>
+  <data name="ValueDate" xml:space="preserve">
+    <value>საბ. თარიღი</value>
+  </data>
+  <data name="WebsiteIsUnderConstruction" xml:space="preserve">
+    <value>მიმდინარეობს ტექნიკური სამუშაოები</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CouldNotFindBusinessPartner" xml:space="preserve">
+    <value>ვერ მოიძებნა ბიზნეს პარტნიორი</value>
+  </data>
+  <data name="FCCredit" xml:space="preserve">
+    <value>კრედიტი(უვ)</value>
+  </data>
+  <data name="FCCurrency" xml:space="preserve">
+    <value>ვალურა</value>
+  </data>
+  <data name="FCDebit" xml:space="preserve">
+    <value>დებეტი(უვ)</value>
+  </data>
+  <data name="SCCredit" xml:space="preserve">
+    <value>კრედიტი(სვ)</value>
+  </data>
+  <data name="SCDebit" xml:space="preserve">
+    <value>დებეტი(სვ)</value>
+  </data>
+  <data name="prFormItem" xml:space="preserve">
+    <value>ფსმ მუხლი</value>
+  </data>
+  <data name="APDownPaymentInvoice" xml:space="preserve">
+    <value>გაცემული ავანსი</value>
+  </data>
+  <data name="APDownPaymentRequest" xml:space="preserve">
+    <value>გაცემული ავანსის მოთხოვნა</value>
+  </data>
+  <data name="FailedToAttachInvoiceDocument" xml:space="preserve">
+    <value>ვერ მოხერხდა ანგარიშ-ფაქტურის დოკუმენტთან მიბმა</value>
+  </data>
+  <data name="ThereAreDuplicatesRowsInTheTable" xml:space="preserve">
+    <value>ცხრილში არის დუბლირებული სტრიქონები</value>
+  </data>
+  <data name="DisplayAE" xml:space="preserve">
+    <value>დამატებითი გატარება</value>
+  </data>
+  <data name="Credit" xml:space="preserve">
+    <value>კრედიტი</value>
+  </data>
+  <data name="Debit" xml:space="preserve">
+    <value>დებეტი</value>
+  </data>
+  <data name="DeclarationNumberShouldBeEmpty" xml:space="preserve">
+    <value>დეკლარაციის ნომერი უნდა იყოს ცარიელი</value>
+  </data>
+  <data name="PreviewJournalEntry" xml:space="preserve">
+    <value>გატარების დათვალიერება</value>
+  </data>
+  <data name="unableToCancelWaybilForThisDocument" xml:space="preserve">
+    <value>შეუძლებელია ზედნადების გაუქმება</value>
+  </data>
+  <data name="DocumentMustNotBeCancelledOrCancellation" xml:space="preserve">
+    <value>დოკუმენტი არ უნდა იყოს გაუქმებული ან გაუქმების დოკუმენტი</value>
+  </data>
+  <data name="ContinueCreatingTaxInvoice" xml:space="preserve">
+    <value>გაგრძელდეს ა/ფ დოკუმენტის შექმნა</value>
+  </data>
+  <data name="ErrorDocumentAdd" xml:space="preserve">
+    <value>შეცდომა დოკუმენტის დამატებისას</value>
+  </data>
+  <data name="FailedToCorrectTaxInvoice" xml:space="preserve">
+    <value>ვერ მოხერხდა ა/ფ-ის დაკორექტირება</value>
+  </data>
+  <data name="UnitedTaxInvoiceCreatedSuccesfully" xml:space="preserve">
+    <value>გაერთიანებული ა/ფ შეიქმნა წარმატებით პროგრამაში</value>
+  </data>
+  <data name="BaseARInvoiceCouldNotFoundInTheMarkedDocumentsSList" xml:space="preserve">
+    <value>საფუძველი რეალიზაცია არ არის მონიშნული დოკუმენტების სიაში</value>
+  </data>
+  <data name="BaseARInvoice" xml:space="preserve">
+    <value>საფუძველი რეალიზაცია</value>
+  </data>
+  <data name="WaybillIsConfirmed" xml:space="preserve">
+    <value>ზედნადები დადასტურებულია</value>
+  </data>
+  <data name="WaybillIsLinkedToDocument" xml:space="preserve">
+    <value>ზედნადები მიბმულია დოკუმენტზე</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>გადატვირთვა</value>
+  </data>
+  <data name="Tax" xml:space="preserve">
+    <value>გადასახადი</value>
+  </data>
+  <data name="CreatePurchaseDocuments" xml:space="preserve">
+    <value>გაფომრდეს შესყიდვის დოკუმენტები</value>
+  </data>
+  <data name="CreateCreditMemoDocuments" xml:space="preserve">
+    <value>გაფორმდეს დაბრუნების დოკუმენტები</value>
+  </data>
+  <data name="BalanceDue" xml:space="preserve">
+    <value>მიმდ. ნაშთი</value>
+  </data>
+  <data name="DocumentRemarks" xml:space="preserve">
+    <value>დოკ. შენიშვნები</value>
+  </data>
+  <data name="DueDate" xml:space="preserve">
+    <value>გადახდის თარიღი</value>
+  </data>
+  <data name="InDetail" xml:space="preserve">
+    <value>დეტალურად</value>
+  </data>
+  <data name="OverdueDays" xml:space="preserve">
+    <value>გადავ. დღეები</value>
+  </data>
+  <data name="Selected" xml:space="preserve">
+    <value>არჩეული</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>ჯამი</value>
+  </data>
+  <data name="TotalPayment" xml:space="preserve">
+    <value>მთლიანი გადახდა</value>
+  </data>
+  <data name="Above" xml:space="preserve">
+    <value>აღემატება</value>
+  </data>
+  <data name="AmountFromBank" xml:space="preserve">
+    <value>გადმორიცხული თანხა</value>
+  </data>
+  <data name="DownPaymentAmount" xml:space="preserve">
+    <value>ავანსის თანხა</value>
+  </data>
+  <data name="InvoicesAmount" xml:space="preserve">
+    <value>ინვოისების თანხა</value>
+  </data>
+  <data name="PaymentOnAccount" xml:space="preserve">
+    <value>ანგარიშზე გადარიცხვა</value>
+  </data>
+  <data name="TotalAmountDue" xml:space="preserve">
+    <value>სულ მიმდ. თანხა</value>
+  </data>
+  <data name="CreatePaymentDocuments" xml:space="preserve">
+    <value>გაფორმდეს გადახდის დოკუმენტები</value>
+  </data>
+  <data name="TotalPaymentLocal" xml:space="preserve">
+    <value>მთლიანი გადახდა (ავ)</value>
+  </data>
+  <data name="InstallmentID" xml:space="preserve">
+    <value>გადარიცხვა</value>
+  </data>
+  <data name="BPCurrencyRate" xml:space="preserve">
+    <value>ბპ. კურსი</value>
+  </data>
+  <data name="NameMismatchFromEnregDoYouWantEditDr" xml:space="preserve">
+    <value>ფიზიკური პირის დასახელება განსხვავდება რეესტრში არსებული დასახელებისგან! გსურთ შეიცვალოს მიმდინარე დასახელება?</value>
+  </data>
+  <data name="withDetl" xml:space="preserve">
+    <value>დეტალური</value>
+  </data>
+  <data name="withoutDetl" xml:space="preserve">
+    <value>არადეტალური</value>
+  </data>
+  <data name="WithoutSalary" xml:space="preserve">
+    <value>ხელფასის გარეშე</value>
+  </data>
+  <data name="Salary" xml:space="preserve">
+    <value>ხელფასი</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>ყველა</value>
+  </data>
+  <data name="needTax" xml:space="preserve">
+    <value>ა/ფ საჭიროება</value>
+  </data>
+  <data name="NotNeedTax" xml:space="preserve">
+    <value>არ საჭიროებს ა/ფ</value>
+  </data>
+  <data name="OnlyNeedTax" xml:space="preserve">
+    <value>მხოლოდ ისეთები რომლებიც საჭიროებენ ა/ფ</value>
+  </data>
+  <data name="IsVATPayer" xml:space="preserve">
+    <value>დღგს გადამხდელი</value>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>ჩამოწერა</value>
+  </data>
+  <data name="CantUpdateRTM1" xml:space="preserve">
+    <value>ვერ მოხერხდა RTM1 ცხრილის განახლება</value>
+  </data>
+  <data name="YouMustRunFromPreviusReport" xml:space="preserve">
+    <value>გადათვლა განახორციელეთ შენახული მონაცემებიდან</value>
+  </data>
+  <data name="CreateGoodsReceiptPO" xml:space="preserve">
+    <value>საქონლის მიღების შექმნა</value>
+  </data>
+  <data name="APInvoiceIsCreatedFromGoodsReceiptPO" xml:space="preserve">
+    <value>AP Invoice შექმნილია Goods Receipt PO დან</value>
+  </data>
+  <data name="EmployeeAccount" xml:space="preserve">
+    <value>თანამშრომლის ანგარიში</value>
+  </data>
+  <data name="ItemAccount" xml:space="preserve">
+    <value>საქონლის ანგარიში</value>
+  </data>
+  <data name="ItemCategories" xml:space="preserve">
+    <value>პროდუქტის კატეგორია</value>
+  </data>
+  <data name="ItemCategory" xml:space="preserve">
+    <value>პროდუქტის კატეგორია</value>
+  </data>
+  <data name="ItemSubCategories" xml:space="preserve">
+    <value>პროდუქტის ქვეკატეგორია</value>
+  </data>
+  <data name="ItemSubCategory" xml:space="preserve">
+    <value>პროდუქტის ქვეკატეგორია</value>
+  </data>
+  <data name="uomNameRS" xml:space="preserve">
+    <value>ერთეულის დასახელება RS</value>
+  </data>
+  <data name="addRow" xml:space="preserve">
+    <value>სტრ. გაყოფა</value>
+  </data>
+  <data name="NewRowQuantity" xml:space="preserve">
+    <value>ახალი სტრ-ის რაოდ.</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+  <data name="QuantityShouldBeLessThan" xml:space="preserve">
+    <value>რაოდენობა უნდა იყოს ნაკლები ვიდრე</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>კატეგორიები</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>დონე</value>
+  </data>
+  <data name="Father" xml:space="preserve">
+    <value>მშობელი</value>
+  </data>
+  <data name="ItemCategoriesMasterData" xml:space="preserve">
+    <value>კატეგორიები</value>
+  </data>
+  <data name="LevelIsNotFeel" xml:space="preserve">
+    <value>დონე არ არის შევსებული</value>
+  </data>
+  <data name="BankingIntegrationRules" xml:space="preserve">
+    <value>საბანკო სისტემასთან ინტეგრაციის წესები</value>
+  </data>
+  <data name="Drivers" xml:space="preserve">
+    <value>მძღოლები</value>
+  </data>
+  <data name="ProfitTaxBase" xml:space="preserve">
+    <value>მოგების გადასახადის დაბეგვრის ობიექტები</value>
+  </data>
+  <data name="ProfitTaxBaseType" xml:space="preserve">
+    <value>მოგების გადასახადის დაბეგვრის ობიექტების ტიპები</value>
+  </data>
+  <data name="ReserveInvoiceAsService" xml:space="preserve">
+    <value>რეზ. ინვოისიდან ა/ფ-ს მომსახურებაზე გამოწერა</value>
+  </data>
+  <data name="serviceRate" xml:space="preserve">
+    <value>სერვისის ტარიფი</value>
+  </data>
+  <data name="ServiceAmount" xml:space="preserve">
+    <value>Service Amount</value>
+  </data>
+  <data name="WTaxAmount" xml:space="preserve">
+    <value>საშემოსავლოს თანხა</value>
+  </data>
+  <data name="BankAcc" xml:space="preserve">
+    <value>საბანკო ანგარიში</value>
+  </data>
+  <data name="ChrgDtls" xml:space="preserve">
+    <value>საკომ. დეტალები</value>
+  </data>
+  <data name="ControlAccount" xml:space="preserve">
+    <value>საკონტ. ანგარიში</value>
+  </data>
+  <data name="Descript" xml:space="preserve">
+    <value>მინიშნება</value>
+  </data>
+  <data name="DispType" xml:space="preserve">
+    <value>Dispatche ტიპი</value>
+  </data>
+  <data name="DocumentPostingDate" xml:space="preserve">
+    <value>თარიღი</value>
+  </data>
+  <data name="OutgoingPaymentWizard" xml:space="preserve">
+    <value>გამავალი გადახდის დამხმარე</value>
+  </data>
+  <data name="PrimaryFormItem" xml:space="preserve">
+    <value>ფულ. სახ. მუხლი</value>
+  </data>
+  <data name="DescriptionIsMandatory" xml:space="preserve">
+    <value>მინიშნება არის აუცილებლად შესავსები!</value>
+  </data>
+  <data name="DocumentCreatedSuccesfully" xml:space="preserve">
+    <value>წარმატებით შეიქმნა დოკუმენტი </value>
+  </data>
+  <data name="DocumentNotCreated" xml:space="preserve">
+    <value>დოკუმენტი არ შექმნილა</value>
+  </data>
+  <data name="FromProject" xml:space="preserve">
+    <value>გამგზ. პროექტი</value>
+  </data>
+  <data name="GrossAmount" xml:space="preserve">
+    <value>გროს თანხა</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>პროდუქტი</value>
+  </data>
+  <data name="VATCode" xml:space="preserve">
+    <value>დღგ კოდი</value>
+  </data>
+  <data name="SupplierName" xml:space="preserve">
+    <value>მომწოდებლის დასახელება</value>
+  </data>
+  <data name="ChooseDownPaymentTaxInvoice" xml:space="preserve">
+    <value>დოკ. არჩევა</value>
+  </data>
+  <data name="VatAmountCanNotBeMoreThanOpenVatRow" xml:space="preserve">
+    <value>დღგ-ს თანხა არ უნდა იყოს დარჩენილ დღგ-ზე მეტი. სტრიქონი: </value>
+  </data>
+  <data name="DocumentAlreadyAddedRow" xml:space="preserve">
+    <value>დოკუმენტი უკვე დამატებულია. სტრიქონი: </value>
+  </data>
+  <data name="OpenVAT" xml:space="preserve">
+    <value>დარჩენილი დღგ</value>
+  </data>
+  <data name="CanNotCancelLinkedDocument" xml:space="preserve">
+    <value>არ შეიძლება მიბმული დოკუმენტის გაუქმება</value>
+  </data>
+  <data name="LinkedAPInvoicesAndCreditNotes" xml:space="preserve">
+    <value>დაკავშირებული შესყიდვები და კორექტირებები</value>
+  </data>
+  <data name="LinkedDPMTaxInvoices" xml:space="preserve">
+    <value>დაკავშირებული ავანსის ანგარიშ-ფაქტურები</value>
+  </data>
+  <data name="advancesVatAmountCanNotBeMoreThanTaxInvoiceVatAmount" xml:space="preserve">
+    <value>ავანსების დღგ არ შეიძლება იყოს შესყიდვის ფაქტურის დღგ-ზე მეტი</value>
+  </data>
+  <data name="DownPaymentTaxInvoiceContent" xml:space="preserve">
+    <value>ავანსის ა/ფ-ის შემადგენლობა</value>
+  </data>
+  <data name="AutoPaymentInternetBank" xml:space="preserve">
+    <value>ავტომატური რეკონსილაცია</value>
+  </data>
+  <data name="AcctForAutoPaymentInternetBank" xml:space="preserve">
+    <value>ანგარიში ავანსისთვის ავტომატური გადახდისას - ინტერნეტ ბანკი</value>
+  </data>
+  <data name="ReceivedDownPaymentPurpose" xml:space="preserve">
+    <value>მიღებული ავანსის დანიშნულება</value>
+  </data>
+  <data name="CreatedAutomaticallyInPlaceOfPaymentDocument" xml:space="preserve">
+    <value>შექმნილია ავტომატურად გადახდის დოკუმენტის ნაცვლად: </value>
+  </data>
+  <data name="SynchronizeDateAndCurrency" xml:space="preserve">
+    <value>სინქრონიზაცია</value>
+  </data>
+  <data name="AfterChangeDateFormWillCloseReopen" xml:space="preserve">
+    <value>თარიღის შეცვლის შემდეგ ფორმა დაიხურება და ხელახლა გაიხსნება</value>
+  </data>
+  <data name="ARDownPaymentVATAccrual" xml:space="preserve">
+    <value>ავანსის დღგ-ს დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="ARVATAccualWizard" xml:space="preserve">
+    <value>ავანსის დღგ-ს დარიცხვის დამხმარე</value>
+  </data>
+  <data name="DocEntVT" xml:space="preserve">
+    <value>დღგ-ს დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="DocNumVT" xml:space="preserve">
+    <value>დღგ-ს დარიცხვის დოკუმენტის ნომერი</value>
+  </data>
+  <data name="ChangeDocDate" xml:space="preserve">
+    <value>თარიღის შეცვლა</value>
+  </data>
+  <data name="ReconcilationWizard" xml:space="preserve">
+    <value>რეკონსილაციის დამხმარე</value>
+  </data>
+  <data name="ReconSum" xml:space="preserve">
+    <value>რეკონსილაციის თანხა</value>
+  </data>
+  <data name="NewDate" xml:space="preserve">
+    <value>ახალი თარიღი</value>
+  </data>
+  <data name="CreateVATAccrualDocuments" xml:space="preserve">
+    <value>შეიქმნას დღგ-ს დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="AlRcnSum" xml:space="preserve">
+    <value>გატარებული თანხა</value>
+  </data>
+  <data name="AlRcnVat" xml:space="preserve">
+    <value>გატარებული დღგ</value>
+  </data>
+  <data name="DefaultValues" xml:space="preserve">
+    <value>Default values</value>
+  </data>
+  <data name="TransId" xml:space="preserve">
+    <value>გატარების #</value>
+  </data>
+  <data name="AddDPAmount" xml:space="preserve">
+    <value>ავანსის თანხა</value>
+  </data>
+  <data name="Localisation" xml:space="preserve">
+    <value>ლოკალიზაციის</value>
+  </data>
+  <data name="AddonLicense" xml:space="preserve">
+    <value>Addon ლიცენზია</value>
+  </data>
+  <data name="AfterChangingLicenseKey" xml:space="preserve">
+    <value>ლიცენზიის კოდის შეცვლის შემდეგ დაიხურება ყველა ფანჯარა, გაგარძელდეს?</value>
+  </data>
+  <data name="License" xml:space="preserve">
+    <value>ლიცენზია</value>
+  </data>
+  <data name="LicenseKey" xml:space="preserve">
+    <value>ლიცენზიის კოდი</value>
+  </data>
+  <data name="LicenseLocalisationProgram" xml:space="preserve">
+    <value>ლოკალიზაციის ლიცენზირება</value>
+  </data>
+  <data name="LocalisationAddonNotLicensed" xml:space="preserve">
+    <value>ლოკალიზაციის ედონი ლიცენზირება ვერ მოხერხდა</value>
+  </data>
+  <data name="LocalisationLicense" xml:space="preserve">
+    <value>ლოკალიზაციის ლიცენზია</value>
+  </data>
+  <data name="LocalisationLicensingDataCouldNotBeCreated" xml:space="preserve">
+    <value>ლოკალიზაციის ლიცენზირებისთვის მონაცემების შექმნა ვერ მოხერხდა</value>
+  </data>
+  <data name="CompanyPension" xml:space="preserve">
+    <value>დამსაქმებლის საპენსიო</value>
+  </data>
+  <data name="PhysicalEntityPension" xml:space="preserve">
+    <value>დასაქმებულის საპენსიო</value>
+  </data>
+  <data name="WithholdingTax" xml:space="preserve">
+    <value>საშემოსავლო გადასახადი</value>
+  </data>
+  <data name="PhysicalEntityTax" xml:space="preserve">
+    <value>ფიზ. პირის გადასახ.</value>
+  </data>
+  <data name="DebtAccount" xml:space="preserve">
+    <value>დებ. ანგარიში</value>
+  </data>
+  <data name="LicenseStatus" xml:space="preserve">
+    <value>ლიცენზიის სტატუსი</value>
+  </data>
+  <data name="LicenseUpdateDate" xml:space="preserve">
+    <value>ლიც. განახ. თარიღი</value>
+  </data>
+  <data name="CompPension" xml:space="preserve">
+    <value>დამსაქმ. საპენსიო</value>
+  </data>
+  <data name="PhysEntityPension" xml:space="preserve">
+    <value>დასაქმებ. საპენსიო</value>
+  </data>
+  <data name="WithhTax" xml:space="preserve">
+    <value>საშ. გადასახადი</value>
+  </data>
+  <data name="BlockNegativeStockOnPostingDate" xml:space="preserve">
+    <value>უარყოფითი ნაშთის კონტროლი გატარების თარიღის მიხედვით</value>
+  </data>
+  <data name="ByCompany" xml:space="preserve">
+    <value>კომპანიის მიხედვით</value>
+  </data>
+  <data name="ByWarehouse" xml:space="preserve">
+    <value>საწყობის მიხედვით</value>
+  </data>
+  <data name="DoNotBlock" xml:space="preserve">
+    <value>არ დაიბლოკოს</value>
+  </data>
+  <data name="WithoutCurrencyDetailing" xml:space="preserve">
+    <value>ვალუტით დეტალიზაციის გარეშე</value>
+  </data>
+  <data name="DocumentCannotBeAdded" xml:space="preserve">
+    <value>დოკუმენტის გატარება შეუძლებელია</value>
+  </data>
+  <data name="InsufficientStockBalanceOnPostingDate" xml:space="preserve">
+    <value>არასაკმარისი ნაშთი გატარების თარიღისთვის</value>
+  </data>
+  <data name="CloseFormIntBank" xml:space="preserve">
+    <value>დაიხუროს ინტერნეტ ბანკის დამხმარე?</value>
+  </data>
+  <data name="IntBanking" xml:space="preserve">
+    <value>ინტ. ბანკი</value>
+  </data>
+  <data name="InvoicesDifferentCurrenciesError" xml:space="preserve">
+    <value>ინვოისების ვალუტები არ უნდა განსხვავდებოდეს!</value>
+  </data>
+  <data name="LocalizationSettings" xml:space="preserve">
+    <value>ლოკალიზაცია</value>
+  </data>
+  <data name="BudgetCashFlow" xml:space="preserve">
+    <value>ბიუჯეტირების მუხლი</value>
+  </data>
+  <data name="BudgetCashFlowCodeOutgoingWizard" xml:space="preserve">
+    <value>ბიუჯ. მუხლი</value>
+  </data>
+  <data name="IsDevelopmentCompany" xml:space="preserve">
+    <value>სამშენებლო ან დეველოპერული კომპანია</value>
+  </data>
+  <data name="BlnkAgr" xml:space="preserve">
+    <value>საერთო შეთანხმება</value>
+  </data>
+  <data name="SynchNotPossibleDocumentLiableProfitTax" xml:space="preserve">
+    <value>დოკუმენტის თარიღის ავტომატური სინქრონიზაცია შეუძლებელია - დოკუმენტი იბეგრება საშ.გად-ით ან მოგების გადასახადით. საჭიროა მისი რედაქტირება მანუალურად</value>
+  </data>
+  <data name="Payment" xml:space="preserve">
+    <value>გადახდა</value>
+  </data>
+  <data name="PaymentAmount" xml:space="preserve">
+    <value>გადახდილი თანხა</value>
+  </data>
+  <data name="CashAccount" xml:space="preserve">
+    <value>ფულ.ანგ.</value>
+  </data>
+  <data name="CashFlow" xml:space="preserve">
+    <value>ფულ. ნაკადი</value>
+  </data>
+  <data name="DoYouWantToClose" xml:space="preserve">
+    <value>გსურთ დაიხუროს</value>
+  </data>
+  <data name="ReconciliationDifferenceMustBeZeroBeforeReconciling" xml:space="preserve">
+    <value>რეკონსილაციამდე რეკონსილაციის განსხვავება უნდა უდრიდეს 0-ს</value>
+  </data>
+  <data name="CostCenterCreatedSuccessfully" xml:space="preserve">
+    <value>ხარჯს ცენტრი წარმატებით შეიქმნა</value>
+  </data>
+  <data name="CostCenterNotCreated" xml:space="preserve">
+    <value>ხარჯის ცენტრი არ შეიქმნა</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>შექმნა</value>
+  </data>
+  <data name="CreateDistributionRule" xml:space="preserve">
+    <value>განაწილების წესის შექმნა</value>
+  </data>
+  <data name="DistributionRule" xml:space="preserve">
+    <value>განაწილების წესი</value>
+  </data>
+  <data name="NewCostCenterForm" xml:space="preserve">
+    <value>ახალი ხარჯის ცენტრი</value>
+  </data>
+  <data name="FixedAssetTransferDocument" xml:space="preserve">
+    <value>ძირითადი საშუალებების გადაადგილება</value>
+  </data>
+  <data name="FromEmployee" xml:space="preserve">
+    <value>თანამშრომლისგან</value>
+  </data>
+  <data name="FromEmployeeName" xml:space="preserve">
+    <value>თანამშრომლისგან დას.</value>
+  </data>
+  <data name="FromLocation" xml:space="preserve">
+    <value>ადგილმდებარეობიდან</value>
+  </data>
+  <data name="FromLocationName" xml:space="preserve">
+    <value>ადგილმდებარეობიდან დას.</value>
+  </data>
+  <data name="ToEmployee" xml:space="preserve">
+    <value>თანამშრომელს</value>
+  </data>
+  <data name="ToEmployeeName" xml:space="preserve">
+    <value>თანამშრომელს დას.</value>
+  </data>
+  <data name="ToLocation" xml:space="preserve">
+    <value>ადგილმდებარეობაზე</value>
+  </data>
+  <data name="ToLocationName" xml:space="preserve">
+    <value>ადგილმდებარეობაზე დას.</value>
+  </data>
+  <data name="AddNewRow" xml:space="preserve">
+    <value>სტრ. დამატება</value>
+  </data>
+  <data name="DeleteRow" xml:space="preserve">
+    <value>სტრ. წაშლა</value>
+  </data>
+  <data name="SerNo" xml:space="preserve">
+    <value>სერ.ნომ.</value>
+  </data>
+  <data name="CannotUpdateAsset" xml:space="preserve">
+    <value>აქტივის გადაადგილება შეუძლებელია</value>
+  </data>
+  <data name="DoYouWantToClearTheTable" xml:space="preserve">
+    <value>გსურთ გასუფთავდეს ცხრილი?</value>
+  </data>
+  <data name="TransferDocumentAlreadyExistsForAsset" xml:space="preserve">
+    <value>გადაადგილების დოკუმენტი უკვე არსებობს ძ.ს-სთვის:</value>
+  </data>
+  <data name="Delivery" xml:space="preserve">
+    <value>მიწოდება</value>
+  </data>
+  <data name="AccumulatedDepreciationAccount" xml:space="preserve">
+    <value>ცვეთის დაგროვილი ანგარიში</value>
+  </data>
+  <data name="DepreciationExpenseAccount" xml:space="preserve">
+    <value>ცვეთის ხარჯის ანგარიში</value>
+  </data>
+  <data name="FixedAsset" xml:space="preserve">
+    <value>ძირითადი საშუალება</value>
+  </data>
+  <data name="UsLife" xml:space="preserve">
+    <value>გამოყენების ვადა</value>
+  </data>
+  <data name="DepreciationAccrual" xml:space="preserve">
+    <value>ცვეთის დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="AccrualMonth" xml:space="preserve">
+    <value>დარიცხვის თვე</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>ადგილმდებარეობა</value>
+  </data>
+  <data name="DepreciationAmount" xml:space="preserve">
+    <value>ცვეთის რაოდენობა</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>უკან</value>
+  </data>
+  <data name="CategoryLevel" xml:space="preserve">
+    <value>კატეგორიის დონე</value>
+  </data>
+  <data name="Cost" xml:space="preserve">
+    <value>ღირებულება</value>
+  </data>
+  <data name="CreateDoc" xml:space="preserve">
+    <value>დოკ. შექმნა</value>
+  </data>
+  <data name="CreateStockTransferDocuments" xml:space="preserve">
+    <value>შეიქმნას მარაგის გადაადგილების დოკუმენტები</value>
+  </data>
+  <data name="Fuel" xml:space="preserve">
+    <value>საწვავი</value>
+  </data>
+  <data name="InStock" xml:space="preserve">
+    <value>ნაშთში</value>
+  </data>
+  <data name="ItemFrom" xml:space="preserve">
+    <value>პროდუქტი დან.</value>
+  </data>
+  <data name="ItemGroup" xml:space="preserve">
+    <value>პროდუქტის ჯგუფი</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>ცენტრალური</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>შემდეგი</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>პოზიციები</value>
+  </data>
+  <data name="Responsible" xml:space="preserve">
+    <value>პასუხისმგებელი</value>
+  </data>
+  <data name="ReturnToMainWarehouse" xml:space="preserve">
+    <value>დაბრუნება ცენტრალურ საწყობზე</value>
+  </data>
+  <data name="ReturnToWriteOffWarehouse" xml:space="preserve">
+    <value>დაბრუნება პროექტის საწყობზე</value>
+  </data>
+  <data name="Split" xml:space="preserve">
+    <value>სტრ. გაყოფა</value>
+  </data>
+  <data name="StockTransferWizard" xml:space="preserve">
+    <value>მარაგების გადაადგილების დამხმარე</value>
+  </data>
+  <data name="TransferToProjectWarehouse" xml:space="preserve">
+    <value>გადაადგილება პროექტის საწყობზე</value>
+  </data>
+  <data name="TransferToWriteOffWarehouse" xml:space="preserve">
+    <value>გადაადგილება ხარჯვის საწყობზე</value>
+  </data>
+  <data name="TransferWithoutType" xml:space="preserve">
+    <value>გადაადგილება ტიპის განსაზღვრის გარეშე</value>
+  </data>
+  <data name="WareHouses" xml:space="preserve">
+    <value>საწყობი</value>
+  </data>
+  <data name="WarehouseType" xml:space="preserve">
+    <value>საწყობის ტიპი</value>
+  </data>
+  <data name="WhsFr" xml:space="preserve">
+    <value>საწყობიდან</value>
+  </data>
+  <data name="WhsTo" xml:space="preserve">
+    <value>საწყობზე</value>
+  </data>
+  <data name="WriteOff" xml:space="preserve">
+    <value>ხარჯვის</value>
+  </data>
+  <data name="AlrDeprAmt" xml:space="preserve">
+    <value>დარიცხული თანხა</value>
+  </data>
+  <data name="BatchNumber" xml:space="preserve">
+    <value>პარტიის ნომერი</value>
+  </data>
+  <data name="AddBatch" xml:space="preserve">
+    <value>პარტიის ნომრების დამატება</value>
+  </data>
+  <data name="APCost" xml:space="preserve">
+    <value>შესყიდვის ღირებულება</value>
+  </data>
+  <data name="CreateDepreciationDocument" xml:space="preserve">
+    <value>ცვეთის დოკუმენტის შექმნა</value>
+  </data>
+  <data name="CurMnthAmt" xml:space="preserve">
+    <value>პერიოდში დარიცხული თანხა</value>
+  </data>
+  <data name="DeprAmt" xml:space="preserve">
+    <value>ცვეთის თანხა</value>
+  </data>
+  <data name="DepreciationAccruingWizard" xml:space="preserve">
+    <value>ცვეთის დარიცხვის დამხმარე</value>
+  </data>
+  <data name="DistNumber" xml:space="preserve">
+    <value>პარტის ნომერი</value>
+  </data>
+  <data name="ItmsGrpCod" xml:space="preserve">
+    <value>საქინლის ჯგუფი</value>
+  </data>
+  <data name="NtBookVal" xml:space="preserve">
+    <value>საბალანსო რირებულება</value>
+  </data>
+  <data name="UseLife" xml:space="preserve">
+    <value>გამოყენების ვადა (თვე)</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>კურსის დიაპაზონი</value>
+  </data>
+  <data name="UseBlAgrRt" xml:space="preserve">
+    <value>კურსის დიაპაზონის გამოყენება</value>
+  </data>
+  <data name="BatchNumberPrefix" xml:space="preserve">
+    <value>პარტიის ნომრის პრეფიქსი</value>
+  </data>
+  <data name="PrefixError" xml:space="preserve">
+    <value>პარტიის ნომერი ვერ შეიქმნა. გთხოვთ, შეავსოთ 2 სიმბოლოიანი პარტიის ნომრის პრეფიქსი</value>
+  </data>
+  <data name="FindNext" xml:space="preserve">
+    <value>ძებნა</value>
+  </data>
+  <data name="TotalPaymentNet" xml:space="preserve">
+    <value>მთლიანი გადახდა (ნეტი)</value>
+  </data>
+<data name="ACNumber" xml:space="preserve">
+    <value>A/C ნომერი</value>
+  </data>
+  <data name="DuplicateAccountInTheLine" xml:space="preserve">
+    <value>ანგარიში მეორდება ხაზზე</value>
+  </data>
+</root>

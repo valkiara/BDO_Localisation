@@ -1,0 +1,545 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{91940B92-D929-43D9-B902-420CAF76C471}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BDO_Localisation_AddOn</RootNamespace>
+    <AssemblyName>BDO_Localisation_AddOn</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>BDO_Localisation_AddOn.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>obj\x86\Release\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="APCorrectionInvoice.cs" />
+    <Compile Include="APDownPayment.cs" />
+    <Compile Include="APDownPaymentInvoice.cs" />
+    <Compile Include="APInvoice.cs" />
+    <Compile Include="APCreditMemo.cs" />
+    <Compile Include="ARReserveInvoice.cs" />
+    <Compile Include="APReserveInvoice.cs" />
+    <Compile Include="ARCreditNote.cs" />
+    <Compile Include="ARDownPayment.cs" />
+    <Compile Include="ARDownPaymentInvoice.cs" />
+    <Compile Include="ARDownPaymentRequest.cs" />
+    <Compile Include="ARInvoice.cs" />
+    <Compile Include="BalanceSheet.cs" />
+    <Compile Include="BDOSARDownPaymentVATAccrual.cs" />
+    <Compile Include="BDOSAutomaticTasks.cs" />
+    <Compile Include="BDOSDeleteUDF.cs" />
+    <Compile Include="BDOSDepreciationAccrualDocument.cs" />
+    <Compile Include="BDOSDownPaymentTaxAnalysisReceived.cs" />
+    <Compile Include="BDOSFixedAssetTransfer.cs" />
+    <Compile Include="BDOSInternetBanking.cs" />
+    <Compile Include="BDOSInternetBankingDocuments.cs" />
+    <Compile Include="BDOSItemCategories.cs" />
+    <Compile Include="BDOSOutgoingPaymentsWizard.cs" />
+    <Compile Include="BDOSReportSettlementReconciliationAct.cs" />
+    <Compile Include="BDOSResources.cs" />
+    <Compile Include="BDOSStockTransferWizard.cs" />
+    <Compile Include="BDOSTablesLog.cs" />
+    <Compile Include="BDOSTaxAnalysisReceived.cs" />
+    <Compile Include="BDOSTaxAnalysissSent.cs" />
+    <Compile Include="BDOSTaxJournal.cs" />
+    <Compile Include="BDOSVATAccrualWizard.cs" />
+    <Compile Include="BDOSVATReconcilationWizard.cs" />
+    <Compile Include="BDOSWaybillsAnalysisReceived.cs" />
+    <Compile Include="BDOSWaybillsAnalysisSent.cs" />
+    <Compile Include="BDO_BPCatalog.cs" />
+    <Compile Include="BDO_Drivers.cs" />
+    <Compile Include="BDO_ImportRateForm.cs" />
+    <Compile Include="BDO_ProfitTaxAccrual.cs" />
+    <Compile Include="BDO_ProfitTaxBase.cs" />
+    <Compile Include="BDO_ProfitTaxBaseType.cs" />
+    <Compile Include="BDO_RSUoM.cs" />
+    <Compile Include="BDO_TaxInvoiceSent.cs" />
+    <Compile Include="BDO_Vehicles.cs" />
+    <Compile Include="BDO_Waybills.cs" />
+    <Compile Include="BDO_WaybillsJournalReceived.cs" />
+    <Compile Include="BDO_WaybillsJournalSent.cs" />
+    <Compile Include="BDO_WBReceivedDocs.cs" />
+    <Compile Include="BlanketAgreement.cs" />
+    <Compile Include="BOG Integration Services\AuthorizeResponse.cs" />
+    <Compile Include="BOG Integration Services\BDOSAuthenticationFormBOG.cs" />
+    <Compile Include="BOG Integration Services\HttpClientExtensions.cs" />
+    <Compile Include="BOG Integration Services\MainPaymentServiceBOG.cs" />
+    <Compile Include="BOG Integration Services\Model\AccountBalance.cs" />
+    <Compile Include="BOG Integration Services\Model\AccountDetails.cs" />
+    <Compile Include="BOG Integration Services\Model\DocumentStatus.cs" />
+    <Compile Include="BOG Integration Services\Model\NbgCurrencyHistory.cs" />
+    <Compile Include="BOG Integration Services\Model\PaymentBase.cs" />
+    <Compile Include="BOG Integration Services\Model\Statement.cs" />
+    <Compile Include="BOG Integration Services\Model\StatementFilter.cs" />
+    <Compile Include="BOG Integration Services\OAuth2Client.cs" />
+    <Compile Include="BOG Integration Services\OAuth2Constants.cs" />
+    <Compile Include="BusinessPartners.cs" />
+    <Compile Include="ChartOfAccounts.cs" />
+    <Compile Include="CommonFunctions.cs" />
+    <Compile Include="CrystalReports.cs" />
+    <Compile Include="CompanyDetails.cs" />
+    <Compile Include="ConnectB1.cs" />
+    <Compile Include="CurrencyB1.cs" />
+    <Compile Include="APDownPaymentRequest.cs" />
+    <Compile Include="Delivery.cs" />
+    <Compile Include="BDOSDepreciationAccrualWizard.cs" />
+    <Compile Include="DocumentSettings.cs" />
+    <Compile Include="ExchangeRateDiffs.cs" />
+    <Compile Include="FinancialReports.cs" />
+    <Compile Include="Capitalization.cs" />
+    <Compile Include="FixedAsset.cs" />
+    <Compile Include="GeneralSettings.cs" />
+    <Compile Include="GoodsIssue.cs" />
+    <Compile Include="GoodsReceiptPO.cs" />
+    <Compile Include="HouseBankAccounts.cs" />
+    <Compile Include="IncomingPayment.cs" />
+    <Compile Include="BDOSInternetBankingIntegrationServicesRules.cs" />
+    <Compile Include="LandedCostsSetup.cs" />
+    <Compile Include="License.cs" />
+    <Compile Include="Locations.cs" />
+    <Compile Include="ItemGroup.cs" />
+    <Compile Include="ProfitAndLossStatement.cs" />
+    <Compile Include="ProfitTax.cs" />
+    <Compile Include="Resource\Res.en.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Res.en.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeFormRatesAndIndexes.cs" />
+    <Compile Include="FormsB1.cs" />
+    <Compile Include="StockTransfer.cs" />
+    <Compile Include="Items.cs" />
+    <Compile Include="JournalEntry.cs" />
+    <Compile Include="LandedCosts.cs" />
+    <Compile Include="NBGCurrency.cs" />
+    <Compile Include="NumberToGeorgianTextConverter.cs" />
+    <Compile Include="OutgoingPayment.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="BDO_TaxInvoiceReceived.cs" />
+    <Compile Include="Retirement.cs" />
+    <Compile Include="Return.cs" />
+    <Compile Include="SalesOrder.cs" />
+    <Compile Include="StatementOfCashFlows.cs" />
+    <Compile Include="TaxInvoice.cs" />
+    <Compile Include="TaxService.cs" />
+    <Compile Include="TBC Integration Services\AbstractIo.cs" />
+    <Compile Include="TBC Integration Services\AccountIdentificationIo.cs" />
+    <Compile Include="TBC Integration Services\AccountMovementDetailIo.cs" />
+    <Compile Include="TBC Integration Services\AccountMovementFilterIo.cs" />
+    <Compile Include="TBC Integration Services\AdditionalAttributeIo.cs" />
+    <Compile Include="TBC Integration Services\BaseFilterIo.cs" />
+    <Compile Include="TBC Integration Services\BasePagerIo.cs" />
+    <Compile Include="TBC Integration Services\BaseQueryResultIo.cs" />
+    <Compile Include="TBC Integration Services\BDOSAuthenticationFormTBC.cs" />
+    <Compile Include="TBC Integration Services\ChangePasswordService.cs" />
+    <Compile Include="TBC Integration Services\ClassForTransfer\TransferToOtherBankForeignCurrencyPaymentOrderIo.cs" />
+    <Compile Include="TBC Integration Services\ClassForTransfer\TransferToOtherBankNationalCurrencyPaymentOrderIo.cs" />
+    <Compile Include="TBC Integration Services\ClassForTransfer\TransferToOwnAccountPaymentOrderIo.cs" />
+    <Compile Include="TBC Integration Services\ClassForTransfer\TransferWithinBankPaymentOrderIo.cs" />
+    <Compile Include="TBC Integration Services\ClassForTransfer\TreasuryTransferPaymentOrderIo.cs" />
+    <Compile Include="TBC Integration Services\GetStatusRequestResponse\GetPaymentOrderStatusRequestIo.cs" />
+    <Compile Include="TBC Integration Services\GetStatusRequestResponse\GetPaymentOrderStatusResponseIo.cs" />
+    <Compile Include="TBC Integration Services\ImportRequestResponse\ImportBatchPaymentOrderRequestIo.cs" />
+    <Compile Include="TBC Integration Services\ImportRequestResponse\ImportBatchPaymentOrderResponseIo.cs" />
+    <Compile Include="TBC Integration Services\ImportRequestResponse\ImportSinglePaymentOrdersRequestIo.cs" />
+    <Compile Include="TBC Integration Services\ImportRequestResponse\ImportSinglePaymentOrdersResponseIo.cs" />
+    <Compile Include="TBC Integration Services\MainChangePasswordService.cs" />
+    <Compile Include="TBC Integration Services\MainMovementService.cs" />
+    <Compile Include="TBC Integration Services\MainPaymentService.cs" />
+    <Compile Include="TBC Integration Services\MoneyIo.cs" />
+    <Compile Include="TBC Integration Services\MovementService.cs" />
+    <Compile Include="TBC Integration Services\PaymentOrderIo.cs" />
+    <Compile Include="TBC Integration Services\PaymentOrderResultIo.cs" />
+    <Compile Include="TBC Integration Services\PaymentService.cs" />
+    <Compile Include="TBC Integration Services\PaymentStatusDataIo.cs" />
+    <Compile Include="TBC Integration Services\PostboxMessageIo.cs" />
+    <Compile Include="TBC Integration Services\PostboxService.cs" />
+    <Compile Include="TBC Integration Services\Security.cs" />
+    <Compile Include="TBC Integration Services\UsernameToken.cs" />
+    <Compile Include="TrialBalace.cs" />
+    <Compile Include="UDO.cs" />
+    <Compile Include="Users.cs" />
+    <Compile Include="VatGroup.cs" />
+    <Compile Include="Warehouses.cs" />
+    <Compile Include="WayBill.cs" />
+    <Compile Include="Web References\LicenseService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\NBGCurrencyService_HTTP\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\TaxInvoiceService_HTTPS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\TaxInvoiceService_HTTP\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\TaxService_HTTP\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\WayBillService_HTTPS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\WayBillService_HTTP\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="WithholdingTax.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="SAPbobsCOM">
+      <Guid>{FC8030BE-F5D2-4B8E-8F92-44228FE30090}</Guid>
+      <VersionMajor>9</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="SAPbouiCOM">
+      <Guid>{6048236A-956D-498D-A6F1-9C81C13AB6E8}</Guid>
+      <VersionMajor>9</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="SHDocVw">
+      <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\LicenseService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\LicenseService\ДанныеДемоБазы1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\LicenseService\ДанныеОбновления1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\LicenseService\ПроверкаОбновленииКонфигурации.wsdl" />
+    <None Include="Web References\NBGCurrencyService_HTTP\NBGCurrency.wsdl" />
+    <None Include="Web References\NBGCurrencyService_HTTP\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\TaxInvoiceService_HTTPS\ntosservice.wsdl" />
+    <None Include="Web References\TaxInvoiceService_HTTPS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\TaxInvoiceService_HTTP\ntosservice.wsdl" />
+    <None Include="Web References\TaxInvoiceService_HTTP\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\TaxService_HTTP\DebtorInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\EmployerAmountInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\EmployerInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\ExtendedTPInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\FamilyInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\IncomeInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\LienInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\TaxService_HTTP\ResponseTPInfoGov.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\ResponseTPInfoGovDea.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\taxservice.wsdl" />
+    <None Include="Web References\TaxService_HTTP\TerminalAutoInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\TPInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\TPInfoDebt_RS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\TPInfo_CI.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\TaxService_HTTP\TPInfo_DPA.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\WayBillService_HTTPS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\WayBillService_HTTPS\WayBillService.wsdl" />
+    <None Include="Web References\WayBillService_HTTP\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\WayBillService_HTTP\WayBillService.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://nbg.gov.ge/currency.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\NBGCurrencyService_HTTP\</RelPath>
+      <UpdateFromURL>http://nbg.gov.ge/currency.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>BDO_Localisation_AddOn_WayBillService_HTTP_NBGCurrencyService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://services.rs.ge/taxservice/taxservice.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\TaxService_HTTP\</RelPath>
+      <UpdateFromURL>http://services.rs.ge/taxservice/taxservice.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>BDO_Localisation_AddOn_TaxService_HTTP_Service</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://services.rs.ge/WayBillService/WayBillService.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WayBillService_HTTP\</RelPath>
+      <UpdateFromURL>http://services.rs.ge/WayBillService/WayBillService.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>BDO_Localisation_AddOn_WayBillService_HTTP_WayBills</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://update.ibs.ge/UpdateConfigs/ws/UpdateConfig.1cws%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\LicenseService\</RelPath>
+      <UpdateFromURL>http://update.ibs.ge/UpdateConfigs/ws/UpdateConfig.1cws%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>BDO_Localisation_AddOn_ge_ibs_update_ПроверкаОбновленииКонфигурации</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://services.rs.ge/WayBillService/WayBillService.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WayBillService_HTTPS\</RelPath>
+      <UpdateFromURL>https://services.rs.ge/WayBillService/WayBillService.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>BDO_Localisation_AddOn_WayBillService_HTTPS_WayBills</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://www.revenue.mof.ge/ntosservice/ntosservice.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\TaxInvoiceService_HTTP\</RelPath>
+      <UpdateFromURL>http://www.revenue.mof.ge/ntosservice/ntosservice.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>BDO_Localisation_AddOn_RSInvoiceService_HTTP_NtosService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://www.revenue.mof.ge/ntosservice/ntosservice.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\TaxInvoiceService_HTTPS\</RelPath>
+      <UpdateFromURL>https://www.revenue.mof.ge/ntosservice/ntosservice.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>BDO_Localisation_AddOn_RSInvoiceService_HTTPS_NtosService</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\TaxService_HTTP\taxservice.disco" />
+    <None Include="Web References\WayBillService_HTTP\WayBillService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\WayBillService_HTTPS\WayBillService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\TaxInvoiceService_HTTP\ntosservice.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\TaxInvoiceService_HTTPS\ntosservice.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Res.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Res.en.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Res.ka.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Res.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

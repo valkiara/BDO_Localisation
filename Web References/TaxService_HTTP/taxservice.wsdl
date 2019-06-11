@@ -1,0 +1,1032 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="services.rs.ge" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="services.rs.ge" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="services.rs.ge">
+      <s:element name="GetTPNameByIN">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPNameByINResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPNameByINResult" type="tns:TPInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TPInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTerminalAutoInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Date" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTerminalAutoInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTerminalAutoInfoResult" type="tns:ArrayOfTerminalAutoInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfTerminalAutoInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TerminalAutoInfo" nillable="true" type="tns:TerminalAutoInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TerminalAutoInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="personal_no" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="gov_number" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="auto_vin" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cross_date" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="division_id" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="duration" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="transit_number_saag" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="terminal_id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="owner_code" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="owner_name" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTPInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPInfoResult" type="tns:ExtendedTPInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ExtendedTPInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrganizationType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrganizationTypeShort" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ActivityType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RegistrationNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Notes" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastRegistrationChange" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="RegistrationDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SaIdentNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PersonId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Representatives">
+            <s:complexType>
+              <s:sequence>
+                <s:element ref="s:schema" />
+                <s:any />
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTPInfoCI">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPInfoCIResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPInfoCIResult" type="tns:TPInfo_CI" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TPInfo_CI">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Debt" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTPInfoDPA">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPInfoDPAResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPInfoDPAResult" type="tns:TPInfo_DPA" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TPInfo_DPA">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTPInfoDebt_RS">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPInfoDebt_RSResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPInfoDebt_RSResult" type="tns:ArrayOfTPInfoDebt_RS" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfTPInfoDebt_RS">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TPInfoDebt_RS" nillable="true" type="tns:TPInfoDebt_RS" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TPInfoDebt_RS">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Code" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DebtAmount" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTPEmployers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPEmployersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPEmployersResult" type="tns:ArrayOfEmployerInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfEmployerInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="EmployerInfo" nillable="true" type="tns:EmployerInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="EmployerInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PersonID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PersonName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Organization" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Year" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTPEmployersAmount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPEmployersAmountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPEmployersAmountResult" type="tns:ArrayOfEmployerAmountInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfEmployerAmountInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="EmployerAmountInfo" nillable="true" type="tns:EmployerAmountInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="EmployerAmountInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PersonID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PersonName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Organization" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Year" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTPIncomeInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IN" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Year" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPIncomeInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPIncomeInfoResult" type="tns:ArrayOfIncomeInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfIncomeInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="IncomeInfo" nillable="true" type="tns:IncomeInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IncomeInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PersonID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Amount1" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="Amount2" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="StatusOther" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="OtherList" type="tns:ArrayOfString" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTPFamily">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPFamilyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPFamilyResult" type="tns:FamilyInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="FamilyInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Person" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Father" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Mother" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Sisters" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="Brothers" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="Children" type="tns:ArrayOfString" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="IsPersonDebtor">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IdenificationNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PersonalNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Surname" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DoB" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsPersonDebtorResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IsPersonDebtorResult" type="tns:DebtorInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DebtorInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="LastStatusChangedDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DocumentNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Text" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status_Fine" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="IsPersonDebtor2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IdenificationNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PersonalNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Surname" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DoB" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Muxli" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsPersonDebtor2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IsPersonDebtor2Result" type="tns:DebtorInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetIdentificationNumbers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SurName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OrganisationName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetIdentificationNumbersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetIdentificationNumbersResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GerRegistrationOrgan">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IdentificationNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GerRegistrationOrganResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GerRegistrationOrganResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLienInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLienInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLienInfoResult" type="tns:LienInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="LienInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SaIdentNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Date" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateEnd" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTerminalAutoNotify">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="barcode" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTerminalAutoNotifyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTerminalAutoNotifyResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPInfoGov">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OrgCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OrgName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPInfoGovResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPInfoGovResult" type="tns:ResponseTPInfoGov" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ResponseTPInfoGov">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Response" type="tns:Response" />
+          <s:element minOccurs="0" maxOccurs="1" name="TPInfoGovList" type="tns:ArrayOfTPInfoGov" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Response">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ResponseStatus" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Error" type="tns:ErrorDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ErrorDetails">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ErrorCode" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorDescription" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfTPInfoGov">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TPInfoGov" nillable="true" type="tns:TPInfoGov" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TPInfoGov">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="OrganizationName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IdentificatinCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LegalAddress" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTPInfoGovDea">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TP_Code" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTPInfoGovDeaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTPInfoGovDeaResult" type="tns:ResponseTPInfoGovDea" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ResponseTPInfoGovDea">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Response" type="tns:Response" />
+          <s:element minOccurs="0" maxOccurs="1" name="TPInfoGovDeaInfo" type="tns:TPInfoGovDea" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TPInfoGovDea">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TP_Code" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TP_Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TP_Address" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TP_LegalForm" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetTPNameByINSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPNameByIN" />
+  </wsdl:message>
+  <wsdl:message name="GetTPNameByINSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPNameByINResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTerminalAutoInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTerminalAutoInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetTerminalAutoInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTerminalAutoInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoCISoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPInfoCI" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoCISoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPInfoCIResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoDPASoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPInfoDPA" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoDPASoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPInfoDPAResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoDebt_RSSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPInfoDebt_RS" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoDebt_RSSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPInfoDebt_RSResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPEmployersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPEmployers" />
+  </wsdl:message>
+  <wsdl:message name="GetTPEmployersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPEmployersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPEmployersAmountSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPEmployersAmount" />
+  </wsdl:message>
+  <wsdl:message name="GetTPEmployersAmountSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPEmployersAmountResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPIncomeInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPIncomeInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetTPIncomeInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPIncomeInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPFamilySoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPFamily" />
+  </wsdl:message>
+  <wsdl:message name="GetTPFamilySoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPFamilyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IsPersonDebtorSoapIn">
+    <wsdl:part name="parameters" element="tns:IsPersonDebtor" />
+  </wsdl:message>
+  <wsdl:message name="IsPersonDebtorSoapOut">
+    <wsdl:part name="parameters" element="tns:IsPersonDebtorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IsPersonDebtor2SoapIn">
+    <wsdl:part name="parameters" element="tns:IsPersonDebtor2" />
+  </wsdl:message>
+  <wsdl:message name="IsPersonDebtor2SoapOut">
+    <wsdl:part name="parameters" element="tns:IsPersonDebtor2Response" />
+  </wsdl:message>
+  <wsdl:message name="GetIdentificationNumbersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetIdentificationNumbers" />
+  </wsdl:message>
+  <wsdl:message name="GetIdentificationNumbersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetIdentificationNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GerRegistrationOrganSoapIn">
+    <wsdl:part name="parameters" element="tns:GerRegistrationOrgan" />
+  </wsdl:message>
+  <wsdl:message name="GerRegistrationOrganSoapOut">
+    <wsdl:part name="parameters" element="tns:GerRegistrationOrganResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLienInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLienInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetLienInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLienInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTerminalAutoNotifySoapIn">
+    <wsdl:part name="parameters" element="tns:GetTerminalAutoNotify" />
+  </wsdl:message>
+  <wsdl:message name="GetTerminalAutoNotifySoapOut">
+    <wsdl:part name="parameters" element="tns:GetTerminalAutoNotifyResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoGovSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPInfoGov" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoGovSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPInfoGovResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoGovDeaSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTPInfoGovDea" />
+  </wsdl:message>
+  <wsdl:message name="GetTPInfoGovDeaSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTPInfoGovDeaResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ServiceSoap">
+    <wsdl:operation name="GetTPNameByIN">
+      <wsdl:input message="tns:GetTPNameByINSoapIn" />
+      <wsdl:output message="tns:GetTPNameByINSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTerminalAutoInfo">
+      <wsdl:input message="tns:GetTerminalAutoInfoSoapIn" />
+      <wsdl:output message="tns:GetTerminalAutoInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfo">
+      <wsdl:input message="tns:GetTPInfoSoapIn" />
+      <wsdl:output message="tns:GetTPInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoCI">
+      <wsdl:input message="tns:GetTPInfoCISoapIn" />
+      <wsdl:output message="tns:GetTPInfoCISoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoDPA">
+      <wsdl:input message="tns:GetTPInfoDPASoapIn" />
+      <wsdl:output message="tns:GetTPInfoDPASoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoDebt_RS">
+      <wsdl:input message="tns:GetTPInfoDebt_RSSoapIn" />
+      <wsdl:output message="tns:GetTPInfoDebt_RSSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPEmployers">
+      <wsdl:input message="tns:GetTPEmployersSoapIn" />
+      <wsdl:output message="tns:GetTPEmployersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPEmployersAmount">
+      <wsdl:input message="tns:GetTPEmployersAmountSoapIn" />
+      <wsdl:output message="tns:GetTPEmployersAmountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPIncomeInfo">
+      <wsdl:input message="tns:GetTPIncomeInfoSoapIn" />
+      <wsdl:output message="tns:GetTPIncomeInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPFamily">
+      <wsdl:input message="tns:GetTPFamilySoapIn" />
+      <wsdl:output message="tns:GetTPFamilySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsPersonDebtor">
+      <wsdl:input message="tns:IsPersonDebtorSoapIn" />
+      <wsdl:output message="tns:IsPersonDebtorSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsPersonDebtor2">
+      <wsdl:input message="tns:IsPersonDebtor2SoapIn" />
+      <wsdl:output message="tns:IsPersonDebtor2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIdentificationNumbers">
+      <wsdl:input message="tns:GetIdentificationNumbersSoapIn" />
+      <wsdl:output message="tns:GetIdentificationNumbersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GerRegistrationOrgan">
+      <wsdl:input message="tns:GerRegistrationOrganSoapIn" />
+      <wsdl:output message="tns:GerRegistrationOrganSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLienInfo">
+      <wsdl:input message="tns:GetLienInfoSoapIn" />
+      <wsdl:output message="tns:GetLienInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTerminalAutoNotify">
+      <wsdl:input message="tns:GetTerminalAutoNotifySoapIn" />
+      <wsdl:output message="tns:GetTerminalAutoNotifySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoGov">
+      <wsdl:input message="tns:GetTPInfoGovSoapIn" />
+      <wsdl:output message="tns:GetTPInfoGovSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoGovDea">
+      <wsdl:input message="tns:GetTPInfoGovDeaSoapIn" />
+      <wsdl:output message="tns:GetTPInfoGovDeaSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceSoap" type="tns:ServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetTPNameByIN">
+      <soap:operation soapAction="services.rs.ge/GetTPNameByIN" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTerminalAutoInfo">
+      <soap:operation soapAction="services.rs.ge/GetTerminalAutoInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfo">
+      <soap:operation soapAction="services.rs.ge/GetTPInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoCI">
+      <soap:operation soapAction="services.rs.ge/GetTPInfoCI" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoDPA">
+      <soap:operation soapAction="services.rs.ge/GetTPInfoDPA" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoDebt_RS">
+      <soap:operation soapAction="services.rs.ge/GetTPInfoDebt_RS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPEmployers">
+      <soap:operation soapAction="services.rs.ge/GetTPEmployers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPEmployersAmount">
+      <soap:operation soapAction="services.rs.ge/GetTPEmployersAmount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPIncomeInfo">
+      <soap:operation soapAction="services.rs.ge/GetTPIncomeInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPFamily">
+      <soap:operation soapAction="services.rs.ge/GetTPFamily" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsPersonDebtor">
+      <soap:operation soapAction="services.rs.ge/IsPersonDebtor" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsPersonDebtor2">
+      <soap:operation soapAction="services.rs.ge/IsPersonDebtor2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIdentificationNumbers">
+      <soap:operation soapAction="services.rs.ge/GetIdentificationNumbers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GerRegistrationOrgan">
+      <soap:operation soapAction="services.rs.ge/GerRegistrationOrgan" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLienInfo">
+      <soap:operation soapAction="services.rs.ge/GetLienInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTerminalAutoNotify">
+      <soap:operation soapAction="services.rs.ge/GetTerminalAutoNotify" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoGov">
+      <soap:operation soapAction="services.rs.ge/GetTPInfoGov" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoGovDea">
+      <soap:operation soapAction="services.rs.ge/GetTPInfoGovDea" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceSoap12" type="tns:ServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetTPNameByIN">
+      <soap12:operation soapAction="services.rs.ge/GetTPNameByIN" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTerminalAutoInfo">
+      <soap12:operation soapAction="services.rs.ge/GetTerminalAutoInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfo">
+      <soap12:operation soapAction="services.rs.ge/GetTPInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoCI">
+      <soap12:operation soapAction="services.rs.ge/GetTPInfoCI" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoDPA">
+      <soap12:operation soapAction="services.rs.ge/GetTPInfoDPA" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoDebt_RS">
+      <soap12:operation soapAction="services.rs.ge/GetTPInfoDebt_RS" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPEmployers">
+      <soap12:operation soapAction="services.rs.ge/GetTPEmployers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPEmployersAmount">
+      <soap12:operation soapAction="services.rs.ge/GetTPEmployersAmount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPIncomeInfo">
+      <soap12:operation soapAction="services.rs.ge/GetTPIncomeInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPFamily">
+      <soap12:operation soapAction="services.rs.ge/GetTPFamily" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsPersonDebtor">
+      <soap12:operation soapAction="services.rs.ge/IsPersonDebtor" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsPersonDebtor2">
+      <soap12:operation soapAction="services.rs.ge/IsPersonDebtor2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIdentificationNumbers">
+      <soap12:operation soapAction="services.rs.ge/GetIdentificationNumbers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GerRegistrationOrgan">
+      <soap12:operation soapAction="services.rs.ge/GerRegistrationOrgan" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLienInfo">
+      <soap12:operation soapAction="services.rs.ge/GetLienInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTerminalAutoNotify">
+      <soap12:operation soapAction="services.rs.ge/GetTerminalAutoNotify" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoGov">
+      <soap12:operation soapAction="services.rs.ge/GetTPInfoGov" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTPInfoGovDea">
+      <soap12:operation soapAction="services.rs.ge/GetTPInfoGovDea" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service">
+    <wsdl:port name="ServiceSoap" binding="tns:ServiceSoap">
+      <soap:address location="http://services.rs.ge/taxservice/taxservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceSoap12" binding="tns:ServiceSoap12">
+      <soap12:address location="http://services.rs.ge/taxservice/taxservice.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

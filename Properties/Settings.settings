@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="BDO_Localisation_AddOn.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="BDO_Localisation_AddOn_WayBillService_HTTP_NBGCurrencyService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://nbg.gov.ge/currency_service.php</Value>
+    </Setting>
+    <Setting Name="BDO_Localisation_AddOn_WayBillService_HTTP_WayBills" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://services.rs.ge/WayBillService/WayBillService.asmx</Value>
+    </Setting>
+    <Setting Name="BDO_Localisation_AddOn_TaxService_HTTP_Service" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://services.rs.ge/taxservice/taxservice.asmx</Value>
+    </Setting>
+    <Setting Name="BDO_Localisation_AddOn_WayBillService_HTTPS_WayBills" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://services.rs.ge/WayBillService/WayBillService.asmx</Value>
+    </Setting>
+    <Setting Name="BDO_Localisation_AddOn_RSInvoiceService_HTTP_NtosService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://www.revenue.mof.ge/ntosservice/ntosservice.asmx</Value>
+    </Setting>
+    <Setting Name="BDO_Localisation_AddOn_RSInvoiceService_HTTPS_NtosService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://www.revenue.mof.ge/ntosservice/ntosservice.asmx</Value>
+    </Setting>
+    <Setting Name="BDO_Localisation_AddOn_ge_ibs_update_ПроверкаОбновленииКонфигурации" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://update.ibs.ge/UpdateConfigs/ws/UpdateConfig.1cws</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

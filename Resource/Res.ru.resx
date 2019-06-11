@@ -1,0 +1,2977 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActivateDate" xml:space="preserve">
+    <value>Activate Date</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="ActualVatAmount" xml:space="preserve">
+    <value>Actual VAT Amount</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddonConnectedSuccesfully" xml:space="preserve">
+    <value>Successfully connected! Wait for addon to load!</value>
+  </data>
+  <data name="AddonLoadingSuccesfully" xml:space="preserve">
+    <value>AddOn loaded successfully!</value>
+  </data>
+  <data name="AddressSection" xml:space="preserve">
+    <value>Address Section</value>
+  </data>
+  <data name="AmntAfterCorrection" xml:space="preserve">
+    <value>Amount After Correction</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="AmountAfterCorrection" xml:space="preserve">
+    <value>Amount After Correction</value>
+  </data>
+  <data name="AmountWithoutVAT" xml:space="preserve">
+    <value>Amount without VAT</value>
+  </data>
+  <data name="AmountWithVat" xml:space="preserve">
+    <value>Amount with VAT</value>
+  </data>
+  <data name="AmountСorrection" xml:space="preserve">
+    <value>Correction Amount</value>
+  </data>
+  <data name="And" xml:space="preserve">
+    <value>And</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="ARCreditMemo" xml:space="preserve">
+    <value>A/R Credit Memo</value>
+  </data>
+  <data name="ARInvoice" xml:space="preserve">
+    <value>A/R Invoice</value>
+  </data>
+  <data name="Article" xml:space="preserve">
+    <value>Article</value>
+  </data>
+  <data name="AttachedToTheDeclaration" xml:space="preserve">
+    <value>Link To Declaration</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="AutoOtherCountry" xml:space="preserve">
+    <value>Auto - Foreign Country</value>
+  </data>
+  <data name="AutoTransporter" xml:space="preserve">
+    <value>Auto - Transporter</value>
+  </data>
+  <data name="Aviation" xml:space="preserve">
+    <value>Aviation</value>
+  </data>
+  <data name="Barcode" xml:space="preserve">
+    <value>Barcode</value>
+  </data>
+  <data name="BaseDocument" xml:space="preserve">
+    <value>Base Document   </value>
+  </data>
+  <data name="BaseDocumentType" xml:space="preserve">
+    <value>Base Document Type</value>
+  </data>
+  <data name="BPCardCode" xml:space="preserve">
+    <value>BP Code</value>
+  </data>
+  <data name="BPCatalogueDescription" xml:space="preserve">
+    <value>BP Catalogue Description</value>
+  </data>
+  <data name="BPControledOnRSLinkWaybillDocument" xml:space="preserve">
+    <value>Controlling via RS information is activated for BP, link Waybill document!</value>
+  </data>
+  <data name="BPName" xml:space="preserve">
+    <value>BP Name</value>
+  </data>
+  <data name="BPNotFound" xml:space="preserve">
+    <value>Business partner could not be found!</value>
+  </data>
+  <data name="BPTin" xml:space="preserve">
+    <value>BP TIN</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Brand</value>
+  </data>
+  <data name="Buyer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="ByOrganization" xml:space="preserve">
+    <value>By Organisation</value>
+  </data>
+  <data name="ByUser" xml:space="preserve">
+    <value>By User</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="CanceledTaxOperation" xml:space="preserve">
+    <value>Tax Operation Canceled</value>
+  </data>
+  <data name="CancellationProcess" xml:space="preserve">
+    <value>In Process of Cancellation </value>
+  </data>
+  <data name="CancelLinkTaxInvoice" xml:space="preserve">
+    <value>Unlink Tax Invoice</value>
+  </data>
+  <data name="CannotActivateWaybillWithAutoTransporter" xml:space="preserve">
+    <value>Can not activate with Waybill Type " Auto Transporter"!</value>
+  </data>
+  <data name="CannotBeEarlierThan" xml:space="preserve">
+    <value>cannot be less than</value>
+  </data>
+  <data name="CannotFindVATCodeDocumentNotCreated" xml:space="preserve">
+    <value>Can not find matching VAT code, Waybill document will not be created</value>
+  </data>
+  <data name="CannotObtainUIDBy" xml:space="preserve">
+    <value>Failed to obtain  taxpayer's unique number by identification code :</value>
+  </data>
+  <data name="CanNotReceiveNotLinkedTaxInvoice" xml:space="preserve">
+    <value>Receiving non-linked Tax Invoice is not allowed</value>
+  </data>
+  <data name="CantDeleteGoodsInTaxInvoice" xml:space="preserve">
+    <value>Can not delete Goods position in Tax invoice : "</value>
+  </data>
+  <data name="CantDeleteWBInTaxInvoice" xml:space="preserve">
+    <value>Could not delete Waybill in Tax invoice № : "</value>
+  </data>
+  <data name="CantFixGoodsItemInTaxInvoice" xml:space="preserve">
+    <value>Could not fix items' position in Tax invoice : "</value>
+  </data>
+  <data name="CantFixWBInTaxInvoice" xml:space="preserve">
+    <value>Unable to fix the waybill in Tax invoice! Waybill number :</value>
+  </data>
+  <data name="CantReceiveDeclarationDate" xml:space="preserve">
+    <value>Cant Receive Declaration number for</value>
+  </data>
+  <data name="ChangedAgreementAmountPricesDecrease" xml:space="preserve">
+    <value>Agreement Amount Is Changed Due To Decreased Prices Or Any Other Reason</value>
+  </data>
+  <data name="ChangedTaxOperationType" xml:space="preserve">
+    <value>Tax Operation Type Changed</value>
+  </data>
+  <data name="ChooseTaxInvoice" xml:space="preserve">
+    <value>Choose Tax Invoice</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="Commandite" xml:space="preserve">
+    <value>Limited Partnership</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="ConfirmationDate" xml:space="preserve">
+    <value>Confirmation Date</value>
+  </data>
+  <data name="ConfirmationInfoID" xml:space="preserve">
+    <value>Confirmation Info (ID)</value>
+  </data>
+  <data name="ConfirmationInfoName" xml:space="preserve">
+    <value>Confirmation Info (name)</value>
+  </data>
+  <data name="ConfirmationPerson" xml:space="preserve">
+    <value>Confirmation Person</value>
+  </data>
+  <data name="Confirmed" xml:space="preserve">
+    <value>Confirmed </value>
+  </data>
+  <data name="ConfirmedCorrected" xml:space="preserve">
+    <value>Confirmed Corrected</value>
+  </data>
+  <data name="ControlPositionsAmount" xml:space="preserve">
+    <value>By Positions</value>
+  </data>
+  <data name="ControlTotalAmount" xml:space="preserve">
+    <value>According To Total Amount</value>
+  </data>
+  <data name="Cooperative" xml:space="preserve">
+    <value>Cooperative</value>
+  </data>
+  <data name="Corrected" xml:space="preserve">
+    <value>Corrected</value>
+  </data>
+  <data name="CorrectedTaxInvoice" xml:space="preserve">
+    <value>Corrected Tax Invoice</value>
+  </data>
+  <data name="CorrectedTaxInvoiceData" xml:space="preserve">
+    <value>Corrected Tax Invoice Data</value>
+  </data>
+  <data name="Correction" xml:space="preserve">
+    <value>Correction</value>
+  </data>
+  <data name="CorrectionAmount" xml:space="preserve">
+    <value>Correction Amount</value>
+  </data>
+  <data name="CorrectionConfirmed" xml:space="preserve">
+    <value>Correction Confirmed</value>
+  </data>
+  <data name="CorrectionDenied" xml:space="preserve">
+    <value>Correction Denied</value>
+  </data>
+  <data name="CorrectionDocument" xml:space="preserve">
+    <value>A/R Credit Note Document</value>
+  </data>
+  <data name="CorrectionDocumentID" xml:space="preserve">
+    <value>Correction Document ID</value>
+  </data>
+  <data name="CorrectionReasonNotIndicated" xml:space="preserve">
+    <value>Correction reason is not filled!</value>
+  </data>
+  <data name="CorrectionReceived" xml:space="preserve">
+    <value>Correction Received</value>
+  </data>
+  <data name="CorrectionTaxAmount" xml:space="preserve">
+    <value>Corrected Tax Amount</value>
+  </data>
+  <data name="CorrectionType" xml:space="preserve">
+    <value>Correction Type</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="CreateDate" xml:space="preserve">
+    <value>Create Date</value>
+  </data>
+  <data name="CreatedCorrected" xml:space="preserve">
+    <value>Created Corrected</value>
+  </data>
+  <data name="CreatedDocumentBasedOnWaybill" xml:space="preserve">
+    <value>Document based on Waybill is created</value>
+  </data>
+  <data name="CreatedIncompletely" xml:space="preserve">
+    <value>Created Incompletely</value>
+  </data>
+  <data name="CreateDocument" xml:space="preserve">
+    <value>Create Document</value>
+  </data>
+  <data name="CreateNotSucceededSellerWoutVAT" xml:space="preserve">
+    <value>Operation "create" ended unsuccessfully! Vendor may be non payer of VAT!</value>
+  </data>
+  <data name="CreateTaxInvoice" xml:space="preserve">
+    <value>Create Tax Invoice</value>
+  </data>
+  <data name="CreateTaxInvoiceAllowedOnlyForReturnType" xml:space="preserve">
+    <value>Creating Tax invoice is allowed only for Return documents!</value>
+  </data>
+  <data name="CreateWaybill" xml:space="preserve">
+    <value>Create Waybill</value>
+  </data>
+  <data name="CreateWaybillAllowedBasedOnlyOtherDocument" xml:space="preserve">
+    <value>Creating waybill is only allowed, if based on other document!</value>
+  </data>
+  <data name="CreateWaybillAllowedOnlyForReturnType" xml:space="preserve">
+    <value>Creating waybill document is only possible for Type:Return !</value>
+  </data>
+  <data name="Creator" xml:space="preserve">
+    <value>Creator</value>
+  </data>
+  <data name="CreditNoteType" xml:space="preserve">
+    <value>Credit Note Type</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="CurrencyCode" xml:space="preserve">
+    <value>Currency Code</value>
+  </data>
+  <data name="DataAfterCorrection" xml:space="preserve">
+    <value>Data After Correction</value>
+  </data>
+  <data name="DataForRS" xml:space="preserve">
+    <value>Data For Tax Services</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Declaration" xml:space="preserve">
+    <value>Declaration</value>
+  </data>
+  <data name="DeclarationDate" xml:space="preserve">
+    <value>Declaration Month</value>
+  </data>
+  <data name="DeclarationNumber" xml:space="preserve">
+    <value>Declaration Number</value>
+  </data>
+  <data name="DeclarationStatus" xml:space="preserve">
+    <value>Declaration Status</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="deleted" xml:space="preserve">
+    <value>Removed</value>
+  </data>
+  <data name="DeliveryDate" xml:space="preserve">
+    <value>Delivery Date</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Denied</value>
+  </data>
+  <data name="DocEntry" xml:space="preserve">
+    <value>Document Internal Key</value>
+  </data>
+  <data name="DocNum" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="Document" xml:space="preserve">
+    <value>Document</value>
+  </data>
+  <data name="DocumentLinkedToTaxInvoice" xml:space="preserve">
+    <value>Tax invoice is already linked to document!</value>
+  </data>
+  <data name="DocumentLinkedToTaxInvoiceCancel" xml:space="preserve">
+    <value>Tax invoice is already linked to document! Do you want to unlink?</value>
+  </data>
+  <data name="DocumentLinkedToWaybill" xml:space="preserve">
+    <value>Waybill is already linked to document!</value>
+  </data>
+  <data name="DocumentLinkedToWaybillCancel" xml:space="preserve">
+    <value>Document is linked to waybill! Do you want to unlink?</value>
+  </data>
+  <data name="DocumentStatusMustBe" xml:space="preserve">
+    <value>Document status must be </value>
+  </data>
+  <data name="DocumentStatusMustBeOpen" xml:space="preserve">
+    <value>Document status must be "Open"!</value>
+  </data>
+  <data name="DocumentType" xml:space="preserve">
+    <value>Document Type</value>
+  </data>
+  <data name="DocumentTypeMustBeItem" xml:space="preserve">
+    <value>document type must be "item"!</value>
+  </data>
+  <data name="DoneSuccessfully" xml:space="preserve">
+    <value>completed successfully!</value>
+  </data>
+  <data name="DoneWithErrors" xml:space="preserve">
+    <value>ended unsuccessfully!</value>
+  </data>
+  <data name="DoNotNeedSendWaybill" xml:space="preserve">
+    <value>Sending Waybill is not needed</value>
+  </data>
+  <data name="DoYouWantForDocuementsExecute" xml:space="preserve">
+    <value>Update documents in database</value>
+  </data>
+  <data name="DoYouWantTaxInvoiceWithReturn" xml:space="preserve">
+    <value>Do you want to create united tax invoices that include A/R credit notes based on A/R invoice?</value>
+  </data>
+  <data name="Driver" xml:space="preserve">
+    <value>Driver</value>
+  </data>
+  <data name="DriverCode" xml:space="preserve">
+    <value>Driver Code</value>
+  </data>
+  <data name="DriverMasterData" xml:space="preserve">
+    <value>Driver Master Data</value>
+  </data>
+  <data name="DriverNotResident" xml:space="preserve">
+    <value>Non-Resident Driver</value>
+  </data>
+  <data name="DriverTin" xml:space="preserve">
+    <value>Driver ID</value>
+  </data>
+  <data name="ElectricTaxInvoice" xml:space="preserve">
+    <value>Electronic Tax Invoice</value>
+  </data>
+  <data name="Electronic" xml:space="preserve">
+    <value>Electronic</value>
+  </data>
+  <data name="EmptyStatus" xml:space="preserve">
+    <value>Empty Status</value>
+  </data>
+  <data name="EndAddress" xml:space="preserve">
+    <value>End Address</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="EnterStartEndDates" xml:space="preserve">
+    <value>Enter start and end dates</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>Error description</value>
+  </data>
+  <data name="ErrorOfCurrencyList" xml:space="preserve">
+    <value>Error while choosing currency list!</value>
+  </data>
+  <data name="ErrorOfDocumentAdd" xml:space="preserve">
+    <value>Error while adding document!</value>
+  </data>
+  <data name="ErrorOfFieldAdd" xml:space="preserve">
+    <value>Error while adding Field!</value>
+  </data>
+  <data name="ErrorOfFormAdd" xml:space="preserve">
+    <value>Error while adding form!</value>
+  </data>
+  <data name="ErrorOfFormItemAdd" xml:space="preserve">
+    <value>Error while adding item on form!</value>
+  </data>
+  <data name="ErrorOfMainCurrency" xml:space="preserve">
+    <value>Error while choosing main currency!</value>
+  </data>
+  <data name="ErrorOfRSSettings" xml:space="preserve">
+    <value>Error while setting up RS!</value>
+  </data>
+  <data name="ErrorOfTableAdd" xml:space="preserve">
+    <value>Error while adding table!</value>
+  </data>
+  <data name="ErrorOfValueAdd" xml:space="preserve">
+    <value>Error while adding value!</value>
+  </data>
+  <data name="ErrorWhileDocumentEdit" xml:space="preserve">
+    <value>Error while editing document!</value>
+  </data>
+  <data name="ErrorWhileImportRateServiceCall" xml:space="preserve">
+    <value>Error while importing rates!</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Fill</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="ForCorrection" xml:space="preserve">
+    <value>For Correction</value>
+  </data>
+  <data name="ForeignEnterpriseBranch" xml:space="preserve">
+    <value>Foreign Enterprise Branch</value>
+  </data>
+  <data name="ForeignEnterpriseLegalEntity" xml:space="preserve">
+    <value>Foreign Enterprise - Legal Entity</value>
+  </data>
+  <data name="ForeignEnterprisePhysicalEntity" xml:space="preserve">
+    <value>Foreign Enterprise - Physical Entity</value>
+  </data>
+  <data name="Form" xml:space="preserve">
+    <value>Form</value>
+  </data>
+  <data name="FormError" xml:space="preserve">
+    <value>Form error</value>
+  </data>
+  <data name="FormItem" xml:space="preserve">
+    <value>Form element </value>
+  </data>
+  <data name="ForPasswordSetChooseServiceUser" xml:space="preserve">
+    <value>In order to set password choose servis user!</value>
+  </data>
+  <data name="ForStatusUpdateFillID" xml:space="preserve">
+    <value>In order to update status you must enter ID!</value>
+  </data>
+  <data name="GoodsTableNotMatchedESTable" xml:space="preserve">
+    <value>Goods' table does not match with RS waybill table</value>
+  </data>
+  <data name="GovernmentBody" xml:space="preserve">
+    <value>Public Authority</value>
+  </data>
+  <data name="ImportRate" xml:space="preserve">
+    <value>Import Rate</value>
+  </data>
+  <data name="IncompleteReceived" xml:space="preserve">
+    <value>Incompletely Received</value>
+  </data>
+  <data name="IndicateType" xml:space="preserve">
+    <value>Indicate Type</value>
+  </data>
+  <data name="IndividualEnterpreneur" xml:space="preserve">
+    <value>Individual Enterpreneur</value>
+  </data>
+  <data name="IndividualLinkAllowdOnlyFromDocumentForm" xml:space="preserve">
+    <value>Individual Linking is only allowed from document form</value>
+  </data>
+  <data name="InventoryTransfer" xml:space="preserve">
+    <value>Inventory Transfer</value>
+  </data>
+  <data name="TaxInvoiceIsAlreadyCreatedBasedOnARCreditNote" xml:space="preserve">
+    <value>Tax invoice is already created based on A/R credit note</value>
+  </data>
+  <data name="InvoiceNumber" xml:space="preserve">
+    <value>Invoice Number</value>
+  </data>
+  <data name="ItemCode" xml:space="preserve">
+    <value>Item Code</value>
+  </data>
+  <data name="ItemCodeForWaybill" xml:space="preserve">
+    <value>Item Code For Waybill</value>
+  </data>
+  <data name="ItemMappingControl" xml:space="preserve">
+    <value>Item Mapping Control</value>
+  </data>
+  <data name="ItemName" xml:space="preserve">
+    <value>Item Name</value>
+  </data>
+  <data name="ItemsAreCorrected" xml:space="preserve">
+    <value>Items are fully corrected</value>
+  </data>
+  <data name="ItemSearchParameter" xml:space="preserve">
+    <value>Item Search Parameter</value>
+  </data>
+  <data name="ItemServiceReturnedToSeller" xml:space="preserve">
+    <value>Item Returnes To Seller Fully Or Partly</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="JLC" xml:space="preserve">
+    <value>JLC</value>
+  </data>
+  <data name="JSC" xml:space="preserve">
+    <value>JSC</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="LEPL" xml:space="preserve">
+    <value>LEPL</value>
+  </data>
+  <data name="Linked" xml:space="preserve">
+    <value>linked</value>
+  </data>
+  <data name="LinkedPartial" xml:space="preserve">
+    <value>Partially Linked</value>
+  </data>
+  <data name="LinkStatus" xml:space="preserve">
+    <value>Link Status</value>
+  </data>
+  <data name="LinkToDocument" xml:space="preserve">
+    <value>Link To Document</value>
+  </data>
+  <data name="LinkWaybill" xml:space="preserve">
+    <value>Link Waybill</value>
+  </data>
+  <data name="LTD" xml:space="preserve">
+    <value>LTD</value>
+  </data>
+  <data name="MainBarcode" xml:space="preserve">
+    <value>Main Barcode</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NameMismatchFromEnregDoYouWantEdit" xml:space="preserve">
+    <value>Business Partner's name mismatches with enregister! Do you want to edit current name?</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No </value>
+  </data>
+  <data name="BaseARInvoiceCouldNotFound" xml:space="preserve">
+    <value>Base A/R Invoice could not found</value>
+  </data>
+  <data name="NoBaseSaleFoundTaxInvoiceUnion" xml:space="preserve">
+    <value>Base document for correction/return can not be found in united Tax Invoice </value>
+  </data>
+  <data name="NonCommercialLegalEntity" xml:space="preserve">
+    <value>Non - Commercial Legal Entity</value>
+  </data>
+  <data name="NoNeedTaxInvoice" xml:space="preserve">
+    <value>Tax Invoice  is not needed</value>
+  </data>
+  <data name="NoPostingPurchaseWithoutWaybill" xml:space="preserve">
+    <value>Procurement without waybill</value>
+  </data>
+  <data name="NoTaxInvoiceConfirmed" xml:space="preserve">
+    <value>Tax Invoice is not confirmed</value>
+  </data>
+  <data name="NoTaxInvoiceSaved" xml:space="preserve">
+    <value>Tax Invoice is not created</value>
+  </data>
+  <data name="NotBeComplete" xml:space="preserve">
+    <value>Will not be done </value>
+  </data>
+  <data name="NotControl" xml:space="preserve">
+    <value>No Control Needed </value>
+  </data>
+  <data name="NotLinked" xml:space="preserve">
+    <value>Not Linked</value>
+  </data>
+  <data name="NotRecognizeObjectByTINInEnreg" xml:space="preserve">
+    <value>Object with given TIN could not be found in enregister!</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="Numb" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="Octomber" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="OnTheBaseARInvoice" xml:space="preserve">
+    <value>on the base A/R Invoice</value>
+  </data>
+  <data name="OnThePreviousARCreditNote" xml:space="preserve">
+    <value>on the previous A/R Credit Note</value>
+  </data>
+  <data name="Operation" xml:space="preserve">
+    <value>Operation</value>
+  </data>
+  <data name="OperationCompletedSuccessfully" xml:space="preserve">
+    <value>Operation complited successfully</value>
+  </data>
+  <data name="OperationDate" xml:space="preserve">
+    <value>Operation Date</value>
+  </data>
+  <data name="OperationForSomeDocumentFinishedWithErrorSeeLog" xml:space="preserve">
+    <value>Operation for some documents ended unsuccessfully. See the message log</value>
+  </data>
+  <data name="OperationImpossibleInMode" xml:space="preserve">
+    <value>Impossible to complete the operation in this mode</value>
+  </data>
+  <data name="OperationMonth" xml:space="preserve">
+    <value>Operation Month</value>
+  </data>
+  <data name="OperationPeriod" xml:space="preserve">
+    <value>Operation Period</value>
+  </data>
+  <data name="Operations" xml:space="preserve">
+    <value>Operations</value>
+  </data>
+  <data name="OperationType" xml:space="preserve">
+    <value>Operation Type</value>
+  </data>
+  <data name="OperationUnsuccesfullSeeLog" xml:space="preserve">
+    <value>Operation ended unsuccessfully. See the message log</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>Or</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Primary</value>
+  </data>
+  <data name="other" xml:space="preserve">
+    <value>Other  </value>
+  </data>
+  <data name="OtherInfo" xml:space="preserve">
+    <value>Other info</value>
+  </data>
+  <data name="Paper" xml:space="preserve">
+    <value>Paper</value>
+  </data>
+  <data name="Partnership" xml:space="preserve">
+    <value>Partnership</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="ServiceUserPassword" xml:space="preserve">
+    <value>Service User Password</value>
+  </data>
+  <data name="PaymentForTransportation" xml:space="preserve">
+    <value>Payment For Transportation</value>
+  </data>
+  <data name="PhysicalEntity" xml:space="preserve">
+    <value>Physical Entity</value>
+  </data>
+  <data name="PostReturnWithoutQuantNotAllowed" xml:space="preserve">
+    <value>Creating Credit Note Document is not allowed without quantity</value>
+  </data>
+  <data name="ProgramCode" xml:space="preserve">
+    <value>Program Code</value>
+  </data>
+  <data name="ProjectVatAmount" xml:space="preserve">
+    <value>Project VAT Amount</value>
+  </data>
+  <data name="ProtocolMode" xml:space="preserve">
+    <value>Protocol Mode</value>
+  </data>
+  <data name="ProtocolTypeForRS" xml:space="preserve">
+    <value>Protocol Type for RS.GE</value>
+  </data>
+  <data name="Purchase" xml:space="preserve">
+    <value>Procurement</value>
+  </data>
+  <data name="Railway" xml:space="preserve">
+    <value>Railway</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="ReasonIs" xml:space="preserve">
+    <value>because of </value>
+  </data>
+  <data name="ReceiveAddDeclaration" xml:space="preserve">
+    <value>Receive/Add To Declaration</value>
+  </data>
+  <data name="Received" xml:space="preserve">
+    <value>Received</value>
+  </data>
+  <data name="ReceiveDate" xml:space="preserve">
+    <value>Receive Date</value>
+  </data>
+  <data name="ReceiveDateNotFilled" xml:space="preserve">
+    <value>Receiving month is not filled!</value>
+  </data>
+  <data name="ReceivedConfirmed" xml:space="preserve">
+    <value>Received Confirmed</value>
+  </data>
+  <data name="ReceiverInfo" xml:space="preserve">
+    <value>Receiver Info</value>
+  </data>
+  <data name="ReceiverInfoName" xml:space="preserve">
+    <value>Receiver Info Name</value>
+  </data>
+  <data name="ReceiveVat" xml:space="preserve">
+    <value>Receive VAT</value>
+  </data>
+  <data name="ReceptionInfo" xml:space="preserve">
+    <value>Reception Info</value>
+  </data>
+  <data name="ReceptionInfoName" xml:space="preserve">
+    <value>Reception Info Name</value>
+  </data>
+  <data name="Refill" xml:space="preserve">
+    <value>Refill</value>
+  </data>
+  <data name="RegistrationDate" xml:space="preserve">
+    <value>Registration Date</value>
+  </data>
+  <data name="RegistrationPeriod" xml:space="preserve">
+    <value>Registration Period</value>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>Remarks</value>
+  </data>
+  <data name="Removed" xml:space="preserve">
+    <value>Removed</value>
+  </data>
+  <data name="Replaced" xml:space="preserve">
+    <value>Replaced</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Return</value>
+  </data>
+  <data name="RSActivation" xml:space="preserve">
+    <value>Activate</value>
+  </data>
+  <data name="RSAddDeclaration" xml:space="preserve">
+    <value>Add To Declaration</value>
+  </data>
+  <data name="RSCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="RsCode" xml:space="preserve">
+    <value>RS code</value>
+  </data>
+  <data name="RSConfirm" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="RSCorrection" xml:space="preserve">
+    <value>Correction</value>
+  </data>
+  <data name="RSCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="RSDownload" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="RSFinish" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="RSSendToTransporter" xml:space="preserve">
+    <value>Send To Transporter</value>
+  </data>
+  <data name="RSUpdate" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="RSUpdateStatus" xml:space="preserve">
+    <value>Update Status</value>
+  </data>
+  <data name="Sale" xml:space="preserve">
+    <value>Sale</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Saved</value>
+  </data>
+  <data name="SaveEditPassword" xml:space="preserve">
+    <value>Set/Edit Password</value>
+  </data>
+  <data name="SavePassword" xml:space="preserve">
+    <value>Set Password</value>
+  </data>
+  <data name="SaveUnitedTaxInvoice" xml:space="preserve">
+    <value>Save United Tax Invoice</value>
+  </data>
+  <data name="Seller" xml:space="preserve">
+    <value>Vendor</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Sent</value>
+  </data>
+  <data name="SentCorrected" xml:space="preserve">
+    <value>Sent Corrected</value>
+  </data>
+  <data name="SentDate" xml:space="preserve">
+    <value>Sending Date</value>
+  </data>
+  <data name="SentToTransporter" xml:space="preserve">
+    <value>Sent To Transporter</value>
+  </data>
+  <data name="Septempet" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="Series" xml:space="preserve">
+    <value>Series/№</value>
+  </data>
+  <data name="SeriesNumber" xml:space="preserve">
+    <value>Series/Number</value>
+  </data>
+  <data name="ServiceUser" xml:space="preserve">
+    <value>Service User</value>
+  </data>
+  <data name="ServiceUserPasswordNotCorrect" xml:space="preserve">
+    <value>Service User Or Password Is Incorrect/Is Not Filled!</value>
+  </data>
+  <data name="StartAddress" xml:space="preserve">
+    <value>Start Address</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="StatusRequestedForCanceling" xml:space="preserve">
+    <value>Tax invoice status must be "confirmed" or "confirmed corrected" and should not be linked to declaration!</value>
+  </data>
+  <data name="StatusRequestedForDeclaring" xml:space="preserve">
+    <value>Tax invoice status must be "primary", "corrected", "confirmed" ან "confirmed corrected "!</value>
+  </data>
+  <data name="StatusRequestedForDeleting" xml:space="preserve">
+    <value>Tax invoice status must be "created", "created corrected", "partly created", "sent" "sent corrected", "denied"!</value>
+  </data>
+  <data name="SynchronisationViolatedCorrectWaybill" xml:space="preserve">
+    <value>Synchronisation to server is violated! In order to restore synchronisation correct waybill</value>
+  </data>
+  <data name="SynchronisationViolatedUpdateStatus" xml:space="preserve">
+    <value>Synchronisation Violated, Try Updating Status</value>
+  </data>
+  <data name="SynchronizationViolated" xml:space="preserve">
+    <value>Synchronization Violated</value>
+  </data>
+  <data name="TableRow" xml:space="preserve">
+    <value>Raw</value>
+  </data>
+  <data name="TaxAccountForBudget" xml:space="preserve">
+    <value>Tax Account For Budget</value>
+  </data>
+  <data name="TaxAmntCorrection" xml:space="preserve">
+    <value>Tax Amount Correction</value>
+  </data>
+  <data name="TaxAmountAfterCorrection" xml:space="preserve">
+    <value>Tax Amount After Correction</value>
+  </data>
+  <data name="TaxInvoceJournal" xml:space="preserve">
+    <value>Tax Invoice Journal</value>
+  </data>
+  <data name="TaxInvoceStatus" xml:space="preserve">
+    <value>Tax Invoice Status</value>
+  </data>
+  <data name="TaxInvoceStatusRs" xml:space="preserve">
+    <value>Tax Invoice Status RS</value>
+  </data>
+  <data name="TaxInvoice" xml:space="preserve">
+    <value>Tax Invoice</value>
+  </data>
+  <data name="TaxInvoiceAlreadyCanceledOnSite" xml:space="preserve">
+    <value>Tax invoice is already canceled on website</value>
+  </data>
+  <data name="TaxInvoiceAlreadyConfirmed" xml:space="preserve">
+    <value>Tax Invoice is already confirmed</value>
+  </data>
+  <data name="TaxInvoiceAlreadyCreated" xml:space="preserve">
+    <value>Tax invoice is already created</value>
+  </data>
+  <data name="TaxInvoiceAlreadyDeclared" xml:space="preserve">
+    <value>Tax invoice is already declared!</value>
+  </data>
+  <data name="TaxInvoiceAlreadyDeletedOnSite" xml:space="preserve">
+    <value>Tax invoice is already deleted on website</value>
+  </data>
+  <data name="TaxInvoiceAlreadyReceived" xml:space="preserve">
+    <value>Tax Invoice is already received</value>
+  </data>
+  <data name="TaxInvoiceAmountsNotEqualSiteNotUpdated" xml:space="preserve">
+    <value>Tax invoice amount is not equal to amount on website. Tax invoice will not be confirmed</value>
+  </data>
+  <data name="TaxInvoiceBaseDocsListEmpty" xml:space="preserve">
+    <value>List of Tax invoice's base documents is empty!</value>
+  </data>
+  <data name="TaxInvoiceDate" xml:space="preserve">
+    <value>Tax Invoice Date</value>
+  </data>
+  <data name="TaxInvoiceID" xml:space="preserve">
+    <value>Tax Invoice ID</value>
+  </data>
+  <data name="TaxInvoiceIDNotFilled" xml:space="preserve">
+    <value>Tax invoice ID is not filled!</value>
+  </data>
+  <data name="TaxInvoiceNotCorrected" xml:space="preserve">
+    <value>Tax invoice not corrected</value>
+  </data>
+  <data name="TaxInvoiceNotFound" xml:space="preserve">
+    <value>Tax Invoice for this period is not found!</value>
+  </data>
+  <data name="TaxInvoiceNotFoundOnSite" xml:space="preserve">
+    <value>Tax invoice couldn’t be founf on website!</value>
+  </data>
+  <data name="TaxInvoiceNumber" xml:space="preserve">
+    <value>Tax Invoice Number</value>
+  </data>
+  <data name="TaxInvoicePeriod" xml:space="preserve">
+    <value>Tax Invoice Period</value>
+  </data>
+  <data name="TaxInvoiceReceived" xml:space="preserve">
+    <value>Tax Invoice Received</value>
+  </data>
+  <data name="TaxInvoiceSent" xml:space="preserve">
+    <value>Tax Invoice Sent</value>
+  </data>
+  <data name="TaxInvoiceSeries" xml:space="preserve">
+    <value>Tax Invoice Series</value>
+  </data>
+  <data name="TaxInvoiceShouldBeCreatedCorrectedOrDeclined" xml:space="preserve">
+    <value>Tax invoice type must be "Created", "Corrected" or "Denied"!</value>
+  </data>
+  <data name="TaxInvoiceShouldBeReceivedCorrectionReceived" xml:space="preserve">
+    <value>Tax invoice status must be "received" or "correction received"!</value>
+  </data>
+  <data name="TaxInvoicesUpdated" xml:space="preserve">
+    <value>Tax Invoice updated</value>
+  </data>
+  <data name="TaxInvoiceTableEmpty" xml:space="preserve">
+    <value>Tax Invoice table is empty!</value>
+  </data>
+  <data name="TaxInvoiceWaybills" xml:space="preserve">
+    <value>Tax Invoice Waybills</value>
+  </data>
+  <data name="Tin" xml:space="preserve">
+    <value>TIN</value>
+  </data>
+  <data name="TINNotFill" xml:space="preserve">
+    <value>TIN is not filled!</value>
+  </data>
+  <data name="ToCompleteOperationWriteDocument" xml:space="preserve">
+    <value>In order to complete operation write the document!</value>
+  </data>
+  <data name="ToCreateTaxInvoiceWriteDocument" xml:space="preserve">
+    <value>In order to create Tax Invoice record document!</value>
+  </data>
+  <data name="ToCreateWaybillWriteDocument" xml:space="preserve">
+    <value>In order to create Waybill record document!</value>
+  </data>
+  <data name="TrailerNumber" xml:space="preserve">
+    <value>Utility Trailer Number</value>
+  </data>
+  <data name="TransBeginDate" xml:space="preserve">
+    <value>Trans. Start Date</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="Transportation" xml:space="preserve">
+    <value>Transportation</value>
+  </data>
+  <data name="TransportationExpense" xml:space="preserve">
+    <value>Transportation Expense</value>
+  </data>
+  <data name="Transporter" xml:space="preserve">
+    <value>Transporter</value>
+  </data>
+  <data name="TransporterName" xml:space="preserve">
+    <value>Transporter Name</value>
+  </data>
+  <data name="TransporterTin" xml:space="preserve">
+    <value>Transporter TIN</value>
+  </data>
+  <data name="TransportSection" xml:space="preserve">
+    <value>Transport Section</value>
+  </data>
+  <data name="TransportType" xml:space="preserve">
+    <value>Transport Type</value>
+  </data>
+  <data name="TxAmntAfterCorrection" xml:space="preserve">
+    <value>Tax Amount After Correction</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="UnableOperationForThisStatus" xml:space="preserve">
+    <value>Unable Operation For This Status</value>
+  </data>
+  <data name="UnionTableMustContainAtLeastOneInvoice" xml:space="preserve">
+    <value>United Tax invoice must contain at least one sales document</value>
+  </data>
+  <data name="UnitOfMeasurement" xml:space="preserve">
+    <value>Unit of Measurement</value>
+  </data>
+  <data name="UomCode" xml:space="preserve">
+    <value>UoM Code</value>
+  </data>
+  <data name="UomEntry" xml:space="preserve">
+    <value>UoM</value>
+  </data>
+  <data name="UomName" xml:space="preserve">
+    <value>UoM Name</value>
+  </data>
+  <data name="UomRsCode" xml:space="preserve">
+    <value>UoM RS Code</value>
+  </data>
+  <data name="UomRsCodes" xml:space="preserve">
+    <value>RS UoM Codes</value>
+  </data>
+  <data name="UoMRsCodesUpdateSuccess" xml:space="preserve">
+    <value>UoM RS codes updated successfully</value>
+  </data>
+  <data name="UpdateConfirmedTaxInvoiceNotAllowed" xml:space="preserve">
+    <value>Updating confirmed tax invoice is not allowed</value>
+  </data>
+  <data name="UpdateDate" xml:space="preserve">
+    <value>Update Date</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="UserCode" xml:space="preserve">
+    <value>User Code</value>
+  </data>
+  <data name="UserNameForRS" xml:space="preserve">
+    <value>Username for RS.GE</value>
+  </data>
+  <data name="UserTable" xml:space="preserve">
+    <value>List of Users</value>
+  </data>
+  <data name="UserTypeForRS" xml:space="preserve">
+    <value>User Type for RS.GE</value>
+  </data>
+  <data name="VatAmount" xml:space="preserve">
+    <value>VAT Amount</value>
+  </data>
+  <data name="VatGroup" xml:space="preserve">
+    <value>VAT Group</value>
+  </data>
+  <data name="VatPercent" xml:space="preserve">
+    <value>VAT Rate</value>
+  </data>
+  <data name="VATReceived" xml:space="preserve">
+    <value>VAT Received</value>
+  </data>
+  <data name="VATReceiveDate" xml:space="preserve">
+    <value>Received Month</value>
+  </data>
+  <data name="VATReceivedDate" xml:space="preserve">
+    <value>VAT Received Date</value>
+  </data>
+  <data name="VATType0" xml:space="preserve">
+    <value>VAT Type 0%</value>
+  </data>
+  <data name="VATTypeNone" xml:space="preserve">
+    <value>VAT Type None</value>
+  </data>
+  <data name="VATTypeNormal" xml:space="preserve">
+    <value>VAT Type Normal</value>
+  </data>
+  <data name="Vehicle" xml:space="preserve">
+    <value>Vehicle</value>
+  </data>
+  <data name="VehicleMasterData" xml:space="preserve">
+    <value>Vehicle Master Data</value>
+  </data>
+  <data name="VehicleNumber" xml:space="preserve">
+    <value>Vehicle Number</value>
+  </data>
+  <data name="Vehicles" xml:space="preserve">
+    <value>Vehicles</value>
+  </data>
+  <data name="Warehouse" xml:space="preserve">
+    <value>Warehouse</value>
+  </data>
+  <data name="WaybillActivateSuccesfully" xml:space="preserve">
+    <value>waybill successfully activated</value>
+  </data>
+  <data name="WaybillCanceledSuccesfully" xml:space="preserve">
+    <value>Waybill cancelled successfully!</value>
+  </data>
+  <data name="WaybillCorrectedSuccesfully" xml:space="preserve">
+    <value>Waybill corrected successfully!</value>
+  </data>
+  <data name="WaybillCreatedSuccesfully" xml:space="preserve">
+    <value>Waybill created successfully</value>
+  </data>
+  <data name="WaybillDocEntry" xml:space="preserve">
+    <value>Waybill Document</value>
+  </data>
+  <data name="WaybillFinishedSuccesfully" xml:space="preserve">
+    <value>Waybill completed successfully!</value>
+  </data>
+  <data name="WaybillID" xml:space="preserve">
+    <value>Waybill ID</value>
+  </data>
+  <data name="WaybillNumber" xml:space="preserve">
+    <value>Waybill Number</value>
+  </data>
+  <data name="WaybillReceived" xml:space="preserve">
+    <value>Waybill Received</value>
+  </data>
+  <data name="Waybills" xml:space="preserve">
+    <value>Waybills</value>
+  </data>
+  <data name="WaybillSentToTransporterSuccesfully" xml:space="preserve">
+    <value>Waybill is successfully sent to transporter !</value>
+  </data>
+  <data name="WaybillsSent" xml:space="preserve">
+    <value>Waybills Sent</value>
+  </data>
+  <data name="WaybillStatus" xml:space="preserve">
+    <value>Waybill Status</value>
+  </data>
+  <data name="WaybillTableIsEmpty" xml:space="preserve">
+    <value>Waybill table is empty!</value>
+  </data>
+  <data name="WaybillTranportTypeIsNotAutoTransporter" xml:space="preserve">
+    <value>Waybill transport type is not "Auto Transporter"!</value>
+  </data>
+  <data name="WaybillType" xml:space="preserve">
+    <value>Waybill Type</value>
+  </data>
+  <data name="WaybillTypeDefault" xml:space="preserve">
+    <value>Default Waybill Type </value>
+  </data>
+  <data name="WaybillUpdatedStatusSuccesfully" xml:space="preserve">
+    <value>Waybill status updated successfully!</value>
+  </data>
+  <data name="Wb" xml:space="preserve">
+    <value>Waybill</value>
+  </data>
+  <data name="WhileAdd" xml:space="preserve">
+    <value>While adding</value>
+  </data>
+  <data name="WhileUpdate" xml:space="preserve">
+    <value>While updating </value>
+  </data>
+  <data name="WithDeclaration" xml:space="preserve">
+    <value>With Declaration</value>
+  </data>
+  <data name="WithoutDeclaration" xml:space="preserve">
+    <value>Without Declaration</value>
+  </data>
+  <data name="WithoutFilter" xml:space="preserve">
+    <value>Without Filter</value>
+  </data>
+  <data name="WithoutTransport" xml:space="preserve">
+    <value>Without Transport</value>
+  </data>
+  <data name="WithTransport" xml:space="preserve">
+    <value>With Transport</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="RSDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="RSDeny" xml:space="preserve">
+    <value>Deny</value>
+  </data>
+  <data name="RSSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="RSSend" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="DoYouWantForDocuementsExecuteUpdate" xml:space="preserve">
+    <value>Do you want for docuements execute update?</value>
+  </data>
+  <data name="DeclDateNotFilled" xml:space="preserve">
+    <value>Declaration month is not filled!</value>
+  </data>
+  <data name="CheckVatGroupAccounts" xml:space="preserve">
+    <value>Check VAT group accounts!</value>
+  </data>
+  <data name="EndsWithErrorCheckMessageLog" xml:space="preserve">
+    <value>ends with error, please check message log!</value>
+  </data>
+  <data name="CheckVatGroupForBP" xml:space="preserve">
+    <value>Check VAT group for BP!</value>
+  </data>
+  <data name="AdditionalEntry" xml:space="preserve">
+    <value>Additional Entry</value>
+  </data>
+  <data name="ErrorDocumentAddEdit" xml:space="preserve">
+    <value>Error while document add or edit</value>
+  </data>
+  <data name="RSTaxInvoicesDownloaded" xml:space="preserve">
+    <value>Tax Invoices Downloaded</value>
+  </data>
+  <data name="AttachToWaybill" xml:space="preserve">
+    <value>Attach to Waybill</value>
+  </data>
+  <data name="CheckBPTin" xml:space="preserve">
+    <value>Check BP TIN</value>
+  </data>
+  <data name="ErrorOfFormUpdate" xml:space="preserve">
+    <value>Error while update form!</value>
+  </data>
+  <data name="ReceiveWaybill" xml:space="preserve">
+    <value>Receive Waybill</value>
+  </data>
+  <data name="RSOperations" xml:space="preserve">
+    <value>RS Operations</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="ItemsTotalAmountsNotMatch" xml:space="preserve">
+    <value>Items total amounts not match</value>
+  </data>
+  <data name="CheckVatGroupForWHT" xml:space="preserve">
+    <value>Check VAT group for withholding tax!</value>
+  </data>
+  <data name="AmountCorrection" xml:space="preserve">
+    <value>Correction Amount</value>
+  </data>
+  <data name="ARCreditNote" xml:space="preserve">
+    <value>A/R Credit Note</value>
+  </data>
+  <data name="TransBeginTime" xml:space="preserve">
+    <value>Transportation Begin Time</value>
+  </data>
+  <data name="RSSaveUnitedTaxInvoice" xml:space="preserve">
+    <value>Save United Tax Invoice</value>
+  </data>
+  <data name="ActivationDate" xml:space="preserve">
+    <value>Activation Date</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="SubjectWithholdingTaxVAT" xml:space="preserve">
+    <value>Subject withholding tax VAT</value>
+  </data>
+  <data name="Approver" xml:space="preserve">
+    <value>Approver</value>
+  </data>
+  <data name="CorrectionTaxInvoice" xml:space="preserve">
+    <value>Correction Tax Invoice</value>
+  </data>
+  <data name="TaxType" xml:space="preserve">
+    <value>Tax Type</value>
+  </data>
+  <data name="APCreditNote" xml:space="preserve">
+    <value>A/P Credit Note</value>
+  </data>
+  <data name="APInvoice" xml:space="preserve">
+    <value>A/P Invoice</value>
+  </data>
+  <data name="CustomerCode" xml:space="preserve">
+    <value>Customer Code</value>
+  </data>
+  <data name="CustomerTIN" xml:space="preserve">
+    <value>Customer TIN</value>
+  </data>
+  <data name="InvoiceStatus" xml:space="preserve">
+    <value>Invoice Status</value>
+  </data>
+  <data name="SupplierCode" xml:space="preserve">
+    <value>Supplier Code</value>
+  </data>
+  <data name="SupplierTIN" xml:space="preserve">
+    <value>Supplier TIN</value>
+  </data>
+  <data name="Waybill" xml:space="preserve">
+    <value>Waybill</value>
+  </data>
+  <data name="NotSetDefaultReportForWayBillDocument" xml:space="preserve">
+    <value>Not Set Default Report For Waybill Document</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="draft" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="failed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="finishedWithErrors" xml:space="preserve">
+    <value>Finished With Errors</value>
+  </data>
+  <data name="forSigning" xml:space="preserve">
+    <value>For Signing</value>
+  </data>
+  <data name="initialState" xml:space="preserve">
+    <value>Initial State</value>
+  </data>
+  <data name="inProgress" xml:space="preserve">
+    <value>In Progress</value>
+  </data>
+  <data name="readyToLoad" xml:space="preserve">
+    <value>Ready To Load</value>
+  </data>
+  <data name="registered" xml:space="preserve">
+    <value>Registered</value>
+  </data>
+  <data name="UpdateStatus" xml:space="preserve">
+    <value>Update Status</value>
+  </data>
+  <data name="waitingForCertification" xml:space="preserve">
+    <value>Waiting For Certification</value>
+  </data>
+  <data name="notToUpload" xml:space="preserve">
+    <value>Not To Upload</value>
+  </data>
+  <data name="LoginRequired" xml:space="preserve">
+    <value>Login Required</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="Digipass" xml:space="preserve">
+    <value>Digipass</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="ThesePasswordsDontMatchTryAgain" xml:space="preserve">
+    <value>These passwords don't match. Try again!</value>
+  </data>
+  <data name="YouCantLeaveEmpty" xml:space="preserve">
+    <value>You can't leave empty!</value>
+  </data>
+  <data name="ModeIsNotChosen" xml:space="preserve">
+    <value>Mode is not chosen</value>
+  </data>
+  <data name="currencyExchange" xml:space="preserve">
+    <value>Currency Exchange</value>
+  </data>
+  <data name="transferToOwnAccount" xml:space="preserve">
+    <value>Transfer to Own Account</value>
+  </data>
+  <data name="treasuryTransfer" xml:space="preserve">
+    <value>Treasury Transfer</value>
+  </data>
+  <data name="TreasuryCode" xml:space="preserve">
+    <value>Treasury Code</value>
+  </data>
+  <data name="CreditAccount" xml:space="preserve">
+    <value>Credit Account</value>
+  </data>
+  <data name="ChargeDetails" xml:space="preserve">
+    <value>Charge Details</value>
+  </data>
+  <data name="OUR" xml:space="preserve">
+    <value>OUR</value>
+  </data>
+  <data name="PaymentID" xml:space="preserve">
+    <value>Payment ID</value>
+  </data>
+  <data name="SHA" xml:space="preserve">
+    <value>SHA</value>
+  </data>
+  <data name="AdditionalDescription" xml:space="preserve">
+    <value>Additional Description</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="InternetBanking" xml:space="preserve">
+    <value>Internet Banking</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="BatchPayment" xml:space="preserve">
+    <value>Batch Payment</value>
+  </data>
+  <data name="SinglePayment" xml:space="preserve">
+    <value>Single Payment</value>
+  </data>
+  <data name="TransferToOtherBankForeignCurrencyPaymentOrderIo" xml:space="preserve">
+    <value>Transfer to Other Bank Foreign Currency</value>
+  </data>
+  <data name="TransferToOtherBankNationalCurrencyPaymentOrderIo" xml:space="preserve">
+    <value>Transfer to Other Bank National Currency</value>
+  </data>
+  <data name="TransferToOwnAccountPaymentOrderIo" xml:space="preserve">
+    <value>Transfer to Own Account</value>
+  </data>
+  <data name="TransferWithinBankPaymentOrderIo" xml:space="preserve">
+    <value>Transfer Within Bank</value>
+  </data>
+  <data name="TreasuryTransferPaymentOrderIo" xml:space="preserve">
+    <value>Treasury Transfer</value>
+  </data>
+  <data name="ExportTypeTBC" xml:space="preserve">
+    <value>Export Type</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="AllDocuments" xml:space="preserve">
+    <value>All Documents</value>
+  </data>
+  <data name="BatchName" xml:space="preserve">
+    <value>Batch Name</value>
+  </data>
+  <data name="BatchPaymentID" xml:space="preserve">
+    <value>Batch Payment ID</value>
+  </data>
+  <data name="BatchStatus" xml:space="preserve">
+    <value>Batch Status</value>
+  </data>
+  <data name="BeneficiaryAddress" xml:space="preserve">
+    <value>Beneficiary Address</value>
+  </data>
+  <data name="BeneficiaryBankCode" xml:space="preserve">
+    <value>Beneficiary Bank Code </value>
+  </data>
+  <data name="BeneficiaryBankName" xml:space="preserve">
+    <value>Beneficiary Bank</value>
+  </data>
+  <data name="BeneficiaryName" xml:space="preserve">
+    <value>Beneficiary Name</value>
+  </data>
+  <data name="BeneficiaryTaxCode" xml:space="preserve">
+    <value>Beneficiary TIN</value>
+  </data>
+  <data name="ButTheDocumentFailedToUpdate" xml:space="preserve">
+    <value>but the document failed to update</value>
+  </data>
+  <data name="CannotSetStatus" xml:space="preserve">
+    <value>Cannot set status</value>
+  </data>
+  <data name="CardCode" xml:space="preserve">
+    <value>CardCode</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="CreditAccountCurrencyCode" xml:space="preserve">
+    <value>Credit Account Currency</value>
+  </data>
+  <data name="CurrencyForExchangeAndTheCreditAccountSCurrencyIsDifferent" xml:space="preserve">
+    <value>Currency for exchange and the credit account's currency is different</value>
+  </data>
+  <data name="DataForExport" xml:space="preserve">
+    <value>Data For Export</value>
+  </data>
+  <data name="DebitAccount" xml:space="preserve">
+    <value>Debit Account</value>
+  </data>
+  <data name="DebitAccountCurrencyCode" xml:space="preserve">
+    <value>Debit Account Currency</value>
+  </data>
+  <data name="DocDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="DocumentSCurrencyAndTheCreditAccountSCurrencyIsDifferent" xml:space="preserve">
+    <value>Document's currency and the credit account's currency is different</value>
+  </data>
+  <data name="DocumentSStatusShouldBeTheOneFromTheList" xml:space="preserve">
+    <value>Document's status should be the one from the list</value>
+  </data>
+  <data name="DocumentStatus" xml:space="preserve">
+    <value>Document Status</value>
+  </data>
+  <data name="HighlightTheRowsToPerformAnOperation" xml:space="preserve">
+    <value>Highlight the rows to perform an operation</value>
+  </data>
+  <data name="MakeSureToFillInTheDocuments" xml:space="preserve">
+    <value>Make sure to fill in the documents</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="NoDocumentsForOperation" xml:space="preserve">
+    <value>No documents for operation</value>
+  </data>
+  <data name="OnlyUploadDocuments" xml:space="preserve">
+    <value>Only Upload Documents</value>
+  </data>
+  <data name="Program" xml:space="preserve">
+    <value>Program</value>
+  </data>
+  <data name="real" xml:space="preserve">
+    <value>Real</value>
+  </data>
+  <data name="resend" xml:space="preserve">
+    <value>Resend</value>
+  </data>
+  <data name="SelectedDocumentsStatusWillBe" xml:space="preserve">
+    <value>Selected documents status will be</value>
+  </data>
+  <data name="SelectFillType" xml:space="preserve">
+    <value>Select fill type</value>
+  </data>
+  <data name="SetStatus" xml:space="preserve">
+    <value>Set Status</value>
+  </data>
+  <data name="SuccessfullySetStatus" xml:space="preserve">
+    <value>Successfully set status</value>
+  </data>
+  <data name="test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="TheDocumentIsNotForInternetBanking" xml:space="preserve">
+    <value>The document is not for internet banking</value>
+  </data>
+  <data name="TheDocumentSStatusHasBeenUpdatedSuccessfully" xml:space="preserve">
+    <value>The Document's status has been updated successfully</value>
+  </data>
+  <data name="TheFollowingFieldIsMandatory" xml:space="preserve">
+    <value>The following field is mandatory</value>
+  </data>
+  <data name="TheFollowingFieldsAreMandatory" xml:space="preserve">
+    <value>The following fields are mandatory</value>
+  </data>
+  <data name="TheRequestHasBeenSubmittedSuccessfully" xml:space="preserve">
+    <value>The request has been submitted successfully</value>
+  </data>
+  <data name="TransferType" xml:space="preserve">
+    <value>Transfer Type</value>
+  </data>
+  <data name="WouldYouWantToContinueTheOperation" xml:space="preserve">
+    <value>Would you want to continue the operation</value>
+  </data>
+  <data name="YouCannotTransferMoreThan10DocumentWhenImportTypeIs" xml:space="preserve">
+    <value>You cannot transfer  more than 10 document, when import type is</value>
+  </data>
+  <data name="GLAccountMustBeUniqueDuplicateGLAccounts" xml:space="preserve">
+    <value>G/L Account must be unique! Duplicate GL Accounts</value>
+  </data>
+  <data name="empty" xml:space="preserve">
+    <value>space</value>
+    <comment> ეს ასე დატოვეთ</comment>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribution</value>
+  </data>
+  <data name="InternalShipment" xml:space="preserve">
+    <value>Internal Shipment</value>
+  </data>
+  <data name="SentWaybillsAnalysis" xml:space="preserve">
+    <value>Sent Waybills Analysis</value>
+  </data>
+  <data name="AmountsNotEqual" xml:space="preserve">
+    <value>Amounts Not Equal</value>
+  </data>
+  <data name="Collapse" xml:space="preserve">
+    <value>Collapse</value>
+  </data>
+  <data name="CompareStatus" xml:space="preserve">
+    <value>Compare Status</value>
+  </data>
+  <data name="CompSt" xml:space="preserve">
+    <value>Comp.St.</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="EqualAmounts" xml:space="preserve">
+    <value>Equa lAmounts</value>
+  </data>
+  <data name="Expand" xml:space="preserve">
+    <value>Expand</value>
+  </data>
+  <data name="FromWarehouse" xml:space="preserve">
+    <value>From Warehouse</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="NotPosted" xml:space="preserve">
+    <value>Not Posted</value>
+  </data>
+  <data name="OnlyOnProgram" xml:space="preserve">
+    <value>Only On Program</value>
+  </data>
+  <data name="OnlyOnSite" xml:space="preserve">
+    <value>Only On Site</value>
+  </data>
+  <data name="Option" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="SavedStatus" xml:space="preserve">
+    <value>Saved Status</value>
+  </data>
+  <data name="SubWaybill" xml:space="preserve">
+    <value>Sub - Waybill</value>
+  </data>
+  <data name="ToWarehouse" xml:space="preserve">
+    <value>To Warehouse</value>
+  </data>
+  <data name="ReceivedWaybillsAnalysis" xml:space="preserve">
+    <value>Received Waybills Analysis</value>
+  </data>
+  <data name="NotFoundOnSiteOnThisPeriod" xml:space="preserve">
+    <value>Not Found On Site On This Period</value>
+  </data>
+  <data name="ReceivedTaxAnalysis" xml:space="preserve">
+    <value>Received Tax Analysis</value>
+  </data>
+  <data name="Waybill_Number" xml:space="preserve">
+    <value>Wb Number</value>
+  </data>
+  <data name="BaseType" xml:space="preserve">
+    <value>Base Type</value>
+  </data>
+  <data name="FillVatRates" xml:space="preserve">
+    <value>Fill VAT rate</value>
+  </data>
+  <data name="UoMNameDuplicated" xml:space="preserve">
+    <value>UoM names are duplicated</value>
+  </data>
+  <data name="ProfitTaxBaseMasterData" xml:space="preserve">
+    <value>Profit Tax Base Master Data</value>
+  </data>
+  <data name="ProfitTaxBaseTypeMasterData" xml:space="preserve">
+    <value>Profit Tax Base Type Master Data</value>
+  </data>
+  <data name="ProfitTaxAccrual" xml:space="preserve">
+    <value>Profit Tax Accrual</value>
+  </data>
+  <data name="ProfitTxType" xml:space="preserve">
+    <value>Profit Base Type</value>
+  </data>
+  <data name="AmountTaxable" xml:space="preserve">
+    <value>Amount Taxable</value>
+  </data>
+  <data name="ProfitTaxAmount" xml:space="preserve">
+    <value>Profit Tax Amount</value>
+  </data>
+  <data name="Accrual" xml:space="preserve">
+    <value>Accrual</value>
+  </data>
+  <data name="Uncrediting" xml:space="preserve">
+    <value>Uncrediting</value>
+  </data>
+  <data name="PostingDate" xml:space="preserve">
+    <value>Posting Date</value>
+  </data>
+  <data name="TransactionNo" xml:space="preserve">
+    <value>Transaction No.</value>
+  </data>
+  <data name="ProfitTaxExempt" xml:space="preserve">
+    <value>Profit Tax Exempt</value>
+  </data>
+  <data name="RegisteredInOffshore" xml:space="preserve">
+    <value>Registered In Offshore</value>
+  </data>
+  <data name="LiableToProfitTax" xml:space="preserve">
+    <value>Liable to Profit Tax</value>
+  </data>
+  <data name="SetGridColor" xml:space="preserve">
+    <value>Differences in colors</value>
+  </data>
+  <data name="LiableToVat" xml:space="preserve">
+    <value>Liable To VAT</value>
+  </data>
+  <data name="Capital" xml:space="preserve">
+    <value>Capital</value>
+  </data>
+  <data name="DifferenceBetweenTheGrossIncomeAndTheDeductions" xml:space="preserve">
+    <value>Difference Between The Gross Income And The Deductions</value>
+  </data>
+  <data name="ExpensesOfNonEconomicExpenses" xml:space="preserve">
+    <value>Expenses of non-economic expenses</value>
+  </data>
+  <data name="GoodsAndServicesDeliveredFreeOfCharge" xml:space="preserve">
+    <value>Goods and services delivered free of charge</value>
+  </data>
+  <data name="IsNot" xml:space="preserve">
+    <value>is not</value>
+  </data>
+  <data name="NonEconomicExpenses" xml:space="preserve">
+    <value>Non-economic expenses</value>
+  </data>
+  <data name="PaymentsForNonEconomicActivities" xml:space="preserve">
+    <value>Payments for non-economic activities</value>
+  </data>
+  <data name="ProfitSharing" xml:space="preserve">
+    <value>Profit Sharing</value>
+  </data>
+  <data name="ProfitSharingTax" xml:space="preserve">
+    <value>Profit Sharing Tax</value>
+  </data>
+  <data name="ProfitTaxPayable" xml:space="preserve">
+    <value>Profit Tax Payable</value>
+  </data>
+  <data name="ProfitTaxSystem" xml:space="preserve">
+    <value>Profit Tax System</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
+  <data name="RepresentationalExpensesAbovePredefinedLevel" xml:space="preserve">
+    <value>Representational expenses above predefined level</value>
+  </data>
+  <data name="TaxableObject" xml:space="preserve">
+    <value>Taxable Object</value>
+  </data>
+  <data name="Taxes" xml:space="preserve">
+    <value>Taxes</value>
+  </data>
+  <data name="VatExpense" xml:space="preserve">
+    <value>Vat Expense</value>
+  </data>
+  <data name="ModeIsNotSelected" xml:space="preserve">
+    <value>Mode is not selected</value>
+  </data>
+  <data name="TaxAccounts" xml:space="preserve">
+    <value>Tax Accounts</value>
+  </data>
+  <data name="DispatchType" xml:space="preserve">
+    <value>Dispatch Type</value>
+  </data>
+  <data name="GeneralError" xml:space="preserve">
+    <value>General Error</value>
+  </data>
+  <data name="signed" xml:space="preserve">
+    <value>Signed</value>
+  </data>
+  <data name="TheDocumentSStatusHasNotBeenUpdatedSuccessfully" xml:space="preserve">
+    <value>The Document's status has not been updated successfully</value>
+  </data>
+  <data name="TransferToForeignCurrencyPaymentOrderIo" xml:space="preserve">
+    <value>Transfer to Foreign Currency</value>
+  </data>
+  <data name="TransferToNationalCurrencyPaymentOrderIo" xml:space="preserve">
+    <value>Transfer to National Currency</value>
+  </data>
+  <data name="BankStatus" xml:space="preserve">
+    <value>Bank Status</value>
+  </data>
+  <data name="CurrencyExchangePaymentOrderIo" xml:space="preserve">
+    <value>Currency Exchange</value>
+  </data>
+  <data name="OperationCompletedUnSuccessfully" xml:space="preserve">
+    <value>Operation completed unsuccessfully</value>
+  </data>
+  <data name="BankProgramIsNotFilled" xml:space="preserve">
+    <value>Bank program is not filled</value>
+  </data>
+  <data name="DocRate" xml:space="preserve">
+    <value>Doc Rate</value>
+  </data>
+  <data name="GetTheToken" xml:space="preserve">
+    <value>Get the token</value>
+  </data>
+  <data name="GoodsList" xml:space="preserve">
+    <value>Goods List</value>
+  </data>
+  <data name="Field" xml:space="preserve">
+    <value>Field</value>
+  </data>
+  <data name="DeleteUDF" xml:space="preserve">
+    <value>Delete UDF</value>
+  </data>
+  <data name="AdditionalTools" xml:space="preserve">
+    <value>Additional Tools</value>
+  </data>
+  <data name="AliasID" xml:space="preserve">
+    <value>Alias ID</value>
+  </data>
+  <data name="Descr" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="ErrorRemovingUDF" xml:space="preserve">
+    <value>Error removing UDF</value>
+  </data>
+  <data name="FieldID" xml:space="preserve">
+    <value>Field ID</value>
+  </data>
+  <data name="CurrencyForExchange" xml:space="preserve">
+    <value>Currency For Exchange</value>
+  </data>
+  <data name="FixedPaying" xml:space="preserve">
+    <value>Fixed Paying</value>
+  </data>
+  <data name="MicroBusinessStatus" xml:space="preserve">
+    <value>Micro Business Status</value>
+  </data>
+  <data name="CurrenciesHaveBeenImportedSuccessfully" xml:space="preserve">
+    <value>Currencies have been imported successfully</value>
+  </data>
+  <data name="CurrenciesHaveBeenImportedUnSuccessfully" xml:space="preserve">
+    <value>Currencies have been imported unsuccessfully</value>
+  </data>
+  <data name="ImportingCurrencies" xml:space="preserve">
+    <value>Importing currencies</value>
+  </data>
+  <data name="GoodsIssue" xml:space="preserve">
+    <value>Goods Issue</value>
+  </data>
+  <data name="DefaultTaxableObjects" xml:space="preserve">
+    <value>Default Taxable Objects</value>
+  </data>
+  <data name="DefaulfTaxableObjectDownPaymentToProfitTaxExemptEntities" xml:space="preserve">
+    <value>Down payment to profit tax exempt entities</value>
+  </data>
+  <data name="DefaulfTaxableObjectGoodsAndServicesDeliveredFreeOfCharge" xml:space="preserve">
+    <value>Goods and services delivered free of charge</value>
+  </data>
+  <data name="Acct" xml:space="preserve">
+    <value>Acct.</value>
+  </data>
+  <data name="RecordIsUsedInDocuments" xml:space="preserve">
+    <value>Record Is Used In Documents</value>
+  </data>
+  <data name="DownPaymentInvoice" xml:space="preserve">
+    <value>Down Payment Invoice</value>
+  </data>
+  <data name="ARDownPaymentInvoice" xml:space="preserve">
+    <value>A/R Down Payment Invoice</value>
+  </data>
+  <data name="ExpenseAccount" xml:space="preserve">
+    <value>Expense Account</value>
+  </data>
+  <data name="Expenses" xml:space="preserve">
+    <value>Exp. Acc</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="DocType" xml:space="preserve">
+    <value>Document Type</value>
+  </data>
+  <data name="ARDownPaymentRequest" xml:space="preserve">
+    <value>A/R Down Payment Request</value>
+  </data>
+  <data name="DocumentSNumberIs" xml:space="preserve">
+    <value>document's number is</value>
+  </data>
+  <data name="DocumentsSNumbersAre" xml:space="preserve">
+    <value>documents' numbers are</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Invoice</value>
+  </data>
+  <data name="ARCDocumentsOnARIDoYouWantToCreateUnitedTaxInvoiceIncludingTheseDocuments" xml:space="preserve">
+    <value>There are A/R Credit Note documents on A/R Invoice (without Tax Invoice). Do you want to create united Tax Invoice including these documents</value>
+  </data>
+  <data name="CannotBeCreated" xml:space="preserve">
+    <value>cannot be created</value>
+  </data>
+  <data name="OnARDownPaymentRequestThereIsAnotherARDownPaymentInvoiceWithTaxInvoiceSentTheStatusOfWhichShouldBeFromThisList" xml:space="preserve">
+    <value>On A/R Down Payment Request there is another A/R Down Payment Invoice with Tax Invoice Sent, the status of which should be from this list</value>
+  </data>
+  <data name="UnitedTaxInvoiceCanNotContainDocumentWithType" xml:space="preserve">
+    <value>United Tax Invoice can not contain document with type</value>
+  </data>
+  <data name="paymentToEmployee" xml:space="preserve">
+    <value>Payment to Employee</value>
+  </data>
+  <data name="salaryPayment" xml:space="preserve">
+    <value>Salary Payment</value>
+  </data>
+  <data name="OpType" xml:space="preserve">
+    <value>Operation Type</value>
+  </data>
+  <data name="BeneficiaryCode" xml:space="preserve">
+    <value>Beneficiary Code</value>
+  </data>
+  <data name="ExportIntBank" xml:space="preserve">
+    <value>Export Data into Bank System</value>
+  </data>
+  <data name="FilterCombinations" xml:space="preserve">
+    <value>Filter Combinations</value>
+  </data>
+  <data name="GetMovementByID" xml:space="preserve">
+    <value>Get Movement by ID</value>
+  </data>
+  <data name="GetMovementsByLastMovementTimestamp" xml:space="preserve">
+    <value>Get Movements by Last Movement Timestamp</value>
+  </data>
+  <data name="GetMovementsByOtherFilteringParameters" xml:space="preserve">
+    <value>Get Movements by Other Filtering Parameters</value>
+  </data>
+  <data name="ImportIntBank" xml:space="preserve">
+    <value>Get Data from Bank System</value>
+  </data>
+  <data name="LastMovementTimestamp" xml:space="preserve">
+    <value>Last Movement Timestamp</value>
+  </data>
+  <data name="MovementID" xml:space="preserve">
+    <value>Movement ID</value>
+  </data>
+  <data name="GetData" xml:space="preserve">
+    <value>Get Data</value>
+  </data>
+  <data name="CurrencyAndTheAccountSCurrencyIsDifferent" xml:space="preserve">
+    <value>Currency and the account's currency is different</value>
+  </data>
+  <data name="StatementGenerationStatementGeneralInformationFirst1000Record" xml:space="preserve">
+    <value>Statement Generation - Statement General Information - First 1000 Record</value>
+  </data>
+  <data name="StatementGlobalAndDailyBalances" xml:space="preserve">
+    <value>Statement Global and Daily Balances</value>
+  </data>
+  <data name="StatementRecordOnPages" xml:space="preserve">
+    <value>Statement Record on Pages</value>
+  </data>
+  <data name="ChiefAccountant" xml:space="preserve">
+    <value>Chief Accountant</value>
+  </data>
+  <data name="IncomingPayment" xml:space="preserve">
+    <value>Incoming Payment</value>
+  </data>
+  <data name="OutgoingPayment" xml:space="preserve">
+    <value>Outgoing Payment</value>
+  </data>
+  <data name="EmployeesMustNotBeDifferent" xml:space="preserve">
+    <value>Employees must not be different</value>
+  </data>
+  <data name="CreateDocuments" xml:space="preserve">
+    <value>Create Documents</value>
+  </data>
+  <data name="CreateNewQuestion" xml:space="preserve">
+    <value>Do you want to add this record anyway</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="DuplicateLictTradNumBP" xml:space="preserve">
+    <value>Business partner of this type with this TIN already exists</value>
+  </data>
+  <data name="DuplicateLictTradNumBPofType" xml:space="preserve">
+    <value>BP with TIN already exists, Bp type :</value>
+  </data>
+  <data name="Supplier" xml:space="preserve">
+    <value>Supplier</value>
+  </data>
+  <data name="BillMobilePhoneFinePayments" xml:space="preserve">
+    <value>Bill, Mobile Phone, Fine Payments</value>
+  </data>
+  <data name="Income" xml:space="preserve">
+    <value>Income</value>
+  </data>
+  <data name="OtherExpenses" xml:space="preserve">
+    <value>Other Expenses</value>
+  </data>
+  <data name="TransferBetweenOwnAccounts" xml:space="preserve">
+    <value>Transfer Between Own Accounts</value>
+  </data>
+  <data name="TransferOutAndCashWithdrawal" xml:space="preserve">
+    <value>Transfer Out And Cash Withdrawal</value>
+  </data>
+  <data name="TreasuryTransfers" xml:space="preserve">
+    <value>Treasury Transfers</value>
+  </data>
+  <data name="CheckGLAccountForHouseBankAccount" xml:space="preserve">
+    <value>Check G/L Account for house bank account</value>
+  </data>
+  <data name="CouldNotFindBankChargeAccount" xml:space="preserve">
+    <value>Could not find bank charge account</value>
+  </data>
+  <data name="CouldNotFindCurrency" xml:space="preserve">
+    <value>Could not find currency</value>
+  </data>
+  <data name="CouldNotFindHouseBankAccount" xml:space="preserve">
+    <value>Could not find house bank account</value>
+  </data>
+  <data name="GLAccount" xml:space="preserve">
+    <value>G/L Account</value>
+  </data>
+  <data name="CashFlowLineItemID" xml:space="preserve">
+    <value>Cash Flow Line Item ID</value>
+  </data>
+  <data name="InternetBankingIntegrationServicesRules" xml:space="preserve">
+    <value>Internet Banking Integration Services Rules</value>
+  </data>
+  <data name="CashFlowLineItemName" xml:space="preserve">
+    <value>Cash Flow Line Item Name</value>
+  </data>
+  <data name="AccountCode" xml:space="preserve">
+    <value>Account Code</value>
+  </data>
+  <data name="AccountName" xml:space="preserve">
+    <value>Account Name</value>
+  </data>
+  <data name="BankCharge" xml:space="preserve">
+    <value>Bank Charge</value>
+  </data>
+  <data name="OtherIncomes" xml:space="preserve">
+    <value>Other Incomes</value>
+  </data>
+  <data name="TransferFromBP" xml:space="preserve">
+    <value>Transfer from BP</value>
+  </data>
+  <data name="TransferToBP" xml:space="preserve">
+    <value>Transfer to BP</value>
+  </data>
+  <data name="CheckCurrencies" xml:space="preserve">
+    <value>Check Currencies</value>
+  </data>
+  <data name="downloadedFromTheBank" xml:space="preserve">
+    <value>Downloaded From The Bank</value>
+  </data>
+  <data name="OutgoingReference" xml:space="preserve">
+    <value>Outgoing Reference</value>
+  </data>
+  <data name="AccountNumber" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="ChargeDetail" xml:space="preserve">
+    <value>Charge Detail</value>
+  </data>
+  <data name="DebitCredit" xml:space="preserve">
+    <value>Debit/Credit</value>
+  </data>
+  <data name="DocumentDate" xml:space="preserve">
+    <value>Doc. Date</value>
+  </data>
+  <data name="DocumentNumber" xml:space="preserve">
+    <value>Document #</value>
+  </data>
+  <data name="ExternalPaymentID" xml:space="preserve">
+    <value>External Payment ID</value>
+  </data>
+  <data name="GLAccountCode" xml:space="preserve">
+    <value>G/L Account</value>
+  </data>
+  <data name="Input" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="OperationCode" xml:space="preserve">
+    <value>Op. Code</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="PartnerAccountNumber" xml:space="preserve">
+    <value>Part. Account</value>
+  </data>
+  <data name="PartnerBank" xml:space="preserve">
+    <value>Partner's Bank</value>
+  </data>
+  <data name="PartnerBankCode" xml:space="preserve">
+    <value>Partner's Bank Code</value>
+  </data>
+  <data name="PartnerCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="PartnerName" xml:space="preserve">
+    <value>Partner</value>
+  </data>
+  <data name="PartnerTaxCode" xml:space="preserve">
+    <value>Partner's TIN</value>
+  </data>
+  <data name="TransactionType" xml:space="preserve">
+    <value>Transaction Type</value>
+  </data>
+  <data name="ValueDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="WebsiteIsUnderConstruction" xml:space="preserve">
+    <value>Website is under construction</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CouldNotFindBusinessPartner" xml:space="preserve">
+    <value>Could not find business partner</value>
+  </data>
+  <data name="FCCredit" xml:space="preserve">
+    <value>Credit(FC)</value>
+  </data>
+  <data name="FCCurrency" xml:space="preserve">
+    <value>Foreign Currency</value>
+  </data>
+  <data name="FCDebit" xml:space="preserve">
+    <value>Debit (FC)</value>
+  </data>
+  <data name="SCCredit" xml:space="preserve">
+    <value>Credit (SC)</value>
+  </data>
+  <data name="SCDebit" xml:space="preserve">
+    <value>Debit (SC)</value>
+  </data>
+  <data name="prFormItem" xml:space="preserve">
+    <value>Primary form Item</value>
+  </data>
+  <data name="APDownPaymentInvoice" xml:space="preserve">
+    <value>A/P  Down Payment Invoice</value>
+  </data>
+  <data name="APDownPaymentRequest" xml:space="preserve">
+    <value>A/P  Down Payment Invoice</value>
+  </data>
+  <data name="FailedToAttachInvoiceDocument" xml:space="preserve">
+    <value>Failed to attach tax invoice document</value>
+  </data>
+  <data name="ThereAreDuplicatesRowsInTheTable" xml:space="preserve">
+    <value>There are duplicates rows in the table</value>
+  </data>
+  <data name="DisplayAE" xml:space="preserve">
+    <value>Display Full JE</value>
+  </data>
+  <data name="Credit" xml:space="preserve">
+    <value>Credit</value>
+  </data>
+  <data name="Debit" xml:space="preserve">
+    <value>Debit</value>
+  </data>
+  <data name="DeclarationNumberShouldBeEmpty" xml:space="preserve">
+    <value>Declaration number should be empty</value>
+  </data>
+  <data name="PreviewJournalEntry" xml:space="preserve">
+    <value>Journal Entry Preview</value>
+  </data>
+  <data name="unableToCancelWaybilForThisDocument" xml:space="preserve">
+    <value>unable to cancel waybil for this document</value>
+  </data>
+  <data name="DocumentMustNotBeCancelledOrCancellation" xml:space="preserve">
+    <value>Document must not be cancelled or cancellation</value>
+  </data>
+  <data name="ContinueCreatingTaxInvoice" xml:space="preserve">
+    <value>Continue creating Tax Invoice</value>
+  </data>
+  <data name="ErrorDocumentAdd" xml:space="preserve">
+    <value>Error while document add</value>
+  </data>
+  <data name="FailedToCorrectTaxInvoice" xml:space="preserve">
+    <value>Failed to correct Tax Invoice</value>
+  </data>
+  <data name="UnitedTaxInvoiceCreatedSuccesfully" xml:space="preserve">
+    <value>United Tax Invoice created succesfully</value>
+  </data>
+  <data name="BaseARInvoiceCouldNotFoundInTheMarkedDocumentsSList" xml:space="preserve">
+    <value>Base A/R Invoice could not found in the marked documents's list</value>
+  </data>
+  <data name="BaseARInvoice" xml:space="preserve">
+    <value>Base A/R Invoice</value>
+  </data>
+  <data name="WaybillIsConfirmed" xml:space="preserve">
+    <value>Waybill is confirmed</value>
+  </data>
+  <data name="WaybillIsLinkedToDocument" xml:space="preserve">
+    <value>Waybill is linked to document</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="Tax" xml:space="preserve">
+    <value>Tax</value>
+  </data>
+  <data name="CreatePurchaseDocuments" xml:space="preserve">
+    <value>Do you want to create purchase documents</value>
+  </data>
+  <data name="CreateCreditMemoDocuments" xml:space="preserve">
+    <value>Do you want to create credit memo documents</value>
+  </data>
+  <data name="BalanceDue" xml:space="preserve">
+    <value>Balance Due</value>
+  </data>
+  <data name="DueDate" xml:space="preserve">
+    <value>Due Date</value>
+  </data>
+  <data name="OverdueDays" xml:space="preserve">
+    <value>Overdue Days</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="TotalPayment" xml:space="preserve">
+    <value>Total Payment</value>
+  </data>
+  <data name="DocumentRemarks" xml:space="preserve">
+    <value>Doc. Remarks</value>
+  </data>
+  <data name="InDetail" xml:space="preserve">
+    <value>In Detail</value>
+  </data>
+  <data name="Selected" xml:space="preserve">
+    <value>Selected</value>
+  </data>
+  <data name="Above" xml:space="preserve">
+    <value>Above</value>
+  </data>
+  <data name="AmountFromBank" xml:space="preserve">
+    <value>Amount from Bank</value>
+  </data>
+  <data name="DownPaymentAmount" xml:space="preserve">
+    <value>Down Payment Amount</value>
+  </data>
+  <data name="InvoicesAmount" xml:space="preserve">
+    <value>Invoices Amount</value>
+  </data>
+  <data name="PaymentOnAccount" xml:space="preserve">
+    <value>Payment on Account</value>
+  </data>
+  <data name="TotalAmountDue" xml:space="preserve">
+    <value>Total Amount Due</value>
+  </data>
+  <data name="CreatePaymentDocuments" xml:space="preserve">
+    <value>Do you want to create payment documents</value>
+  </data>
+  <data name="TotalPaymentLocal" xml:space="preserve">
+    <value>Total Payment (LC)</value>
+  </data>
+  <data name="InstallmentID" xml:space="preserve">
+    <value>Instalment</value>
+  </data>
+  <data name="BPCurrencyRate" xml:space="preserve">
+    <value>BP Rate</value>
+  </data>
+  <data name="NameMismatchFromEnregDoYouWantEditDr" xml:space="preserve">
+    <value>Driver's name mismatches with enregister! Do you want to edit current name?</value>
+  </data>
+  <data name="withDetl" xml:space="preserve">
+    <value>With details</value>
+  </data>
+  <data name="withoutDetl" xml:space="preserve">
+    <value>Without details</value>
+  </data>
+  <data name="WithoutSalary" xml:space="preserve">
+    <value>Without salary</value>
+  </data>
+  <data name="Salary" xml:space="preserve">
+    <value>Salary</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="IsVATPayer" xml:space="preserve">
+    <value>VAT Payer</value>
+  </data>
+  <data name="needTax" xml:space="preserve">
+    <value>Need Tax Invoice</value>
+  </data>
+  <data name="NotNeedTax" xml:space="preserve">
+    <value>Doesnt Need Tax Invoce</value>
+  </data>
+  <data name="OnlyNeedTax" xml:space="preserve">
+    <value>Only Who Need Tax Invoice</value>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>Issue</value>
+  </data>
+  <data name="CantUpdateRTM1" xml:space="preserve">
+    <value>Cant update RTM1 table</value>
+  </data>
+  <data name="YouMustRunFromPreviusReport" xml:space="preserve">
+    <value>Please run from previus report</value>
+  </data>
+  <data name="CreateGoodsReceiptPO" xml:space="preserve">
+    <value>Create Goods Receipt PO</value>
+  </data>
+  <data name="APInvoiceIsCreatedFromGoodsReceiptPO" xml:space="preserve">
+    <value>AP Invoice Is Created From Goods Receipt PO</value>
+  </data>
+  <data name="QuantityShouldBeLessThan" xml:space="preserve">
+    <value>Quantity should be less than</value>
+  </data>
+  <data name="EmployeeAccount" xml:space="preserve">
+    <value>Employee Account</value>
+  </data>
+  <data name="ItemAccount" xml:space="preserve">
+    <value>Item Account</value>
+  </data>
+  <data name="uomNameRS" xml:space="preserve">
+    <value>Uom Name RS</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="ItemCategory" xml:space="preserve">
+    <value>Item Category</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="Father" xml:space="preserve">
+    <value>Father</value>
+  </data>
+  <data name="ItemCategoriesMasterData" xml:space="preserve">
+    <value>Item Categories Master Data</value>
+  </data>
+  <data name="LevelIsNotFeel" xml:space="preserve">
+    <value>Level Is Not Feel</value>
+  </data>
+  <data name="BankingIntegrationRules" xml:space="preserve">
+    <value>Banking Integration Rules</value>
+  </data>
+  <data name="Drivers" xml:space="preserve">
+    <value>Drivers</value>
+  </data>
+  <data name="ProfitTaxBase" xml:space="preserve">
+    <value>Profit Tax Base</value>
+  </data>
+  <data name="ProfitTaxBaseType" xml:space="preserve">
+    <value>Profit Tax Base Type</value>
+  </data>
+  <data name="ReserveInvoiceAsService" xml:space="preserve">
+    <value>Create Service type Tax invoice from AR Reserve Invoice</value>
+  </data>
+  <data name="ServiceRate" xml:space="preserve">
+    <value>Service Rate</value>
+  </data>
+  <data name="ServiceAmount" xml:space="preserve">
+    <value>Service Amount</value>
+  </data>
+  <data name="WTaxAmount" xml:space="preserve">
+    <value>WTax Amount</value>
+  </data>
+  <data name="BankAcc" xml:space="preserve">
+    <value>Bank account</value>
+  </data>
+  <data name="ChrgDtls" xml:space="preserve">
+    <value>Charge Details</value>
+  </data>
+  <data name="ControlAccount" xml:space="preserve">
+    <value>Control account</value>
+  </data>
+  <data name="Descript" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DispType" xml:space="preserve">
+    <value>Dispatche type</value>
+  </data>
+  <data name="DocumentPostingDate" xml:space="preserve">
+    <value>Doc Posting Date</value>
+  </data>
+  <data name="OutgoingPaymentWizard" xml:space="preserve">
+    <value>Outgoing payment wizard</value>
+  </data>
+  <data name="PrimaryFormItem" xml:space="preserve">
+    <value>Primary Form Item</value>
+  </data>
+  <data name="DescriptionIsMandatory" xml:space="preserve">
+    <value>Description is the mandatory field</value>
+  </data>
+  <data name="DocumentCreatedSuccesfully" xml:space="preserve">
+    <value>Document Created Succesfully!</value>
+  </data>
+  <data name="DocumentNotCreated" xml:space="preserve">
+    <value>Document is not Created</value>
+  </data>
+  <data name="FromProject" xml:space="preserve">
+    <value>From Project</value>
+  </data>
+  <data name="GrossAmount" xml:space="preserve">
+    <value>Gross Amount</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="VATCode" xml:space="preserve">
+    <value>VAT Code</value>
+  </data>
+  <data name="SupplierName" xml:space="preserve">
+    <value>Supplier Name</value>
+  </data>
+  <data name="ChooseDownPaymentTaxInvoice" xml:space="preserve">
+    <value>Choose Document</value>
+  </data>
+  <data name="VatAmountCanNotBeMoreThanOpenVatRow" xml:space="preserve">
+    <value>Vat amount can not be more than open vat. Row: </value>
+  </data>
+  <data name="DocumentAlreadyAddedRow" xml:space="preserve">
+    <value>Document already added row: </value>
+  </data>
+  <data name="OpenVAT" xml:space="preserve">
+    <value>Open VAT</value>
+  </data>
+  <data name="CanNotCancelLinkedDocument" xml:space="preserve">
+    <value>Can not cancel linked document</value>
+  </data>
+  <data name="LinkedAPInvoicesAndCreditNotes" xml:space="preserve">
+    <value>Linked AP Invoices and Credit Notes</value>
+  </data>
+  <data name="LinkedDPMTaxInvoices" xml:space="preserve">
+    <value>Linked DPM Tax Invoices</value>
+  </data>
+  <data name="advancesVatAmountCanNotBeMoreThanTaxInvoiceVatAmount" xml:space="preserve">
+    <value>Advances vat amount can not be more than Tax Invoice vat mount</value>
+  </data>
+  <data name="DownPaymentTaxInvoiceContent" xml:space="preserve">
+    <value>Down Payment Tax Invoice Content</value>
+  </data>
+  <data name="AcctForAutoPaymentInternetBank" xml:space="preserve">
+    <value>Account for Auto Down Payment (Internet Bank)</value>
+  </data>
+  <data name="AddDownPaymentAmount" xml:space="preserve">
+    <value>Add DP Amt</value>
+  </data>
+  <data name="ReceivedDownPaymentPurpose" xml:space="preserve">
+    <value>Received Down Payment Purpose</value>
+  </data>
+  <data name="SynchronizeDateAndCurrency" xml:space="preserve">
+    <value>Synchronize</value>
+  </data>
+  <data name="CreatedAutomaticallyInPlaceOfPaymentDocument" xml:space="preserve">
+    <value>Created Automatically in Place of Payment Document: </value>
+  </data>
+  <data name="AfterChangeDateFormWillCloseReopen" xml:space="preserve">
+    <value>After date changing form will close and reopen</value>
+  </data>
+  <data name="ARDownPaymentVATAccrual" xml:space="preserve">
+    <value>AR Down payment VAT accrual</value>
+  </data>
+  <data name="ARVATAccualWizard" xml:space="preserve">
+    <value>AR VAT accual wizard</value>
+  </data>
+  <data name="DocEntVT" xml:space="preserve">
+    <value>VAT accrual doc entry</value>
+  </data>
+  <data name="DocNumVT" xml:space="preserve">
+    <value>VAT accrual doc number</value>
+  </data>
+  <data name="ChangeDocDate" xml:space="preserve">
+    <value>Change document date</value>
+  </data>
+  <data name="ReconcilationWizard" xml:space="preserve">
+    <value>Reconcilation wizard</value>
+  </data>
+  <data name="ReconSum" xml:space="preserve">
+    <value>Reconcilatin sum</value>
+  </data>
+  <data name="NewDate" xml:space="preserve">
+    <value>New date</value>
+  </data>
+  <data name="CreateVATAccrualDocuments" xml:space="preserve">
+    <value>Create VAT accrual documents</value>
+  </data>
+  <data name="AlRcnSum" xml:space="preserve">
+    <value>Already reconcilation amount</value>
+  </data>
+  <data name="AlRcnVat" xml:space="preserve">
+    <value>Already reconcilation vat</value>
+  </data>
+  <data name="DefaultValues" xml:space="preserve">
+    <value>Default values</value>
+  </data>
+  <data name="TransId" xml:space="preserve">
+    <value>Trans ID</value>
+  </data>
+  <data name="AddDPAmount" xml:space="preserve">
+    <value>DP Amount</value>
+  </data>
+  <data name="Localisation" xml:space="preserve">
+    <value>Localisation</value>
+  </data>
+  <data name="AddonLicense" xml:space="preserve">
+    <value>Addon License</value>
+  </data>
+  <data name="AfterChangingLicenseKey" xml:space="preserve">
+    <value>After changing the License Key, all windows will be closed, Continue?</value>
+  </data>
+  <data name="License" xml:space="preserve">
+    <value>License</value>
+  </data>
+  <data name="LicenseKey" xml:space="preserve">
+    <value>License Key</value>
+  </data>
+  <data name="LicenseLocalisationProgram" xml:space="preserve">
+    <value>License Localisation Program</value>
+  </data>
+  <data name="LocalisationAddonNotLicensed" xml:space="preserve">
+    <value>Localisation Addon Not Licensed</value>
+  </data>
+  <data name="LocalisationLicense" xml:space="preserve">
+    <value>Localisation License</value>
+  </data>
+  <data name="LocalisationLicensingDataCouldNotBeCreated" xml:space="preserve">
+    <value>Localisation Licensing Data Could Not Be Created</value>
+  </data>
+  <data name="CompanyPension" xml:space="preserve">
+    <value>Company Pension</value>
+  </data>
+  <data name="PhysicalEntityPension" xml:space="preserve">
+    <value>Physical Entity Pension</value>
+  </data>
+  <data name="WithholdingTax" xml:space="preserve">
+    <value>Withholding Tax</value>
+  </data>
+  <data name="PhysicalEntityTax" xml:space="preserve">
+    <value>Physical Entity Tax</value>
+  </data>
+  <data name="DebtAccount" xml:space="preserve">
+    <value>Debt Account</value>
+  </data>
+  <data name="CompPension" xml:space="preserve">
+    <value>Company Pension</value>
+  </data>
+  <data name="LicenseStatus" xml:space="preserve">
+    <value>License Status</value>
+  </data>
+  <data name="LicenseUpdateDate" xml:space="preserve">
+    <value>License Update Date</value>
+  </data>
+  <data name="PhysEntityPension" xml:space="preserve">
+    <value>Physical Entity Pension</value>
+  </data>
+  <data name="WithhTax" xml:space="preserve">
+    <value>Withholding Tax</value>
+  </data>
+  <data name="BlockNegativeStockOnPostingDate" xml:space="preserve">
+    <value>Block Negative Stock On Posting Date</value>
+  </data>
+  <data name="ByCompany" xml:space="preserve">
+    <value>By Company</value>
+  </data>
+  <data name="ByWarehouse" xml:space="preserve">
+    <value>By Warehouse</value>
+  </data>
+  <data name="DoNotBlock" xml:space="preserve">
+    <value>Do Not Block</value>
+  </data>
+  <data name="WithoutCurrencyDetailing" xml:space="preserve">
+    <value>Without Currency Detailing</value>
+  </data>
+  <data name="DocumentCannotBeAdded" xml:space="preserve">
+    <value>Document cannot be added</value>
+  </data>
+  <data name="InsufficientStockBalanceOnPostingDate" xml:space="preserve">
+    <value>Insufficient stock balance on posting date</value>
+  </data>
+  <data name="CloseFormIntBank" xml:space="preserve">
+    <value>Are you sure you want to close the internet banking wizard ?</value>
+  </data>
+  <data name="IntBanking" xml:space="preserve">
+    <value>Int. Banking</value>
+  </data>
+  <data name="InvoicesDifferentCurrenciesError" xml:space="preserve">
+    <value>Invoices must have same currency!</value>
+  </data>
+  <data name="LocalizationSettings" xml:space="preserve">
+    <value>Localization</value>
+  </data>
+  <data name="BudgetCashFlow" xml:space="preserve">
+    <value>Budget Cash Flow</value>
+  </data>
+  <data name="BudgetCashFlowCodeOutgoingWizard" xml:space="preserve">
+    <value>Budg. Flow</value>
+  </data>
+  <data name="IsDevelopmentCompany" xml:space="preserve">
+    <value>Development Company</value>
+  </data>
+  <data name="BlnkAgr" xml:space="preserve">
+    <value>Blanket Agreement</value>
+  </data>
+  <data name="SynchNotPossibleDocumentLiableProfitTax" xml:space="preserve">
+    <value>It is not possible to synchronize dates in documents with withholding tax or profit tax</value>
+  </data>
+  <data name="Payment" xml:space="preserve">
+    <value>Payment</value>
+  </data>
+  <data name="PaymentAmount" xml:space="preserve">
+    <value>Payment Amount</value>
+  </data>
+  <data name="CashAccount" xml:space="preserve">
+    <value>Cash Account</value>
+  </data>
+  <data name="CashFlow" xml:space="preserve">
+    <value>Cash Flow</value>
+  </data>
+  <data name="DoYouWantToClose" xml:space="preserve">
+    <value>Do You Want To Close</value>
+  </data>
+  <data name="ReconciliationDifferenceMustBeZeroBeforeReconciling" xml:space="preserve">
+    <value>Reconciliation difference must be zero before reconciling</value>
+  </data>
+  <data name="CostCenterCreatedSuccessfully" xml:space="preserve">
+    <value>Cost center created successfully</value>
+  </data>
+  <data name="CostCenterNotCreated" xml:space="preserve">
+    <value>Cost center not created</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="DistributionRule" xml:space="preserve">
+    <value>Distribution rule</value>
+  </data>
+  <data name="NewCostCenterForm" xml:space="preserve">
+    <value>New cost center</value>
+  </data>
+  <data name="FixedAssetTransferDocument" xml:space="preserve">
+    <value>Fixed Asset Transfer Document</value>
+  </data>
+  <data name="FromEmployee" xml:space="preserve">
+    <value>From Employee</value>
+  </data>
+  <data name="FromEmployeeName" xml:space="preserve">
+    <value>From Employee Name</value>
+  </data>
+  <data name="FromLocation" xml:space="preserve">
+    <value>From Location</value>
+  </data>
+  <data name="FromLocationName" xml:space="preserve">
+    <value>From Location Name</value>
+  </data>
+  <data name="ToEmployee" xml:space="preserve">
+    <value>To Employee</value>
+  </data>
+  <data name="ToEmployeeName" xml:space="preserve">
+    <value>To Employee Name</value>
+  </data>
+  <data name="ToLocation" xml:space="preserve">
+    <value>To Location</value>
+  </data>
+  <data name="ToLocationName" xml:space="preserve">
+    <value>To Location Name</value>
+  </data>
+  <data name="AddNewRow" xml:space="preserve">
+    <value>Add Row</value>
+  </data>
+  <data name="DeleteRow" xml:space="preserve">
+    <value>Delete Row</value>
+  </data>
+  <data name="SerNo" xml:space="preserve">
+    <value>Ser.No</value>
+  </data>
+  <data name="CannotUpdateAsset" xml:space="preserve">
+    <value>Cannot Update Asset</value>
+  </data>
+  <data name="DoYouWantToClearTheTable" xml:space="preserve">
+    <value>Do you want to clear the table</value>
+  </data>
+  <data name="TransferDocumentAlreadyExistsForAsset" xml:space="preserve">
+    <value>Transfer Document Already Exists For Asset</value>
+  </data>
+  <data name="Delivery" xml:space="preserve">
+    <value>Delivery</value>
+  </data>
+  <data name="AccumulatedDepreciationAccount" xml:space="preserve">
+    <value>Accumulated Depreciation Acc.</value>
+  </data>
+  <data name="DepreciationExpenseAccount" xml:space="preserve">
+    <value>Depreciation Expense Acc.</value>
+  </data>
+  <data name="FixedAsset" xml:space="preserve">
+    <value>Fixed Asset</value>
+  </data>
+  <data name="UsLife" xml:space="preserve">
+    <value>Useful Life</value>
+  </data>
+  <data name="DepreciationAccrual" xml:space="preserve">
+    <value>Depreciation Accrual Document</value>
+  </data>
+  <data name="AccrualMonth" xml:space="preserve">
+    <value>Accrual Month</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="DepreciationAmount" xml:space="preserve">
+    <value>Depreciation Amount</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="CategoryLevel" xml:space="preserve">
+    <value>Category Level</value>
+  </data>
+  <data name="Cost" xml:space="preserve">
+    <value>Cost</value>
+  </data>
+  <data name="CreateDoc" xml:space="preserve">
+    <value>Create Doc.</value>
+  </data>
+  <data name="CreateStockTransferDocuments" xml:space="preserve">
+    <value>Create Stock Transfer Documents</value>
+  </data>
+  <data name="Fuel" xml:space="preserve">
+    <value>Fuel</value>
+  </data>
+  <data name="InStock" xml:space="preserve">
+    <value>In Stock</value>
+  </data>
+  <data name="ItemFrom" xml:space="preserve">
+    <value>Item From</value>
+  </data>
+  <data name="ItemGroup" xml:space="preserve">
+    <value>Item Group</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Main</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Responsible" xml:space="preserve">
+    <value>Responsible</value>
+  </data>
+  <data name="ReturnToMainWarehouse" xml:space="preserve">
+    <value>Return to Main Warehouse</value>
+  </data>
+  <data name="ReturnToWriteOffWarehouse" xml:space="preserve">
+    <value>Return to Write Off Warehouse</value>
+  </data>
+  <data name="Split" xml:space="preserve">
+    <value>Split</value>
+  </data>
+  <data name="StockTransferWizard" xml:space="preserve">
+    <value>Stock Transfer Wizard</value>
+  </data>
+  <data name="TransferToProjectWarehouse" xml:space="preserve">
+    <value>Transfer to Project Warehouse</value>
+  </data>
+  <data name="TransferToWriteOffWarehouse" xml:space="preserve">
+    <value>Transfer to Write Off Warehouse</value>
+  </data>
+  <data name="TransferWithoutType" xml:space="preserve">
+    <value>Transfer Without Type</value>
+  </data>
+  <data name="WareHouses" xml:space="preserve">
+    <value>WareHouses</value>
+  </data>
+  <data name="WarehouseType" xml:space="preserve">
+    <value>Warehouse Type</value>
+  </data>
+  <data name="WhsFr" xml:space="preserve">
+    <value>Warehouse From</value>
+  </data>
+  <data name="WhsTo" xml:space="preserve">
+    <value>Warehouse To</value>
+  </data>
+  <data name="WriteOff" xml:space="preserve">
+    <value>Write Off</value>
+  </data>
+  <data name="AlrDeprAmt" xml:space="preserve">
+    <value>Already depreciated amount</value>
+  </data>
+  <data name="BatchNumber" xml:space="preserve">
+    <value>Batch Number</value>
+  </data>
+  <data name="AddBatch" xml:space="preserve">
+    <value>Add Batch Numbers</value>
+  </data>
+  <data name="APCost" xml:space="preserve">
+    <value>Purchase cost</value>
+  </data>
+  <data name="CreateDepreciationDocument" xml:space="preserve">
+    <value>Create depreciation document</value>
+  </data>
+  <data name="CurMnthAmt" xml:space="preserve">
+    <value>Current month depreciation amount</value>
+  </data>
+  <data name="DeprAmt" xml:space="preserve">
+    <value>Depreciation amount</value>
+  </data>
+  <data name="DepreciationAccruingWizard" xml:space="preserve">
+    <value>Depreciation accruing wizard</value>
+  </data>
+  <data name="DistNumber" xml:space="preserve">
+    <value>Batch number</value>
+  </data>
+  <data name="ItmsGrpCod" xml:space="preserve">
+    <value>Item group code</value>
+  </data>
+  <data name="NtBookVal" xml:space="preserve">
+    <value>Net book value</value>
+  </data>
+  <data name="UseLife" xml:space="preserve">
+    <value>Useful life</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>Rate Range</value>
+  </data>
+  <data name="UseBlAgrRt" xml:space="preserve">
+    <value>Use Rate Ranges</value>
+  </data>
+  <data name="BatchNumberPrefix" xml:space="preserve">
+    <value>Batch Number Prefix</value>
+  </data>
+  <data name="PrefixError" xml:space="preserve">
+    <value>Cannot create batch number. Please fill 2 symbol prefix for batch numbers</value>
+  </data>
+  <data name="FindNext" xml:space="preserve">
+    <value>Find Next</value>
+  </data>
+  <data name="TotalPaymentNet" xml:space="preserve">
+    <value>Total Payment net</value>
+  </data>
+<data name="ACNumber" xml:space="preserve">
+    <value>A/C Number</value>
+  </data>
+  <data name="DuplicateAccountInTheLine" xml:space="preserve">
+    <value>Duplicate Account In The Line</value>
+  </data>
+</root>

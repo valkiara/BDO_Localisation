@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd1="http://localhost/ws/BaseRegistration" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:tns="http://localhost/ws/updateconf" xmlns:soapbind="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12bind="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd2="http://localhost/ws/updateconf" name="ПроверкаОбновленииКонфигурации" targetNamespace="http://localhost/ws/updateconf" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema xmlns:xs2="http://localhost/ws/BaseRegistration" xmlns:xs1="http://localhost/ws/updateconf" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://localhost/ws/updateconf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://localhost/ws/BaseRegistration" />
+      <xs:complexType name="ДанныеКонфигурации">
+        <xs:sequence>
+          <xs:element name="Версия" type="xs:string" />
+          <xs:element name="Конфигурация" type="xs:string" />
+          <xs:element minOccurs="0" name="ДанныеВебКлиента" type="xs:string" />
+          <xs:element minOccurs="0" name="ИдентификаторБазы" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ДанныеОбновления">
+        <xs:sequence>
+          <xs:element name="ЕстьОбновление" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ВерсииОбновления" nillable="true" type="xs1:СтрокаВерсии" />
+          <xs:element name="АдрессРесурсаОбнавления" nillable="true" type="xs:string" />
+          <xs:element name="Пользователь" nillable="true" type="xs:string" />
+          <xs:element name="Пароль" nillable="true" type="xs:string" />
+          <xs:element name="ИнформацияОбОбновлении" nillable="true" type="xs:base64Binary" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="СтрокаВерсии">
+        <xs:sequence>
+          <xs:element name="Версия" type="xs:string" />
+          <xs:element name="ЛокальныйОтносительныйКаталог" type="xs:string" />
+          <xs:element name="ПутьКФайлуОбновления" type="xs:string" />
+          <xs:element name="ФайлОбновления" type="xs:string" />
+          <xs:element name="ВерсияПлатформы" type="xs:string" />
+          <xs:element name="РазмерФайлаОбновления" type="xs:decimal" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ПроверитьОбновлениеКонфигурации">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ДанныеКонфигурации" type="xs1:ДанныеКонфигурации" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ПроверитьОбновлениеКонфигурацииResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs1:ДанныеОбновления" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ЗарегистрироватьБазу">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ДанныеКлиента" type="xs2:ДанныеКлиента" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ЗарегистрироватьБазуResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs2:ДанныеДемоБазы" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ЗалицензироватьКонфигурацию">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ДанныеЛицензирования" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ЗалицензироватьКонфигурациюResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://localhost/ws/BaseRegistration" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://localhost/ws/BaseRegistration" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="ДанныеДемоБазы">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="АдресFTP" nillable="true" type="xs:string" />
+          <xs:element name="Пользователь" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Пароль" nillable="true" type="xs:string" />
+          <xs:element name="АдрессБазы" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ИмяФайла" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ДанныеКлиента">
+        <xs:sequence>
+          <xs:element name="Наименование" type="xs:string" />
+          <xs:element minOccurs="0" name="Телефон" type="xs:string" />
+          <xs:element minOccurs="0" name="Почта" type="xs:string" />
+          <xs:element minOccurs="0" name="НаименованиеКомпании" type="xs:string" />
+          <xs:element minOccurs="0" name="Язик" nillable="true" />
+          <xs:element minOccurs="0" name="Позиция" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </types>
+  <message name="ПроверитьОбновлениеКонфигурацииRequestMessage">
+    <part name="parameters" element="xsd2:ПроверитьОбновлениеКонфигурации" />
+  </message>
+  <message name="ПроверитьОбновлениеКонфигурацииResponseMessage">
+    <part name="parameters" element="xsd2:ПроверитьОбновлениеКонфигурацииResponse" />
+  </message>
+  <message name="ЗарегистрироватьБазуRequestMessage">
+    <part name="parameters" element="xsd2:ЗарегистрироватьБазу" />
+  </message>
+  <message name="ЗарегистрироватьБазуResponseMessage">
+    <part name="parameters" element="xsd2:ЗарегистрироватьБазуResponse" />
+  </message>
+  <message name="ЗалицензироватьКонфигурациюRequestMessage">
+    <part name="parameters" element="xsd2:ЗалицензироватьКонфигурацию" />
+  </message>
+  <message name="ЗалицензироватьКонфигурациюResponseMessage">
+    <part name="parameters" element="xsd2:ЗалицензироватьКонфигурациюResponse" />
+  </message>
+  <portType name="ПроверкаОбновленииКонфигурацииPortType">
+    <operation name="ПроверитьОбновлениеКонфигурации">
+      <input message="xsd2:ПроверитьОбновлениеКонфигурацииRequestMessage" />
+      <output message="xsd2:ПроверитьОбновлениеКонфигурацииResponseMessage" />
+    </operation>
+    <operation name="ЗарегистрироватьБазу">
+      <input message="xsd2:ЗарегистрироватьБазуRequestMessage" />
+      <output message="xsd2:ЗарегистрироватьБазуResponseMessage" />
+    </operation>
+    <operation name="ЗалицензироватьКонфигурацию">
+      <input message="xsd2:ЗалицензироватьКонфигурациюRequestMessage" />
+      <output message="xsd2:ЗалицензироватьКонфигурациюResponseMessage" />
+    </operation>
+  </portType>
+  <binding name="ПроверкаОбновленииКонфигурацииSoapBinding" type="xsd2:ПроверкаОбновленииКонфигурацииPortType">
+    <soapbind:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="ПроверитьОбновлениеКонфигурации">
+      <soapbind:operation soapAction="http://localhost/ws/updateconf#ПроверкаОбновленииКонфигурации:ПроверитьОбновлениеКонфигурации" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="ЗарегистрироватьБазу">
+      <soapbind:operation soapAction="http://localhost/ws/updateconf#ПроверкаОбновленииКонфигурации:ЗарегистрироватьБазу" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="ЗалицензироватьКонфигурацию">
+      <soapbind:operation soapAction="http://localhost/ws/updateconf#ПроверкаОбновленииКонфигурации:ЗалицензироватьКонфигурацию" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <binding name="ПроверкаОбновленииКонфигурацииSoap12Binding" type="xsd2:ПроверкаОбновленииКонфигурацииPortType">
+    <soap12bind:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="ПроверитьОбновлениеКонфигурации">
+      <soap12bind:operation soapAction="http://localhost/ws/updateconf#ПроверкаОбновленииКонфигурации:ПроверитьОбновлениеКонфигурации" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="ЗарегистрироватьБазу">
+      <soap12bind:operation soapAction="http://localhost/ws/updateconf#ПроверкаОбновленииКонфигурации:ЗарегистрироватьБазу" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="ЗалицензироватьКонфигурацию">
+      <soap12bind:operation soapAction="http://localhost/ws/updateconf#ПроверкаОбновленииКонфигурации:ЗалицензироватьКонфигурацию" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="ПроверкаОбновленииКонфигурации">
+    <port name="ПроверкаОбновленииКонфигурацииSoap" binding="xsd2:ПроверкаОбновленииКонфигурацииSoapBinding">
+      <documentation>
+        <wsi:Claim xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" conformsTo="http://ws-i.org/profiles/basic/1.1" />
+      </documentation>
+      <soapbind:address location="http://update.ibs.ge/UpdateConfigs/ws/UpdateConfig.1cws" />
+    </port>
+    <port name="ПроверкаОбновленииКонфигурацииSoap12" binding="xsd2:ПроверкаОбновленииКонфигурацииSoap12Binding">
+      <soap12bind:address location="http://update.ibs.ge/UpdateConfigs/ws/UpdateConfig.1cws" />
+    </port>
+  </service>
+</definitions>
