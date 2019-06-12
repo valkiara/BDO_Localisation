@@ -18,10 +18,6 @@ namespace BDO_Localisation_AddOn
             string tableName = "BDO_WBLD";
             string description = "Waybill";
 
-            SAPbobsCOM.UserObjectsMD oUserObjectsMD = null;
-            oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
-
             int result = UDO.addUserTable( tableName, description, SAPbobsCOM.BoUTBTableType.bott_Document, out errorText);
 
             if (result != 0)
@@ -100,7 +96,7 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields( fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ტრანსპორტირების დაწყების თარიღი (საათები/წუთები)
-            fieldskeysMap.Add("Name", "begTime");
+            fieldskeysMap.Add("Name", "beginTime");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "BeginTime");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
@@ -540,7 +536,7 @@ namespace BDO_Localisation_AddOn
             top = top + height + 1;
 
             formItems = new Dictionary<string, object>();
-            itemName = "BegTimeS"; //10 characters
+            itemName = "beginTimeS"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
             formItems.Add("Left", left_s);
             formItems.Add("Width", width_s);
@@ -548,7 +544,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("TransBeginTime"));
-            formItems.Add("LinkTo", "BegTimeE");
+            formItems.Add("LinkTo", "beginTimeE");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -557,11 +553,11 @@ namespace BDO_Localisation_AddOn
             }
 
             formItems = new Dictionary<string, object>();
-            itemName = "BegTimeE"; //10 characters
+            itemName = "beginTimeE"; //10 characters
             formItems.Add("isDataSource", true);
             formItems.Add("DataSource", "DBDataSources");
             formItems.Add("TableName", "@BDO_WBLD");
-            formItems.Add("Alias", "U_begTime");
+            formItems.Add("Alias", "U_beginTime");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             formItems.Add("Left", left_e);
@@ -1011,7 +1007,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
             objectType = "60"; //Goods Issue
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
-            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
+            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
             //<----
 
             formItems = new Dictionary<string, object>();
@@ -2290,7 +2286,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_baseDocT", oRecordSet.Fields.Item("ObjType").Value.ToString());
                     oGeneralData.SetProperty("U_strAddrs", strAddrs);
                     oGeneralData.SetProperty("U_begDate", DateTime.Today);  //DateTime.Today.ToString("yyyyMMdd"));
-                    oGeneralData.SetProperty("U_begTime", DateTime.Now.ToString("HHmm"));
+                    oGeneralData.SetProperty("U_beginTime", DateTime.Now);
 
                     if (vehicleCode != null)
                     {
@@ -2474,7 +2470,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_baseDocT", oRecordSet.Fields.Item("ObjType").Value.ToString());
                     oGeneralData.SetProperty("U_strAddrs", strAddrs);
                     oGeneralData.SetProperty("U_begDate", DateTime.Today);  //DateTime.Today.ToString("yyyyMMdd"));
-                    oGeneralData.SetProperty("U_begTime", DateTime.Now.ToString("HHmm"));
+                    oGeneralData.SetProperty("U_beginTime", DateTime.Now);
 
                     if (vehicleCode != null)
                     {
@@ -2585,7 +2581,7 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
-        
+
         private static void createDocumentInventoryTransferType( int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
@@ -2681,7 +2677,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_baseDocT", oRecordSet.Fields.Item("ObjType").Value.ToString());
                     oGeneralData.SetProperty("U_strAddrs", strAddrs);
                     oGeneralData.SetProperty("U_begDate", DateTime.Today);  //DateTime.Today.ToString("yyyyMMdd"));
-                    oGeneralData.SetProperty("U_begTime", DateTime.Now.ToString("HHmm")); 
+                    oGeneralData.SetProperty("U_beginTime", DateTime.Now); 
 
                     if (vehicleCode != null)
                     {
@@ -2861,7 +2857,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_baseDocT", oRecordSet.Fields.Item("Object").Value.ToString());
                     oGeneralData.SetProperty("U_strAddrs", strAddrs);
                     oGeneralData.SetProperty("U_begDate", DateTime.Today);  //DateTime.Today.ToString("yyyyMMdd"));
-                    oGeneralData.SetProperty("U_begTime", DateTime.Now.ToString("HHmm"));
+                    oGeneralData.SetProperty("U_beginTime", DateTime.Now);
 
                     if (vehicleCode != null)
                     {
@@ -3022,7 +3018,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_baseDocT", oRecordSet.Fields.Item("ObjType").Value.ToString());
                     oGeneralData.SetProperty("U_endAddrs", strAddrs); //U_strAddrs
                     oGeneralData.SetProperty("U_begDate", DateTime.Today);  //DateTime.Today.ToString("yyyyMMdd"));
-                    oGeneralData.SetProperty("U_begTime", DateTime.Now.ToString("HHmm")); 
+                    oGeneralData.SetProperty("U_beginTime", DateTime.Now); 
 
                     if (vehicleCode != null)
                     {
@@ -3204,7 +3200,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_baseDocT", oRecordSet.Fields.Item("ObjType").Value.ToString());
                     oGeneralData.SetProperty("U_strAddrs", strAddrs);
                     oGeneralData.SetProperty("U_begDate", DateTime.Today);  //DateTime.Today.ToString("yyyyMMdd"));
-                    oGeneralData.SetProperty("U_begTime", DateTime.Now.ToString("HHmm"));
+                    oGeneralData.SetProperty("U_beginTime", DateTime.Now);
 
                     if (vehicleCode != null)
                     {
@@ -3310,9 +3306,9 @@ namespace BDO_Localisation_AddOn
             oItem.Top = top;
             top = top + height + 1;
 
-            oItem = oForm.Items.Item("BegTimeS");
+            oItem = oForm.Items.Item("beginTimeS");
             oItem.Top = top;
-            oItem = oForm.Items.Item("BegTimeE");
+            oItem = oForm.Items.Item("beginTimeE");
             oItem.Top = top;
             top = top + height + 1;
 
@@ -4800,7 +4796,7 @@ namespace BDO_Localisation_AddOn
             "\"BDO_WBLD\".\"U_status\", " +
             "\"BDO_WBLD\".\"U_actDate\", " +
             "\"BDO_WBLD\".\"U_begDate\", " +
-            "\"BDO_WBLD\".\"U_begTime\", " +
+            "\"BDO_WBLD\".\"U_beginTime\", " +
             "\"BDO_WBLD\".\"U_strAddrs\", " +
             "\"BDO_WBLD\".\"U_endAddrs\", " +
             "\"BDO_WBLD\".\"U_comment\", " +
@@ -4921,9 +4917,9 @@ namespace BDO_Localisation_AddOn
                     BEGIN_DATE = BEGIN_DATE == DateTime.MinValue || BEGIN_DATE < DateTime.Today ? DateTime.Now : BEGIN_DATE;
 
                     //ტრანსორტირების დაწყების საათები
-                    decimal U_begTime = Convert.ToDecimal(oRecordSet.Fields.Item("U_begTime").Value);
-                    int Hour = Convert.ToInt32(Math.Round(U_begTime / 100));
-                    int Min = Convert.ToInt32(U_begTime - Hour * 100);
+                    decimal U_beginTime = Convert.ToDecimal(oRecordSet.Fields.Item("U_beginTime").Value);
+                    int Hour = Convert.ToInt32(Math.Round(U_beginTime / 100));
+                    int Min = Convert.ToInt32(U_beginTime - Hour * 100);
                     BEGIN_DATE = new DateTime(BEGIN_DATE.Year, BEGIN_DATE.Month, BEGIN_DATE.Day, Hour, Min,0);
                     
 
@@ -6355,7 +6351,7 @@ namespace BDO_Localisation_AddOn
             "\"BDO_WBLD\".\"U_recvInfN\", " +
             "\"BDO_WBLD\".\"U_baseDocT\", " +
             "\"BDO_WBLD\".\"U_delvDate\", " +
-            "\"BDO_WBLD\".\"U_begTime\", " +
+            "\"BDO_WBLD\".\"U_beginTime\", " +
             "\"BDO_WBLD\".\"U_begDate\" " +
             "FROM \"@BDO_WBLD\" AS \"BDO_WBLD\" " +
             "WHERE \"BDO_WBLD\".\"DocEntry\" = '" + docEntry + "'";
@@ -6379,9 +6375,9 @@ namespace BDO_Localisation_AddOn
 
 
                     ///////////////////
-                    decimal U_begTime = Convert.ToDecimal(oRecordSet.Fields.Item("U_begTime").Value);
-                    int Hour = Convert.ToInt32(Math.Round(U_begTime / 100));
-                    int Min = Convert.ToInt32(U_begTime - Hour * 100);
+                    decimal U_beginTime = Convert.ToDecimal(oRecordSet.Fields.Item("U_beginTime").Value);
+                    int Hour = Convert.ToInt32(Math.Round(U_beginTime / 100));
+                    int Min = Convert.ToInt32(U_beginTime - Hour * 100);
 
                     BEGIN_DATE = DateTime.TryParse(oRecordSet.Fields.Item("U_begDate").Value.ToString("yyyyMMdd") == "18991230" ? "" : oRecordSet.Fields.Item("U_begDate").Value.ToString(), out BEGIN_DATE) == false ? DateTime.MinValue : BEGIN_DATE;//BEGIN_DATE - ტრანსპორტირების დაწყების თარიღი
                     BEGIN_DATE = BEGIN_DATE == DateTime.MinValue || BEGIN_DATE < DateTime.Today ? DateTime.Now : BEGIN_DATE;

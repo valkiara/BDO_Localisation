@@ -299,40 +299,42 @@ namespace BDO_Localisation_AddOn
 
             SAPbouiCOM.DBDataSources dBDataSources = oForm.DataSources.DBDataSources;
 
-            string acNumber = dBDataSources.Item("OIPF").GetValue("U_BDOSACNum", 0);
-            if (string.IsNullOrEmpty(acNumber))
+            try
             {
-                if (dBDataSources.Item("IPF1").Size > 0)
+                string acNumber = dBDataSources.Item("OIPF").GetValue("U_BDOSACNum", 0);
+                if (string.IsNullOrEmpty(acNumber))
                 {
-                    string baseEntry = dBDataSources.Item("IPF1").GetValue("BaseEntry", 0);
-                    string baseType = dBDataSources.Item("IPF1").GetValue("BaseType", 0);
-                    if (baseEntry != "" && (baseType == "18" || baseType == "20" || baseType == "69"))
+                    if (dBDataSources.Item("IPF1").Size > 0)
                     {
-                        string tableName = (baseType == "18" ? "OPCH" : (baseType == "20" ? "OPDN" : "OIPF"));
+                        string baseEntry = dBDataSources.Item("IPF1").GetValue("BaseEntry", 0);
+                        string baseType = dBDataSources.Item("IPF1").GetValue("BaseType", 0);
+                        if (baseEntry != "" && (baseType == "18" || baseType == "20" || baseType == "69"))
+                        {
+                            string tableName = (baseType == "18" ? "OPCH" : (baseType == "20" ? "OPDN" : "OIPF"));
 
-                        query = @"SELECT
+                            query = @"SELECT
                                  ""U_BDOSACNum""
                             FROM """ + tableName + @"""
                             WHERE ""DocEntry"" = '" + baseEntry + "'";
 
-                        oRecordSet.DoQuery(query);
-                        if (!oRecordSet.EoF)
-                        {
-                            acNumber = oRecordSet.Fields.Item("U_BDOSACNum").Value;
-                            SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDOSACNumE").Specific;
-                            oEditText.Value = acNumber;
+                            oRecordSet.DoQuery(query);
+                            if (!oRecordSet.EoF)
+                            {
+                                acNumber = oRecordSet.Fields.Item("U_BDOSACNum").Value;
+                                SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDOSACNumE").Specific;
+                                oEditText.Value = acNumber;
+                            }
                         }
                     }
                 }
-            }
-            acNumber = "AC1235";
-            if (!string.IsNullOrEmpty(acNumber))
-            {
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("54").Specific));
-                SAPbouiCOM.Column oColumnAlcCode = oMatrix.Columns.Item("5");
-                int rowCount = oMatrix.RowCount;
 
-                query = @"SELECT
+                if (!string.IsNullOrEmpty(acNumber))
+                {
+                    SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("54").Specific));
+                    SAPbouiCOM.Column oColumnAlcCode = oMatrix.Columns.Item("5");
+                    int rowCount = oMatrix.RowCount;
+
+                    query = @"SELECT
                             ""OALC"".""AlcCode"",
 	                        ""JDT1"".""Account"",
 	                        SUM(""JDT1"".""Debit""),
@@ -344,26 +346,29 @@ namespace BDO_Localisation_AddOn
 
                         GROUP BY ""OALC"".""AlcCode"", ""JDT1"".""Account"" ";
 
-                oRecordSet.DoQuery(query);
-                while (!oRecordSet.EoF)
-                {
-                    decimal amount = Convert.ToDecimal(oRecordSet.Fields.Item("Amount").Value);
-                    string alcCode = oRecordSet.Fields.Item("AlcCode").Value;
-                    if (amount > 0)
+                    oRecordSet.DoQuery(query);
+                    while (!oRecordSet.EoF)
                     {
-                        for (int row = 1; row <= rowCount; row++)
+                        decimal amount = Convert.ToDecimal(oRecordSet.Fields.Item("Amount").Value);
+                        string alcCode = oRecordSet.Fields.Item("AlcCode").Value;
+                        if (amount > 0)
                         {
-                            if (alcCode == oColumnAlcCode.Cells.Item(row).Specific.Value)
+                            for (int row = 1; row <= rowCount; row++)
                             {
-                                oMatrix.Columns.Item("3").Cells.Item(row).Specific.Value = amount;
-                            }
-                           
-                        }
-                    }
+                                if (alcCode == oColumnAlcCode.Cells.Item(row).Specific.Value)
+                                {
+                                    oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = amount;
+                                }
 
-                    oRecordSet.MoveNext();
+                            }
+                        }
+
+                        oRecordSet.MoveNext();
+                    }
                 }
             }
+            catch { }
+            { }
         }
 
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
@@ -776,6 +781,11 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
+                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
+                {
+                    formDataLoad(oForm, out errorText);
+                }
+
                 //A/C Number Update
                 if ((BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
                     && BusinessObjectInfo.ActionSuccess == true && BusinessObjectInfo.BeforeAction == false)
@@ -819,6 +829,46 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static void setVisibleFormItems(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+            SAPbouiCOM.Item oItem = null;
+            oForm.Freeze(true);
+
+            try
+            {
+                string docEntrySTR = oForm.DataSources.DBDataSources.Item("OIPF").GetValue("DocEntry", 0).Trim();
+                bool docEntryIsEmpty = string.IsNullOrEmpty(docEntrySTR);
+
+                oForm.Items.Item("BDOSFllAmt").Enabled = docEntryIsEmpty;
+            }
+            catch (Exception ex)
+            {
+                errorText = ex.Message;
+            }
+            finally
+            {
+                oForm.Freeze(false);
+                oForm.Update();
+                GC.Collect();
+            }
+        }
+
+        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+            oForm.Freeze(true);
+            try
+            {
+                setVisibleFormItems(oForm, out errorText);
+            }
+            catch (Exception ex)
+            { }
+            finally
+            {
+                oForm.Freeze(false);
+            }
+        }
 
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
@@ -851,6 +901,7 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
                     LandedCosts.createFormItems(oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
@@ -903,9 +954,12 @@ namespace BDO_Localisation_AddOn
                 //აწყობილი ანგარიშების მიხედვით ბუღ.თანხებით შევსება
                 if (pVal.ItemUID == "BDOSFllAmt" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
-                    oForm.Freeze(true);
-                    FillCostsAmounts(oForm, out errorText);
-                    oForm.Freeze(false);
+                    if (oForm.Items.Item("BDOSFllAmt").Enabled)
+                    {
+                        oForm.Freeze(true);
+                        FillCostsAmounts(oForm, out errorText);
+                        oForm.Freeze(false);
+                    }
                 }
 
                 if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & pVal.EventType != SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)

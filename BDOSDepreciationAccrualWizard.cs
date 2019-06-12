@@ -465,6 +465,8 @@ namespace BDO_Localisation_AddOn
         {
             string errorText = null;
 
+            bool isInvoice = oForm.Items.Item("InvDepr").Specific.Selected;
+
             SAPbobsCOM.CompanyService oCompanyService = null;
             SAPbobsCOM.GeneralService oGeneralService = null;
             SAPbobsCOM.GeneralData oGeneralData = null;
@@ -498,6 +500,13 @@ namespace BDO_Localisation_AddOn
                         oChild.SetProperty("U_Project", DepreciationLines.GetValue("Project", i));
                         oChild.SetProperty("U_Quantity", DepreciationLines.GetValue("Quantity", i));
                         oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("DeprAmt", i));
+                        if(isInvoice)
+                        {
+                            oChild.SetProperty("U_InvEntry", DepreciationLines.GetValue("DocEntry", i));
+                            oChild.SetProperty("U_InvType", DepreciationLines.GetValue("DocType", i));
+
+                        }
+
                     }
                     else
                     {
@@ -584,9 +593,11 @@ namespace BDO_Localisation_AddOn
 	                         ""FinTable"".""DistNumber"",
                              ""FinTable"".""InDate"",
 	                         ""FinTable"".""APCost"",
-                             ""DepcAcc"".""DeprAmt"" as ""DeprAmt"",
-                             ""DepcAcc"".""CurrDeprAmt"" as ""CurrDeprAmt"",
-	                         ""DepcAcc"".""DeprQty"" as ""DeprQty"", 
+                             ""DepcAcc"".""DeprAmt"" as ""DeprAmt"","
+                            +
+                            (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt"" as ""CurrDeprAmt""," : @"""DepcAcc"".""CurrDeprAmt"" as ""CurrDeprAmt"",")
+                            +	                         
+                            @"""DepcAcc"".""DeprQty"" as ""DeprQty"", 
 	                         ""FinTable"".""NtBookVal"" as ""NtBookVal"",
 	                         ""FinTable"".""Quantity"" as ""Quantity""
 
@@ -608,7 +619,7 @@ namespace BDO_Localisation_AddOn
 	                         SUM(""OBVL"".""Quantity""*case when ""OBVL"".""TransValue"">0 then 1 else -1 end ) as ""Quantity"" 
                         from ""OBVL""
                         
-                        inner join ""OBTN"" on ""OBTN"".""DistNumber"" = ""OBVL"".""DistNumber"" and ""OBTN"".""ItemCode"" = ""OBVL"".""ItemCode"" 
+                        inner join ""OBTN"" on ""OBTN"".""DistNumber"" = ""OBVL"".""DistNumber"" and ""OBTN"".""ItemCode"" = ""OBVL"".""ItemCode"" and ""OBTN"".""Quantity"">0
                         and #ItemFilter#
                         and #BatchFilter#
                         and  ADD_MONTHS(NEXT_DAY(LAST_DAY(""OBTN"".""InDate"")),-1)< ADD_MONTHS(NEXT_DAY(LAST_DAY('" + DeprMonth.ToString("yyyyMMdd") + @"')),-1)
@@ -621,7 +632,10 @@ namespace BDO_Localisation_AddOn
                         then ""OIVL"".""ParentID"" 
                         else ""OIVL"".""TransType"" 
                         END = ""OBVL"".""BaseType"" 
-                        inner join ""OWHS"" on ""OWHS"".""WhsCode"" = ""OIVL"".""LocCode"" 
+                        inner join ""OWHS"" on ""OWHS"".""WhsCode"" = ""OIVL"".""LocCode"""
+                         +
+                            (isInvoice ? @" where (""OBVL"".""DocType""= 13 or ""OBVL"".""DocType""= 60) and LAST_DAY(""OIVL"".""DocDate"") = '" + DeprMonth.ToString("yyyyMMdd") + "'"  : "")
+                            + @"
                         
                         group by ""OIVL"".""LocCode"","
                             +
@@ -647,14 +661,42 @@ namespace BDO_Localisation_AddOn
 
 	                    SUM(""@BDOSDEPAC1"".""U_Quantity"") as ""DeprQty""
                         from ""@BDOSDEPAC1"" 
-                        inner join ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N'group by ""@BDOSDEPAC1"".""U_ItemCode"",""@BDOSDEPAC1"".""U_DistNumber"") as ""DepcAcc"" 
+                        inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' 
+                        
+                        group by 
+                        ""@BDOSDEPAC1"".""U_ItemCode"",
+                        ""@BDOSDEPAC1"".""U_DistNumber"" ) as ""DepcAcc"" 
                         on ""DepcAcc"".""U_ItemCode"" = ""FinTable"".""ItemCode"" 
-                        and ""DepcAcc"".""U_DistNumber"" = ""FinTable"".""DistNumber"""
-                         +
-                            (isInvoice ? @" where ""FinTable"".""DocType""= 13 or ""FinTable"".""DocType""= 60 " : "")
-                            +
+                        and ""DepcAcc"".""U_DistNumber"" = ""FinTable"".""DistNumber""
 
-                        @"";
+                        left  join (select
+                        ""@BDOSDEPAC1"".""U_InvEntry"",
+                        ""@BDOSDEPAC1"".""U_InvType"",
+                        
+                        ""@BDOSDEPAC1"".""U_ItemCode"",
+                        ""@BDOSDEPAC1"".""U_DistNumber"",
+                        SUM(case when ISNULL(""@BDOSDEPAC1"".""U_Quantity"",0)=0 then 0 else ""@BDOSDEPAC1"".""U_DeprAmt""/""@BDOSDEPAC1"".""U_Quantity"" end) as ""DeprAmt"",
+
+                        SUM(case when ""@BDOSDEPACR"".""U_AccrMnth"" = '" + DeprMonth.ToString("yyyyMMdd") + @"' 
+                        then ""@BDOSDEPAC1"".""U_DeprAmt""
+	                    else 0
+                        end) as ""CurrDeprAmt"",
+
+	                    SUM(""@BDOSDEPAC1"".""U_Quantity"") as ""DeprQty""
+                        from ""@BDOSDEPAC1"" 
+                        inner join ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and not ""@BDOSDEPAC1"".""U_InvEntry"" is null 
+                        
+                        group by 
+                        ""@BDOSDEPAC1"".""U_InvEntry"",
+                        ""@BDOSDEPAC1"".""U_InvType"",
+                        ""@BDOSDEPAC1"".""U_ItemCode"",
+                        ""@BDOSDEPAC1"".""U_DistNumber"" ) as ""DepcAccInvoice""
+                        on ""DepcAcc"".""U_ItemCode"" = ""FinTable"".""ItemCode"" 
+                        and ""DepcAcc"".""U_DistNumber"" = ""FinTable"".""DistNumber""
+                        and " +
+                            (isInvoice ? @" ""DepcAccInvoice"".""U_InvEntry"" =  ""FinTable"".""DocEntry"" and   ""DepcAccInvoice"".""U_InvType"" = ""FinTable"".""DocType"" ":" 1=0");
+
+
 
             if(ItemCodes=="")
             {
@@ -714,9 +756,11 @@ namespace BDO_Localisation_AddOn
                 monthsApart = Math.Abs(monthsApart);
                                 
                 decimal AlrDeprAmt = 0;
+                decimal Quantity = Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value);
+                Quantity = Quantity * (isInvoice ? -1 : 1);
                 
-                AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value);
-                decimal NtBookVal = Convert.ToDecimal(oRecordSet.Fields.Item("APCost").Value * oRecordSet.Fields.Item("Quantity").Value) - AlrDeprAmt;
+                AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Quantity;
+                decimal NtBookVal = Convert.ToDecimal(oRecordSet.Fields.Item("APCost").Value * Convert.ToDouble(Quantity)) - AlrDeprAmt;
                 decimal DeprAmt = NtBookVal / monthsApart;
                 
                 oDataTable.Rows.Add();
@@ -728,8 +772,8 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue("ItemName", rowIndex, oRecordSet.Fields.Item("ItemName").Value);
                 oDataTable.SetValue("DistNumber", rowIndex, oRecordSet.Fields.Item("DistNumber").Value);
                 oDataTable.SetValue("UseLife", rowIndex, monthsApart);                
-                oDataTable.SetValue("Quantity", rowIndex, oRecordSet.Fields.Item("Quantity").Value);
-                oDataTable.SetValue("APCost", rowIndex, oRecordSet.Fields.Item("APCost").Value * oRecordSet.Fields.Item("Quantity").Value);
+                oDataTable.SetValue("Quantity", rowIndex, Convert.ToDouble(Quantity));
+                oDataTable.SetValue("APCost", rowIndex, oRecordSet.Fields.Item("APCost").Value * Convert.ToDouble(Quantity));
                 oDataTable.SetValue("AlrDeprAmt", rowIndex, Convert.ToDouble(AlrDeprAmt));
                 oDataTable.SetValue("NtBookVal", rowIndex, Convert.ToDouble(NtBookVal));
                 oDataTable.SetValue("DeprAmt", rowIndex, Convert.ToDouble(DeprAmt));

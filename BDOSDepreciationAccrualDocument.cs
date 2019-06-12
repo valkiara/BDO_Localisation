@@ -108,6 +108,23 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
             
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "InvEntry");
+            fieldskeysMap.Add("TableName", "BDOSDEPAC1");
+            fieldskeysMap.Add("Description", "Invoice doc entry");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 150);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "InvType");
+            fieldskeysMap.Add("TableName", "BDOSDEPAC1");
+            fieldskeysMap.Add("Description", "Invoice doc type");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 150);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             GC.Collect();
 
@@ -651,6 +668,19 @@ namespace BDO_Localisation_AddOn
             oColumn.Visible = true;
             oColumn.ExtendedObject.LinkedObjectType = objectTypeLocation;
             
+            oColumn = oColumns.Add("InvEntry", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InvEntry");
+            oColumn.Width = 60;
+            oColumn.Editable = true;
+            oColumn.Visible = true;
+
+            oColumn = oColumns.Add("InvType", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InvType");
+            oColumn.Width = 60;
+            oColumn.Editable = true;
+            oColumn.Visible = true;
+
+
 
             SAPbouiCOM.DBDataSource oDBDataSource;
             oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDOSDEPAC1");
@@ -672,6 +702,12 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Item("Project");
             oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_Project");
+
+            oColumn = oColumns.Item("InvEntry");
+            oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_InvEntry");
+
+            oColumn = oColumns.Item("InvType");
+            oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_InvType");
 
             //მარჯვენა რიგი
             top = 6;

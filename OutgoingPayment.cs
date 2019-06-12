@@ -764,7 +764,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
             formItems.Add("Left", left_s);
             formItems.Add("Width", width_s);
-            formItems.Add("Top", top + height + 1);
+            formItems.Add("Top", top+height+1);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", "Reporting Code");
@@ -777,7 +777,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-
+            
 
             listValidValuesDict = new Dictionary<string, string>();
             listValidValuesDict.Add("GDS", "GDS");
@@ -795,7 +795,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
             formItems.Add("Left", left_e);
             formItems.Add("Width", width_e);
-            formItems.Add("Top", top + height + 1);
+            formItems.Add("Top", top+height+1);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
@@ -3036,7 +3036,7 @@ namespace BDO_Localisation_AddOn
 
                             Program.JrnLinesGlobal = new DataTable();
                             DataTable reLines = null;
-                            DataTable JrnLinesDT = createAdditionalEntries(oForm, null, null, null, DocCurrency, out reLines, DocRate);
+                            DataTable JrnLinesDT = createAdditionalEntries(oForm, null, null,null, DocCurrency, out reLines, DocRate);
 
                             JrnEntry(DocEntry, DocNum, DocDate, JrnLinesDT, reLines, out errorText);
                             if (errorText != null)
@@ -3107,7 +3107,7 @@ namespace BDO_Localisation_AddOn
             reLines = ProfitTax.ProfitTaxTable();
             DataRow reLinesRow = null;
             DataTable AccountTable = CommonFunctions.GetOACTTable();
-
+            
             SAPbouiCOM.DBDataSource DBDataSourceTable = null;
             int JEcount = 0;
 
@@ -3193,11 +3193,11 @@ namespace BDO_Localisation_AddOn
             if (ProfitTaxTypeIsSharing == true)
             {
                 string U_liablePrTx = CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_liablePrTx", 0).ToString(); //docDBSource.GetValue("U_liablePrTx", 0).Trim();
-                decimal NoDocSum = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "NoDocSum", 0).ToString())); ;
+                decimal NoDocSum = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "NoDocSum", 0).ToString()); ;
 
                 string DebitAccount = CommonFunctions.getOADM("U_BDO_CapAcc").ToString();
                 string CreditAccount = CommonFunctions.getOADM("U_BDO_TaxAcc").ToString();
-                decimal U_BDO_PrTxRt = Convert.ToDecimal(CommonFunctions.getOADM("U_BDO_PrTxRt").ToString());
+                decimal U_BDO_PrTxRt = Convert.ToDecimal(CommonFunctions.getOADM("U_BDO_PrTxRt").ToString(),CultureInfo.InvariantCulture);
 
                 if (U_liablePrTx == "Y" & NoDocSum > 0)
                 {
@@ -3219,14 +3219,14 @@ namespace BDO_Localisation_AddOn
                     reLinesRow["amtPrTx"] = TaxAmount;
 
                 }
-
+                
                 for (int i = 0; i < JEcount; i++)
                 {
                     string InvType = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSourceVPM2, "InvType", i).ToString();
 
                     if (InvType == "18" || InvType == "204")
                     {
-                        decimal SumApplied = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSourceVPM2, "SumApplied", i).ToString(), CultureInfo.InvariantCulture);
+                        decimal SumApplied = FormsB1.cleanStringOfNonDigits( CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSourceVPM2, "SumApplied", i).ToString());
                         decimal TaxAmount = SumApplied * U_BDO_PrTxRt / (100 - U_BDO_PrTxRt);
 
                         decimal TaxAmountFC = DocCurrency == "" ? 0 : TaxAmount / DocRate;
@@ -3265,18 +3265,18 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-
+                
             }
 
             // პენსია            
-
+            
             string wtCode = CommonFunctions.getChildOrDbDataSourceValue(BPDataSourceTable, null, DTSource, "WtCode", 0).ToString();
 
             string WTLiable = CommonFunctions.getChildOrDbDataSourceValue(BPDataSourceTable, null, DTSource, "WTLiable", 0).ToString();
             string U_BDOSPhisTx = CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString();
 
             bool physicalEntityTax = (WTLiable == "Y" && U_BDOSPhisTx == "Y");
-
+            
 
             if (physicalEntityTax)
             {
@@ -3293,13 +3293,13 @@ namespace BDO_Localisation_AddOn
 
                 string Project = CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "PrjCode", 0).ToString();
 
-                decimal WhtAmount = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSWhtAmt", 0).ToString(), CultureInfo.InvariantCulture);
+                decimal WhtAmount = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSWhtAmt", 0).ToString());
                 decimal WhtAmountFC = DocCurrency == "" ? 0 : WhtAmount / DocRate;
 
-                decimal PhysPensionAmount = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnPhAm", 0).ToString(), CultureInfo.InvariantCulture);
+                decimal PhysPensionAmount = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnPhAm", 0).ToString());
                 decimal PhysPensionAmountFC = DocCurrency == "" ? 0 : PhysPensionAmount / DocRate;
 
-                decimal CompanyPensionAmount = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnCoAm", 0).ToString(), CultureInfo.InvariantCulture);
+                decimal CompanyPensionAmount = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnCoAm", 0).ToString());
                 decimal CompanyPensionAmountFC = DocCurrency == "" ? 0 : CompanyPensionAmount / DocRate;
 
                 if (WhtAmount != 0 && PhysPensionAmount != 0)
@@ -3481,7 +3481,7 @@ namespace BDO_Localisation_AddOn
                         {
                             setVisibleFormItems(oForm, out errorText);
                         }
-
+                        
                     }
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE & pVal.BeforeAction == false)
                     {
@@ -3491,7 +3491,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    if (pVal.ItemUID == "UsBlaAgRtS" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
+                    if(pVal.ItemUID == "UsBlaAgRtS" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                     {
                         SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
                         if (oCheckBox.Checked == true)
@@ -3913,7 +3913,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                }
+                }                
 
                 SAPbouiCOM.EditText oEditAmtPrTx = ((SAPbouiCOM.EditText)(oItemPrTx.Specific));
 
@@ -4087,7 +4087,7 @@ namespace BDO_Localisation_AddOn
             if (DocType == "18")
             {
                 query = @"SELECT ""OPCH"".""U_nonEconExp"" AS ""PrTx"" 
-                        FROM ""OPCH"" 
+                        FROM ""OPCH""
                         WHERE ""OPCH"".""DocNum""='" + DocNum + "'";
             }
             else if (DocType == "204")
@@ -5923,7 +5923,7 @@ namespace BDO_Localisation_AddOn
             ""DSC1"".""AcctName"" AS ""AcctName"",
             ""DSC1"".""U_program"" AS ""U_program"",
             ""OCRD"".""LicTradNum"" AS ""BeneficiaryTaxCode"", 
-            ""OCRD"".""Address"" AS ""BeneficiaryAddress"",
+            ""OCRD"".""Address"" AS ""BeneficiaryAddress"", 
             ""OCRD"".""City"" AS ""RecipientCity"",
             ""OCRD"".""Country"" AS ""BeneficiaryRegistrationCountryCode"",
 
@@ -6060,11 +6060,11 @@ namespace BDO_Localisation_AddOn
             ""DSC1"".""AcctName"" AS ""AcctName"",
             ""DSC1"".""U_program"" AS ""U_program"",
             ""OCRD"".""LicTradNum"" AS ""BeneficiaryTaxCode"", 
-            ""OCRD"".""Address"" AS ""BeneficiaryAddress"",
+            ""OCRD"".""Address"" AS ""BeneficiaryAddress"", 
             ""OCRD"".""City"" AS ""RecipientCity"",
             ""OCRD"".""Country"" AS ""BeneficiaryRegistrationCountryCode"",
 
-        
+
             CASE 
             WHEN ""OACT"".""ActCurr"" = '##'
             THEN '" + Program.LocalCurrency + "' " +

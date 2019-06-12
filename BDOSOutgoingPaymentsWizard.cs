@@ -1060,16 +1060,9 @@ namespace BDO_Localisation_AddOn
             DataTable DTSourceVPM2 = new DataTable();
             DTSourceVPM2.Columns.Add("InvType");
             DTSourceVPM2.Columns.Add("DocEntry");
+            DTSourceVPM2.Columns.Add("AppliedFC");
+            DTSourceVPM2.Columns.Add("SumApplied");
 
-            DataColumn colDecimal = new DataColumn("AppliedFC");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
-            DTSourceVPM2.Columns.Add(colDecimal);
-
-            colDecimal = new DataColumn("SumApplied");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
-            DTSourceVPM2.Columns.Add(colDecimal);
-
-            
 
             DataTable DTSource = new DataTable();
             DTSource.Columns.Add("WtCode");
@@ -1078,24 +1071,11 @@ namespace BDO_Localisation_AddOn
             DTSource.Columns.Add("PrjCode");
             DTSource.Columns.Add("U_liablePrTx");
             DTSource.Columns.Add("U_prBase");
+            DTSource.Columns.Add("U_BDOSWhtAmt");
+            DTSource.Columns.Add("NoDocSum");
+            DTSource.Columns.Add("U_BDOSPnPhAm");
+            DTSource.Columns.Add("U_BDOSPnCoAm");
             
-            colDecimal = new DataColumn("U_BDOSWhtAmt");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
-            DTSource.Columns.Add(colDecimal);
-            
-            
-
-            colDecimal = new DataColumn("NoDocSum");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
-            DTSource.Columns.Add(colDecimal);
-
-            colDecimal = new DataColumn("U_BDOSPnPhAm");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
-            DTSource.Columns.Add(colDecimal);
-
-            colDecimal = new DataColumn("U_BDOSPnCoAm");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
-            DTSource.Columns.Add(colDecimal);
 
             string LocalCurrency = CurrencyB1.getMainCurrency(out errorText);
             string BankAccount = headerLine["BankAccount"].ToString();
@@ -1266,6 +1246,14 @@ namespace BDO_Localisation_AddOn
 
 
             DataRow DTSourceRow = DTSource.Rows.Add();
+
+            SAPbobsCOM.BusinessPartners oBP;
+            oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
+
+            if (oBP.GetByKey(CardCode))
+            {
+                WTCode = oBP.WTCode;
+            }
             DTSourceRow["WtCode"] = WTCode;
             DTSourceRow["WTLiable"] = "Y";
             DTSourceRow["CardCode"] = CardCode;
