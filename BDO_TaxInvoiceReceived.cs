@@ -276,15 +276,15 @@ namespace BDO_Localisation_AddOn
             //------------------------------
 
 
-            fieldskeysMap = new Dictionary<string, object>(); //ჩათვლილია
-            fieldskeysMap.Add("Name", "vatRecvd");
-            fieldskeysMap.Add("TableName", "BDO_TAXR");
-            fieldskeysMap.Add("Description", "Vat Received");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            fieldskeysMap.Add("EditSize", 1);
-            fieldskeysMap.Add("DefaultValue", "N");
+            //fieldskeysMap = new Dictionary<string, object>(); //ჩათვლილია
+            //fieldskeysMap.Add("Name", "vatRecvd");
+            //fieldskeysMap.Add("TableName", "BDO_TAXR");
+            //fieldskeysMap.Add("Description", "Vat Received");
+            //fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            //fieldskeysMap.Add("EditSize", 1);
+            //fieldskeysMap.Add("DefaultValue", "N");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            //UDO.addUserTableFields( fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ჩათვლის თვე
             fieldskeysMap.Add("Name", "vatRDate");
@@ -2342,7 +2342,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("TaxReceived"));
+            formItems.Add("Caption", BDOSResources.getTranslate("ReceiveVat"));
             formItems.Add("LinkTo", "TaxInRcvdC");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -2353,9 +2353,9 @@ namespace BDO_Localisation_AddOn
 
 
             listValidValuesDict = new Dictionary<string, string>(); //ჩათვლილი (კომბო)
-            listValidValuesDict.Add("empty", "");
-            listValidValuesDict.Add("yes", BDOSResources.getTranslate("Yes"));
-            listValidValuesDict.Add("no", BDOSResources.getTranslate("No"));
+            listValidValuesDict.Add("", "");
+            listValidValuesDict.Add("Y", BDOSResources.getTranslate("Yes"));
+            listValidValuesDict.Add("N", BDOSResources.getTranslate("No"));
 
             formItems = new Dictionary<string, object>();
             itemName = "TaxInRcvdC"; //10 characters
@@ -2372,7 +2372,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
             formItems.Add("DisplayDesc", true);
-            formItems.Add("Description", BDOSResources.getTranslate("TaxReceived"));
+            formItems.Add("Description", BDOSResources.getTranslate("VATReceived"));
             formItems.Add("ValidValues", listValidValuesDict);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -2391,29 +2391,29 @@ namespace BDO_Localisation_AddOn
 
             top = top + 2 * height + 1;
 
-            formItems = new Dictionary<string, object>();
-            itemName = "vatRecvdCH"; //10 characters
-            formItems.Add("isDataSource", true);
-            formItems.Add("DataSource", "DBDataSources");
-            formItems.Add("TableName", "@BDO_TAXR");
-            formItems.Add("Alias", "U_vatRecvd");
-            formItems.Add("Bound", true);
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
-            formItems.Add("Left", left_s);
-            formItems.Add("Width", width_s);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Caption", BDOSResources.getTranslate("VATReceived"));
-            formItems.Add("ValOff", "N");
-            formItems.Add("ValOn", "Y");
+            //formItems = new Dictionary<string, object>();
+            //itemName = "vatRecvdCH"; //10 characters
+            //formItems.Add("isDataSource", true);
+            //formItems.Add("DataSource", "DBDataSources");
+            //formItems.Add("TableName", "@BDO_TAXR");
+            //formItems.Add("Alias", "U_vatRecvd");
+            //formItems.Add("Bound", true);
+            //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            //formItems.Add("Left", left_s);
+            //formItems.Add("Width", width_s);
+            //formItems.Add("Top", top);
+            //formItems.Add("Height", height);
+            //formItems.Add("UID", itemName);
+            //formItems.Add("DisplayDesc", true);
+            //formItems.Add("Caption", BDOSResources.getTranslate("VATReceived"));
+            //formItems.Add("ValOff", "N");
+            //formItems.Add("ValOn", "Y");
 
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
+            //FormsB1.createFormItem(oForm, formItems, out errorText);
+            //if (errorText != null)
+            //{
+            //    return;
+            //}
 
             formItems = new Dictionary<string, object>();
             itemName = "vatRDateS"; //10 characters
@@ -3306,8 +3306,8 @@ namespace BDO_Localisation_AddOn
             oItem.Top = top;
             top = top + 2 * height + 1;
 
-            oItem = oForm.Items.Item("vatRecvdCH");
-            oItem.Top = top;
+            //oItem = oForm.Items.Item("vatRecvdCH");
+            //oItem.Top = top;
             oItem = oForm.Items.Item("vatRDateS");
             oItem.Top = top;
             oItem = oForm.Items.Item("vatRDateE");
@@ -3677,6 +3677,25 @@ namespace BDO_Localisation_AddOn
 
             try
             {
+
+
+                if (pVal.ItemUID == "TaxInRcvdC")
+                {
+                    string vatRecvd = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_TaxInRcvd", 0).Trim();
+                    if (vatRecvd == "Y")
+                    {
+                        SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("vatRDateE").Specific;
+                        DateTime vatRDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                        oEditText.Value = vatRDate.ToString("yyyyMMdd");
+                    }
+                    else
+                    {
+                        SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("vatRDateE").Specific;
+                        oEditText.Value = "";
+                    }
+                }
+
+
                 SAPbouiCOM.ButtonCombo oButtonCombo = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("operationB").Specific));
 
                 if (pVal.BeforeAction == true)
@@ -4137,21 +4156,7 @@ namespace BDO_Localisation_AddOn
                         declDate = new DateTime(declDate.Year, declDate.Month, 1);
                         oEditText.Value = declDate.ToString("yyyyMMdd");
                     }
-                    if (pVal.ItemUID == "vatRecvdCH")
-                    {
-                        string vatRecvd = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_vatRecvd", 0).Trim();
-                        if (vatRecvd == "Y")
-                        {
-                            SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("vatRDateE").Specific;
-                            DateTime vatRDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-                            oEditText.Value = vatRDate.ToString("yyyyMMdd");
-                        }
-                        else
-                        {
-                            SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("vatRDateE").Specific;
-                            oEditText.Value = "";
-                        }
-                    }
+                    
                     else if (pVal.ItemUID == "corrInvCH")
                     {
                         setVisibleFormItems(oForm, out errorText);
@@ -5785,7 +5790,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void receiveVAT( int docEntry, DateTime declDate, out string errorText)
+        public static void receiveVAT( int docEntry, DateTime declDate, string YesNoEmpty, out string errorText)
         {
             errorText = null;
 
@@ -5800,18 +5805,36 @@ namespace BDO_Localisation_AddOn
 
             oGeneralData = oGeneralService.GetByParams(UDOParameter);
 
-            string U_recStatus = oGeneralData.GetProperty("U_vatRecvd");
-            if (U_recStatus == "Y")
-            {
-                errorText = BDOSResources.getTranslate("TaxInvoiceAlreadyReceived");
-                return;
-            }
+            string U_recStatus = oGeneralData.GetProperty("U_TaxInRcvd");
+
+            
             try
             {
-                oGeneralData.SetProperty("U_vatRDate", declDate);
-                //oGeneralData.SetProperty("U_declDate", declDate);
-                oGeneralData.SetProperty("U_vatRecvd", "Y");
-                oGeneralService.Update(oGeneralData);
+                if (YesNoEmpty == "Y")
+                {
+                    if (U_recStatus == "Y")
+                    {
+                        errorText = BDOSResources.getTranslate("TaxInvoiceAlreadyReceived");
+                        return;
+                    }
+                    oGeneralData.SetProperty("U_vatRDate", declDate);
+                    oGeneralData.SetProperty("U_TaxInRcvd", "Y");
+                    oGeneralService.Update(oGeneralData);
+                }
+
+                else if (YesNoEmpty == "N")
+                {
+                    oGeneralData.SetProperty("U_vatRDate", "");
+                    oGeneralData.SetProperty("U_TaxInRcvd", "N");
+                    oGeneralService.Update(oGeneralData);
+                }
+                else
+                {
+                    oGeneralData.SetProperty("U_vatRDate", "");
+                    oGeneralData.SetProperty("U_TaxInRcvd", "");
+                    oGeneralService.Update(oGeneralData);
+                }
+
             }
             catch (Exception ex)
             {

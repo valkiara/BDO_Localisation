@@ -1648,7 +1648,7 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(false);
         }
 
-        public static void receiveVATTaxInvoiceReceived(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void receiveVATTaxInvoiceReceived(  SAPbouiCOM.Form oForm, string YesNoEmpty, out string errorText)
         {
             bool opSuccess = true;
             errorText = null;
@@ -1668,7 +1668,7 @@ namespace BDO_Localisation_AddOn
                 if (checkedLine)
                 {
                     int docEntry = Convert.ToInt32(oMatrix.Columns.Item("Document").Cells.Item(row).Specific.Value);
-                    BDO_TaxInvoiceReceived.receiveVAT( docEntry, declDate, out errorText);
+                    BDO_TaxInvoiceReceived.receiveVAT( docEntry, declDate, YesNoEmpty, out errorText);
 
                     if (errorText != null)
                     {
@@ -2585,17 +2585,51 @@ namespace BDO_Localisation_AddOn
                     formItems = new Dictionary<string, object>();
                     Dictionary<string, object> fieldskeysMap;
                     fieldskeysMap = new Dictionary<string, object>();
-                    listValidValues = new List<string>();
-                    listValidValues.Add(BDOSResources.getTranslate("RSAddDeclaration"));
-                    listValidValues.Add(BDOSResources.getTranslate("ReceiveVat"));
+                    //listValidValues = new List<string>();
+                    //listValidValues.Add(BDOSResources.getTranslate("RSAddDeclaration"));
+                    //listValidValues.Add(BDOSResources.getTranslate("ReceiveVat"));
 
 
                     formItems = new Dictionary<string, object>(); //დეკლარაციაში დამატება
                     itemName = "addDecl";
-                    formItems.Add("Caption", BDOSResources.getTranslate("Add"));
+                    formItems.Add("Caption", BDOSResources.getTranslate("RSAddDeclaration"));
+                    formItems.Add("Size", 20);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+                    formItems.Add("Left", leftSC + 100 + 10 + 10 + 5);
+                    formItems.Add("Width", 100);
+                    formItems.Add("Top", Top);
+                    formItems.Add("Height", 19);
+                    formItems.Add("UID", itemName);
+                    //formItems.Add("ValidValues", listValidValues);
+                    //formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+                    formItems.Add("AffectsFormMode", false);
+                    formItems.Add("DisplayDesc", true);
+                    formItems.Add("FromPane", 1);
+                    formItems.Add("ToPane", 1);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+
+                    //-----------------------------------
+
+
+                    left = leftSC + 200 + 10 + 10 + 7;
+                    
+                    listValidValues = new List<string>();
+                    listValidValues.Add("");
+                    listValidValues.Add(BDOSResources.getTranslate("Yes"));
+                    listValidValues.Add(BDOSResources.getTranslate("No"));
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "TaxInRcvd";
+                    formItems.Add("Caption", BDOSResources.getTranslate("ReceiveVat"));
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON_COMBO);
-                    formItems.Add("Left", leftSC + 100 + 10 + 10 + 5);
+                    formItems.Add("Left", left);
                     formItems.Add("Width", 100);
                     formItems.Add("Top", Top);
                     formItems.Add("Height", 19);
@@ -2612,7 +2646,11 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
+                    
 
+                    //-----------------------------------
+
+                    
 
                     //დეკლ.დამატება - გამავალი - Pane "2"
                     formItems = new Dictionary<string, object>(); //დეკლარაციის თვე
@@ -3258,6 +3296,7 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
+                    
 
                     //რიგი
                     Top = Top + 25;
@@ -4122,6 +4161,13 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "addDecl" & pVal.BeforeAction == false)
+                {
+                    SAPbouiCOM.Button oaddDecl = ((SAPbouiCOM.Button)(oForm.Items.Item("addDecl").Specific));
+                    oaddDecl.Caption = BDOSResources.getTranslate("RSAddDeclaration");
+                    addDeclTaxInvoiceReceived(oForm, out errorText);
+                }
+
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.BeforeAction == false)
                 {
                     //SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
@@ -4142,21 +4188,29 @@ namespace BDO_Localisation_AddOn
                         rsOperationTaxInvoiceSent( oForm, oOperation, out errorText);
                     }
 
-                    if (pVal.ItemUID == "addDecl")
+
+                    if (pVal.ItemUID == "TaxInRcvd")
                     {
-                        SAPbouiCOM.ButtonCombo oaddDecl = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("addDecl").Specific));
-                        oaddDecl.Caption = BDOSResources.getTranslate("Add");
+                        SAPbouiCOM.ButtonCombo oTaxInRcvd = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("TaxInRcvd").Specific));
+                        oTaxInRcvd.Caption = BDOSResources.getTranslate("ReceiveVat");
                         int oOperation = pVal.PopUpIndicator;
 
                         if (oOperation == 0)
                         {
-                            addDeclTaxInvoiceReceived(  oForm, out errorText);
+                            receiveVATTaxInvoiceReceived(oForm, "", out errorText);
+                        }
+                        else if (oOperation == 1)
+                        {
+                            receiveVATTaxInvoiceReceived(oForm, "Y", out errorText);
                         }
                         else
                         {
-                            receiveVATTaxInvoiceReceived(  oForm, out errorText);
+                            receiveVATTaxInvoiceReceived(oForm, "N", out errorText);
                         }
                     }
+
+
+                    
                     if (pVal.ItemUID == "addDecl2")
                     {
                         SAPbouiCOM.ButtonCombo oaddDecl = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("addDecl2").Specific));
