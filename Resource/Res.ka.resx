@@ -2998,4 +2998,13 @@
   <data name="DuplicateAccountInTheLine" xml:space="preserve">
     <value>ანგარიში მეორდება ხაზზე</value>
   </data>
+  <data name="EnableUsingFuelManagementModule" xml:space="preserve">
+    <value>საწვავის მართვის მოდულის გამოყენება</value>
+  </data>
+  <data name="FuelByFixedAssets" xml:space="preserve">
+    <value>საწვავის ნაშთის აღრიცხვა სატრანსპორტო საშუალებების ჭრილში</value>
+  </data>
+  <data name="FuelWarehouse" xml:space="preserve">
+    <value>საწვავის საწყობი</value>
+  </data>
 </root>

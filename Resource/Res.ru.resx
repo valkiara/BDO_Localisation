@@ -2974,4 +2974,13 @@
   <data name="DuplicateAccountInTheLine" xml:space="preserve">
     <value>Duplicate Account In The Line</value>
   </data>
+  <data name="EnableUsingFuelManagementModule" xml:space="preserve">
+    <value>Enable using fuel management module</value>
+  </data>
+  <data name="FuelByFixedAssets" xml:space="preserve">
+    <value>Fuel By Fixed Assets</value>
+  </data>
+  <data name="FuelWarehouse" xml:space="preserve">
+    <value>Fuel Warehouse</value>
+  </data>
 </root>
