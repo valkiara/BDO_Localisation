@@ -604,8 +604,8 @@ namespace BDO_Localisation_AddOn
 
                 if (cardType == "C" || cardType == "L") //თუ მყიდველია ან პოტენციური კლიენტი
                 {
-                    oForm.PaneLevel = 10;
-                    oForm.Items.Item("BDO_NotInv").Visible = true;
+                    //oForm.PaneLevel = 10;
+                    //oForm.Items.Item("BDO_NotInv").Visible = true;
 
                     //მომწოდებლის რეკვიზიტები
                     oForm.PaneLevel = 1;
@@ -614,8 +614,8 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                    oForm.PaneLevel = 10;
-                    oForm.Items.Item("BDO_NotInv").Visible = false;
+                    //oForm.PaneLevel = 10;
+                    //oForm.Items.Item("BDO_NotInv").Visible = false;
 
                     //მომწოდებლის რეკვიზიტები
                     oForm.PaneLevel = 1;
@@ -697,8 +697,8 @@ namespace BDO_Localisation_AddOn
                         oVatStatus.Select("Exempt", SAPbouiCOM.BoSearchKey.psk_ByDescription);
                     }
                 }
-                if (cardType == "C" || cardType == "L") //თუ მყიდველია ან პოტენციური კლიენტი
-                {
+                //if (cardType == "C" || cardType == "L") //თუ მყიდველია ან პოტენციური კლიენტი
+                //{
                     if (isVatPayer == true & BDO_NotInv != "N")
                     {
                         oForm.PaneLevel = 10;
@@ -711,7 +711,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.CheckBox oBDO_NotInv = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_NotInv").Specific));
                         oBDO_NotInv.Checked = true;
                     }
-                }
+                //}
 
                 oForm.PaneLevel = panelLevel;
             }

@@ -357,7 +357,7 @@ namespace BDO_Localisation_AddOn
                             {
                                 if (alcCode == oColumnAlcCode.Cells.Item(row).Specific.Value)
                                 {
-                                    oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = amount;
+                                    oMatrix.Columns.Item("3").Cells.Item(row).Specific.Value = amount;
                                 }
 
                             }

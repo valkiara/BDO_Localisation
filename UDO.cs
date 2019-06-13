@@ -68,7 +68,7 @@ namespace BDO_Localisation_AddOn
                 BDOSARDownPaymentVATAccrual.registerUDO( out errorText);
             }
 
-            BDO_TaxInvoiceSent.CreateDocumentUDO( out errorText);
+            BDO_TaxInvoiceSent.createDocumentUDO( out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_TAXS_D") == false)
             {
                 BDO_TaxInvoiceSent.registerUDO( out errorText);

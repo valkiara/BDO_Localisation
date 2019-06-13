@@ -867,7 +867,7 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Item oItem = null;
             int height = 15;
             int top = 6;
-
+            
             oForm.Items.Item("CanceledS").Top = top;
             oForm.Items.Item("CanceledE").Top = top;
 
@@ -1044,6 +1044,8 @@ namespace BDO_Localisation_AddOn
                 decimal DeprAmt = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_DeprAmt", i), CultureInfo.InvariantCulture);
                 string ItemCode = ((string)CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_ItemCode", i)).Trim();
                 string U_PrjCode = ((string)CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_Project", i)).Trim();
+                string U_InvEntry = ((string)CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_InvEntry", i)).Trim();
+                string U_InvType = ((string)CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_InvType", i)).Trim();
 
                 SAPbobsCOM.Items oItem;
                 oItem = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oItems);
@@ -1055,8 +1057,14 @@ namespace BDO_Localisation_AddOn
 
                 string AccDepAccount = oItemGroup.UserFields.Fields.Item("U_BDOSAccDep").Value.ToString();
                 string ExpDepAccount = oItemGroup.UserFields.Fields.Item("U_BDOSExpDep").Value.ToString();
-
+                string SaleCostAc = oItemGroup.SalesCreditAcc;
                 JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", ExpDepAccount, AccDepAccount, DeprAmt, 0, "", "", "", "", "", "", U_PrjCode, "", "");
+
+                if ( string.IsNullOrEmpty(U_InvEntry)==false)
+                {
+                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", AccDepAccount, SaleCostAc, DeprAmt, 0, "", "", "", "", "", "", U_PrjCode, "", "");
+                }
+
             }
 
 

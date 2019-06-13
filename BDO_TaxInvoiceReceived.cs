@@ -2383,9 +2383,6 @@ namespace BDO_Localisation_AddOn
 
 
             //---------------------------------------------------
-
-
-
             left_s = 6;
             left_e = 127;
 
@@ -4852,14 +4849,19 @@ namespace BDO_Localisation_AddOn
 	             SUM(""TBL1"".""GTotal"") AS ""GTotal"",
             	 SUM(""TBL1"".""LineVat"") AS ""LineVat"" 
             FROM """ + baseDocTable + @""" AS ""TABL"" 
-            LEFT JOIN """ + baseDocRowTable + @""" AS ""TBL1"" ON ""TBL1"".""DocEntry"" = ""TABL"".""DocEntry"" 
-            WHERE ""TABL"".""CANCELED"" = 'N' 
+            LEFT JOIN """ + baseDocRowTable + @""" AS ""TBL1"" ON ""TBL1"".""DocEntry"" = ""TABL"".""DocEntry""" 
+            + 
+            (baseDocType == "0"? @"LEFT JOIN ""OPDN"" ON ""TBL1"".""BaseEntry"" = ""OPDN"".""DocEntry""":"")
+            +           
+
+            @"WHERE ""TABL"".""CANCELED"" = 'N' 
             AND ""TABL"".""CardCode"" = N'" + cardCode + @"'
             AND ""TABL"".""DocDate"" >= '" + firstDayMonth.ToString("yyyyMMdd") + @"' AND ""TABL"".""DocDate"" <= '" + lastDayMonth.ToString("yyyyMMdd") + "'";
 
             if (baseDocType != "2" && string.IsNullOrEmpty(overhead_no) == false) //ვეძებთ ზედნადების ნომრით
             {
-                query = query + @" AND ""TABL"".""U_BDO_WBNo"" = '" + overhead_no + "'";
+                query = query + @" AND (""TABL"".""U_BDO_WBNo"" = '" + overhead_no + "'" + 
+                    (baseDocType == "0" ? @" OR ""OPDN"".""U_BDO_WBNo""= '" + overhead_no + "' " : "") + ") ";
             }
             if (baseDocType == "2")
             {

@@ -102,6 +102,17 @@ namespace BDO_Localisation_AddOn
 
             addCrystalReport( reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
 
+            //შესყიდვის ფაქტურების ანგარიშგება
+            reportName = "Purchase Tax Invoice Analysis";
+            reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report
+            rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_PurchaseTaxInvoiceAnalysis.rpt" : @"\CrystalReports_SQL\Report_PurchaseTaxInvoiceAnalysis_SQL.rpt");
+            menuID = "43534"; //Purchasing Reports/Purchasing
+            layoutCode = null;
+
+            layoutCode = getReportlayoutCode(reportName, reportTypeCode, out errorText);
+
+            addCrystalReport(reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+
             //მიღებული ავანსის ა/ფ ანალიზი
             reportName = "Down Payment Tax Invoice Received Analysis";
             reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report

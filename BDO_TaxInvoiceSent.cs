@@ -10,7 +10,7 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_TaxInvoiceSent
     {
-        public static void CreateDocumentUDO( out string errorText)
+        public static void createDocumentUDO( out string errorText)
         {
             errorText = null;
             string tableName = "BDO_TAXS";
