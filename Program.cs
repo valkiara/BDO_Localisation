@@ -1848,7 +1848,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Blanket agreement<-----------------------------
-                if (pVal.FormTypeEx == "1250000100")
+                if (pVal.FormTypeEx == "1250000100" || pVal.FormTypeEx == "1250000102")
                 {
                     BlanketAgreement.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
