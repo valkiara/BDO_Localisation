@@ -330,7 +330,8 @@ namespace BDO_Localisation_AddOn
 
             try
             {
-                JournalEntry.JrnEntry(DocEntry, "UDO_F_BDO_PAYR_D", "Payroll Document: " + DocNum, DocDate, JrnLinesDT, out errorText);
+                JournalEntry.JrnEntry(DocEntry, "18", "AP Reserve Invoice: " + DocNum, DocDate, JrnLinesDT, 0, "", out errorText);
+
                 if (errorText != null)
                 {
                     return;

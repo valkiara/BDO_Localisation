@@ -1584,7 +1584,6 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-
                     //რიგი6
                     Top = Top + 25;
                     left = 6;
@@ -3315,9 +3314,6 @@ namespace BDO_Localisation_AddOn
                             createWaybillIncDocs( oForm, out errorText);
                         }
                     }
-
-                    
-
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
@@ -3415,6 +3411,5 @@ namespace BDO_Localisation_AddOn
 
 
         }
-
     }
 }

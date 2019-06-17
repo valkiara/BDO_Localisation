@@ -37,8 +37,6 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-
-
             //Gross Price
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSGrsPrc");
@@ -270,7 +268,6 @@ namespace BDO_Localisation_AddOn
                     }
                 }
                
-
                 if (pVal.ItemUID == "1250000045" && (pVal.ColUID == "U_BDOSGrsPrc" || pVal.ColUID == "1250000009" || pVal.ColUID == "1250000007") & pVal.ItemChanged && pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE & pVal.BeforeAction == false)
                 {
                     oForm.Freeze(true);

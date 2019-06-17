@@ -1718,52 +1718,6 @@ namespace BDO_Localisation_AddOn
                 }
             }
             
-
-            oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            query = @"select
-	                        ""OBVL"".""ItemCode"",
-	                        ""OBVL"".""DistNumber"",
-                            ""OBVL"".""Quantity"",
-	                        ""OITB"".""SaleCostAc"",
-		                    ""OITB"".""U_BDOSAccDep"",
-                            ""IGE1"".""Project"",	                    
-                            ""IGE1"".""OcrCode"",
-                            ""IGE1"".""OcrCode2"",
-                            ""IGE1"".""OcrCode3"",
-                            ""IGE1"".""OcrCode4"",
-                            ""IGE1"".""OcrCode5""
-                        from ""OBVL"" 
-                        inner join ""OITM"" on ""OBVL"".""ItemCode"" = ""OITM"".""ItemCode""
-                        inner join ""OITB"" on  ""OITB"".""ItmsGrpCod"" = ""OITM"".""ItmsGrpCod"" and ""OITB"".""U_BDOSFxAs""='Y'
-                        inner join ""IGE1"" on  ""OBVL"".""DocEntry"" = ""IGE1"".""DocEntry""                       
-                        where""OBVL"".""DocEntry"" = " + DocEntry + @" 
-                        and ""OBVL"".""DocType"" = 60";
-
-
-            oRecordSet.DoQuery(query);
-            if (oRecordSet.RecordCount > 0)
-            {
-                while (!oRecordSet.EoF)
-                {
-                    string ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
-                    string DistNumber = oRecordSet.Fields.Item("DistNumber").Value;
-                    string SaleCostAc = oRecordSet.Fields.Item("SaleCostAc").Value;
-                    string U_BDOSAccDep = oRecordSet.Fields.Item("U_BDOSAccDep").Value;
-                    string DistrRule1 = oRecordSet.Fields.Item("OcrCode").Value;
-                    string DistrRule2 = oRecordSet.Fields.Item("OcrCode2").Value;
-                    string DistrRule3 = oRecordSet.Fields.Item("OcrCode3").Value;
-                    string DistrRule4 = oRecordSet.Fields.Item("OcrCode4").Value;
-                    string DistrRule5 = oRecordSet.Fields.Item("OcrCode5").Value;
-                    string Project = oRecordSet.Fields.Item("Project").Value;
-                    decimal DeprPrice = BDOSDepreciationAccrualDocument.getDepreciationPriceDistNumber(ItemCode, DistNumber);
-                    decimal DeprAmount = DeprPrice * Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value, CultureInfo.InvariantCulture);
-                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", U_BDOSAccDep, SaleCostAc, DeprAmount, 0, "", "", DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
-
-                    oRecordSet.MoveNext();
-                }
-            }
-
-
             if (jeLines.Rows.Count > 0)
             {
                 jeLines = jeLines.AsEnumerable()

@@ -979,7 +979,7 @@ namespace BDO_Localisation_AddOn
 
             left_s = 295;
             left_e = left_s + 121;
-
+            oForm.AutoManaged = true;
             oForm.Title = BDOSResources.getTranslate("ARDownPaymentVATAccrual");
             
             formItems = new Dictionary<string, object>();
@@ -1013,7 +1013,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Enabled", true);
+            formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
             
 
 
@@ -1086,6 +1087,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("DisplayDesc", true);
             formItems.Add("ChooseFromListUID", uniqueID_lf_BusinessPartnerCFL);
             formItems.Add("ChooseFromListAlias", "CardCode");
+            formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1108,6 +1111,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("DisplayDesc", true);
             formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1156,8 +1160,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("LinkTo", "baseDocE");
             formItems.Add("FontSize", fontSize);
             formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", true);
             formItems.Add("Visible", true);
+            formItems.Add("Enabled", false);
             formItems.Add("ValidValues", listValidValues);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -1183,6 +1187,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("DisplayDesc", true);
             formItems.Add("ChooseFromListUID", uniqueID_lf_BaseDocCFL);
             formItems.Add("ChooseFromListAlias", "DocEntry");
+            formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1243,6 +1249,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
             formItems.Add("DisplayDesc", true);
             formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1392,6 +1399,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Add"));
+            formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1408,6 +1417,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Delete"));
+            formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1469,13 +1480,13 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Add("U_Qnty", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = "Qnty";
             oColumn.Width = 20 - 1;
-            oColumn.Editable = true;
+            oColumn.Editable = false;
             oColumn.Visible = true;
 
             oColumn = oColumns.Add("U_GrsAmnt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = "GrsAmnt";
             oColumn.Width = 20 - 1;
-            oColumn.Editable = true;
+            oColumn.Editable = false;
             oColumn.Visible = true;
 
 
@@ -1493,13 +1504,13 @@ namespace BDO_Localisation_AddOn
                 oRecordSet.MoveNext();
             }
             oColumn.Width = 20 - 1;
-            oColumn.Editable = true;
+            oColumn.Editable = false;
             oColumn.Visible = true;
 
             oColumn = oColumns.Add("U_VatAmnt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = "VatAmount";
             oColumn.Width = 20 - 1;
-            oColumn.Editable = true;
+            oColumn.Editable = false;
             oColumn.Visible = true;
             
             SAPbouiCOM.DBDataSource oDBDataSource;
@@ -1574,6 +1585,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("DisplayDesc", true);
             formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1615,6 +1627,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("DisplayDesc", true);
             formItems.Add("ScrollBars", SAPbouiCOM.BoScrollBars.sb_Vertical);
+            formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1660,6 +1674,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("DisplayDesc", true);
             formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1702,6 +1717,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("DisplayDesc", true);
             formItems.Add("Enabled", false);
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)

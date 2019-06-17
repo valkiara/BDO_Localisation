@@ -47,9 +47,6 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-
-            
-
             SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
 
             oJounalEntry.Reference = jeReference;

@@ -181,8 +181,8 @@ namespace BDO_Localisation_AddOn
             int pane = 7;
             int left = oForm.Items.Item("1720002167").Left;
             height = oForm.Items.Item("1720002167").Height;
-            top = oForm.Items.Item("1720002167").Top + height + 5;
-
+            top = oForm.Items.Item("1720002167").Top + height +5;
+            
             formItems = new Dictionary<string, object>();
             itemName = "UsBlaAgRtS"; //10 characters
             formItems.Add("isDataSource", true);
@@ -233,7 +233,7 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields(fieldskeysMap, out errorText);
             GC.Collect();
         }
-        
+
         public static void formDataLoad( SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
@@ -606,7 +606,7 @@ namespace BDO_Localisation_AddOn
                             }
                         }
                     }
-                   
+
                 
                 }
             }
@@ -619,117 +619,22 @@ namespace BDO_Localisation_AddOn
             DataTable AccountTable = CommonFunctions.GetOACTTable();
 
 
-            SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
-            SAPbouiCOM.DBDataSource DBDataSourceTable = null;
-            int JEcount = 0;
+                //            string DocEntry = DocDBSource.GetValue("DocEntry", 0);
+                //            string DocNum = DocDBSource.GetValue("DocNum", 0);
+                //            string DocCurr = DocDBSource.GetValue("DocCur", 0);
+                //            decimal DocRate = FormsB1.cleanStringOfNonDigits( DocDBSource.GetValue("DocRate", 0));
+                //            DateTime DocDate = DateTime.ParseExact(DocDBSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
+                //            JrnEntry( DocEntry, DocNum, DocDate, DocRate, DocCurr, out errorText);
+                //            if (errorText != null)
+                //            {
+                //                Program.uiApp.MessageBox(errorText);
+                //                BubbleEvent = false;
 
-            if (oForm == null)
-            {
-                JEcount = DTSource.Rows.Count;
+                //            }
+                //        }
+                //    }
+                //}
             }
-            else
-            {
-               // DBDataSourceTable = docDBSources.Item("PCH11");
-                //JEcount = DBDataSourceTable.Size;
-            }
-
-            SAPbouiCOM.DBDataSource BPDataSourceTable = docDBSources.Item("OCRD");
-
-                   
-
-
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string query = @"select
-	                        ""OBVL"".""ItemCode"",
-	                        ""OBVL"".""DistNumber"",
-                            ""OBVL"".""Quantity"",
-	                        ""OITB"".""SaleCostAc"",
-		                    ""OITB"".""U_BDOSAccDep"",
-                            ""INV1"".""Project"",	                    
-                            ""INV1"".""OcrCode"",
-                            ""INV1"".""OcrCode2"",
-                            ""INV1"".""OcrCode3"",
-                            ""INV1"".""OcrCode4"",
-                            ""INV1"".""OcrCode5""
-                        from ""OBVL"" 
-                        inner join ""OITM"" on ""OBVL"".""ItemCode"" = ""OITM"".""ItemCode""
-                        inner join ""OITB"" on  ""OITB"".""ItmsGrpCod"" = ""OITM"".""ItmsGrpCod"" and ""OITB"".""U_BDOSFxAs""='Y'
-                        inner join ""INV1"" on  ""OBVL"".""DocEntry"" = ""INV1"".""DocEntry""                       
-                        where""OBVL"".""DocEntry"" = " + DocEntry + @" 
-                        and ""OBVL"".""DocType"" = 13";
-
-
-            oRecordSet.DoQuery(query);
-            if (oRecordSet.RecordCount > 0)
-            {
-                while (!oRecordSet.EoF)
-                {
-                    string ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
-                    string DistNumber = oRecordSet.Fields.Item("DistNumber").Value;
-                    string SaleCostAc = oRecordSet.Fields.Item("SaleCostAc").Value;
-                    string U_BDOSAccDep = oRecordSet.Fields.Item("U_BDOSAccDep").Value;
-                    string DistrRule1 = oRecordSet.Fields.Item( "OcrCode").Value;
-                    string DistrRule2 = oRecordSet.Fields.Item( "OcrCode2").Value;
-                    string DistrRule3 = oRecordSet.Fields.Item( "OcrCode3").Value;
-                    string DistrRule4 = oRecordSet.Fields.Item( "OcrCode4").Value;
-                    string DistrRule5 = oRecordSet.Fields.Item( "OcrCode5").Value;
-                    string Project    = oRecordSet.Fields.Item("Project").Value;
-                    decimal DeprPrice = BDOSDepreciationAccrualDocument.getDepreciationPriceDistNumber(ItemCode, DistNumber);
-                    decimal DeprAmount = DeprPrice * Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value,CultureInfo.InvariantCulture);
-                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", U_BDOSAccDep, SaleCostAc, DeprAmount, 0, DocCurrency, "", DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
-
-                    oRecordSet.MoveNext();
-            }
-        }
-
-            if (jeLines.Rows.Count > 0)
-            {
-                jeLines = jeLines.AsEnumerable()
-                      .GroupBy(row => new
-                      {
-                          AccountCode = row.Field<string>("AccountCode"),
-                          ShortName = row.Field<string>("ShortName"),
-                          ContraAccount = row.Field<string>("ContraAccount"),
-                          FCCurrency = row.Field<string>("FCCurrency"),
-                          CostingCode = row.Field<string>("CostingCode"),
-                          CostingCode2 = row.Field<string>("CostingCode2"),
-                          CostingCode3 = row.Field<string>("CostingCode3"),
-                          CostingCode4 = row.Field<string>("CostingCode4"),
-                          CostingCode5 = row.Field<string>("CostingCode5"),
-                          ProjectCode = row.Field<string>("ProjectCode"),
-                          VatGroupCode = row.Field<string>("VatGroup"),
-                          U_BDOSEmpID = row.Field<string>("U_BDOSEmpID")
-                      })
-                      .Select(g =>
-                      {
-                          var row = jeLines.NewRow();
-                          row["AccountCode"] = g.Key.AccountCode;
-                          row["ShortName"] = g.Key.ShortName;
-                          row["ContraAccount"] = g.Key.ContraAccount;
-                          row["FCCurrency"] = g.Key.FCCurrency;
-                          row["CostingCode"] = g.Key.CostingCode;
-                          row["CostingCode2"] = g.Key.CostingCode2;
-                          row["CostingCode3"] = g.Key.CostingCode3;
-                          row["CostingCode4"] = g.Key.CostingCode4;
-                          row["CostingCode5"] = g.Key.CostingCode5;
-                          row["ProjectCode"] = g.Key.ProjectCode;
-                          row["VatGroup"] = g.Key.VatGroupCode;
-                          row["U_BDOSEmpID"] = g.Key.U_BDOSEmpID;
-
-
-                          row["Credit"] = g.Sum(r => r.Field<double>("Credit"));
-                          row["Debit"] = g.Sum(r => r.Field<double>("Debit"));
-                          row["FCCredit"] = g.Sum(r => r.Field<double>("FCCredit"));
-                          row["FCDebit"] = g.Sum(r => r.Field<double>("FCDebit"));
-                          return row;
-                      }).CopyToDataTable();
-            }
-
-
-
-
-            return jeLines;
-
         }
 
         public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
@@ -768,29 +673,27 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
                 {
                     if (pVal.ItemUID == "BDO_WblTxt" || pVal.ItemUID == "BDO_TaxTxt")
+                {
+                    oForm.Freeze(true);
+                    int newDocEntry = 0;
+                    string bstrUDOObjectType = null;
+
+                    itemPressed( oForm, pVal, out newDocEntry, out bstrUDOObjectType, out errorText);
+
+                    if (errorText != null)
                     {
-                        oForm.Freeze(true);
-                        int newDocEntry = 0;
-                        string bstrUDOObjectType = null;
+                        Program.uiApp.MessageBox(errorText);
+                    }
 
-                        itemPressed(oForm, pVal, out newDocEntry, out bstrUDOObjectType, out errorText);
+                    oForm.Freeze(false);
+                    oForm.Update();
 
-                        if (errorText != null)
-                        {
-                            Program.uiApp.MessageBox(errorText);
-                        }
-
-                        oForm.Freeze(false);
-                        oForm.Update();
-
-                        if (newDocEntry != 0 && bstrUDOObjectType != null)
-                        {
-                            Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, bstrUDOObjectType, newDocEntry.ToString());
-                        }
+                    if (newDocEntry != 0 && bstrUDOObjectType != null)
+                    {
+                        Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, bstrUDOObjectType, newDocEntry.ToString());
                     }
                 }
-
-                
+                }               
             }
         }
 
@@ -808,7 +711,7 @@ namespace BDO_Localisation_AddOn
                 if (oEdit.Value != "")
                 {
                     oItem.Enabled = true;
-                }
+            }
                 else oItem.Enabled = false;
             }
             catch (Exception ex)
@@ -822,7 +725,7 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
             }
 
-        }
+        }       
 
         public static void JrnEntry(string DocEntry, string DocNum, DateTime DocDate, DataTable JrnLinesDT,  out string errorText)
         {

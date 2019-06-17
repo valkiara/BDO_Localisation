@@ -2945,7 +2945,6 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
         private static void createDocumentInvoiceCreditMemoType( int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
