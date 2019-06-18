@@ -190,9 +190,9 @@ namespace BDO_Localisation_AddOn
                     //int PaymentGroupCode = oAcuerdo.PaymentTerms;
 
                     APInv.Project = PrjCode;
-                    if (WBBlankAgr != "")
-                    {
-                        APInv.BlanketAgreementNumber = Convert.ToInt32(WBBlankAgr);
+                    if(WBBlankAgr!="")
+                    { 
+                    APInv.BlanketAgreementNumber = Convert.ToInt32(WBBlankAgr);
                         SAPbobsCOM.Recordset oRecordSetBA = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                         string query = @"SELECT ""Project"" FROM ""OOAT"" WHERE ""AbsID"" = '" + Convert.ToInt32(WBBlankAgr) + "'";
 
@@ -210,7 +210,7 @@ namespace BDO_Localisation_AddOn
                     APInv.DocDate = WBActDate;
                     APInv.VatDate = WBActDate;
                     APInv.TaxDate = WBActDate;
-                    
+
                     //APInv.DocCurrency = Program.LocalCurrency;
 
                     APInv.UserFields.Fields.Item("U_BDO_WBNo").Value = WBNo;
@@ -325,7 +325,7 @@ namespace BDO_Localisation_AddOn
                         if (ManBtchNum == "Y")
                         {
 
-                            string BatchNumber = oMatrixGoods.GetCellSpecific("DistNumber", index + 1).Value;
+                            string BatchNumber = oMatrixGoods.GetCellSpecific("DistNumber", index+1).Value;
                             if (BatchNumber == "")
                             {
 
@@ -345,15 +345,15 @@ namespace BDO_Localisation_AddOn
 
 
                             else
-                            {
-                                APInv.Lines.BatchNumbers.Add();
-                                APInv.Lines.BatchNumbers.BatchNumber = BatchNumber;
-                                APInv.Lines.BatchNumbers.Quantity = WBQty;
-
-                            }
+                                {
+                                    APInv.Lines.BatchNumbers.Add();
+                                    APInv.Lines.BatchNumbers.BatchNumber = BatchNumber;
+                                    APInv.Lines.BatchNumbers.Quantity = WBQty;
+                            
+                        }
                         }
 
-
+                        
                         //--------------------------------------------------
                         APInv.Lines.ItemCode = ItemCode;
                         //APInv.Lines.ItemDescription = WBItmName;
@@ -450,7 +450,7 @@ namespace BDO_Localisation_AddOn
                         {
                             if (oGdsRcpt == "Y")
                             {
-                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("Return") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("GoodsRcptPO") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                                 BDO_WBReceivedDocs.getGoodsReceipePOByWB( WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
                                 oMatrix.Columns.Item("GdsRcpPO").Cells.Item(row).Specific.Value = LinkedDocEnrty;
                             }

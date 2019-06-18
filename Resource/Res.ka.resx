@@ -2836,7 +2836,7 @@
   <data name="TransferDocumentAlreadyExistsForAsset" xml:space="preserve">
     <value>გადაადგილების დოკუმენტი უკვე არსებობს ძ.ს-სთვის:</value>
   </data>
-  <data name="Delivery" xml:space="preserve">
+<data name="Delivery" xml:space="preserve">
     <value>მიწოდება</value>
   </data>
   <data name="AccumulatedDepreciationAccount" xml:space="preserve">
@@ -2851,7 +2851,7 @@
   <data name="UsLife" xml:space="preserve">
     <value>გამოყენების ვადა</value>
   </data>
-  <data name="DepreciationAccrual" xml:space="preserve">
+<data name="DepreciationAccrual" xml:space="preserve">
     <value>ცვეთის დარიცხვის დოკუმენტი</value>
   </data>
   <data name="AccrualMonth" xml:space="preserve">
@@ -2862,7 +2862,7 @@
   </data>
   <data name="DepreciationAmount" xml:space="preserve">
     <value>ცვეთის რაოდენობა</value>
-  </data>
+    </data>
   <data name="Back" xml:space="preserve">
     <value>უკან</value>
   </data>
@@ -2980,10 +2980,10 @@
   <data name="UseBlAgrRt" xml:space="preserve">
     <value>კურსის დიაპაზონის გამოყენება</value>
   </data>
-  <data name="BatchNumberPrefix" xml:space="preserve">
+<data name="BatchNumberPrefix" xml:space="preserve">
     <value>პარტიის ნომრის პრეფიქსი</value>
   </data>
-  <data name="PrefixError" xml:space="preserve">
+<data name="PrefixError" xml:space="preserve">
     <value>პარტიის ნომერი ვერ შეიქმნა. გთხოვთ, შეავსოთ 2 სიმბოლოიანი პარტიის ნომრის პრეფიქსი</value>
   </data>
   <data name="FindNext" xml:space="preserve">
@@ -3006,5 +3006,8 @@
   </data>
   <data name="FuelWarehouse" xml:space="preserve">
     <value>საწვავის საწყობი</value>
+  </data>
+  <data name="GoodsRcptPO" xml:space="preserve">
+    <value>საქონლის მიღება</value>
   </data>
 </root>

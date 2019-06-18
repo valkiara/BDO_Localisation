@@ -2836,7 +2836,7 @@
   <data name="TransferDocumentAlreadyExistsForAsset" xml:space="preserve">
     <value>Transfer Document Already Exists For Asset</value>
   </data>
-  <data name="Delivery" xml:space="preserve">
+<data name="Delivery" xml:space="preserve">
     <value>Delivery</value>
   </data>
   <data name="AccumulatedDepreciationAccount" xml:space="preserve">
@@ -2851,7 +2851,7 @@
   <data name="UsLife" xml:space="preserve">
     <value>Useful Life</value>
   </data>
-  <data name="DepreciationAccrual" xml:space="preserve">
+<data name="DepreciationAccrual" xml:space="preserve">
     <value>Depreciation Accrual Document</value>
   </data>
   <data name="AccrualMonth" xml:space="preserve">
@@ -2862,7 +2862,7 @@
   </data>
   <data name="DepreciationAmount" xml:space="preserve">
     <value>Depreciation Amount</value>
-  </data>
+    </data>
   <data name="Back" xml:space="preserve">
     <value>Back</value>
   </data>
@@ -2980,7 +2980,7 @@
   <data name="UseBlAgrRt" xml:space="preserve">
     <value>Use Rate Ranges</value>
   </data>
-  <data name="BatchNumberPrefix" xml:space="preserve">
+<data name="BatchNumberPrefix" xml:space="preserve">
     <value>Batch Number Prefix</value>
   </data>
   <data name="FindNext" xml:space="preserve">
@@ -2989,7 +2989,7 @@
   <data name="TotalPaymentNet" xml:space="preserve">
     <value>Total Payment net</value>
   </data>
-  <data name="PrefixError" xml:space="preserve">
+<data name="PrefixError" xml:space="preserve">
     <value>Cannot create batch number. Please fill 2 symbol prefix for batch numbers</value>
   </data>
 <data name="ACNumber" xml:space="preserve">
@@ -3006,5 +3006,8 @@
   </data>
   <data name="FuelWarehouse" xml:space="preserve">
     <value>Fuel Warehouse</value>
+  </data>
+  <data name="GoodsRcptPO" xml:space="preserve">
+    <value>Goods Receipt PO</value>
   </data>
 </root>

@@ -634,7 +634,10 @@ namespace BDO_Localisation_AddOn
                 //        }
                 //    }
                 //}
-            }
+            //}
+
+            return jeLines;
+
         }
 
         public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
