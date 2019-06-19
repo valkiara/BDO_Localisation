@@ -163,7 +163,7 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("51").Specific));
 
             oMatrix.Columns.Item("BDOSVatPrc").Cells.Item(row).Specific.Value = FormsB1.ConvertDecimalToString(GetVatGroupRate(oMatrix.Columns.Item("BDOSVatGrp").Cells.Item(row).Specific.Value));
-            RefillRowVatAmount(oMatrix, row);
+            RefillRowVatAmount(oForm,oMatrix, row);
         }
 
         public static decimal GetVatGroupRate(string VatGroup)
@@ -197,7 +197,7 @@ namespace BDO_Localisation_AddOn
 
             for (int row = 1; row <= rowCount; row++)
             {
-                RefillRowVatAmount(oMatrix, row);
+                RefillRowVatAmount(oForm, oMatrix, row);
             }
 
             LandedCosts.RefillTotalVatAmounts(oForm, out errorText);
@@ -280,14 +280,94 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static void RefillRowVatAmount(SAPbouiCOM.Matrix oMatrix, int row)
+        public static void RefillRowVatAmount(SAPbouiCOM.Form oForm, SAPbouiCOM.Matrix oMatrix, int row)
         {
+
+
+            //-------- get currency and date
+
+            SAPbouiCOM.DBDataSource DBDataSourceO = oForm.DataSources.DBDataSources.Item("OIPF");
+            string DocDateStr = DBDataSourceO.GetValue("DocDate", 0);
+            DateTime DocDate = DateTime.TryParseExact(DocDateStr, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DocDate) == false ? DateTime.Now : DocDate;
+
+            string DocCurr = "";
+            string BaseDocPrice = oMatrix.Columns.Item("7").Cells.Item(row).Specific.String;
+
+            SAPbobsCOM.Recordset oRecordSetCur = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            string query = "SELECT " +
+                            "\"OCRN\".\"CurrCode\" " +
+                            "FROM \"OCRN\" ";
+            oRecordSetCur.DoQuery(query);
+
+            while (!oRecordSetCur.EoF)
+            {
+                string curr = oRecordSetCur.Fields.Item("CurrCode").Value;
+
+                if (BaseDocPrice.Contains(curr))
+                {
+                    DocCurr = curr;
+                }
+
+                oRecordSetCur.MoveNext();
+            }
+
+            //-------- get rate
+
+            SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+            SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(DocCurr, DocDate);
+
+            decimal DocRate = 0;
+            while (!RateRecordset.EoF)
+            {
+                DocRate = Convert.ToDecimal(RateRecordset.Fields.Item("CurrencyRate").Value);
+                RateRecordset.MoveNext();
+            }
+
+            //=========================================
+
+            string itemCode = oMatrix.Columns.Item("1").Cells.Item(row).Specific.Value;
+            decimal duty = 0;
+
+            SAPbobsCOM.Recordset oRecordSetDut = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            string queryDut = 
+                            "SELECT " +
+                            "\"OARG\".\"TotalTax\" " +
+                            "FROM \"OARG\" " +
+                            "JOIN \"OITM\" " +
+                            "ON \"OARG\".\"CstGrpCode\" = \"OITM\".\"CstGrpCode\" " +
+                            "WHERE \"OITM\".\"ItemCode\" = '" + itemCode + "'";
+
+            oRecordSetDut.DoQuery(queryDut);
+
+            while (!oRecordSetDut.EoF)
+            {
+                duty = (decimal)oRecordSetDut.Fields.Item("TotalTax").Value;
+                oRecordSetDut.MoveNext();
+            }
+
+            decimal dutyValue = ((FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("3").Cells.Item(row).Specific.Value)
+                            * FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value)
+                            * DocRate)
+                            + FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("10000102").Cells.Item(row).Specific.Value)
+                            - FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("10000058").Cells.Item(row).Specific.Value))
+                            * (duty / 100);
+
+            oMatrix.Columns.Item("10000074").Cells.Item(row).Specific.Value = FormsB1.ConvertDecimalToString(dutyValue);
+            
+
+            
+            //---------------------------------
             decimal LineTotal = FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("10000074").Cells.Item(row).Specific.Value)
-                + FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("10000102").Cells.Item(row).Specific.Value);
+                + FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("10000102").Cells.Item(row).Specific.Value) 
+                - FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("10000058").Cells.Item(row).Specific.Value) 
+                + (FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("3").Cells.Item(row).Specific.Value) * DocRate * FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value));
             decimal VatPercent = FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("BDOSVatPrc").Cells.Item(row).Specific.Value);
             decimal VatAmount = LineTotal * (VatPercent / 100);
 
             oMatrix.Columns.Item("BDOSVatAmt").Cells.Item(row).Specific.Value = FormsB1.ConvertDecimalToString(VatAmount);
+
+            
         }
 
         public static void FillCostsAmounts(SAPbouiCOM.Form oForm, out string errorText)
@@ -879,6 +959,9 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
+                //Program.uiApp.SetStatusBarMessage(pVal.EventType.ToString() + " " + pVal.ItemUID + " " + pVal.ItemChanged);
+
+
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DRAW)
                 {
                     if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
@@ -926,22 +1009,22 @@ namespace BDO_Localisation_AddOn
                     LandedCosts.RefillTotalVatAmounts(oForm, out errorText);
                     oForm.Freeze(false);
                 }
+                
+                ////დანახარჯების თანხის შევსებისას დღგს თანხების გადათვლა
+                //if (pVal.ItemUID == "54" & pVal.ItemChanged & pVal.BeforeAction == false)
+                //{
+                //    oForm.Freeze(true);
+                //    LandedCosts.RefillVatAmounts(oForm, out errorText);
+                //    oForm.Freeze(false);
+                //}
 
-                //დანახარჯების თანხის შევსებისას დღგს თანხების გადათვლა
-                if (pVal.ItemUID == "54" & pVal.ItemChanged & pVal.BeforeAction == false)
-                {
-                    oForm.Freeze(true);
-                    LandedCosts.RefillVatAmounts(oForm, out errorText);
-                    oForm.Freeze(false);
-                }
-
-                //დანახარჯების თანხის შევსებისას დღგს თანხების გადათვლა
-                if (pVal.ItemUID == "24" & pVal.ItemChanged & pVal.BeforeAction == false)
-                {
-                    oForm.Freeze(true);
-                    LandedCosts.RefillVatAmounts(oForm, out errorText);
-                    oForm.Freeze(false);
-                }
+                ////დანახარჯების თანხის შევსებისას დღგს თანხების გადათვლა
+                //if (pVal.ItemUID == "24" & pVal.ItemChanged & pVal.BeforeAction == false)
+                //{
+                //    oForm.Freeze(true);
+                //    LandedCosts.RefillVatAmounts(oForm, out errorText);
+                //    oForm.Freeze(false);
+                //}
 
                 //რეკალკულაციის დროს დღგს განაკვეთების შევსება
                 if ((pVal.ItemUID == "68" || pVal.ItemUID == "BDOSFllVAT") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
