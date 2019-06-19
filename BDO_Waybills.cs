@@ -5894,7 +5894,7 @@ namespace BDO_Localisation_AddOn
             "0 AS \"VAT_TYPE\", " +
             " '' AS \"VatGroup\", " +
             "'0' AS \"A_ID\", " +
-            "CASE WHEN \"@BDOSFASTR1\".\"U_Quantity\" is null THEN '1' ELSE \"@BDOSFASTR1\".\"U_Quantity\" END AS \"Quantity\", " +
+            "CASE WHEN \"@BDOSFASTR1\".\"U_Quantity\" is null or \"@BDOSFASTR1\".\"U_Quantity\" = '0' THEN '1' ELSE \"@BDOSFASTR1\".\"U_Quantity\" END AS \"Quantity\", " +
             "'0' AS \"AMOUNT\"," +
             "'0' AS \"PRICE\" " +
 
