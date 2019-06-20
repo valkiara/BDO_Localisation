@@ -1057,7 +1057,7 @@ namespace BDO_Localisation_AddOn
 
                 string AccDepAccount = oItemGroup.UserFields.Fields.Item("U_BDOSAccDep").Value.ToString();
                 string ExpDepAccount = oItemGroup.UserFields.Fields.Item("U_BDOSExpDep").Value.ToString();
-                string SaleCostAc = oItemGroup.SalesCreditAcc;
+                string SaleCostAc = oItemGroup.CostAccount;
                 JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", ExpDepAccount, AccDepAccount, DeprAmt, 0, "", "", "", "", "", "", U_PrjCode, "", "");
 
                 if ( string.IsNullOrEmpty(U_InvEntry)==false)

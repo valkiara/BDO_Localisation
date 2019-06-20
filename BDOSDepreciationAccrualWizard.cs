@@ -109,13 +109,14 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("InvoiceDepreciation"));
+                    formItems.Add("Caption", BDOSResources.getTranslate("Retirement"));
                     formItems.Add("ValOn", "Y");
                     formItems.Add("ValOff", "N");
                     formItems.Add("DisplayDesc", true);
                     formItems.Add("Selected", true);
                     formItems.Add("FromPane", 0);
                     formItems.Add("ToPane", 0);
+                    formItems.Add("Value", 1);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -138,7 +139,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("StockDepreciation"));
+                    formItems.Add("Caption", BDOSResources.getTranslate("Depreciation"));
                     formItems.Add("GroupWith", "InvDepr");
                     formItems.Add("ValOn", "Y");
                     formItems.Add("ValOff", "N");
@@ -226,6 +227,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("DistNumber", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("Quantity", SAPbouiCOM.BoFieldsType.ft_Quantity);
                     oDataTable.Columns.Add("DeprAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
+                    oDataTable.Columns.Add("DepcDoc", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
 
                     oDataTable = oForm.DataSources.DataTables.Add("ItemsMTR");
                     oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50); //ინდექსი 
@@ -244,6 +246,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("NtBookVal", SAPbouiCOM.BoFieldsType.ft_Sum);
                     oDataTable.Columns.Add("DeprAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
                     oDataTable.Columns.Add("CurMnthAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
+                    oDataTable.Columns.Add("DepcDoc", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     
                     for (int count = 0; count < oDataTable.Columns.Count; count++)
                     {
@@ -296,6 +299,16 @@ namespace BDO_Localisation_AddOn
                             oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = "4";
                         }
+                        else if (columnName == "DepcDoc")
+                        {
+                            oColumn = oColumns.Add("DepcDoc", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("DepcDoc");
+                            oColumn.Editable = false;
+                            oColumn.DataBind.Bind("ItemsMTR", columnName);
+                            oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = "UDO_F_BDOSDEPACR_D";
+                        }
+                        
                         else if (columnName == "DocEntry")
                         {
                             oColumn = oColumns.Add("DocEntry", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
@@ -651,6 +664,7 @@ namespace BDO_Localisation_AddOn
 	                         ""FinTable"".""DistNumber"",
                              ""FinTable"".""InDate"",
 	                         ""FinTable"".""APCost"",
+                             ""DepcAccInvoice"".""DepcDoc"",
                              ""DepcAcc"".""DeprAmt"" as ""DeprAmt"","
                             +
                             (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt"" as ""CurrDeprAmt""," : @"""DepcAcc"".""CurrDeprAmt"" as ""CurrDeprAmt"",")
@@ -686,6 +700,7 @@ namespace BDO_Localisation_AddOn
                         inner join ""OITM"" on  ""OBVL"".""ItemCode"" = ""OITM"".""ItemCode""
                         inner join ""OITB"" on  ""OITB"".""ItmsGrpCod"" = ""OITM"".""ItmsGrpCod"" and ""OITB"".""U_BDOSFxAs""='Y'
                         inner join ""OIVL"" on ""OIVL"".""ItemCode"" = ""OBVL"".""ItemCode"" 
+                        and ""OIVL"".""DocDate"" <='" + DeprMonth.ToString("yyyyMMdd") + @"'                        
                         and ""OIVL"".""CreatedBy"" = ""OBVL"".""DocEntry"" 
                         and ""OIVL"".""TransType"" = ""OBVL"".""DocType"" 
                         and case when ""OIVL"".""ParentID"" = -1 
@@ -723,7 +738,7 @@ namespace BDO_Localisation_AddOn
 
 	                    SUM(""@BDOSDEPAC1"".""U_Quantity"") as ""DeprQty""
                         from ""@BDOSDEPAC1"" 
-                        inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' 
+                        inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ""@BDOSDEPACR"".""U_AccrMnth"" <= '" + DeprMonth.ToString("yyyyMMdd") + @"'and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')=''
                         
                         group by 
                         ""@BDOSDEPAC1"".""U_ItemCode"",
@@ -732,6 +747,7 @@ namespace BDO_Localisation_AddOn
                         and ""DepcAcc"".""U_DistNumber"" = ""FinTable"".""DistNumber""
 
                         left  join (select
+                        ""@BDOSDEPACR"".""DocEntry"" as ""DepcDoc"",
                         ""@BDOSDEPAC1"".""U_InvEntry"",
                         ""@BDOSDEPAC1"".""U_InvType"",
                         
@@ -746,18 +762,20 @@ namespace BDO_Localisation_AddOn
 
 	                    SUM(""@BDOSDEPAC1"".""U_Quantity"") as ""DeprQty""
                         from ""@BDOSDEPAC1"" 
-                        inner join ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')<>''
-
-                        
-                        group by 
+                        inner join ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ""@BDOSDEPACR"".""U_AccrMnth"" = '" + DeprMonth.ToString("yyyyMMdd") + @"' and "
+                        +
+                        (isInvoice? @" ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')<>'' " : @" ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')='' ")
+                        +
+                        @"group by 
+                        ""@BDOSDEPACR"".""DocEntry"",
                         ""@BDOSDEPAC1"".""U_InvEntry"",
                         ""@BDOSDEPAC1"".""U_InvType"",
                         ""@BDOSDEPAC1"".""U_ItemCode"",
                         ""@BDOSDEPAC1"".""U_DistNumber"" ) as ""DepcAccInvoice""
-                        on ""DepcAcc"".""U_ItemCode"" = ""FinTable"".""ItemCode"" 
-                        and ""DepcAcc"".""U_DistNumber"" = ""FinTable"".""DistNumber""
-                        and " +
-                            (isInvoice ? @" ""DepcAccInvoice"".""U_InvEntry"" =  ""FinTable"".""DocEntry"" and   ""DepcAccInvoice"".""U_InvType"" = ""FinTable"".""DocType"" ":" 1=0");
+                        on ""DepcAccInvoice"".""U_ItemCode"" = ""FinTable"".""ItemCode"" 
+                        and ""DepcAccInvoice"".""U_DistNumber"" = ""FinTable"".""DistNumber""
+                         " +
+                            (isInvoice ? @" and ""DepcAccInvoice"".""U_InvEntry"" =  ""FinTable"".""DocEntry"" and   ""DepcAccInvoice"".""U_InvType"" = ""FinTable"".""DocType"" " : "");
 
             
 
@@ -836,6 +854,8 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue("ItemCode", rowIndex, oRecordSet.Fields.Item("ItemCode").Value);
                 oDataTable.SetValue("ItemName", rowIndex, oRecordSet.Fields.Item("ItemName").Value);
                 oDataTable.SetValue("DistNumber", rowIndex, oRecordSet.Fields.Item("DistNumber").Value);
+                oDataTable.SetValue("DepcDoc", rowIndex, oRecordSet.Fields.Item("DepcDoc").Value);
+                
                 oDataTable.SetValue("UseLife", rowIndex, monthsApart);                
                 oDataTable.SetValue("Quantity", rowIndex, Convert.ToDouble(Quantity));
                 oDataTable.SetValue("APCost", rowIndex, oRecordSet.Fields.Item("APCost").Value * Convert.ToDouble(Quantity));
