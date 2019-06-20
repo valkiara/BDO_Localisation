@@ -352,8 +352,9 @@ namespace BDO_Localisation_AddOn
                             + FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("10000102").Cells.Item(row).Specific.Value)
                             - FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("10000058").Cells.Item(row).Specific.Value))
                             * (duty / 100);
+            decimal duTyRounded = decimal.Round(dutyValue, 2);
 
-            oMatrix.Columns.Item("10000074").Cells.Item(row).Specific.Value = FormsB1.ConvertDecimalToString(dutyValue);
+            oMatrix.Columns.Item("10000074").Cells.Item(row).Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(duTyRounded);
             
 
             
