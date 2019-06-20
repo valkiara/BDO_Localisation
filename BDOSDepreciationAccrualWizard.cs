@@ -662,7 +662,9 @@ namespace BDO_Localisation_AddOn
                              from (select
 	                         ""OIVL"".""LocCode"","
                             +
-                            (isInvoice ? @" ""OBVL"".""DocEntry"", ""OBVL"".""DocType"", " : "")
+                            (isInvoice ? @" case when ""OBVL"".""BaseDocEn""= 0 
+                                                then ""OBVL"".""DocEntry""
+                                                else ""OBVL"".""BaseDocEn"" end as ""DocEntry"", ""OBVL"".""DocType"", " : "")
                             +
                              @"""OWHS"".""U_BDOSPrjCod"" as ""Project"",
                              ""OITM"".""ItmsGrpCod"" as ""ItemGrp"", 	                         
@@ -697,7 +699,9 @@ namespace BDO_Localisation_AddOn
 
                         group by ""OIVL"".""LocCode"","
                             +
-                            (isInvoice ? @" ""OBVL"".""DocEntry"", ""OBVL"".""DocType"", " : "")
+                            (isInvoice ? @" case when ""OBVL"".""BaseDocEn""= 0 
+                                                then ""OBVL"".""DocEntry""
+                                                else ""OBVL"".""BaseDocEn"" end, ""OBVL"".""DocType"", " : "")
                             +
                              @"""OWHS"".""U_BDOSPrjCod"",
                             ""OITM"".""ItmsGrpCod"",
@@ -742,7 +746,8 @@ namespace BDO_Localisation_AddOn
 
 	                    SUM(""@BDOSDEPAC1"".""U_Quantity"") as ""DeprQty""
                         from ""@BDOSDEPAC1"" 
-                        inner join ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and not ""@BDOSDEPAC1"".""U_InvEntry"" is null 
+                        inner join ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')<>''
+
                         
                         group by 
                         ""@BDOSDEPAC1"".""U_InvEntry"",
@@ -802,7 +807,10 @@ namespace BDO_Localisation_AddOn
                 DateTime InDateStart = oRecordSet.Fields.Item("InDate").Value;
                 DateTime InDateEnd = InDateStart.AddMonths(oRecordSet.Fields.Item("UseLife").Value);
                 
-                if (DeprMonth > InDateEnd || DeprMonth < InDateStart)
+                decimal Quantity = Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value);
+                Quantity = Quantity * (isInvoice ? -1 : 1);
+
+                if (DeprMonth > InDateEnd || DeprMonth < InDateStart || Quantity==0)
                 {
                     oRecordSet.MoveNext();
                     continue;
@@ -814,8 +822,7 @@ namespace BDO_Localisation_AddOn
                 monthsApart = Math.Abs(monthsApart);
                                 
                 decimal AlrDeprAmt = 0;
-                decimal Quantity = Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value);
-                Quantity = Quantity * (isInvoice ? -1 : 1);
+                
 
                 AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Quantity;
                 decimal NtBookVal = Convert.ToDecimal(oRecordSet.Fields.Item("APCost").Value * Convert.ToDouble(Quantity)) - AlrDeprAmt;
