@@ -521,8 +521,12 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-
+                    try
+                    {
                     oForm.Items.Item("CashFlowI").Specific.Select(CommonFunctions.getOADM("CfwOutDflt").ToString(), SAPbouiCOM.BoSearchKey.psk_ByValue);
+                    }
+                    catch
+                    { }
 
                     top = top + height + 1;
 
@@ -599,7 +603,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("isDataSource", true);
                     formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
                     formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("Length", 20);
+                    formItems.Add("Length", 254);
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     formItems.Add("TableName", "");

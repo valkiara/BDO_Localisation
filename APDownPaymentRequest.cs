@@ -11,6 +11,52 @@ namespace BDO_Localisation_AddOn
 {
     static partial class APDownPaymentRequest
     {
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+            Dictionary<string, object> formItems = null;
+
+            string itemName = "";
+
+            // -------------------- Use blanket agreement rates-----------------
+            int pane = 7;
+            int left = oForm.Items.Item("1720002167").Left;
+            int height = oForm.Items.Item("1720002167").Height;
+            int top = oForm.Items.Item("1720002167").Top + height + 5;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "UsBlaAgRtS"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "ODPO");
+            formItems.Add("Alias", "U_UseBlaAgRt");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 1);
+            formItems.Add("Left", left);
+            formItems.Add("Width", 100);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("UseBlAgrRt"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("SetAutoManaged", true);
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            GC.Collect();
+        }
+
         public static bool ProfitTaxTypeIsSharing = false;
 
         public static void chooseFromList( SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
@@ -310,6 +356,7 @@ namespace BDO_Localisation_AddOn
                         APDownPayment.createFormItems(oForm, out errorText);
                         formDataLoad(oForm, out errorText);
                         setVisibleFormItems(oForm, out errorText);
+                        createFormItems(oForm, out errorText);
                     }
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && pVal.BeforeAction == false)
                     {
@@ -325,7 +372,28 @@ namespace BDO_Localisation_AddOn
                             LiableTaxes_OnClick(oForm, out errorText);
                             oForm.Freeze(false);
                         }
+
+                        if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
+                        {
+                            CommonFunctions.fillDocRate(oForm, "ODPO", "ODPO");
+                        }
+
+                        if (pVal.ItemUID == "UsBlaAgRtS" & pVal.BeforeAction == false)
+                        {
+
+                            SAPbouiCOM.EditText oBlankAgr = (SAPbouiCOM.EditText)oForm.Items.Item("1980002192").Specific;
+
+                            if (string.IsNullOrEmpty(oBlankAgr.Value))
+                            {
+                                Program.uiApp.SetStatusBarMessage(errorText = BDOSResources.getTranslate("EmptyBlaAgrError"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                                SAPbouiCOM.CheckBox oUsBlaAgRtCB = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
+                                oUsBlaAgRtCB.Checked = false;
+                                oForm.Items.Item("1980002192").Click();
+                            }
                     }
+
+                    }
+
                     if ((pVal.ItemUID == "PrBaseE") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         if (pVal.BeforeAction == false)

@@ -3010,4 +3010,22 @@
   <data name="GoodsRcptPO" xml:space="preserve">
     <value>საქონლის მიღება</value>
   </data>
+<data name="EmptyBlaAgrError" xml:space="preserve">
+    <value>გთხოვთ შეავსეთ ძირითადი საშუალება</value>
+  </data>
+  <data name="ThereIsDepreciationAmountsInCurrentMonthForItem" xml:space="preserve">
+    <value>მიმდინარე თვეში უკვე დარიცხული ცვეთა საქონლისთვის</value>
+  </data>
+<data name="ConsumTypesMasterData" xml:space="preserve">
+    <value>წვის ტიპი</value>
+  </data>
+  <data name="FuelType" xml:space="preserve">
+    <value>საწვავის ტიპი</value>
+  </data>
+  <data name="PerHour" xml:space="preserve">
+    <value>სთ-ში</value>
+  </data>
+  <data name="PerHunKm" xml:space="preserve">
+    <value>100 კმ.-ზე</value>
+  </data>
 </root>

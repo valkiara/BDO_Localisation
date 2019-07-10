@@ -153,7 +153,6 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            
             itemName = "";
 
             SAPbouiCOM.Item oItem_s = oForm.Items.Item("1470000099");
@@ -162,11 +161,15 @@ namespace BDO_Localisation_AddOn
             left_s = oItem_s.Left;
             left_e = oItem_e.Left;
             height = oItem_e.Height;
-            top = oItem_e.Top;
+            //top = oItem_e.Top;
+            top = top + height + 10;
             int width_s = oItem_s.Width;
             int width_e = oItem_e.Width;
 
-            top = top + height + 1;
+            multiSelection = false;
+            objectType = "63";
+            string uniqueID_lf_prj_CFL = "Prj_CFL";
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_prj_CFL);
 
             formItems = new Dictionary<string, object>();
             itemName = "PrjCodeS"; //10 characters
@@ -184,12 +187,7 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
-
-            multiSelection = false;
-            objectType = "63";
-            string uniqueID_lf_prj_CFL = "Prj_CFL";
-            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_prj_CFL);
-
+                       
             formItems = new Dictionary<string, object>();
             itemName = "PrjCodeE"; //10 characters
             formItems.Add("isDataSource", true);

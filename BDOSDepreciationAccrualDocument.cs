@@ -109,6 +109,15 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields(fieldskeysMap, out errorText);
             
             fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "AlrDeprAmt");
+            fieldskeysMap.Add("TableName", "BDOSDEPAC1");
+            fieldskeysMap.Add("Description", "Already Depreciation Amount");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "InvEntry");
             fieldskeysMap.Add("TableName", "BDOSDEPAC1");
             fieldskeysMap.Add("Description", "Invoice doc entry");
@@ -276,18 +285,11 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == true) //false & BusinessObjectInfo.ActionSuccess ==
+                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == true)
                 {
                     if (Program.cancellationTrans == true & Program.canceledDocEntry != 0)
                     {
-                        //updateAsset(oForm, true, out errorText);
-                        if (errorText != null)
-                        {
-                            Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-                            Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                            BubbleEvent = false;
-                        }
-                        
+                        cancellation(oForm, Program.canceledDocEntry, out errorText);
                         Program.canceledDocEntry = 0;
                     }
                 }
@@ -298,9 +300,30 @@ namespace BDO_Localisation_AddOn
                 }
 
             }
-
-
         }
+
+        public static void cancellation(SAPbouiCOM.Form oForm, int docEntry, out string errorText)
+        {
+            errorText = null;
+
+            try
+            {
+                JournalEntry.cancellation(oForm, docEntry, "UDO_F_BDOSDEPACR_D", out errorText);
+            }
+            catch (Exception ex)
+            {
+                int errCode;
+                string errMsg;
+
+                Program.oCompany.GetLastError(out errCode, out errMsg);
+                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+        }
+            finally
+            {
+                GC.Collect();
+            }
+        }
+
 
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
@@ -661,6 +684,12 @@ namespace BDO_Localisation_AddOn
             oColumn.Editable = true;
             oColumn.Visible = true;
 
+            oColumn = oColumns.Add("AlrDeprAmt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("AlrDeprAmt");
+            oColumn.Width = 60;
+            oColumn.Editable = true;
+            oColumn.Visible = true;
+
             oColumn = oColumns.Add("Project", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Project");
             oColumn.Width = 60;
@@ -700,6 +729,9 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Item("DeprAmt");
             oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_DeprAmt");
 
+            oColumn = oColumns.Item("AlrDeprAmt");
+            oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_AlrDeprAmt");
+            
             oColumn = oColumns.Item("Project");
             oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_Project");
 
@@ -1042,6 +1074,8 @@ namespace BDO_Localisation_AddOn
             {
 
                 decimal DeprAmt = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_DeprAmt", i), CultureInfo.InvariantCulture);
+                decimal AlrDeprAmt = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_AlrDeprAmt", i), CultureInfo.InvariantCulture);
+                
                 string ItemCode = ((string)CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_ItemCode", i)).Trim();
                 string U_PrjCode = ((string)CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_Project", i)).Trim();
                 string U_InvEntry = ((string)CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_InvEntry", i)).Trim();
@@ -1062,7 +1096,7 @@ namespace BDO_Localisation_AddOn
 
                 if ( string.IsNullOrEmpty(U_InvEntry)==false)
                 {
-                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", AccDepAccount, SaleCostAc, DeprAmt, 0, "", "", "", "", "", "", U_PrjCode, "", "");
+                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", AccDepAccount, SaleCostAc, AlrDeprAmt, 0, "", "", "", "", "", "", U_PrjCode, "", "");
                 }
 
             }

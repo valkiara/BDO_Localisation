@@ -927,7 +927,7 @@ namespace BDO_Localisation_AddOn
 
             string DocCurr = "";
 
-            if (documentTable == "OINV" || documentTable == "OPCH")
+            if (documentTable == "OINV" || documentTable == "OPCH" || documentTable == "ODPI" || documentTable == "ODPO")
             {
                 DocCurr = DBDataSourceO.GetValue("DocCur", 0);
             }
@@ -1003,7 +1003,7 @@ namespace BDO_Localisation_AddOn
             if (DocRate > 0)
             {
 
-                if (documentTable == "OINV" || documentTable == "OPCH")
+                if (documentTable == "OINV" || documentTable == "OPCH" || documentTable == "ODPI" || documentTable == "ODPO")
                 {
                     if (oForm.Items.Item("64").Enabled)
                     {
@@ -1156,6 +1156,49 @@ namespace BDO_Localisation_AddOn
                 oForm.Freeze(false);
             }
         }
+        public static void blockAssetInvoice(SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, string whsFieldName, out bool rejection)
+        {
+            rejection = false;
+            SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(docDBSourcesName);
+            SAPbouiCOM.DBDataSource DocDBSourceTable = oForm.DataSources.DBDataSources.Item(tableDBSourcesName);
+
+
+            DateTime DocDate = DateTime.ParseExact(DocDBSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
+            DocDate = new DateTime(DocDate.Year, DocDate.Month, 1);
+            DocDate = DocDate.AddMonths(1).AddDays(-1);
+
+            string ItemCodes = "";
+
+            for (int i = 0; i < DocDBSourceTable.Size; i++)
+            {
+                ItemCodes = ItemCodes + "'" + DocDBSourceTable.GetValue("ItemCode", i).ToString() + "'";
+                ItemCodes = ItemCodes + (i == DocDBSourceTable.Size - 1 ? "" : ",");
+            }
+
+
+            string query = BDOSDepreciationAccrualWizard.BatchDepreciaionQuery(DocDate, ItemCodes, "", "", false);
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+
+            oRecordSet.DoQuery(query);
+            while (!oRecordSet.EoF)
+            {
+                string ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
+                string DistNumber = oRecordSet.Fields.Item("DistNumber").Value;
+
+                decimal CurrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture);
+                if(CurrDeprAmt>0)
+                {
+                    rejection = true;
+                    Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem")+" " +ItemCode + ": " + DistNumber);
+                }
+
+                oRecordSet.MoveNext();
+            }
+        }
+
+
+
 
         public static void blockNegativeStockByDocDate(SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, string whsFieldName, out bool rejection)
         {

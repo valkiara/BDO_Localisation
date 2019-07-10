@@ -3010,4 +3010,28 @@
   <data name="GoodsRcptPO" xml:space="preserve">
     <value>Goods Receipt PO</value>
   </data>
+<data name="EmptyBlaAgrError" xml:space="preserve">
+    <value>Please fill Blanket Agreement</value>
+  </data>
+  <data name="ThereIsDepreciationAmountsInCurrentMonthForItem" xml:space="preserve">
+    <value>There is depreciation amounts in current month for item</value>
+  </data>
+<data name="ConsumTypesMasterData" xml:space="preserve">
+    <value>Consumption Types Master Data</value>
+  </data>
+  <data name="FuelType" xml:space="preserve">
+    <value>Fuel Type</value>
+  </data>
+  <data name="PerHour" xml:space="preserve">
+    <value>Per Hour</value>
+  </data>
+  <data name="PerHunKm" xml:space="preserve">
+    <value>Per 100 Kilometers</value>
+  </data>
+  <data name="Uom" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="Item Code" xml:space="preserve">
+    <value />
+  </data>
 </root>

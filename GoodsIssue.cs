@@ -1100,6 +1100,17 @@ namespace BDO_Localisation_AddOn
                             BubbleEvent = false;
                         }
 
+
+                        //ძირითადი საშუალებების შემოწმება
+                        bool rejectionAsset = false;
+                        CommonFunctions.blockAssetInvoice(oForm, "OIGE", "IGE1", "", out rejectionAsset);
+                        if (rejectionAsset)
+                        {
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
+                            BubbleEvent = false;
+                        }
+
+
                         if (ProfitTaxTypeIsSharing == true)
                         {
                             // მოგების გადასახადი

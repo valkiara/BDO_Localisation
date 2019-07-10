@@ -1673,7 +1673,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     paymentID = (oStatementDetail[rowIndex].EntryDocumentNumber == "0") ? oStatementDetail[rowIndex].EntryId : oStatementDetail[rowIndex].EntryDocumentNumber; //EntryDocumentNumber
-                    ePaymentID = oStatementDetail[rowIndex].EntryDocumentNumber;
+                    ePaymentID = oStatementDetail[rowIndex].EntryId;
                     docNumber = oStatementDetail[rowIndex].EntryDocumentNumber;
                     transCode = oStatementDetail[rowIndex].DocumentProductGroup;
 
@@ -1967,7 +1967,7 @@ namespace BDO_Localisation_AddOn
                 oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
             else if (transactionType == "CCO")
                 oOperationType = OperationTypeFromIntBank.CurrencyExchange;
-            else if (transactionType == "PMC")
+            else if (transactionType == "PMC" || transactionType == "LND")
             {
                 if (debitCredit == 0)
                     oOperationType = OperationTypeFromIntBank.OtherExpenses;

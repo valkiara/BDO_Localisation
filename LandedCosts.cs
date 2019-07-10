@@ -312,17 +312,22 @@ namespace BDO_Localisation_AddOn
             }
 
             //-------- get rate
-
-            SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-            SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(DocCurr, DocDate);
-
             decimal DocRate = 0;
+            SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+            if (DocCurr == "GEL")
+            {
+                DocRate = 1;
+            }
+            else
+            {
+            SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(DocCurr, DocDate);
             while (!RateRecordset.EoF)
             {
                 DocRate = Convert.ToDecimal(RateRecordset.Fields.Item("CurrencyRate").Value);
                 RateRecordset.MoveNext();
             }
 
+            }
             //=========================================
 
             string itemCode = oMatrix.Columns.Item("1").Cells.Item(row).Specific.Value;

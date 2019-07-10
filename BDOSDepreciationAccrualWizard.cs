@@ -228,10 +228,10 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("Quantity", SAPbouiCOM.BoFieldsType.ft_Quantity);
                     oDataTable.Columns.Add("DeprAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
                     oDataTable.Columns.Add("DepcDoc", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
+                    oDataTable.Columns.Add("AlrDeprAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
 
                     oDataTable = oForm.DataSources.DataTables.Add("ItemsMTR");
                     oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50); //ინდექსი 
-                    oDataTable.Columns.Add("CheckBox", SAPbouiCOM.BoFieldsType.ft_Text, 1); // 
                     oDataTable.Columns.Add("DocType", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("DocEntry", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("Project", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
@@ -261,16 +261,6 @@ namespace BDO_Localisation_AddOn
                             oColumn.DataBind.Bind("ItemsMTR", columnName);
                             oColumn.AffectsFormMode = false;
                         }
-                        else if (columnName == "CheckBox")
-                        {
-                            oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
-                            oColumn.TitleObject.Caption = "";
-                            oColumn.Editable = true;
-                            oColumn.ValOff = "N";
-                            oColumn.ValOn = "Y";
-                            oColumn.DataBind.Bind("ItemsMTR", columnName);
-                            oColumn.AffectsFormMode = false;
-                        }                        
                         
                         else if (columnName == "Project")
                         {
@@ -511,6 +501,8 @@ namespace BDO_Localisation_AddOn
                 oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("DeprAmt", i));
                 oChild.SetProperty("U_InvEntry", DepreciationLines.GetValue("DocEntry", i));
                 oChild.SetProperty("U_InvType", DepreciationLines.GetValue("DocType", i));
+                oChild.SetProperty("U_AlrDeprAmt", DepreciationLines.GetValue("AlrDeprAmt", i));
+                
             }
                        
             /////////////////////
@@ -568,10 +560,7 @@ namespace BDO_Localisation_AddOn
             int NewRow = 0;
             for (int i = 0; i < oMatrix.RowCount; i++)
             {
-                bool CheckBox = oMatrix.GetCellSpecific("CheckBox", i + 1).Checked;
-                    //DepreciationLines.GetValue("CheckBox", i);
-                if (CheckBox)
-                {
+
                     double CurMnthAmt = DepreciationLines.GetValue("CurMnthAmt", i);
                     if (CurMnthAmt == 0)
                     {
@@ -583,6 +572,8 @@ namespace BDO_Localisation_AddOn
 
                         DepreciationLinesTmp.SetValue("Quantity", NewRow, DepreciationLines.GetValue("Quantity", i));
                         DepreciationLinesTmp.SetValue("DeprAmt", NewRow, DepreciationLines.GetValue("DeprAmt", i));
+                        DepreciationLinesTmp.SetValue("AlrDeprAmt", NewRow, DepreciationLines.GetValue("AlrDeprAmt", i));
+
                         if (isInvoice)
                         {
                             DepreciationLinesTmp.SetValue("DocEntry", NewRow, DepreciationLines.GetValue("DocEntry", i));
@@ -609,9 +600,7 @@ namespace BDO_Localisation_AddOn
                             CreateDocument(oForm, AccrMnth, DocDate);
 
                             DepreciationLinesTmp.Rows.Clear();
-
                         }
-
                     }
                     else
                     {
@@ -620,7 +609,7 @@ namespace BDO_Localisation_AddOn
 
                         Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreatedForBatchNumber") + " " + DistNumber + " (" + ItemCode + ")", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                     }
-                }
+
             }
 
             if(isInvoice==false && DepreciationLinesTmp.Rows.Count>0)
@@ -848,7 +837,6 @@ namespace BDO_Localisation_AddOn
                 
                 oDataTable.Rows.Add();
                 oDataTable.SetValue("LineNum", rowIndex, rowIndex + 1);
-                oDataTable.SetValue("CheckBox", rowIndex, "Y"); // 
                 oDataTable.SetValue("Project", rowIndex, oRecordSet.Fields.Item("Project").Value);
                 oDataTable.SetValue("ItemGrp", rowIndex, oRecordSet.Fields.Item("ItemGrp").Value);
                 oDataTable.SetValue("ItemCode", rowIndex, oRecordSet.Fields.Item("ItemCode").Value);

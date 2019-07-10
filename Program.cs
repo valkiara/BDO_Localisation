@@ -139,7 +139,7 @@ namespace BDO_Localisation_AddOn
                 BDO_BPCatalog.updateFields();
 
                 /////////////////
-                string version = "1.1.3.3";
+                string version = "1.1.5.1";
 
                 BDOSTablesLog.CreateTable(out errorText);
 
@@ -316,6 +316,17 @@ namespace BDO_Localisation_AddOn
                 {
                     CommonFunctions.fillDocRate(oDocForm, "OVPM", "OVPM");
                 }
+
+                if (oDocForm.TypeEx == "65308")
+                {
+                    CommonFunctions.fillDocRate(oDocForm, "ODPI", "ODPI");
+                }
+                
+                if (oDocForm.TypeEx == "65309")
+                {
+                    CommonFunctions.fillDocRate(oDocForm, "ODPO", "ODPO");
+                }
+
             }
 
             //preview addon
@@ -574,7 +585,7 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->Depreciation Accrual<-----------------------------
+//----------------------------->Depreciation Accrual<-----------------------------
             try
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSDEPACR_D")
@@ -757,6 +768,15 @@ namespace BDO_Localisation_AddOn
                         cancellationTrans = true;
                         canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORIN").GetValue("DocEntry", 0));
                     }
+
+                   
+                    //----------------------------->Depreciation<-----------------------------
+                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
+                    {
+                        cancellationTrans = true;
+                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSDEPACR").GetValue("DocEntry", 0));
+                    }
+
                     //----------------------------->Profit Tax Accrual<-----------------------------
                     else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                     {
