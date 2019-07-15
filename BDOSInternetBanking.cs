@@ -1959,7 +1959,7 @@ namespace BDO_Localisation_AddOn
             projectCod = null;
             blnkAgr = null;
 
-            if (transactionType == "COM" || transactionType == "FEE" || transactionType == "LFG")
+            if (transactionType == "COM" || transactionType == "FEE")
                 oOperationType = OperationTypeFromIntBank.BankCharge;
             else if (CommonFunctions.isAccountInHouseBankAccount(partnerAccountNumber + partnerCurrency) == true && transactionType != "CCO")
                 oOperationType = OperationTypeFromIntBank.TransferToOwnAccount;
@@ -1967,6 +1967,15 @@ namespace BDO_Localisation_AddOn
                 oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
             else if (transactionType == "CCO")
                 oOperationType = OperationTypeFromIntBank.CurrencyExchange;
+            else if (transactionType == "LFG")
+            {
+                if (debitCredit == 0)
+                    oOperationType = OperationTypeFromIntBank.OtherExpenses;
+                else if (debitCredit == 1)
+                    oOperationType = OperationTypeFromIntBank.OtherIncomes;
+                else
+                    oOperationType = OperationTypeFromIntBank.None;
+            }
             else if (transactionType == "PMC" || transactionType == "LND")
             {
                 if (debitCredit == 0)
