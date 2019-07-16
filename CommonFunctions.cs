@@ -359,6 +359,33 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static SAPbobsCOM.Recordset getEmployeeInfo(string govID)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                if (string.IsNullOrEmpty(govID) == false)
+                {
+                    string query = @"SELECT ""OHEM"".""empID""
+                         FROM ""OHEM""
+                         WHERE ""OHEM"".""govID"" = '" + govID + @"'";
+
+                    oRecordSet.DoQuery(query);
+                    if (!oRecordSet.EoF)
+                    {
+                        return oRecordSet;
+                    }
+                }
+                Marshal.FinalReleaseComObject(oRecordSet);
+                oRecordSet = null;
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static Dictionary<string, string> getCurrencyListForValidValues()
         {
             string query = @"SELECT 
