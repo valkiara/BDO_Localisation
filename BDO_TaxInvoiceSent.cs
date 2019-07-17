@@ -1762,9 +1762,7 @@ namespace BDO_Localisation_AddOn
             objectType = "UDO_F_BDO_ARDPV_D"; //A/R Down Payment Invoice
             string uniqueID_lf_ARDownPaymentVAT_CFL = "ARDownPaymentVAT_CFL";
             FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_ARDownPaymentVAT_CFL);
-
-            
-
+        
             oColumn = oColumns.Add("LineID", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = "  ";
             oColumn.Width = 20 - 1;
@@ -1979,8 +1977,6 @@ namespace BDO_Localisation_AddOn
             left_e = left_s + 121;
 
             top = top + height + 1;
-
-            formItems = new Dictionary<string, object>();
 
             listValidValuesDict = new Dictionary<string, string>();
             listValidValuesDict.Add("updateStatus", BDOSResources.getTranslate("RSUpdateStatus"));
@@ -2214,16 +2210,20 @@ namespace BDO_Localisation_AddOn
             oItem = oForm.Items.Item("CommentE");
             oItem.Top = top;
 
+            int topTemp1 = oForm.Items.Item("CommentE").Top + 2 * height + 1;
+            int topTemp2 = oForm.ClientHeight - 25;
             //ღილაკები
+            top = topTemp2 > topTemp1 ? topTemp2 : topTemp1;
+
             oItem = oForm.Items.Item("1");
-            oItem.Top = oForm.ClientHeight - 25;
+            oItem.Top = top;
 
             oItem = oForm.Items.Item("2");
-            oItem.Top = oForm.ClientHeight - 25;
+            oItem.Top = top;
 
             oItem = oForm.Items.Item("operationB");
             oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
-            oItem.Top = oForm.ClientHeight - 25;
+            oItem.Top = top;
         }
 
         public static void setSizeForm( SAPbouiCOM.Form oForm, out string errorText)
@@ -2231,11 +2231,14 @@ namespace BDO_Localisation_AddOn
             errorText = null;
             try
             {
-                int formHeight = Program.uiApp.Desktop.Width;
-                int formWidth = Program.uiApp.Desktop.Width;
+                oForm.ClientHeight = Program.uiApp.Desktop.Width / 3;
+                //oForm.ClientWidth = Program.uiApp.Desktop.Width / 3;
 
-                oForm.ClientHeight = formHeight;
-                oForm.Height = formWidth;
+                oForm.Height = 630; //Program.uiApp.Desktop.Width / 3 * 2;
+                //oForm.ClientWidth = Program.uiApp.Desktop.Width / 2;
+
+                oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
+                oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 2;
             }
             catch (Exception ex)
             {
@@ -2750,8 +2753,6 @@ namespace BDO_Localisation_AddOn
             {
                 if (pVal.ItemUID == "elctrnicCH")
                 {
-                    setVisibleFormItems(oForm, out errorText);
-
                     string elctrnic = oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("U_elctrnic", 0).Trim();
                     if (elctrnic == "N")
                     {
@@ -2761,6 +2762,7 @@ namespace BDO_Localisation_AddOn
                     {
                         oForm.DataSources.DBDataSources.Item("@BDO_TAXS").SetValue("U_status", 0, "empty");
                     }
+                    setVisibleFormItems(oForm, out errorText);
                 }
                 else if (pVal.ItemUID == "vatRDateE")
                 {
