@@ -7281,12 +7281,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void fillBaseDocs( SAPbobsCOM.GeneralData oGeneralData, SAPbobsCOM.GeneralDataCollection oChildren, string overhead_no, string overhead_dt_str)
+        private static void fillBaseDocs(SAPbobsCOM.GeneralData oGeneralData, SAPbobsCOM.GeneralDataCollection oChildren, string overhead_no, string overhead_dt_str)
         {
             string errorText = null;
             DataTable baseDocs;
 
-            baseDocs = getListBaseDoc( oGeneralData, overhead_no, overhead_dt_str, null, 0, out errorText);
+            baseDocs = getListBaseDoc(oGeneralData, overhead_no, overhead_dt_str, null, 0, out errorText);
 
             if (string.IsNullOrEmpty(overhead_no) == false) //ვეძებთ ზედნადების ნომრით
             {
@@ -7319,7 +7319,7 @@ namespace BDO_Localisation_AddOn
             }
             else //ვეძებთ თანხის მიხედვით
             {
-                if (baseDocs.Rows.Count > 0)
+                if (baseDocs.Rows.Count == 1)
                 {
                     DataRow dataRow = baseDocs.Rows[0];
 
