@@ -219,6 +219,15 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields( fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSUsLife");
+            fieldskeysMap.Add("TableName", "OITM");
+            fieldskeysMap.Add("Description", "Useful life");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+
             GC.Collect();
 
         }
@@ -375,6 +384,66 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
+
+            //useful life
+
+            pane = 6;
+            oItem = oForm.Items.Item("234000480");
+            int left = oItem.Left;
+            int width = oItem.Width;
+            height = oItem.Height;
+            top = oItem.Top + height + 5;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "UsLifeS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("UsLife"));
+            formItems.Add("LinkTo", "UsLife");
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+            formItems.Add("Visible", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            oItem = oForm.Items.Item("234000481");
+            left = oItem.Left;
+            width = oItem.Width;
+            height = oItem.Height;
+            top = oItem.Top + height + 5;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "UsLife"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OITM");
+            formItems.Add("Alias", "U_BDOSUsLife");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+            formItems.Add("Visible", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
             GC.Collect();
         }
 
@@ -395,7 +464,13 @@ namespace BDO_Localisation_AddOn
                 if (pVal.ItemUID == "BDOSCat" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.BeforeAction == true)
                 {
                     oForm.PaneLevel = 20;
-                    setVisibleFormItems( oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
+                }
+
+                if(pVal.ItemUID == "39" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.BeforeAction == false)
+                {
+                    setVisibleFormItems(oForm, out errorText);
+                    FillUsLife(oForm, out errorText);
                 }
 
                 if (pVal.ItemUID != "" && pVal.ItemUID.Length > 7 && pVal.ItemUID.Substring(0, 7) == "BDOSCtg" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_KEY_DOWN && pVal.BeforeAction == false)
@@ -426,6 +501,26 @@ namespace BDO_Localisation_AddOn
                     }
                     oForm.Freeze(false);
                 }
+            }
+        }
+
+        public static void uiApp_MenuEvent(ref SAPbouiCOM.MenuEvent pVal, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+
+            try
+            {   
+                //find
+                if (pVal.BeforeAction && pVal.MenuUID == "1281")
+                {
+                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+                    oForm.Items.Item("UsLife").Visible = true;
+                    oForm.Items.Item("UsLifeS").Visible = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
         }
 
@@ -632,18 +727,79 @@ namespace BDO_Localisation_AddOn
                 {
                     setVisibleFormItems( oForm, out errorText);
                 }
+
+                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD & BusinessObjectInfo.BeforeAction == true)
+                {
+                    oForm.Freeze(true);
+                    FillUsLife(oForm, out errorText);
+                    oForm.Freeze(false);
+                }
+
             }
         }
 
+        public static void FillUsLife(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+
+            SAPbouiCOM.ComboBox oItmsGrpCod = oForm.Items.Item("39").Specific;
+            string itmsGrpCod = oItmsGrpCod.Value;
+
+            SAPbouiCOM.EditText oUsLife = oForm.Items.Item("UsLife").Specific;
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            string query = @"SELECT ""OITB"".""U_BDOSUsLife"" as ""UsLife"" FROM ""OITB"" WHERE ""ItmsGrpCod"" = '" + itmsGrpCod + @"' AND ""U_BDOSUsLife"" IS NOT NULL";
+
+            oRecordSet.DoQuery(query);
+
+            try
+            {
+                if (!oRecordSet.EoF)
+                {
+                    oUsLife.Value = oRecordSet.Fields.Item("UsLife").Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorText = ex.Message;
+            }
+            finally
+            {
+                GC.Collect();
+            }
+        }   
         public static void setVisibleFormItems( SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
+
+            bool visibleProperties = false;
+
+            SAPbouiCOM.ComboBox oItmsGrpCod = oForm.Items.Item("39").Specific;
+            string itmsGrpCod = oItmsGrpCod.Value;
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            string query = @"SELECT ""OITB"".""U_BDOSUsLife"" as ""UsLife"" FROM ""OITB"" WHERE ""ItmsGrpCod"" = '" + itmsGrpCod + @"' AND ""U_BDOSUsLife"" IS NOT NULL";
+            oRecordSet.DoQuery(query);
+
+            if (oRecordSet.EoF)
+            {
+                visibleProperties = false;
+            }
+            else
+            {
+                visibleProperties = true;
+            }
+
             try
             {
                 for (int i = 1; i <= 10; i++)
                 {
                     oForm.Items.Item("BDOSCtgN" + i).Enabled = false;
                 }
+
+                oForm.Items.Item("UsLife").Visible = visibleProperties;
+                oForm.Items.Item("UsLifeS").Visible = visibleProperties;
+
             }
             catch (Exception ex)
             {

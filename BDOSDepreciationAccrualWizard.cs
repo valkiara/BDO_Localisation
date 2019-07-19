@@ -673,7 +673,7 @@ namespace BDO_Localisation_AddOn
                              ""OITM"".""ItmsGrpCod"" as ""ItemGrp"", 	                         
                              ""OBVL"".""ItemCode"",
 	 	                     ""OITM"".""ItemName"",
-                             ""OITB"".""U_BDOSUsLife"" as ""UseLife"",
+                             ""OITM"".""U_BDOSUsLife"" as ""UseLife"",
 	                         ""OBVL"".""DistNumber"",
                              ""OBTN"".""InDate"",
 	                         ""OBTN"".""CostTotal"" / ""OBTN"".""Quantity"" as ""APCost"",
@@ -711,7 +711,7 @@ namespace BDO_Localisation_AddOn
                             ""OITM"".""ItmsGrpCod"",
 	                         ""OBVL"".""ItemCode"",
 	                         ""OITM"".""ItemName"",
-                            ""OITB"".""U_BDOSUsLife"",
+                            ""OITM"".""U_BDOSUsLife"",
 	                         ""OBVL"".""DistNumber"",
                             ""OBTN"".""InDate"",
 	                         ""OBTN"".""CostTotal"" / ""OBTN"".""Quantity"") as ""FinTable""
@@ -808,7 +808,7 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             oRecordSet.DoQuery(query);
             int rowIndex = 0;
-
+            int i = 0;
             while (!oRecordSet.EoF)
             {
                 DateTime InDateStart = oRecordSet.Fields.Item("InDate").Value;
@@ -816,7 +816,7 @@ namespace BDO_Localisation_AddOn
                 
                 decimal Quantity = Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value);
                 Quantity = Quantity * (isInvoice ? -1 : 1);
-
+                i++;
                 if (DeprMonth > InDateEnd || DeprMonth < InDateStart || Quantity==0)
                 {
                     oRecordSet.MoveNext();
