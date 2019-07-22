@@ -3451,14 +3451,8 @@ namespace BDO_Localisation_AddOn
             errorText = null;
             try
             {
-                oForm.ClientHeight = Program.uiApp.Desktop.Width / 3;
-                //oForm.ClientWidth = Program.uiApp.Desktop.Width / 3;
-
-                oForm.Height = Program.uiApp.Desktop.Width / 2;
-                //oForm.ClientWidth = Program.uiApp.Desktop.Width / 2;
-
-                oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
-                oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 2;
+                oForm.ClientHeight = oForm.Height * 5 + 20; //1400;
+                oForm.ClientWidth = oForm.Width * 2; //1000;
             }
             catch (Exception ex)
             {
