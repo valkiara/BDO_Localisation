@@ -2836,7 +2836,7 @@
   <data name="TransferDocumentAlreadyExistsForAsset" xml:space="preserve">
     <value>Transfer Document Already Exists For Asset</value>
   </data>
-<data name="Delivery" xml:space="preserve">
+  <data name="Delivery" xml:space="preserve">
     <value>Delivery</value>
   </data>
   <data name="AccumulatedDepreciationAccount" xml:space="preserve">
@@ -2851,7 +2851,7 @@
   <data name="UsLife" xml:space="preserve">
     <value>Useful Life</value>
   </data>
-<data name="DepreciationAccrual" xml:space="preserve">
+  <data name="DepreciationAccrual" xml:space="preserve">
     <value>Depreciation Accrual Document</value>
   </data>
   <data name="AccrualMonth" xml:space="preserve">
@@ -2862,7 +2862,7 @@
   </data>
   <data name="DepreciationAmount" xml:space="preserve">
     <value>Depreciation Amount</value>
-    </data>
+  </data>
   <data name="Back" xml:space="preserve">
     <value>Back</value>
   </data>
@@ -2980,7 +2980,7 @@
   <data name="UseBlAgrRt" xml:space="preserve">
     <value>Use Rate Ranges</value>
   </data>
-<data name="BatchNumberPrefix" xml:space="preserve">
+  <data name="BatchNumberPrefix" xml:space="preserve">
     <value>Batch Number Prefix</value>
   </data>
   <data name="FindNext" xml:space="preserve">
@@ -2989,10 +2989,10 @@
   <data name="TotalPaymentNet" xml:space="preserve">
     <value>Total Payment net</value>
   </data>
-<data name="PrefixError" xml:space="preserve">
+  <data name="PrefixError" xml:space="preserve">
     <value>Cannot create batch number. Please fill 2 symbol prefix for batch numbers</value>
   </data>
-<data name="ACNumber" xml:space="preserve">
+  <data name="ACNumber" xml:space="preserve">
     <value>A/C Number</value>
   </data>
   <data name="DuplicateAccountInTheLine" xml:space="preserve">
@@ -3010,13 +3010,13 @@
   <data name="GoodsRcptPO" xml:space="preserve">
     <value>Goods Receipt PO</value>
   </data>
-<data name="EmptyBlaAgrError" xml:space="preserve">
+  <data name="EmptyBlaAgrError" xml:space="preserve">
     <value>Please fill Blanket Agreement</value>
   </data>
   <data name="ThereIsDepreciationAmountsInCurrentMonthForItem" xml:space="preserve">
     <value>There is depreciation amounts in current month for item</value>
   </data>
-<data name="ConsumTypesMasterData" xml:space="preserve">
+  <data name="ConsumTypesMasterData" xml:space="preserve">
     <value>Consumption Types Master Data</value>
   </data>
   <data name="FuelType" xml:space="preserve">
@@ -3033,5 +3033,8 @@
   </data>
   <data name="Item Code" xml:space="preserve">
     <value />
+  </data>
+  <data name="LinkToAPDocuments" xml:space="preserve">
+    <value>Link To A/P Documents</value>
   </data>
 </root>

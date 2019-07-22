@@ -10,15 +10,15 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDOSTaxJournal
     {
-        //----------------------------->Tax Invoice Sent<-----------------------------       
-        public static void rsOperationTaxInvoiceSent( SAPbouiCOM.Form oForm,  int oOperation, out string errorText)
+        #region Tax Invoice Sent      
+        public static void rsOperationTaxInvoiceSent(SAPbouiCOM.Form oForm, int oOperation, out string errorText)
         {
             errorText = null;
             bool opSuccess = true;
             string errorTextGoods = null;
             string errorTextWb = null;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
@@ -30,7 +30,7 @@ namespace BDO_Localisation_AddOn
 
             TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-            bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+            bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
             if (chek_service_user == false)
             {
                 errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
@@ -88,7 +88,7 @@ namespace BDO_Localisation_AddOn
                             errorText = null;
                             continue;
                         }
-                        else if(checkedLine)
+                        else if (checkedLine)
                         {
                             errorText = BDOSResources.getTranslate("TaxInvoiceAlreadyCreated") + "! " + BDOSResources.getTranslate("TableRow") + " : " + row;
                             Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
@@ -120,7 +120,7 @@ namespace BDO_Localisation_AddOn
                         int newDocEntry = 0;
                         List<int> docEntryList = new List<int>();
 
-                        oGeneralData = BDO_TaxInvoiceSent.createDocumentForUnion( cardCode, docDate, out errorText);
+                        oGeneralData = BDO_TaxInvoiceSent.createDocumentForUnion(cardCode, docDate, out errorText);
                         //int localRow = 0;
 
                         for (int row = 0; row < rowCount; row++)
@@ -192,7 +192,7 @@ namespace BDO_Localisation_AddOn
                                 docDate = DateTime.ParseExact(oDataTable.Rows[row]["OpDate"].ToString(), "yyyyMMdd", null);
                                 docDate = new DateTime(docDate.Year, docDate.Month, 1);
 
-                                oGeneralData = BDO_TaxInvoiceSent.createDocumentForUnion( cardCode, docDate, out errorText);
+                                oGeneralData = BDO_TaxInvoiceSent.createDocumentForUnion(cardCode, docDate, out errorText);
                             }
 
                             if (string.IsNullOrEmpty(errorText) && oGeneralData != null)
@@ -200,11 +200,11 @@ namespace BDO_Localisation_AddOn
                                 errorText = null;
                                 if (docType == "ARInvoice")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument( "13", Convert.ToInt32(invEntry), null, false, answer, oGeneralData, true, docEntryARCreditNoteList, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), null, false, answer, oGeneralData, true, docEntryARCreditNoteList, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARCreditNote")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument( "14", Convert.ToInt32(invEntry), null, false, 1, oGeneralData, true, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("14", Convert.ToInt32(invEntry), null, false, 1, oGeneralData, true, null, out newDocEntry, out errorText);
                                 }
                                 if (string.IsNullOrEmpty(errorText) == false)
                                 {
@@ -268,7 +268,7 @@ namespace BDO_Localisation_AddOn
                         //rs.ge - ზე შექმნა --->
                         for (int i = 0; i < docEntryList.Count; i++)
                         {
-                            BDO_TaxInvoiceSent.operationRS( oTaxInvoice, "save", docEntryList[i], -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                            BDO_TaxInvoiceSent.operationRS(oTaxInvoice, "save", docEntryList[i], -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
 
                             if (errorText != null || errorTextWb != null || errorTextGoods != null)
                             {
@@ -301,7 +301,7 @@ namespace BDO_Localisation_AddOn
                         //სტრიქონის განახლება --->
                         for (int i = 0; i < docEntryList.Count; i++)
                         {
-                            updateMatrixRowTaxInvoiceSent( oForm, oMatrix, docEntryList[i]);
+                            updateMatrixRowTaxInvoiceSent(oForm, oMatrix, docEntryList[i]);
                         }
                         //სტრიქონის განახლება <---
                     }
@@ -344,21 +344,21 @@ namespace BDO_Localisation_AddOn
                                 }
                                 else if (docType == "ARInvoice")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument( "13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARCreditNote")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument( "14", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("14", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARDownPaymentVAT")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument( "UDO_F_BDO_ARDPV_D", Convert.ToInt32(invEntry), corrType, false, 0, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("UDO_F_BDO_ARDPV_D", Convert.ToInt32(invEntry), corrType, false, 0, null, false, null, out newDocEntry, out errorText);
                                 }
                                 docEntry = newDocEntry.ToString();
                             }
                             if (errorText == null)
                             {
-                                BDO_TaxInvoiceSent.operationRS( oTaxInvoice, "save", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                                BDO_TaxInvoiceSent.operationRS(oTaxInvoice, "save", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                             }
                         }
                         else if (oOperation == 1) //გადაგზავნა
@@ -373,40 +373,40 @@ namespace BDO_Localisation_AddOn
                                 }
                                 else if (docType == "ARInvoice")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument( "13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARCreditNote")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument( "14", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("14", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARDownPaymentVAT")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument( "UDO_F_BDO_ARDPV_D", Convert.ToInt32(invEntry), corrType, false, 0, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("UDO_F_BDO_ARDPV_D", Convert.ToInt32(invEntry), corrType, false, 0, null, false, null, out newDocEntry, out errorText);
                                 }
                                 docEntry = newDocEntry.ToString();
                             }
 
                             if (errorText == null)
                             {
-                                BDO_TaxInvoiceSent.operationRS( oTaxInvoice, "send", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                                BDO_TaxInvoiceSent.operationRS(oTaxInvoice, "send", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                             }
                         }
                         else if (oOperation == 2) //წაშლა
                         {
                             opText = BDOSResources.getTranslate("RSDelete");
-                            BDO_TaxInvoiceSent.operationRS( oTaxInvoice, "remove", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                            BDO_TaxInvoiceSent.operationRS(oTaxInvoice, "remove", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                         }
                         else if (oOperation == 3) //გაუქმება
                         {
                             opText = BDOSResources.getTranslate("RSCancel");
-                            BDO_TaxInvoiceSent.operationRS( oTaxInvoice, "cancel", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                            BDO_TaxInvoiceSent.operationRS(oTaxInvoice, "cancel", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                         }
                         else if (oOperation == 4) //სტატუსების განხლება
                         {
                             opText = BDOSResources.getTranslate("RSUpdateStatus");
                             if (docEntry != "")
                             {
-                                BDO_TaxInvoiceSent.operationRS( oTaxInvoice, "updateStatus", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                                BDO_TaxInvoiceSent.operationRS(oTaxInvoice, "updateStatus", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                             }
                         }
 
@@ -438,7 +438,7 @@ namespace BDO_Localisation_AddOn
                         }
                         if (docEntry != "" & docEntry != "0")
                         {
-                            updateMatrixRowTaxInvoiceSent( oForm, oMatrix, Convert.ToInt32(docEntry));
+                            updateMatrixRowTaxInvoiceSent(oForm, oMatrix, Convert.ToInt32(docEntry));
                             //fillFromBaseTaxInvoiceSent(  oForm, false, out errorText);
                         }
                     }
@@ -464,7 +464,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void updateMatrixRowTaxInvoiceSent( SAPbouiCOM.Form oForm, SAPbouiCOM.Matrix oMatrix, int docEntry)
+        private static void updateMatrixRowTaxInvoiceSent(SAPbouiCOM.Form oForm, SAPbouiCOM.Matrix oMatrix, int docEntry)
         {
             string d;
 
@@ -508,7 +508,7 @@ namespace BDO_Localisation_AddOn
                 int count = oChildren.Count;
                 string baseDocType;
                 int baseDoc;
-                int row;               
+                int row;
 
                 if (count > 0)
                 {
@@ -549,7 +549,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void addDeclTaxInvoiceSent(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void addDeclTaxInvoiceSent(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             string errorTextWb = null;
@@ -560,7 +560,7 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item("DeclNum2").Specific.Value = "";
             int seqNum = 0;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 oForm.Update();
@@ -574,7 +574,7 @@ namespace BDO_Localisation_AddOn
 
             TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-            bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+            bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
             if (chek_service_user == false)
             {
                 oForm.Update();
@@ -624,7 +624,7 @@ namespace BDO_Localisation_AddOn
                     string declNum = oMatrix.Columns.Item("DeclNum").Cells.Item(row).Specific.Value;
                     //oMatrix.Columns.Item("TxChkBx").Cells.Item(row).Specific.Checked = false;
 
-                    BDO_TaxInvoiceSent.operationRS( oTaxInvoice, "addToTheDeclaration", Convert.ToInt32(docEntry), seqNum, DeclDate, out errorText, out errorTextWb, out errorTextGoods);
+                    BDO_TaxInvoiceSent.operationRS(oTaxInvoice, "addToTheDeclaration", Convert.ToInt32(docEntry), seqNum, DeclDate, out errorText, out errorTextWb, out errorTextGoods);
 
                     if (errorText != null || errorTextWb != null || errorTextGoods != null)
                     {
@@ -653,7 +653,7 @@ namespace BDO_Localisation_AddOn
                         Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSAddDeclaration") + " " + BDOSResources.getTranslate("DoneSuccessfully") + " " + BDOSResources.getTranslate("TableRow") + " : " + row.ToString(), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                         if (docEntry != 0)
                         {
-                            updateMatrixRowTaxInvoiceSent( oForm, oMatrix, docEntry);
+                            updateMatrixRowTaxInvoiceSent(oForm, oMatrix, docEntry);
                             //fillFromBaseTaxInvoiceSent(  oForm, false, out errorText);
                         }
                     }
@@ -667,7 +667,7 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(false);
         }
 
-        public static void fillFromBaseTaxInvoiceSent(  SAPbouiCOM.Form oForm, bool download, out string errorText)
+        public static void fillFromBaseTaxInvoiceSent(SAPbouiCOM.Form oForm, bool download, out string errorText)
         {
             errorText = null;
 
@@ -784,7 +784,7 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            if (needTax=="1")
+            if (needTax == "1")
             {
                 queryARInvoice = queryARInvoice + @" AND ""OCRD"".""U_BDO_NotInv"" ='N' ";
             }
@@ -1069,7 +1069,7 @@ namespace BDO_Localisation_AddOn
 
                 oDataTable.Rows.Clear();
 
-                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
                 if (errorText != null)
                 {
                     oForm.Update();
@@ -1082,7 +1082,7 @@ namespace BDO_Localisation_AddOn
 
                 TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-                bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+                bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
                 if (chek_service_user == false)
                 {
                     oForm.Update();
@@ -1111,7 +1111,7 @@ namespace BDO_Localisation_AddOn
 
                     if (download == false & String.IsNullOrEmpty(number) == false)
                     {
-                        BDO_TaxInvoiceSent.operationRS( oTaxInvoice, "checkSync", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                        BDO_TaxInvoiceSent.operationRS(oTaxInvoice, "checkSync", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
 
                         statusRS = BDO_TaxInvoiceSent.getStatusValueByStatusNumber(statusRS, false, false);
                     }
@@ -1127,7 +1127,7 @@ namespace BDO_Localisation_AddOn
                         DateTime DocDate = oRecordSet.Fields.Item("DocDate").Value;
                         string queryCardCode = oRecordSet.Fields.Item("CardCode").Value;
 
-                        DataTable сreditNotes = BDO_TaxInvoiceSent.getCorrDocs( Convert.ToInt32(CreditMemoEntry), DocDate, DocDate, Convert.ToInt32(BaseDoc), queryCardCode, out errorText);
+                        DataTable сreditNotes = BDO_TaxInvoiceSent.getCorrDocs(Convert.ToInt32(CreditMemoEntry), DocDate, DocDate, Convert.ToInt32(BaseDoc), queryCardCode, out errorText);
                         if (сreditNotes != null)
                         {
                             int rowCount = сreditNotes.Rows.Count;
@@ -1135,7 +1135,7 @@ namespace BDO_Localisation_AddOn
 
                             if (rowCount == 1) // ეს ნიშნავს რომ რეალიზაციაზე მარტო ერთი сreditNote არის მიბმული. ამიტომ უნდა დავაკორექტიროთ რეალიზაციის ა/ფ.
                             {
-                                taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo( Convert.ToInt32(BaseDoc), "ARInvoice", queryCardCode, out errorText);
+                                taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo(Convert.ToInt32(BaseDoc), "ARInvoice", queryCardCode, out errorText);
                                 if (taxDocInfo != null)
                                 {
                                     corrDocEntry = taxDocInfo["docEntry"].ToString(); //კორექტირების ა/ფ-ის Entry
@@ -1167,7 +1167,7 @@ namespace BDO_Localisation_AddOn
                         DataTable confirmedInvoices;
                         DateTime docDate = oRecordSet.Fields.Item("DocDate").Value;
 
-                        if (BDOSARDownPaymentVATAccrual.checkDocumentForTaxInvoice( invoiceEntry, docDate, docDate, out primary, out confirmedInvoices, out errorText) == true)
+                        if (BDOSARDownPaymentVATAccrual.checkDocumentForTaxInvoice(invoiceEntry, docDate, docDate, out primary, out confirmedInvoices, out errorText) == true)
                         {
                             if (primary == false)
                             {
@@ -1231,17 +1231,16 @@ namespace BDO_Localisation_AddOn
                 Marshal.ReleaseComObject(oRecordSet);
             }
         }
-        //----------------------------->Tax Invoice Sent<-----------------------------
+        #endregion
 
-
-        //----------------------------->Tax Invoice Received<-----------------------------
-        public static void rsOperationTaxInvoiceReceived( SAPbouiCOM.Form oForm,  int oOperation, out string errorText)
+        #region Tax Invoice Received
+        public static void rsOperationTaxInvoiceReceived(SAPbouiCOM.Form oForm, int oOperation, out string errorText)
         {
             errorText = null;
             oForm.Freeze(true);
             bool opSuccess = true;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 oForm.Update();
@@ -1255,7 +1254,7 @@ namespace BDO_Localisation_AddOn
 
             TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-            bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+            bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
             if (chek_service_user == false)
             {
                 oForm.Update();
@@ -1287,7 +1286,7 @@ namespace BDO_Localisation_AddOn
 
                         if (statusDoc == "received" || statusDoc == "correctionReceived" || statusDoc == "cancellationProcess")
                         {
-                            BDO_TaxInvoiceReceived.operationRS( oTaxInvoice, "confirmation", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText);
+                            BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "confirmation", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText);
                         }
                         else
                         {
@@ -1298,14 +1297,14 @@ namespace BDO_Localisation_AddOn
                     else if (oOperation == 1) //სტატუსების განახლება
                     {
                         opText = BDOSResources.getTranslate("RSUpdateStatus");
-                        BDO_TaxInvoiceReceived.operationRS( oTaxInvoice, "updateStatus", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText);
+                        BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "updateStatus", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText);
                     }
                     else if (oOperation == 2) //უარყოფა
                     {
                         opText = BDOSResources.getTranslate("RSDeny");
                         if (statusDoc == "received" || statusDoc == "correctionReceived")
                         {
-                            BDO_TaxInvoiceReceived.operationRS( oTaxInvoice, "deny", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText);
+                            BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "deny", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText);
                         }
                         else
                         {
@@ -1323,7 +1322,7 @@ namespace BDO_Localisation_AddOn
                     else
                     {
                         Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Operation") + "  " + opText + BDOSResources.getTranslate("DoneSuccessfully") + " " + BDOSResources.getTranslate("TableRow") + " : " + row.ToString() + ", " + BDOSResources.getTranslate("TaxInvoiceID") + " : " + TxId, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
-                        updateMatrixRowTaxInvoiceReceived( oMatrix, row, docEntry);
+                        updateMatrixRowTaxInvoiceReceived(oMatrix, row, docEntry);
                     }
                 }
             }
@@ -1335,7 +1334,7 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(false);
         }
 
-        private static void updateMatrixRowTaxInvoiceReceived( SAPbouiCOM.Matrix oMatrix, int row, int docEntry)
+        private static void updateMatrixRowTaxInvoiceReceived(SAPbouiCOM.Matrix oMatrix, int row, int docEntry)
         {
             NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
 
@@ -1391,13 +1390,13 @@ namespace BDO_Localisation_AddOn
             oMatrix.CommonSetting.SetCellBackColor(row, 3, FormsB1.getLongIntRGB(231, 231, 231));
         }
 
-        public static void updateTaxInvoiceReceived(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void updateTaxInvoiceReceived(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             oForm.Freeze(true);
             bool opSuccess = true;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 oForm.Update();
@@ -1411,7 +1410,7 @@ namespace BDO_Localisation_AddOn
 
             TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-            bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+            bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
             if (chek_service_user == false)
             {
                 oForm.Update();
@@ -1447,16 +1446,16 @@ namespace BDO_Localisation_AddOn
                     }
 
                     int docEntry = Convert.ToInt32(oMatrix.Columns.Item("Document").Cells.Item(row).Specific.Value);
-                    BDO_TaxInvoiceReceived.operationRS( oTaxInvoice, "update", docEntry, -1, new DateTime(), null, out statusRS, out errorText);
+                    BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "update", docEntry, -1, new DateTime(), null, out statusRS, out errorText);
                     if (errorText != null)
                     {
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("ErrorWhileDocumentEdit") + " " + BDOSResources.getTranslate("TableRow") + " : " + row.ToString() + "! მიზეზით : " + errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("ErrorWhileDocumentEdit") + " " + BDOSResources.getTranslate("TableRow") + " : " + row.ToString() + "! " + BDOSResources.getTranslate("ReasonIs") + ": " + errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                         opSuccess = false;
                         continue;
                     }
                     else
                     {
-                        updateMatrixRowTaxInvoiceReceived( oMatrix, row, docEntry);
+                        updateMatrixRowTaxInvoiceReceived(oMatrix, row, docEntry);
                     }
                 }
             }
@@ -1473,14 +1472,14 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(false);
         }
 
-        public static void downloadTaxInvoiceReceived(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void downloadTaxInvoiceReceived(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
             int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantForDocuementsExecuteUpdate"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
             bool isUpdate = answer == 1 ? true : false;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
@@ -1492,7 +1491,7 @@ namespace BDO_Localisation_AddOn
 
             TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-            bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+            bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
             if (chek_service_user == false)
             {
                 errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
@@ -1532,7 +1531,7 @@ namespace BDO_Localisation_AddOn
             for (int row = 0; row < rowCount; row++)
             {
                 DataRow TaxDataRow = TaxDataTable.Rows[row];
-                BDO_TaxInvoiceReceived.createDocumentTaxInvoiceType( oTaxInvoice, isUpdate, TaxDataRow, out errorText);
+                BDO_TaxInvoiceReceived.createDocumentTaxInvoiceType(oTaxInvoice, isUpdate, TaxDataRow, out errorText);
 
                 if (errorText != null)
                 {
@@ -1551,7 +1550,7 @@ namespace BDO_Localisation_AddOn
             Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("RSTaxInvoicesDownloaded"), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
         }
 
-        public static void addDeclTaxInvoiceReceived(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void addDeclTaxInvoiceReceived(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             oForm.Freeze(true);
@@ -1560,7 +1559,7 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item("DeclNum").Specific.Value = "";
             int seqNum = 0;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 oForm.Update();
@@ -1574,7 +1573,7 @@ namespace BDO_Localisation_AddOn
 
             TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-            bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+            bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
             if (chek_service_user == false)
             {
                 oForm.Update();
@@ -1626,7 +1625,7 @@ namespace BDO_Localisation_AddOn
                     string declNum = oMatrix.Columns.Item("DeclNum").Cells.Item(row).Specific.Value;
                     //oMatrix.Columns.Item("TxChkBx").Cells.Item(row).Specific.Checked = false;
 
-                    BDO_TaxInvoiceReceived.operationRS( oTaxInvoice, "addToTheDeclaration", Convert.ToInt32(docEntry), seqNum, DeclDate, null, out statusRS, out errorText);
+                    BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "addToTheDeclaration", Convert.ToInt32(docEntry), seqNum, DeclDate, null, out statusRS, out errorText);
                     if (errorText != null)
                     {
                         Program.uiApp.StatusBar.SetSystemMessage(errorText + "! " + BDOSResources.getTranslate("TableRow") + " : " + row.ToString(), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
@@ -1636,7 +1635,7 @@ namespace BDO_Localisation_AddOn
                     else
                     {
                         Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSAddDeclaration") + " " + BDOSResources.getTranslate("DoneSuccessfully") + " " + BDOSResources.getTranslate("TableRow") + " : " + row.ToString(), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
-                        updateMatrixRowTaxInvoiceReceived( oMatrix, row, docEntry);
+                        updateMatrixRowTaxInvoiceReceived(oMatrix, row, docEntry);
                     }
                 }
             }
@@ -1648,7 +1647,7 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(false);
         }
 
-        public static void receiveVATTaxInvoiceReceived(  SAPbouiCOM.Form oForm, string YesNoEmpty, out string errorText)
+        public static void receiveVATTaxInvoiceReceived(SAPbouiCOM.Form oForm, string YesNoEmpty, out string errorText)
         {
             bool opSuccess = true;
             errorText = null;
@@ -1668,7 +1667,7 @@ namespace BDO_Localisation_AddOn
                 if (checkedLine)
                 {
                     int docEntry = Convert.ToInt32(oMatrix.Columns.Item("Document").Cells.Item(row).Specific.Value);
-                    BDO_TaxInvoiceReceived.receiveVAT( docEntry, declDate, YesNoEmpty, out errorText);
+                    BDO_TaxInvoiceReceived.receiveVAT(docEntry, declDate, YesNoEmpty, out errorText);
 
                     if (errorText != null)
                     {
@@ -1689,7 +1688,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void fillFromBaseTaxInvoiceReceived(  SAPbouiCOM.Form oForm, bool download, out string errorText)
+        public static void fillFromBaseTaxInvoiceReceived(SAPbouiCOM.Form oForm, bool download, out string errorText)
         {
             errorText = null;
             oForm.Freeze(true);
@@ -1763,7 +1762,7 @@ namespace BDO_Localisation_AddOn
 
             oDataTable.Rows.Clear();
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 oForm.Update();
@@ -1777,7 +1776,7 @@ namespace BDO_Localisation_AddOn
 
             TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-            bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+            bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
             if (chek_service_user == false)
             {
                 oForm.Update();
@@ -1796,7 +1795,7 @@ namespace BDO_Localisation_AddOn
 
                 if (download == false & String.IsNullOrEmpty(number) == false)
                 {
-                    BDO_TaxInvoiceReceived.operationRS( oTaxInvoice, "checkSync", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText);
+                    BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "checkSync", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText);
                     statusRS = BDO_TaxInvoiceReceived.getStatusValueByStatusNumber(statusRS);
                     //if (BDO_TaxInvoiceReceived.checkSync( null, docEntry, out statusRS, out errorText) == false)
                     //{
@@ -1866,7 +1865,53 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(false);
         }
 
-        //----------------------------->Tax Invoice Received<-----------------------------
+        public static void linkToAPDocuments(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+            oForm.Freeze(true);
+            bool opSuccess = true;
+
+            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("TxTable").Specific));
+
+            oMatrix.FlushToDataSource();
+
+            int rowCount = oMatrix.RowCount;
+
+            for (int row = 1; row <= rowCount; row++)
+            {
+                SAPbouiCOM.CheckBox Edtfield = oMatrix.Columns.Item("TxChkBx").Cells.Item(row).Specific;
+                bool checkedLine = (Edtfield.Checked);
+
+                if (checkedLine)
+                {
+                    int docEntry = Convert.ToInt32(oMatrix.Columns.Item("Document").Cells.Item(row).Specific.Value);
+                    BDO_TaxInvoiceReceived.linkToAPDocuments(docEntry, out errorText);
+                    if (errorText != null)
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("ErrorWhileDocumentEdit") + " " + BDOSResources.getTranslate("TableRow") + " : " + row.ToString() + "! " + BDOSResources.getTranslate("ReasonIs") + ": " + errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                        opSuccess = false;
+                        continue;
+                    }
+                    //else
+                    //{
+                    //    updateMatrixRowTaxInvoiceReceived(oMatrix, row, docEntry);
+                    //}
+                }
+            }
+
+            if (opSuccess == false)
+            {
+                Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationForSomeDocumentFinishedWithErrorSeeLog"));
+            }
+            else
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TaxInvoicesUpdated"), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+            }
+            oForm.Update();
+            oForm.Freeze(false);
+        }
+
+        #endregion
 
         public static void matrixColumnSetCfl(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
@@ -1921,7 +1966,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void addMenus( out string errorText)
+        public static void addMenus(out string errorText)
         {
             errorText = null;
 
@@ -1933,7 +1978,7 @@ namespace BDO_Localisation_AddOn
             {
                 oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
                 fatherMenuItem = Program.uiApp.Menus.Item("1536");
-                
+
                 oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_POPUP;
                 oCreationPackage.UniqueID = "TAX1536";
                 oCreationPackage.String = BDOSResources.getTranslate("Tax");
@@ -1950,7 +1995,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 fatherMenuItem = Program.uiApp.Menus.Item("TAX1536");
-                
+
                 // Add a pop-up menu item
                 oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
                 oCreationPackage.Checked = false;
@@ -1968,7 +2013,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void createForm(  out string errorText)
+        public static void createForm(out string errorText)
         {
             errorText = null;
 
@@ -1984,7 +2029,7 @@ namespace BDO_Localisation_AddOn
 
             SAPbouiCOM.Form oForm;
             bool newForm;
-            bool formExist = FormsB1.createForm( formProperties, out oForm, out newForm, out errorText);
+            bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
 
             if (errorText != null)
             {
@@ -2618,7 +2663,7 @@ namespace BDO_Localisation_AddOn
 
 
                     left = leftSC + 200 + 10 + 10 + 7;
-                    
+
                     listValidValues = new List<string>();
                     listValidValues.Add("");
                     listValidValues.Add(BDOSResources.getTranslate("Yes"));
@@ -2646,11 +2691,11 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-                    
+
 
                     //-----------------------------------
 
-                    
+
 
                     //დეკლ.დამატება - გამავალი - Pane "2"
                     formItems = new Dictionary<string, object>(); //დეკლარაციის თვე
@@ -2769,7 +2814,7 @@ namespace BDO_Localisation_AddOn
                     bool multiSelection = false;
                     string objectType = "2"; //Warehouse
                     string uniqueID_lf_BusinessPartnerCFL = "BP_CFL";
-                    FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL);
+                    FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL);
 
                     //პირობის დადება ბიზნესპარტნიორის არჩევის სიაზე
                     SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(uniqueID_lf_BusinessPartnerCFL);
@@ -2809,7 +2854,7 @@ namespace BDO_Localisation_AddOn
 
                     //ბიზნეს პარტნიორი ველები - გაცემული - Pane 2
                     string uniqueID_lf_BusinessPartnerCFL2 = "BP_CFL2";
-                    FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL2);
+                    FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL2);
 
                     //პირობის დადება ბიზნესპარტნიორის არჩევის სიაზე
                     SAPbouiCOM.ChooseFromList oCFL2 = oForm.ChooseFromLists.Item(uniqueID_lf_BusinessPartnerCFL2);
@@ -3026,7 +3071,7 @@ namespace BDO_Localisation_AddOn
                     ValidValues = new List<string>();
                     ValidValues.Add(BDOSResources.getTranslate("All"));
                     ValidValues.Add(BDOSResources.getTranslate("OnlyNeedTax"));
-                    
+
 
                     formItems = new Dictionary<string, object>();
                     itemName = "needTax";
@@ -3268,8 +3313,6 @@ namespace BDO_Localisation_AddOn
                     left = left + 100 + 2;
 
                     formItems = new Dictionary<string, object>();
-
-                    fieldskeysMap = new Dictionary<string, object>();
                     listValidValues = new List<string>();
                     listValidValues.Add(BDOSResources.getTranslate("RSConfirm"));
                     listValidValues.Add(BDOSResources.getTranslate("RSUpdateStatus"));
@@ -3296,7 +3339,28 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-                    
+
+
+                    left = left + 100 + 2;
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "linkAPDocs";
+                    formItems.Add("Caption", BDOSResources.getTranslate("LinkToAPDocuments"));
+                    formItems.Add("Size", 20);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+                    formItems.Add("Left", left);
+                    formItems.Add("Width", 100);
+                    formItems.Add("Top", Top);
+                    formItems.Add("Height", 19);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("FromPane", 1);
+                    formItems.Add("ToPane", 1);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
 
                     //რიგი
                     Top = Top + 25;
@@ -3817,7 +3881,7 @@ namespace BDO_Localisation_AddOn
 
                 }
 
-                createFolder(  oForm, out errorText);
+                createFolder(oForm, out errorText);
 
                 oForm.Visible = true;
                 oForm.Select();
@@ -3829,7 +3893,7 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void createFolder(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFolder(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -4001,7 +4065,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static object GetDocumentProperty( string UDOName, int key, string propertyName, out string errorText)
+        public static object GetDocumentProperty(string UDOName, int key, string propertyName, out string errorText)
         {
             errorText = null;
             try
@@ -4059,7 +4123,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -4081,7 +4145,7 @@ namespace BDO_Localisation_AddOn
                     string startDateStr = oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx.ToString();
 
                     DateTime startDate = DateTime.ParseExact(startDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
-                    DateTime OperationPeriodStart = new DateTime(startDate.Year, startDate.Month, 1);   
+                    DateTime OperationPeriodStart = new DateTime(startDate.Year, startDate.Month, 1);
                     oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx = OperationPeriodStart.ToString("yyyyMMdd");
 
                     string endDateStr = oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx.ToString();
@@ -4125,25 +4189,31 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "fillFrmBs2" & pVal.BeforeAction == false)
                 {
                     //SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
-                    fillFromBaseTaxInvoiceSent(  oForm, false, out errorText);
+                    fillFromBaseTaxInvoiceSent(oForm, false, out errorText);
                 }
                 //გაცემულები
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "dwnldTax" & pVal.BeforeAction == false)
                 {
-                    downloadTaxInvoiceReceived(  oForm, out errorText);
-                    fillFromBaseTaxInvoiceReceived(  oForm, true, out errorText);
+                    downloadTaxInvoiceReceived(oForm, out errorText);
+                    fillFromBaseTaxInvoiceReceived(oForm, true, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "updtTax" & pVal.BeforeAction == false)
                 {
-                    updateTaxInvoiceReceived(  oForm, out errorText);
-                    //fillFromBase(  oForm, out errorText);
+                    updateTaxInvoiceReceived(oForm, out errorText);
+                    //fillFromBase( oForm, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "fillFrmBs" & pVal.BeforeAction == false)
                 {
-                    fillFromBaseTaxInvoiceReceived(  oForm, false, out errorText);
+                    fillFromBaseTaxInvoiceReceived(oForm, false, out errorText);
+                }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "linkAPDocs" & pVal.BeforeAction == false)
+                {
+                    linkToAPDocuments(oForm, out errorText);
+                    //fillFromBaseTaxInvoiceReceived(oForm, false, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
@@ -4177,7 +4247,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.ButtonCombo oTxOperRS = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("TxOperRS").Specific));
                         oTxOperRS.Caption = BDOSResources.getTranslate("Operations");
                         int oOperation = pVal.PopUpIndicator;
-                        rsOperationTaxInvoiceReceived( oForm, oOperation, out errorText);
+                        rsOperationTaxInvoiceReceived(oForm, oOperation, out errorText);
                     }
 
                     if (pVal.ItemUID == "TxOperRS2")
@@ -4185,9 +4255,8 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.ButtonCombo oTxOperRS = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("TxOperRS2").Specific));
                         oTxOperRS.Caption = BDOSResources.getTranslate("Operations");
                         int oOperation = pVal.PopUpIndicator;
-                        rsOperationTaxInvoiceSent( oForm, oOperation, out errorText);
+                        rsOperationTaxInvoiceSent(oForm, oOperation, out errorText);
                     }
-
 
                     if (pVal.ItemUID == "TaxInRcvd")
                     {
@@ -4209,8 +4278,6 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-
-                    
                     if (pVal.ItemUID == "addDecl2")
                     {
                         SAPbouiCOM.ButtonCombo oaddDecl = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("addDecl2").Specific));
@@ -4219,7 +4286,7 @@ namespace BDO_Localisation_AddOn
 
                         if (oOperation == 0)
                         {
-                            addDeclTaxInvoiceSent(  oForm, out errorText);
+                            addDeclTaxInvoiceSent(oForm, out errorText);
                         }
                     }
                 }
