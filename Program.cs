@@ -354,9 +354,14 @@ namespace BDO_Localisation_AddOn
                 }
 
             }
+            SAPbouiCOM.Form oDocFormI = Program.uiApp.Forms.ActiveForm;
+            if (oDocFormI.TypeEx == "150")
+            {
+                Items.uiApp_MenuEvent(ref pVal, out BubbleEvent);
+            }
 
-            //----------------------------->მოგების გადასახადის დაბეგვრის ობიექტების ტიპები<-----------------------------
-            try
+                //----------------------------->მოგების გადასახადის დაბეგვრის ობიექტების ტიპები<-----------------------------
+                try
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_PTBT_D")
                 {
