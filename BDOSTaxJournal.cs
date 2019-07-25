@@ -1892,10 +1892,6 @@ namespace BDO_Localisation_AddOn
                         opSuccess = false;
                         continue;
                     }
-                    //else
-                    //{
-                    //    updateMatrixRowTaxInvoiceReceived(oMatrix, row, docEntry);
-                    //}
                 }
             }
 
@@ -2090,7 +2086,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
                     formItems.Add("Left", leftSC);
-                    formItems.Add("Width", 170);
+                    formItems.Add("Width", 180);
                     formItems.Add("Top", Top);
                     formItems.Add("Caption", BDOSResources.getTranslate("ReceiveAddDeclaration"));
                     formItems.Add("UID", itemName);
@@ -2942,7 +2938,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Left", left);
                     formItems.Add("Width", 130);
                     formItems.Add("Top", Top);
-                    formItems.Add("Caption", BDOSResources.getTranslate("LinkToDocument"));
+                    formItems.Add("Caption", BDOSResources.getTranslate("LinkStatus"));
                     formItems.Add("UID", itemName);
                     formItems.Add("FromPane", 1);
                     formItems.Add("ToPane", 1);
@@ -2996,15 +2992,9 @@ namespace BDO_Localisation_AddOn
 
                     List<string> ValidValues = new List<string>();
                     ValidValues.Add(BDOSResources.getTranslate("WithoutFilter"));
-
-                    SAPbobsCOM.UserTable oUserTable = null;
-                    oUserTable = Program.oCompany.UserTables.Item("BDO_TAXR");
-                    SAPbobsCOM.ValidValues StatusValidValues = oUserTable.UserFields.Fields.Item("U_LinkStatus").ValidValues;
-
-                    for (int i = 0; i < StatusValidValues.Count; i++)
-                    {
-                        ValidValues.Add(StatusValidValues.Item(i).Description);
-                    }
+                    ValidValues.Add(BDOSResources.getTranslate("NotLinked"));
+                    ValidValues.Add(BDOSResources.getTranslate("Linked"));
+                    ValidValues.Add(BDOSResources.getTranslate("LinkedPartial"));
 
                     formItems = new Dictionary<string, object>();
                     itemName = "Attach";
@@ -3033,6 +3023,29 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
+
+                    left = left + 100 + 10;
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "linkAPDocs";
+                    formItems.Add("Caption", BDOSResources.getTranslate("LinkToAPDocuments"));
+                    formItems.Add("Size", 20);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+                    formItems.Add("Left", left);
+                    formItems.Add("Width", 100);
+                    formItems.Add("Top", Top);
+                    formItems.Add("Height", 19);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("FromPane", 1);
+                    formItems.Add("ToPane", 1);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+                    left = left - 100 - 10;
 
                     //გაცემული - Pane 2
                     ValidValues = new List<string>();
@@ -3072,7 +3085,6 @@ namespace BDO_Localisation_AddOn
                     ValidValues.Add(BDOSResources.getTranslate("All"));
                     ValidValues.Add(BDOSResources.getTranslate("OnlyNeedTax"));
 
-
                     formItems = new Dictionary<string, object>();
                     itemName = "needTax";
                     formItems.Add("isDataSource", true);
@@ -3101,7 +3113,6 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
                     //გაცემული - Pane 2
-
 
                     //რიგი 6
                     Top = Top + 25;
@@ -3146,7 +3157,6 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
                     //გაცემული - Pane 2
-
 
                     left = left + 20 + 1;
 
@@ -3331,28 +3341,6 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
                     formItems.Add("AffectsFormMode", false);
                     formItems.Add("DisplayDesc", true);
-                    formItems.Add("FromPane", 1);
-                    formItems.Add("ToPane", 1);
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
-
-
-                    left = left + 100 + 2;
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "linkAPDocs";
-                    formItems.Add("Caption", BDOSResources.getTranslate("LinkToAPDocuments"));
-                    formItems.Add("Size", 20);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 100);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 19);
-                    formItems.Add("UID", itemName);
                     formItems.Add("FromPane", 1);
                     formItems.Add("ToPane", 1);
 
@@ -3641,9 +3629,7 @@ namespace BDO_Localisation_AddOn
 
                     oColumns = oMatrix2.Columns;
 
-                    //SAPbouiCOM.DataTable oDataTable2;
                     oDataTable = oForm.DataSources.DataTables.Add("TxTable2");
-
                     oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Text, 50); // 0 - ინდექსი გვჭირდება SetValue-ს პირველ პარამეტრად
                     oDataTable.Columns.Add("SrvStatus", SAPbouiCOM.BoFieldsType.ft_Text, 50); //1
                     oDataTable.Columns.Add("Status", SAPbouiCOM.BoFieldsType.ft_Text, 50); //2
@@ -3686,10 +3672,6 @@ namespace BDO_Localisation_AddOn
                     oColumn.DataBind.Bind("TxTable2", "TxChkBx");
                     oColumn.ValOn = "Y";
                     oColumn.ValOff = "N";
-
-                    oUserTable = null;
-                    oUserTable = Program.oCompany.UserTables.Item("BDO_TAXS");
-                    StatusValidValues = oUserTable.UserFields.Fields.Item("U_status").ValidValues;
 
                     oColumn = oColumns.Add("StatusDoc", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("TaxInvoceStatus");
@@ -3793,7 +3775,6 @@ namespace BDO_Localisation_AddOn
                     oLink.LinkedObjectType = "UDO_F_BDO_TAXS_D";
                     oColumn.DataBind.Bind("TxTable2", "CorrDoc");
 
-                    oUserTable = Program.oCompany.UserTables.Item("BDO_TAXS");
                     oColumn = oColumns.Add("CorrType", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("Reason");
                     oColumn.Width = 200;
@@ -3806,7 +3787,6 @@ namespace BDO_Localisation_AddOn
                     oColumn.ValidValues.Add("2", BDOSResources.getTranslate("ChangedTaxOperationType")); //2 //შეცვლილია დასაბეგრი ოპერაციის სახე
                     oColumn.ValidValues.Add("3", BDOSResources.getTranslate("ChangedAgreementAmountPricesDecrease")); //3 //ფასების შემცირების ან სხვა მიზეზით შეცვლილია ოპერაციაზე ადრე შეთანხმებული კომპენსაციის თანხა
                     oColumn.ValidValues.Add("4", BDOSResources.getTranslate("ItemServiceReturnedToSeller")); //4 საქონელი (მომსახურება) სრულად ან ნაწილობრივ უბრუნდება გამყიდველს
-
 
                     oColumn = oColumns.Add("IsVATPayer", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("IsVATPayer");
@@ -3878,7 +3858,6 @@ namespace BDO_Localisation_AddOn
                     oMatrix2.LoadFromDataSource();
                     oMatrix2.AutoResizeColumns();
                     //გაცემული Pane 2
-
                 }
 
                 createFolder(oForm, out errorText);
@@ -4213,7 +4192,6 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "linkAPDocs" & pVal.BeforeAction == false)
                 {
                     linkToAPDocuments(oForm, out errorText);
-                    //fillFromBaseTaxInvoiceReceived(oForm, false, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
@@ -4240,8 +4218,6 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.BeforeAction == false)
                 {
-                    //SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
-
                     if (pVal.ItemUID == "TxOperRS")
                     {
                         SAPbouiCOM.ButtonCombo oTxOperRS = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("TxOperRS").Specific));
