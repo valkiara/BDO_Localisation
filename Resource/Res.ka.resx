@@ -2836,7 +2836,7 @@
   <data name="TransferDocumentAlreadyExistsForAsset" xml:space="preserve">
     <value>გადაადგილების დოკუმენტი უკვე არსებობს ძ.ს-სთვის:</value>
   </data>
-<data name="Delivery" xml:space="preserve">
+  <data name="Delivery" xml:space="preserve">
     <value>მიწოდება</value>
   </data>
   <data name="AccumulatedDepreciationAccount" xml:space="preserve">
@@ -2851,7 +2851,7 @@
   <data name="UsLife" xml:space="preserve">
     <value>გამოყენების ვადა</value>
   </data>
-<data name="DepreciationAccrual" xml:space="preserve">
+  <data name="DepreciationAccrual" xml:space="preserve">
     <value>ცვეთის დარიცხვის დოკუმენტი</value>
   </data>
   <data name="AccrualMonth" xml:space="preserve">
@@ -2862,7 +2862,7 @@
   </data>
   <data name="DepreciationAmount" xml:space="preserve">
     <value>ცვეთის რაოდენობა</value>
-    </data>
+  </data>
   <data name="Back" xml:space="preserve">
     <value>უკან</value>
   </data>
@@ -2980,10 +2980,10 @@
   <data name="UseBlAgrRt" xml:space="preserve">
     <value>კურსის დიაპაზონის გამოყენება</value>
   </data>
-<data name="BatchNumberPrefix" xml:space="preserve">
+  <data name="BatchNumberPrefix" xml:space="preserve">
     <value>პარტიის ნომრის პრეფიქსი</value>
   </data>
-<data name="PrefixError" xml:space="preserve">
+  <data name="PrefixError" xml:space="preserve">
     <value>პარტიის ნომერი ვერ შეიქმნა. გთხოვთ, შეავსოთ 2 სიმბოლოიანი პარტიის ნომრის პრეფიქსი</value>
   </data>
   <data name="FindNext" xml:space="preserve">
@@ -2992,7 +2992,7 @@
   <data name="TotalPaymentNet" xml:space="preserve">
     <value>მთლიანი გადახდა (ნეტი)</value>
   </data>
-<data name="ACNumber" xml:space="preserve">
+  <data name="ACNumber" xml:space="preserve">
     <value>A/C ნომერი</value>
   </data>
   <data name="DuplicateAccountInTheLine" xml:space="preserve">
@@ -3010,13 +3010,13 @@
   <data name="GoodsRcptPO" xml:space="preserve">
     <value>საქონლის მიღება</value>
   </data>
-<data name="EmptyBlaAgrError" xml:space="preserve">
+  <data name="EmptyBlaAgrError" xml:space="preserve">
     <value>გთხოვთ შეავსეთ ძირითადი საშუალება</value>
   </data>
   <data name="ThereIsDepreciationAmountsInCurrentMonthForItem" xml:space="preserve">
     <value>მიმდინარე თვეში უკვე დარიცხული ცვეთა საქონლისთვის</value>
   </data>
-<data name="ConsumTypesMasterData" xml:space="preserve">
+  <data name="ConsumTypesMasterData" xml:space="preserve">
     <value>წვის ტიპი</value>
   </data>
   <data name="FuelType" xml:space="preserve">
@@ -3027,5 +3027,8 @@
   </data>
   <data name="PerHunKm" xml:space="preserve">
     <value>100 კმ.-ზე</value>
+  </data>
+  <data name="LinkToAPDocuments" xml:space="preserve">
+    <value>დოკუმენტებთან მიბმა</value>
   </data>
 </root>
