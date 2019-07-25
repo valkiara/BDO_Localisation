@@ -6916,21 +6916,17 @@ namespace BDO_Localisation_AddOn
         {
             errorText = null;
 
-            SAPbobsCOM.CompanyService oCompanyService = null;
-            SAPbobsCOM.GeneralService oGeneralService = null;
-            SAPbobsCOM.GeneralData oGeneralData = null;
-            SAPbobsCOM.GeneralDataParams oGeneralParams = null;
-            oCompanyService = Program.oCompany.GetCompanyService();
-            oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
-            //oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+            SAPbobsCOM.CompanyService oCompanyService = Program.oCompany.GetCompanyService();
+            SAPbobsCOM.GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
 
-            oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
+            SAPbobsCOM.GeneralDataParams oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
             oGeneralParams.SetProperty("DocEntry", docEntry);
-            oGeneralData = oGeneralService.GetByParams(oGeneralParams);
+            SAPbobsCOM.GeneralData oGeneralData = oGeneralService.GetByParams(oGeneralParams);
 
             SAPbobsCOM.GeneralDataCollection oChildren = oGeneralData.Child("BDO_TXR1");
             int oChildrenCount = oChildren.Count;
             bool searchByWbl = false;
+
             try
             {
                 if (oGeneralData.GetProperty("U_downPaymnt") == "N")
@@ -6958,11 +6954,11 @@ namespace BDO_Localisation_AddOn
                     fillBaseDocs(oGeneralData, oChildren, null, null);
                 }
 
-                //if (errorText == null && (oChildrenCount != oChildren.Count || searchByWbl))
-                //{
+                if (errorText == null && (oChildrenCount != oChildren.Count || searchByWbl))
+                {
                     setLinkStatus(oGeneralData, oChildren);
                     oGeneralService.Update(oGeneralData);
-                //}
+                }
             }
             catch (Exception ex)
             {
@@ -6970,10 +6966,10 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                //Marshal.ReleaseComObject(oChildren);
-                //Marshal.ReleaseComObject(oGeneralParams);
-                //Marshal.ReleaseComObject(oGeneralData);
-                //Marshal.ReleaseComObject(oGeneralService);
+                Marshal.ReleaseComObject(oChildren);
+                Marshal.ReleaseComObject(oGeneralParams);
+                Marshal.ReleaseComObject(oGeneralData);
+                Marshal.ReleaseComObject(oGeneralService);
             }
             ///----------------------------------------------->დოკუმენტების მიბმა (შესყიდვა/დაბრუნება)<-----------------------------------------------
         }
