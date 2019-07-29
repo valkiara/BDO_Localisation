@@ -1196,7 +1196,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(sboField);
+                Marshal.ReleaseComObject(sboField);
                 sboField = null;
                 GC.Collect();
             }

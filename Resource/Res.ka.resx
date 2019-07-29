@@ -3031,4 +3031,7 @@
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>დოკუმენტებთან მიბმა</value>
   </data>
+  <data name="Treasury" xml:space="preserve">
+    <value>სახაზინო</value>
+  </data>
 </root>

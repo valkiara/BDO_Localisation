@@ -2928,9 +2928,10 @@ namespace BDO_Localisation_AddOn
                             oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
 
                             string value = "TransferToOwnAccountPaymentOrderIo";
-                            oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));
+                            oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));                          
                             value = "TreasuryTransferPaymentOrderIo";
                             oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));
+                            oColumn.ValidValues.Add("TreasuryTransferPaymentOrderIoBP", BDOSResources.getTranslate(value));
                             value = "TransferWithinBankPaymentOrderIo";
                             oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));
                             value = "TransferToOtherBankNationalCurrencyPaymentOrderIo";

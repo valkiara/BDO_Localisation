@@ -2998,4 +2998,7 @@
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>Link To A/P Documents</value>
   </data>
+  <data name="Treasury" xml:space="preserve">
+    <value>Treasury</value>
+  </data>
 </root>

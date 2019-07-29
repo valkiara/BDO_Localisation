@@ -127,7 +127,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    HouseBankAccounts.changeFormItems(oForm, out errorText);
+                    changeFormItems(oForm, out errorText);
                 }
             }
         }

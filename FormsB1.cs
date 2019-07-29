@@ -75,6 +75,7 @@ namespace BDO_Localisation_AddOn
 
             Warehouses.createUserFields(out errorText);
 
+            BPBankAccounts.createUserFields(out errorText);
         }
 
         public static void addMenusForAddOn( out string errorText)
