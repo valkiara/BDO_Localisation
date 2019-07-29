@@ -3031,4 +3031,7 @@
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>დოკუმენტებთან მიბმა</value>
   </data>
+  <data name="UsLifeError" xml:space="preserve">
+    <value>გამოყენების ვადა უნდა იყოს უკვე დარიცხული თვეების რაოდენობაზე მეტი!</value>
+  </data>
 </root>
