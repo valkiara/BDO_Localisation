@@ -461,6 +461,17 @@ namespace BDO_Localisation_AddOn
                     createFormItems( oForm, out errorText);
                 }
 
+                if (pVal.ItemUID == "UsLife" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE && pVal.BeforeAction == true)
+                {
+                    CheckUsLife(oForm, out errorText);
+                    if (errorText != null)
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(errorText);
+                        BubbleEvent = false;
+                    }
+
+                }
+
                 if (pVal.ItemUID == "BDOSCat" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.BeforeAction == true)
                 {
                     oForm.PaneLevel = 20;
@@ -470,7 +481,11 @@ namespace BDO_Localisation_AddOn
                 if(pVal.ItemUID == "39" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.BeforeAction == false)
                 {
                     setVisibleFormItems(oForm, out errorText);
-                    FillUsLife(oForm, out errorText);
+                    if (oForm.Mode != SAPbouiCOM.BoFormMode.fm_FIND_MODE)
+                    {
+                        FillUsLife(oForm, out errorText);
+                    }
+                    
                 }
 
                 if (pVal.ItemUID != "" && pVal.ItemUID.Length > 7 && pVal.ItemUID.Substring(0, 7) == "BDOSCtg" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_KEY_DOWN && pVal.BeforeAction == false)
@@ -511,12 +526,10 @@ namespace BDO_Localisation_AddOn
             try
             {   
                 //find
-                if (pVal.BeforeAction && pVal.MenuUID == "1281")
-                {
-                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
-                    oForm.Items.Item("UsLife").Visible = true;
-                    oForm.Items.Item("UsLifeS").Visible = true;
-                }
+                SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+                oForm.Items.Item("UsLife").Visible = true;
+                oForm.Items.Item("UsLifeS").Visible = true;
+                
             }
             catch (Exception ex)
             {
@@ -728,6 +741,16 @@ namespace BDO_Localisation_AddOn
                     setVisibleFormItems( oForm, out errorText);
                 }
 
+                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == false)
+                {
+                    CheckUsLife(oForm, out errorText);
+                    if (errorText != null)
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(errorText);
+                        BubbleEvent = false;
+                    }
+                }
+
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD & BusinessObjectInfo.BeforeAction == true)
                 {
                     oForm.Freeze(true);
@@ -768,6 +791,7 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }   
+
         public static void setVisibleFormItems( SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
@@ -868,6 +892,32 @@ namespace BDO_Localisation_AddOn
 
 
 
+        }
+
+        public static void CheckUsLife(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+
+            SAPbouiCOM.EditText oItemCode = oForm.Items.Item("5").Specific;
+            string itemCode = oItemCode.Value;
+
+            SAPbouiCOM.EditText oUsLife = oForm.Items.Item("UsLife").Specific;
+            int usLife = Convert.ToInt32(oUsLife.Value);
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            string query = @"SELECT COUNT(""@BDOSDEPAC1"".""DocEntry"") as ""DepNum"" from ""@BDOSDEPAC1"" " +
+                @"join ""@BDOSDEPACR"" on ""@BDOSDEPAC1"".""DocEntry"" = ""@BDOSDEPACR"".""DocEntry"" where ""U_ItemCode"" = '" + itemCode + @"' AND ""Canceled"" = 'N'";
+
+            oRecordSet.DoQuery(query);
+
+            if (!oRecordSet.EoF)
+            {
+                if (usLife <= oRecordSet.Fields.Item("DepNum").Value)
+                {
+                    errorText = BDOSResources.getTranslate("UsLifeError");
+                    return;
+                }
+            }
         }
 
     }

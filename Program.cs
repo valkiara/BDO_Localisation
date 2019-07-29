@@ -354,10 +354,14 @@ namespace BDO_Localisation_AddOn
                 }
 
             }
-            SAPbouiCOM.Form oDocFormI = Program.uiApp.Forms.ActiveForm;
-            if (oDocFormI.TypeEx == "150")
+
+            if (pVal.BeforeAction && pVal.MenuUID == "1281")
             {
-                Items.uiApp_MenuEvent(ref pVal, out BubbleEvent);
+                SAPbouiCOM.Form oDocFormI = Program.uiApp.Forms.ActiveForm;
+                if (oDocFormI.TypeEx == "150")
+                {
+                    Items.uiApp_MenuEvent(ref pVal, out BubbleEvent);
+                }
             }
 
                 //----------------------------->მოგების გადასახადის დაბეგვრის ობიექტების ტიპები<-----------------------------
