@@ -832,6 +832,7 @@ namespace BDO_Localisation_AddOn
                 
 
                 AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Quantity;
+                AlrDeprAmt -= CurrDeprAmt;
                 decimal NtBookVal = Convert.ToDecimal(oRecordSet.Fields.Item("APCost").Value * Convert.ToDouble(Quantity)) - AlrDeprAmt;
                 decimal DeprAmt = NtBookVal / monthsApart;
                 

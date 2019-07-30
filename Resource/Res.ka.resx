@@ -3034,4 +3034,7 @@
   <data name="Treasury" xml:space="preserve">
     <value>სახაზინო</value>
   </data>
+  <data name="UsLifeError" xml:space="preserve">
+    <value>გამოყენების ვადა უნდა იყოს უკვე დარიცხული თვეების რაოდენობაზე მეტი!</value>
+  </data>
 </root>
