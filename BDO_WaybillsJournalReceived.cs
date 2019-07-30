@@ -1982,7 +1982,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable = oForm.DataSources.DataTables.Add("WbGdsTable");
                     oDataTable.Columns.Add("#", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //0
                     oDataTable.Columns.Add("WBNo", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);//1
-                    oDataTable.Columns.Add("WBBarcode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);//2
+                    oDataTable.Columns.Add("WBBarcode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);//2
                     oDataTable.Columns.Add("WBItmName", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 150);//3
                     oDataTable.Columns.Add("WBUntCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 100);//4
                     oDataTable.Columns.Add("WBUntName", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 100);//5
