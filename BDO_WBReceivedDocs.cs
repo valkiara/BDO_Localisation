@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace BDO_Localisation_AddOn
 {
@@ -353,7 +354,7 @@ namespace BDO_Localisation_AddOn
 
             foreach (string[] goodsRow in array_GOODS)
             {
-                string WBBarcode = goodsRow[6];
+                string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
                 string WBItmName = goodsRow[1];
 
                 SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(CardCode, WBItmName, WBBarcode, out errorText);

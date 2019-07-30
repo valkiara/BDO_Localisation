@@ -157,7 +157,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static SAPbobsCOM.Recordset getCatalogEntryByBPBarcode(string CardCode, string ItemName, string Barcode,  out string errorText)
+        public static SAPbobsCOM.Recordset getCatalogEntryByBPBarcode(string CardCode, string ItemName, string Barcode, out string errorText)
         {
             errorText = null;
 
@@ -169,10 +169,9 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-            string query = "";
+            string query;
             try
             {
-                Barcode = Barcode.Replace("'", "");
                 CardCode = CardCode.Trim();
 
                 if (searchingParam == "1") //დასახელებით
@@ -182,7 +181,7 @@ namespace BDO_Localisation_AddOn
                         ItemName = ItemName.Substring(0, 254);
                     }
 
-                    query = @"SELECT * FROM ""OSCN""  WHERE ""U_BDO_SubDsc"" = N'" + ItemName.Replace("'","''") + @"' AND ""CardCode""  = N'" + CardCode + "'";
+                    query = @"SELECT * FROM ""OSCN""  WHERE ""U_BDO_SubDsc"" = N'" + ItemName.Replace("'", "''") + @"' AND ""CardCode""  = N'" + CardCode + "'";
                 }
                 else //კოდით
                 {
@@ -206,7 +205,7 @@ namespace BDO_Localisation_AddOn
                 string errMsg;
 
                 Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription")+" : " + errMsg + "! "+BDOSResources.getTranslate("Code") +" : " + errCode + "! "+ BDOSResources.getTranslate("OtherInfo")+" : " + ex.Message;
+                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
                 return null;
             }
             finally
