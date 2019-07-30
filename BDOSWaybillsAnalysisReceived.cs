@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace BDO_Localisation_AddOn
 {
@@ -756,7 +757,7 @@ namespace BDO_Localisation_AddOn
 
                         foreach (string[] goodsRow in array_GOODS)
                         {
-                            string WBBarcode = goodsRow[6];
+                            string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
                             string WBItmName = goodsRow[1];
 
                             string ItmCode = "";
@@ -773,7 +774,6 @@ namespace BDO_Localisation_AddOn
                                     ItmCode = CatalogEntry.Fields.Item("ItemCode").Value;
                                 }
                             }
-
 
                             DataRow taxDataRow = RSDataTable.Rows.Add();
                             taxDataRow["RowLinked"] = "N";
@@ -801,13 +801,10 @@ namespace BDO_Localisation_AddOn
 
                             rowCounter++;
                             rowIndex++;
-
                         }
                     }
                 }
-
                 startDateParam = endDateParam;
-
             }
 
             int count = 0;
