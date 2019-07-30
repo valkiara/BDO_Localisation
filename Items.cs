@@ -524,12 +524,12 @@ namespace BDO_Localisation_AddOn
             BubbleEvent = true;
 
             try
-            {   
-                //find
+            {
+                //find 
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
                 oForm.Items.Item("UsLife").Visible = true;
                 oForm.Items.Item("UsLifeS").Visible = true;
-                
+
             }
             catch (Exception ex)
             {

@@ -151,6 +151,7 @@
     <Compile Include="BOG Integration Services\Model\StatementFilter.cs" />
     <Compile Include="BOG Integration Services\OAuth2Client.cs" />
     <Compile Include="BOG Integration Services\OAuth2Constants.cs" />
+    <Compile Include="BPBankAccounts.cs" />
     <Compile Include="BusinessPartners.cs" />
     <Compile Include="ChartOfAccounts.cs" />
     <Compile Include="CommonFunctions.cs" />

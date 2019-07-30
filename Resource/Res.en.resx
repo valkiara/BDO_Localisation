@@ -3037,6 +3037,9 @@
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>Link To A/P Documents</value>
   </data>
+  <data name="Treasury" xml:space="preserve">
+    <value>Treasury</value>
+  </data>
   <data name="UsLifeError" xml:space="preserve">
     <value>Useful life must be more than it has already been depreciated!</value>
   </data>

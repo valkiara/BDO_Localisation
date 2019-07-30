@@ -359,6 +359,36 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static bool isBPAccountTreasury(string cardCode, string bankCode, string account)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                if (!string.IsNullOrEmpty(cardCode) && !string.IsNullOrEmpty(bankCode) && !string.IsNullOrEmpty(account))
+                {
+                    string query = @"SELECT ""Account""
+                    FROM ""OCRB""
+                    WHERE ""CardCode"" = '" + cardCode + @"' AND ""BankCode"" = '" + bankCode + @"' AND ""Account"" = '" + account + @"' AND ""U_treasury"" = 'Y'";
+
+                    oRecordSet.DoQuery(query);
+                    if (!oRecordSet.EoF)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+                oRecordSet = null;
+            }
+        }
+
         public static SAPbobsCOM.Recordset getEmployeeInfo(string govID)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -1132,7 +1162,7 @@ namespace BDO_Localisation_AddOn
                     if (physicalEntityTax && DBDataSourceTable.GetValue("WtLiable", row).Trim() == "Y")
                     {
                         GrossAmount = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
-              
+
                         PensPhAm = roundAmountByGeneralSettings(GrossAmount * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
                         WhtAmt = roundAmountByGeneralSettings((GrossAmount - PensPhAm) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
                         PensCoAm = roundAmountByGeneralSettings(GrossAmount * PhysicalEntityPensionRates["PensionCoWTaxRate"] / 100, "Sum");
@@ -1214,10 +1244,10 @@ namespace BDO_Localisation_AddOn
                 string DistNumber = oRecordSet.Fields.Item("DistNumber").Value;
 
                 decimal CurrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture);
-                if(CurrDeprAmt>0)
+                if (CurrDeprAmt > 0)
                 {
                     rejection = true;
-                    Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem")+" " +ItemCode + ": " + DistNumber);
+                    Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem") + " " + ItemCode + ": " + DistNumber);
                 }
 
                 oRecordSet.MoveNext();
@@ -1277,44 +1307,44 @@ namespace BDO_Localisation_AddOn
                         queryBuilder.Append(docDatestr);
                         queryBuilder.Append("' ");
 
-                        int rowQty=0;
+                        int rowQty = 0;
                         SAPbouiCOM.DBDataSource DBDataSourceTable = docDBSources.Item(tableDBSourcesName);
                         for (int row = 0; row < DBDataSourceTable.Size; row++)
                         {
                             itemCode = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "ItemCode", row).ToString().Trim();
                             if (CommonFunctions.getValue("OITM", "InvntItem", "ItemCode", itemCode).ToString() == "Y")
                             {
-                            quantity = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "Quantity", row), CultureInfo.InvariantCulture);
-                            whsCode = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, whsFieldName, row).ToString().Trim();
+                                quantity = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "Quantity", row), CultureInfo.InvariantCulture);
+                                whsCode = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, whsFieldName, row).ToString().Trim();
 
-                            if (row == 0)
-                            {
-                                queryBuilder.Append(" AND ( ");
-                            }
-                            else
-                            {
-                                queryBuilder.Append(" OR ");
-                            }
+                                if (row == 0)
+                                {
+                                    queryBuilder.Append(" AND ( ");
+                                }
+                                else
+                                {
+                                    queryBuilder.Append(" OR ");
+                                }
 
-                            queryBuilder.Append(@"""ItemCode"" = N'");
-                            queryBuilder.Append(itemCode);
-                            queryBuilder.Append("'");
-
-                            docLinesRow = docLines.Rows.Add();
-                            docLinesRow["ItemCode"] = itemCode;
-                            docLinesRow["Quantity"] = quantity;
-
-                            if (blockStockByWarehouse)
-                            {
-                                queryBuilder.Append(@" AND ""LocCode"" = N'");
-                                queryBuilder.Append(whsCode);
-
-                                docLinesRow["WhsCode"] = whsCode;
+                                queryBuilder.Append(@"""ItemCode"" = N'");
+                                queryBuilder.Append(itemCode);
                                 queryBuilder.Append("'");
-                            }
+
+                                docLinesRow = docLines.Rows.Add();
+                                docLinesRow["ItemCode"] = itemCode;
+                                docLinesRow["Quantity"] = quantity;
+
+                                if (blockStockByWarehouse)
+                                {
+                                    queryBuilder.Append(@" AND ""LocCode"" = N'");
+                                    queryBuilder.Append(whsCode);
+
+                                    docLinesRow["WhsCode"] = whsCode;
+                                    queryBuilder.Append("'");
+                                }
 
                                 rowQty++;
-                        }
+                            }
                         }
 
                         if (rowQty == 0) return;
@@ -1325,7 +1355,7 @@ namespace BDO_Localisation_AddOn
                         {
                             queryBuilder.Append(@" ""LocCode"", ");
                         }
-                        queryBuilder.Append(@" ""ItemCode"" ");                        
+                        queryBuilder.Append(@" ""ItemCode"" ");
 
                         //ნაშთები
                         SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
