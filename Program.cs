@@ -1384,7 +1384,7 @@ namespace BDO_Localisation_AddOn
                 {
                     BDOSFixedAssetTransfer.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
-                
+
                 //----------------------------->Depreciation Accrual Document<-----------------------------
                 if (BusinessObjectInfo.Type == "UDO_F_BDOSDEPACR_D")
                 {
@@ -1554,7 +1554,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Profit Tax Base Master Data<-----------------------------
-                else if(pVal.FormTypeEx == "UDO_F_BDO_PTBS_D")
+                else if (pVal.FormTypeEx == "UDO_F_BDO_PTBS_D")
                 {
                     BDO_ProfitTaxBase.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
@@ -1564,7 +1564,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Item Categories<-----------------------------
-                else if(pVal.FormTypeEx == "UDO_F_BDOSITMCTG_D")
+                else if (pVal.FormTypeEx == "UDO_F_BDOSITMCTG_D")
                 {
                     BDOSItemCategories.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
@@ -1574,98 +1574,96 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Statement of Cash Flows<-----------------------------
-                else if(pVal.FormTypeEx == "80028")
+                else if (pVal.FormTypeEx == "80028")
                 {
                     StatementOfCashFlows.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Trial Balance<-----------------------------
-                else if(pVal.FormTypeEx == "167")
+                else if (pVal.FormTypeEx == "167")
                 {
                     TrialBalace.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Balance Sheet<-----------------------------
-                else if(pVal.FormTypeEx == "163")
+                else if (pVal.FormTypeEx == "163")
                 {
                     BalanceSheet.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Profit and Loss Statement<-----------------------------
-                else if(pVal.FormTypeEx == "164")
+                else if (pVal.FormTypeEx == "164")
                 {
                     ProfitAndLossStatement.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Waybills Analysis Received<-----------------------------
-                else if(pVal.FormUID == "BDOSWBRAn")
+                else if (pVal.FormUID == "BDOSWBRAn")
                 {
                     BDOSWaybillsAnalysisReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Waybills Analysis Sent<-----------------------------
-                else if(pVal.FormUID == "BDOSWBSAn")
+                else if (pVal.FormUID == "BDOSWBSAn")
                 {
                     BDOSWaybillsAnalysisSent.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Tax Analysis Received<-----------------------------
-                else if(pVal.FormTypeEx == "410000100")
+                else if (pVal.FormTypeEx == "410000100")
                 {
                     BDOSTaxAnalysisReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Down Payment Tax Analysis Received<-----------------------------
-                else if(pVal.FormTypeEx == "410000100")
+                else if (pVal.FormTypeEx == "410000100")
                 {
                     BDOSDownPaymentTaxAnalysisReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Tax Analysis Sent<-----------------------------
-                else if(pVal.FormTypeEx == "410000100")
+                else if (pVal.FormTypeEx == "410000100")
                 {
                     BDOSTaxAnalysissSent.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Settlement Reconciliation Act<-----------------------------
-                else if(pVal.FormTypeEx == "410000100")
+                else if (pVal.FormTypeEx == "410000100")
                 {
                     BDOSReportSettlementReconciliationAct.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Journal Entry<-----------------------------
-                else if(pVal.FormTypeEx == "392")
+                else if (pVal.FormTypeEx == "392")
                 {
                     JournalEntry.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Cart Of Accounts<-----------------------------
-                else if(pVal.FormTypeEx == "804")
+                else if (pVal.FormTypeEx == "804")
                 {
                     ChartOfAccounts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Landed Costs<-----------------------------
-                else if(pVal.FormTypeEx == "369")
+                else if (pVal.FormTypeEx == "369")
                 {
                     ExchangeRateDiffs.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-
                 }
 
-                else if(pVal.FormTypeEx == "370")
+                else if (pVal.FormTypeEx == "370")
                 {
                     ExchangeRateDiffs.uiApp_ItemEvent1(FormUID, ref pVal, out BubbleEvent);
-
                 }
 
                 //----------------------------->Landed Costs<-----------------------------
-                else if(pVal.FormTypeEx == "992")
+                else if (pVal.FormTypeEx == "992")
                 {
                     LandedCosts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->TAX Groups<-----------------------------
-                else if(pVal.FormTypeEx == "895")
+                else if (pVal.FormTypeEx == "895")
                 {
                     VatGroup.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
@@ -1809,6 +1807,7 @@ namespace BDO_Localisation_AddOn
                             oEditText = (SAPbouiCOM.EditText)oItem.Specific;
                         }
                     }
+                    GeneralSettings.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Company Details-ზე პაროლის დანიშვნის ფორმა<-----------------------------
@@ -2073,12 +2072,6 @@ namespace BDO_Localisation_AddOn
                     BDOSInternetBankingIntegrationServicesRules.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->General Settings<-----------------------------
-                else if (pVal.FormTypeEx == "138")
-                {
-                    GeneralSettings.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-
                 //----------------------------->Document Settings<-----------------------------
                 else if (pVal.FormTypeEx == "228")
                 {
@@ -2256,6 +2249,5 @@ namespace BDO_Localisation_AddOn
                 }
             }
         }
-
     }
 }
