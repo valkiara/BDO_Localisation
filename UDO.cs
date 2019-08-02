@@ -44,6 +44,12 @@ namespace BDO_Localisation_AddOn
                 BDO_Drivers.registerUDO( out errorText);
             }
 
+            BDOSConsumptionTypes.createMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFLTP_T") == false)
+            {
+                BDOSConsumptionTypes.registerUDO(out errorText);
+            }
+
             BDO_Vehicles.createMasterDataUDO( out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_VECL_D") == false)
             {
@@ -90,6 +96,12 @@ namespace BDO_Localisation_AddOn
             if (oUserObjectsMD.GetByKey("UDO_F_BDOSDEPACR_D") == false)
             {
                 BDOSDepreciationAccrualDocument.registerUDO(out errorText);
+            }
+
+            BDOSFuelConsumption.createDocumentUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUECON_D") == false)
+            {
+                BDOSFuelConsumption.registerUDO(out errorText);
             }
 
             //მოგების გადასახადის ცხრილი (ბევრი დოკუმენტი გააკეთებს ჩანაწერებს)

@@ -76,6 +76,8 @@ namespace BDO_Localisation_AddOn
             Warehouses.createUserFields(out errorText);
 
             BPBankAccounts.createUserFields(out errorText);
+
+            AssetClass.createUserFields(out errorText);
         }
 
         public static void addMenusForAddOn( out string errorText)
@@ -90,11 +92,15 @@ namespace BDO_Localisation_AddOn
 
             BDOSDepreciationAccrualWizard.addMenus(out errorText);
 
+            BDOSFuelWriteOffWizard.addMenus(out errorText);
+
             BDOSTaxJournal.addMenus( out errorText);
 
             BDO_Drivers.addMenus( out errorText);
 
             BDO_Vehicles.addMenus( out errorText);
+
+            BDOSConsumptionTypes.addMenus(out errorText);
 
             BDO_Waybills.addMenus( out errorText);
 
@@ -129,6 +135,10 @@ namespace BDO_Localisation_AddOn
             BDOSStockTransferWizard.addMenus(out errorText);
 
             BDOSDepreciationAccrualDocument.addMenus(out errorText);
+
+            BDOSFuelTransferWizard.addMenus(out errorText);
+
+            BDOSFuelConsumption.addMenus(out errorText);
         }
 
         public static int getLongIntRGB(int R, int G, int B)
@@ -957,8 +967,7 @@ namespace BDO_Localisation_AddOn
 
             return Convert.ToDecimal(s, Nfi);
         }           
-
-
+        
         public static decimal cleanStringOfNonDigits( string s)
         {
             if (string.IsNullOrEmpty(s))
