@@ -664,20 +664,20 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    //golden errow
-                    formItems = new Dictionary<string, object>();
-                    itemName = "WhsToLB"; //10 characters
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                    formItems.Add("Left", left + 5 + width_s - 20);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("LinkTo", "WhsToE");
-                    formItems.Add("LinkedObjectType", objectType);
-                    formItems.Add("FromPane", pane);
-                    formItems.Add("ToPane", pane);
+					//golden errow
+					formItems = new Dictionary<string, object>();
+					itemName = "WhsToLB"; //10 characters
+					formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+					formItems.Add("Left", left + 5 + width_s - 20);
+					formItems.Add("Top", top);
+					formItems.Add("Height", height);
+					formItems.Add("UID", itemName);
+					formItems.Add("LinkTo", "WhsToE");
+					formItems.Add("LinkedObjectType", objectType);
+					formItems.Add("FromPane", pane);
+					formItems.Add("ToPane", pane);
 
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
+					FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
                         return;
@@ -1094,18 +1094,18 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    //golden errow
-                    formItems = new Dictionary<string, object>();
-                    itemName = "WhsToLB"; //10 characters
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                    formItems.Add("Left", left + 5 + width_s - 20);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("LinkTo", "WhsToE");
-                    formItems.Add("LinkedObjectType", objectType);
+					//golden errow
+					formItems = new Dictionary<string, object>();
+					itemName = "WrhsToLB"; //10 characters
+					formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+					formItems.Add("Left", left + 5 + width_s - 20);
+					formItems.Add("Top", top);
+					formItems.Add("Height", height);
+					formItems.Add("UID", itemName);
+					formItems.Add("LinkTo", "WhsToE");
+					formItems.Add("LinkedObjectType", objectType);
 
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
+					FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
                         return;
@@ -2004,15 +2004,42 @@ namespace BDO_Localisation_AddOn
                 Sbuilder.Append(XML);
                 Sbuilder.Append("<Rows>");
 
-                string query = @"Select 'N' AS ""ChkBx"", ""WhsCode"" AS ""Code"",""WhsName"" AS ""Name"" FROM ""OWHS"" WHERE ""Inactive"" = 'N' AND ""DropShip"" = 'N' AND ""Locked"" = 'N'";
-                if (docType == "TransferToProjectWarehouse")
+				//string query = @"Select 'N' AS ""ChkBx"", ""WhsCode"" AS ""Code"",""WhsName"" AS ""Name"" FROM ""OWHS"" WHERE ""Inactive"" = 'N' AND ""DropShip"" = 'N' AND ""Locked"" = 'N'";
+				Sbuilder.Clear();
+
+				Sbuilder.Append(
+					@"SELECT 
+						'N' AS ""ChkBx"", 
+					    ""WhsCode"" AS ""Code"",
+						""WhsName"" AS ""Name"" 
+					FROM 
+						""OWHS"" 
+					WHERE 
+						""Inactive"" = 'N' AND ""DropShip"" = 'N' AND ""Locked"" = 'N' ");
+
+				if (docType == "TransferToProjectWarehouse")
                 {
-                    query = query + @" AND ""U_BDOSWhType"" = 'Main'";
+					Sbuilder.Append(@" AND ""U_BDOSWhType"" = 'Main' ");
+                    //query = query + @" AND ""U_BDOSWhType"" = 'Main'";
                 }
+
                 else if (docType != "TransferWithoutType")
                 {
-                    query = @"Select 'N' AS ""ChkBx"",  ""PrjCode"" AS ""Code"",""PrjName"" AS ""Name"" FROM ""OPRJ"" WHERE ""Active"" = 'Y' AND ""Locked"" = 'N'";
-                }
+					Sbuilder.Clear();
+
+					Sbuilder.Append(
+						@"SELECT 
+							'N' AS ""ChkBx"",
+							""PrjCode"" AS ""Code"", 
+							""PrjName"" AS ""Name"" 
+							FROM 
+								""OPRJ""
+							WHERE 
+								""Active"" = 'Y' AND ""Locked"" = 'N' ");
+					//query = @"Select 'N' AS ""ChkBx"",  ""PrjCode"" AS ""Code"",""PrjName"" AS ""Name"" FROM ""OPRJ"" WHERE ""Active"" = 'Y' AND ""Locked"" = 'N'";
+				}
+
+				string query = Sbuilder.ToString();
 
                 oDataTable.ExecuteQuery(query);
 
