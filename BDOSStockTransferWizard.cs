@@ -208,7 +208,7 @@ namespace BDO_Localisation_AddOn
                     Dictionary<string, string> listValidValuesDict = new Dictionary<string, string>();
                     listValidValuesDict.Add("TransferToProjectWarehouse", BDOSResources.getTranslate("TransferToProjectWarehouse"));
                     listValidValuesDict.Add("TransferToWriteOffWarehouse", BDOSResources.getTranslate("TransferToWriteOffWarehouse"));
-                    listValidValuesDict.Add("ReturnToWriteOffWarehouse", BDOSResources.getTranslate("ReturnToWriteOffWarehouse"));
+                    listValidValuesDict.Add("ReturnToProjectWareHouse", BDOSResources.getTranslate("ReturnToProjectWareHouse"));
                     listValidValuesDict.Add("ReturnToMainWarehouse", BDOSResources.getTranslate("ReturnToMainWarehouse"));
                     listValidValuesDict.Add("TransferWithoutType", BDOSResources.getTranslate("TransferWithoutType"));
 
@@ -951,7 +951,7 @@ namespace BDO_Localisation_AddOn
                     Dictionary<string, string> listValidValuesDict = new Dictionary<string, string>();
                     listValidValuesDict.Add("TransferToProjectWarehouse", BDOSResources.getTranslate("TransferToProjectWarehouse"));
                     listValidValuesDict.Add("TransferToWriteOffWarehouse", BDOSResources.getTranslate("TransferToWriteOffWarehouse"));
-                    listValidValuesDict.Add("ReturnToWriteOffWarehouse", BDOSResources.getTranslate("ReturnToWriteOffWarehouse"));
+                    listValidValuesDict.Add("ReturnToProjectWareHouse", BDOSResources.getTranslate("ReturnToProjectWareHouse"));
                     listValidValuesDict.Add("ReturnToMainWarehouse", BDOSResources.getTranslate("ReturnToMainWarehouse"));
                     listValidValuesDict.Add("TransferWithoutType", BDOSResources.getTranslate("TransferWithoutType"));
 
@@ -2160,7 +2160,7 @@ namespace BDO_Localisation_AddOn
                 {
                     queryBuilder.Append(@" AND ""OWHS"".""U_BDOSWhType"" = 'Project'");
                 }
-                else if (docType == "ReturnToWriteOffWarehouse")
+                else if (docType == "ReturnToProjectWareHouse")
                 {
                     queryBuilder.Append(@" AND ""OWHS"".""U_BDOSWhType"" = 'WriteOff'");
                 }
@@ -2172,7 +2172,7 @@ namespace BDO_Localisation_AddOn
 	                                     ""OWHS"".""U_BDOSPrjCod"",
                                          ""OWHS"".""U_BDOSWhType""
 
-                                       ORDER BY ""OIVL"".""LocCode"" ");
+                                       ORDER BY ""OIVL"".""LocCode""");
 
                 string query = queryBuilder.ToString();
 

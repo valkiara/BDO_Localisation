@@ -2611,8 +2611,8 @@
   <data name="ARDownPaymentVATAccrual" xml:space="preserve">
     <value>AR Down payment VAT accrual</value>
   </data>
-  <data name="ARVATAccualWizard" xml:space="preserve">
-    <value>AR VAT accual wizard</value>
+  <data name="ARVATAccrualWizard" xml:space="preserve">
+    <value>AR VAT Accrual Wizard</value>
   </data>
   <data name="DocEntVT" xml:space="preserve">
     <value>VAT accrual doc entry</value>
@@ -2905,8 +2905,8 @@
   <data name="ReturnToMainWarehouse" xml:space="preserve">
     <value>Return to Main Warehouse</value>
   </data>
-  <data name="ReturnToWriteOffWarehouse" xml:space="preserve">
-    <value>Return to Write Off Warehouse</value>
+  <data name="ReturnToProjectWareHouse" xml:space="preserve">
+    <value>Return to Project Warehouse</value>
   </data>
   <data name="Split" xml:space="preserve">
     <value>Split</value>
@@ -2960,7 +2960,7 @@
     <value>Depreciation amount</value>
   </data>
   <data name="DepreciationAccruingWizard" xml:space="preserve">
-    <value>Depreciation accruing wizard</value>
+    <value>Depreciation Accruing Wizard</value>
   </data>
   <data name="DistNumber" xml:space="preserve">
     <value>Batch number</value>
@@ -2998,9 +2998,6 @@
   <data name="DuplicateAccountInTheLine" xml:space="preserve">
     <value>Duplicate Account In The Line</value>
   </data>
-  <data name="EnableUsingFuelManagementModule" xml:space="preserve">
-    <value>Enable using fuel management module</value>
-  </data>
   <data name="FuelByFixedAssets" xml:space="preserve">
     <value>Fuel By Fixed Assets</value>
   </data>
@@ -3033,6 +3030,114 @@
   </data>
   <data name="Item Code" xml:space="preserve">
     <value />
+  </data>
+ <data name="FuelMng" xml:space="preserve">
+    <value>Fuel Management</value>
+  </data>
+  <data name="FuelTransferWizard" xml:space="preserve">
+    <value>Fuel Transfer Wizard</value>
+  </data>
+  <data name="AssetCode" xml:space="preserve">
+    <value>Asset Code</value>
+  </data>
+  <data name="AssetName" xml:space="preserve">
+    <value>Asset Name</value>
+  </data>
+  <data name="ConsumType" xml:space="preserve">
+    <value>Consumption Type</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Employee</value>
+  </data>
+  <data name="Dimension1" xml:space="preserve">
+    <value>Dimension 1</value>
+  </data>
+  <data name="Dimension2" xml:space="preserve">
+    <value>Dimension 2</value>
+  </data>
+  <data name="Dimension3" xml:space="preserve">
+    <value>Dimension 3</value>
+  </data>
+  <data name="Dimension4" xml:space="preserve">
+    <value>Dimension 4</value>
+  </data>
+  <data name="Dimension5" xml:space="preserve">
+    <value>Dimension 5</value>
+  </data>
+  <data name="EndingUnit" xml:space="preserve">
+    <value>Ending Unit</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>From Date</value>
+  </data>
+  <data name="FuelConsumptionDocument" xml:space="preserve">
+    <value>Fuel Consumption Document</value>
+  </data>
+  <data name="NormativeConsumption" xml:space="preserve">
+    <value>Normative Consumption</value>
+  </data>
+  <data name="StartingUnit" xml:space="preserve">
+    <value>Starting Unit</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>To Date</value>
+  </data>
+  <data name="WorkedHours" xml:space="preserve">
+    <value>Worked Hours</value>
+  </data>
+  <data name="FuelName" xml:space="preserve">
+    <value>Fuel Name</value>
+  </data>
+  <data name="FuelGroup" xml:space="preserve">
+    <value>Fuel Group</value>
+  </data>
+  <data name="FuelWriteOffWizard" xml:space="preserve">
+    <value>Fuel Write-Off Wizard</value>
+  </data>
+  <data name="Consum" xml:space="preserve">
+    <value>Consumption</value>
+  </data>
+  <data name="CreateGoodsIssue" xml:space="preserve">
+    <value>Create Goods Issue</value>
+  </data>
+  <data name="EndUnit" xml:space="preserve">
+    <value>Ending Unit</value>
+  </data>
+  <data name="NormConsum" xml:space="preserve">
+    <value>Normative Consumption</value>
+  </data>
+  <data name="StartUnit" xml:space="preserve">
+    <value>Starting Unit</value>
+  </data>
+  <data name="WorkHours" xml:space="preserve">
+    <value>Worked Hours</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="ToProject" xml:space="preserve">
+    <value>To Project</value>
+  </data>
+  <data name="EnableUsingFuelManagementModule" xml:space="preserve">
+    <value>Enable Using Fuel Management Module</value>
+  </data>
+  <data name="CreateStockTransfer" xml:space="preserve">
+    <value>Create Stock Transfer Document</value>
+  </data>
+  <data name="FixedAssetsDimension" xml:space="preserve">
+    <value>Fixed Assets Dimension</value>
+  </data>
+  <data name="ConsumptionColumnMustBeFilled" xml:space="preserve">
+    <value>Consumption Column Must Be Filled</value>
+  </data>
+  <data name="ConsumptionValueMustBeGreaterThanZero" xml:space="preserve">
+    <value>Consumption Value Must Be Greater Than Zero</value>
+  </data>
+  <data name="YouMustEnterEndingUnitGreaterThanStartingUnit" xml:space="preserve">
+    <value>You Must Enter Ending Unit Greater Than Starting Unit</value>
+  </data>
+  <data name="YouMustEnterPostingDateAfterEndingDate" xml:space="preserve">
+    <value>You Must Enter Posting Date After Ending Date</value>
   </data>
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>Link To A/P Documents</value>

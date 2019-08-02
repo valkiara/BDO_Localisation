@@ -1902,108 +1902,108 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            //top = top + height + 1;
 
-            formItems = new Dictionary<string, object>();
-            itemName = "BDOSFlByFA";
-            formItems.Add("isDataSource", true);
-            formItems.Add("DataSource", "DBDataSources");
-            formItems.Add("TableName", "OADM");
-            formItems.Add("Alias", "U_BDOSFlByFA");
-            formItems.Add("Bound", true);
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
-            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-            formItems.Add("Left", left);
-            formItems.Add("Width", width_s);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("FromPane", pane);
-            formItems.Add("ToPane", pane);
-            formItems.Add("Description", BDOSResources.getTranslate("FuelByFixedAssets"));
-            formItems.Add("Caption", BDOSResources.getTranslate("FuelByFixedAssets"));
-            formItems.Add("ValOff", "N");
-            formItems.Add("ValOn", "Y");
-            formItems.Add("DisplayDesc", true);
+            //formItems = new Dictionary<string, object>();
+            //itemName = "BDOSFlByFA";
+            //formItems.Add("isDataSource", true);
+            //formItems.Add("DataSource", "DBDataSources");
+            //formItems.Add("TableName", "OADM");
+            //formItems.Add("Alias", "U_BDOSFlByFA");
+            //formItems.Add("Bound", true);
+            //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            //formItems.Add("Left", left);
+            //formItems.Add("Width", width_s);
+            //formItems.Add("Top", top);
+            //formItems.Add("Height", height);
+            //formItems.Add("UID", itemName);
+            //formItems.Add("FromPane", pane);
+            //formItems.Add("ToPane", pane);
+            //formItems.Add("Description", BDOSResources.getTranslate("FuelByFixedAssets"));
+            //formItems.Add("Caption", BDOSResources.getTranslate("FuelByFixedAssets"));
+            //formItems.Add("ValOff", "N");
+            //formItems.Add("ValOn", "Y");
+            //formItems.Add("DisplayDesc", true);
 
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
+            //FormsB1.createFormItem(oForm, formItems, out errorText);
+            //if (errorText != null)
+            //{
+            //    return;
+            //}
 
-            oitem = oForm.Items.Item("91");
-            left_s = oitem.Left;
-            width_s = oitem.Width / 3;
-            width_e = width_s;
+            //oitem = oForm.Items.Item("91");
+            //left_s = oitem.Left;
+            //width_s = oitem.Width / 3;
+            //width_e = width_s;
 
-            formItems = new Dictionary<string, object>();
-            itemName = "BDOSFlWhsS"; //10 characters
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", left_s);
-            formItems.Add("Width", width_s);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("FuelWarehouse"));
-            formItems.Add("LinkTo", "BDOSFlWhsE");
-            formItems.Add("FromPane", pane);
-            formItems.Add("ToPane", pane);
+            //formItems = new Dictionary<string, object>();
+            //itemName = "BDOSFlWhsS"; //10 characters
+            //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            //formItems.Add("Left", left_s);
+            //formItems.Add("Width", width_s);
+            //formItems.Add("Top", top);
+            //formItems.Add("Height", height);
+            //formItems.Add("UID", itemName);
+            //formItems.Add("Caption", BDOSResources.getTranslate("FuelWarehouse"));
+            //formItems.Add("LinkTo", "BDOSFlWhsE");
+            //formItems.Add("FromPane", pane);
+            //formItems.Add("ToPane", pane);
 
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
+            //FormsB1.createFormItem(oForm, formItems, out errorText);
+            //if (errorText != null)
+            //{
+            //    return;
+            //}
 
-            string objectTypeWhs = "64";
-            string uniqueID_lf_FromLoc = "FlWhs_CFL";
-            FormsB1.addChooseFromList(oForm, multiSelection, objectTypeWhs, uniqueID_lf_FromLoc);
+            //string objectTypeWhs = "64";
+            //string uniqueID_lf_FromLoc = "FlWhs_CFL";
+            //FormsB1.addChooseFromList(oForm, multiSelection, objectTypeWhs, uniqueID_lf_FromLoc);
 
-            left_e = left_s + width_s + 25;
-            formItems = new Dictionary<string, object>();
-            itemName = "BDOSFlWhsE"; //10 characters
-            formItems.Add("isDataSource", true);
-            formItems.Add("DataSource", "DBDataSources");
-            formItems.Add("TableName", "OADM");
-            formItems.Add("Alias", "U_BDOSFlWhs");
-            formItems.Add("Bound", true);
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left_e);
-            formItems.Add("Width", width_e);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("ChooseFromListUID", uniqueID_lf_FromLoc);
-            formItems.Add("ChooseFromListAlias", "WhsCode");
-            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
-            formItems.Add("FromPane", pane);
-            formItems.Add("ToPane", pane);
+            //left_e = left_s + width_s + 25;
+            //formItems = new Dictionary<string, object>();
+            //itemName = "BDOSFlWhsE"; //10 characters
+            //formItems.Add("isDataSource", true);
+            //formItems.Add("DataSource", "DBDataSources");
+            //formItems.Add("TableName", "OADM");
+            //formItems.Add("Alias", "U_BDOSFlWhs");
+            //formItems.Add("Bound", true);
+            //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            //formItems.Add("Left", left_e);
+            //formItems.Add("Width", width_e);
+            //formItems.Add("Top", top);
+            //formItems.Add("Height", height);
+            //formItems.Add("UID", itemName);
+            //formItems.Add("DisplayDesc", true);
+            //formItems.Add("ChooseFromListUID", uniqueID_lf_FromLoc);
+            //formItems.Add("ChooseFromListAlias", "WhsCode");
+            //formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+            //formItems.Add("FromPane", pane);
+            //formItems.Add("ToPane", pane);
 
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
+            //FormsB1.createFormItem(oForm, formItems, out errorText);
+            //if (errorText != null)
+            //{
+            //    return;
+            //}
 
-            formItems = new Dictionary<string, object>();
-            itemName = "BDOSWhsLB"; //10 characters
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-            formItems.Add("Left", left_e - 20);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("LinkTo", "BDOSFlWhsE");
-            formItems.Add("LinkedObjectType", objectTypeWhs);
-            formItems.Add("FromPane", pane);
-            formItems.Add("ToPane", pane);
+            //formItems = new Dictionary<string, object>();
+            //itemName = "BDOSWhsLB"; //10 characters
+            //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            //formItems.Add("Left", left_e - 20);
+            //formItems.Add("Top", top);
+            //formItems.Add("Height", height);
+            //formItems.Add("UID", itemName);
+            //formItems.Add("LinkTo", "BDOSFlWhsE");
+            //formItems.Add("LinkedObjectType", objectTypeWhs);
+            //formItems.Add("FromPane", pane);
+            //formItems.Add("ToPane", pane);
 
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
+            //FormsB1.createFormItem(oForm, formItems, out errorText);
+            //if (errorText != null)
+            //{
+            //    return;
+            //}
 
             GC.Collect();
         }
@@ -2202,13 +2202,20 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
+				//else if (oForm.PaneLevel == 11)
+				//{
+				//	bool enableFuelManagment = oForm.DataSources.DBDataSources.Item("OADM").GetValue("U_BDOSEnbFlM", 0).Trim() == "Y";
+				//	bool enableByFixedAsset = oForm.DataSources.DBDataSources.Item("OADM").GetValue("U_BDOSFlByFA", 0).Trim() == "Y";
+				//	oForm.Items.Item("BDOSFlByFA").Visible = enableFuelManagment;
+				//	oForm.Items.Item("BDOSFlWhsS").Visible = enableFuelManagment && enableByFixedAsset;
+				//	oForm.Items.Item("BDOSFlWhsE").Visible = enableFuelManagment && enableByFixedAsset;
+				//}
+
                 else if (oForm.PaneLevel == 11)
                 {
-                    bool enableFlueManagment = oForm.DataSources.DBDataSources.Item("OADM").GetValue("U_BDOSEnbFlM", 0).Trim() == "Y";
-                    bool enableTyFixedAsset = oForm.DataSources.DBDataSources.Item("OADM").GetValue("U_BDOSFlByFA", 0).Trim() == "Y";
-                    oForm.Items.Item("BDOSFlByFA").Visible = enableFlueManagment;
-                    oForm.Items.Item("BDOSFlWhsS").Visible = enableFlueManagment && enableTyFixedAsset;
-                    oForm.Items.Item("BDOSFlWhsE").Visible = enableFlueManagment && enableTyFixedAsset;
+					bool enableFuelManagment = oForm.DataSources.DBDataSources.Item("OADM").GetValue("U_BDOSEnbFlM", 0).Trim() == "Y";
+
+					oForm.Items.Item("BDOSEnbFlM").Enabled = !enableFuelManagment;
                 }
 
             }
@@ -2777,10 +2784,10 @@ namespace BDO_Localisation_AddOn
                             setVisibleFormItemsForCompanyDetails(oForm, out errorText);
                         }
 
-                        if ((pVal.ItemUID == "36" || pVal.ItemUID == "BDOSEnbFlM" || pVal.ItemUID == "BDOSFlByFA") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == true)
-                        {
-                            setVisibleFormItemsForCompanyDetails(oForm, out errorText);
-                        }
+						//if ((pVal.ItemUID == "36" || pVal.ItemUID == "BDOSEnbFlM" || pVal.ItemUID == "BDOSFlByFA") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == true)
+						//{
+						//	setVisibleFormItemsForCompanyDetails(oForm, out errorText);
+						//}
 
                         if ((pVal.ItemUID == "BDO_CapAcc" || pVal.ItemUID == "BDO_TaxAcc") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                         {
