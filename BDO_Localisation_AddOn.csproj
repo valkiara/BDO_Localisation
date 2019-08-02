@@ -76,9 +76,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>obj\x86\Release\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -152,6 +151,7 @@
     <Compile Include="BOG Integration Services\Model\StatementFilter.cs" />
     <Compile Include="BOG Integration Services\OAuth2Client.cs" />
     <Compile Include="BOG Integration Services\OAuth2Constants.cs" />
+    <Compile Include="BPBankAccounts.cs" />
     <Compile Include="BusinessPartners.cs" />
     <Compile Include="ChartOfAccounts.cs" />
     <Compile Include="CommonFunctions.cs" />

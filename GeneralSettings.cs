@@ -8,7 +8,7 @@ namespace BDO_Localisation_AddOn
 {
     static partial class GeneralSettings
     {
-        public static void createUserFields( out string errorText)
+        public static void createUserFields(out string errorText)
         {
             errorText = null;
             Dictionary<string, object> fieldskeysMap;
@@ -20,7 +20,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 15);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSRcDPPr");
@@ -29,7 +29,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSBTCNPR");
@@ -51,7 +51,7 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -252,9 +252,9 @@ namespace BDO_Localisation_AddOn
             }
 
             //left = left + 70 + 10;
-            bool multiSelection = false;            
+            bool multiSelection = false;
             string uniqueID_lf_Project = "GLAccount_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_Project);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_Project);
 
             formItems = new Dictionary<string, object>();
             itemName = "ActAutPayE";
@@ -300,7 +300,7 @@ namespace BDO_Localisation_AddOn
             if (errorText != null)
             {
                 return;
-            }       
+            }
 
             top = top + 19 + 5;
 
@@ -355,7 +355,7 @@ namespace BDO_Localisation_AddOn
             left = 300;
             top = oForm.Items.Item("540002042").Top;
 
-            
+
 
             itemName = "BDOSFADimS";
             formItems = new Dictionary<string, object>();
@@ -377,8 +377,6 @@ namespace BDO_Localisation_AddOn
             }
 
             left_e = left + width + 5 + 30;
-
-           
 
             Dictionary<string, string> activeDimensionsList = CommonFunctions.getActiveDimensionsList(out errorText);
 
@@ -500,7 +498,7 @@ namespace BDO_Localisation_AddOn
             }
 
 
-            
+
 
 
             ////Batch Number ცხრილი
@@ -570,10 +568,10 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static void setValueCFLEvent(  SAPbouiCOM.Form oForm, SAPbouiCOM.ChooseFromListEvent oCFL, out string errorText)
+        public static void setValueCFLEvent(SAPbouiCOM.Form oForm, SAPbouiCOM.ChooseFromListEvent oCFL, out string errorText)
         {
             errorText = null;
-          
+
             if (oCFL.ChooseFromListUID == "Dimension_CFL")
             {
                 SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFL.SelectedObjects;
@@ -607,8 +605,8 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.EditText oEdit = oForm.Items.Item("ActAutPayE").Specific;
                         oEdit.Value = AcctCode;
                     }
-                    catch { }                    
-             
+                    catch { }
+
                 }
                 catch (Exception ex)
                 {
@@ -630,7 +628,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -640,7 +638,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    createFormItems( oForm, out errorText);
+                    createFormItems(oForm, out errorText);
                     oForm.PaneLevel = 3;
                     oForm.Items.Item("45").Click();
                 }
@@ -667,13 +665,13 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.ChooseFromListEvent oCFLEvento = null;
                         oCFLEvento = ((SAPbouiCOM.ChooseFromListEvent)(pVal));
 
-                        setValueCFLEvent( oForm, oCFLEvento, out errorText);
+                        setValueCFLEvent(oForm, oCFLEvento, out errorText);
                     }
                     else
                     {
                         string sCFL_ID = "GLAccount_CFL";
                         SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
-                                         
+
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
 
                         SAPbouiCOM.Condition oCon = oCons.Add();

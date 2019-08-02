@@ -1329,7 +1329,7 @@ namespace BDO_Localisation_AddOn
                     //filterByTransType && 
                     if (transTypeForFilter == OperationTypeFromIntBank.WithoutSalary.ToString())
                     {
-                        if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.Salary.ToString())
+                        if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.Salary.ToString() || oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.None.ToString())
                         {
                             if (deleteFromUnsynchronized)
                             {
@@ -1716,7 +1716,7 @@ namespace BDO_Localisation_AddOn
                     //filterByTransType && 
                     if (transTypeForFilter == OperationTypeFromIntBank.WithoutSalary.ToString())
                     {
-                        if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.Salary.ToString())
+                        if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.Salary.ToString() || oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.None.ToString())
                         {
                             if (deleteFromUnsynchronized)
                             {
@@ -1918,6 +1918,15 @@ namespace BDO_Localisation_AddOn
                     projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
                     blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
                 }
+                else if (debitCredit == 0)
+                {
+                    oRecordSet = CommonFunctions.getEmployeeInfo(partnerTaxCode);
+
+                    if (oRecordSet != null)
+                    {
+                        oOperationType = OperationTypeFromIntBank.None;
+                    }
+                }
             }
             else if (transactionType == "20") //Income
                 oOperationType = OperationTypeFromIntBank.OtherIncomes;
@@ -1930,6 +1939,15 @@ namespace BDO_Localisation_AddOn
                     GLAccountCodeBP = oRecordSet.Fields.Item("DebPayAcct").Value;
                     projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
                     blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
+                }
+                else if (debitCredit == 0)
+                {
+                    oRecordSet = CommonFunctions.getEmployeeInfo(partnerTaxCode);
+
+                    if (oRecordSet != null)
+                    {
+                        oOperationType = OperationTypeFromIntBank.None;
+                    }
                 }
             }
             else if (transactionType == "30") //Transfer out and cash withdrawal
@@ -1959,7 +1977,7 @@ namespace BDO_Localisation_AddOn
             projectCod = null;
             blnkAgr = null;
 
-            if (transactionType == "COM" || transactionType == "FEE" || transactionType == "LFG")
+            if (transactionType == "COM" || transactionType == "FEE")
                 oOperationType = OperationTypeFromIntBank.BankCharge;
             else if (CommonFunctions.isAccountInHouseBankAccount(partnerAccountNumber + partnerCurrency) == true && transactionType != "CCO")
                 oOperationType = OperationTypeFromIntBank.TransferToOwnAccount;
@@ -1967,6 +1985,15 @@ namespace BDO_Localisation_AddOn
                 oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
             else if (transactionType == "CCO")
                 oOperationType = OperationTypeFromIntBank.CurrencyExchange;
+            else if (transactionType == "LFG")
+            {
+                if (debitCredit == 0)
+                    oOperationType = OperationTypeFromIntBank.OtherExpenses;
+                else if (debitCredit == 1)
+                    oOperationType = OperationTypeFromIntBank.OtherIncomes;
+                else
+                    oOperationType = OperationTypeFromIntBank.None;
+            }
             else if (transactionType == "PMC" || transactionType == "LND")
             {
                 if (debitCredit == 0)
@@ -1990,6 +2017,15 @@ namespace BDO_Localisation_AddOn
                     GLAccountCodeBP = oRecordSet.Fields.Item("DebPayAcct").Value;
                     projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
                     blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
+                }
+                else if (debitCredit == 0)
+                {
+                    oRecordSet = CommonFunctions.getEmployeeInfo(partnerTaxCode);
+
+                    if (oRecordSet != null)
+                    {
+                        oOperationType = OperationTypeFromIntBank.None;
+                    }
                 }
             }
             else if (debitCredit == 0)
@@ -2892,9 +2928,10 @@ namespace BDO_Localisation_AddOn
                             oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
 
                             string value = "TransferToOwnAccountPaymentOrderIo";
-                            oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));
+                            oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));                          
                             value = "TreasuryTransferPaymentOrderIo";
                             oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));
+                            oColumn.ValidValues.Add("TreasuryTransferPaymentOrderIoBP", BDOSResources.getTranslate(value));
                             value = "TransferWithinBankPaymentOrderIo";
                             oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));
                             value = "TransferToOtherBankNationalCurrencyPaymentOrderIo";
