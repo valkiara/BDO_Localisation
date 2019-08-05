@@ -104,7 +104,7 @@ namespace BDO_Localisation_AddOn
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
+            string errorText;
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
@@ -118,42 +118,15 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-
-                if (pVal.FormTypeEx == "60504")
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                    if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                     {
-                        createFormItems(oForm, out errorText);
-
-                        SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                        if (DocDBSource.GetValue("ObjType", 0).Trim() == "18" && DocDBSource.GetValue("isIns", 0).Trim() == "Y" && DocDBSource.GetValue("DocEntry", 0) == "" && DocDBSource.GetValue("CANCELED", 0) == "N")
-                        {
-                            SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("60092", Program.currentFormCount);
-
-                            //საპენსიოს დათვლა
-                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "OPCH", "PCH1", out errorText);
-                            if (!string.IsNullOrEmpty(errorText))
-                            {
-                                Program.uiApp.StatusBar.SetSystemMessage(errorText);
-                                Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                                BubbleEvent = false;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
-                    {
-                        if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
-                        {
-                            CommonFunctions.fillDocRate(oForm, "OPCH", "PCH11");
-                        }
+                        CommonFunctions.fillDocRate(oForm, "OPCH", "PCH11");
                     }
                 }
             }
         }
-
 
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
