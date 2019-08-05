@@ -363,7 +363,7 @@ namespace BDO_Localisation_AddOn
                         }
 
                         //A/P Reserve Invoice
-                        if (DocDBSource.GetValue("ObjType", 0).Trim() == "18" && DocDBSource.GetValue("isIns", 0).Trim() == "Y")
+                        else if(DocDBSource.GetValue("ObjType", 0).Trim() == "18" && DocDBSource.GetValue("isIns", 0).Trim() == "Y")
                         {
                             SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("60092", Program.currentFormCount);
 
