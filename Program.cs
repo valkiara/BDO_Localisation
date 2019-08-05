@@ -2220,8 +2220,7 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "1472000006")
                 {
                     AssetClass.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-            }
+                }            
 
                 //----------------------------->Withholding Tax Table<-----------------------------
                 else if (pVal.FormTypeEx == "60504") //from A/P Credit Memo, A/P Invoice, A/P Reserve Invoice, A/P Down Payment Request 
