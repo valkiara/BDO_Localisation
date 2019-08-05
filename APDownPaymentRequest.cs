@@ -322,76 +322,54 @@ namespace BDO_Localisation_AddOn
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
+            string errorText;
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.FormTypeEx == "60504")
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
-                    {
-                        SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                        if (DocDBSource.GetValue("ObjType", 0).Trim() == "204" && DocDBSource.GetValue("DocEntry", 0) == "" && DocDBSource.GetValue("CANCELED", 0) == "N")
-                        {
-                            SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("65309", Program.currentFormCount);
-
-                            //საპენსიოს დათვლა
-                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "ODPO", "DPO1", out errorText);
-                            if (!string.IsNullOrEmpty(errorText))
-                            {
-                                Program.uiApp.StatusBar.SetSystemMessage(errorText);
-                                Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                                BubbleEvent = false;
-                            }
-                        }
-                    }
+                    ProfitTaxTypeIsSharing = ProfitTax.ProfitTaxTypeIsSharing();
+                    APDownPayment.createFormItems(oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
+                    createFormItems(oForm, out errorText);
                 }
-                else
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && pVal.BeforeAction == false)
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
-                    {
-                        ProfitTaxTypeIsSharing = ProfitTax.ProfitTaxTypeIsSharing();
-                        APDownPayment.createFormItems(oForm, out errorText);
-                        formDataLoad(oForm, out errorText);
-                        setVisibleFormItems(oForm, out errorText);
-                        createFormItems(oForm, out errorText);
-                    }
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && pVal.BeforeAction == false)
+                    oForm.Freeze(true);
+                    resizeForm(oForm, out errorText);
+                    oForm.Freeze(false);
+                }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
+                {
+                    if ((pVal.ItemUID == "liablePrTx") && pVal.BeforeAction == false)
                     {
                         oForm.Freeze(true);
-                        resizeForm(oForm, out errorText);
+                        LiableTaxes_OnClick(oForm, out errorText);
                         oForm.Freeze(false);
                     }
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
+
+                    if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                     {
-                        if ((pVal.ItemUID == "liablePrTx") && pVal.BeforeAction == false)
-                        {
-                            oForm.Freeze(true);
-                            LiableTaxes_OnClick(oForm, out errorText);
-                            oForm.Freeze(false);
-                        }
-
-                        if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
-                        {
-                            CommonFunctions.fillDocRate(oForm, "ODPO", "ODPO");
-                        }
-
-                        if (pVal.ItemUID == "UsBlaAgRtS" & pVal.BeforeAction == false)
-                        {
-
-                            SAPbouiCOM.EditText oBlankAgr = (SAPbouiCOM.EditText)oForm.Items.Item("1980002192").Specific;
-
-                            if (string.IsNullOrEmpty(oBlankAgr.Value))
-                            {
-                                Program.uiApp.SetStatusBarMessage(errorText = BDOSResources.getTranslate("EmptyBlaAgrError"), SAPbouiCOM.BoMessageTime.bmt_Short);
-                                SAPbouiCOM.CheckBox oUsBlaAgRtCB = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
-                                oUsBlaAgRtCB.Checked = false;
-                                oForm.Items.Item("1980002192").Click();
-                            }
+                        CommonFunctions.fillDocRate(oForm, "ODPO", "ODPO");
                     }
 
+                    if (pVal.ItemUID == "UsBlaAgRtS" & pVal.BeforeAction == false)
+                    {
+
+                        SAPbouiCOM.EditText oBlankAgr = (SAPbouiCOM.EditText)oForm.Items.Item("1980002192").Specific;
+
+                        if (string.IsNullOrEmpty(oBlankAgr.Value))
+                        {
+                            Program.uiApp.SetStatusBarMessage(errorText = BDOSResources.getTranslate("EmptyBlaAgrError"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                            SAPbouiCOM.CheckBox oUsBlaAgRtCB = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
+                            oUsBlaAgRtCB.Checked = false;
+                            oForm.Items.Item("1980002192").Click();
+                        }
                     }
 
                     if ((pVal.ItemUID == "PrBaseE") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)

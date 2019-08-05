@@ -1785,7 +1785,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->A/P Credit Memo<-----------------------------
-                else if (pVal.FormTypeEx == "181" || pVal.FormTypeEx == "60504")
+                else if (pVal.FormTypeEx == "181") // || pVal.FormTypeEx == "60504"
                 {
                     APCreditMemo.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
@@ -1969,7 +1969,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->A/P Invoice<-----------------------------
-                else if (pVal.FormTypeEx == "141" || pVal.FormTypeEx == "60504")
+                else if (pVal.FormTypeEx == "141") // || pVal.FormTypeEx == "60504"
                 {
                     APInvoice.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
@@ -1981,7 +1981,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->A/P Reserve Invoice<-----------------------------
-                else if (pVal.FormTypeEx == "60092" || pVal.FormTypeEx == "60504")
+                else if (pVal.FormTypeEx == "60092") // || pVal.FormTypeEx == "60504"
                 {
                     APReserveInvoice.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
@@ -2124,7 +2124,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->A/P Down Payment Request<-----------------------------
-                else if (pVal.FormTypeEx == "65309" || pVal.FormTypeEx == "60504")
+                else if (pVal.FormTypeEx == "65309") // || pVal.FormTypeEx == "60504"
                 {
                     APDownPaymentRequest.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
@@ -2220,6 +2220,13 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "1472000006")
                 {
                     AssetClass.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+            }
+
+                //----------------------------->Withholding Tax Table<-----------------------------
+                else if (pVal.FormTypeEx == "60504") //from A/P Credit Memo, A/P Invoice, A/P Reserve Invoice, A/P Down Payment Request 
+                {
+                    WithholdingTax.openTaxTableFromAPDocs(FormUID, ref pVal, out BubbleEvent);
                 }
             }
             catch (Exception ex)

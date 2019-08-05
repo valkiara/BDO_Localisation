@@ -329,5 +329,66 @@ namespace BDO_Localisation_AddOn
 
             return PhysicalEntityPensionRates;
         }
+
+        public static void openTaxTableFromAPDocs(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+            string errorText = null;
+
+            if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
+            {
+                SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                {
+                    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+                    if (DocDBSource.GetValue("DocEntry", 0) == "" && DocDBSource.GetValue("CANCELED", 0) == "N")
+                    {
+                        //A/P Credit Memo
+                        if (DocDBSource.GetValue("ObjType", 0).Trim() == "19")
+                        {
+                            SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("181", Program.currentFormCount);
+
+                            //საპენსიოს დათვლა
+                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "ORPC", "RPC1", out errorText);
+                        }
+
+                        //A/P Invoice
+                        else if (DocDBSource.GetValue("ObjType", 0).Trim() == "18" && DocDBSource.GetValue("isIns", 0).Trim() != "Y")
+                        {
+                            SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("141", Program.currentFormCount);
+
+                            //საპენსიოს დათვლა
+                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "OPCH", "PCH1", out errorText);
+                        }
+
+                        //A/P Reserve Invoice
+                        if (DocDBSource.GetValue("ObjType", 0).Trim() == "18" && DocDBSource.GetValue("isIns", 0).Trim() == "Y")
+                        {
+                            SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("60092", Program.currentFormCount);
+
+                            //საპენსიოს დათვლა
+                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "OPCH", "PCH1", out errorText);
+                        }
+
+                        //A/P Down Payment Request
+                        else if(DocDBSource.GetValue("ObjType", 0).Trim() == "204")
+                        {
+                            SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("65309", Program.currentFormCount);
+
+                            //საპენსიოს დათვლა
+                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "ODPO", "DPO1", out errorText);
+                        }
+
+                        if(!string.IsNullOrEmpty(errorText))
+                        {
+                            Program.uiApp.StatusBar.SetSystemMessage(errorText);
+                            Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                            BubbleEvent = false;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

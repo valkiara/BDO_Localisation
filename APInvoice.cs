@@ -1049,129 +1049,101 @@ namespace BDO_Localisation_AddOn
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
+            string errorText;
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.FormTypeEx == "60504")
+                if (pVal.ItemUID == "PrBaseE" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                    if (pVal.BeforeAction == false)
                     {
-                        
-                        SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                        if (DocDBSource.GetValue("ObjType", 0).Trim() == "18" && DocDBSource.GetValue("isIns", 0).Trim() != "Y" && DocDBSource.GetValue("DocEntry", 0) == "" && DocDBSource.GetValue("CANCELED", 0) == "N")
-                        {
-                            SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("141", Program.currentFormCount);
+                        SAPbouiCOM.ChooseFromListEvent oCFLEvento = null;
+                        oCFLEvento = ((SAPbouiCOM.ChooseFromListEvent)(pVal));
 
-                            //საპენსიოს დათვლა
-                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "OPCH", "PCH1", out errorText);
-                            if (!string.IsNullOrEmpty(errorText))
-                            {
-                                Program.uiApp.StatusBar.SetSystemMessage(errorText);
-                                Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                                BubbleEvent = false;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (pVal.ItemUID == "PrBaseE" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
-                    {
-                        if (pVal.BeforeAction == false)
-                        {
-                            SAPbouiCOM.ChooseFromListEvent oCFLEvento = null;
-                            oCFLEvento = ((SAPbouiCOM.ChooseFromListEvent)(pVal));
-
-                            chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
-                        }
-                    }
-
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
-                    {
-                        if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
-                        {
-                            CommonFunctions.fillDocRate(oForm, "OPCH", "PCH11");
-                        }
-
-                        if (pVal.ItemUID == "UsBlaAgRtS")
-                        {
-
-                            SAPbouiCOM.EditText oBlankAgr = (SAPbouiCOM.EditText)oForm.Items.Item("1980002192").Specific;
-
-                            if (string.IsNullOrEmpty(oBlankAgr.Value))
-                            {
-                                Program.uiApp.SetStatusBarMessage(errorText = BDOSResources.getTranslate("EmptyBlaAgrError"), SAPbouiCOM.BoMessageTime.bmt_Short);
-                                SAPbouiCOM.CheckBox oUsBlaAgRtCB = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
-                                oUsBlaAgRtCB.Checked = false;
-                                oForm.Items.Item("1980002192").Click();
-                            }
-                            
-
-                        }
-
-                        if (pVal.ItemUID == "nonEconExp" && pVal.BeforeAction == false)
-                        {
-                            oForm.Freeze(true);
-                            nonEconExp_OnClick(oForm, out errorText);
-                            oForm.Freeze(false);
-                        }
-                    }
-
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && pVal.BeforeAction == false)
-                    {
-                        oForm.Freeze(true);
-                        resizeForm(oForm, out errorText);
-                        oForm.Freeze(false);
-                    }
-
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
-                    {
-                        createFormItems(oForm, out errorText);
-                        formDataLoad(oForm, out errorText);
-                        setVisibleFormItems(oForm, out errorText);
-                    }
-
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.ItemUID == "WBOper" & pVal.BeforeAction == false)
-                    {
-                        Program.oIncWaybDocFormAPInv = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
-
-                        oForm.Freeze(true);
-                        BDO_WBReceivedDocs.comboSelect(oForm, Program.oIncWaybDocFormAPInv, pVal.ItemUID, "Invoice", out errorText);
-                        oForm.Freeze(false);
-                    }
-
-                    if (pVal.ItemUID == "BDO_TaxDoc" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST) // || pVal.ItemUID == "4") 
-                    {
-                        SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
-                        oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
                         chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                     }
+                }
 
-                    if (pVal.ItemUID == "BDO_TaxCan" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
+                {
+                    if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                     {
-                        int taxDocEntry = Convert.ToInt32(oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx);
-                        int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocEntry", 0));
-                        if (taxDocEntry != 0)
+                        CommonFunctions.fillDocRate(oForm, "OPCH", "PCH11");
+                    }
+
+                    if (pVal.ItemUID == "UsBlaAgRtS")
+                    {
+                        SAPbouiCOM.EditText oBlankAgr = (SAPbouiCOM.EditText)oForm.Items.Item("1980002192").Specific;
+
+                        if (string.IsNullOrEmpty(oBlankAgr.Value))
                         {
-                            int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentLinkedToTaxInvoiceCancel"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-                            if (answer == 1)
-                            {
-                                BDO_TaxInvoiceReceived.removeBaseDoc(taxDocEntry, docEntry, "0", out errorText);
-                                formDataLoad(oForm, out errorText);
-                                setVisibleFormItems(oForm, out errorText);
-                            }
+                            Program.uiApp.SetStatusBarMessage(errorText = BDOSResources.getTranslate("EmptyBlaAgrError"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                            SAPbouiCOM.CheckBox oUsBlaAgRtCB = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
+                            oUsBlaAgRtCB.Checked = false;
+                            oForm.Items.Item("1980002192").Click();
                         }
-                        else
+                    }
+
+                    if (pVal.ItemUID == "nonEconExp" && pVal.BeforeAction == false)
+                    {
+                        oForm.Freeze(true);
+                        nonEconExp_OnClick(oForm, out errorText);
+                        oForm.Freeze(false);
+                    }
+                }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && pVal.BeforeAction == false)
+                {
+                    oForm.Freeze(true);
+                    resizeForm(oForm, out errorText);
+                    oForm.Freeze(false);
+                }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                {
+                    createFormItems(oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
+                }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.ItemUID == "WBOper" & pVal.BeforeAction == false)
+                {
+                    Program.oIncWaybDocFormAPInv = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
+                    oForm.Freeze(true);
+                    BDO_WBReceivedDocs.comboSelect(oForm, Program.oIncWaybDocFormAPInv, pVal.ItemUID, "Invoice", out errorText);
+                    oForm.Freeze(false);
+                }
+
+                if (pVal.ItemUID == "BDO_TaxDoc" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST) // || pVal.ItemUID == "4") 
+                {
+                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
+                    oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
+                    chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
+                }
+
+                if (pVal.ItemUID == "BDO_TaxCan" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
+                {
+                    int taxDocEntry = Convert.ToInt32(oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx);
+                    int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocEntry", 0));
+                    if (taxDocEntry != 0)
+                    {
+                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentLinkedToTaxInvoiceCancel"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        if (answer == 1)
                         {
-                            BubbleEvent = false;
+                            BDO_TaxInvoiceReceived.removeBaseDoc(taxDocEntry, docEntry, "0", out errorText);
+                            formDataLoad(oForm, out errorText);
+                            setVisibleFormItems(oForm, out errorText);
                         }
+                    }
+                    else
+                    {
+                        BubbleEvent = false;
                     }
                 }
             }
-
         }
 
         public static void cancellation(SAPbouiCOM.Form oForm, int docEntry, out string errorText)
