@@ -698,6 +698,34 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static string getAccountCurrency(string accountCode)
+        {
+            string accountCurrency = null;
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                string query = @"SELECT ""OACT"".""ActCurr"" FROM ""OACT"" WHERE ""OACT"".""AcctCode"" = '" + accountCode + "'";
+
+                oRecordSet.DoQuery(query);
+                if (!oRecordSet.EoF)
+                {
+                    accountCurrency = oRecordSet.Fields.Item("ActCurr").Value.ToString();
+                    return accountCurrency;
+                }
+                return accountCurrency;
+            }
+            catch
+            {
+                return accountCurrency;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+                oRecordSet = null;
+            }
+        }
+
         public static string getServiceUrlForInternetBanking(string program, out string clientID, out int port, out string errorText)
         {
             errorText = null;

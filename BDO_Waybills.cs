@@ -4868,8 +4868,8 @@ namespace BDO_Localisation_AddOn
                     string END_ADDRESS = oRecordSet.Fields.Item("U_endAddrs").Value.ToString(); //END_ADDRESS - ტრანსპორტირების დასრულების ადგილი
                     string DRIVER_TIN = oRecordSet.Fields.Item("U_drivTin").Value.ToString(); //DRIVER_TIN - მძღოლის პირადი ნომერი
                     string CHEK_DRIVER_TIN = oRecordSet.Fields.Item("U_notRsdnt").Value.ToString(); //CHEK_DRIVER_TIN – თუ უცხოელია 0 თუ საქართველოს მოქალაქე 1
-                    CHEK_DRIVER_TIN = CHEK_DRIVER_TIN == "N" ? "1" : "0";
-                    if (DRIVER_TIN == "")
+                    CHEK_DRIVER_TIN = (CHEK_DRIVER_TIN == "N" || string.IsNullOrEmpty(CHEK_DRIVER_TIN)) ? "1" : "0";
+                    if (string.IsNullOrEmpty(DRIVER_TIN))
                     {
                         CHEK_DRIVER_TIN = "";
                     }
@@ -4921,7 +4921,6 @@ namespace BDO_Localisation_AddOn
                     int Min = Convert.ToInt32(U_beginTime - Hour * 100);
                     BEGIN_DATE = new DateTime(BEGIN_DATE.Year, BEGIN_DATE.Month, BEGIN_DATE.Day, Hour, Min,0);
                     
-
                     string TRAN_COST_PAYER = oRecordSet.Fields.Item("U_payForTr").Value.ToString(); //TRAN_COST_PAYER- ტრანსპორტირების ღირებულებას თუ იხდის მყიდველი - 1; გამყიდველი - 2;
                     TRAN_COST_PAYER = TRAN_COST_PAYER == "-1" ? "0" : TRAN_COST_PAYER;
                     string TRANS_ID = oRecordSet.Fields.Item("U_trnsType").Value.ToString(); //TRANS_ID - ტრანსპორტის ტიპის id
