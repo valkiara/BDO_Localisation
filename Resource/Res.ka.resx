@@ -3037,12 +3037,6 @@
   <data name="Dimension5" xml:space="preserve">
     <value>Dimension 5</value>
   </data>
-  <data name="ConsumTypesMasterData" xml:space="preserve">
-    <value>წვის ტიპი</value>
-  </data>
-  <data name="FuelType" xml:space="preserve">
-    <value>საწვავის ტიპი</value>
-  </data>
   <data name="PerHour" xml:space="preserve">
     <value>სთ-ში</value>
   </data>
@@ -3115,7 +3109,7 @@
   <data name="ConsumptionValueMustBeGreaterThanZero" xml:space="preserve">
     <value>Consumption Value Must Be Greater Than Zero</value>
   </data>
- <data name="YouMustEnterEndingUnitGreaterThanStartingUnit" xml:space="preserve">
+  <data name="YouMustEnterEndingUnitGreaterThanStartingUnit" xml:space="preserve">
     <value>You Must Enter Ending Unit Greater Than Starting Unit</value>
   </data>
   <data name="YouMustEnterPostingDateAfterEndingDate" xml:space="preserve">
@@ -3129,5 +3123,14 @@
   </data>
   <data name="UsLifeError" xml:space="preserve">
     <value>გამოყენების ვადა უნდა იყოს უკვე დარიცხული თვეების რაოდენობაზე მეტი!</value>
+  </data>
+  <data name="BeneficiaryRegistrationCountryCode" xml:space="preserve">
+    <value>რეგისტრაციის ქვეყნის კოდი</value>
+  </data>
+  <data name="RecipientCity" xml:space="preserve">
+    <value>მიმღები ქალაქი</value>
+  </data>
+  <data name="ReportingCode" xml:space="preserve">
+    <value>რეპორტინგის კოდი</value>
   </data>
 </root>

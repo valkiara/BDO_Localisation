@@ -767,7 +767,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top + height + 1);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Caption", "Reporting Code");
+            formItems.Add("Caption", BDOSResources.getTranslate("ReportingCode"));
             formItems.Add("LinkTo", "rprtCodeCB");
             //formItems.Add("Visible", false);
 
@@ -2701,6 +2701,7 @@ namespace BDO_Localisation_AddOn
             string docCurr = dataForTransferType["docCurr"];
             string description = dataForTransferType["description"];
             string chargeDetails = dataForTransferType["chargeDetails"];
+            string beneficiaryAddress = dataForTransferType["BeneficiaryAddress"];
             string dispatchType = dataForTransferType["dispatchType"];
             string isPayToBank = dataForTransferType["isPayToBank"];
             //დოკუმენტის მონაცემები <---
@@ -2795,9 +2796,12 @@ namespace BDO_Localisation_AddOn
                     else if (docType != "A" && transferType == "TransferToOtherBankForeignCurrencyPaymentOrderIo") //გადარიცხვა სხვა ბანკში (უცხოური ვალუტა)
                     {
                         creditAcctTmp = bpBAccountCurrency;
-                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description))
+                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(beneficiaryAddress))
                         {
-                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" + oForm.Items.Item("descrptS").Specific.caption + "\""; //აუცილებელია შემდეგი ველების შევსება
+                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") 
+                                + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" 
+                                + oForm.Items.Item("descrptS").Specific.caption
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryAddress") + "\""; //აუცილებელია შემდეგი ველების შევსება
                             return;
                         }
                     }
@@ -2813,9 +2817,12 @@ namespace BDO_Localisation_AddOn
                     else if (docType == "A" && transferType == "TransferToOtherBankForeignCurrencyPaymentOrderIo") //გადარიცხვა სხვა ბანკში (უცხოური ვალუტა)
                     {
                         creditAcctTmp = creditAcctCurrency;
-                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description))
+                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(beneficiaryAddress))
                         {
-                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" + oForm.Items.Item("descrptS").Specific.caption + "\""; //აუცილებელია შემდეგი ველების შევსება
+                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory")
+                                + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \""
+                                + oForm.Items.Item("descrptS").Specific.caption
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryAddress") + "\""; //აუცილებელია შემდეგი ველების შევსება
                             return;
                         }
                     }
@@ -2853,9 +2860,9 @@ namespace BDO_Localisation_AddOn
             string description = dataForTransferType["description"];
             string chargeDetails = dataForTransferType["chargeDetails"];
             string reportCode = dataForTransferType["reportCode"];
-            string RecipientCity = dataForTransferType["RecipientCity"];
-            string BeneficiaryAddress = dataForTransferType["BeneficiaryAddress"];
-            string BeneficiaryRegistrationCountryCode = dataForTransferType["BeneficiaryRegistrationCountryCode"];
+            string recipientCity = dataForTransferType["RecipientCity"];
+            string beneficiaryAddress = dataForTransferType["BeneficiaryAddress"];
+            string beneficiaryRegistrationCountryCode = dataForTransferType["BeneficiaryRegistrationCountryCode"];
             string dispatchType = dataForTransferType["dispatchType"];
             string isPayToBank = dataForTransferType["isPayToBank"];
             string docRate = dataForTransferType["docRate"];
@@ -2942,9 +2949,18 @@ namespace BDO_Localisation_AddOn
                     else if (docType != "A" && transferType == "TransferToForeignCurrencyPaymentOrderIo") //გადარიცხვა (უცხოური ვალუტა)
                     {
                         creditAcctTmp = bpBAccountCurrency;
-                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(reportCode) || string.IsNullOrEmpty(BeneficiaryAddress) || string.IsNullOrEmpty(RecipientCity) || string.IsNullOrEmpty(BeneficiaryRegistrationCountryCode))
+                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description) 
+                            || string.IsNullOrEmpty(reportCode) || string.IsNullOrEmpty(beneficiaryAddress) 
+                            || string.IsNullOrEmpty(recipientCity) || string.IsNullOrEmpty(beneficiaryRegistrationCountryCode))
                         {
-                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" + oForm.Items.Item("rprtCodeS").Specific.caption + "\", \"" + oForm.Items.Item("descrptS").Specific.caption + "\""; //აუცილებელია შემდეგი ველების შევსება
+                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") 
+                                + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption 
+                                + "\", \"" + oForm.Items.Item("rprtCodeS").Specific.caption 
+                                + "\", \"" + oForm.Items.Item("descrptS").Specific.caption
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryAddress")
+                                + "\", \"" + BDOSResources.getTranslate("RecipientCity")
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryRegistrationCountryCode") + "\"";
+                            //აუცილებელია შემდეგი ველების შევსება
                             return;
                         }
                     }
@@ -2960,9 +2976,18 @@ namespace BDO_Localisation_AddOn
                     else if (docType == "A" && transferType == "TransferToForeignCurrencyPaymentOrderIo") //გადარიცხვა (უცხოური ვალუტა)
                     {
                         creditAcctTmp = creditAcctCurrency;
-                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description))
+                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description)
+                             || string.IsNullOrEmpty(reportCode) || string.IsNullOrEmpty(beneficiaryAddress)
+                             || string.IsNullOrEmpty(recipientCity) || string.IsNullOrEmpty(beneficiaryRegistrationCountryCode))
                         {
-                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" + oForm.Items.Item("rprtCodeS").Specific.caption + "\", \"" + oForm.Items.Item("descrptS").Specific.caption + "\""; //აუცილებელია შემდეგი ველების შევსება
+                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory")
+                                + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption
+                                + "\", \"" + oForm.Items.Item("rprtCodeS").Specific.caption
+                                + "\", \"" + oForm.Items.Item("descrptS").Specific.caption
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryAddress")
+                                + "\", \"" + BDOSResources.getTranslate("RecipientCity")
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryRegistrationCountryCode") + "\"";
+                            //აუცილებელია შემდეგი ველების შევსება
                             return;
                         }
                     }
