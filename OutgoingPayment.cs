@@ -3035,7 +3035,6 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-
                 if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction)
                 {
                     //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
