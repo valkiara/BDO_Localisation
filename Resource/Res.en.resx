@@ -3157,4 +3157,10 @@
   <data name="ReportingCode" xml:space="preserve">
     <value>Reporting Code</value>
   </data>
+  <data name="CannotDeleteACashFlowLineItemAssignedInInternetBankingIntegrationServicesRules" xml:space="preserve">
+    <value>Cannot delete a Cash Flow line item assigned  in Internet Banking Integration Services Rules</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
 </root>
