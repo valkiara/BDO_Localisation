@@ -792,7 +792,7 @@ namespace BDO_Localisation_AddOn
         OtherIncomes,
         OtherExpenses,
         Salary,
-        WithoutSalary
-        
+        WithoutSalary,
+        TreasuryTransferPaymentOrderIoBP
     };
 }

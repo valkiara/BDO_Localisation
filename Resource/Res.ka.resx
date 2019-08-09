@@ -3133,4 +3133,7 @@
   <data name="ReportingCode" xml:space="preserve">
     <value>რეპორტინგის კოდი</value>
   </data>
+  <data name="TreasuryTransferPaymentOrderIoBP" xml:space="preserve">
+    <value>საბიუჯეტო გადარიცხვა (ბპ)</value>
+  </data>
 </root>

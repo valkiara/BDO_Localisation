@@ -213,7 +213,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("AffectsFormMode", false);
-                    //formItems.Add("Value", "B941646");
+                    formItems.Add("Value", "B941646");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -250,7 +250,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     formItems.Add("UID", itemName);                   
                     formItems.Add("IsPassword", true);
                     formItems.Add("AffectsFormMode", false);
-                    //formItems.Add("Value", "Aa123456");
+                    formItems.Add("Value", "Aa123456");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -286,7 +286,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("AffectsFormMode", false);
-                    //formItems.Add("Value", "1111");
+                    formItems.Add("Value", "1111");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
