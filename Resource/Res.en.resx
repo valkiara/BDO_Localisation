@@ -3031,7 +3031,7 @@
   <data name="Item Code" xml:space="preserve">
     <value />
   </data>
- <data name="FuelMng" xml:space="preserve">
+  <data name="FuelMng" xml:space="preserve">
     <value>Fuel Management</value>
   </data>
   <data name="FuelTransferWizard" xml:space="preserve">
@@ -3147,5 +3147,8 @@
   </data>
   <data name="UsLifeError" xml:space="preserve">
     <value>Useful life must be more than it has already been depreciated!</value>
+  </data>
+  <data name="CannotDeleteACashFlowLineItemAssignedIn" xml:space="preserve">
+    <value>Cannot delete a Cash Flow line item assigned in </value>
   </data>
 </root>

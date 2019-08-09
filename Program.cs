@@ -363,19 +363,30 @@ namespace BDO_Localisation_AddOn
                     Items.uiApp_MenuEvent(ref pVal, out BubbleEvent);
                 }
             }
-            //----------------------------->მოგების გადასახადის დაბეგვრის ობიექტების ტიპები<-----------------------------
-            try
-            {
-                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_PTBT_D")
-                {
-                    errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_PTBT_D", "");
-                }
-            }
-            catch (Exception ex)
-            {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
-            }
+
+			//Delete Ln Item
+			if (pVal.BeforeAction && pVal.MenuUID == "5910")
+			{
+				SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+				if (oDocForm.TypeEx == "80030")
+				{
+					CashFlowLineItem.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
+				}
+			}
+
+			//----------------------------->მოგების გადასახადის დაბეგვრის ობიექტების ტიპები<-----------------------------
+			try
+			{
+				if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_PTBT_D")
+				{
+					errorText = null;
+					Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_PTBT_D", "");
+				}
+			}
+			catch (Exception ex)
+			{
+				Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+			}
 
             //----------------------------->მოგების გადასახადის დაბეგვრის ობიექტები<-----------------------------
             try
@@ -962,7 +973,7 @@ namespace BDO_Localisation_AddOn
                     {
                         removeRecordTrans = true;
                     }
-                }
+				}
             }
 
             //----------------------------->Remove Line<-----------------------------
@@ -1548,7 +1559,7 @@ namespace BDO_Localisation_AddOn
                 {
                     AssetClass.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
-            }
+			}
             catch (Exception ex)
             {
                 errorText = ex.Message;
@@ -2227,7 +2238,7 @@ namespace BDO_Localisation_AddOn
                 {
                     WithholdingTax.openTaxTableFromAPDocs(FormUID, ref pVal, out BubbleEvent);
                 }
-            }
+			}
             catch (Exception ex)
             {
                 errorText = ex.Message;
@@ -2309,7 +2320,7 @@ namespace BDO_Localisation_AddOn
 
             if (eventInfo.BeforeAction == true)
             {
-                if (Program.uiApp.Menus.Exists("6005") == false && oItem != null && DocEntry == "")
+				if (Program.uiApp.Menus.Exists("6005") == false && oItem != null && DocEntry == "")
                 {
                     SAPbouiCOM.MenuItem oMenuItem;
                     SAPbouiCOM.Menus oMenus;
