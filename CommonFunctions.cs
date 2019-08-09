@@ -333,7 +333,8 @@ namespace BDO_Localisation_AddOn
                     	 ""OCRB"".""BankCode"",
                     	 ""OCRB"".""Country"",
                     	 ""OCRB"".""Account"",
-                    	 ""OCRB"".""AcctName"" 
+                    	 ""OCRB"".""AcctName"",
+                         ""OCRB"".""U_treasury""
                     FROM ""OCRB"" 
                     INNER JOIN ""OCRD"" ON ""OCRB"".""CardCode"" = ""OCRD"".""CardCode"" 
                     WHERE ""Account"" = '" + account + @"' AND ""OCRD"".""CardType"" = '" + cardType + "'";

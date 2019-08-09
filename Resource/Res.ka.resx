@@ -3136,4 +3136,7 @@
   <data name="CannotDeleteACashFlowLineItemAssignedInInternetBankingIntegrationServicesRules" xml:space="preserve">
     <value>ვერ მოხერხდა ფულ. ნაკადის წაშლა, რომელიც გამოყენებულია  ინტერნეტ ბანკთან ინტეგრაციის წესებში</value>
   </data>
+  <data name="TreasuryTransferPaymentOrderIoBP" xml:space="preserve">
+    <value>საბიუჯეტო გადარიცხვა (ბპ)</value>
+  </data>
 </root>

@@ -3124,4 +3124,7 @@
   <data name="CannotDeleteACashFlowLineItemAssignedInInternetBankingIntegrationServicesRules" xml:space="preserve">
     <value>Cannot delete a Cash Flow line item assigned  in Internet Banking Integration Services Rules</value>
   </data>
+  <data name="TreasuryTransferPaymentOrderIoBP" xml:space="preserve">
+    <value>Treasury Transfer (BP)</value>
+  </data>
 </root>
