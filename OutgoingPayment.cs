@@ -767,7 +767,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top + height + 1);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Caption", "Reporting Code");
+            formItems.Add("Caption", BDOSResources.getTranslate("ReportingCode"));
             formItems.Add("LinkTo", "rprtCodeCB");
             //formItems.Add("Visible", false);
 
@@ -2108,9 +2108,11 @@ namespace BDO_Localisation_AddOn
                 string docType = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocType", 0).Trim();
                 string opType = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_opType", 0).Trim();
                 string diffCurr = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DiffCurr", 0).Trim();
-                string docCurr = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocCurr", 0).Trim();
-                docCurr = CommonFunctions.getCurrencyInternationalCode(docCurr);
-                docCurr = diffCurr == "Y" ? Program.LocalCurrency : docCurr;
+                //string docCurr = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocCurr", 0).Trim();               
+                string docCurr = CommonFunctions.getAccountCurrency(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("TrsfrAcct", 0).Trim());
+                docCurr = docCurr == "##" ? Program.LocalCurrency : docCurr;
+                //docCurr = CommonFunctions.getCurrencyInternationalCode(docCurr);
+                //docCurr = diffCurr == "Y" ? Program.LocalCurrency : docCurr;
                 string description = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_descrpt", 0).Trim();
                 string chargeDetails = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_chrgDtls", 0).Trim();
                 string reportCode = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_rprtCode", 0).Trim();
@@ -2223,9 +2225,10 @@ namespace BDO_Localisation_AddOn
                 string docType = oRecordSet.Fields.Item("DocType").Value.ToString();
                 string opType = oRecordSet.Fields.Item("U_opType").Value.ToString();
                 string diffCurr = oRecordSet.Fields.Item("DiffCurr").Value.ToString();
-                string docCurr = oRecordSet.Fields.Item("DocCurr").Value.ToString();
-                docCurr = CommonFunctions.getCurrencyInternationalCode(docCurr);
-                docCurr = diffCurr == "Y" ? Program.LocalCurrency : docCurr;
+                //string docCurr = oRecordSet.Fields.Item("DocCurr").Value.ToString();
+                string docCurr = oRecordSet.Fields.Item("DebitAccountCurrencyCode").Value.ToString(); 
+                //docCurr = CommonFunctions.getCurrencyInternationalCode(docCurr);
+                //docCurr = diffCurr == "Y" ? Program.LocalCurrency : docCurr;
                 string description = oRecordSet.Fields.Item("U_descrpt").Value.ToString();
                 string chargeDetails = oRecordSet.Fields.Item("U_chrgDtls").Value.ToString();
                 string reportCode = oRecordSet.Fields.Item("U_rprtCode").Value.ToString();
@@ -2328,7 +2331,7 @@ namespace BDO_Localisation_AddOn
                 string docType = dataForTransferType["docType"];
                 string opType = dataForTransferType["opType"];
                 string diffCurr = dataForTransferType["diffCurr"];
-                string docCurr = dataForTransferType["docCurr"];
+                string docCurr = oRecordSet.Fields.Item("DebitAccountCurrencyCode").Value.ToString(); //dataForTransferType["docCurr"];
                 string description = dataForTransferType["description"];
                 string chargeDetails = dataForTransferType["chargeDetails"];
                 string reportCode = dataForTransferType["reportCode"];
@@ -2535,28 +2538,29 @@ namespace BDO_Localisation_AddOn
                     }
                     else
                     {
+                        //docCurr <-> creditAcctCurrency
                         if (bankCode == "TBCBGE22")
                         {
                             if (creditBankCode == bankCode)
                             {
                                 transferType = "TransferWithinBankPaymentOrderIo"; //გადარიცხვა თიბისი ბანკის ფილიალებში
                             }
-                            else if (creditAcctCurrency == "GEL")
+                            else if (docCurr == "GEL")
                             {
                                 transferType = "TransferToOtherBankNationalCurrencyPaymentOrderIo"; //გადარიცხვა სხვა ბანკში (ეროვნული ვალუტა)
                             }
-                            else if (creditAcctCurrency != "GEL")
+                            else if (docCurr != "GEL")
                             {
                                 transferType = "TransferToOtherBankForeignCurrencyPaymentOrderIo"; //გადარიცხვა სხვა ბანკში (უცხოური ვალუტა)
                             }
                         }
                         else if (bankCode == "BAGAGE22")
                         {
-                            if (creditAcctCurrency == "GEL")
+                            if (docCurr == "GEL")
                             {
                                 transferType = "TransferToNationalCurrencyPaymentOrderIo"; //გადარიცხვა (ეროვნული ვალუტა)
                             }
-                            else if (creditAcctCurrency != "GEL")
+                            else if (docCurr != "GEL")
                             {
                                 transferType = "TransferToForeignCurrencyPaymentOrderIo"; //გადარიცხვა (უცხოური ვალუტა)
                             }
@@ -2572,7 +2576,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-
+                    //docCurr <-> bpBAccountCurrency
                     if (bankCode == "TBCBGE22")
                     {
                         if (bpBnkCode == "TBCBGE22")
@@ -2581,11 +2585,11 @@ namespace BDO_Localisation_AddOn
                         }
                         else if (string.IsNullOrEmpty(bpBnkCode) == false && bpBnkCode != "TBCBGE22") //pBnkCode != bankCode)
                         {
-                            if (bpBAccountCurrency == "GEL")
+                            if (docCurr == "GEL")
                             {
                                 transferType = "TransferToOtherBankNationalCurrencyPaymentOrderIo"; //გადარიცხვა სხვა ბანკში (ეროვნული ვალუტა)
                             }
-                            else if (bpBAccountCurrency != "GEL")
+                            else if (docCurr != "GEL")
                             {
                                 transferType = "TransferToOtherBankForeignCurrencyPaymentOrderIo"; //გადარიცხვა სხვა ბანკში (უცხოური ვალუტა)
                             }
@@ -2595,11 +2599,11 @@ namespace BDO_Localisation_AddOn
                     {
                         if (string.IsNullOrEmpty(bpBnkCode) == false)
                         {
-                            if (bpBAccountCurrency == "GEL")
+                            if (docCurr == "GEL")
                             {
                                 transferType = "TransferToNationalCurrencyPaymentOrderIo"; //გადარიცხვა (ეროვნული ვალუტა)
                             }
-                            else if (bpBAccountCurrency != "GEL")
+                            else if (docCurr != "GEL")
                             {
                                 transferType = "TransferToForeignCurrencyPaymentOrderIo"; //გადარიცხვა (უცხოური ვალუტა)
                             }
@@ -2697,6 +2701,7 @@ namespace BDO_Localisation_AddOn
             string docCurr = dataForTransferType["docCurr"];
             string description = dataForTransferType["description"];
             string chargeDetails = dataForTransferType["chargeDetails"];
+            string beneficiaryAddress = dataForTransferType["BeneficiaryAddress"];
             string dispatchType = dataForTransferType["dispatchType"];
             string isPayToBank = dataForTransferType["isPayToBank"];
             //დოკუმენტის მონაცემები <---
@@ -2791,9 +2796,12 @@ namespace BDO_Localisation_AddOn
                     else if (docType != "A" && transferType == "TransferToOtherBankForeignCurrencyPaymentOrderIo") //გადარიცხვა სხვა ბანკში (უცხოური ვალუტა)
                     {
                         creditAcctTmp = bpBAccountCurrency;
-                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description))
+                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(beneficiaryAddress))
                         {
-                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" + oForm.Items.Item("descrptS").Specific.caption + "\""; //აუცილებელია შემდეგი ველების შევსება
+                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") 
+                                + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" 
+                                + oForm.Items.Item("descrptS").Specific.caption
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryAddress") + "\""; //აუცილებელია შემდეგი ველების შევსება
                             return;
                         }
                     }
@@ -2809,21 +2817,25 @@ namespace BDO_Localisation_AddOn
                     else if (docType == "A" && transferType == "TransferToOtherBankForeignCurrencyPaymentOrderIo") //გადარიცხვა სხვა ბანკში (უცხოური ვალუტა)
                     {
                         creditAcctTmp = creditAcctCurrency;
-                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description))
+                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(beneficiaryAddress))
                         {
-                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" + oForm.Items.Item("descrptS").Specific.caption + "\""; //აუცილებელია შემდეგი ველების შევსება
+                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory")
+                                + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \""
+                                + oForm.Items.Item("descrptS").Specific.caption
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryAddress") + "\""; //აუცილებელია შემდეგი ველების შევსება
                             return;
                         }
                     }
 
-                    if (string.IsNullOrEmpty(creditAcctTmp) == false && transferType != "CurrencyExchangePaymentOrderIo") //კონვერტაცია
-                    {
-                        if (docCurr != creditAcctTmp)
-                        {
-                            errorText = BDOSResources.getTranslate("DocumentSCurrencyAndTheCreditAccountSCurrencyIsDifferent") + "!"; //დოკუმენტის ვალუტა და მიმღები ანგარიშის ვალუტა განსხვავდება!";
-                            return;
-                        }
-                    }
+                    //დროებით
+                    //if (string.IsNullOrEmpty(creditAcctTmp) == false && transferType != "CurrencyExchangePaymentOrderIo") //კონვერტაცია
+                    //{
+                    //    if (docCurr != creditAcctTmp)
+                    //    {
+                    //        errorText = BDOSResources.getTranslate("DocumentSCurrencyAndTheCreditAccountSCurrencyIsDifferent") + "!"; //დოკუმენტის ვალუტა და მიმღები ანგარიშის ვალუტა განსხვავდება!";
+                    //        return;
+                    //    }
+                    //}
                 }
             }
         }
@@ -2848,9 +2860,9 @@ namespace BDO_Localisation_AddOn
             string description = dataForTransferType["description"];
             string chargeDetails = dataForTransferType["chargeDetails"];
             string reportCode = dataForTransferType["reportCode"];
-            string RecipientCity = dataForTransferType["RecipientCity"];
-            string BeneficiaryAddress = dataForTransferType["BeneficiaryAddress"];
-            string BeneficiaryRegistrationCountryCode = dataForTransferType["BeneficiaryRegistrationCountryCode"];
+            string recipientCity = dataForTransferType["RecipientCity"];
+            string beneficiaryAddress = dataForTransferType["BeneficiaryAddress"];
+            string beneficiaryRegistrationCountryCode = dataForTransferType["BeneficiaryRegistrationCountryCode"];
             string dispatchType = dataForTransferType["dispatchType"];
             string isPayToBank = dataForTransferType["isPayToBank"];
             string docRate = dataForTransferType["docRate"];
@@ -2937,9 +2949,18 @@ namespace BDO_Localisation_AddOn
                     else if (docType != "A" && transferType == "TransferToForeignCurrencyPaymentOrderIo") //გადარიცხვა (უცხოური ვალუტა)
                     {
                         creditAcctTmp = bpBAccountCurrency;
-                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(reportCode) || string.IsNullOrEmpty(BeneficiaryAddress) || string.IsNullOrEmpty(RecipientCity) || string.IsNullOrEmpty(BeneficiaryRegistrationCountryCode))
+                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description) 
+                            || string.IsNullOrEmpty(reportCode) || string.IsNullOrEmpty(beneficiaryAddress) 
+                            || string.IsNullOrEmpty(recipientCity) || string.IsNullOrEmpty(beneficiaryRegistrationCountryCode))
                         {
-                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" + oForm.Items.Item("rprtCodeS").Specific.caption + "\", \"" + oForm.Items.Item("descrptS").Specific.caption + "\""; //აუცილებელია შემდეგი ველების შევსება
+                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") 
+                                + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption 
+                                + "\", \"" + oForm.Items.Item("rprtCodeS").Specific.caption 
+                                + "\", \"" + oForm.Items.Item("descrptS").Specific.caption
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryAddress")
+                                + "\", \"" + BDOSResources.getTranslate("RecipientCity")
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryRegistrationCountryCode") + "\"";
+                            //აუცილებელია შემდეგი ველების შევსება
                             return;
                         }
                     }
@@ -2955,21 +2976,31 @@ namespace BDO_Localisation_AddOn
                     else if (docType == "A" && transferType == "TransferToForeignCurrencyPaymentOrderIo") //გადარიცხვა (უცხოური ვალუტა)
                     {
                         creditAcctTmp = creditAcctCurrency;
-                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description))
+                        if (string.IsNullOrEmpty(chargeDetails) || string.IsNullOrEmpty(description)
+                             || string.IsNullOrEmpty(reportCode) || string.IsNullOrEmpty(beneficiaryAddress)
+                             || string.IsNullOrEmpty(recipientCity) || string.IsNullOrEmpty(beneficiaryRegistrationCountryCode))
                         {
-                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption + "\", \"" + oForm.Items.Item("rprtCodeS").Specific.caption + "\", \"" + oForm.Items.Item("descrptS").Specific.caption + "\""; //აუცილებელია შემდეგი ველების შევსება
+                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory")
+                                + " : \"" + oForm.Items.Item("chrgDtlsS").Specific.caption
+                                + "\", \"" + oForm.Items.Item("rprtCodeS").Specific.caption
+                                + "\", \"" + oForm.Items.Item("descrptS").Specific.caption
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryAddress")
+                                + "\", \"" + BDOSResources.getTranslate("RecipientCity")
+                                + "\", \"" + BDOSResources.getTranslate("BeneficiaryRegistrationCountryCode") + "\"";
+                            //აუცილებელია შემდეგი ველების შევსება
                             return;
                         }
                     }
 
-                    if (string.IsNullOrEmpty(creditAcctTmp) == false && transferType != "CurrencyExchangePaymentOrderIo") //კონვერტაცია
-                    {
-                        if (docCurr != creditAcctTmp)
-                        {
-                            errorText = BDOSResources.getTranslate("DocumentSCurrencyAndTheCreditAccountSCurrencyIsDifferent") + "!"; //დოკუმენტის ვალუტა და მიმღები ანგარიშის ვალუტა განსხვავდება!";
-                            return;
-                        }
-                    }
+                    //დროებით
+                    //if (string.IsNullOrEmpty(creditAcctTmp) == false && transferType != "CurrencyExchangePaymentOrderIo") //კონვერტაცია
+                    //{
+                    //    if (docCurr != creditAcctTmp)
+                    //    {
+                    //        errorText = BDOSResources.getTranslate("DocumentSCurrencyAndTheCreditAccountSCurrencyIsDifferent") + "!"; //დოკუმენტის ვალუტა და მიმღები ანგარიშის ვალუტა განსხვავდება!";
+                    //        return;
+                    //    }
+                    //}
                 }
             }
         }
@@ -2982,19 +3013,19 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
             //შემოწმება
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
             {
-                if (BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == false)
+                if (!BusinessObjectInfo.BeforeAction && !BusinessObjectInfo.ActionSuccess)
                 {
                     BubbleEvent = false;
                 }
 
-                if (BusinessObjectInfo.BeforeAction == true)
+                if (BusinessObjectInfo.BeforeAction)
                 {
                     fillPhysicalEntityTaxes(oForm, out errorText);
 
                     // მოგების გადასახადი
-                    if (ProfitTaxTypeIsSharing == true)
+                    if (ProfitTaxTypeIsSharing)
                     {
                         if (oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocType", 0) == "S")
                         {
@@ -3009,7 +3040,7 @@ namespace BDO_Localisation_AddOn
 
                         if (oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_liablePrTx", 0) == "Y")
                         {
-                            if (oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_prBase", 0) == "")
+                            if (string.IsNullOrEmpty(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_prBase", 0)))
                             {
                                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TaxableObject") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
                                 Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
@@ -3034,28 +3065,27 @@ namespace BDO_Localisation_AddOn
                         BubbleEvent = false;
                     }
                 }
-
-
-                if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction)
-                {
+                
+                if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction) //BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction
+                {                   
                     //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
-                    SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item(0);
-                    if (DocDBSourcePAYR.GetValue("CANCELED", 0) == "N")
+                    SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item(0);
+                    if (oDBDataSource.GetValue("Canceled", 0) == "N")
                     {
-                        string opType = DocDBSourcePAYR.GetValue("U_opType", 0).Trim();
+                        string opType = oDBDataSource.GetValue("U_opType", 0).Trim();
                         if (opType != "salaryPayment" & opType != "paymentToEmployee")
                         {
-                            string DocEntry = DocDBSourcePAYR.GetValue("DocEntry", 0);
-                            string DocCurrency = DocDBSourcePAYR.GetValue("DocCurr", 0);
+                            string DocEntry = oDBDataSource.GetValue("DocEntry", 0);
+                            string DocCurrency = oDBDataSource.GetValue("DocCurr", 0);
                             //decimal DocRate = Convert.ToDecimal( DocDBSourcePAYR.GetValue("DocRate", 0));
-                            decimal DocRate = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(DocDBSourcePAYR.GetValue("DocRate", 0)));
-                            string DocNum = DocDBSourcePAYR.GetValue("DocNum", 0);
-                            DateTime DocDate = DateTime.ParseExact(DocDBSourcePAYR.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
+                            decimal DocRate = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oDBDataSource.GetValue("DocRate", 0)));
+                            string DocNum = oDBDataSource.GetValue("DocNum", 0);
+                            DateTime DocDate = DateTime.ParseExact(oDBDataSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
 
                             CommonFunctions.StartTransaction();
 
                             Program.JrnLinesGlobal = new DataTable();
-                            DataTable reLines = null;
+                            DataTable reLines;
                             DataTable JrnLinesDT = createAdditionalEntries(oForm, null, null, null, DocCurrency, out reLines, DocRate);
 
                             JrnEntry(DocEntry, DocNum, DocDate, JrnLinesDT, reLines, out errorText);
@@ -3066,55 +3096,71 @@ namespace BDO_Localisation_AddOn
                             }
                             else
                             {
-                                if (BusinessObjectInfo.ActionSuccess == false)
+                                if (!BusinessObjectInfo.ActionSuccess)
                                 {
                                     Program.JrnLinesGlobal = JrnLinesDT;
                                 }
                             }
-
-                            //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
-                            if (BusinessObjectInfo.ActionSuccess == true & BusinessObjectInfo.BeforeAction == false)
+                            if (Program.oCompany.InTransaction)
                             {
-                                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                                //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
+                                if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction)
+                                {
+                                    CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                                }
+                                else
+                                {
+                                    CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                                }
                             }
                             else
                             {
-                                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                                Program.uiApp.MessageBox("ტრანზაქციის დასრულებს შეცდომა");
+                                BubbleEvent = false;
                             }
                         }
                     }
                 }
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
             {
-                if (BusinessObjectInfo.BeforeAction == true)
+                if (Program.cancellationTrans && Program.canceledDocEntry != 0)
                 {
-                    if (Program.cancellationTrans == true && Program.canceledDocEntry != 0)
-                    {
-
-                    }
-                    else
-                    {
-                        checkFillDoc(oForm, out errorText);
-                        if (errorText != null)
-                        {
-                            Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, false);
-                            BubbleEvent = false;
-                        }
-                    }
-                }
-                else if (BusinessObjectInfo.BeforeAction == false && BusinessObjectInfo.ActionSuccess == true)
-                {
-                    if (Program.cancellationTrans == true && Program.canceledDocEntry != 0)
-                    {
-                        cancellation(oForm, Program.canceledDocEntry, out errorText);
-                        Program.canceledDocEntry = 0;
-                    }
+                    cancellation(oForm, Program.canceledDocEntry, out errorText);
+                    Program.canceledDocEntry = 0;
                 }
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
+            //if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
+            //{
+            //    if (BusinessObjectInfo.BeforeAction == true)
+            //    {
+            //        if (Program.cancellationTrans == true && Program.canceledDocEntry != 0)
+            //        {
+
+            //        }
+            //        else
+            //        {
+            //            checkFillDoc(oForm, out errorText);
+            //            if (errorText != null)
+            //            {
+            //                Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, false);
+            //                BubbleEvent = false;
+            //            }
+            //        }
+            //    }
+            //    else if (BusinessObjectInfo.BeforeAction == false && BusinessObjectInfo.ActionSuccess == true)
+            //    {
+            //        if (Program.cancellationTrans == true && Program.canceledDocEntry != 0)
+            //        {
+            //            cancellation(oForm, Program.canceledDocEntry, out errorText);
+            //            Program.canceledDocEntry = 0;
+            //        }
+            //    }
+            //}
+
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
                 formDataLoad(oForm, out errorText);
             }

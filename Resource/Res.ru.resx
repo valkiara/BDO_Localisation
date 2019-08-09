@@ -3112,6 +3112,15 @@
   <data name="YouMustEnterPostingDateAfterEndingDate" xml:space="preserve">
     <value>You Must Enter Posting Date After Ending Date</value>
   </data>
+  <data name="BeneficiaryRegistrationCountryCode" xml:space="preserve">
+    <value>Beneficiary Registration Country Code</value>
+  </data>
+  <data name="RecipientCity" xml:space="preserve">
+    <value>Recipient City</value>
+  </data>
+  <data name="ReportingCode" xml:space="preserve">
+    <value>Reporting Code</value>
+  </data>
   <data name="CannotDeleteACashFlowLineItemAssignedInInternetBankingIntegrationServicesRules" xml:space="preserve">
     <value>Cannot delete a Cash Flow line item assigned  in Internet Banking Integration Services Rules</value>
   </data>
