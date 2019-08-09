@@ -1990,7 +1990,21 @@ namespace BDO_Localisation_AddOn
             else if (CommonFunctions.isAccountInHouseBankAccount(partnerAccountNumber + partnerCurrency) == true && transactionType != "CCO")
                 oOperationType = OperationTypeFromIntBank.TransferToOwnAccount;
             else if (string.IsNullOrEmpty(treasuryCode) == false)
+            {
                 oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
+                if (string.IsNullOrEmpty(partnerAccountNumber) == false && debitCredit == 0)
+                {
+                    oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + "GEL", partnerTaxCode, cardType);
+
+                    if (oRecordSet != null && oRecordSet.Fields.Item("U_treasury").Value == "Y")
+                    {
+                        GLAccountCodeBP = oRecordSet.Fields.Item("DebPayAcct").Value;
+                        projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
+                        blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
+                        oOperationType = OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP;
+                    }
+                }
+            }
             else if (transactionType == "CCO")
                 oOperationType = OperationTypeFromIntBank.CurrencyExchange;
             else if (transactionType == "LFG")
