@@ -106,6 +106,7 @@
     <Compile Include="BalanceSheet.cs" />
     <Compile Include="BDOSARDownPaymentVATAccrual.cs" />
     <Compile Include="BDOSAutomaticTasks.cs" />
+    <Compile Include="CashFlowLineItem.cs" />
     <Compile Include="BDOSConsumptionTypes.cs" />
     <Compile Include="BDOSDeleteUDF.cs" />
     <Compile Include="BDOSDepreciationAccrualDocument.cs" />
