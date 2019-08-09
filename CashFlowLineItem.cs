@@ -21,7 +21,7 @@ namespace BDO_Localisation_AddOn
 
 				if (checkRemoving(oForm, out errorText))
 				{
-					Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CannotDeleteACashFlowLineItemAssignedIn") + BDOSResources.getTranslate("InternetBankingIntegrationServicesRules"));
+					Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CannotDeleteACashFlowLineItemAssignedInInternetBankingIntegrationServicesRules"));
 
 
 					BubbleEvent = false;

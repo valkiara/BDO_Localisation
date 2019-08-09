@@ -3046,9 +3046,6 @@
   <data name="ThereIsDepreciationAmountsInCurrentMonthForItem" xml:space="preserve">
     <value>There is depreciation amounts in current month for item</value>
   </data>
-  <data name="ConsumTypesMasterData" xml:space="preserve">
-    <value>Consumption Types Master Data</value>
-  </data>
   <data name="StartingUnit" xml:space="preserve">
     <value>Starting Unit</value>
   </data>
@@ -3099,20 +3096,23 @@
   </data>
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>Link To A/P Documents</value>
-    </data>
+  </data>
   <data name="ConsumptionValueMustBeGreaterThanZero" xml:space="preserve">
     <value>Consumption Value Must Be Greater Than Zero</value>
   </data>
   <data name="Treasury" xml:space="preserve">
     <value>Treasury</value>
-    </data>
+  </data>
   <data name="YouMustEnterEndingUnitGreaterThanStartingUnit" xml:space="preserve">
     <value>You Must Enter Ending Unit Greater Than Starting Unit</value>
   </data>
-    <data name="UsLifeError" xml:space="preserve">
+  <data name="UsLifeError" xml:space="preserve">
     <value>Useful life must be more than it has already been depreciated!</value>
-    </data>
+  </data>
   <data name="YouMustEnterPostingDateAfterEndingDate" xml:space="preserve">
     <value>You Must Enter Posting Date After Ending Date</value>
+  </data>
+  <data name="CannotDeleteACashFlowLineItemAssignedInInternetBankingIntegrationServicesRules" xml:space="preserve">
+    <value>Cannot delete a Cash Flow line item assigned  in Internet Banking Integration Services Rules</value>
   </data>
 </root>

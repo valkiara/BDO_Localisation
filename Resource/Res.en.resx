@@ -3148,7 +3148,10 @@
   <data name="UsLifeError" xml:space="preserve">
     <value>Useful life must be more than it has already been depreciated!</value>
   </data>
-  <data name="CannotDeleteACashFlowLineItemAssignedIn" xml:space="preserve">
-    <value>Cannot delete a Cash Flow line item assigned in </value>
+  <data name="CannotDeleteACashFlowLineItemAssignedInInternetBankingIntegrationServicesRules" xml:space="preserve">
+    <value>Cannot delete a Cash Flow line item assigned  in Internet Banking Integration Services Rules</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
   </data>
 </root>
