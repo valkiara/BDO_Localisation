@@ -176,7 +176,14 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("ColumnDescription", "Accrual Month");
             listFindColumns.Add(fieldskeysMap);
 
-            
+            formProperties.Add("FindColumns", listFindColumns);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("FormColumnAlias", "DocEntry");
+            fieldskeysMap.Add("FormColumnDescription", "DocEntry");
+            listFormColumns.Add(fieldskeysMap);
+
+            formProperties.Add("FormColumns", listFormColumns);
 
             //ცხრილური ნაწილები
             fieldskeysMap = new Dictionary<string, object>();
