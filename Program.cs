@@ -1718,28 +1718,13 @@ namespace BDO_Localisation_AddOn
                     BDOSWaybillsAnalysisSent.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Tax Analysis Received<-----------------------------
+                //----------------------------->Tax Analysis Received, Settlement Reconciliation Act, Tax Analysiss Sent, DownPayment Tax Analysis Received<-----------------------------
                 else if (pVal.FormTypeEx == "410000100")
                 {
                     BDOSTaxAnalysisReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-
-                //----------------------------->Down Payment Tax Analysis Received<-----------------------------
-                else if (pVal.FormTypeEx == "410000100")
-                {
-                    BDOSDownPaymentTaxAnalysisReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-
-                //----------------------------->Tax Analysis Sent<-----------------------------
-                else if (pVal.FormTypeEx == "410000100")
-                {
-                    BDOSTaxAnalysissSent.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-
-                //----------------------------->Settlement Reconciliation Act<-----------------------------
-                else if (pVal.FormTypeEx == "410000100")
-                {
                     BDOSReportSettlementReconciliationAct.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    BDOSTaxAnalysissSent.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    BDOSDownPaymentTaxAnalysisReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Journal Entry<-----------------------------
