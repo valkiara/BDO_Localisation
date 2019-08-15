@@ -842,7 +842,7 @@ namespace BDO_Localisation_AddOn
                             oCon = oCons.Add();
                             oCon.Alias = "LocManTran"; //Lock Manual Transaction (Control Account)
                             oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
-                            if ((transactionType == OperationTypeFromIntBank.TransferFromBP.ToString() || transactionType == OperationTypeFromIntBank.TransferToBP.ToString()) && string.IsNullOrEmpty(partnerAccountNumber) == false)
+                            if ((transactionType == OperationTypeFromIntBank.TransferFromBP.ToString() || transactionType == OperationTypeFromIntBank.TransferToBP.ToString() || transactionType == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString()) && string.IsNullOrEmpty(partnerAccountNumber) == false)
                                 oCon.CondVal = "Y"; //bp
                             else
                                 oCon.CondVal = "N";
@@ -1384,7 +1384,7 @@ namespace BDO_Localisation_AddOn
 
                     oRecordSet = BDOSInternetBankingIntegrationServicesRules.getRules(oOperationTypeFromIntBank, treasuryCode);
 
-                    if (oOperationTypeFromIntBank == OperationTypeFromIntBank.TransferFromBP || oOperationTypeFromIntBank == OperationTypeFromIntBank.TransferToBP)
+                    if (oOperationTypeFromIntBank == OperationTypeFromIntBank.TransferFromBP || oOperationTypeFromIntBank == OperationTypeFromIntBank.TransferToBP || oOperationTypeFromIntBank == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP)
                     {
                         oDataTable.SetValue("GLAccountCode", row, GLAccountCodeBP == null ? "" : GLAccountCodeBP);
                         oDataTable.SetValue("Project", row, projectCod == null ? "" : projectCod);
@@ -1795,7 +1795,7 @@ namespace BDO_Localisation_AddOn
 
                     oRecordSet = BDOSInternetBankingIntegrationServicesRules.getRules(oOperationTypeFromIntBank, treasuryCode);
 
-                    if (oOperationTypeFromIntBank == OperationTypeFromIntBank.TransferFromBP || oOperationTypeFromIntBank == OperationTypeFromIntBank.TransferToBP)
+                    if (oOperationTypeFromIntBank == OperationTypeFromIntBank.TransferFromBP || oOperationTypeFromIntBank == OperationTypeFromIntBank.TransferToBP || oOperationTypeFromIntBank == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP)
                     {
                         oDataTable.SetValue("GLAccountCode", row, GLAccountCodeBP == null ? "" : GLAccountCodeBP);
                         oDataTable.SetValue("Project", row, projectCod == null ? "" : projectCod);
@@ -1930,7 +1930,7 @@ namespace BDO_Localisation_AddOn
             }
             else if (transactionType == "20") //Income
                 oOperationType = OperationTypeFromIntBank.OtherIncomes;
-            else if (transactionType == "30" && string.IsNullOrEmpty(partnerAccountNumber) == false && string.IsNullOrEmpty(partnerCurrency) == false) //Transfer out and cash withdrawal
+            else if ((transactionType == "30" || transactionType == "32") && string.IsNullOrEmpty(partnerAccountNumber) == false && string.IsNullOrEmpty(partnerCurrency) == false) //Transfer out and cash withdrawal or Treasury transfers
             {
                 oOperationType = OperationTypeFromIntBank.TransferToBP;
                 oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, cardType);
@@ -1939,8 +1939,14 @@ namespace BDO_Localisation_AddOn
                     GLAccountCodeBP = oRecordSet.Fields.Item("DebPayAcct").Value;
                     projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
                     blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
+                    if (oRecordSet.Fields.Item("U_treasury").Value == "Y")
+                    {
+                        oOperationType = OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP;
+                    }
+                    else if(transactionType == "32")
+                        oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
                 }
-                else if (debitCredit == 0)
+                else if (debitCredit == 0 && transactionType == "30")
                 {
                     oRecordSet = CommonFunctions.getEmployeeInfo(partnerTaxCode);
 
@@ -1949,6 +1955,8 @@ namespace BDO_Localisation_AddOn
                         oOperationType = OperationTypeFromIntBank.None;
                     }
                 }
+                else if (transactionType == "32")
+                    oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
             }
             else if (transactionType == "30") //Transfer out and cash withdrawal
                 oOperationType = OperationTypeFromIntBank.OtherExpenses;
@@ -1982,7 +1990,21 @@ namespace BDO_Localisation_AddOn
             else if (CommonFunctions.isAccountInHouseBankAccount(partnerAccountNumber + partnerCurrency) == true && transactionType != "CCO")
                 oOperationType = OperationTypeFromIntBank.TransferToOwnAccount;
             else if (string.IsNullOrEmpty(treasuryCode) == false)
+            {
                 oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
+                if (string.IsNullOrEmpty(partnerAccountNumber) == false && debitCredit == 0)
+                {
+                    oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + "GEL", partnerTaxCode, cardType);
+
+                    if (oRecordSet != null && oRecordSet.Fields.Item("U_treasury").Value == "Y")
+                    {
+                        GLAccountCodeBP = oRecordSet.Fields.Item("DebPayAcct").Value;
+                        projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
+                        blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
+                        oOperationType = OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP;
+                    }
+                }
+            }
             else if (transactionType == "CCO")
                 oOperationType = OperationTypeFromIntBank.CurrencyExchange;
             else if (transactionType == "LFG")
@@ -2017,6 +2039,10 @@ namespace BDO_Localisation_AddOn
                     GLAccountCodeBP = oRecordSet.Fields.Item("DebPayAcct").Value;
                     projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
                     blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
+                    if (oRecordSet.Fields.Item("U_treasury").Value == "Y" && oOperationType == OperationTypeFromIntBank.TransferToBP)
+                    {
+                        oOperationType = OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP;
+                    }
                 }
                 else if (debitCredit == 0)
                 {
@@ -2212,7 +2238,7 @@ namespace BDO_Localisation_AddOn
 
                         infoList.Add(String.IsNullOrEmpty(errorText) ? info : errorText);
                     }
-                    else if (transactionType == OperationTypeFromIntBank.TransferToBP.ToString())
+                    else if (transactionType == OperationTypeFromIntBank.TransferToBP.ToString() || transactionType == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString())
                     {
                         info = OutgoingPayment.createDocumentTransferToBPType(oDataTable, i, out docEntry, out docNum, out errorText);
                         infoList.Add(errorText == null ? info : errorText);
@@ -2931,7 +2957,8 @@ namespace BDO_Localisation_AddOn
                             oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));                          
                             value = "TreasuryTransferPaymentOrderIo";
                             oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));
-                            oColumn.ValidValues.Add("TreasuryTransferPaymentOrderIoBP", BDOSResources.getTranslate(value));
+                            value = "TreasuryTransferPaymentOrderIoBP";
+                            oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));
                             value = "TransferWithinBankPaymentOrderIo";
                             oColumn.ValidValues.Add(value, BDOSResources.getTranslate(value));
                             value = "TransferToOtherBankNationalCurrencyPaymentOrderIo";
@@ -3364,6 +3391,7 @@ namespace BDO_Localisation_AddOn
                     listValidValuesDict.Add(OperationTypeFromIntBank.TransferToOwnAccount.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TransferToOwnAccount.ToString()));
                     listValidValuesDict.Add(OperationTypeFromIntBank.TreasuryTransfer.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TreasuryTransfer.ToString()));
                     listValidValuesDict.Add(OperationTypeFromIntBank.WithoutSalary.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.WithoutSalary.ToString()));
+                    listValidValuesDict.Add(OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString()));
 
                     formItems = new Dictionary<string, object>();
                     itemName = "transTypCB"; //10 characters
@@ -3820,6 +3848,7 @@ namespace BDO_Localisation_AddOn
                             oColumn.ValidValues.Add(OperationTypeFromIntBank.TransferToBP.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TransferToBP.ToString()));
                             oColumn.ValidValues.Add(OperationTypeFromIntBank.TransferToOwnAccount.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TransferToOwnAccount.ToString()));
                             oColumn.ValidValues.Add(OperationTypeFromIntBank.TreasuryTransfer.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TreasuryTransfer.ToString()));
+                            oColumn.ValidValues.Add(OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString()));
                         }
                         else if (columnName == "TransactionCode")
                         {
@@ -4101,7 +4130,7 @@ namespace BDO_Localisation_AddOn
 
                 string transTypeForFilter = oDataTable.GetValue("TransactionType", rowNum - 1);
 
-                if (transTypeForFilter != OperationTypeFromIntBank.TransferToBP.ToString())
+                if (transTypeForFilter != OperationTypeFromIntBank.TransferToBP.ToString() && transTypeForFilter != OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString())
                 {
                     continue;
                 }
@@ -4738,7 +4767,7 @@ namespace BDO_Localisation_AddOn
                         {
                             cardType = "C";
                         }
-                        else if (transactionType == OperationTypeFromIntBank.TransferToBP.ToString())
+                        else if (transactionType == OperationTypeFromIntBank.TransferToBP.ToString() || transactionType == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString())
                         {
                             cardType = "S";
                         }

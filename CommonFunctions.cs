@@ -333,7 +333,8 @@ namespace BDO_Localisation_AddOn
                     	 ""OCRB"".""BankCode"",
                     	 ""OCRB"".""Country"",
                     	 ""OCRB"".""Account"",
-                    	 ""OCRB"".""AcctName"" 
+                    	 ""OCRB"".""AcctName"",
+                         ""OCRB"".""U_treasury""
                     FROM ""OCRB"" 
                     INNER JOIN ""OCRD"" ON ""OCRB"".""CardCode"" = ""OCRD"".""CardCode"" 
                     WHERE ""Account"" = '" + account + @"' AND ""OCRD"".""CardType"" = '" + cardType + "'";
@@ -690,6 +691,34 @@ namespace BDO_Localisation_AddOn
             catch
             {
                 return bankName;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+                oRecordSet = null;
+            }
+        }
+
+        public static string getAccountCurrency(string accountCode)
+        {
+            string accountCurrency = null;
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                string query = @"SELECT ""OACT"".""ActCurr"" FROM ""OACT"" WHERE ""OACT"".""AcctCode"" = '" + accountCode + "'";
+
+                oRecordSet.DoQuery(query);
+                if (!oRecordSet.EoF)
+                {
+                    accountCurrency = oRecordSet.Fields.Item("ActCurr").Value.ToString();
+                    return accountCurrency;
+                }
+                return accountCurrency;
+            }
+            catch
+            {
+                return accountCurrency;
             }
             finally
             {
