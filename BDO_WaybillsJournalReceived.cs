@@ -382,11 +382,7 @@ namespace BDO_Localisation_AddOn
 
                         string WBPrjCode = "";
 
-						if (goodsRow.Length > 12)
-						{
-							WBPrjCode = goodsRow[12];
-
-						}
+                        WBPrjCode = oMatrixGoods.GetCellSpecific("WBPrjCode", index + 1).Value;
 
                         if (PrjCode != "")
                         {
