@@ -184,13 +184,24 @@ namespace BDO_Localisation_AddOn
                     //oParams.AgreementNo = Convert.ToInt32(WBBlankAgr);
                     //oAcuerdo = oAcuerdoServicio.GetBlanketAgreement(oParams);
 
-
-
-
-
                     //int PaymentGroupCode = oAcuerdo.PaymentTerms;
 
-                    APInv.Project = PrjCode;
+
+                    SAPbobsCOM.Recordset oRecordSetWH = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                    string queryPr = @"SELECT ""U_BDOSPrjCod"" FROM ""OWHS"" WHERE ""WhsCode"" = '" + whs + "'";
+
+                    oRecordSetWH.DoQuery(queryPr);
+
+                    if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null || oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
+                    {
+                        APInv.Project = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
+                    }
+
+                    if(PrjCode != "")
+                    {
+                        APInv.Project = PrjCode;
+                    }
+                    
                     if (WBBlankAgr != "")
                     {
                         APInv.BlanketAgreementNumber = Convert.ToInt32(WBBlankAgr);
@@ -364,7 +375,12 @@ namespace BDO_Localisation_AddOn
 
 						APInv.Lines.WarehouseCode = whs;
 
-						string WBPrjCode = "";
+                        if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null || oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
+                        {
+                            APInv.Lines.ProjectCode = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
+                        }
+
+                        string WBPrjCode = "";
 
 						if (goodsRow.Length > 12)
 						{
@@ -372,7 +388,16 @@ namespace BDO_Localisation_AddOn
 
 						}
 
-						APInv.Lines.ProjectCode = (string.IsNullOrEmpty(WBPrjCode)) ? PrjCode : WBPrjCode;
+                        if (PrjCode != "")
+                        {
+                            APInv.Lines.ProjectCode = PrjCode;
+                        }
+
+                        if (WBPrjCode != "")
+                        {
+                            APInv.Lines.ProjectCode = WBPrjCode;
+                        }
+						
 						if (WBBlankAgr != "")
 						{
 							APInv.Lines.AgreementNo = Convert.ToInt32(WBBlankAgr);
