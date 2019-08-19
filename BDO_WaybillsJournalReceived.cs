@@ -384,6 +384,8 @@ namespace BDO_Localisation_AddOn
 
                         WBPrjCode = oMatrixGoods.GetCellSpecific("WBPrjCode", index + 1).Value;
 
+                        goodsRow[12] = WBPrjCode;
+
                         if (PrjCode != "")
                         {
                             APInv.Lines.ProjectCode = PrjCode;
@@ -470,6 +472,8 @@ namespace BDO_Localisation_AddOn
                         rowCounter++;
                         //rowIndex++;
                     }
+
+                    wbTempLines[oMatrix.GetCellSpecific("WBNo", 1).Value] = array_GOODS;
 
                     if (NotToCreate)
                     {
