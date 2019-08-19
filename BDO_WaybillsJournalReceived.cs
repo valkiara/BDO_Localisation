@@ -2778,6 +2778,7 @@ namespace BDO_Localisation_AddOn
                 string WBUntCdRS = "";
                 string WbUntNmRS = "";
                 string Cardcode = null;
+                string DistNumber = "";
 
                 Cardcode = BusinessPartners.GetCardCodeByTin(BPID, "S", out cardName);
 
@@ -2792,9 +2793,35 @@ namespace BDO_Localisation_AddOn
                 SAPbobsCOM.Recordset oRecordsetbyRSCODE = null;
 
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                SAPbobsCOM.Recordset oRecordSetBN = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-                //foreach (string[] goodsRow in array_GOODS)
-                for (int i = 0; i < array_GOODS.Length; i++)
+                string apInvoice = oMatrix.GetCellSpecific("APInvoice", row).Value;
+                string queryBN = "";
+
+                if (!string.IsNullOrEmpty(apInvoice))
+                {
+                    queryBN = @"Select Distinct OBTN.""DistNumber""
+
+                                From PCH1 Inner Join
+
+                                OPCH on OPCH.""DocEntry"" = PCH1.""DocEntry"" Inner Join
+
+                                ITL1 on ITL1.""ItemCode"" = PCH1.""ItemCode"" Inner Join
+
+                                OITL ON ITL1.""LogEntry"" = OITL.""LogEntry"" INNER JOIN
+
+                                OBTN ON ITL1.""ItemCode"" = OBTN.""ItemCode"" AND ITL1.""SysNumber"" = OBTN.""SysNumber""
+
+                                and OITL.""DocLine"" = PCH1.""LineNum"" AND OITL.""DocEntry"" = PCH1.""DocEntry""
+
+                                WHERE OPCH.""DocEntry"" = '" + apInvoice + "'";
+
+                    oRecordSetBN.DoQuery(queryBN);
+                }
+
+
+                    //foreach (string[] goodsRow in array_GOODS)
+                    for (int i = 0; i < array_GOODS.Length; i++)
                 //Parallel.ForEach(array_GOODS, goodsRow =>
                 {
                     string[] goodsRow = array_GOODS[i];
@@ -2865,6 +2892,16 @@ namespace BDO_Localisation_AddOn
                         WBItmName = WBItmName.Substring(0, 254);
                     }
 
+                    
+
+                    if (!oRecordSetBN.EoF)
+                    {
+                        DistNumber = oRecordSetBN.Fields.Item("DistNumber").Value;
+                        oRecordSetBN.MoveNext();
+                    }
+                    
+                    
+
                     Sbuilder.Append("<Row>");
                     Sbuilder.Append("<Cell> <ColumnUid>#</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, (i + 1).ToString());
@@ -2904,6 +2941,10 @@ namespace BDO_Localisation_AddOn
 
                     Sbuilder.Append("<Cell> <ColumnUid>ItemName</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, ItemName);
+                    Sbuilder.Append("</Value></Cell>");
+
+                    Sbuilder.Append("<Cell> <ColumnUid>DistNumber</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, DistNumber);
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>WBPrjCode</ColumnUid> <Value>");
