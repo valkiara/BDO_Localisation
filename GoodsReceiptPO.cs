@@ -288,10 +288,6 @@ namespace BDO_Localisation_AddOn
                 string ObjType = DocDBSource.GetValue("ObjType", 0);
                 string ACNumber = DocDBSource.GetValue("U_BDOSACNum", 0);
 
-                string WblId = DocDBSource.GetValue("U_BDO_WBID", 0);
-                string WblNum = DocDBSource.GetValue("U_BDO_WBNo", 0);
-
-                JournalEntry.UpdateJournalEntryWblIdAndNumber(DocEntry, ObjType, WblId, WblNum, out errorText);
                 JournalEntry.UpdateJournalEntryACNumber(DocEntry, ObjType, ACNumber, out errorText);
                 if (string.IsNullOrEmpty(errorText))
                 {
@@ -302,6 +298,8 @@ namespace BDO_Localisation_AddOn
                     Program.uiApp.MessageBox(errorText);
                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
                 }
+
+                AddWblIDAndNumberInJrnEntry(oForm, out errorText);
             }
                         
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
@@ -353,6 +351,30 @@ namespace BDO_Localisation_AddOn
                     oForm.Freeze(false);
                 }
 
+            }
+        }
+
+        public static void AddWblIDAndNumberInJrnEntry(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            CommonFunctions.StartTransaction();
+
+            SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+            string DocEntry = DocDBSource.GetValue("DocEntry", 0);
+            string ObjType = DocDBSource.GetValue("ObjType", 0);
+
+            string WblId = DocDBSource.GetValue("U_BDO_WBID", 0);
+            string WblNum = DocDBSource.GetValue("U_BDO_WBNo", 0);
+
+            JournalEntry.UpdateJournalEntryWblIdAndNumber(DocEntry, ObjType, WblId, WblNum, out errorText);
+
+            if (string.IsNullOrEmpty(errorText))
+            {
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+            }
+            else
+            {
+                Program.uiApp.MessageBox(errorText);
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
             }
         }
 

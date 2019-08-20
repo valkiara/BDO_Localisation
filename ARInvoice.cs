@@ -277,6 +277,9 @@ namespace BDO_Localisation_AddOn
                 
                 oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("BDO_WblTxt").Specific;
                 oStaticText.Caption = caption;
+
+                AddWblIDAndNumberInJrnEntry(oForm, out errorText);
+
                 //<-------------------------------------------სასაქონლო ზედნადები-----------------------------------
 
                 //-------------------------------------------ანგარიშ-ფაქტურა----------------------------------->
@@ -620,29 +623,11 @@ namespace BDO_Localisation_AddOn
 
                 }
 
-                //Use Waybill ID and Number Update
+                
                 if ((BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
                         && BusinessObjectInfo.ActionSuccess == true && BusinessObjectInfo.BeforeAction == false)
                 {
-                    CommonFunctions.StartTransaction();
-
-                    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                    string DocEntry = DocDBSource.GetValue("DocEntry", 0);
-                    string ObjType = DocDBSource.GetValue("ObjType", 0);
-
-                    string WblId = oForm.DataSources.UserDataSources.Item("BDO_WblID").ValueEx;
-                    string WblNum = oForm.DataSources.UserDataSources.Item("BDO_WblNum").ValueEx;
-
-                    JournalEntry.UpdateJournalEntryWblIdAndNumber(DocEntry, ObjType, WblId, WblNum, out errorText);
-                    if (string.IsNullOrEmpty(errorText))
-                    {
-                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                    }
-                    else
-                    {
-                        Program.uiApp.MessageBox(errorText);
-                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                    }
+                    AddWblIDAndNumberInJrnEntry(oForm, out errorText);
                 }
             }
         }
@@ -744,8 +729,6 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        
-
         public static void JrnEntry(string DocEntry, string DocNum, DateTime DocDate, DataTable JrnLinesDT,  out string errorText)
         {
             errorText = null;
@@ -825,6 +808,30 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oRecordSet = null;
                 GC.Collect();
+            }
+        }
+
+        public static void AddWblIDAndNumberInJrnEntry(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = "";
+            CommonFunctions.StartTransaction();
+
+            SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+            string DocEntry = DocDBSource.GetValue("DocEntry", 0);
+            string ObjType = DocDBSource.GetValue("ObjType", 0);
+
+            string WblId = oForm.DataSources.UserDataSources.Item("BDO_WblID").ValueEx;
+            string WblNum = oForm.DataSources.UserDataSources.Item("BDO_WblNum").ValueEx;
+
+            JournalEntry.UpdateJournalEntryWblIdAndNumber(DocEntry, ObjType, WblId, WblNum, out errorText);
+            if (string.IsNullOrEmpty(errorText))
+            {
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+            }
+            else
+            {
+                Program.uiApp.MessageBox(errorText);
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
             }
         }
     }
