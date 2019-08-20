@@ -429,6 +429,9 @@ namespace BDO_Localisation_AddOn
 
                 oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("BDO_WblTxt").Specific;
                 oStaticText.Caption = caption;
+
+                AddWblIDAndNumberInJrnEntry(oForm, out errorText);
+
                 //<-------------------------------------------სასაქონლო ზედნადები-----------------------------------
 
                 //-------------------------------------------ანგარიშ-ფაქტურა----------------------------------->
@@ -876,24 +879,30 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-            //if (BusinessObjectInfo.ActionSuccess & BusinessObjectInfo.BeforeAction == false)
-            //{
-            //    //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
-            //    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+                if ((BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
+                        && BusinessObjectInfo.ActionSuccess == true && BusinessObjectInfo.BeforeAction == false)
+                {
+                    AddWblIDAndNumberInJrnEntry(oForm, out errorText);
+                }
 
-            //    string DocEntry = DocDBSource.GetValue("DocEntry", 0);
-            //    string DocNum = DocDBSource.GetValue("DocNum", 0);
-            //    string DocCurr = DocDBSource.GetValue("DocCur", 0);
-            //    decimal DocRate = FormsB1.cleanStringOfNonDigits( DocDBSource.GetValue("DocRate", 0));
-            //    DateTime DocDate = DateTime.ParseExact(DocDBSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
-            //    JrnEntry( DocEntry, DocNum, DocDate, DocRate, DocCurr, out errorText);
-            //    if (errorText != null)
-            //    {
-            //        Program.uiApp.MessageBox(errorText);
-            //        BubbleEvent = false;
+                //if (BusinessObjectInfo.ActionSuccess & BusinessObjectInfo.BeforeAction == false)
+                //{
+                //    //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
+                //    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
 
-            //    }
-            //}
+                //    string DocEntry = DocDBSource.GetValue("DocEntry", 0);
+                //    string DocNum = DocDBSource.GetValue("DocNum", 0);
+                //    string DocCurr = DocDBSource.GetValue("DocCur", 0);
+                //    decimal DocRate = FormsB1.cleanStringOfNonDigits( DocDBSource.GetValue("DocRate", 0));
+                //    DateTime DocDate = DateTime.ParseExact(DocDBSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
+                //    JrnEntry( DocEntry, DocNum, DocDate, DocRate, DocCurr, out errorText);
+                //    if (errorText != null)
+                //    {
+                //        Program.uiApp.MessageBox(errorText);
+                //        BubbleEvent = false;
+
+                //    }
+                //}
             }
         }
 
@@ -1007,6 +1016,30 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oRecordSet = null;
                 GC.Collect();
+            }
+        }
+
+        public static void AddWblIDAndNumberInJrnEntry(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = "";
+            CommonFunctions.StartTransaction();
+
+            SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+            string DocEntry = DocDBSource.GetValue("DocEntry", 0);
+            string ObjType = DocDBSource.GetValue("ObjType", 0);
+
+            string WblId = oForm.DataSources.UserDataSources.Item("BDO_WblID").ValueEx;
+            string WblNum = oForm.DataSources.UserDataSources.Item("BDO_WblNum").ValueEx;
+
+            JournalEntry.UpdateJournalEntryWblIdAndNumber(DocEntry, ObjType, WblId, WblNum, out errorText);
+            if (string.IsNullOrEmpty(errorText))
+            {
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+            }
+            else
+            {
+                Program.uiApp.MessageBox(errorText);
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
             }
         }
     }
