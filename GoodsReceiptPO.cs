@@ -288,6 +288,10 @@ namespace BDO_Localisation_AddOn
                 string ObjType = DocDBSource.GetValue("ObjType", 0);
                 string ACNumber = DocDBSource.GetValue("U_BDOSACNum", 0);
 
+                string WblId = DocDBSource.GetValue("U_BDO_WBID", 0);
+                string WblNum = DocDBSource.GetValue("U_BDO_WBNo", 0);
+
+                JournalEntry.UpdateJournalEntryWblIdAndNumber(DocEntry, ObjType, WblId, WblNum, out errorText);
                 JournalEntry.UpdateJournalEntryACNumber(DocEntry, ObjType, ACNumber, out errorText);
                 if (string.IsNullOrEmpty(errorText))
                 {
@@ -299,7 +303,7 @@ namespace BDO_Localisation_AddOn
                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
                 }
             }
-
+                        
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
             {
                 if (BusinessObjectInfo.BeforeAction == true)
