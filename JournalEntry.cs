@@ -25,7 +25,6 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields( fieldskeysMap, out errorText);
 
-            GC.Collect();
 
             fieldskeysMap = new Dictionary<string, object>(); //  A/C Number ივსება Good Receipt PO, AP Invoice, AP Credit memo, Landed Cost დოკუმენტებიდან
             fieldskeysMap.Add("Name", "BDOSACNum");
@@ -35,6 +34,314 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>(); 
+            fieldskeysMap.Add("Name", "BDOSWblId");
+            fieldskeysMap.Add("TableName", "OJDT");
+            fieldskeysMap.Add("Description", "Waybill ID");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();  
+            fieldskeysMap.Add("Name", "BDOSWblNum");
+            fieldskeysMap.Add("TableName", "OJDT");
+            fieldskeysMap.Add("Description", "Waybill Number");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            GC.Collect();
+
+        }
+
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+
+            SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("76").Specific;
+            SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("U_BDOSEmpID");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("EmployeeNo");
+
+            SAPbouiCOM.Item oItem = oForm.Items.Item("9");
+
+            int height = oItem.Height;
+            int top = oItem.Top + oItem.Height + 5;
+            int left = oItem.Left;
+            int width = oItem.Width;
+
+            //////////////////////
+
+            Dictionary<string, object> formItems = new Dictionary<string, object>();
+            string itemName = "BDOSJrnEnS";
+
+            try
+            {
+                oForm.Items.Item(itemName);
+            }
+            catch
+            {
+                formItems.Add("Size", 20);
+                formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                formItems.Add("Left", left);
+                formItems.Add("Width", width);
+                formItems.Add("Top", top);
+                formItems.Add("Height", height);
+                formItems.Add("UID", itemName);
+                formItems.Add("Caption", BDOSResources.getTranslate("AdditionalEntry"));
+
+                FormsB1.createFormItem(oForm, formItems, out errorText);
+                if (errorText != null)
+                {
+                    return;
+                }
+            }
+
+            //////////////////////
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSJrnEnt";
+            try
+            {
+                oForm.Items.Item(itemName);
+            }
+            catch
+            {
+                formItems.Add("Size", 20);
+                formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                formItems.Add("Left", left);
+                formItems.Add("Width", width);
+                formItems.Add("Top", top + height + 2);
+                formItems.Add("Height", height);
+                formItems.Add("UID", itemName);
+                formItems.Add("Enabled", false);
+
+                FormsB1.createFormItem(oForm, formItems, out errorText);
+                if (errorText != null)
+                {
+                    return;
+                }
+            }
+
+            //////////////////////
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSJEntLB";
+            try
+            {
+                oForm.Items.Item(itemName);
+            }
+            catch
+            {
+                formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                formItems.Add("Left", left - 20);
+                formItems.Add("Top", top + height + 2);
+                formItems.Add("UID", itemName);
+                formItems.Add("LinkTo", "BDOSJrnEnt");
+                formItems.Add("LinkedObjectType", "30");
+
+                FormsB1.createFormItem(oForm, formItems, out errorText);
+                if (errorText != null)
+                {
+                    return;
+                }
+            }
+
+            //AC Number
+            oItem = oForm.Items.Item("7");
+            left = oItem.Left;
+            width = oItem.Width;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSACNumS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("ACNumber"));
+            formItems.Add("LinkTo", "BDOSACNumE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSACNumE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OJDT");
+            formItems.Add("Alias", "U_BDOSACNum");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top + height + 2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("Enabled", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+            //AC Number
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSAddEnt";
+            try
+            {
+                oForm.Items.Item(itemName);
+            }
+            catch
+            {
+                formItems.Add("isDataSource", true);
+                formItems.Add("Length", 1);
+                formItems.Add("DataSource", "UserDataSources");
+                formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                formItems.Add("TableName", "");
+                formItems.Add("Alias", itemName);
+                formItems.Add("Bound", true);
+                formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+                formItems.Add("Width", oForm.Items.Item("37").Width);
+                formItems.Add("Left", oForm.Items.Item("37").Left - oForm.Items.Item("37").Width - 20);
+                formItems.Add("Top", oForm.Items.Item("37").Top);
+                formItems.Add("Caption", BDOSResources.getTranslate("DisplayAE"));
+
+                formItems.Add("AffectsFormMode", false);
+                formItems.Add("UID", itemName);
+                formItems.Add("Enabled", true);
+                formItems.Add("ValueOn", "Y");
+                formItems.Add("ValueOff", "N");
+
+                FormsB1.createFormItem(oForm, formItems, out errorText);
+                if (errorText != null)
+                {
+                    return;
+                }
+            }
+
+            //-------------------
+
+            //Waybill ID and Number
+            oItem = oForm.Items.Item("17");
+            left = oItem.Left+5;
+            width = oItem.Width;
+            height = oItem.Height;
+
+            oItem = oForm.Items.Item("540002024");
+            top = oItem.Top;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSWblIdS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("WaybillID"));
+            formItems.Add("LinkTo", "BDOSWblIdE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            oItem = oForm.Items.Item("540002023");
+            top = oItem.Top;
+            height = oItem.Height;
+            width = oItem.Width;
+            left = oItem.Left + width +1;
+
+            oItem = oForm.Items.Item("93");
+            width = oItem.Width;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSWblIdE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OJDT");
+            formItems.Add("Alias", "U_BDOSWblId");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("Enabled", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+            //-----------
+            oItem = oForm.Items.Item("BDOSWblIdS");
+            left = oItem.Left + width + 1;
+            width = oItem.Width;
+            height = oItem.Height;
+            top = oItem.Top;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSWblNuS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("WaybillNumber"));
+            formItems.Add("LinkTo", "BDOSWblNuE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            oItem = oForm.Items.Item("BDOSWblIdE");
+            top = oItem.Top;
+            height = oItem.Height;
+            width = oItem.Width;
+            left = oItem.Left + width + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSWblNuE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OJDT");
+            formItems.Add("Alias", "U_BDOSWblNum");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("Enabled", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+            //Waybill ID and Number
+
+
+
+            ShowAdditionalEntries(oForm, out errorText);
 
         }
 
@@ -208,181 +515,6 @@ namespace BDO_Localisation_AddOn
                     jeLinesRow["U_BDOSEmpID"] = U_BDOSEmpID;
                 }
             }
-        }
-
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
-        {
-            errorText = null;
-
-            SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("76").Specific;
-            SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("U_BDOSEmpID");
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("EmployeeNo");
-
-            SAPbouiCOM.Item oItem = oForm.Items.Item("9");
-
-            int height = oItem.Height;
-            int top = oItem.Top + oItem.Height + 5;
-            int left = oItem.Left;
-            int width = oItem.Width;
-
-            //////////////////////
-
-            Dictionary<string, object> formItems = new Dictionary<string, object>();
-            string itemName = "BDOSJrnEnS";
-
-            try
-            {
-                oForm.Items.Item(itemName);
-            }
-            catch
-            {
-                formItems.Add("Size", 20);
-                formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                formItems.Add("Left", left);
-                formItems.Add("Width", width);
-                formItems.Add("Top", top);
-                formItems.Add("Height", height);
-                formItems.Add("UID", itemName);
-                formItems.Add("Caption", BDOSResources.getTranslate("AdditionalEntry"));
-
-                FormsB1.createFormItem(oForm, formItems, out errorText);
-                if (errorText != null)
-                {
-                    return;
-                }
-            }
-
-            //////////////////////
-
-            formItems = new Dictionary<string, object>();
-            itemName = "BDOSJrnEnt";
-            try
-            {
-                oForm.Items.Item(itemName);
-            }
-            catch
-            {
-                formItems.Add("Size", 20);
-                formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                formItems.Add("Left", left);
-                formItems.Add("Width", width);
-                formItems.Add("Top", top + height + 2);
-                formItems.Add("Height", height);
-                formItems.Add("UID", itemName);
-                formItems.Add("Enabled", false);
-
-                FormsB1.createFormItem(oForm, formItems, out errorText);
-                if (errorText != null)
-                {
-                    return;
-                }
-            }
-
-            //////////////////////
-
-            formItems = new Dictionary<string, object>();
-            itemName = "BDOSJEntLB";
-            try
-            {
-                oForm.Items.Item(itemName);
-            }
-            catch
-            {
-                formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                formItems.Add("Left", left - 20);
-                formItems.Add("Top", top + height + 2);
-                formItems.Add("UID", itemName);
-                formItems.Add("LinkTo", "BDOSJrnEnt");
-                formItems.Add("LinkedObjectType", "30");
-
-                FormsB1.createFormItem(oForm, formItems, out errorText);
-                if (errorText != null)
-                {
-                    return;
-                }
-            }
-
-            //AC Number
-            oItem = oForm.Items.Item("7");
-            left = oItem.Left;
-            width = oItem.Width;
-
-            formItems = new Dictionary<string, object>();
-            itemName = "BDOSACNumS"; //10 characters
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", left);
-            formItems.Add("Width", width);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("ACNumber"));
-            formItems.Add("LinkTo", "BDOSACNumE");
-
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
-
-            formItems = new Dictionary<string, object>();
-            itemName = "BDOSACNumE"; //10 characters
-            formItems.Add("isDataSource", true);
-            formItems.Add("DataSource", "DBDataSources");
-            formItems.Add("TableName", "OJDT");
-            formItems.Add("Alias", "U_BDOSACNum");
-            formItems.Add("Bound", true);
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left);
-            formItems.Add("Width", width);
-            formItems.Add("Top", top + height + 2);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", false);
-
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
-            //AC Number
-
-            formItems = new Dictionary<string, object>();
-            itemName = "BDOSAddEnt";
-            try
-            {
-                oForm.Items.Item(itemName);
-            }
-            catch
-            {
-                formItems.Add("isDataSource", true);
-                formItems.Add("Length", 1);
-                formItems.Add("DataSource", "UserDataSources");
-                formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                formItems.Add("TableName", "");
-                formItems.Add("Alias", itemName);
-                formItems.Add("Bound", true);
-                formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
-                formItems.Add("Width", oForm.Items.Item("37").Width);
-                formItems.Add("Left", oForm.Items.Item("37").Left - oForm.Items.Item("37").Width - 20);
-                formItems.Add("Top", oForm.Items.Item("37").Top);
-                formItems.Add("Caption", BDOSResources.getTranslate("DisplayAE"));
-
-                formItems.Add("AffectsFormMode", false);
-                formItems.Add("UID", itemName);
-                formItems.Add("Enabled", true);
-                formItems.Add("ValueOn", "Y");
-                formItems.Add("ValueOff", "N");
-
-                FormsB1.createFormItem(oForm, formItems, out errorText);
-                if (errorText != null)
-                {
-                    return;
-                }
-            }
-
-            ShowAdditionalEntries( oForm, out errorText);
-
         }
 
         private static void ShowAdditionalEntries(  SAPbouiCOM.Form oForm, out string errorText)
@@ -1015,6 +1147,41 @@ namespace BDO_Localisation_AddOn
                     oJounalEntry.GetByKey(oRecordSet.Fields.Item("TransId").Value);
 
                     oJounalEntry.UserFields.Fields.Item("U_BDOSACNum").Value = ACNumber.Trim();
+
+                    int updateCode = 0;
+                    updateCode = oJounalEntry.Update();
+
+                    if (updateCode != 0)
+                    {
+                        Program.oCompany.GetLastError(out updateCode, out errorText);
+                    }
+                }
+            }
+        }
+
+        public static void UpdateJournalEntryWblIdAndNumber(string DocEntry, string TransType, string WblId, string WblNum, out string errorText)
+        {
+            errorText = "";
+
+            if (DocEntry != "" && TransType != "" && WblId != "" && WblNum != "")
+            {
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                string query = @"SELECT 
+                            *  
+                            FROM ""OJDT"" 
+                            WHERE ""StornoToTr"" IS NULL   
+                            AND ""TransType"" = '" + TransType + @"'  
+                            AND ""CreatedBy"" = '" + DocEntry + "' ";
+
+                oRecordSet.DoQuery(query);
+
+                if (!oRecordSet.EoF)
+                {
+                    SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
+                    oJounalEntry.GetByKey(oRecordSet.Fields.Item("TransId").Value);
+
+                    oJounalEntry.UserFields.Fields.Item("U_BDOSWblId").Value = WblId.Trim();
+                    oJounalEntry.UserFields.Fields.Item("U_BDOSWblNum").Value = WblNum.Trim();
 
                     int updateCode = 0;
                     updateCode = oJounalEntry.Update();

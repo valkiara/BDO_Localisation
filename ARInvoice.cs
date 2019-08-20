@@ -594,7 +594,7 @@ namespace BDO_Localisation_AddOn
                                 {
                                     Program.JrnLinesGlobal = JrnLinesDT;
                                 }
-                }
+                            }
 
                             if (Program.oCompany.InTransaction)
                             {
@@ -616,17 +616,20 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    //Use Rate Ranges Update
+                    //Use Waybill ID and Number Update
                     if ((BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
-                                    && BusinessObjectInfo.ActionSuccess == true && BusinessObjectInfo.BeforeAction == false)
+                            && BusinessObjectInfo.ActionSuccess == true && BusinessObjectInfo.BeforeAction == false)
                     {
                         CommonFunctions.StartTransaction();
 
                         SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
                         string DocEntry = DocDBSource.GetValue("DocEntry", 0);
                         string ObjType = DocDBSource.GetValue("ObjType", 0);
-                        string UseRateRanges = DocDBSource.GetValue("U_UseBlaAgRt", 0);
 
+                        string WblId = DocDBSource.GetValue("U_BDO_WBID", 0);
+                        string WblNum = DocDBSource.GetValue("U_BDO_WBNo", 0);
+
+                        JournalEntry.UpdateJournalEntryWblIdAndNumber(DocEntry, ObjType, WblId, WblNum, out errorText);
                         if (string.IsNullOrEmpty(errorText))
                         {
                             CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);

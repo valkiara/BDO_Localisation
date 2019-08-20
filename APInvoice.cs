@@ -988,7 +988,7 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            //A/C Number and Use Rate Ranges Update
+            //A/C Number and Waybill ID/Number Update
             if ((BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
                             && BusinessObjectInfo.ActionSuccess == true && BusinessObjectInfo.BeforeAction == false)
             {
@@ -998,9 +998,11 @@ namespace BDO_Localisation_AddOn
                 string DocEntry = DocDBSource.GetValue("DocEntry", 0);
                 string ObjType = DocDBSource.GetValue("ObjType", 0);
                 string ACNumber = DocDBSource.GetValue("U_BDOSACNum", 0);
+                
+                string WblId = DocDBSource.GetValue("U_BDO_WBID", 0);
+                string WblNum = DocDBSource.GetValue("U_BDO_WBNo", 0);
 
-                string UseRateRanges = DocDBSource.GetValue("U_UseBlaAgRt", 0);
-
+                JournalEntry.UpdateJournalEntryWblIdAndNumber(DocEntry, ObjType, WblId, WblNum, out errorText);
                 JournalEntry.UpdateJournalEntryACNumber(DocEntry, ObjType, ACNumber, out errorText);
                 if (string.IsNullOrEmpty(errorText))
                 {
