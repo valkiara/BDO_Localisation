@@ -207,6 +207,7 @@ namespace BDO_Localisation_AddOn
             {
                 //-------------------------------------------სასაქონლო ზედნადები----------------------------------->              
                 BDO_WBReceivedDocs.setwaybillText(oForm, out errorText);
+                AddWblIDAndNumberInJrnEntry(oForm, out errorText);
                 //<-------------------------------------------სასაქონლო ზედნადები-----------------------------------
 
                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORPC").GetValue("DocEntry", 0));
