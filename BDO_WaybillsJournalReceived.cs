@@ -353,7 +353,9 @@ namespace BDO_Localisation_AddOn
 								APInv.Lines.BatchNumbers.BatchNumber = BatchNumberFinal;
 								APInv.Lines.BatchNumbers.Quantity = WBQty;
 
-							}
+                                oMatrixGoods.GetCellSpecific("DistNumber", index + 1).Value = BatchNumberFinal;
+
+                            }
 
 
 							else
@@ -362,7 +364,7 @@ namespace BDO_Localisation_AddOn
 								APInv.Lines.BatchNumbers.BatchNumber = BatchNumber;
 								APInv.Lines.BatchNumbers.Quantity = WBQty;
 
-							}
+                            }
 						}
 
 
