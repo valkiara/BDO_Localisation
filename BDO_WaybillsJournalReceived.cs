@@ -525,6 +525,13 @@ namespace BDO_Localisation_AddOn
 
                         Program.oCompany.GetLastError(out errCode, out errMSG);
                         Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Error") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID + " " + errMSG);
+
+                        int ind = 0;
+                        foreach (string[] goodsRow in array_GOODS)
+                        {
+                            oMatrixGoods.GetCellSpecific("DistNumber", ind + 1).Value = "";
+                            ind++;
+                        }
                     }
                 }
             }
