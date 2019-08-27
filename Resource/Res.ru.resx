@@ -3127,4 +3127,7 @@
   <data name="TreasuryTransferPaymentOrderIoBP" xml:space="preserve">
     <value>Treasury Transfer (BP)</value>
   </data>
+  <data name="AllDataWillBeCleared" xml:space="preserve">
+    <value>If you go back, your data will be cleared. Are you sure you want to continue?</value>
+  </data>
 </root>

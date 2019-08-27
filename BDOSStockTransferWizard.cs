@@ -1470,9 +1470,17 @@ namespace BDO_Localisation_AddOn
                     }
 					if (pVal.ItemUID == "Prev" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
 					{
-						if (oForm.Items.Item("Prev").Enabled)
+						int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("AllDataWillBeCleared"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+						if (answer == 1)
 						{
-							changePane(oForm, -1);
+							if (oForm.Items.Item("Prev").Enabled)
+							{
+								changePane(oForm, -1);
+							}
+						}
+						else {
+							BubbleEvent = false;
+							return;
 						}
 					}
 
