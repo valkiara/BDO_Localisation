@@ -3139,4 +3139,7 @@
   <data name="TreasuryTransferPaymentOrderIoBP" xml:space="preserve">
     <value>საბიუჯეტო გადარიცხვა (ბპ)</value>
   </data>
+  <data name="AllDataWillBeCleared" xml:space="preserve">
+    <value>თუ უკან დაბრუნდებით, თქვენი მონაცემები წაიშლება. დარწმუნებული ხართ, რომ გსურთ გაგრძელება?</value>
+  </data>
 </root>
