@@ -1272,8 +1272,9 @@ namespace BDO_Localisation_AddOn
                 string ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
                 string DistNumber = oRecordSet.Fields.Item("DistNumber").Value;
 
+                decimal futureDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("FutureDeprAmt").Value, CultureInfo.InvariantCulture);
                 decimal CurrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture);
-                if (CurrDeprAmt > 0)
+                if (CurrDeprAmt > 0 || futureDeprAmt >0)
                 {
                     rejection = true;
                     Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem") + " " + ItemCode + ": " + DistNumber);
