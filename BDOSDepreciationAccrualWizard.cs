@@ -656,8 +656,8 @@ namespace BDO_Localisation_AddOn
                              ""DepcAccInvoice"".""DepcDoc"",
                              ""DepcAcc"".""DeprAmt"" as ""DeprAmt"","
                             +
-                            (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt"" as ""CurrDeprAmt""," : @"""DepcAcc"".""CurrDeprAmt"" as ""CurrDeprAmt"",")
-                            +	                         
+                            (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt"" as ""CurrDeprAmt""," : @"""DepcAcc"".""CurrDeprAmt"" as ""CurrDeprAmt"", ""DepcAcc"".""FutureDeprAmt"" as ""FutureDeprAmt"",")
+                            +
                             @"""DepcAcc"".""DeprQty"" as ""DeprQty"", 
 	                         ""FinTable"".""NtBookVal"" as ""NtBookVal"",
 	                         ""FinTable"".""Quantity"" as ""Quantity""
@@ -685,7 +685,7 @@ namespace BDO_Localisation_AddOn
                         inner join ""OBTN"" on ""OBTN"".""DistNumber"" = ""OBVL"".""DistNumber"" and ""OBTN"".""ItemCode"" = ""OBVL"".""ItemCode"" and ""OBTN"".""Quantity"">0
                         and #ItemFilter#
                         and #BatchFilter#
-                        and  ADD_MONTHS(NEXT_DAY(LAST_DAY(""OBTN"".""InDate"")),-1)< ADD_MONTHS(NEXT_DAY(LAST_DAY('" + DeprMonth.ToString("yyyyMMdd") + @"')),-1)
+                        and  ADD_MONTHS(NEXT_DAY(LAST_DAY(""OBTN"".""InDate"")),-1)<= ADD_MONTHS(NEXT_DAY(LAST_DAY('" + DeprMonth.ToString("yyyyMMdd") + @"')),-1)
                         inner join ""OITM"" on  ""OBVL"".""ItemCode"" = ""OITM"".""ItemCode""
                         inner join ""OITB"" on  ""OITB"".""ItmsGrpCod"" = ""OITM"".""ItmsGrpCod"" and ""OITB"".""U_BDOSFxAs""='Y'
                         inner join ""OIVL"" on ""OIVL"".""ItemCode"" = ""OBVL"".""ItemCode"" 
@@ -725,9 +725,14 @@ namespace BDO_Localisation_AddOn
 	                    else 0
                         end) as ""CurrDeprAmt"",
 
+                        SUM(case when ""@BDOSDEPACR"".""U_AccrMnth"" > '" + DeprMonth.ToString("yyyyMMdd") + @"' 
+                        then ""@BDOSDEPAC1"".""U_DeprAmt""
+	                    else 0
+                        end) as ""FutureDeprAmt"",
+
 	                    SUM(""@BDOSDEPAC1"".""U_Quantity"") as ""DeprQty""
                         from ""@BDOSDEPAC1"" 
-                        inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ""@BDOSDEPACR"".""U_AccrMnth"" <= '" + DeprMonth.ToString("yyyyMMdd") + @"'and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')=''
+                        inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ""@BDOSDEPACR"".""U_AccrMnth"" >= '" + DeprMonth.ToString("yyyyMMdd") + @"'and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')=''
                         
                         group by 
                         ""@BDOSDEPAC1"".""U_ItemCode"",
@@ -748,6 +753,11 @@ namespace BDO_Localisation_AddOn
                         then ""@BDOSDEPAC1"".""U_DeprAmt""
 	                    else 0
                         end) as ""CurrDeprAmt"",
+
+                        SUM(case when ""@BDOSDEPACR"".""U_AccrMnth"" > '" + DeprMonth.ToString("yyyyMMdd") + @"' 
+                        then ""@BDOSDEPAC1"".""U_DeprAmt""
+	                    else 0
+                        end) as ""FutureDeprAmt"",
 
 	                    SUM(""@BDOSDEPAC1"".""U_Quantity"") as ""DeprQty""
                         from ""@BDOSDEPAC1"" 
