@@ -814,6 +814,11 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.ItemUID == "BDO_WblTxt" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
                 {
+                    if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE)
+                    {
+                        goto SkipToEnd;
+                    }
+
                     oForm.Freeze(true);
 
                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSFASTRD").GetValue("DocEntry", 0));
@@ -861,6 +866,9 @@ namespace BDO_Localisation_AddOn
                     {
                         Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_WBLD_D", newDocEntry.ToString());
                     }
+
+                SkipToEnd:;
+                    
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS && pVal.BeforeAction == false)
@@ -913,51 +921,51 @@ namespace BDO_Localisation_AddOn
 
                     fillAssets(oForm, out errorText);
                 }
-				if (pVal.ItemUID == "CardCodeE" && pVal.BeforeAction == false)
-				{
-					SAPbouiCOM.EditText oEdit = oForm.Items.Item("CardCodeE").Specific;
-					string cardCode = oEdit.Value;
-					if (string.IsNullOrEmpty(cardCode))
-					{
-						oForm.Items.Item("CardNameE").Specific.Value = "";
-					}
-				}
-				if (pVal.ItemUID == "FLocCodeE" && pVal.BeforeAction == false)
-				{
-					SAPbouiCOM.EditText oEdit = oForm.Items.Item("FLocCodeE").Specific;
-					string fLocCode = oEdit.Value;
-					if (string.IsNullOrEmpty(fLocCode))
-					{
-						oForm.Items.Item("FLocNameE").Specific.Value = "";
-					}
-				}
-				if (pVal.ItemUID == "FEmplIDE" && pVal.BeforeAction == false)
-				{
-					SAPbouiCOM.EditText oEdit = oForm.Items.Item("FEmplIDE").Specific;
-					string fEmplID = oEdit.Value;
-					if (string.IsNullOrEmpty(fEmplID))
-					{
-						oForm.Items.Item("FEmplNameE").Specific.Value = "";
-					}
-				}
-				if (pVal.ItemUID == "TLocCodeE" && pVal.BeforeAction == false)
-				{
-					SAPbouiCOM.EditText oEdit = oForm.Items.Item("TLocCodeE").Specific;
-					string tLocCode = oEdit.Value;
-					if (string.IsNullOrEmpty(tLocCode))
-					{
-						oForm.Items.Item("TLocNameE").Specific.Value = "";
-					}
-				}
-				if (pVal.ItemUID == "TEmplIDE" && pVal.BeforeAction == false)
-				{
-					SAPbouiCOM.EditText oEdit = oForm.Items.Item("TEmplIDE").Specific;
-					string tEmplID = oEdit.Value;
-					if (string.IsNullOrEmpty(tEmplID))
-					{
-						oForm.Items.Item("TEmplNameE").Specific.Value = "";
-					}
-				}
+				//if (pVal.ItemUID == "CardCodeE" && pVal.BeforeAction == false)
+				//{
+				//	SAPbouiCOM.EditText oEdit = oForm.Items.Item("CardCodeE").Specific;
+				//	string cardCode = oEdit.Value;
+				//	if (string.IsNullOrEmpty(cardCode))
+				//	{
+				//		oForm.Items.Item("CardNameE").Specific.Value = "";
+				//	}
+				//}
+				//if (pVal.ItemUID == "FLocCodeE" && pVal.BeforeAction == false)
+				//{
+				//	SAPbouiCOM.EditText oEdit = oForm.Items.Item("FLocCodeE").Specific;
+				//	string fLocCode = oEdit.Value;
+				//	if (string.IsNullOrEmpty(fLocCode))
+				//	{
+				//		oForm.Items.Item("FLocNameE").Specific.Value = "";
+				//	}
+				//}
+				//if (pVal.ItemUID == "FEmplIDE" && pVal.BeforeAction == false)
+				//{
+				//	SAPbouiCOM.EditText oEdit = oForm.Items.Item("FEmplIDE").Specific;
+				//	string fEmplID = oEdit.Value;
+				//	if (string.IsNullOrEmpty(fEmplID))
+				//	{
+				//		oForm.Items.Item("FEmplNameE").Specific.Value = "";
+				//	}
+				//}
+				//if (pVal.ItemUID == "TLocCodeE" && pVal.BeforeAction == false)
+				//{
+				//	SAPbouiCOM.EditText oEdit = oForm.Items.Item("TLocCodeE").Specific;
+				//	string tLocCode = oEdit.Value;
+				//	if (string.IsNullOrEmpty(tLocCode))
+				//	{
+				//		oForm.Items.Item("TLocNameE").Specific.Value = "";
+				//	}
+				//}
+				//if (pVal.ItemUID == "TEmplIDE" && pVal.BeforeAction == false)
+				//{
+				//	SAPbouiCOM.EditText oEdit = oForm.Items.Item("TEmplIDE").Specific;
+				//	string tEmplID = oEdit.Value;
+				//	if (string.IsNullOrEmpty(tEmplID))
+				//	{
+				//		oForm.Items.Item("TEmplNameE").Specific.Value = "";
+				//	}
+				//}
 
 				if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & pVal.BeforeAction == false)
                 {
@@ -1418,7 +1426,7 @@ namespace BDO_Localisation_AddOn
             itemName = "BDO_WblTxt"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
             formItems.Add("Left", left_s);
-            formItems.Add("Width", width_e);
+            formItems.Add("Width", width_s);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
