@@ -725,6 +725,10 @@ namespace BDO_Localisation_AddOn
 
                         if (oCFLEvento.ChooseFromListUID == "Waybill_CFL")
                         {
+                            if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE)
+                            {
+                                goto SkipToEnd;
+                            }
                             string query = @"Select ""DocEntry"" from ""@BDO_WBLD"" where ""U_baseDoc"" =0";
 
                             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -751,6 +755,8 @@ namespace BDO_Localisation_AddOn
 
 
                             oCFL.SetConditions(oCons);
+
+                        SkipToEnd:;
                         }
                     }
                     else
@@ -760,6 +766,11 @@ namespace BDO_Localisation_AddOn
 
                         if (oCFLEvento.ChooseFromListUID == "Waybill_CFL")
                         {
+                            if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE)
+                            {
+                                goto SkipToEnd;
+                            }
+
                             SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
 
                             if (oDataTableSelectedObjects == null)
@@ -802,6 +813,8 @@ namespace BDO_Localisation_AddOn
                             BubbleEvent = true;
                             oForm.Freeze(false);
                             oForm.Update();
+
+                        SkipToEnd:;
 
                         }
                     }
@@ -871,8 +884,15 @@ namespace BDO_Localisation_AddOn
                     
                 }
 
+                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE)
+                {
+                    oForm.Items.Item("BDO_WblDoc").Enabled = false;
+                }
+
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS && pVal.BeforeAction == false)
                 {
+                    
+
                     if (oForm.Items.Item("0_U_E").ToPane != 2)
                     {
                         oForm.Visible = false;
@@ -910,9 +930,12 @@ namespace BDO_Localisation_AddOn
                     {
                         setVisibleFormItems(oForm, out errorText);
                     }
+
                 }
 
-                if (pVal.ItemUID != "" && pVal.ItemUID == "FillMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+                
+
+                    if (pVal.ItemUID != "" && pVal.ItemUID == "FillMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                 {
                     if (oForm.Items.Item(pVal.ItemUID).Enabled == false)
                     {
