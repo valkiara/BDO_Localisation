@@ -2960,7 +2960,7 @@
     <value>Depreciation amount</value>
   </data>
   <data name="DepreciationAccruingWizard" xml:space="preserve">
-    <value>Depreciation Accruing Wizard</value>
+    <value>Depreciation Accruing Wizard - With Quantities</value>
   </data>
   <data name="DistNumber" xml:space="preserve">
     <value>Batch number</value>
