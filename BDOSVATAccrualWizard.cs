@@ -1498,7 +1498,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
             formProperties.Add("UniqueID", "BDOSVATADD");
             formProperties.Add("BorderStyle", SAPbouiCOM.BoFormBorderStyle.fbs_Sizable);
-            formProperties.Add("Title", BDOSResources.getTranslate("ARVATAccualWizard") + " (" + BDOSResources.getTranslate("InDetail") + ")");
+            formProperties.Add("Title", BDOSResources.getTranslate("ARVATAccrualWizard") + " (" + BDOSResources.getTranslate("InDetail") + ")");
             //formProperties.Add("Left", (Program.uiApp.Desktop.Width - formWidth) / 2);
             formProperties.Add("Width", formWidth);
             //formProperties.Add("Top", (Program.uiApp.Desktop.Height - formHeight) / 3);
