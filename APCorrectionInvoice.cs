@@ -26,6 +26,7 @@ namespace BDO_Localisation_AddOn
                     oForm.Items.Item("1000").Specific.Value = sdocDate;
                     oForm.PaneLevel = panelLevel;
                     oForm.Freeze(false);
+
                 }
             }
         }
