@@ -1278,7 +1278,7 @@ namespace BDO_Localisation_AddOn
                 oCreationPackage.Enabled = true;
                 oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
                 oCreationPackage.UniqueID = "BDOSVAWizzForm";
-                oCreationPackage.String = BDOSResources.getTranslate("ARVATAccualWizard");
+                oCreationPackage.String = BDOSResources.getTranslate("ARVATAccrualWizard");
                 oCreationPackage.Position = fatherMenuItem.SubMenus.Count - 1;
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
