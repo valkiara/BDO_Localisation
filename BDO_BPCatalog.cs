@@ -185,7 +185,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else //კოდით
                 {
-                    query = @"SELECT * FROM ""OSCN"" WHERE ""Substitute"" = '" + Barcode + @"' AND ""CardCode""  = N'" + CardCode + "'";
+                    query = @"SELECT * FROM ""OSCN"" WHERE ""Substitute"" = N'" + Barcode + @"' AND ""CardCode""  = N'" + CardCode + "'";
                 }
 
                 oRecordSet.DoQuery(query);
