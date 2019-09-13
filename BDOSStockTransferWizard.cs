@@ -1468,17 +1468,34 @@ namespace BDO_Localisation_AddOn
                     {
                         fillFiltTable(oForm, out errorText);
                     }
+					if (pVal.ItemUID == "Prev" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+					{
+						int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("AllDataWillBeCleared"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+						if (answer == 1)
+						{
+							if (oForm.Items.Item("Prev").Enabled)
+							{
+								changePane(oForm, -1);
+							}
+						}
+						else {
+							BubbleEvent = false;
+							return;
+						}
+					}
 
-                    if (pVal.ItemUID == "Next" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+					if (pVal.ItemUID == "Next" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                     {
                         changePane(oForm, 1);
                     }
 
-                    if (pVal.ItemUID == "Prev" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
-                    {
-                        if (oForm.Items.Item("Prev").Enabled)
+					if (pVal.ItemUID == "CategoryE" &&  pVal.BeforeAction == false)
+                    {	
+						SAPbouiCOM.EditText oEdit = oForm.Items.Item("CategoryE").Specific;
+						string category = oEdit.Value;
+                        if (string.IsNullOrEmpty(category))
                         {
-                            changePane(oForm, -1);
+                            oForm.Items.Item("CategoryN").Specific.Value = "";
                         }
                     }
 
@@ -1512,7 +1529,8 @@ namespace BDO_Localisation_AddOn
                     if ((pVal.ItemUID == "Check" || pVal.ItemUID == "Uncheck") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                     {
                         checkUncheckTables(oForm, pVal.ItemUID, "WhsTblDt", out errorText);
-                    }
+						//updateDetailTable(oForm, out errorText);
+					}
 
                     if (pVal.ItemUID == "FindNext" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                     {
@@ -1595,7 +1613,10 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                    oItem = oForm.Items.Item("WhsToE");
+					oItem = oForm.Items.Item("WhsToLB");
+					oItem.Left = oForm.Items.Item("WhsToS").Left + oForm.Items.Item("WhsToS").Width-15;
+
+					oItem = oForm.Items.Item("WhsToE");
                     oItem.Left = oForm.Items.Item("WhsToS").Left + oForm.Items.Item("WhsToS").Width + 5;
 
                     oItem = oForm.Items.Item("FindNextE");
@@ -1863,7 +1884,8 @@ namespace BDO_Localisation_AddOn
             {
                 oDataTable.SetValue("ChkBx", i, ChkBx);
             }
-            oForm.Freeze(false);
+			oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+			oForm.Freeze(false);
         }
 
         public static void setWarehousesConditions(string prjCode, string whsType, SAPbouiCOM.ChooseFromList oCFL)
@@ -2009,7 +2031,11 @@ namespace BDO_Localisation_AddOn
                 {
                     query = query + @" AND ""U_BDOSWhType"" = 'Main'";
                 }
-                else if (docType != "TransferWithoutType")
+				else if (docType == "TransferToWriteOffWarehouse")
+				{
+					query = query + (@" AND ""OWHS"".""U_BDOSWhType"" = 'Project'");
+				}
+				else if (docType != "TransferWithoutType")
                 {
                     query = @"Select 'N' AS ""ChkBx"",  ""PrjCode"" AS ""Code"",""PrjName"" AS ""Name"" FROM ""OPRJ"" WHERE ""Active"" = 'Y' AND ""Locked"" = 'N'";
                 }
@@ -2140,17 +2166,27 @@ namespace BDO_Localisation_AddOn
                     queryBuilder.Append(itemGroup.Trim());
                     queryBuilder.Append("' ");
                 }
-
+				int count = 0;
                 bool byWhs = (docType == "TransferToProjectWarehouse" || docType == "TransferWithoutType");
                 for (int i = 0; i < oDataTableFilter.Rows.Count; i++)
-                {
+                {	
                     if (oDataTableFilter.GetValue("ChkBx", i) == "Y")
                     {
-                        queryBuilder.Append(byWhs ? @" AND ""OIVL"".""LocCode"" = '" : @" AND ""OWHS"".""U_BDOSPrjCod"" = '");
-                        queryBuilder.Append(oDataTableFilter.GetValue("Code", i).Trim());
-                        queryBuilder.Append("' ");
+						count++;
+						if (count == 1)
+						{
+							queryBuilder.Append(byWhs ? @" AND ""OIVL"".""LocCode"" = '" : @" AND ""OWHS"".""U_BDOSPrjCod"" = '");
+							queryBuilder.Append(oDataTableFilter.GetValue("Code", i).Trim());
+							queryBuilder.Append("' ");
+						}
+						else if(count>1){
+							queryBuilder.Append(byWhs ? @" OR ""OIVL"".""LocCode"" = '" : @" AND ""OWHS"".""U_BDOSPrjCod"" = '");
+							queryBuilder.Append(oDataTableFilter.GetValue("Code", i).Trim());
+							queryBuilder.Append("' ");
+						}
                     }
                 }
+				count = 0;
 
                 if (docType == "TransferToProjectWarehouse")
                 {
@@ -2171,8 +2207,7 @@ namespace BDO_Localisation_AddOn
 	                                     ""OITM"".""ItemName"",
 	                                     ""OWHS"".""U_BDOSPrjCod"",
                                          ""OWHS"".""U_BDOSWhType""
-
-                                       ORDER BY ""OIVL"".""LocCode""");
+									ORDER BY ""OIVL"".""LocCode"" ");
 
                 string query = queryBuilder.ToString();
 
@@ -2199,19 +2234,21 @@ namespace BDO_Localisation_AddOn
                 string tmpLocCode = "";
                 while (!oRecordSet.EoF)
                 {
-                    rowDetail++;
+                    
                     qty = Convert.ToDecimal(oRecordSet.Fields.Item("Qty").Value);
-                    tmpLocCode = oRecordSet.Fields.Item("LocCode").Value;
+                    
 
                     if (qty > 0)
                     {
-                        if (LocCode != tmpLocCode)
+						tmpLocCode = oRecordSet.Fields.Item("LocCode").Value;
+						rowDetail++;
+						if (LocCode != tmpLocCode)
                         {
                             row++;
                             if (row > 1)
                             {
                                 //წინა სტრიქონში ჯამები და დახურვა
-                                SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Position", rowDetail.ToString());
+                                SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Position", (rowDetail-1).ToString());
                                 SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Qty", FormsB1.ConvertDecimalToString(totalQty));
                                 SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Cost", FormsB1.ConvertDecimalToString(totalCost));
                                 SbuilderWhs.Append("</Row>");
@@ -2232,7 +2269,7 @@ namespace BDO_Localisation_AddOn
 
                         }
 
-                        totalQty = totalQty + qty;
+						totalQty = totalQty + qty;
                         totalCost = totalCost + Convert.ToDecimal(oRecordSet.Fields.Item("Cost").Value);
 
                         DataRow dataRow = TableWhsItemsForDetail.Rows.Add();

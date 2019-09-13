@@ -2960,7 +2960,7 @@
     <value>Depreciation amount</value>
   </data>
   <data name="DepreciationAccruingWizard" xml:space="preserve">
-    <value>Depreciation Accruing Wizard</value>
+    <value>Depreciation Accruing Wizard - With Quantities</value>
   </data>
   <data name="DistNumber" xml:space="preserve">
     <value>Batch number</value>
@@ -3165,5 +3165,8 @@
   </data>
   <data name="TreasuryTransferPaymentOrderIoBP" xml:space="preserve">
     <value>Treasury Transfer (BP)</value>
+  </data>
+  <data name="AllDataWillBeCleared" xml:space="preserve">
+    <value>If you go back, your data will be cleared. Are you sure you want to continue?</value>
   </data>
 </root>

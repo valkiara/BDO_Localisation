@@ -4921,6 +4921,7 @@ namespace BDO_Localisation_AddOn
                     int Min = Convert.ToInt32(U_beginTime - Hour * 100);
                     BEGIN_DATE = new DateTime(BEGIN_DATE.Year, BEGIN_DATE.Month, BEGIN_DATE.Day, Hour, Min,0);
                     
+
                     string TRAN_COST_PAYER = oRecordSet.Fields.Item("U_payForTr").Value.ToString(); //TRAN_COST_PAYER- ტრანსპორტირების ღირებულებას თუ იხდის მყიდველი - 1; გამყიდველი - 2;
                     TRAN_COST_PAYER = TRAN_COST_PAYER == "-1" ? "0" : TRAN_COST_PAYER;
                     string TRANS_ID = oRecordSet.Fields.Item("U_trnsType").Value.ToString(); //TRANS_ID - ტრანსპორტის ტიპის id

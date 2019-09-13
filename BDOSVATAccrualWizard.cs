@@ -36,7 +36,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
             formProperties.Add("UniqueID", "BDOSVAWizzForm");
             formProperties.Add("BorderStyle", SAPbouiCOM.BoFormBorderStyle.fbs_Sizable);
-            formProperties.Add("Title", BDOSResources.getTranslate("ARVATAccualWizard"));
+            formProperties.Add("Title", BDOSResources.getTranslate("ARVATAccrualWizard"));
             formProperties.Add("Left", 558);
             formProperties.Add("ClientWidth", 600);
             formProperties.Add("Top", 335);
@@ -1278,7 +1278,7 @@ namespace BDO_Localisation_AddOn
                 oCreationPackage.Enabled = true;
                 oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
                 oCreationPackage.UniqueID = "BDOSVAWizzForm";
-                oCreationPackage.String = BDOSResources.getTranslate("ARVATAccualWizard");
+                oCreationPackage.String = BDOSResources.getTranslate("ARVATAccrualWizard");
                 oCreationPackage.Position = fatherMenuItem.SubMenus.Count - 1;
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
@@ -1498,7 +1498,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
             formProperties.Add("UniqueID", "BDOSVATADD");
             formProperties.Add("BorderStyle", SAPbouiCOM.BoFormBorderStyle.fbs_Sizable);
-            formProperties.Add("Title", BDOSResources.getTranslate("ARVATAccualWizard") + " (" + BDOSResources.getTranslate("InDetail") + ")");
+            formProperties.Add("Title", BDOSResources.getTranslate("ARVATAccrualWizard") + " (" + BDOSResources.getTranslate("InDetail") + ")");
             //formProperties.Add("Left", (Program.uiApp.Desktop.Width - formWidth) / 2);
             formProperties.Add("Width", formWidth);
             //formProperties.Add("Top", (Program.uiApp.Desktop.Height - formHeight) / 3);

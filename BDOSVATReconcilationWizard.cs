@@ -893,9 +893,13 @@ namespace BDO_Localisation_AddOn
         {
             Dictionary<string, string> listValidValuesDict = new Dictionary<string, string>();
 
-            string query = @"select  top 2 * from ""JDT1""
+            string query = @"select  top 2 * 
+            from ""JDT1""
             inner join ""OJDT"" on ""JDT1"".""TransId"" = ""OJDT"".""TransId"" and ""OJDT"".""Ref1"" = '"+ DocEntry+ @"'
-            and ""OJDT"".""Ref2""  = 'UDO_F_BDO_ARDPV_D'";
+                and ""OJDT"".""Ref2""  = 'UDO_F_BDO_ARDPV_D' 
+            where ""OJDT"".""TransId"" not in 
+            (select ""StornoToTr"" from ""OJDT"" where ""StornoToTr"" is not null)
+            AND ""OJDT"".""StornoToTr"" Is NULL";
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             oRecordSet.DoQuery(query);

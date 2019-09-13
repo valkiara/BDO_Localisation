@@ -699,34 +699,6 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string getAccountCurrency(string accountCode)
-        {
-            string accountCurrency = null;
-
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            try
-            {
-                string query = @"SELECT ""OACT"".""ActCurr"" FROM ""OACT"" WHERE ""OACT"".""AcctCode"" = '" + accountCode + "'";
-
-                oRecordSet.DoQuery(query);
-                if (!oRecordSet.EoF)
-                {
-                    accountCurrency = oRecordSet.Fields.Item("ActCurr").Value.ToString();
-                    return accountCurrency;
-                }
-                return accountCurrency;
-            }
-            catch
-            {
-                return accountCurrency;
-            }
-            finally
-            {
-                Marshal.FinalReleaseComObject(oRecordSet);
-                oRecordSet = null;
-            }
-        }
-
         public static string getServiceUrlForInternetBanking(string program, out string clientID, out int port, out string errorText)
         {
             errorText = null;
@@ -1272,8 +1244,9 @@ namespace BDO_Localisation_AddOn
                 string ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
                 string DistNumber = oRecordSet.Fields.Item("DistNumber").Value;
 
+                decimal futureDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("FutureDeprAmt").Value, CultureInfo.InvariantCulture);
                 decimal CurrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture);
-                if (CurrDeprAmt > 0)
+                if (CurrDeprAmt > 0 || futureDeprAmt >0)
                 {
                     rejection = true;
                     Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem") + " " + ItemCode + ": " + DistNumber);
