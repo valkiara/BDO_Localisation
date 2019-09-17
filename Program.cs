@@ -40,6 +40,8 @@ namespace BDO_Localisation_AddOn
         public static string LocalCurrency = null;
         public static string MainCurrencySapCode = null;
         public static bool openPaymentMeans = false;
+        public static decimal transferSumFC;
+        public static bool openPaymentMeansByCurrRateChange = false;
         public static DataTable JrnLinesGlobal = new DataTable();
         public static bool clickUnitedJournalEntry = false;
         public static bool Exchange_Rate_Save_Click = false;
@@ -2164,10 +2166,7 @@ namespace BDO_Localisation_AddOn
                 //----------------------------->Payment Means<-----------------------------
                 else if (pVal.FormTypeEx == "196")
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE && pVal.BeforeAction == false)
-                    {
-                        openPaymentMeans = true;
-                    }
+                    PaymentMeans.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Delete UDF<-----------------------------
@@ -2216,7 +2215,7 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "1472000006")
                 {
                     AssetClass.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }            
+                }
 
                 //----------------------------->Withholding Tax Table<-----------------------------
                 else if (pVal.FormTypeEx == "60504") //from A/P Credit Memo, A/P Invoice, A/P Reserve Invoice, A/P Down Payment Request 
