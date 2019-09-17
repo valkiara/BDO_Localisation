@@ -905,6 +905,22 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        private delegate double RoundingFunction(double value);
+
+        private enum RoundingDirection { Up, Down }
+
+        private static double Round(double value, int precision, RoundingDirection roundingDirection)
+        {
+            RoundingFunction roundingFunction;
+            if (roundingDirection == RoundingDirection.Up)
+                roundingFunction = Math.Ceiling;
+            else
+                roundingFunction = Math.Floor;
+            value *= Math.Pow(10, precision);
+            value = roundingFunction(value);
+            return value * Math.Pow(10, -1 * precision);
+        }
+
         public static string getRegistrationCountryCode(string account, string table)
         {
             string registrationCountryCode = null;

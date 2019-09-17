@@ -183,6 +183,7 @@
     <Compile Include="License.cs" />
     <Compile Include="Locations.cs" />
     <Compile Include="ItemGroup.cs" />
+    <Compile Include="PaymentMeans.cs" />
     <Compile Include="ProfitAndLossStatement.cs" />
     <Compile Include="ProfitTax.cs" />
     <Compile Include="Resource\Res.en.Designer.cs">
