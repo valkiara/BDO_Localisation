@@ -136,6 +136,14 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSInStck");
+            fieldskeysMap.Add("TableName", "IGE1");
+            fieldskeysMap.Add("Description", "In Stock");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Quantity);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
         }
 
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
@@ -1377,12 +1385,51 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
+                if(pVal.ItemChanged && pVal.ItemUID == "13" && !pVal.BeforeAction)
+                {
+
+                }
+
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && pVal.BeforeAction == false)
                 {
                     oForm.Freeze(true);
                     resizeForm(oForm, out errorText);
                     oForm.Freeze(false);
                 }
+            }
+        }
+
+        public static decimal getInStockByWarehouse(string itemCode, string warehouse)
+        {
+            SAPbobsCOM.Recordset oRecordset = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            try
+            {
+                string query = @"SELECT 
+                ""ItemCode"", 
+                ""Dscription"", 
+                ""Warehouse"",
+                SUM(""InQty"" - ""OutQty"") AS ""InStock""
+                FROM ""OINM""
+                WHERE
+                ""ItemCode"" = '" + itemCode + @"'
+                AND ""Warehouse"" = '" + warehouse + @"'
+                GROUP BY ""ItemCode"", ""Dscription"", ""Warehouse""";
+
+                oRecordset.DoQuery(query);
+                if (!oRecordset.EoF)
+                {
+                    return Convert.ToDecimal(oRecordset.Fields.Item("InStock").Value);
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordset);
             }
         }
 
