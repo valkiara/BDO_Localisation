@@ -3169,4 +3169,10 @@
   <data name="AllDataWillBeCleared" xml:space="preserve">
     <value>If you go back, your data will be cleared. Are you sure you want to continue?</value>
   </data>
+  <data name="DocumentCantSaveAsDraftAutomatically" xml:space="preserve">
+    <value>Document can't  "Save As Draft" automatically!</value>
+  </data>
+  <data name="TryItManually" xml:space="preserve">
+    <value>Try it manually</value>
+  </data>
 </root>

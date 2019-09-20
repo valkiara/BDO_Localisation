@@ -2394,7 +2394,7 @@ namespace BDO_Localisation_AddOn
                 XMLWhs = XMLWhs.Replace("<Rows/></DataTable>", "");
                 SbuilderWhs.Append(XMLWhs);
                 SbuilderWhs.Append("<Rows>");
-
+                
                 string expression = "LineIDWhsTable = '" + LineIDWhsTable + "'";
                 DataRow[] foundRows = TableWhsItemsForDetail.Select(expression);
 

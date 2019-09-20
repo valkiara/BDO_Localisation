@@ -879,7 +879,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static decimal roundAmountByGeneralSettings(decimal amount, string DecType)
+        public static decimal roundAmountByGeneralSettings(decimal amount, string DecType, RoundingDirection roundingDir = RoundingDirection.Other)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
@@ -892,11 +892,19 @@ namespace BDO_Localisation_AddOn
                 {
                     sumDec = Convert.ToInt32(oRecordSet.Fields.Item(DecType + "Dec").Value);
                 }
-                return Math.Round(amount, sumDec);
+                if (roundingDir == RoundingDirection.Other)
+                {
+                    return Math.Round(amount, sumDec);
+                }
+                return Round(Convert.ToDouble(amount, CultureInfo.InvariantCulture), sumDec, roundingDir);
             }
             catch
             {
-                return Math.Round(amount, 2);
+                if (roundingDir == RoundingDirection.Other)
+                {
+                    return Math.Round(amount, 2);
+                }
+                return Round(Convert.ToDouble(amount, CultureInfo.InvariantCulture), 2, roundingDir);
             }
             finally
             {
@@ -907,9 +915,9 @@ namespace BDO_Localisation_AddOn
 
         private delegate double RoundingFunction(double value);
 
-        private enum RoundingDirection { Up, Down }
+        public enum RoundingDirection { Up, Down, Other }
 
-        private static double Round(double value, int precision, RoundingDirection roundingDirection)
+        private static decimal Round(double value, int precision, RoundingDirection roundingDirection)
         {
             RoundingFunction roundingFunction;
             if (roundingDirection == RoundingDirection.Up)
@@ -918,7 +926,7 @@ namespace BDO_Localisation_AddOn
                 roundingFunction = Math.Floor;
             value *= Math.Pow(10, precision);
             value = roundingFunction(value);
-            return value * Math.Pow(10, -1 * precision);
+            return Convert.ToDecimal(value * Math.Pow(10, -1 * precision), CultureInfo.InvariantCulture);
         }
 
         public static string getRegistrationCountryCode(string account, string table)
