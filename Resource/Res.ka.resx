@@ -3142,4 +3142,10 @@
   <data name="AllDataWillBeCleared" xml:space="preserve">
     <value>თუ უკან დაბრუნდებით, თქვენი მონაცემები წაიშლება. დარწმუნებული ხართ, რომ გსურთ გაგრძელება?</value>
   </data>
+  <data name="DocumentCantSaveAsDraftAutomatically" xml:space="preserve">
+    <value>ავტომატურად ვერ მოხერხდა დოკუმენტის დამახსოვრება დრაფტად!</value>
+  </data>
+  <data name="TryItManually" xml:space="preserve">
+    <value>სცადეთ მანუალურად</value>
+  </data>
 </root>
