@@ -17,7 +17,7 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DRAW && pVal.BeforeAction == false && Program.openPaymentMeansByCurrRateChange)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DRAW && pVal.BeforeAction == false && Program.openPaymentMeansByPostDateChange)
                 {
                     try
                     {
@@ -37,7 +37,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.ItemChanged == true && pVal.ItemUID == "34" && pVal.BeforeAction == false && Program.openPaymentMeansByCurrRateChange)
+                if (pVal.ItemChanged == true && pVal.ItemUID == "34" && pVal.BeforeAction == false && Program.openPaymentMeansByPostDateChange)
                 {
                     //Program.openPaymentMeansByCurrRateChange = false;
                     oForm.Items.Item("1").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
