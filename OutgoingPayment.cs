@@ -21,6 +21,7 @@ namespace BDO_Localisation_AddOn
         public static bool ProfitTaxTypeIsSharing = false;
         public static SAPbouiCOM.Form CurrentForm;
         public static decimal oldAmountLC;
+        public static decimal oldAmountFC;
         public static decimal oldDocRate;
 
         public static void createUserFields(out string errorText)
@@ -3475,8 +3476,7 @@ namespace BDO_Localisation_AddOn
                             CommonFunctions.fillDocRate(oForm, "OVPM", "OVPM");
                         }
                     }
-
-                    string docCurrency = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("docCurr", 0).Trim();
+                    
                     if (pVal.ItemChanged == true && pVal.ItemUID == "10")
                     {
                         string docEntry = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0);
@@ -3485,20 +3485,21 @@ namespace BDO_Localisation_AddOn
                             SAPbobsCOM.Payments oPayments = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPaymentsDrafts);
                             bool draft = oPayments.GetByKey(Convert.ToInt32(docEntry));
 
-                            if (docCurrency != Program.LocalCurrency && draft)
+                            if (draft)
                             {
-                                if (pVal.BeforeAction == false)
+                                if (!pVal.BeforeAction && oldAmountLC > 0)
                                 {
-                                    changePostingDate(oForm, docCurrency);
+                                    changePostingDate(oForm);
                                 }
                             }
                         }
                     }
 
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.ItemUID == "10" && pVal.BeforeAction == false)
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.ItemUID == "10" && pVal.BeforeAction == true)
                     {
                         oForm.Freeze(true);
                         oldAmountLC = Convert.ToDecimal(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("TrsfrSum", 0), CultureInfo.InvariantCulture);
+                        oldAmountFC = Convert.ToDecimal(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("TrsfrSumFC", 0), CultureInfo.InvariantCulture);
                         oldDocRate = FormsB1.cleanStringOfNonDigits(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("docRate", 0).ToString());
 
                         Program.paymentInvoices = new DataTable();
@@ -3682,9 +3683,9 @@ namespace BDO_Localisation_AddOn
                         Program.openPaymentMeans = false;
                         setVisibleFormItems(oForm, out errorText);
 
-                        if (Program.openPaymentMeansByCurrRateChange)
+                        if (Program.openPaymentMeansByPostDateChange)
                         {
-                            Program.openPaymentMeansByCurrRateChange = false;
+                            Program.openPaymentMeansByPostDateChange = false;
                             try
                             {
                                 string docEntry = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0);
@@ -3707,21 +3708,61 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void changePostingDate(SAPbouiCOM.Form oForm, string docCurrency)
+        private static void changePostingDate(SAPbouiCOM.Form oForm)
         {
+            string docCurrency = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("docCurr", 0).Trim();
             decimal docRate = FormsB1.cleanStringOfNonDigits(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("docRate", 0).ToString());
-            if (docRate != 0)
+            string transferAccount = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("TrsfrAcct", 0).Trim();
+            string trsfrAcctCurr = CommonFunctions.getAccountCurrency(transferAccount);
+            string bpCurr = oForm.DataSources.DBDataSources.Item("OCRD").GetValue("Currency", 0).Trim();
+
+            try
             {
-                try
+                oForm.Freeze(true);
+
+                Program.newPostDateStr = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocDate", 0);
+                if (docCurrency == Program.LocalCurrency)
                 {
-                    oForm.Freeze(true);
-                    Program.transferSumFC = CommonFunctions.roundAmountByGeneralSettings(oldAmountLC / docRate, "Sum");
-                    Program.overallAmount = CommonFunctions.roundAmountByGeneralSettings(oldAmountLC, "Sum");
-                    Program.newPostDateStr = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocDate", 0);
+                    Program.transferSumFC = oldAmountLC;
+                    Program.overallAmount = oldAmountLC;
 
                     SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)(oForm.Items.Item("20").Specific);
                     int rowCount = oMatrix.RowCount;
+
+                    for (int i = 1; i <= rowCount; i++)
+                    {
+                        string docNum = oMatrix.GetCellSpecific("1", i).Value;
+                        string objType = oMatrix.GetCellSpecific("45", i).Value;
+                        DataRow[] foundRows = Program.paymentInvoices.Select("DocNum = '" + docNum + "' AND ObjType = '" + objType + "'");
+
+                        if (foundRows.Count() > 0)
+                        {
+                            string totalPaymentFCStr = oMatrix.GetCellSpecific("24", i).Value;
+                            string invCurr = totalPaymentFCStr.Substring(0, 3);
+
+                            if (invCurr == docCurrency)
+                            {
+                                oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Checked = true;
+                            }
+                        }
+                    }
+                }
+
+                else if (docCurrency != Program.LocalCurrency && trsfrAcctCurr == "##" && docRate != 0)
+                {
+                    Program.transferSumFC = CommonFunctions.roundAmountByGeneralSettings(oldAmountLC / docRate, "Sum");
+                    if (bpCurr == Program.LocalCurrency || bpCurr == "##")
+                    {
+                        Program.overallAmount = CommonFunctions.roundAmountByGeneralSettings(oldAmountLC, "Sum");
+                    }
+                    else
+                    {
+                        Program.overallAmount = Program.transferSumFC;
+                    }
+
                     decimal newAmountFC = CommonFunctions.roundAmountByGeneralSettings(oldAmountLC / docRate, "Sum");
+                    SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)(oForm.Items.Item("20").Specific);
+                    int rowCount = oMatrix.RowCount;
 
                     for (int i = 1; i <= rowCount; i++)
                     {
@@ -3750,7 +3791,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    oForm.Items.Item("21").Specific.value = FormsB1.ConvertDecimalToStringForEditboxStrings(CommonFunctions.roundAmountByGeneralSettings(Program.overallAmount / Program.transferSumFC, "Rate", CommonFunctions.RoundingDirection.Down));
+                    oForm.Items.Item("21").Specific.value = FormsB1.ConvertDecimalToStringForEditboxStrings(CommonFunctions.roundAmountByGeneralSettings(oldAmountLC / Program.transferSumFC, "Rate", CommonFunctions.RoundingDirection.Down));
 
                     if (newAmountFC > 0)
                     {
@@ -3763,27 +3804,61 @@ namespace BDO_Localisation_AddOn
                         oForm.Items.Item("37").Specific.Checked = false;
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    var st = new System.Diagnostics.StackTrace(ex, true);
-                    // Get the top stack frame
-                    var frame = st.GetFrame(0);
-                    // Get the line number from the stack frame
-                    var line = frame.GetFileLineNumber();
+                    Program.transferSumFC = oldAmountFC;
 
-                    Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-                    Program.uiApp.StatusBar.SetSystemMessage("st: " + st, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-                    Program.uiApp.StatusBar.SetSystemMessage("frame: " + frame, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-                    Program.uiApp.StatusBar.SetSystemMessage("line: " + line, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                    if (bpCurr == Program.LocalCurrency || bpCurr == "##")
+                    {
+                        Program.overallAmount = CommonFunctions.roundAmountByGeneralSettings(oldAmountFC * docRate, "Sum");
+                    }
+                    else
+                    {
+                        Program.overallAmount = oldAmountFC;
+                    }
+
+                    SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)(oForm.Items.Item("20").Specific);
+                    int rowCount = oMatrix.RowCount;
+
+                    for (int i = 1; i <= rowCount; i++)
+                    {
+                        string docNum = oMatrix.GetCellSpecific("1", i).Value;
+                        string objType = oMatrix.GetCellSpecific("45", i).Value;
+                        DataRow[] foundRows = Program.paymentInvoices.Select("DocNum = '" + docNum + "' AND ObjType = '" + objType + "'");
+
+                        if (foundRows.Count() > 0)
+                        {
+                            string totalPaymentFCStr = oMatrix.GetCellSpecific("24", i).Value;
+                            string invCurr = totalPaymentFCStr.Substring(0, 3);
+
+                            if (invCurr == docCurrency)
+                            {
+                                oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Checked = true;
+                            }
+                        }
+                    }
                 }
-                finally
-                {
-                    oForm.Freeze(false);
-                }
-                
-                Program.openPaymentMeansByCurrRateChange = true;
-                oForm.Items.Item("234000001").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
             }
+            catch (Exception ex)
+            {
+                var st = new System.Diagnostics.StackTrace(ex, true);
+                // Get the top stack frame
+                var frame = st.GetFrame(0);
+                // Get the line number from the stack frame
+                var line = frame.GetFileLineNumber();
+
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage("st: " + st, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage("frame: " + frame, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage("line: " + line, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
+
+            Program.openPaymentMeansByPostDateChange = true;
+            oForm.Items.Item("234000001").Click(SAPbouiCOM.BoCellClickType.ct_Regular);            
         }        
 
         //private static void changeDocDateRate(SAPbouiCOM.Form oFormDate, string newDate)
