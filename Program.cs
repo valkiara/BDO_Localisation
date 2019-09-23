@@ -41,7 +41,10 @@ namespace BDO_Localisation_AddOn
         public static string MainCurrencySapCode = null;
         public static bool openPaymentMeans = false;
         public static decimal transferSumFC;
-        public static bool openPaymentMeansByCurrRateChange = false;
+        public static decimal overallAmount;
+        public static string newPostDateStr;
+        public static DataTable paymentInvoices;
+        public static bool openPaymentMeansByPostDateChange = false;
         public static DataTable JrnLinesGlobal = new DataTable();
         public static bool clickUnitedJournalEntry = false;
         public static bool Exchange_Rate_Save_Click = false;
