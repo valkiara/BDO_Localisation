@@ -48,13 +48,11 @@ namespace BDO_Localisation_AddOn
         public static DataTable JrnLinesGlobal = new DataTable();
         public static bool clickUnitedJournalEntry = false;
         public static bool Exchange_Rate_Save_Click = false;
-
         public static DataTable UserDefinedFieldsCurrentCompany;
         public static DataTable UserDefinedTablesCurrentCompany;
-
         public static bool localisationAddonLicensed = false;
-
         public static readonly string ExecutionDateISO = DateTime.UtcNow.ToString("o");
+        public static bool selectItemsToCopyOkClick = false;
 
         static void Main(string[] args)
         {
@@ -1564,7 +1562,7 @@ namespace BDO_Localisation_AddOn
                 {
                     AssetClass.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
-			}
+            }
             catch (Exception ex)
             {
                 errorText = ex.Message;
@@ -2225,7 +2223,25 @@ namespace BDO_Localisation_AddOn
                 {
                     WithholdingTax.openTaxTableFromAPDocs(FormUID, ref pVal, out BubbleEvent);
                 }
-			}
+
+                //----------------------------->Issue For Production<-----------------------------
+                else if (pVal.FormTypeEx == "65213")
+                {
+                    IssueForProduction.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->Select Items to Copy (Issue For Production)<-----------------------------
+                else if (pVal.FormTypeEx == "65212")
+                {
+                    if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
+                    {
+                        SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
+                        if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
+                            selectItemsToCopyOkClick = true;
+                    }
+                }
+            }
             catch (Exception ex)
             {
                 errorText = ex.Message;

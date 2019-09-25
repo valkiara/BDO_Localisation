@@ -179,6 +179,7 @@
     <Compile Include="HouseBankAccounts.cs" />
     <Compile Include="IncomingPayment.cs" />
     <Compile Include="BDOSInternetBankingIntegrationServicesRules.cs" />
+    <Compile Include="IssueForProduction.cs" />
     <Compile Include="LandedCostsSetup.cs" />
     <Compile Include="License.cs" />
     <Compile Include="Locations.cs" />

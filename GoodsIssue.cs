@@ -12,6 +12,8 @@ namespace BDO_Localisation_AddOn
     static partial class GoodsIssue
     {
         public static bool ProfitTaxTypeIsSharing = false;
+        public static string itemCodeOld;
+        public static string warehouseOld;
 
         public static void createUserFields(out string errorText)
         {
@@ -1385,9 +1387,37 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if(pVal.ItemChanged && pVal.ItemUID == "13" && !pVal.BeforeAction)
+                if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)
                 {
+                    if (!pVal.BeforeAction)
+                    {
+                        if (pVal.ColUID == "1") //Item No.
+                        {
+                            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item(pVal.ItemUID).Specific));
+                            itemCodeOld = oMatrix.GetCellSpecific(pVal.ColUID, pVal.Row).Value;
+                        }
+                        else if (pVal.ColUID == "15") //Whse
+                        {
+                            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item(pVal.ItemUID).Specific));
+                            warehouseOld = oMatrix.GetCellSpecific(pVal.ColUID, pVal.Row).Value;
+                        }
+                    }
+                }
 
+                if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_LOST_FOCUS)
+                {
+                    if (!pVal.BeforeAction)
+                    {
+                        if (pVal.ColUID == "1" || pVal.ColUID == "15") //Item No. || //Whse
+                        {
+                            updateInStockByWarehouseAndDate(oForm, pVal.Row);
+                        }
+                    }
+                }
+
+                if (pVal.ItemUID == "9" && pVal.ItemChanged && !pVal.BeforeAction)
+                {
+                    updateInStockByWarehouseAndDate(oForm);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && pVal.BeforeAction == false)
@@ -1399,37 +1429,40 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static decimal getInStockByWarehouse(string itemCode, string warehouse)
+        private static void updateInStockByWarehouseAndDate(SAPbouiCOM.Form oForm, int rowIndex = 0)
         {
-            SAPbobsCOM.Recordset oRecordset = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
+            string docDate = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("DocDate", 0);
             try
             {
-                string query = @"SELECT 
-                ""ItemCode"", 
-                ""Dscription"", 
-                ""Warehouse"",
-                SUM(""InQty"" - ""OutQty"") AS ""InStock""
-                FROM ""OINM""
-                WHERE
-                ""ItemCode"" = '" + itemCode + @"'
-                AND ""Warehouse"" = '" + warehouse + @"'
-                GROUP BY ""ItemCode"", ""Dscription"", ""Warehouse""";
+                oForm.Freeze(true);
 
-                oRecordset.DoQuery(query);
-                if (!oRecordset.EoF)
+                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("13").Specific));
+                int rowCount = rowIndex == 0 ? oMatrix.RowCount : rowIndex;
+                int i = rowIndex == 0 ? 1 : rowIndex;
+
+                for (; i <= rowCount; i++)
                 {
-                    return Convert.ToDecimal(oRecordset.Fields.Item("InStock").Value);
+                    string warehouse = oMatrix.GetCellSpecific("15", i).Value;
+                    string itemCode = oMatrix.GetCellSpecific("1", i).Value;
+
+                    if ((itemCode != itemCodeOld || warehouse != warehouseOld) || rowIndex == 0)
+                    {
+                        if (!string.IsNullOrEmpty(itemCode) && !string.IsNullOrEmpty(warehouse) && !string.IsNullOrEmpty(docDate))
+                        {
+                            oMatrix.Columns.Item("U_BDOSInStck").Cells.Item(i).Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(CommonFunctions.getInStockByWarehouseAndDate(itemCode, warehouse, docDate));
+                        }
+                    }
                 }
-                return 0;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
             }
             finally
             {
-                Marshal.FinalReleaseComObject(oRecordset);
+                oForm.Freeze(false);
+                itemCodeOld = null;
+                warehouseOld = null;
             }
         }
 
@@ -1933,6 +1966,5 @@ namespace BDO_Localisation_AddOn
 
             setVisibleFormItems(oForm, out errorText);
         }
-
     }
 }
