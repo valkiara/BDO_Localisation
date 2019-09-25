@@ -1739,5 +1739,39 @@ namespace BDO_Localisation_AddOn
                 oRecordSet = null;
             }
         }
+
+        public static decimal getInStockByWarehouseAndDate(string itemCode, string warehouse, string docDate)
+        {
+            SAPbobsCOM.Recordset oRecordset = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            try
+            {
+                string query = @"SELECT 
+                ""ItemCode"", 
+                ""Dscription"", 
+                ""Warehouse"",
+                SUM(""InQty"" - ""OutQty"") AS ""InStock""
+                FROM ""OINM""
+                WHERE
+                ""ItemCode"" = '" + itemCode + @"'
+                AND ""Warehouse"" = '" + warehouse + @"' AND ""DocDate"" <= '" + docDate + @"'
+                GROUP BY ""ItemCode"", ""Dscription"", ""Warehouse""";
+
+                oRecordset.DoQuery(query);
+                if (!oRecordset.EoF)
+                {
+                    return Convert.ToDecimal(oRecordset.Fields.Item("InStock").Value);
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordset);
+            }
+        }
     }
 }
