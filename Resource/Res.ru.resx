@@ -3136,4 +3136,7 @@
   <data name="TryItManually" xml:space="preserve">
     <value>Try it manually</value>
   </data>
+  <data name="AllowableDeviation" xml:space="preserve">
+    <value>Allowable Deviation</value>
+  </data>
 </root>

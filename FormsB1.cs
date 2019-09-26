@@ -966,13 +966,13 @@ namespace BDO_Localisation_AddOn
             NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = CommonFunctions.getOADM("DecSep").ToString(), NumberGroupSeparator = CommonFunctions.getOADM("ThousSep").ToString() };
 
             return Convert.ToDecimal(s, Nfi);
-        }           
-        
-        public static decimal cleanStringOfNonDigits( string s)
+        }
+
+        public static decimal cleanStringOfNonDigits(string s)
         {
             if (string.IsNullOrEmpty(s))
                 return 0;
-            
+
             StringBuilder sb = new StringBuilder(s.Length);
             for (int i = 0; i < s.Length; ++i)
             {
@@ -981,9 +981,8 @@ namespace BDO_Localisation_AddOn
                 if ((c > '9') & (c != '.') & (c != ',') & (c != '-')) continue;
                 sb.Append(s[i]);
             }
+
             string cleaned = sb.ToString();
-
-
             bool decSepIsRp = false;
             string NewString = "";
 
@@ -1007,21 +1006,19 @@ namespace BDO_Localisation_AddOn
                         decSepIsRp = true;
                     }
                 }
-                }
+            }
 
             NewString = NewString.Replace("DecSep", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
             NewString = NewString.Replace("ThousSep", CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator);
 
-
             try
-                {
+            {
                 return Convert.ToDecimal(NewString, CultureInfo.InvariantCulture);
-                }
+            }
             catch
             {
                 return 0;
             }
-
         }
 
         public static DateTime DateFormats(string s, string dateFormat)
