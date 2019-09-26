@@ -3148,4 +3148,7 @@
   <data name="TryItManually" xml:space="preserve">
     <value>სცადეთ მანუალურად</value>
   </data>
+  <data name="AllowableDeviation" xml:space="preserve">
+    <value>დასაშვები გადახრა</value>
+  </data>
 </root>

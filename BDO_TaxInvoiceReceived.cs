@@ -4863,7 +4863,10 @@ namespace BDO_Localisation_AddOn
 
             if (string.IsNullOrEmpty(overhead_no) && fromDoc == false) //ვეძებთ თანხით
             {
-                query = query + @"HAVING(SUM(""TBL1"".""GTotal"")) = '" + amount.ToString(Nfi) + "'";
+                decimal allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString());
+                decimal amountMax = amount + allowableDeviation;
+                decimal amountMin = amount - allowableDeviation;
+                query = query + @" HAVING(SUM(""TBL1"".""GTotal"") >= '" + amountMin.ToString(Nfi) + @"' AND SUM(""TBL1"".""GTotal"") <= '" + amountMax.ToString(Nfi) + "')";
             }
 
             try
