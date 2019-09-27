@@ -1325,12 +1325,6 @@ namespace BDO_Localisation_AddOn
                     Capitalization.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Stock transfer<-----------------------------
-                if (BusinessObjectInfo.Type == "67")
-                {
-                    StockTransfer.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
-                }
-
                 //----------------------------->Retirement<-----------------------------
                 if (BusinessObjectInfo.Type == "1470000094")
                 {
@@ -1435,6 +1429,12 @@ namespace BDO_Localisation_AddOn
                 if (BusinessObjectInfo.Type == "67")
                 {
                     StockTransfer.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
+                //----------------------------->Inventory Transfer Request<-----------------------------
+                if (BusinessObjectInfo.Type == "1250000001")
+                {
+                    StockTransferRequest.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Delivery<-----------------------------
@@ -2009,6 +2009,12 @@ namespace BDO_Localisation_AddOn
                     StockTransfer.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
+                //-----------------------------Inventory Transfer Request<-----------------------------
+                else if (pVal.FormTypeEx == "1250000940")
+                {
+                    StockTransferRequest.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
                 //----------------------------->A/R Credit Note<-----------------------------
                 else if (pVal.FormTypeEx == "179")
                 {
@@ -2102,12 +2108,6 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "170")
                 {
                     IncomingPayment.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-
-                //----------------------------->Stock Transfer / Stock Transfer Request<-----------------------------
-                else if (pVal.FormTypeEx == "940" || pVal.FormTypeEx == "1250000940")
-                {
-                    StockTransfer.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Goods Issue<-----------------------------
