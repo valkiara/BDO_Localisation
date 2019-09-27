@@ -215,6 +215,7 @@ namespace BDO_Localisation_AddOn
 
             GC.Collect();
         }
+
         public static void createUserFields(out string errorText)
         {
             errorText = null;

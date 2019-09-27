@@ -213,6 +213,7 @@
     <Compile Include="Return.cs" />
     <Compile Include="SalesOrder.cs" />
     <Compile Include="StatementOfCashFlows.cs" />
+    <Compile Include="StockTransferRequest.cs" />
     <Compile Include="TaxInvoice.cs" />
     <Compile Include="TaxService.cs" />
     <Compile Include="TBC Integration Services\AbstractIo.cs" />
