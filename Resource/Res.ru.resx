@@ -3139,4 +3139,7 @@
   <data name="AllowableDeviation" xml:space="preserve">
     <value>Allowable Deviation</value>
   </data>
+  <data name="InStockByDate" xml:space="preserve">
+    <value>In Stock (By Date)</value>
+  </data>
 </root>

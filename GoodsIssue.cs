@@ -1341,10 +1341,12 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
                     createFormItems(oForm, out errorText);
                     formDataLoad(oForm, out errorText);
+
+                    changeFormItems(oForm, out errorText);
                 }
 
                 if (pVal.ItemUID == "FillAmtTxs" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false & pVal.InnerEvent == false)
@@ -1429,14 +1431,26 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static void changeFormItems(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+
+            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("13").Specific));
+
+            SAPbouiCOM.Columns oColumns = oMatrix.Columns;
+            SAPbouiCOM.Column oColumn = oColumns.Item("U_BDOSInStck");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InStockByDate");
+            oColumn.Editable = false;
+        }
+
         private static void updateInStockByWarehouseAndDate(SAPbouiCOM.Form oForm, int rowIndex = 0)
         {
-            string docDate = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("DocDate", 0);
+            string docDate = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("DocDate", 0);         
             try
             {
                 oForm.Freeze(true);
 
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("13").Specific));
+                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("13").Specific));             
                 int rowCount = rowIndex == 0 ? oMatrix.RowCount : rowIndex;
                 int i = rowIndex == 0 ? 1 : rowIndex;
 
@@ -1449,7 +1463,11 @@ namespace BDO_Localisation_AddOn
                     {
                         if (!string.IsNullOrEmpty(itemCode) && !string.IsNullOrEmpty(warehouse) && !string.IsNullOrEmpty(docDate))
                         {
+                            SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("U_BDOSInStck");
+                            oColumn.Editable = true;
                             oMatrix.Columns.Item("U_BDOSInStck").Cells.Item(i).Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(CommonFunctions.getInStockByWarehouseAndDate(itemCode, warehouse, docDate));
+                            oMatrix.Columns.Item("2").Cells.Item(i).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                            oColumn.Editable = false;
                         }
                     }
                 }

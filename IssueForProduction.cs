@@ -58,12 +58,29 @@ namespace BDO_Localisation_AddOn
                     Program.selectItemsToCopyOkClick = false;
                     updateInStockByWarehouseAndDate(oForm);
                 }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
+                {
+                    changeFormItems(oForm, out errorText);
+                }
             }
+        }
+
+        public static void changeFormItems(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+
+            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("13").Specific));
+
+            SAPbouiCOM.Columns oColumns = oMatrix.Columns;
+            SAPbouiCOM.Column oColumn = oColumns.Item("U_BDOSInStck");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InStockByDate");
+            oColumn.Editable = false;
         }
 
         private static void updateInStockByWarehouseAndDate(SAPbouiCOM.Form oForm, int rowIndex = 0)
         {
-            string docDate = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("DocDate", 0);
+            string docDate = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("DocDate", 0);          
             try
             {
                 oForm.Freeze(true);
@@ -81,7 +98,11 @@ namespace BDO_Localisation_AddOn
                     {
                         if (!string.IsNullOrEmpty(itemCode) && !string.IsNullOrEmpty(warehouse) && !string.IsNullOrEmpty(docDate))
                         {
+                            SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("U_BDOSInStck");
+                            oColumn.Editable = true;
                             oMatrix.Columns.Item("U_BDOSInStck").Cells.Item(i).Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(CommonFunctions.getInStockByWarehouseAndDate(itemCode, warehouse, docDate));
+                            oMatrix.Columns.Item("60").Cells.Item(i).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                            oColumn.Editable = false;
                         }
                     }
                 }
