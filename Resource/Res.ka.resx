@@ -3151,4 +3151,7 @@
   <data name="AllowableDeviation" xml:space="preserve">
     <value>დასაშვები გადახრა</value>
   </data>
+  <data name="InStockByDate" xml:space="preserve">
+    <value>ნაშთი (თარიღის მიხედვით)</value>
+  </data>
 </root>
