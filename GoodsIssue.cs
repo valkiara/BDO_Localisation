@@ -1120,13 +1120,16 @@ namespace BDO_Localisation_AddOn
                         }
 
                         //ძირითადი საშუალებების შემოწმება
-                        bool rejectionAsset = false;
-                        CommonFunctions.blockAssetInvoice(oForm, "OIGE", "IGE1", "", out rejectionAsset);
-                        if (rejectionAsset)
+                        if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
                         {
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
-                            BubbleEvent = false;
-                        }
+                            bool rejectionAsset = false;
+                            CommonFunctions.blockAssetInvoice(oForm, "OIGE", "IGE1", "", out rejectionAsset);
+                            if (rejectionAsset)
+                            {
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
+                                BubbleEvent = false;
+                            }
+                        } 
 
                         if (ProfitTaxTypeIsSharing == true)
                         {
@@ -1738,8 +1741,8 @@ namespace BDO_Localisation_AddOn
                         jeLinesRow["AccountCode"] = CreditAccount; //Credit
                         jeLinesRow["ShortName"] = CreditAccount;
                         jeLinesRow["ContraAccount"] = DebitAccount;
-                        jeLinesRow["Credit"] = amtPrTx;
-                        jeLinesRow["FCCredit"] = amtPrTxFC;
+                        jeLinesRow["Credit"] = Convert.ToDouble(amtPrTx, CultureInfo.InvariantCulture);
+                        jeLinesRow["FCCredit"] = Convert.ToDouble(amtPrTxFC, CultureInfo.InvariantCulture);
                         jeLinesRow["Debit"] = 0;
                         jeLinesRow["FCCurrency"] = DocCurrency;
 
@@ -1748,8 +1751,8 @@ namespace BDO_Localisation_AddOn
                         jeLinesRow["ShortName"] = DebitAccount;
                         jeLinesRow["ContraAccount"] = CreditAccount;
                         jeLinesRow["Credit"] = 0;
-                        jeLinesRow["Debit"] = amtPrTx;
-                        jeLinesRow["FCDebit"] = amtPrTxFC;
+                        jeLinesRow["Debit"] = Convert.ToDouble(amtPrTx, CultureInfo.InvariantCulture);
+                        jeLinesRow["FCDebit"] = Convert.ToDouble(amtPrTxFC, CultureInfo.InvariantCulture);
                         jeLinesRow["FCCurrency"] = DocCurrency;
 
                         reLinesRow = reLines.Rows.Add();
@@ -1757,8 +1760,8 @@ namespace BDO_Localisation_AddOn
                         reLinesRow["creditAccount"] = CreditAccount;
                         reLinesRow["prBase"] = prBase;
                         reLinesRow["txType"] = "Accrual";
-                        reLinesRow["amtTx"] = amtVat;
-                        reLinesRow["amtPrTx"] = amtPrTx;
+                        reLinesRow["amtTx"] = Convert.ToDouble(amtVat, CultureInfo.InvariantCulture);
+                        reLinesRow["amtPrTx"] = Convert.ToDouble(amtPrTx, CultureInfo.InvariantCulture);
                     }
                 }
             }
