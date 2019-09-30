@@ -1105,12 +1105,7 @@ namespace BDO_Localisation_AddOn
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
             {
-                if (!BusinessObjectInfo.BeforeAction && !BusinessObjectInfo.ActionSuccess)
-                {
-                    BubbleEvent = false;
-                }
-
-                if (BusinessObjectInfo.BeforeAction)
+                if (BusinessObjectInfo.BeforeAction == true)
                 {
                     SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
                     if (DocDBSource.GetValue("CANCELED", 0) == "N")
@@ -1133,7 +1128,7 @@ namespace BDO_Localisation_AddOn
                             BubbleEvent = false;
                         }
 
-                        if (ProfitTaxTypeIsSharing)
+                        if (ProfitTaxTypeIsSharing == true)
                         {
                             // მოგების გადასახადი
                             if (DocDBSource.GetValue("U_liablePrTx", 0) == "Y")
@@ -1165,20 +1160,20 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction) //BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction && BubbleEvent)
+                if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction && BubbleEvent)
                 {
                     //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
-                    SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item(0);
+                    SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item(0);
 
-                    if (oDBDataSource.GetValue("CANCELED", 0) == "N")
+                    if (DocDBSourcePAYR.GetValue("CANCELED", 0) == "N")
                     {
-                        string DocEntry = oDBDataSource.GetValue("DocEntry", 0);
+                        string DocEntry = DocDBSourcePAYR.GetValue("DocEntry", 0);
                         DocEntry = DocEntry == "" ? "0" : DocEntry;
 
-                        string DocCurrency = oDBDataSource.GetValue("DocCur", 0);
-                        decimal DocRate = FormsB1.cleanStringOfNonDigits(oDBDataSource.GetValue("DocRate", 0));
-                        string DocNum = oDBDataSource.GetValue("DocNum", 0);
-                        DateTime DocDate = DateTime.ParseExact(oDBDataSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
+                        string DocCurrency = DocDBSourcePAYR.GetValue("DocCur", 0);
+                        decimal DocRate = FormsB1.cleanStringOfNonDigits(DocDBSourcePAYR.GetValue("DocRate", 0));
+                        string DocNum = DocDBSourcePAYR.GetValue("DocNum", 0);
+                        DateTime DocDate = DateTime.ParseExact(DocDBSourcePAYR.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
 
                         CommonFunctions.StartTransaction();
 
@@ -1194,7 +1189,7 @@ namespace BDO_Localisation_AddOn
                         }
                         else
                         {
-                            if (!BusinessObjectInfo.ActionSuccess)
+                            if (BusinessObjectInfo.ActionSuccess == false)
                             {
                                 Program.JrnLinesGlobal = JrnLinesDT;
                             }
@@ -1203,7 +1198,7 @@ namespace BDO_Localisation_AddOn
                         if (Program.oCompany.InTransaction)
                         {
                             //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
-                            if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction)
+                            if (BusinessObjectInfo.ActionSuccess == true & BusinessObjectInfo.BeforeAction == false)
                             {
                                 CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
                             }
@@ -1221,16 +1216,16 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == true)
             {
-                if (Program.cancellationTrans && Program.canceledDocEntry != 0)
+                if (Program.cancellationTrans == true & Program.canceledDocEntry != 0)
                 {
                     cancellation(oForm, Program.canceledDocEntry, out errorText);
                     Program.canceledDocEntry = 0;
                 }
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
             {
                 formDataLoad(oForm, out errorText);
             }
