@@ -3154,4 +3154,7 @@
   <data name="InStockByDate" xml:space="preserve">
     <value>ნაშთი (თარიღის მიხედვით)</value>
   </data>
+  <data name="ShowStockByDate" xml:space="preserve">
+    <value>ნაშთები თარიღის მიხედვით</value>
+  </data>
 </root>
