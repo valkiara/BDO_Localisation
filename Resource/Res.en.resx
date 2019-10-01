@@ -3181,4 +3181,7 @@
   <data name="InStockByDate" xml:space="preserve">
     <value>In Stock (By Date)</value>
   </data>
+  <data name="ShowStockByDate" xml:space="preserve">
+    <value>Show stock by date</value>
+  </data>
 </root>

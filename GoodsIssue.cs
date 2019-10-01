@@ -840,6 +840,25 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
+            top = top + 2 * height + 5;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "StckByDate";
+            formItems.Add("Caption", BDOSResources.getTranslate("ShowStockByDate"));
+            formItems.Add("Size", 20);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+            formItems.Add("Left", left_e - 70);
+            formItems.Add("Width", 150);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
             oForm.DataSources.UserDataSources.Add("BDO_WblID", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 20);
             oForm.DataSources.UserDataSources.Add("BDO_WblNum", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 20);
             oForm.DataSources.UserDataSources.Add("BDO_WblSts", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
@@ -1409,15 +1428,21 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_LOST_FOCUS)
+                //არ წაშალოთ!!! (დაგვჭირდება ოდესმე)
+                //if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_LOST_FOCUS)
+                //{
+                //    if (!pVal.BeforeAction)
+                //    {
+                //        if (pVal.ColUID == "1" || pVal.ColUID == "15") //Item No. || //Whse
+                //        {
+                //            updateInStockByWarehouseAndDate(oForm, pVal.Row);
+                //        }
+                //    }
+                //}
+
+                if (pVal.ItemUID == "StckByDate" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction && !pVal.InnerEvent)
                 {
-                    if (!pVal.BeforeAction)
-                    {
-                        if (pVal.ColUID == "1" || pVal.ColUID == "15") //Item No. || //Whse
-                        {
-                            updateInStockByWarehouseAndDate(oForm, pVal.Row);
-                        }
-                    }
+                    updateInStockByWarehouseAndDate(oForm);
                 }
 
                 if (pVal.ItemUID == "9" && pVal.ItemChanged && !pVal.BeforeAction)

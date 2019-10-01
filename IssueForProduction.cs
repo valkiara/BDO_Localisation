@@ -11,6 +11,42 @@ namespace BDO_Localisation_AddOn
         public static string itemCodeOld;
         public static string warehouseOld;
 
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+            Dictionary<string, object> fieldskeysMap;
+
+            Dictionary<string, object> formItems;
+            string itemName = "";
+
+            SAPbouiCOM.Item oItem = oForm.Items.Item("20");
+
+            int height = oForm.Items.Item("21").Height;
+            double top = oForm.Items.Item("21").Top + height * 1.5 + 1;
+            //int left_s = oForm.Items.Item("21").Left;
+            int left_e = oForm.Items.Item("21").Left;
+            //int width_e = oForm.Items.Item("21").Width;
+
+            top = top + 2 * height + 10;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "StckByDate";
+            formItems.Add("Caption", BDOSResources.getTranslate("ShowStockByDate"));
+            formItems.Add("Size", 20);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+            formItems.Add("Left", left_e - 70);
+            formItems.Add("Width", 150);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+        }
+
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
@@ -37,15 +73,21 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_LOST_FOCUS)
+                //არ წაშალოთ!!! (დაგვჭირდება ოდესმე)
+                //if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_LOST_FOCUS)
+                //{
+                //    if (!pVal.BeforeAction)
+                //    {
+                //        if (pVal.ColUID == "61" || pVal.ColUID == "15") //Order No. || //Whse
+                //        {
+                //            updateInStockByWarehouseAndDate(oForm, pVal.Row);
+                //        }
+                //    }
+                //}
+
+                if (pVal.ItemUID == "StckByDate" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction && !pVal.InnerEvent)
                 {
-                    if (!pVal.BeforeAction)
-                    {
-                        if (pVal.ColUID == "61" || pVal.ColUID == "15") //Order No. || //Whse
-                        {
-                            updateInStockByWarehouseAndDate(oForm, pVal.Row);
-                        }
-                    }
+                    updateInStockByWarehouseAndDate(oForm);
                 }
 
                 if (pVal.ItemUID == "9" && pVal.ItemChanged && !pVal.BeforeAction)
@@ -61,6 +103,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
+                    createFormItems(oForm, out errorText);
                     changeFormItems(oForm, out errorText);
                 }
             }
@@ -80,7 +123,7 @@ namespace BDO_Localisation_AddOn
 
         private static void updateInStockByWarehouseAndDate(SAPbouiCOM.Form oForm, int rowIndex = 0)
         {
-            string docDate = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("DocDate", 0);          
+            string docDate = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("DocDate", 0);
             try
             {
                 oForm.Freeze(true);
