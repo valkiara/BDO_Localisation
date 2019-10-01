@@ -699,6 +699,34 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static string getAccountCurrency(string accountCode)
+        {
+            string accountCurrency = null;
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                string query = @"SELECT ""OACT"".""ActCurr"" FROM ""OACT"" WHERE ""OACT"".""AcctCode"" = '" + accountCode + "'";
+
+                oRecordSet.DoQuery(query);
+                if (!oRecordSet.EoF)
+                {
+                    accountCurrency = oRecordSet.Fields.Item("ActCurr").Value.ToString();
+                    return accountCurrency;
+                }
+                return accountCurrency;
+            }
+            catch
+            {
+                return accountCurrency;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+                oRecordSet = null;
+            }
+        }
+
         public static string getServiceUrlForInternetBanking(string program, out string clientID, out int port, out string errorText)
         {
             errorText = null;
@@ -851,7 +879,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static decimal roundAmountByGeneralSettings(decimal amount, string DecType)
+        public static decimal roundAmountByGeneralSettings(decimal amount, string DecType, RoundingDirection roundingDir = RoundingDirection.Other)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
@@ -864,17 +892,41 @@ namespace BDO_Localisation_AddOn
                 {
                     sumDec = Convert.ToInt32(oRecordSet.Fields.Item(DecType + "Dec").Value);
                 }
-                return Math.Round(amount, sumDec);
+                if (roundingDir == RoundingDirection.Other)
+                {
+                    return Math.Round(amount, sumDec);
+                }
+                return Round(Convert.ToDouble(amount, CultureInfo.InvariantCulture), sumDec, roundingDir);
             }
             catch
             {
-                return Math.Round(amount, 2);
+                if (roundingDir == RoundingDirection.Other)
+                {
+                    return Math.Round(amount, 2);
+                }
+                return Round(Convert.ToDouble(amount, CultureInfo.InvariantCulture), 2, roundingDir);
             }
             finally
             {
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oRecordSet = null;
             }
+        }
+
+        private delegate double RoundingFunction(double value);
+
+        public enum RoundingDirection { Up, Down, Other }
+
+        private static decimal Round(double value, int precision, RoundingDirection roundingDirection)
+        {
+            RoundingFunction roundingFunction;
+            if (roundingDirection == RoundingDirection.Up)
+                roundingFunction = Math.Ceiling;
+            else
+                roundingFunction = Math.Floor;
+            value *= Math.Pow(10, precision);
+            value = roundingFunction(value);
+            return Convert.ToDecimal(value * Math.Pow(10, -1 * precision), CultureInfo.InvariantCulture);
         }
 
         public static string getRegistrationCountryCode(string account, string table)
@@ -1685,6 +1737,40 @@ namespace BDO_Localisation_AddOn
             {
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oRecordSet = null;
+            }
+        }
+
+        public static decimal getInStockByWarehouseAndDate(string itemCode, string warehouse, string docDate)
+        {
+            SAPbobsCOM.Recordset oRecordset = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            try
+            {
+                string query = @"SELECT 
+                ""ItemCode"", 
+                ""Dscription"", 
+                ""Warehouse"",
+                SUM(""InQty"" - ""OutQty"") AS ""InStock""
+                FROM ""OINM""
+                WHERE
+                ""ItemCode"" = '" + itemCode + @"'
+                AND ""Warehouse"" = '" + warehouse + @"' AND ""DocDate"" <= '" + docDate + @"'
+                GROUP BY ""ItemCode"", ""Dscription"", ""Warehouse""";
+
+                oRecordset.DoQuery(query);
+                if (!oRecordset.EoF)
+                {
+                    return Convert.ToDecimal(oRecordset.Fields.Item("InStock").Value);
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordset);
             }
         }
     }

@@ -58,8 +58,7 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-
-            // use blan. agr. rate ranges
+            //Use Blanket Agreement Rates
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "UseBlaAgRt");
             fieldskeysMap.Add("TableName", "OPCH");
@@ -70,7 +69,8 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            fieldskeysMap = new Dictionary<string, object>(); //  A/C Number
+            //A/C Number
+            fieldskeysMap = new Dictionary<string, object>(); 
             fieldskeysMap.Add("Name", "BDOSACNum");
             fieldskeysMap.Add("TableName", "OPCH");
             fieldskeysMap.Add("Description", "A/C Number");

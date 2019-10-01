@@ -40,16 +40,19 @@ namespace BDO_Localisation_AddOn
         public static string LocalCurrency = null;
         public static string MainCurrencySapCode = null;
         public static bool openPaymentMeans = false;
+        public static decimal transferSumFC;
+        public static decimal overallAmount;
+        public static string newPostDateStr;
+        public static DataTable paymentInvoices;
+        public static bool openPaymentMeansByPostDateChange = false;
         public static DataTable JrnLinesGlobal = new DataTable();
         public static bool clickUnitedJournalEntry = false;
         public static bool Exchange_Rate_Save_Click = false;
-
         public static DataTable UserDefinedFieldsCurrentCompany;
         public static DataTable UserDefinedTablesCurrentCompany;
-
         public static bool localisationAddonLicensed = false;
-
         public static readonly string ExecutionDateISO = DateTime.UtcNow.ToString("o");
+        public static bool selectItemsToCopyOkClick = false;
 
         static void Main(string[] args)
         {
@@ -1322,12 +1325,6 @@ namespace BDO_Localisation_AddOn
                     Capitalization.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Stock transfer<-----------------------------
-                if (BusinessObjectInfo.Type == "67")
-                {
-                    StockTransfer.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
-                }
-
                 //----------------------------->Retirement<-----------------------------
                 if (BusinessObjectInfo.Type == "1470000094")
                 {
@@ -1432,6 +1429,12 @@ namespace BDO_Localisation_AddOn
                 if (BusinessObjectInfo.Type == "67")
                 {
                     StockTransfer.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
+                //----------------------------->Inventory Transfer Request<-----------------------------
+                if (BusinessObjectInfo.Type == "1250000001")
+                {
+                    StockTransferRequest.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Delivery<-----------------------------
@@ -1559,7 +1562,7 @@ namespace BDO_Localisation_AddOn
                 {
                     AssetClass.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
-			}
+            }
             catch (Exception ex)
             {
                 errorText = ex.Message;
@@ -2006,6 +2009,12 @@ namespace BDO_Localisation_AddOn
                     StockTransfer.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
+                //-----------------------------Inventory Transfer Request<-----------------------------
+                else if (pVal.FormTypeEx == "1250000940")
+                {
+                    StockTransferRequest.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
                 //----------------------------->A/R Credit Note<-----------------------------
                 else if (pVal.FormTypeEx == "179")
                 {
@@ -2101,12 +2110,6 @@ namespace BDO_Localisation_AddOn
                     IncomingPayment.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Stock Transfer / Stock Transfer Request<-----------------------------
-                else if (pVal.FormTypeEx == "940" || pVal.FormTypeEx == "1250000940")
-                {
-                    StockTransfer.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-
                 //----------------------------->Goods Issue<-----------------------------
                 else if (pVal.FormTypeEx == "720")
                 {
@@ -2164,10 +2167,7 @@ namespace BDO_Localisation_AddOn
                 //----------------------------->Payment Means<-----------------------------
                 else if (pVal.FormTypeEx == "196")
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE && pVal.BeforeAction == false)
-                    {
-                        openPaymentMeans = true;
-                    }
+                    PaymentMeans.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Delete UDF<-----------------------------
@@ -2216,14 +2216,32 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "1472000006")
                 {
                     AssetClass.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }            
+                }
 
                 //----------------------------->Withholding Tax Table<-----------------------------
                 else if (pVal.FormTypeEx == "60504") //from A/P Credit Memo, A/P Invoice, A/P Reserve Invoice, A/P Down Payment Request 
                 {
                     WithholdingTax.openTaxTableFromAPDocs(FormUID, ref pVal, out BubbleEvent);
                 }
-			}
+
+                //----------------------------->Issue For Production<-----------------------------
+                else if (pVal.FormTypeEx == "65213")
+                {
+                    IssueForProduction.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->Select Items to Copy (Issue For Production)<-----------------------------
+                else if (pVal.FormTypeEx == "65212")
+                {
+                    if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
+                    {
+                        SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
+                        if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
+                            selectItemsToCopyOkClick = true;
+                    }
+                }
+            }
             catch (Exception ex)
             {
                 errorText = ex.Message;

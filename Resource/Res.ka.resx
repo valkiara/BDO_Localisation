@@ -3142,4 +3142,19 @@
   <data name="AllDataWillBeCleared" xml:space="preserve">
     <value>თუ უკან დაბრუნდებით, თქვენი მონაცემები წაიშლება. დარწმუნებული ხართ, რომ გსურთ გაგრძელება?</value>
   </data>
+  <data name="DocumentCantSaveAsDraftAutomatically" xml:space="preserve">
+    <value>ავტომატურად ვერ მოხერხდა დოკუმენტის დამახსოვრება დრაფტად!</value>
+  </data>
+  <data name="TryItManually" xml:space="preserve">
+    <value>სცადეთ მანუალურად</value>
+  </data>
+  <data name="AllowableDeviation" xml:space="preserve">
+    <value>დასაშვები გადახრა</value>
+  </data>
+  <data name="InStockByDate" xml:space="preserve">
+    <value>ნაშთი (თარიღის მიხედვით)</value>
+  </data>
+  <data name="ShowStockByDate" xml:space="preserve">
+    <value>ნაშთები თარიღის მიხედვით</value>
+  </data>
 </root>

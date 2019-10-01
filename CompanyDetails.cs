@@ -94,6 +94,15 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSAllDev"); 
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Allowable Deviation");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             //VAT TYPES
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDO_RSVAT0");
@@ -783,10 +792,54 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
-
-            top = top + 30;
             //რეზერვის ინვოისიდან ფაქტურის გამოწერა როგორც მომსახურებაზე
 
+            top = top + 25;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSAllDeS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", 13);
+            formItems.Add("Width", 207);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 15);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("AllowableDeviation"));
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("LinkTo", "BDOSAllDeE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSAllDeE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_BDOSAllDev");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", 230);
+            formItems.Add("Width", 250);
+            formItems.Add("Top", top + 1);
+            formItems.Add("Height", 14);
+            formItems.Add("UID", itemName);
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            top = top + 30;
+            
             //სერვის მომხმარებლის სახელი (RS.GE)
             formItems = new Dictionary<string, object>();
             itemName = "SU";

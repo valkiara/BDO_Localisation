@@ -688,7 +688,7 @@ namespace BDO_Localisation_AddOn
 
             //----------------------------------
             fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("ColumnAlias", "TaxInRcvd");
+            fieldskeysMap.Add("ColumnAlias", "U_TaxInRcvd");
             fieldskeysMap.Add("ColumnDescription", "Tax Invoice Received"); //30 characters
             listFindColumns.Add(fieldskeysMap);
             //----------------------------------
@@ -792,7 +792,7 @@ namespace BDO_Localisation_AddOn
             listFindColumns.Add("DocEntry");
             listFindColumns.Add("DocNum");
             listFindColumns.Add("Status");
-            listFindColumns.Add("TaxInRcvd");
+            listFindColumns.Add("U_TaxInRcvd");
             listFindColumns.Add("CreateDate");
             listFindColumns.Add("U_docDate");
             listFindColumns.Add("Remark");
@@ -4863,7 +4863,10 @@ namespace BDO_Localisation_AddOn
 
             if (string.IsNullOrEmpty(overhead_no) && fromDoc == false) //ვეძებთ თანხით
             {
-                query = query + @"HAVING(SUM(""TBL1"".""GTotal"")) = '" + amount.ToString(Nfi) + "'";
+                decimal allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString());
+                decimal amountMax = amount + allowableDeviation;
+                decimal amountMin = amount - allowableDeviation;
+                query = query + @" HAVING(SUM(""TBL1"".""GTotal"") >= '" + amountMin.ToString(Nfi) + @"' AND SUM(""TBL1"".""GTotal"") <= '" + amountMax.ToString(Nfi) + "')";
             }
 
             try

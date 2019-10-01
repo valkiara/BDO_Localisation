@@ -267,115 +267,111 @@ namespace BDO_Localisation_AddOn
 
                     int index = 0;
 
-					foreach (string[] goodsRow in array_GOODS)
-					{
-						string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
-						string WBItmName = goodsRow[1];
-						string WBGUntName = "";
-						string WBGUntCode = "";
-						string WBUntCdRS = goodsRow[2];
-						string Cardcode = BusinessPartners.GetCardCodeByTin(BPID, "S", out cardName);
-						if (CardCode == null)
-						{
-							oForm.Freeze(false);
-							errorText = BDOSResources.getTranslate("BPNotFound") + BDOSResources.getTranslate("BPTin") + " : " + BPID;
-							return;
-						}
-						string ItemCode = "";
+                    foreach (string[] goodsRow in array_GOODS)
+                    {
+                        string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
+                        string WBItmName = goodsRow[1];
+                        string WBGUntName = "";
+                        string WBGUntCode = "";
+                        string WBUntCdRS = goodsRow[2];
+                        string Cardcode = BusinessPartners.GetCardCodeByTin(BPID, "S", out cardName);
+                        if (CardCode == null)
+                        {
+                            oForm.Freeze(false);
+                            errorText = BDOSResources.getTranslate("BPNotFound") + BDOSResources.getTranslate("BPTin") + " : " + BPID;
+                            return;
+                        }
+                        string ItemCode = "";
 
-						ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out errorText);
+                        ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out errorText);
 
-						SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
+                        SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
 
-						if (CatalogEntry != null)
-						{
-							ItemCode = CatalogEntry.Fields.Item("ItemCode").Value;
-							WBGUntCode = CatalogEntry.Fields.Item("U_BDO_UoMCod").Value;
-						}
+                        if (CatalogEntry != null)
+                        {
+                            ItemCode = CatalogEntry.Fields.Item("ItemCode").Value;
+                            WBGUntCode = CatalogEntry.Fields.Item("U_BDO_UoMCod").Value;
+                        }
 
-						SAPbobsCOM.Recordset oRecordsetbyRSCODE = BDO_RSUoM.getUomByRSCode(ItemCode, WBUntCdRS, out errorText);
+                        SAPbobsCOM.Recordset oRecordsetbyRSCODE = BDO_RSUoM.getUomByRSCode(ItemCode, WBUntCdRS, out errorText);
 
-						if (oRecordsetbyRSCODE != null)
-						{
-							if (WBGUntCode == "")
-							{
-								WBGUntCode = oRecordsetbyRSCODE.Fields.Item("UomCode").Value;
-							}
-						}
+                        if (oRecordsetbyRSCODE != null)
+                        {
+                            if (WBGUntCode == "")
+                            {
+                                WBGUntCode = oRecordsetbyRSCODE.Fields.Item("UomCode").Value;
+                            }
+                        }
 
-						SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-						string query = @"SELECT * FROM ""OUOM"" WHERE ""UomCode"" = N'" + WBGUntCode + "'";
+                        SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        string query = @"SELECT * FROM ""OUOM"" WHERE ""UomCode"" = N'" + WBGUntCode + "'";
 
-						oRecordSet.DoQuery(query);
+                        oRecordSet.DoQuery(query);
 
-						int UomEntry = -1;
-						if (!oRecordSet.EoF)
-						{
-							WBGUntName = oRecordSet.Fields.Item("UomName").Value;
-							UomEntry = oRecordSet.Fields.Item("UomEntry").Value;
-						}
+                        int UomEntry = -1;
+                        if (!oRecordSet.EoF)
+                        {
+                            WBGUntName = oRecordSet.Fields.Item("UomName").Value;
+                            UomEntry = oRecordSet.Fields.Item("UomEntry").Value;
+                        }
 
-						double WBQty = Convert.ToDouble(goodsRow[3], CultureInfo.InvariantCulture);
-						double WBPrice = Convert.ToDouble(goodsRow[4], CultureInfo.InvariantCulture);
-						double WBSum = Convert.ToDouble(goodsRow[5], CultureInfo.InvariantCulture);
-						//------------------
+                        //double WBQty = Convert.ToDouble(goodsRow[3], CultureInfo.InvariantCulture);
+                        ////double WBPrice = Convert.ToDouble(goodsRow[4], CultureInfo.InvariantCulture);
+                        //double WBSum = Convert.ToDouble(goodsRow[5], CultureInfo.InvariantCulture);
+                        //------------------
 
+                        decimal WBQty = FormsB1.cleanStringOfNonDigits(goodsRow[3]);
+                        //double WBPrice = Convert.ToDouble(goodsRow[4], CultureInfo.InvariantCulture);
+                        decimal WBSum = FormsB1.cleanStringOfNonDigits(goodsRow[5]);
+                        decimal price = CommonFunctions.roundAmountByGeneralSettings(WBSum / WBQty, "Price");
 
+                        SAPbobsCOM.Recordset oRecordSetIt = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        string queryIt = @"SELECT ""ManBtchNum"" FROM ""OITM"" WHERE ""ItemCode"" = '" + ItemCode + "'";
 
+                        oRecordSetIt.DoQuery(queryIt);
 
-						SAPbobsCOM.Recordset oRecordSetIt = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-						string queryIt = @"SELECT ""ManBtchNum"" FROM ""OITM"" WHERE ""ItemCode"" = '" + ItemCode + "'";
+                        string ManBtchNum = "N";
+                        if (!oRecordSetIt.EoF)
+                        {
+                            ManBtchNum = oRecordSetIt.Fields.Item("ManBtchNum").Value;
+                        }
 
-						oRecordSetIt.DoQuery(queryIt);
-
-						string ManBtchNum = "N";
-						if (!oRecordSetIt.EoF)
-						{
-							ManBtchNum = oRecordSetIt.Fields.Item("ManBtchNum").Value;
-						}
-
-						if (ManBtchNum == "Y")
-						{
-
-							string BatchNumber = oMatrixGoods.GetCellSpecific("DistNumber", index + 1).Value;
-							if (BatchNumber == "")
-							{
-
-								string BatchNumberFinal = Items.creatBatchNumbers(ItemCode, index, out errorText);
-								if (errorText != null)
-								{
-									Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Error") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID + " " + errorText);
-									CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-									NotToCreate = true;
-									break;
-								}
-								APInv.Lines.BatchNumbers.Add();
-								APInv.Lines.BatchNumbers.BatchNumber = BatchNumberFinal;
-								APInv.Lines.BatchNumbers.Quantity = WBQty;
+                        if (ManBtchNum == "Y")
+                        {
+                            string BatchNumber = oMatrixGoods.GetCellSpecific("DistNumber", index + 1).Value;
+                            if (BatchNumber == "")
+                            {
+                                string BatchNumberFinal = Items.creatBatchNumbers(ItemCode, index, out errorText);
+                                if (errorText != null)
+                                {
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Error") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID + " " + errorText);
+                                    CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                                    NotToCreate = true;
+                                    break;
+                                }
+                                APInv.Lines.BatchNumbers.Add();
+                                APInv.Lines.BatchNumbers.BatchNumber = BatchNumberFinal;
+                                APInv.Lines.BatchNumbers.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
 
                                 oMatrixGoods.GetCellSpecific("DistNumber", index + 1).Value = BatchNumberFinal;
+                            }
+                            else
+                            {
+                                APInv.Lines.BatchNumbers.Add();
+                                APInv.Lines.BatchNumbers.BatchNumber = BatchNumber;
+                                APInv.Lines.BatchNumbers.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
 
                             }
+                        }
 
+                        //--------------------------------------------------
+                        APInv.Lines.ItemCode = ItemCode;
+                        //APInv.Lines.ItemDescription = WBItmName;
 
-							else
-							{
-								APInv.Lines.BatchNumbers.Add();
-								APInv.Lines.BatchNumbers.BatchNumber = BatchNumber;
-								APInv.Lines.BatchNumbers.Quantity = WBQty;
+                        //Uom Entry ირკვევა UOMCODe-ის მიხედვით ცხრილში OUOM
+                        APInv.Lines.UoMEntry = UomEntry;
 
-                            }
-						}
-
-
-						//--------------------------------------------------
-						APInv.Lines.ItemCode = ItemCode;
-						//APInv.Lines.ItemDescription = WBItmName;
-
-						//Uom Entry ირკვევა UOMCODe-ის მიხედვით ცხრილში OUOM
-						APInv.Lines.UoMEntry = UomEntry;
-
-						APInv.Lines.WarehouseCode = whs;
+                        APInv.Lines.WarehouseCode = whs;
 
                         if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null || oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
                         {
@@ -397,51 +393,48 @@ namespace BDO_Localisation_AddOn
                         {
                             APInv.Lines.ProjectCode = WBPrjCode;
                         }
-						
-						if (WBBlankAgr != "")
-						{
-							APInv.Lines.AgreementNo = Convert.ToInt32(WBBlankAgr);
 
-							SAPbobsCOM.Recordset oRecordSetBA = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-							string queryP = @"SELECT ""Project"" FROM ""OOAT"" WHERE ""AbsID"" = '" + Convert.ToInt32(WBBlankAgr) + "'";
+                        if (WBBlankAgr != "")
+                        {
+                            APInv.Lines.AgreementNo = Convert.ToInt32(WBBlankAgr);
 
-							oRecordSetBA.DoQuery(queryP);
+                            SAPbobsCOM.Recordset oRecordSetBA = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                            string queryP = @"SELECT ""Project"" FROM ""OOAT"" WHERE ""AbsID"" = '" + Convert.ToInt32(WBBlankAgr) + "'";
 
+                            oRecordSetBA.DoQuery(queryP);
 
-							if (!oRecordSetBA.EoF)
-							{
-								APInv.Lines.ProjectCode = oRecordSetBA.Fields.Item("Project").Value;
-							}
+                            if (!oRecordSetBA.EoF)
+                            {
+                                APInv.Lines.ProjectCode = oRecordSetBA.Fields.Item("Project").Value;
+                            }
+                        }
 
-						}
-
-						SAPbobsCOM.Recordset oRecordSetVat = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-						string queryVat = @"SELECT ""VatStatus"",""ECVatGroup"" FROM ""OCRD"" WHERE ""OCRD"".""CardCode"" ='" + Cardcode + "'";
-						oRecordSetVat.DoQuery(queryVat);
-						string status = "";
-						string VatCode="";
-						if (!oRecordSetVat.EoF)
-						{
-							status = oRecordSetVat.Fields.Item("VatStatus").Value;
-							VatCode = oRecordSetVat.Fields.Item("ECVatGroup").Value;
-						}
-						if (status == "Y")
-						{
-							string RSVatCode = goodsRow[8];
-								APInv.Lines.VatGroup = DetectVATByRSCode(RSVatCode, out errorText);
-						}
-						else if(status == "N")
-						{
-								APInv.Lines.VatGroup = oRecordSetVat.Fields.Item("ECVatGroup").Value;
-						}
-						
+                        SAPbobsCOM.Recordset oRecordSetVat = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        string queryVat = @"SELECT ""VatStatus"",""ECVatGroup"" FROM ""OCRD"" WHERE ""OCRD"".""CardCode"" ='" + Cardcode + "'";
+                        oRecordSetVat.DoQuery(queryVat);
+                        string status = "";
+                        string VatCode = "";
+                        if (!oRecordSetVat.EoF)
+                        {
+                            status = oRecordSetVat.Fields.Item("VatStatus").Value;
+                            VatCode = oRecordSetVat.Fields.Item("ECVatGroup").Value;
+                        }
+                        if (status == "Y")
+                        {
+                            string RSVatCode = goodsRow[8];
+                            APInv.Lines.VatGroup = DetectVATByRSCode(RSVatCode, out errorText);
+                        }
+                        else if (status == "N")
+                        {
+                            APInv.Lines.VatGroup = oRecordSetVat.Fields.Item("ECVatGroup").Value;
+                        }
 
                         if (APInv.Lines.VatGroup == null || APInv.Lines.VatGroup == "")
                         {
                             Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + " " + rowCounter + " " + BDOSResources.getTranslate("CannotFindVATCodeDocumentNotCreated"));
                         }
 
-                        APInv.Lines.Quantity = WBQty;
+                        APInv.Lines.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
                         //APInv.Lines.LineTotal = WBSum;
 
                         oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
@@ -466,7 +459,7 @@ namespace BDO_Localisation_AddOn
                         //}
                         APInv.Lines.Currency = Program.LocalCurrency;
 
-                        APInv.Lines.PriceAfterVAT = WBSum / WBQty;
+                        APInv.Lines.PriceAfterVAT = Convert.ToDouble(price, CultureInfo.InvariantCulture);
 
                         APInv.Lines.Add();
 
@@ -2896,21 +2889,19 @@ namespace BDO_Localisation_AddOn
                     string strWBPrice = goodsRow[4];
                     string strWBSum = goodsRow[5];
 
+                    decimal price = CommonFunctions.roundAmountByGeneralSettings(FormsB1.cleanStringOfNonDigits(strWBSum) / FormsB1.cleanStringOfNonDigits(strWBQty), "Price");
+
                     if (WBItmName.Length > 254)
                     {
                         WBItmName = WBItmName.Substring(0, 254);
                     }
-
-                    
-
+                
                     if (!oRecordSetBN.EoF)
                     {
                         DistNumber = oRecordSetBN.Fields.Item("DistNumber").Value;
                         oRecordSetBN.MoveNext();
                     }
-                    
-                    
-
+                                      
                     Sbuilder.Append("<Row>");
                     Sbuilder.Append("<Cell> <ColumnUid>#</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, (i + 1).ToString());
@@ -2965,7 +2956,7 @@ namespace BDO_Localisation_AddOn
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>WBPrice</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, strWBPrice);
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, price.ToString(CultureInfo.InvariantCulture));
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>WBSum</ColumnUid> <Value>");

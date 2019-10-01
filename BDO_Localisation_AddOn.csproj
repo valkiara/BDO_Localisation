@@ -179,10 +179,12 @@
     <Compile Include="HouseBankAccounts.cs" />
     <Compile Include="IncomingPayment.cs" />
     <Compile Include="BDOSInternetBankingIntegrationServicesRules.cs" />
+    <Compile Include="IssueForProduction.cs" />
     <Compile Include="LandedCostsSetup.cs" />
     <Compile Include="License.cs" />
     <Compile Include="Locations.cs" />
     <Compile Include="ItemGroup.cs" />
+    <Compile Include="PaymentMeans.cs" />
     <Compile Include="ProfitAndLossStatement.cs" />
     <Compile Include="ProfitTax.cs" />
     <Compile Include="Resource\Res.en.Designer.cs">
@@ -211,6 +213,7 @@
     <Compile Include="Return.cs" />
     <Compile Include="SalesOrder.cs" />
     <Compile Include="StatementOfCashFlows.cs" />
+    <Compile Include="StockTransferRequest.cs" />
     <Compile Include="TaxInvoice.cs" />
     <Compile Include="TaxService.cs" />
     <Compile Include="TBC Integration Services\AbstractIo.cs" />

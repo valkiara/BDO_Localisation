@@ -422,14 +422,14 @@ namespace BDO_Localisation_AddOn
             {
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
                 {
-                    StockTransfer.formDataLoad( oForm, out errorText);
-                    //StockTransfer.setVisibleFormItems( oForm, out errorText);
+                    formDataLoad( oForm, out errorText);
+                    //setVisibleFormItems( oForm, out errorText);
                 }
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == true)
                 {
                     if (Program.cancellationTrans == true & Program.canceledDocEntry != 0)
                     {
-                        StockTransfer.cancellation( Program.canceledDocEntry, out errorText);
+                        cancellation( Program.canceledDocEntry, out errorText);
                         //Program.cancellationTrans = false; //უნდა იყოს დაკომენტარებული!!!
                         Program.canceledDocEntry = 0;
                     }
@@ -466,11 +466,22 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
                     createFormItems(oForm, out errorText);
-                    setVisibleFormItems(oForm, out errorText);
+                    Program.FORM_LOAD_FOR_VISIBLE = true;
+                    Program.FORM_LOAD_FOR_ACTIVATE = true;
+
+                    formDataLoad(oForm, out errorText);
+                }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & pVal.BeforeAction == false)
+                {
+                    if (Program.FORM_LOAD_FOR_ACTIVATE == true)
+                    {
+                        setVisibleFormItems(oForm, out errorText);
+                        Program.FORM_LOAD_FOR_ACTIVATE = false;
+                    }
                 }
 
                 if (pVal.ItemUID == "PrjCodeE" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
@@ -481,24 +492,9 @@ namespace BDO_Localisation_AddOn
                     chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.Row, pVal.BeforeAction, out errorText);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
-                {
-                    createFormItems( oForm, out errorText);
-                    formDataLoad( oForm, out errorText);
-                }
-
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & pVal.BeforeAction == false)
-                {
-                    oForm.Freeze(true);
-                    //StockTransfer.setVisibleFormItems( oForm, out errorText);
-                    oForm.Freeze(false);
-                }
-
-
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST )
                 //& oCFLEvento.ChooseFromListUID == "Waybill_CFL" & pVal.BeforeAction == true)
                 {
-
                     if (pVal.BeforeAction == true)
                     {
                         SAPbouiCOM.ChooseFromListEvent oCFLEvento = null;
@@ -525,14 +521,12 @@ namespace BDO_Localisation_AddOn
 
                                 oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_OR;
 
-
                                 oRecordSet.MoveNext();
                             }
                             oCon = oCons.Add();
                             oCon.Alias = "DocEntry";
                             oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                             //oCon.CondVal = "";
-
 
                             oCFL.SetConditions(oCons);
                         }
@@ -557,7 +551,6 @@ namespace BDO_Localisation_AddOn
                                 return;
                             }
 
-
                             oForm.Freeze(true);
                             
                             int newDocEntry = oDataTableSelectedObjects.GetValue("DocEntry", 0);
@@ -581,7 +574,7 @@ namespace BDO_Localisation_AddOn
                             oGeneralService.Update(oGeneralData);
 
                             oForm.DataSources.UserDataSources.Item("BDO_WblDoc").ValueEx = newDocEntry.ToString();
-                            StockTransfer.formDataLoad( oForm, out errorText);
+                            formDataLoad( oForm, out errorText);
 
                             BubbleEvent = true;
                             oForm.Freeze(false);
@@ -589,7 +582,6 @@ namespace BDO_Localisation_AddOn
 
                         }
                     }
-
                 }
 
                 if (pVal.ItemUID == "BDO_WblTxt" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
@@ -612,7 +604,7 @@ namespace BDO_Localisation_AddOn
                             if (errorText == null & newDocEntry != 0)
                             {
                                 Program.uiApp.MessageBox(BDOSResources.getTranslate("WaybillCreatedSuccesfully") + " DocEntry : " + newDocEntry);
-                                StockTransfer.formDataLoad( oForm, out errorText);
+                                formDataLoad( oForm, out errorText);
                             }
                             else
                             {

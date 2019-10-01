@@ -53,6 +53,8 @@ namespace BDO_Localisation_AddOn
 
             StockTransfer.createUserFields( out errorText);
 
+            StockTransferRequest.createUserFields(out errorText);
+
             GoodsReceiptPO.createUserFields( out errorText);
 
             APDownPayment.createUserFields( out errorText);
@@ -953,37 +955,36 @@ namespace BDO_Localisation_AddOn
             return d.ToString(Nfi);
         }
 
-        public static string ConvertDecimalToStringForEditboxStrings( decimal d)
+        public static string ConvertDecimalToStringForEditboxStrings(decimal d)
         {
             //Use this function to fill "String" property in B1 form edittexts
-            NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = CommonFunctions.getOADM( "DecSep").ToString(), NumberGroupSeparator = CommonFunctions.getOADM( "ThousSep").ToString() };
+            NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = CommonFunctions.getOADM("DecSep").ToString(), NumberGroupSeparator = CommonFunctions.getOADM("ThousSep").ToString() };
             return d.ToString(Nfi);
         }
 
-        public static decimal StringToDecimalByGeneralSettingsSeparators( string s)
+        public static decimal StringToDecimalByGeneralSettingsSeparators(string s)
         {
 
-            NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = CommonFunctions.getOADM( "DecSep").ToString(), NumberGroupSeparator = CommonFunctions.getOADM( "ThousSep").ToString() };
+            NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = CommonFunctions.getOADM("DecSep").ToString(), NumberGroupSeparator = CommonFunctions.getOADM("ThousSep").ToString() };
 
             return Convert.ToDecimal(s, Nfi);
-        }           
-        
-        public static decimal cleanStringOfNonDigits( string s)
+        }
+
+        public static decimal cleanStringOfNonDigits(string s)
         {
             if (string.IsNullOrEmpty(s))
                 return 0;
-            
+
             StringBuilder sb = new StringBuilder(s.Length);
             for (int i = 0; i < s.Length; ++i)
             {
                 char c = s[i];
-                if ((c < '0') & (c != '.') & (c != ',')) continue;
-                if ((c > '9') & (c != '.') & (c != ',')) continue;
+                if ((c < '0') & (c != '.') & (c != ',') & (c != '-')) continue;
+                if ((c > '9') & (c != '.') & (c != ',') & (c != '-')) continue;
                 sb.Append(s[i]);
             }
+
             string cleaned = sb.ToString();
-
-
             bool decSepIsRp = false;
             string NewString = "";
 
@@ -1007,21 +1008,19 @@ namespace BDO_Localisation_AddOn
                         decSepIsRp = true;
                     }
                 }
-                }
+            }
 
             NewString = NewString.Replace("DecSep", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
             NewString = NewString.Replace("ThousSep", CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator);
 
-
             try
-                {
+            {
                 return Convert.ToDecimal(NewString, CultureInfo.InvariantCulture);
-                }
+            }
             catch
             {
                 return 0;
             }
-
         }
 
         public static DateTime DateFormats(string s, string dateFormat)
