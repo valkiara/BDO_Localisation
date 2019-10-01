@@ -1411,24 +1411,24 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)
-                {
-                    if (!pVal.BeforeAction)
-                    {
-                        if (pVal.ColUID == "1") //Item No.
-                        {
-                            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item(pVal.ItemUID).Specific));
-                            itemCodeOld = oMatrix.GetCellSpecific(pVal.ColUID, pVal.Row).Value;
-                        }
-                        else if (pVal.ColUID == "15") //Whse
-                        {
-                            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item(pVal.ItemUID).Specific));
-                            warehouseOld = oMatrix.GetCellSpecific(pVal.ColUID, pVal.Row).Value;
-                        }
-                    }
-                }
-
                 //არ წაშალოთ!!! (დაგვჭირდება ოდესმე)
+                //if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)
+                //{
+                //    if (!pVal.BeforeAction)
+                //    {
+                //        if (pVal.ColUID == "1") //Item No.
+                //        {
+                //            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item(pVal.ItemUID).Specific));
+                //            itemCodeOld = oMatrix.GetCellSpecific(pVal.ColUID, pVal.Row).Value;
+                //        }
+                //        else if (pVal.ColUID == "15") //Whse
+                //        {
+                //            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item(pVal.ItemUID).Specific));
+                //            warehouseOld = oMatrix.GetCellSpecific(pVal.ColUID, pVal.Row).Value;
+                //        }
+                //    }
+                //}
+
                 //if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_LOST_FOCUS)
                 //{
                 //    if (!pVal.BeforeAction)
