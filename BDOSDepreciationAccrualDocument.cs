@@ -672,12 +672,11 @@ namespace BDO_Localisation_AddOn
             oColumn.Visible = true;
             oColumn.ExtendedObject.LinkedObjectType = objectTypeItem;
 
-            oColumn = oColumns.Add("DistNumber", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            oColumn = oColumns.Add("DistNumber", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("DistNumber");
             oColumn.Width = 60;
             oColumn.Editable = true;
             oColumn.Visible = true;
-            //oColumn.ExtendedObject.LinkedObjectType = objectTypeDist;
             
             oColumn = oColumns.Add("Quantity", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Quantity");

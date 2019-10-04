@@ -309,12 +309,10 @@ namespace BDO_Localisation_AddOn
                         
                         else if (columnName == "DistNumber")
                         {
-                            oColumn = oColumns.Add("DistNumber", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                            oColumn = oColumns.Add("DistNumber", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("DistNumber");
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("ItemsMTR", columnName);
-                            //oLink = oColumn.ExtendedObject;
-                            //oLink.LinkedObjectType = "10000044";
 
                         }
                         else
@@ -392,6 +390,11 @@ namespace BDO_Localisation_AddOn
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
+                if((pVal.ItemUID == "StckDepr" || pVal.ItemUID == "InvDepr") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
+                {
+                    setVisibility(oForm, out errorText);
+                }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
                 {
@@ -732,7 +735,7 @@ namespace BDO_Localisation_AddOn
 
 	                    SUM(""@BDOSDEPAC1"".""U_Quantity"") as ""DeprQty""
                         from ""@BDOSDEPAC1"" 
-                        inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ""@BDOSDEPACR"".""U_AccrMnth"" >= '" + DeprMonth.ToString("yyyyMMdd") + @"'and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')=''
+                        inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')=''
                         
                         group by 
                         ""@BDOSDEPAC1"".""U_ItemCode"",
@@ -823,11 +826,16 @@ namespace BDO_Localisation_AddOn
             {
                 DateTime InDateStart = oRecordSet.Fields.Item("InDate").Value;
                 DateTime InDateEnd = InDateStart.AddMonths(oRecordSet.Fields.Item("UseLife").Value);
-                
+
+                DateTime AccrMnth = InDateStart;
+
+                AccrMnth = new DateTime(AccrMnth.Year, AccrMnth.Month, 1);
+                AccrMnth = AccrMnth.AddMonths(1).AddDays(-1);
+
                 decimal Quantity = Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value);
                 Quantity = Quantity * (isInvoice ? -1 : 1);
                 i++;
-                if (DeprMonth > InDateEnd || DeprMonth < InDateStart || Quantity==0)
+                if (DeprMonth > InDateEnd || DeprMonth <= AccrMnth || Quantity==0)
                 {
                     oRecordSet.MoveNext();
                     continue;
@@ -842,8 +850,11 @@ namespace BDO_Localisation_AddOn
                 
 
                 AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Quantity;
+
                 AlrDeprAmt -= CurrDeprAmt;
                 decimal NtBookVal = Convert.ToDecimal(oRecordSet.Fields.Item("APCost").Value * Convert.ToDouble(Quantity)) - AlrDeprAmt;
+
+             
                 decimal DeprAmt = NtBookVal / monthsApart;
                 
                 oDataTable.Rows.Add();
@@ -927,6 +938,35 @@ namespace BDO_Localisation_AddOn
             {
                 errorText = ex.Message;
             }
+        }
+
+        public static void setVisibility(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+
+            oForm.Freeze(true);
+            try
+            {
+                bool isRetirement = oForm.Items.Item("InvDepr").Specific.Selected;
+
+                SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
+
+                if (isRetirement)
+                {
+                    oMatrix.Columns.Item("DocType").Visible = true;
+                    oMatrix.Columns.Item("DocEntry").Visible = true;
+                }
+                else
+                {
+                    oMatrix.Columns.Item("DocType").Visible = false;
+                    oMatrix.Columns.Item("DocEntry").Visible = false;
+                }
+            }
+            catch
+            { }
+
+            oForm.Freeze(false);
+
         }
 
     }
