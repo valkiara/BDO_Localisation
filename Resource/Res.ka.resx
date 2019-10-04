@@ -2969,7 +2969,7 @@
     <value>საქინლის ჯგუფი</value>
   </data>
   <data name="NtBookVal" xml:space="preserve">
-    <value>საბალანსო რირებულება</value>
+    <value>საბალანსო ღირებულება</value>
   </data>
   <data name="UseLife" xml:space="preserve">
     <value>გამოყენების ვადა (თვე)</value>
@@ -3156,5 +3156,17 @@
   </data>
   <data name="ShowStockByDate" xml:space="preserve">
     <value>ნაშთები თარიღის მიხედვით</value>
+  </data>
+  <data name="fillMTR" xml:space="preserve">
+    <value>ცხრილის შევსება</value>
+  </data>
+  <data name="DepcDoc" xml:space="preserve">
+    <value>ცვეთის დოკუმენტი</value>
+  </data>
+  <data name="Depreciation" xml:space="preserve">
+    <value>ცვეთის დარიცხვა</value>
+  </data>
+  <data name="Retirement" xml:space="preserve">
+    <value>ცვეთის ჩამოწერა</value>
   </data>
 </root>

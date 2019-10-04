@@ -3184,4 +3184,10 @@
   <data name="ShowStockByDate" xml:space="preserve">
     <value>Show stock by date</value>
   </data>
+  <data name="fillMTR" xml:space="preserve">
+    <value>Fill Matrix</value>
+  </data>
+  <data name="DepcDoc" xml:space="preserve">
+    <value>Depreciation Document</value>
+  </data>
 </root>
