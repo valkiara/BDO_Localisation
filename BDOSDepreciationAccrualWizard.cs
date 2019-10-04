@@ -225,6 +225,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("Project", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("DistNumber", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
+                    oDataTable.Columns.Add("UseLife", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("Quantity", SAPbouiCOM.BoFieldsType.ft_Quantity);
                     oDataTable.Columns.Add("DeprAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
                     oDataTable.Columns.Add("DepcDoc", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
@@ -239,7 +240,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("ItemName", SAPbouiCOM.BoFieldsType.ft_Text, 50);
                     oDataTable.Columns.Add("DistNumber", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
-                    oDataTable.Columns.Add("UseLife", SAPbouiCOM.BoFieldsType.ft_Quantity);
+                    oDataTable.Columns.Add("UseLife", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("AlrDeprAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
                     oDataTable.Columns.Add("Quantity", SAPbouiCOM.BoFieldsType.ft_Quantity);
                     oDataTable.Columns.Add("APCost", SAPbouiCOM.BoFieldsType.ft_Sum);
@@ -499,6 +500,7 @@ namespace BDO_Localisation_AddOn
                 SAPbobsCOM.GeneralData oChild = oChildren.Add();
                 oChild.SetProperty("U_ItemCode", DepreciationLines.GetValue("ItemCode", i));
                 oChild.SetProperty("U_DistNumber", DepreciationLines.GetValue("DistNumber", i));
+                oChild.SetProperty("U_BDOSUsLife", DepreciationLines.GetValue("UseLife", i));
                 oChild.SetProperty("U_Project", DepreciationLines.GetValue("Project", i));
                 oChild.SetProperty("U_Quantity", DepreciationLines.GetValue("Quantity", i));
                 oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("DeprAmt", i));
@@ -565,53 +567,54 @@ namespace BDO_Localisation_AddOn
             {
 
                     double CurMnthAmt = DepreciationLines.GetValue("CurMnthAmt", i);
-                    if (CurMnthAmt == 0)
+                if (CurMnthAmt == 0)
+                {
+                    NewRow = DepreciationLinesTmp.Rows.Count;
+                    DepreciationLinesTmp.Rows.Add();
+                    DepreciationLinesTmp.SetValue("ItemCode", NewRow, DepreciationLines.GetValue("ItemCode", i));
+                    DepreciationLinesTmp.SetValue("DistNumber", NewRow, DepreciationLines.GetValue("DistNumber", i));
+                    DepreciationLinesTmp.SetValue("UseLife", NewRow, DepreciationLines.GetValue("UseLife", i));
+                    DepreciationLinesTmp.SetValue("Project", NewRow, DepreciationLines.GetValue("Project", i));
+
+                    DepreciationLinesTmp.SetValue("Quantity", NewRow, DepreciationLines.GetValue("Quantity", i));
+                    DepreciationLinesTmp.SetValue("DeprAmt", NewRow, DepreciationLines.GetValue("DeprAmt", i));
+                    DepreciationLinesTmp.SetValue("AlrDeprAmt", NewRow, DepreciationLines.GetValue("AlrDeprAmt", i));
+
+                    if (isInvoice)
                     {
-                        NewRow = DepreciationLinesTmp.Rows.Count;
-                        DepreciationLinesTmp.Rows.Add();
-                        DepreciationLinesTmp.SetValue("ItemCode", NewRow, DepreciationLines.GetValue("ItemCode", i));
-                        DepreciationLinesTmp.SetValue("DistNumber", NewRow, DepreciationLines.GetValue("DistNumber", i));
-                        DepreciationLinesTmp.SetValue("Project", NewRow, DepreciationLines.GetValue("Project", i));
+                        DepreciationLinesTmp.SetValue("DocEntry", NewRow, DepreciationLines.GetValue("DocEntry", i));
+                        DepreciationLinesTmp.SetValue("DocType", NewRow, DepreciationLines.GetValue("DocType", i));
 
-                        DepreciationLinesTmp.SetValue("Quantity", NewRow, DepreciationLines.GetValue("Quantity", i));
-                        DepreciationLinesTmp.SetValue("DeprAmt", NewRow, DepreciationLines.GetValue("DeprAmt", i));
-                        DepreciationLinesTmp.SetValue("AlrDeprAmt", NewRow, DepreciationLines.GetValue("AlrDeprAmt", i));
+                        SAPbobsCOM.BoObjectTypes DocType;
 
-                        if (isInvoice)
+                        if (DepreciationLines.GetValue("DocType", i) == "13")
                         {
-                            DepreciationLinesTmp.SetValue("DocEntry", NewRow, DepreciationLines.GetValue("DocEntry", i));
-                            DepreciationLinesTmp.SetValue("DocType", NewRow, DepreciationLines.GetValue("DocType", i));
-
-                            SAPbobsCOM.BoObjectTypes DocType;
-
-                            if (DepreciationLines.GetValue("DocType", i) == "13")
-                            {
-                                DocType = SAPbobsCOM.BoObjectTypes.oInvoices;
-                            }
-                            else
-                            {
-                                DocType = SAPbobsCOM.BoObjectTypes.oInventoryGenExit;
-                            }
-
-                            SAPbobsCOM.Documents oInvoice = Program.oCompany.GetBusinessObject(DocType);
-                            DateTime DocDate = new DateTime();
-                            if (oInvoice.GetByKey(DepreciationLines.GetValue("DocEntry", i)))
-                            {
-                                DocDate = oInvoice.DocDate;
-                            }
-                                                        
-                            CreateDocument(oForm, AccrMnth, DocDate);
-
-                            DepreciationLinesTmp.Rows.Clear();
+                            DocType = SAPbobsCOM.BoObjectTypes.oInvoices;
                         }
-                    }
-                    else
-                    {
-                        string ItemCode = DepreciationLines.GetValue("ItemCode", i);
-                        string DistNumber = DepreciationLines.GetValue("DistNumber", i);
+                        else
+                        {
+                            DocType = SAPbobsCOM.BoObjectTypes.oInventoryGenExit;
+                        }
 
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreatedForBatchNumber") + " " + DistNumber + " (" + ItemCode + ")", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                        SAPbobsCOM.Documents oInvoice = Program.oCompany.GetBusinessObject(DocType);
+                        DateTime DocDate = new DateTime();
+                        if (oInvoice.GetByKey(DepreciationLines.GetValue("DocEntry", i)))
+                        {
+                            DocDate = oInvoice.DocDate;
+                        }
+
+                        CreateDocument(oForm, AccrMnth, DocDate);
+
+                        DepreciationLinesTmp.Rows.Clear();
                     }
+                }
+                else
+                {
+                    string ItemCode = DepreciationLines.GetValue("ItemCode", i);
+                    string DistNumber = DepreciationLines.GetValue("DistNumber", i);
+
+                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreatedForBatchNumber") + " " + DistNumber + " (" + ItemCode + ")", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                }
 
             }
 

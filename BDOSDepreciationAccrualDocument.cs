@@ -78,6 +78,14 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSUsLife");
+            fieldskeysMap.Add("TableName", "BDOSDEPAC1");
+            fieldskeysMap.Add("Description", "Useful Life");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
+            fieldskeysMap.Add("EditSize", 10);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "Project");
@@ -677,7 +685,13 @@ namespace BDO_Localisation_AddOn
             oColumn.Width = 60;
             oColumn.Editable = true;
             oColumn.Visible = true;
-            
+
+            oColumn = oColumns.Add("BDOSUsLife", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("UseLife");
+            oColumn.Width = 60;
+            oColumn.Editable = false;
+            oColumn.Visible = true;
+
             oColumn = oColumns.Add("Quantity", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Quantity");
             oColumn.Width = 60;
@@ -728,6 +742,9 @@ namespace BDO_Localisation_AddOn
                        
             oColumn = oColumns.Item("DistNumber");
             oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_DistNumber");
+
+            oColumn = oColumns.Item("BDOSUsLife");
+            oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_BDOSUsLife");
 
             oColumn = oColumns.Item("Quantity");
             oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_Quantity");
