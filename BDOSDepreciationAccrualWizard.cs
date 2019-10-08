@@ -665,10 +665,10 @@ namespace BDO_Localisation_AddOn
                             (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt"" as ""CurrDeprAmt""," : @"""DepcAcc"".""CurrDeprAmt"" as ""CurrDeprAmt"", ""DepcAcc"".""FutureDeprAmt"" as ""FutureDeprAmt"",")
                             +
                             @"""DepcAcc"".""DeprQty"" as ""DeprQty"", 
-	                         ""FinTable"".""NtBookVal"" as ""NtBookVal"",
-	                         ""FinTable"".""Quantity"" as ""Quantity""
+	                         sum(""FinTable"".""NtBookVal"") as ""NtBookVal"",
+	                         sum(""FinTable"".""Quantity"") as ""Quantity""
 
-                             from (select
+                             from (select distinct
 	                         ""OIVL"".""LocCode"","
                             +
                             (isInvoice ? @" case when ""OBVL"".""BaseDocEn""= 0 
@@ -684,8 +684,8 @@ namespace BDO_Localisation_AddOn
                              ""OBTN"".""InDate"",
 	                         ""OBTN"".""CostTotal"" / ""OBTN"".""Quantity"" as ""APCost"",
                              
-	                         SUM( ""OBTN"".""CostTotal""/""OBTN"".""Quantity"" * ""OBVL"".""Quantity""*case when ""OBVL"".""TransValue"">0 then 1 else -1 end) as ""NtBookVal"",
-	                         SUM(""OBVL"".""Quantity""*case when ""OBVL"".""TransValue"">0 then 1 else -1 end ) as ""Quantity"" 
+	                         ""OBTN"".""CostTotal""/""OBTN"".""Quantity"" * ""OBVL"".""Quantity""*case when ""OBVL"".""TransValue"">0 then 1 else -1 end as ""NtBookVal"",
+	                         ""OBVL"".""Quantity""*case when ""OBVL"".""TransValue"">0 then 1 else -1 end  as ""Quantity"" 
                         from ""OBVL""
                         
                         inner join ""OBTN"" on ""OBTN"".""DistNumber"" = ""OBVL"".""DistNumber"" and ""OBTN"".""ItemCode"" = ""OBVL"".""ItemCode"" and ""OBTN"".""Quantity"">0
@@ -707,20 +707,7 @@ namespace BDO_Localisation_AddOn
                             (isInvoice ? @" where (""OBVL"".""DocType""= 13 or ""OBVL"".""DocType""= 60) and LAST_DAY(""OIVL"".""DocDate"") = '" + DeprMonth.ToString("yyyyMMdd") + "'"  : "")
                             + @"
 
-                        group by ""OIVL"".""LocCode"","
-                            +
-                            (isInvoice ? @" case when ""OBVL"".""BaseDocEn""= 0 
-                                                then ""OBVL"".""DocEntry""
-                                                else ""OBVL"".""BaseDocEn"" end, ""OBVL"".""DocType"", " : "")
-                            +
-                             @"""OWHS"".""U_BDOSPrjCod"",
-                            ""OITM"".""ItmsGrpCod"",
-	                         ""OBVL"".""ItemCode"",
-	                         ""OITM"".""ItemName"",
-                            ""OITM"".""U_BDOSUsLife"",
-	                         ""OBVL"".""DistNumber"",
-                            ""OBTN"".""InDate"",
-	                         ""OBTN"".""CostTotal"" / ""OBTN"".""Quantity"") as ""FinTable""
+                        ) as ""FinTable""
 	                         left  join (select
                         ""@BDOSDEPAC1"".""U_ItemCode"",
                         ""@BDOSDEPAC1"".""U_DistNumber"",
@@ -779,8 +766,28 @@ namespace BDO_Localisation_AddOn
                         ""@BDOSDEPAC1"".""U_DistNumber"" ) as ""DepcAccInvoice""
                         on ""DepcAccInvoice"".""U_ItemCode"" = ""FinTable"".""ItemCode"" 
                         and ""DepcAccInvoice"".""U_DistNumber"" = ""FinTable"".""DistNumber""
-                         " +
-                            (isInvoice ? @" and ""DepcAccInvoice"".""U_InvEntry"" =  ""FinTable"".""DocEntry"" and   ""DepcAccInvoice"".""U_InvType"" = ""FinTable"".""DocType"" " : "");
+                         " 
+                         +
+                         (isInvoice ? @" and ""DepcAccInvoice"".""U_InvEntry"" =  ""FinTable"".""DocEntry"" and   ""DepcAccInvoice"".""U_InvType"" = ""FinTable"".""DocType"" " : "")
+                         +
+                            @"group by ""FinTable"".""LocCode"","
+                            +
+                            (isInvoice ? @" ""FinTable"".""DocEntry"", ""FinTable"".""DocType"", " : "")
+                            +
+                             @"""FinTable"".""Project"",
+                             ""FinTable"".""ItemGrp"",
+                             ""FinTable"".""ItemCode"",
+	 	                     ""FinTable"".""ItemName"",
+                             ""FinTable"".""UseLife"" ,
+	                         ""FinTable"".""DistNumber"",
+                             ""FinTable"".""InDate"",
+	                         ""FinTable"".""APCost"",
+                             ""DepcAccInvoice"".""DepcDoc"",
+                             ""DepcAcc"".""DeprAmt"","
+                            +
+                            (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt""," : @"""DepcAcc"".""CurrDeprAmt"", ""DepcAcc"".""FutureDeprAmt"",")
+                            +
+                            @"""DepcAcc"".""DeprQty""";
 
             
 
