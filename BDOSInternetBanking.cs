@@ -1992,9 +1992,9 @@ namespace BDO_Localisation_AddOn
             else if (string.IsNullOrEmpty(treasuryCode) == false)
             {
                 oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
-                if (string.IsNullOrEmpty(partnerAccountNumber) == false && debitCredit == 0)
+                if (debitCredit == 0)
                 {
-                    oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + "GEL", partnerTaxCode, cardType);
+                    oRecordSet = CommonFunctions.getBPBankInfo(treasuryCode + "GEL", partnerTaxCode, cardType);
 
                     if (oRecordSet != null && oRecordSet.Fields.Item("U_treasury").Value == "Y")
                     {
