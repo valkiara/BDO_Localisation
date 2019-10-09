@@ -3151,4 +3151,22 @@
   <data name="DepcDoc" xml:space="preserve">
     <value>Depreciation Document</value>
   </data>
+  <data name="DoYouWantCreateJournalEntryForTaxWithPostingDate" xml:space="preserve">
+    <value>Do you want create Journal Entry with Posting Date</value>
+  </data>
+  <data name="IfNoPleaseFillTaxDateAndTryAgain" xml:space="preserve">
+    <value>If no, please fill Tax Date and try again</value>
+  </data>
+  <data name="PleaseFillTaxDate" xml:space="preserve">
+    <value>Please fill Tax Date</value>
+  </data>
+  <data name="TaxDate" xml:space="preserve">
+    <value>Tax Date</value>
+  </data>
+  <data name="ForCreateJournalEntryPleaseFillTaxDateAndUpdateDocument" xml:space="preserve">
+    <value>For create Journal Entry please fill Tax Date and update document</value>
+  </data>
+  <data name="IfNoPleaseFillTaxDateAndUpdateDocument" xml:space="preserve">
+    <value>If no, please fill Tax Date and update document</value>
+  </data>
 </root>

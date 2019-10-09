@@ -4680,7 +4680,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string createDocumentTransferToBPType(SAPbouiCOM.DataTable oDataTable, int i, out int docEntry, out int docNum, out string errorText)
+        public static string createDocumentTransferToBPType(SAPbouiCOM.DataTable oDataTable, int i, out int docEntry, out int docNum, out string errorText, string transactionType = null)
         {
             errorText = null;
             docEntry = 0;
@@ -4707,8 +4707,8 @@ namespace BDO_Localisation_AddOn
                 string currencySapCode = CommonFunctions.getCurrencySapCode(currency);
                 if (string.IsNullOrEmpty(currencySapCode))
                     errorText = errorText + BDOSResources.getTranslate("CouldNotFindCurrency") + " \"" + currency + "\"! ";
-                string partnerAccountNumber = oDataTable.GetValue("PartnerAccountNumber", i);
-                string partnerCurrency = oDataTable.GetValue("PartnerCurrency", i);
+                string partnerAccountNumber = transactionType == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString() ? oDataTable.GetValue("TreasuryCode", i) : oDataTable.GetValue("PartnerAccountNumber", i);
+                string partnerCurrency = transactionType == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString() ? "GEL" : oDataTable.GetValue("PartnerCurrency", i);
                 string partnerCurrencySapCode = CommonFunctions.getCurrencySapCode(partnerCurrency);
                 if (string.IsNullOrEmpty(partnerCurrencySapCode))
                     errorText = errorText + BDOSResources.getTranslate("CouldNotFindCurrency") + " \"" + partnerCurrencySapCode + "\"! ";

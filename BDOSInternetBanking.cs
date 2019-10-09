@@ -2240,7 +2240,7 @@ namespace BDO_Localisation_AddOn
                     }
                     else if (transactionType == OperationTypeFromIntBank.TransferToBP.ToString() || transactionType == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString())
                     {
-                        info = OutgoingPayment.createDocumentTransferToBPType(oDataTable, i, out docEntry, out docNum, out errorText);
+                        info = OutgoingPayment.createDocumentTransferToBPType(oDataTable, i, out docEntry, out docNum, out errorText, transactionType);
                         infoList.Add(errorText == null ? info : errorText);
                     }
                     else if (transactionType == OperationTypeFromIntBank.TransferToOwnAccount.ToString())
