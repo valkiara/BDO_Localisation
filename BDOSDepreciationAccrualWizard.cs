@@ -709,6 +709,7 @@ namespace BDO_Localisation_AddOn
 
                         ) as ""FinTable""
 	                         left  join (select
+                        ""@BDOSDEPAC1"".""U_Project"",
                         ""@BDOSDEPAC1"".""U_ItemCode"",
                         ""@BDOSDEPAC1"".""U_DistNumber"",
                         SUM(case when ISNULL(""@BDOSDEPAC1"".""U_Quantity"",0)=0 then 0 else ""@BDOSDEPAC1"".""U_DeprAmt""/""@BDOSDEPAC1"".""U_Quantity"" end) as ""DeprAmt"",
@@ -728,10 +729,12 @@ namespace BDO_Localisation_AddOn
                         inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')=''
                         
                         group by 
+                        ""@BDOSDEPAC1"".""U_Project"",
                         ""@BDOSDEPAC1"".""U_ItemCode"",
                         ""@BDOSDEPAC1"".""U_DistNumber"" ) as ""DepcAcc"" 
                         on ""DepcAcc"".""U_ItemCode"" = ""FinTable"".""ItemCode"" 
                         and ""DepcAcc"".""U_DistNumber"" = ""FinTable"".""DistNumber""
+                        and ""DepcAcc"".""U_Project"" = ""FinTable"".""Project""                        
 
                         left  join (select
                         ""@BDOSDEPACR"".""DocEntry"" as ""DepcDoc"",
@@ -862,6 +865,7 @@ namespace BDO_Localisation_AddOn
                 AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Quantity;
 
                 AlrDeprAmt -= CurrDeprAmt;
+
                 decimal NtBookVal = Convert.ToDecimal(oRecordSet.Fields.Item("APCost").Value * Convert.ToDouble(Quantity)) - AlrDeprAmt;
 
              
