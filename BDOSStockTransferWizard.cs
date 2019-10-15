@@ -1870,11 +1870,10 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTable");
 
                         int dTableRow = oGrid.GetDataTableRowIndex(pVal.Row);
-                        string prjTo = ""; 
-
-                        string whsType = oDataTable.GetValue("WhseTypeFr", dTableRow);
+                        string prjFr = oDataTable.GetValue("PrjFr", dTableRow);
+                        //string whsType = oDataTable.GetValue("WhseTypeFr", dTableRow);
                         string whsFr = oDataTable.GetValue("WhsFr", dTableRow);
-                        setWarehousesConditions(prjTo, whsType, whsFr, oCFL);
+                        setWarehousesConditions(prjFr, null, whsFr, oCFL);
                     }
                     else if (sCFL_ID == "DetailTableWhsTo_CFL")
                     {
@@ -1882,11 +1881,10 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTblDt");
 
                         int dTableRow = oGrid.GetDataTableRowIndex(pVal.Row);
-                        string prjTo = "";
-
-                        string whsType = oDataTable.GetValue("WhseTypeFr", dTableRow);
+                        string prjFr = oDataTable.GetValue("PrjFr", dTableRow);
+                        //string whsType = oDataTable.GetValue("WhseTypeFr", dTableRow);
                         string whsFr = oDataTable.GetValue("WhsFr", dTableRow);
-                        setWarehousesConditions(prjTo, whsType, whsFr, oCFL);
+                        setWarehousesConditions(prjFr, null, whsFr, oCFL);
                     }
                     else if (sCFL_ID == "Category_CFL")
                     {
@@ -1958,6 +1956,14 @@ namespace BDO_Localisation_AddOn
                 oCon.Alias = "U_BDOSPrjCod";
                 oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                 oCon.CondVal = prjCode;
+                oCFL.SetConditions(oCons);
+
+                oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
+
+                oCon = oCons.Add();
+                oCon.Alias = "WhsCode";
+                oCon.Operation = SAPbouiCOM.BoConditionOperation.co_NOT_EQUAL;
+                oCon.CondVal = whsCode;
                 oCFL.SetConditions(oCons);
 
                 oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
@@ -2239,7 +2245,7 @@ namespace BDO_Localisation_AddOn
                    LEFT JOIN ""OITM"" ON ""OIVL"".""ItemCode"" = ""OITM"".""ItemCode""
                    WHERE
                      ""DocDate"" <= '" + date.ToString("yyyyMMdd") + @"'
-                     AND ""OITM"".""ManBtchNum"" = 'N'");
+                     AND ""OITM"".""ManBtchNum"" = 'N' AND ""OITM"".""ManSerNum"" = 'N' ");
                 if (!string.IsNullOrEmpty(itemGroup))
                 {
                     queryBuilder.Append(@" AND ""OITM"".""ItmsGrpCod"" = '");
@@ -2284,7 +2290,7 @@ namespace BDO_Localisation_AddOn
                    LEFT JOIN ""OITM"" ON ""OIVL"".""ItemCode"" = ""OITM"".""ItemCode""
                    WHERE
                      ""DocDate"" <= '" + today.ToString("yyyyMMdd") + @"'
-                     AND ""OITM"".""ManBtchNum"" = 'N'");
+                     AND ""OITM"".""ManBtchNum"" = 'N' AND ""OITM"".""ManSerNum"" = 'N' ");
                 if (!string.IsNullOrEmpty(itemGroup))
                 {
                     queryBuilder.Append(@" AND ""OITM"".""ItmsGrpCod"" = '");
