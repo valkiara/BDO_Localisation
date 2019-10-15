@@ -3187,4 +3187,25 @@
   <data name="IfNoPleaseFillTaxDateAndUpdateDocument" xml:space="preserve">
     <value>უარყოფის შემთხვევაში შეავსეთ დღგ-ს თარიღი და განაახლეთ დოკუმენტი</value>
   </data>
+  <data name="CostInStock" xml:space="preserve">
+    <value>ღირებულება (ნაშთში)</value>
+  </data>
+  <data name="DocumentAlreadyCreated" xml:space="preserve">
+    <value>დოკუმენტი უკვე შექმნილია</value>
+  </data>
+  <data name="InsufficientStockBalance" xml:space="preserve">
+    <value>არასაკმარისი ნაშთი</value>
+  </data>
+  <data name="ProjectFrom" xml:space="preserve">
+    <value>პროექტიდან</value>
+  </data>
+  <data name="ProjectTo" xml:space="preserve">
+    <value>პროექტზე</value>
+  </data>
+  <data name="WhseType" xml:space="preserve">
+    <value>საწყობის ტიპი</value>
+  </data>
+  <data name="WhseTypeFrom" xml:space="preserve">
+    <value>საწყობის ტიპი (დან)</value>
+  </data>
 </root>
