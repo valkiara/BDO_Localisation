@@ -1392,6 +1392,7 @@ namespace BDO_Localisation_AddOn
             TableWhsItemsForDetail.Columns.Add("InStock", typeof(decimal));
             TableWhsItemsForDetail.Columns.Add("Qty", typeof(decimal));
             TableWhsItemsForDetail.Columns.Add("Cost", typeof(decimal));
+            TableWhsItemsForDetail.Columns.Add("CostInStock", typeof(decimal));
 
             return TableWhsItemsForDetail;
         }
@@ -2403,6 +2404,7 @@ namespace BDO_Localisation_AddOn
                         dataRow["InStock"] = qty;
                         dataRow["Qty"] = qty;
                         dataRow["Cost"] = oRecordSet.Fields.Item("Cost").Value;
+                        dataRow["CostInStock"] = oRecordSet.Fields.Item("Cost").Value;
                     }
                     oRecordSet.MoveNext();
                     LocCode = tmpLocCode;
@@ -2550,7 +2552,7 @@ namespace BDO_Localisation_AddOn
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "InStock", FormsB1.ConvertDecimalToString(Convert.ToDecimal(foundRows[i]["InStock"].ToString())));
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Qty", FormsB1.ConvertDecimalToString(Convert.ToDecimal(foundRows[i]["Qty"].ToString())));
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Cost", FormsB1.ConvertDecimalToString(Convert.ToDecimal(foundRows[i]["Cost"].ToString())));
-                        SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "CostInStock", FormsB1.ConvertDecimalToString(Convert.ToDecimal(foundRows[i]["Cost"].ToString())));
+                        SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "CostInStock", FormsB1.ConvertDecimalToString(Convert.ToDecimal(foundRows[i]["CostInStock"].ToString())));
                         SbuilderWhs.Append("</Row>");
 
                         row++;
@@ -2696,10 +2698,10 @@ namespace BDO_Localisation_AddOn
                     dataRow["InStock"] = tmpInStock;
                     dataRow["Qty"] = tmpQty;
                     dataRow["Cost"] = Convert.ToDecimal(oDataTable.GetValue("Cost", i));
-
+                    dataRow["CostInStock"] = Convert.ToDecimal(oDataTable.GetValue("CostInStock", i));
+                    
                     if (oDataTable.GetValue("ChkBx", i).ToString() == "Y")
                     {
-
                         totalQty = totalQty + tmpQty;
                         totalCost = totalCost + tmpCost;
                         position++;
