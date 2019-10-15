@@ -4226,7 +4226,7 @@ namespace BDO_Localisation_AddOn
                     int answer;
                     if (string.IsNullOrEmpty(taxDateStr))
                     {
-                        answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithPostingDate") + "? \n" + BDOSResources.getTranslate("IfNoPleaseFillTaxDateAndTryAgain"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate") + "? \n" + BDOSResources.getTranslate("IfNoPleaseFillTaxDateAndTryAgain"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                         if (answer == 2)
                         {
                             return;
@@ -4234,7 +4234,7 @@ namespace BDO_Localisation_AddOn
                     }
                     else
                     {
-                        answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithPostingDate") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                         if (answer == 2)
                         {
                             taxDate = DateTime.ParseExact(taxDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
@@ -4291,7 +4291,7 @@ namespace BDO_Localisation_AddOn
                             int answer;
                             if (string.IsNullOrEmpty(taxDateStr))
                             {
-                                answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithPostingDate") + "? \n" + BDOSResources.getTranslate("IfNoPleaseFillTaxDateAndTryAgain"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate") + "? \n" + BDOSResources.getTranslate("IfNoPleaseFillTaxDateAndTryAgain"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                                 if (answer == 2)
                                 {
                                     return;
@@ -4299,7 +4299,7 @@ namespace BDO_Localisation_AddOn
                             }
                             else
                             {
-                                answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithPostingDate") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                                 if (answer == 2)
                                 {
                                     taxDate = DateTime.ParseExact(taxDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
