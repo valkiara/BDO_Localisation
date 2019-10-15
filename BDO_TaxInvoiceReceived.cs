@@ -6022,7 +6022,7 @@ namespace BDO_Localisation_AddOn
 
                             if (string.IsNullOrEmpty(taxDate))
                             {
-                                createJournalEntryForTaxWithPostingDate = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithPostingDate") + "? \n" + BDOSResources.getTranslate("IfNoPleaseFillTaxDateAndTryAgain"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                createJournalEntryForTaxWithPostingDate = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate") + "? \n" + BDOSResources.getTranslate("IfNoPleaseFillTaxDateAndTryAgain"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                                 if (createJournalEntryForTaxWithPostingDate == 2)
                                 {
                                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PleaseFillTaxDate"), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
@@ -6935,7 +6935,7 @@ namespace BDO_Localisation_AddOn
 
                     if (taxDate == new DateTime(1899, 12, 30))
                     {
-                        createJournalEntryForTaxWithPostingDate = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithPostingDate") + "? \n" + BDOSResources.getTranslate("IfNoPleaseFillTaxDateAndUpdateDocument"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        createJournalEntryForTaxWithPostingDate = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate") + "? \n" + BDOSResources.getTranslate("IfNoPleaseFillTaxDateAndUpdateDocument"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                         if (createJournalEntryForTaxWithPostingDate == 2)
                         {
                             journalEntryForTaxWithPostingDateMsg = BDOSResources.getTranslate("ForCreateJournalEntryPleaseFillTaxDateAndUpdateDocument");

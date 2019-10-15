@@ -3169,8 +3169,8 @@
   <data name="Retirement" xml:space="preserve">
     <value>ცვეთის ჩამოწერა</value>
   </data>
-  <data name="DoYouWantCreateJournalEntryForTaxWithPostingDate" xml:space="preserve">
-    <value>გსურთ გატარება შეიქმნას დოკუმენტის გატარების თარიღით</value>
+  <data name="DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate" xml:space="preserve">
+    <value>გსურთ გატარება შეიქმნას ფაქტურის დადასტურების თარიღით</value>
   </data>
   <data name="IfNoPleaseFillTaxDateAndTryAgain" xml:space="preserve">
     <value>უარყოფის შემთხვევაში შეავსეთ დღგ-ს თარიღი</value>
