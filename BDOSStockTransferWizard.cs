@@ -2701,7 +2701,7 @@ namespace BDO_Localisation_AddOn
                     {
 
                         totalQty = totalQty + tmpQty;
-                        totalCost = totalCost + (tmpInStock > 0 ? tmpQty * (tmpCost / tmpInStock) : 0);
+                        totalCost = totalCost + tmpCost;
                         position++;
                     }
                 }
