@@ -3208,4 +3208,19 @@
   <data name="WhseTypeFrom" xml:space="preserve">
     <value>საწყობის ტიპი (დან)</value>
   </data>
+  <data name="Post" xml:space="preserve">
+    <value>გატარება</value>
+  </data>
+  <data name="CheckDocumentAndItsStatus" xml:space="preserve">
+    <value>გადაამოწმეთ დოკუმენტი და მისი სტატუსი</value>
+  </data>
+  <data name="DataForJournalEntryNotFound" xml:space="preserve">
+    <value>მონაცემები გატარებისთვის არ მოიძებნა</value>
+  </data>
+  <data name="JournalEntryAlreadyCreated" xml:space="preserve">
+    <value>გატარება უკვე შექმნილია</value>
+  </data>
+  <data name="JournalEntryNotCreated" xml:space="preserve">
+    <value>ვერ მოხერხდა გატარების შექმნა</value>
+  </data>
 </root>
