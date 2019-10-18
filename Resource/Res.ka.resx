@@ -3005,7 +3005,7 @@
     <value>საწვავის მართვის მოდულის გამოყენება</value>
   </data>
   <data name="FuelType" xml:space="preserve">
-    <value>საწვავის ტიპი</value>
+    <value>წვის ტიპი</value>
   </data>
   <data name="FuelByFixedAssets" xml:space="preserve">
     <value>საწვავის ნაშთის აღრიცხვა სატრანსპორტო საშუალებების ჭრილში</value>
@@ -3037,17 +3037,11 @@
   <data name="Dimension5" xml:space="preserve">
     <value>Dimension 5</value>
   </data>
-  <data name="PerHour" xml:space="preserve">
-    <value>სთ-ში</value>
-  </data>
   <data name="EndingUnit" xml:space="preserve">
     <value>ოდომეტრის საბოლოო ჩვენება(კმ)</value>
   </data>
   <data name="FromDate" xml:space="preserve">
     <value>საწყისი თარიღი</value>
-  </data>
-  <data name="PerHunKm" xml:space="preserve">
-    <value>100 კმ.-ზე</value>
   </data>
   <data name="FuelConsumptionDocument" xml:space="preserve">
     <value>ხარჯვის აქტი</value>
@@ -3207,5 +3201,35 @@
   </data>
   <data name="WhseTypeFrom" xml:space="preserve">
     <value>საწყობის ტიპი (დან)</value>
+  </data>
+  <data name="FuelTypes" xml:space="preserve">
+    <value>წვის ტიპები</value>
+  </data>
+  <data name="FuelCode" xml:space="preserve">
+    <value>საწვავის კოდი</value>
+  </data>
+  <data name="FuelDescription" xml:space="preserve">
+    <value>საწვავის აღწერა</value>
+  </data>
+  <data name="PerHr" xml:space="preserve">
+    <value>სთ-ში</value>
+  </data>
+  <data name="PerKm" xml:space="preserve">
+    <value>100 კმ-ზე</value>
+  </data>
+  <data name="FuelCriteria" xml:space="preserve">
+    <value>წვის კრიტერიუმები</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>პროცენტულობა</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>მნიშვნელობა</value>
+  </data>
+  <data name="SpecificationOfFuelNorm" xml:space="preserve">
+    <value>წვის ნორმის დაზუსტება</value>
+  </data>
+  <data name="Fixed" xml:space="preserve">
+    <value>ფიქსირებული</value>
   </data>
 </root>

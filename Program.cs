@@ -504,18 +504,46 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->Fleet Types Master Data<-----------------------------
+            //----------------------------->Fuel Types Master Data<-----------------------------
             try
             {
-                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFLTP_T")
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUTP_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFLTP_T", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUTP_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
+            //----------------------------->Fuel Criteria Master Data<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUCR_D")
+                {
+                    errorText = null;
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUCR_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
+            //----------------------------->Specification of Fuel Norm Master Data<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUNR_D")
+                {
+                    errorText = null;
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUNR_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Waybill document<-----------------------------
@@ -967,12 +995,6 @@ namespace BDO_Localisation_AddOn
                     }
                     //----------------------------->Drivers<-----------------------------
                     if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_DRVS_D")
-                    {
-                        removeRecordTrans = true;
-                    }
-
-                    //----------------------------->Fleet Types<-----------------------------
-                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSFLTP_T")
                     {
                         removeRecordTrans = true;
                     }
@@ -1533,10 +1555,16 @@ namespace BDO_Localisation_AddOn
                     BDO_Drivers.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Fleet Types<----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDOSFLTP_T")
+                //----------------------------->Fuel Types<----------------------------
+                if (BusinessObjectInfo.Type == "UDO_F_BDOSFUTP_D")
                 {
-                    BDOSConsumptionTypes.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                    BDOSFuelTypes.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
+                //----------------------------->Specification of Fuel Norm<----------------------------
+                if (BusinessObjectInfo.Type == "UDO_F_BDOSFUNR_D")
+                {
+                    BDOSFuelNormSpecification.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Blanket Agreement<-----------------------------
@@ -1951,14 +1979,34 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                //----------------------------->Fleet Types Master Data<-----------------------------
-                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFLTP_T")
+                //----------------------------->Fuel Types Master Data<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFUTP_D")
                 {
-                    BDOSConsumptionTypes.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
-                    {
-                        removeRecordRow = 1;
-                    }
+                    BDOSFuelTypes.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    //{
+                    //    removeRecordRow = 1;
+                    //}
+                }
+
+                //----------------------------->Fuel Criteria Master Data<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_F_BDOSFUCR_D")
+                {
+                    BDOSFuelCriteria.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    //{
+                    //    removeRecordRow = 1;
+                    //}
+                }
+
+                //----------------------------->Specification of Fuel Norm Master Data<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFUNR_D")
+                {
+                    BDOSFuelNormSpecification.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    //{
+                    //    removeRecordRow = 1;
+                    //}
                 }
 
                 //----------------------------->Waybill Document<-----------------------------

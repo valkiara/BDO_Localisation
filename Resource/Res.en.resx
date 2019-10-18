@@ -3019,12 +3019,6 @@
   <data name="FuelType" xml:space="preserve">
     <value>Fuel Type</value>
   </data>
-  <data name="PerHour" xml:space="preserve">
-    <value>Per Hour</value>
-  </data>
-  <data name="PerHunKm" xml:space="preserve">
-    <value>Per 100 Kilometers</value>
-  </data>
   <data name="Uom" xml:space="preserve">
     <value>Unit</value>
   </data>
@@ -3228,5 +3222,35 @@
   </data>
   <data name="WhseTypeFrom" xml:space="preserve">
     <value>Warehouse Type (From)</value>
+  </data>
+  <data name="FuelTypes" xml:space="preserve">
+    <value>Fuel Types</value>
+  </data>
+  <data name="FuelCode" xml:space="preserve">
+    <value>Fuel Code</value>
+  </data>
+  <data name="FuelDescription" xml:space="preserve">
+    <value>Fuel Description</value>
+  </data>
+  <data name="PerHr" xml:space="preserve">
+    <value>Per Hour</value>
+  </data>
+  <data name="PerKm" xml:space="preserve">
+    <value>Per 100 km</value>
+  </data>
+  <data name="FuelCriteria" xml:space="preserve">
+    <value>Fuel Criteria</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>Percentage</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="SpecificationOfFuelNorm" xml:space="preserve">
+    <value>Specification of Fuel Norm</value>
+  </data>
+  <data name="Fixed" xml:space="preserve">
+    <value>Fixed</value>
   </data>
 </root>

@@ -49,8 +49,17 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            GC.Collect();
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSFuel");
+            fieldskeysMap.Add("TableName", "OITB");
+            fieldskeysMap.Add("Description", "Fuel");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
 
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            GC.Collect();
         }
 
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
@@ -67,10 +76,8 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
 
-
                     chooseFromListAddForm(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                     chooseFromList(oForm, pVal.BeforeAction, oCFLEvento, out errorText);
-
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
@@ -87,10 +94,10 @@ namespace BDO_Localisation_AddOn
                 if (pVal.ItemUID == "BDOSFxAs" || pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                 {
                     setVisibility(oForm, out errorText);
-                }
-                
+                }             
             }
         }
+
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
@@ -121,6 +128,11 @@ namespace BDO_Localisation_AddOn
             top = top + height + 1;
             oItem.Top = top;
 
+            oItem = oForm.Items.Item("BDOSFuel");
+            oItem.FromPane = 1;
+            oItem.ToPane = 1;
+            oItem.Top = top;
+
             oItem = oForm.Items.Item("AccDepS");
             oItem.FromPane = 1;
             oItem.ToPane = 1; top = top + height + 1;
@@ -130,8 +142,7 @@ namespace BDO_Localisation_AddOn
             oItem.FromPane = 1;
             oItem.ToPane = 1;
             oItem.Top = top;
-            
-
+           
             oItem = oForm.Items.Item("ExpDepS");
             oItem.FromPane = 1;
             oItem.ToPane = 1;
@@ -152,10 +163,7 @@ namespace BDO_Localisation_AddOn
             oItem = oForm.Items.Item("UsLife");
             oItem.FromPane = 1;
             oItem.ToPane = 1;
-            oItem.Top = top;
-
-
-            
+            oItem.Top = top;        
         }
 
         public static void setVisibility(SAPbouiCOM.Form oForm, out string errorText)
@@ -184,14 +192,12 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("UsLife").ToPane = 1;
                 oForm.Items.Item("UsLifeS").Visible = visibleProperties;
                 oForm.Items.Item("UsLifeS").FromPane = 1;
-                oForm.Items.Item("UsLifeS").ToPane = 1;
-                
+                oForm.Items.Item("UsLifeS").ToPane = 1;                
             }
             catch
             { }
 
             oForm.Freeze(false);
-
         }
         public static void resizeForm(SAPbouiCOM.Form oForm, out string errorText)
         {
@@ -239,6 +245,31 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Enabled", true);
             formItems.Add("ValueOn", "Y");
             formItems.Add("ValueOff", "N");
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSFuel"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OITB");
+            formItems.Add("Alias", "U_BDOSFuel");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("Width", Width);
+            formItems.Add("Left", oForm.Items.Item("124").Left);
+            formItems.Add("Top", Top);
+            formItems.Add("Height", Height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Fuel"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
             formItems.Add("FromPane", pane);
             formItems.Add("ToPane", pane);
 
@@ -302,7 +333,6 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-
             Top = Top + Height + 1;
             Left = oForm.Items.Item("123").Left;
 
@@ -358,7 +388,6 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-
             Top = Top + Height + 1;
             Left = oForm.Items.Item("123").Left;
 
@@ -384,7 +413,6 @@ namespace BDO_Localisation_AddOn
 
             Left = oForm.Items.Item("124").Left;
             
-
             formItems = new Dictionary<string, object>();
             itemName = "UsLife"; //10 characters
             formItems.Add("isDataSource", true);
@@ -408,9 +436,6 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
-
-
-
         }
 
         private static void chooseFromList(SAPbouiCOM.Form oForm, bool BeforeAction, SAPbouiCOM.IChooseFromListEvent oCFLEvento, out string errorText)

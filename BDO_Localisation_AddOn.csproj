@@ -106,8 +106,10 @@
     <Compile Include="BalanceSheet.cs" />
     <Compile Include="BDOSARDownPaymentVATAccrual.cs" />
     <Compile Include="BDOSAutomaticTasks.cs" />
+    <Compile Include="BDOSFuelCriteria.cs" />
+    <Compile Include="BDOSFuelNormSpecification.cs" />
+    <Compile Include="BDOSFuelTypes.cs" />
     <Compile Include="CashFlowLineItem.cs" />
-    <Compile Include="BDOSConsumptionTypes.cs" />
     <Compile Include="BDOSDeleteUDF.cs" />
     <Compile Include="BDOSDepreciationAccrualDocument.cs" />
     <Compile Include="BDOSDownPaymentTaxAnalysisReceived.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="BDOSInternetBankingIntegrationServicesRules.cs" />
     <Compile Include="IssueForProduction.cs" />
     <Compile Include="LandedCostsSetup.cs" />
+    <Compile Include="LanguageUtils.cs" />
     <Compile Include="License.cs" />
     <Compile Include="Locations.cs" />
     <Compile Include="ItemGroup.cs" />

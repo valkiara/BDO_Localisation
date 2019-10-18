@@ -44,10 +44,22 @@ namespace BDO_Localisation_AddOn
                 BDO_Drivers.registerUDO( out errorText);
             }
 
-            BDOSConsumptionTypes.createMasterDataUDO(out errorText);
-            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFLTP_T") == false)
+            BDOSFuelTypes.createMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUTP_D") == false)
             {
-                BDOSConsumptionTypes.registerUDO(out errorText);
+                BDOSFuelTypes.registerUDO();
+            }
+
+            BDOSFuelCriteria.createMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUCR_D") == false)
+            {
+                BDOSFuelCriteria.registerUDO();
+            }
+
+            BDOSFuelNormSpecification.createMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUNR_D") == false)
+            {
+                BDOSFuelNormSpecification.registerUDO();
             }
 
             BDO_Vehicles.createMasterDataUDO( out errorText);
@@ -338,8 +350,7 @@ namespace BDO_Localisation_AddOn
                 return 0;
             }
             
-            SAPbobsCOM.UserTablesMD oUserTablesMD = null;
-            oUserTablesMD = ((SAPbobsCOM.UserTablesMD)(Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserTables)));
+            SAPbobsCOM.UserTablesMD oUserTablesMD = ((SAPbobsCOM.UserTablesMD)(Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserTables)));
             oUserTablesMD.TableName = tableName;
             oUserTablesMD.TableDescription = description;
             oUserTablesMD.TableType = type;

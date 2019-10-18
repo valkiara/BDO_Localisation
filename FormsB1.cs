@@ -102,7 +102,11 @@ namespace BDO_Localisation_AddOn
 
             BDO_Vehicles.addMenus( out errorText);
 
-            BDOSConsumptionTypes.addMenus(out errorText);
+            BDOSFuelTypes.addMenus();
+
+            BDOSFuelCriteria.addMenus();
+
+            BDOSFuelNormSpecification.addMenus();
 
             BDO_Waybills.addMenus( out errorText);
 
