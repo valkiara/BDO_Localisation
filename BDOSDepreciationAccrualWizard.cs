@@ -647,6 +647,8 @@ namespace BDO_Localisation_AddOn
             
 
             string query = @"select 
+                            ((""FinTable"".""APCost"" * ""DeprDocs"".""DeprDocAmnt"")/""FinTable"".""UseLife"") as ""AlrDeprAmt"",
+                            ""DeprDocs"".""DeprDocAmnt"",
                             ""FinTable"".""LocCode"","
                             +
                             (isInvoice ? @" ""FinTable"".""DocEntry"", ""FinTable"".""DocType"", " : "")
@@ -662,7 +664,7 @@ namespace BDO_Localisation_AddOn
                              ""DepcAccInvoice"".""DepcDoc"",
                              ""DepcAcc"".""DeprAmt"" as ""DeprAmt"","
                             +
-                            (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt"" as ""CurrDeprAmt""," : @"""DepcAcc"".""CurrDeprAmt"" as ""CurrDeprAmt"", ""DepcAcc"".""FutureDeprAmt"" as ""FutureDeprAmt"",")
+                            (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt"" as ""CurrDeprAmt""," : @"""CurrDepcAcc"".""CurrDeprAmt"" as ""CurrDeprAmt"", ""CurrDepcAcc"".""FutureDeprAmt"" as ""FutureDeprAmt"",")
                             +
                             @"""DepcAcc"".""DeprQty"" as ""DeprQty"", 
 	                         sum(""FinTable"".""NtBookVal"") as ""NtBookVal"",
@@ -709,7 +711,6 @@ namespace BDO_Localisation_AddOn
 
                         ) as ""FinTable""
 	                         left  join (select
-                        ""@BDOSDEPAC1"".""U_Project"",
                         ""@BDOSDEPAC1"".""U_ItemCode"",
                         ""@BDOSDEPAC1"".""U_DistNumber"",
                         SUM(case when ISNULL(""@BDOSDEPAC1"".""U_Quantity"",0)=0 then 0 else ""@BDOSDEPAC1"".""U_DeprAmt""/""@BDOSDEPAC1"".""U_Quantity"" end) as ""DeprAmt"",
@@ -729,13 +730,55 @@ namespace BDO_Localisation_AddOn
                         inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')=''
                         
                         group by 
-                        ""@BDOSDEPAC1"".""U_Project"",
                         ""@BDOSDEPAC1"".""U_ItemCode"",
                         ""@BDOSDEPAC1"".""U_DistNumber"" ) as ""DepcAcc"" 
                         on ""DepcAcc"".""U_ItemCode"" = ""FinTable"".""ItemCode"" 
                         and ""DepcAcc"".""U_DistNumber"" = ""FinTable"".""DistNumber""
-                        and ""DepcAcc"".""U_Project"" = ""FinTable"".""Project""                        
+------------------
 
+                        left  join (select
+                        ""@BDOSDEPAC1"".""U_Project"",
+                        ""@BDOSDEPAC1"".""U_ItemCode"",
+                        ""@BDOSDEPAC1"".""U_DistNumber"",
+                        SUM(case when ISNULL(""@BDOSDEPAC1"".""U_Quantity"",0)=0 then 0 else ""@BDOSDEPAC1"".""U_DeprAmt""/""@BDOSDEPAC1"".""U_Quantity"" end) as ""DeprAmt"",
+
+                        SUM(case when ""@BDOSDEPACR"".""U_AccrMnth"" = '" + DeprMonth.ToString("yyyyMMdd") + @"' 
+                        then ""@BDOSDEPAC1"".""U_DeprAmt""
+	                    else 0
+                        end) as ""CurrDeprAmt"",
+
+                        SUM(case when ""@BDOSDEPACR"".""U_AccrMnth"" > '" + DeprMonth.ToString("yyyyMMdd") + @"' 
+                        then ""@BDOSDEPAC1"".""U_DeprAmt""
+	                    else 0
+                        end) as ""FutureDeprAmt""
+                        from ""@BDOSDEPAC1"" 
+                        inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N' and ISNULL(""@BDOSDEPAC1"".""U_InvEntry"",'')=''
+                        
+                        group by 
+                        ""@BDOSDEPAC1"".""U_Project"",
+                        ""@BDOSDEPAC1"".""U_ItemCode"",
+                        ""@BDOSDEPAC1"".""U_DistNumber"" ) as ""CurrDepcAcc"" 
+                        on ""CurrDepcAcc"".""U_ItemCode"" = ""FinTable"".""ItemCode"" 
+                        and ""CurrDepcAcc"".""U_DistNumber"" = ""FinTable"".""DistNumber""
+                        and ""CurrDepcAcc"".""U_Project"" = ""FinTable"".""Project""  
+
+
+------------------
+
+                        left join (select 
+                        ""@BDOSDEPAC1"".""U_ItemCode"",
+                        ""@BDOSDEPAC1"".""U_DistNumber"",count(distinct ""@BDOSDEPAC1"".""DocEntry"") as ""DeprDocAmnt""
+                        from ""@BDOSDEPAC1""
+                        inner join   ""@BDOSDEPACR"" on ""@BDOSDEPACR"".""DocEntry"" = ""@BDOSDEPAC1"".""DocEntry"" and ""@BDOSDEPACR"".""Canceled"" = 'N'
+                        group by
+                        ""@BDOSDEPAC1"".""U_ItemCode"",
+                        ""@BDOSDEPAC1"".""U_DistNumber"") as ""DeprDocs"" 
+                        on ""DeprDocs"".""U_ItemCode"" = ""FinTable"".""ItemCode""
+                        and ""DeprDocs"".""U_DistNumber"" = ""FinTable"".""DistNumber""
+
+
+
+------------------
                         left  join (select
                         ""@BDOSDEPACR"".""DocEntry"" as ""DepcDoc"",
                         ""@BDOSDEPAC1"".""U_InvEntry"",
@@ -778,6 +821,8 @@ namespace BDO_Localisation_AddOn
                             (isInvoice ? @" ""FinTable"".""DocEntry"", ""FinTable"".""DocType"", " : "")
                             +
                              @"""FinTable"".""Project"",
+                                (""FinTable"".""APCost"" * ""DeprDocs"".""DeprDocAmnt"")/""FinTable"".""UseLife"",
+                                ""DeprDocs"".""DeprDocAmnt"",
                              ""FinTable"".""ItemGrp"",
                              ""FinTable"".""ItemCode"",
 	 	                     ""FinTable"".""ItemName"",
@@ -788,7 +833,7 @@ namespace BDO_Localisation_AddOn
                              ""DepcAccInvoice"".""DepcDoc"",
                              ""DepcAcc"".""DeprAmt"","
                             +
-                            (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt""," : @"""DepcAcc"".""CurrDeprAmt"", ""DepcAcc"".""FutureDeprAmt"",")
+                            (isInvoice ? @"""DepcAccInvoice"".""CurrDeprAmt""," : @"""CurrDepcAcc"".""CurrDeprAmt"", ""CurrDepcAcc"".""FutureDeprAmt"",")
                             +
                             @"""DepcAcc"".""DeprQty""";
 
@@ -860,9 +905,12 @@ namespace BDO_Localisation_AddOn
                 monthsApart = Math.Abs(monthsApart);
                                 
                 decimal AlrDeprAmt = 0;
-                
 
-                AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Quantity;
+
+                //AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Quantity;
+
+                
+                AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("AlrDeprAmt").Value) * Quantity;
 
                 AlrDeprAmt -= CurrDeprAmt;
 
