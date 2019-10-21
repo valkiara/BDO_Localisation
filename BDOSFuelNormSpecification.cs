@@ -88,14 +88,32 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            //fieldskeysMap = new Dictionary<string, object>();
-            //fieldskeysMap.Add("Name", "CrtrName");
-            //fieldskeysMap.Add("TableName", "BDOSFUN1");
-            //fieldskeysMap.Add("Description", "Criteria Name");
-            //fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            //fieldskeysMap.Add("EditSize", 100);
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "CrtrName");
+            fieldskeysMap.Add("TableName", "BDOSFUN1");
+            fieldskeysMap.Add("Description", "Criteria Name");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 100);
 
-            //UDO.addUserTableFields(fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "CrtrValue");
+            fieldskeysMap.Add("TableName", "BDOSFUN1");
+            fieldskeysMap.Add("Description", "Criteria Value");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 100);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "CrtrPr");
+            fieldskeysMap.Add("TableName", "BDOSFUN1");
+            fieldskeysMap.Add("Description", "Criteria Percentage");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Percentage);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             GC.Collect();
         }
@@ -144,6 +162,12 @@ namespace BDO_Localisation_AddOn
                 oUDOFind.Add();
                 oUDOFind.ColumnAlias = "U_Fixed";
                 oUDOFind.ColumnDescription = "Fixed";
+                oUDOFind.Add();
+                oUDOFind.ColumnAlias = "U_PerKm";
+                oUDOFind.ColumnDescription = "Per 100 km";
+                oUDOFind.Add();
+                oUDOFind.ColumnAlias = "U_PerHr";
+                oUDOFind.ColumnDescription = "Per Hour";
                 oUDOFind.Add();
 
                 //Form
@@ -244,38 +268,16 @@ namespace BDO_Localisation_AddOn
                             staticText.Caption = BDOSResources.getTranslate("Code");
                             staticText = oForm.Items.Item("1_U_S").Specific;
                             staticText.Caption = BDOSResources.getTranslate("Name");
-                            oForm.Items.Item("1_U_S").Left = oForm.Items.Item("0_U_S").Left;
-                            oForm.Items.Item("1_U_S").Top = oForm.Items.Item("0_U_S").Top + oForm.Items.Item("0_U_S").Height + 1;
-                            oForm.Items.Item("1_U_E").Left = oForm.Items.Item("0_U_E").Left;
-                            oForm.Items.Item("1_U_E").Top = oForm.Items.Item("0_U_E").Top + oForm.Items.Item("0_U_E").Height + 1;
 
-                            bool isFixed = oForm.DataSources.DBDataSources.Item("@BDOSFUNR").GetValue("U_Fixed", 0) == "Y";
-                            if (isFixed)
-                                oForm.Items.Item("FixedOB").Specific.Selected = isFixed;
-
-                            //oForm.Items.Item("0_U_E").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                            Program.FORM_LOAD_FOR_ACTIVATE = false;
+                            //bool isFixed = oForm.DataSources.DBDataSources.Item("@BDOSFUNR").GetValue("U_Fixed", 0) == "Y";
+                            //if (isFixed)
+                            //    oForm.Items.Item("FixedOB").Specific.Selected = isFixed;
+                            //else
+                            //    oForm.Items.Item("CriteriaOB").Specific.Selected = true;
 
                             setVisibleFormItems(oForm);
 
-                            //string query = @"SELECT 
-                            //       ""@BDOSFUN1"".""U_CrtrCode"", 
-                            //       ""@BDOSFUCR"".""Name"", 
-                            //       ""@BDOSFUCR"".""U_Value"", 
-                            //       ""@BDOSFUCR"".""U_Percentage""
-                            //FROM   ""@BDOSFUN1""
-                            //       LEFT JOIN ""@BDOSFUCR""
-                            //              ON ""@BDOSFUN1"".""U_CrtrCode"" = ""@BDOSFUCR"".""Code""
-                            //WHERE  ""@BDOSFUN1"".""Code"" = '" + oForm.DataSources.DBDataSources.Item("@BDOSFUNR").GetValue("Code", 0) + @"'";
-
-                            //SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("CrtrMTR").Specific));
-                            //oMatrix.Clear();
-                            //SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDOSFUN1").;
-                            //oForm.Items.Item("CrtrMTR").e
-                            //oMatrix.LoadFromDataSource();
-
-
-
+                            Program.FORM_LOAD_FOR_ACTIVATE = false;
                         }
                         catch (Exception ex)
                         {
@@ -287,7 +289,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-            
+
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
@@ -320,34 +322,6 @@ namespace BDO_Localisation_AddOn
                 {
                     deleteMatrixRow(oForm);
                 }
-
-                if (pVal.ItemUID == "CrtrMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LOAD && !pVal.BeforeAction)
-                {
-                    //if (oForm.DataSources.DBDataSources.Item("@BDOSFUNR").GetValue("U_Fixed", 0) == "N")
-                    //{
-                    //    SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                    //    string query = @"SELECT 
-                    //               ""@BDOSFUN1"".""U_CrtrCode"", 
-                    //               ""@BDOSFUN1"".""LineId"",
-                    //               ""@BDOSFUCR"".""Name"", 
-                    //               ""@BDOSFUCR"".""U_Value"", 
-                    //               ""@BDOSFUCR"".""U_Percentage""
-                    //        FROM   ""@BDOSFUN1""
-                    //               LEFT JOIN ""@BDOSFUCR""
-                    //                      ON ""@BDOSFUN1"".""U_CrtrCode"" = ""@BDOSFUCR"".""Code""
-                    //        WHERE  ""@BDOSFUN1"".""Code"" = '" + oForm.DataSources.DBDataSources.Item("@BDOSFUNR").GetValue("Code", 0) + @"' 
-                    //        ORDER BY ""@BDOSFUN1"".""LineId""";
-
-                    //    oRecordSet.DoQuery(query);
-                    //    SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("CrtrMTR").Specific));
-                    //    while (!oRecordSet.EoF)
-                    //    {
-                    //        int row = Convert.ToInt32(oRecordSet.Fields.Item("LineId").Value);
-                    //        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrName").Cells.Item(row).Specific.Value = oRecordSet.Fields.Item("Name").Value.ToString());
-                    //        oRecordSet.MoveNext();
-                    //    }
-                    //}
-                }
             }
         }
 
@@ -359,8 +333,14 @@ namespace BDO_Localisation_AddOn
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
+                bool isFixed = oForm.DataSources.DBDataSources.Item("@BDOSFUNR").GetValue("U_Fixed", 0) == "Y";
+                if (isFixed)
+                    oForm.Items.Item("FixedOB").Specific.Selected = isFixed;
+                else
+                    oForm.Items.Item("CriteriaOB").Specific.Selected = true;
+
                 setVisibleFormItems(oForm);
-            }         
+            }
         }
 
         public static void createFormItems(SAPbouiCOM.Form oForm)
@@ -483,6 +463,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Caption", BDOSResources.getTranslate("FuelCriteria"));
             formItems.Add("ValOn", "Y");
             formItems.Add("ValOff", "N");
+            formItems.Add("AffectsFormMode", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -509,6 +490,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("GroupWith", "CriteriaOB");
             formItems.Add("ValOn", "Y");
             formItems.Add("ValOff", "N");
+            formItems.Add("Selected", true);
+            formItems.Add("AffectsFormMode", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -630,7 +613,7 @@ namespace BDO_Localisation_AddOn
 
             top = top + height + 1;
 
-            int mtrWidth = oForm.ClientWidth;
+            int mtrWidth = oForm.ClientWidth / 2;
 
             formItems = new Dictionary<string, object>();
             itemName = "CrtrMTR"; //10 characters
@@ -659,42 +642,56 @@ namespace BDO_Localisation_AddOn
             oColumn.Editable = false;
             oColumn.Visible = true;
 
+            oColumn = oColumns.Item("LineID");
+            oColumn.DataBind.SetBound(true, "@BDOSFUN1", "LineId");
+
             mtrWidth = mtrWidth - 20 - 1;
 
             oColumn = oColumns.Add("CrtrCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Code");
-            oColumn.Width = mtrWidth/2;
+            oColumn.Width = mtrWidth / 4;
             oColumn.Editable = true;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Item("CrtrCode");
             oColumn.DataBind.SetBound(true, "@BDOSFUN1", "U_CrtrCode");
-
             oColumn.ChooseFromListUID = "FuelCriteriaCodeCFL";
             oColumn.ChooseFromListAlias = "Code";
             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
             oLink.LinkedObjectType = "UDO_F_BDOSFUCR_D";
 
-            //SAPbouiCOM.DBDataSource oDBDataSource1 = oForm.DataSources.DataTables.Add("BDOSFUCR");
-
             oColumn = oColumns.Add("CrtrName", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Name");
-            oColumn.Width = mtrWidth/2;
-            oColumn.Editable = true;
-            oColumn.Visible = true;
-            oColumn = oColumns.Item("CrtrCode");
+            oColumn.Width = mtrWidth / 4;
+            oColumn.Editable = false;
 
-            //oForm.DataSources.UserDataSources.Add("CrtrName", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 100);
+            oColumn = oColumns.Item("CrtrName");
+            oColumn.DataBind.SetBound(true, "@BDOSFUN1", "U_CrtrName");
 
-            //oColumn.DataBind.SetBound(true, "", "CrtrName");
+            oColumn = oColumns.Add("CrtrValue", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Value");
+            oColumn.Width = mtrWidth / 4;
+            oColumn.Editable = false;
 
-            //oMatrix.Clear();
-            //oDBDataSource.Query();
-            //oMatrix.LoadFromDataSource();
+            oColumn = oColumns.Item("CrtrValue");
+            oColumn.DataBind.SetBound(true, "@BDOSFUN1", "U_CrtrValue");
 
-            //oMatrix.AddRow();
+            oColumn = oColumns.Add("CrtrPr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Percentage");
+            oColumn.Width = mtrWidth / 4;
+            oColumn.Editable = false;
+
+            oColumn = oColumns.Item("CrtrPr");
+            oColumn.DataBind.SetBound(true, "@BDOSFUN1", "U_CrtrPr");
+
+            oMatrix.Clear();
+            oDBDataSource.Query();
+            oMatrix.LoadFromDataSource();
+
+            //oMatrix.AddRow(1);
             //oMatrix.FlushToDataSource();
             //oMatrix.LoadFromDataSource();
+
+            oMatrix.AutoResizeColumns();
 
             GC.Collect();
         }
@@ -733,10 +730,24 @@ namespace BDO_Localisation_AddOn
                         else if (oCFLEvento.ChooseFromListUID == "FuelCriteriaCodeCFL")
                         {
                             string crtrCode = oDataTable.GetValue("Code", 0);
-                            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("CrtrMTR").Specific));
+                            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                            string query = @"SELECT 
+                                           ""@BDOSFUCR"".""Name"", 
+                                           ""@BDOSFUCR"".""U_Value"", 
+                                           ""@BDOSFUCR"".""U_Percentage""
+                                    FROM   ""@BDOSFUCR""
+                                    WHERE  ""@BDOSFUCR"".""Code"" = '" + crtrCode + @"'";
 
+                            oRecordSet.DoQuery(query);
+
+                            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("CrtrMTR").Specific));
                             LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = crtrCode);
-                            //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrName").Cells.Item(pVal.Row).Specific.Value = "გზის სირთულე");
+                            if (!oRecordSet.EoF)
+                            {
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrName").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("Name").Value);
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrValue").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_Value").Value);
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrPr").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_Percentage").Value.ToString());
+                            }
                         }
                     }
                 }
@@ -774,11 +785,12 @@ namespace BDO_Localisation_AddOn
         {
             try
             {
-                SAPbouiCOM.Item oItem = oForm.Items.Item("1");
-                oItem.Top = oForm.ClientHeight - 25;
-
-                oItem = oForm.Items.Item("2");
-                oItem.Top = oForm.ClientHeight - 25;
+                oForm.Items.Item("1_U_S").Left = oForm.Items.Item("0_U_S").Left;
+                oForm.Items.Item("1_U_S").Top = oForm.Items.Item("0_U_S").Top + oForm.Items.Item("0_U_S").Height + 1;
+                oForm.Items.Item("1_U_E").Left = oForm.Items.Item("0_U_E").Left;
+                oForm.Items.Item("1_U_E").Top = oForm.Items.Item("0_U_E").Top + oForm.Items.Item("0_U_E").Height + 1;
+                oForm.Items.Item("1").Top = oForm.ClientHeight - 25;
+                oForm.Items.Item("2").Top = oForm.ClientHeight - 25;
             }
             catch (Exception ex)
             {
@@ -799,7 +811,6 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("1_U_E").Enabled = (oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE || oForm.Mode == SAPbouiCOM.BoFormMode.fm_FIND_MODE);
 
                 bool isFixed = oForm.DataSources.DBDataSources.Item("@BDOSFUNR").GetValue("U_Fixed", 0) == "Y";
-                //oForm.DataSources.UserDataSources.Item("CriteriaOB").ValueEx;
                 oForm.Items.Item("PerKmS").Visible = isFixed;
                 oForm.Items.Item("PerKmE").Visible = isFixed;
                 oForm.Items.Item("PerHrS").Visible = isFixed;
@@ -823,37 +834,39 @@ namespace BDO_Localisation_AddOn
 
         public static void addMatrixRow(SAPbouiCOM.Form oForm)
         {
-            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("CrtrMTR").Specific));
-            //SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
-            int index = 0;
-            //if (cellPos == null)
-            //{
-            if (oMatrix.RowCount == 0)
-            {
-                index = 1;
-            }
-            else
-            {
-                index = Convert.ToInt32(oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value) + 1;
-            }
-            oMatrix.AddRow(1, -1);
-            oMatrix.AutoResizeColumns();
-            oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value = index;
-            //}
-            //else
-            //{
-            //    if (cellPos.rowIndex == oMatrix.RowCount)
-            //    {
-            //        index = Convert.ToInt32(oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value) + 1;
-            //    }
-            //}
+            oForm.Freeze(true);
 
-            //if (index > 0)
-            //{
-            //    oMatrix.AddRow(1, -1);
-            //    oMatrix.AutoResizeColumns();
-            //    oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value = index;
-            //}
+            try
+            {
+                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("CrtrMTR").Specific));
+
+                int index = 0;
+                if (oMatrix.RowCount == 0)
+                {
+                    index = 1;
+                }
+                else
+                {
+                    index = Convert.ToInt32(oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value) + 1;
+                }
+
+                oMatrix.AddRow(1, -1);
+                int row = oMatrix.RowCount;
+
+                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("LineID").Cells.Item(row).Specific.Value = index.ToString());
+                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrCode").Cells.Item(row).Specific.Value = "");
+                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrName").Cells.Item(row).Specific.Value = "");
+                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrValue").Cells.Item(row).Specific.Value = "");
+                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrPr").Cells.Item(row).Specific.Value = "");
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
         }
 
         public static void deleteMatrixRow(SAPbouiCOM.Form oForm)

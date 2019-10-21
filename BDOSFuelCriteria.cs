@@ -80,11 +80,11 @@ namespace BDO_Localisation_AddOn
                 oUDOFind.ColumnAlias = "Name";
                 oUDOFind.ColumnDescription = "Name";
                 oUDOFind.Add();
-                oUDOFind.ColumnAlias = "Value";
-                oUDOFind.ColumnDescription = "U_Value";
+                oUDOFind.ColumnAlias = "U_Value";
+                oUDOFind.ColumnDescription = "Value";
                 oUDOFind.Add();
-                oUDOFind.ColumnAlias = "Percentage";
-                oUDOFind.ColumnDescription = "U_Percentage";
+                oUDOFind.ColumnAlias = "U_Percentage";
+                oUDOFind.ColumnDescription = "Percentage";
                 oUDOFind.Add();
 
                 //Form
