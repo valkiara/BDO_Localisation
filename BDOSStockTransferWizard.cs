@@ -2224,6 +2224,13 @@ namespace BDO_Localisation_AddOn
                         whseCodes.Add("'" + oDataTableFilter.GetValue("Code", i).Trim() + "'");
                     }
                 }
+                if (whseCodes.Count == 0)
+                {
+                    for (int i = 0; i < oDataTableFilter.Rows.Count; i++)
+                    {
+                        whseCodes.Add("'" + oDataTableFilter.GetValue("Code", i).Trim() + "'");
+                    }
+                }
                 string whseCodesStr = string.Join(",", whseCodes);
 
                 StringBuilder queryBuilder = new StringBuilder();
