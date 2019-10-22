@@ -157,7 +157,7 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "amtVat"); //დღგ-ს თანხა
+            fieldskeysMap.Add("Name", "amtVat"); //დღგ-ის თანხა
             fieldskeysMap.Add("TableName", "OIGE");
             fieldskeysMap.Add("Description", "Vat Amount");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);

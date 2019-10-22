@@ -373,7 +373,7 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            fieldskeysMap = new Dictionary<string, object>(); //დღგ-ს თარიღი
+            fieldskeysMap = new Dictionary<string, object>(); //დღგ-ის თარიღი
             fieldskeysMap.Add("Name", "taxDate");
             fieldskeysMap.Add("TableName", "BDO_TAXR");
             fieldskeysMap.Add("Description", "Tax Date");
@@ -493,7 +493,7 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "full_amount"); //თანხა დღგ-ს და აქციზის ჩათვლით
+            fieldskeysMap.Add("Name", "full_amount"); //თანხა დღგ-ის და აქციზის ჩათვლით
             fieldskeysMap.Add("TableName", "BDO_TXR3");
             fieldskeysMap.Add("Description", "full amount");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
@@ -7440,7 +7440,7 @@ namespace BDO_Localisation_AddOn
                                 catch { }
                                 try
                                 {
-                                    decimal full_amount = Convert.ToDecimal(taxDeclRow["full_amount"], CultureInfo.InvariantCulture); //თანხა დღგ-ს და აქციზის ჩათვლით
+                                    decimal full_amount = Convert.ToDecimal(taxDeclRow["full_amount"], CultureInfo.InvariantCulture); //თანხა დღგ-ის და აქციზის ჩათვლით
                                     oChildGeneralData.SetProperty("U_full_amount", Convert.ToDouble(full_amount));
                                 }
                                 catch { }
@@ -7872,7 +7872,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        /// <summary>"თანხა დღგ-ს და აქციზის ჩათვლით" და "დღგ" - ს საიტიდან მიღება</summary>
+        /// <summary>"თანხა დღგ-ის და აქციზის ჩათვლით" და "დღგ" - ს საიტიდან მიღება</summary>
         private static void get_invoice_desc(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, out decimal full_amount, out decimal drg_amount, out string errorText)
         {
             errorText = null;
@@ -7905,7 +7905,7 @@ namespace BDO_Localisation_AddOn
                     catch { }
                     try
                     {
-                        full_amount = full_amount + Convert.ToDecimal(taxDeclRow["full_amount"], CultureInfo.InvariantCulture); //თანხა დღგ-ს და აქციზის ჩათვლით
+                        full_amount = full_amount + Convert.ToDecimal(taxDeclRow["full_amount"], CultureInfo.InvariantCulture); //თანხა დღგ-ის და აქციზის ჩათვლით
                     }
                     catch { }
                     try

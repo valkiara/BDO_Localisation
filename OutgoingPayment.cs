@@ -3210,7 +3210,7 @@ namespace BDO_Localisation_AddOn
 
             DocCurrency = DocCurrency == CommonFunctions.getLocalCurrency() ? "" : DocCurrency;
 
-            //დღგ-ს გატარება
+            //დღგ-ის გატარება
             if (TaxType == "12") // = 18
             {
                 for (int i = 0; i < JEcount; i++)

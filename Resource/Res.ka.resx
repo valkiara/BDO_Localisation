@@ -124,7 +124,7 @@
     <value>აქტიური</value>
   </data>
   <data name="ActualVatAmount" xml:space="preserve">
-    <value>დღგ-ს ფაქტობრივი თანხა</value>
+    <value>დღგ-ის ფაქტობრივი თანხა</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>დამატება</value>
@@ -832,7 +832,7 @@
     <value>პროგრამის კოდი</value>
   </data>
   <data name="ProjectVatAmount" xml:space="preserve">
-    <value>პროექტის დღგ-ს თანხა</value>
+    <value>პროექტის დღგ-ის თანხა</value>
   </data>
   <data name="ProtocolMode" xml:space="preserve">
     <value>პროტოკოლის რეჟიმი</value>
@@ -1213,13 +1213,13 @@
     <value>მომხმარებლის ტიპი RS.GE-ზე</value>
   </data>
   <data name="VatAmount" xml:space="preserve">
-    <value>დღგ-ს თანხა</value>
+    <value>დღგ-ის თანხა</value>
   </data>
   <data name="VatGroup" xml:space="preserve">
     <value>გადასახადის ჯგუფი</value>
   </data>
   <data name="VatPercent" xml:space="preserve">
-    <value>დღგ-ს განაკვეთი</value>
+    <value>დღგ-ის განაკვეთი</value>
   </data>
   <data name="VATReceived" xml:space="preserve">
     <value>ჩათვლილი</value>
@@ -1228,16 +1228,16 @@
     <value>ჩათვლის თვე</value>
   </data>
   <data name="VATReceivedDate" xml:space="preserve">
-    <value>დღგ-ს ჩათვლის თარიღი</value>
+    <value>დღგ-ის ჩათვლის თარიღი</value>
   </data>
   <data name="VATType0" xml:space="preserve">
-    <value>დღგ-ს ტიპი 0%</value>
+    <value>დღგ-ის ტიპი 0%</value>
   </data>
   <data name="VATTypeNone" xml:space="preserve">
-    <value>დღგ-ს გარეშე</value>
+    <value>დღგ-ის გარეშე</value>
   </data>
   <data name="VATTypeNormal" xml:space="preserve">
-    <value>დღგ-ს ტიპი ნორმალური</value>
+    <value>დღგ-ის ტიპი ნორმალური</value>
   </data>
   <data name="Vehicle" xml:space="preserve">
     <value>სატრანსპორტო საშუალება</value>
@@ -1405,7 +1405,7 @@
     <value>ზედნადების მიღება</value>
   </data>
   <data name="CheckVatGroupForWHT" xml:space="preserve">
-    <value>გადაამოწმეთ საშემოსავლოზე მითითებული დღგ-ს ჯგუფი!</value>
+    <value>გადაამოწმეთ საშემოსავლოზე მითითებული დღგ-ის ჯგუფი!</value>
   </data>
   <data name="RSOperations" xml:space="preserve">
     <value>RS ოპერაციები</value>
@@ -1898,7 +1898,7 @@
     <value>გადასახადები</value>
   </data>
   <data name="VatExpense" xml:space="preserve">
-    <value>დღგ-ს ხარჯში ჩამოწერის</value>
+    <value>დღგ-ის ხარჯში ჩამოწერის</value>
   </data>
   <data name="ModeIsNotSelected" xml:space="preserve">
     <value>რეჟიმი არ არის არჩეული</value>
@@ -2567,7 +2567,7 @@
     <value>დოკ. არჩევა</value>
   </data>
   <data name="VatAmountCanNotBeMoreThanOpenVatRow" xml:space="preserve">
-    <value>დღგ-ს თანხა არ უნდა იყოს დარჩენილ დღგ-ზე მეტი. სტრიქონი: </value>
+    <value>დღგ-ის თანხა არ უნდა იყოს დარჩენილ დღგ-ზე მეტი. სტრიქონი: </value>
   </data>
   <data name="DocumentAlreadyAddedRow" xml:space="preserve">
     <value>დოკუმენტი უკვე დამატებულია. სტრიქონი: </value>
@@ -2609,16 +2609,16 @@
     <value>თარიღის შეცვლის შემდეგ ფორმა დაიხურება და ხელახლა გაიხსნება</value>
   </data>
   <data name="ARDownPaymentVATAccrual" xml:space="preserve">
-    <value>ავანსის დღგ-ს დარიცხვის დოკუმენტი</value>
+    <value>ავანსის დღგ-ის დარიცხვის დოკუმენტი</value>
   </data>
   <data name="ARVATAccrualWizard" xml:space="preserve">
-    <value>ავანსის დღგ-ს დარიცხვის დამხმარე</value>
+    <value>ავანსის დღგ-ის დარიცხვის დამხმარე</value>
   </data>
   <data name="DocEntVT" xml:space="preserve">
-    <value>დღგ-ს დარიცხვის დოკუმენტი</value>
+    <value>დღგ-ის დარიცხვის დოკუმენტი</value>
   </data>
   <data name="DocNumVT" xml:space="preserve">
-    <value>დღგ-ს დარიცხვის დოკუმენტის ნომერი</value>
+    <value>დღგ-ის დარიცხვის დოკუმენტის ნომერი</value>
   </data>
   <data name="ChangeDocDate" xml:space="preserve">
     <value>თარიღის შეცვლა</value>
@@ -2633,7 +2633,7 @@
     <value>ახალი თარიღი</value>
   </data>
   <data name="CreateVATAccrualDocuments" xml:space="preserve">
-    <value>შეიქმნას დღგ-ს დარიცხვის დოკუმენტი</value>
+    <value>შეიქმნას დღგ-ის დარიცხვის დოკუმენტი</value>
   </data>
   <data name="AlRcnSum" xml:space="preserve">
     <value>გატარებული თანხა</value>
@@ -3173,19 +3173,19 @@
     <value>გსურთ გატარება შეიქმნას ფაქტურის დადასტურების თარიღით</value>
   </data>
   <data name="IfNoPleaseFillTaxDateAndTryAgain" xml:space="preserve">
-    <value>უარყოფის შემთხვევაში შეავსეთ დღგ-ს თარიღი</value>
+    <value>უარყოფის შემთხვევაში შეავსეთ დღგ-ის თარიღი</value>
   </data>
   <data name="PleaseFillTaxDate" xml:space="preserve">
-    <value>შეავსეთ დღგ-ს თარიღი</value>
+    <value>შეავსეთ დღგ-ის თარიღი</value>
   </data>
   <data name="TaxDate" xml:space="preserve">
-    <value>დღგ-ს თარიღი</value>
+    <value>დღგ-ის თარიღი</value>
   </data>
   <data name="ForCreateJournalEntryPleaseFillTaxDateAndUpdateDocument" xml:space="preserve">
-    <value>გატარების შესაქმნელად შეავსეთ დღგ-ს თარიღი და განაახლეთ დოკუმენტი</value>
+    <value>გატარების შესაქმნელად შეავსეთ დღგ-ის თარიღი და განაახლეთ დოკუმენტი</value>
   </data>
   <data name="IfNoPleaseFillTaxDateAndUpdateDocument" xml:space="preserve">
-    <value>უარყოფის შემთხვევაში შეავსეთ დღგ-ს თარიღი და განაახლეთ დოკუმენტი</value>
+    <value>უარყოფის შემთხვევაში შეავსეთ დღგ-ის თარიღი და განაახლეთ დოკუმენტი</value>
   </data>
   <data name="CostInStock" xml:space="preserve">
     <value>ღირებულება (ნაშთში)</value>
