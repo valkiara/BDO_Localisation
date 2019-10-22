@@ -3223,4 +3223,7 @@
   <data name="JournalEntryNotCreated" xml:space="preserve">
     <value>ვერ მოხერხდა გატარების შექმნა</value>
   </data>
+  <data name="DoYouWantToCreateJEForDownPayment" xml:space="preserve">
+    <value>გსურთ შეიქმნას გატარება ავანსის ფაქტურისთვის</value>
+  </data>
 </root>

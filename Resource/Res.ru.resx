@@ -3205,4 +3205,7 @@
   <data name="JournalEntryNotCreated" xml:space="preserve">
     <value>Can't create Journal Entry</value>
   </data>
+  <data name="DoYouWantToCreateJEForDownPayment" xml:space="preserve">
+    <value>Do you want to create journal entry for down payment invoice</value>
+  </data>
 </root>

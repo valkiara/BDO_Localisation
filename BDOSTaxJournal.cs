@@ -10,8 +10,6 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDOSTaxJournal
     {
-        static int createJournalEntryForTaxWithPostingDate = 0;
-
         #region Tax Invoice Sent      
         public static void rsOperationTaxInvoiceSent(SAPbouiCOM.Form oForm, int oOperation, out string errorText)
         {
@@ -1919,41 +1917,25 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("TxTable").Specific));
             int rowCount = oMatrix.RowCount;
             string taxDateStr = oForm.DataSources.UserDataSources.Item("taxDateE").ValueEx;
-            DateTime? taxDate = null;
+            DateTime taxDate;
+
+            if (string.IsNullOrEmpty(taxDateStr))
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PleaseFillTaxDate"), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                return;
+            }
 
             for (int row = 1; row <= rowCount; row++)
             {
                 SAPbouiCOM.CheckBox Edtfield = oMatrix.Columns.Item("TxChkBx").Cells.Item(row).Specific;
                 bool checkedLine = (Edtfield.Checked);
+                string txSerie = oMatrix.Columns.Item("TxSerie").Cells.Item(row).Specific.Value.Trim();
 
-                if (checkedLine)
+                if (checkedLine && txSerie.StartsWith("ავ"))
                 {
                     int docEntry = Convert.ToInt32(oMatrix.Columns.Item("Document").Cells.Item(row).Specific.Value);
-                    string txSerie = oMatrix.Columns.Item("TxSerie").Cells.Item(row).Specific.Value.Trim();
 
-                    if (txSerie.StartsWith("ავ") && (createJournalEntryForTaxWithPostingDate != 2 || string.IsNullOrEmpty(taxDateStr)))
-                    {
-                        if (string.IsNullOrEmpty(taxDateStr))
-                        {
-                            createJournalEntryForTaxWithPostingDate = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate") + "? \n" + BDOSResources.getTranslate("IfNoPleaseFillTaxDateAndTryAgain"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-                            if (createJournalEntryForTaxWithPostingDate == 2)
-                            {
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            createJournalEntryForTaxWithPostingDate = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-                        }
-                    }
-
-                    if (createJournalEntryForTaxWithPostingDate == 2)
-                    {
-                        taxDate = DateTime.ParseExact(taxDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
-                    }
-
-                    createJournalEntryForTaxWithPostingDate = txSerie.StartsWith("ავ") ? createJournalEntryForTaxWithPostingDate : 0;
-                    taxDate = createJournalEntryForTaxWithPostingDate == 2 ? taxDate : null;
+                    taxDate = DateTime.ParseExact(taxDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
 
                     BDO_TaxInvoiceReceived.postDocument(docEntry, out errorText, taxDate);
 
@@ -1966,11 +1948,9 @@ namespace BDO_Localisation_AddOn
                     else
                     {
                         Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("Post") + " " + BDOSResources.getTranslate("DoneSuccessfully") + " " + BDOSResources.getTranslate("TableRow") + " : " + row.ToString(), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
-                    }                 
+                    }
                 }
             }
-
-            createJournalEntryForTaxWithPostingDate = 0;
 
             if (opSuccess == false)
             {
@@ -3420,8 +3400,8 @@ namespace BDO_Localisation_AddOn
                     itemName = "taxDateS";
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", leftSC);
-                    formItems.Add("Width", 160);
+                    formItems.Add("Left", leftSC + 70);
+                    formItems.Add("Width", 80);
                     formItems.Add("Top", Top);
                     formItems.Add("Caption", BDOSResources.getTranslate("TaxDate") + " (" + BDOSResources.getTranslate("DownPaymentInvoice") + ")");
                     formItems.Add("UID", itemName);
@@ -3447,7 +3427,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Alias", itemName);
                     formItems.Add("Bound", true);
                     formItems.Add("Left", leftSC + 150 + 7);
-                    formItems.Add("Width", 70);
+                    formItems.Add("Width", 100);
                     formItems.Add("Top", Top);
                     formItems.Add("Height", 19);
                     formItems.Add("UID", itemName);
@@ -3463,8 +3443,8 @@ namespace BDO_Localisation_AddOn
                     formItems = new Dictionary<string, object>();
                     itemName = "postB"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
-                    formItems.Add("Left", leftSC + 220 + 8);
-                    formItems.Add("Width", 100);
+                    formItems.Add("Left", leftSC + 220 + 8 + 30);
+                    formItems.Add("Width", 70);
                     formItems.Add("Top", Top);
                     formItems.Add("Height", 19);
                     formItems.Add("UID", itemName);
@@ -4415,7 +4395,10 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.ItemUID == "postB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
-                    postDocuments(oForm);
+                    if (Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantToCreateJEForDownPayment") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "") == 1)
+                    {
+                        postDocuments(oForm);
+                    }
                 }
             }
         }
