@@ -1884,14 +1884,21 @@ namespace BDO_Localisation_AddOn
                     }
                     else if (sCFL_ID == "DetailTableWhsTo_CFL")
                     {
+                        string whsType = null;
+                        SAPbouiCOM.ComboBox oComboBoxDocTyp = (SAPbouiCOM.ComboBox)oForm.Items.Item("DocTypeE").Specific;
+                        string docType = oComboBoxDocTyp.Value;
+                        if (docType == "TransferToWriteOffWarehouse")
+                        {
+                            whsType = "WriteOff";
+                        }
+
                         SAPbouiCOM.Grid oGrid = oForm.Items.Item("WhsTblDt").Specific;
                         SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTblDt");
 
                         int dTableRow = oGrid.GetDataTableRowIndex(pVal.Row);
                         string prjFr = oDataTable.GetValue("PrjFr", dTableRow);
-                        //string whsType = oDataTable.GetValue("WhseTypeFr", dTableRow);
                         string whsFr = oDataTable.GetValue("WhsFr", dTableRow);
-                        setWarehousesConditions(prjFr, null, whsFr, oCFL);
+                        setWarehousesConditions(prjFr, whsType, whsFr, oCFL);
                     }
                     else if (sCFL_ID == "Category_CFL")
                     {
