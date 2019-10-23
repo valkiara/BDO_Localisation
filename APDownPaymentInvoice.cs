@@ -117,47 +117,44 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
-            if (oForm.TypeEx == "65301") //A/P DownPayment Invoice
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD & BusinessObjectInfo.BeforeAction == true)
             {
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD & BusinessObjectInfo.BeforeAction == true)
-                {
-                    oForm.Freeze(true);
-                    int panelLevel = oForm.PaneLevel;
-                    string sdocDate = oForm.Items.Item("10").Specific.Value;
-                    oForm.PaneLevel = 7;
-                    oForm.Items.Item("1000").Specific.Value = sdocDate;
-                    oForm.PaneLevel = panelLevel;
-                    oForm.Freeze(false);
-                }
+                oForm.Freeze(true);
+                int panelLevel = oForm.PaneLevel;
+                string sdocDate = oForm.Items.Item("10").Specific.Value;
+                oForm.PaneLevel = 7;
+                oForm.Items.Item("1000").Specific.Value = sdocDate;
+                oForm.PaneLevel = panelLevel;
+                oForm.Freeze(false);
+            }
 
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
-                {
-                    formDataLoad( oForm, out errorText);
-                    setVisibleFormItems(oForm, out errorText);
-                }
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
+            {
+                formDataLoad(oForm, out errorText);
+                setVisibleFormItems(oForm, out errorText);
+            }
 
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
+            {
+                if (BusinessObjectInfo.BeforeAction == true)
                 {
-                    if (BusinessObjectInfo.BeforeAction == true)
-                {
-                    formDataAddUpdate( oForm, out errorText);
+                    formDataAddUpdate(oForm, out errorText);
                     if (string.IsNullOrEmpty(errorText) == false)
                     {
                         Program.uiApp.MessageBox(errorText);
                         BubbleEvent = false;
                     }
                 }
-                    else if (BusinessObjectInfo.BeforeAction == false && BusinessObjectInfo.ActionSuccess == true)
-                    {
-                        setVisibleFormItems(oForm, out errorText);
-                    }
+                else if (BusinessObjectInfo.BeforeAction == false && BusinessObjectInfo.ActionSuccess == true)
+                {
+                    setVisibleFormItems(oForm, out errorText);
                 }
             }
         }
