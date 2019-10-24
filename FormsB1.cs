@@ -108,6 +108,8 @@ namespace BDO_Localisation_AddOn
 
             BDOSFuelNormSpecification.addMenus();
 
+            BDOSFuelConsumptionAct.addMenus();
+
             BDO_Waybills.addMenus( out errorText);
 
             BDO_TaxInvoiceSent.addMenus( out errorText);

@@ -546,6 +546,20 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
+            //----------------------------->Fuel Consumption Act Document<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUCN_D")
+                {
+                    errorText = null;
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUCN_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
             //----------------------------->Waybill document<-----------------------------
             try
             {
@@ -1562,6 +1576,12 @@ namespace BDO_Localisation_AddOn
                     BDOSFuelNormSpecification.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
+                //----------------------------->Fuel Consumption Act Document<----------------------------
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSFUCN_D")
+                {
+                    BDOSFuelConsumptionAct.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
                 //----------------------------->Blanket Agreement<-----------------------------
                 else if (BusinessObjectInfo.Type == "1250000025")
                 {
@@ -1996,6 +2016,12 @@ namespace BDO_Localisation_AddOn
                     //{
                     //    removeRecordRow = 1;
                     //}
+                }
+
+                //----------------------------->Fuel Consumption Act Document<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFUCN_D")
+                {
+                    BDOSFuelConsumptionAct.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Waybill Document<-----------------------------

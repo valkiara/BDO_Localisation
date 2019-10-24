@@ -106,6 +106,7 @@
     <Compile Include="BalanceSheet.cs" />
     <Compile Include="BDOSARDownPaymentVATAccrual.cs" />
     <Compile Include="BDOSAutomaticTasks.cs" />
+    <Compile Include="BDOSFuelConsumptionAct.cs" />
     <Compile Include="BDOSFuelCriteria.cs" />
     <Compile Include="BDOSFuelNormSpecification.cs" />
     <Compile Include="BDOSFuelTypes.cs" />

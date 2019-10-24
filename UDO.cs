@@ -62,6 +62,12 @@ namespace BDO_Localisation_AddOn
                 BDOSFuelNormSpecification.registerUDO();
             }
 
+            BDOSFuelConsumptionAct.createDocumentUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUCN_D") == false)
+            {
+                BDOSFuelConsumptionAct.registerUDO();
+            }
+
             BDO_Vehicles.createMasterDataUDO( out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_VECL_D") == false)
             {
