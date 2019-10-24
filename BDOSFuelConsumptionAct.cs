@@ -253,6 +253,10 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.UserObjectMD_FormColumns oUDOForm = null;
             SAPbobsCOM.IUserObjectMD_ChildTables oUDOChildTables = null;
             GC.Collect();
+
+            oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectMD);
+
             oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD) as SAPbobsCOM.UserObjectsMD;
             oUDOFind = oUserObjectMD.FindColumns;
             oUDOForm = oUserObjectMD.FormColumns;
@@ -276,7 +280,22 @@ namespace BDO_Localisation_AddOn
 
                 //Find
                 oUDOFind.ColumnAlias = "DocEntry";
-                oUDOFind.ColumnDescription = "Document Internal ID";
+                oUDOFind.ColumnDescription = "Internal Number";
+                oUDOFind.Add();
+                oUDOFind.ColumnAlias = "DocNum";
+                oUDOFind.ColumnDescription = "Document Number";
+                oUDOFind.Add();
+                oUDOFind.ColumnAlias = "CreateDate";
+                oUDOFind.ColumnDescription = "Create Date";
+                oUDOFind.Add();
+                oUDOFind.ColumnAlias = "UpdateDate";
+                oUDOFind.ColumnDescription = "Update Date";
+                oUDOFind.Add();
+                oUDOFind.ColumnAlias = "Status";
+                oUDOFind.ColumnDescription = "Status";
+                oUDOFind.Add();
+                oUDOFind.ColumnAlias = "Canceled";
+                oUDOFind.ColumnDescription = "Canceled";
                 oUDOFind.Add();
                 oUDOFind.ColumnAlias = "U_DocDate";
                 oUDOFind.ColumnDescription = "Posting Date";
@@ -293,11 +312,13 @@ namespace BDO_Localisation_AddOn
                 oUDOFind.ColumnAlias = "U_FuNrCode";
                 oUDOFind.ColumnDescription = "Specification of Fuel Norm Code";
                 oUDOFind.Add();
+                oUDOFind.ColumnAlias = "Remark";
+                oUDOFind.ColumnDescription = "Remark";
+                oUDOFind.Add();
 
                 //Form
                 oUDOForm.FormColumnAlias = "DocEntry";
-                oUDOForm.FormColumnDescription = "Document Internal ID";
-                oUDOForm.Editable = SAPbobsCOM.BoYesNoEnum.tYES;
+                oUDOForm.FormColumnDescription = "Internal Number";
                 oUDOForm.Add();               
 
                 oUDOChildTables.Add();
@@ -465,7 +486,7 @@ namespace BDO_Localisation_AddOn
             top += (height + 1);
 
             FormsB1.addChooseFromList(oForm, false, "63", "ProjectCodeCFL"); //Project Codes
-            FormsB1.addChooseFromList(oForm, false, "UDO_F_BDOSFUCN_D", "SpecificationOfFuelNormCodeCFL"); //Specification of Fuel Norm
+            FormsB1.addChooseFromList(oForm, false, "UDO_F_BDOSFUNR_D", "SpecificationOfFuelNormCodeCFL"); //Specification of Fuel Norm
 
             formItems = new Dictionary<string, object>();
             itemName = "PrjCodeS"; //10 characters
@@ -524,7 +545,6 @@ namespace BDO_Localisation_AddOn
 
             top = top + height + 1;
 
-
             formItems = new Dictionary<string, object>();
             itemName = "FuNrCodeS"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
@@ -572,7 +592,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("LinkTo", "FuNrCodeE");
-            formItems.Add("LinkedObjectType", "UDO_F_BDOSFUCN_D"); //Specification of Fuel Norm
+            formItems.Add("LinkedObjectType", "UDO_F_BDOSFUNR_D"); //Specification of Fuel Norm
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -628,7 +648,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", 150);
             formItems.Add("Top", top);
             formItems.Add("UID", itemName);
-            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -658,7 +677,7 @@ namespace BDO_Localisation_AddOn
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_ItemCode");
 
             oColumn.ChooseFromListUID = "ItemCodeCFL";
-            oColumn.ChooseFromListAlias = "Code";
+            oColumn.ChooseFromListAlias = "ItemCode";
             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
             oLink.LinkedObjectType = "4"; //Items
 
@@ -670,6 +689,7 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Add("FuTpCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelTypeCode");
+            oColumn.Editable = false;
 
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuTpCode");
 
@@ -680,16 +700,18 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Add("FuelCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelCode");
+            oColumn.Editable = false;
 
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuelCode");
 
             oColumn.ChooseFromListUID = "FuelCodeCFL";
-            oColumn.ChooseFromListAlias = "Code";
+            oColumn.ChooseFromListAlias = "ItemCode";
             oLink = oColumn.ExtendedObject;
             oLink.LinkedObjectType = "4"; //Items
 
             oColumn = oColumns.Add("FuUomEntry", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("UomEntry");
+            oColumn.Editable = false;
 
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuUomEntry");
 
@@ -698,11 +720,13 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Add("FuPerKm", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("PerKm");
+            oColumn.Editable = false;
 
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuPerKm");
 
             oColumn = oColumns.Add("FuPerHr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("PerHr");
+            oColumn.Editable = false;
 
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuPerHr");
 
@@ -829,22 +853,22 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                oForm.Items.Item("1_U_S").Left = oForm.Items.Item("0_U_S").Left;
-                oForm.Items.Item("1_U_S").Top = oForm.Items.Item("0_U_S").Top + oForm.Items.Item("0_U_S").Height + 1;
-                oForm.Items.Item("1_U_E").Left = oForm.Items.Item("0_U_E").Left;
-                oForm.Items.Item("1_U_E").Top = oForm.Items.Item("0_U_E").Top + oForm.Items.Item("0_U_E").Height + 1;
+                //oForm.Items.Item("1_U_S").Left = oForm.Items.Item("0_U_S").Left;
+                //oForm.Items.Item("1_U_S").Top = oForm.Items.Item("0_U_S").Top + oForm.Items.Item("0_U_S").Height + 1;
+                //oForm.Items.Item("1_U_E").Left = oForm.Items.Item("0_U_E").Left;
+                //oForm.Items.Item("1_U_E").Top = oForm.Items.Item("0_U_E").Top + oForm.Items.Item("0_U_E").Height + 1;
                 oForm.Items.Item("1").Top = oForm.ClientHeight - 25;
                 oForm.Items.Item("2").Top = oForm.ClientHeight - 25;
 
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
-                int mtrWidth = oForm.ClientWidth / 3 * 2;
-                oForm.Items.Item("AssetMTR").Width = mtrWidth;
-                oMatrix.Columns.Item("LineID").Width = 19;
-                mtrWidth -= 19;
-                oMatrix.Columns.Item("CrtrCode").Width = mtrWidth / 4;
-                oMatrix.Columns.Item("CrtrName").Width = mtrWidth / 4;
-                oMatrix.Columns.Item("CrtrValue").Width = mtrWidth / 4;
-                oMatrix.Columns.Item("CrtrPr").Width = mtrWidth / 4;
+                //SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
+                //int mtrWidth = oForm.ClientWidth / 3 * 2;
+                //oForm.Items.Item("AssetMTR").Width = mtrWidth;
+                //oMatrix.Columns.Item("LineID").Width = 19;
+                //mtrWidth -= 19;
+                //oMatrix.Columns.Item("CrtrCode").Width = mtrWidth / 4;
+                //oMatrix.Columns.Item("CrtrName").Width = mtrWidth / 4;
+                //oMatrix.Columns.Item("CrtrValue").Width = mtrWidth / 4;
+                //oMatrix.Columns.Item("CrtrPr").Width = mtrWidth / 4;
             }
             catch (Exception ex)
             {
