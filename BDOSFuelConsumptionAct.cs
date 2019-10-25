@@ -128,6 +128,16 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            //საწვავის ერთეული
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "FuUomCode");
+            fieldskeysMap.Add("TableName", "BDOSFUC1");
+            fieldskeysMap.Add("Description", "Fuel UoM Code");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 20);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);   
+
             //წვა 100 კმ-ში
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "FuPerKm");
@@ -319,7 +329,7 @@ namespace BDO_Localisation_AddOn
                 //Form
                 oUDOForm.FormColumnAlias = "DocEntry";
                 oUDOForm.FormColumnDescription = "Internal Number";
-                oUDOForm.Add();               
+                oUDOForm.Add();
 
                 oUDOChildTables.Add();
                 oUDOChildTables.SetCurrentLine(oUDOChildTables.Count - 1);
@@ -384,7 +394,7 @@ namespace BDO_Localisation_AddOn
                     {
                         setSizeForm(oForm);
                         oForm.Freeze(true);
-                        oForm.Title = BDOSResources.getTranslate("SpecificationOfFuelNorm");
+                        oForm.Title = BDOSResources.getTranslate("FuelConsumptionAct");
                         oForm.Freeze(false);
                         Program.FORM_LOAD_FOR_VISIBLE = false;
                         setVisibleFormItems(oForm);
@@ -404,9 +414,7 @@ namespace BDO_Localisation_AddOn
                         try
                         {
                             SAPbouiCOM.StaticText staticText = oForm.Items.Item("0_U_S").Specific;
-                            staticText.Caption = BDOSResources.getTranslate("Code");
-                            staticText = oForm.Items.Item("1_U_S").Specific;
-                            staticText.Caption = BDOSResources.getTranslate("Name");
+                            staticText.Caption = BDOSResources.getTranslate("DocEntry");
 
                             Program.FORM_LOAD_FOR_ACTIVATE = false;
                         }
@@ -430,20 +438,6 @@ namespace BDO_Localisation_AddOn
                     //    addMatrixRow(oForm);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && !pVal.BeforeAction)
-                {
-                    if (!pVal.InnerEvent && (pVal.ItemUID == "CriteriaOB" || pVal.ItemUID == "FixedOB"))
-                    {
-                        if (oForm.DataSources.UserDataSources.Item("CriteriaOB").ValueEx == "1")
-                            oForm.DataSources.DBDataSources.Item("@BDOSFUCN").SetValue("U_Fixed", 0, "N");
-                        else if (oForm.DataSources.UserDataSources.Item("CriteriaOB").ValueEx == "2")
-                            oForm.DataSources.DBDataSources.Item("@BDOSFUCN").SetValue("U_Fixed", 0, "Y");
-
-                        oForm.Items.Item("PrjCodeE").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                        setVisibleFormItems(oForm);
-                    }
-                }
-
                 if (pVal.ItemUID == "addMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
                     addMatrixRow(oForm);
@@ -463,7 +457,7 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
-            { 
+            {
                 setVisibleFormItems(oForm);
             }
         }
@@ -477,11 +471,15 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formItems;
             string itemName;
             int left_s = 6;
-            int left_e = 127;
+            int left_e = 160;
             int height = 15;
-            int top = 6;
-            int width_s = 121;
+            int top = 5;
+            int width_s = 139;
             int width_e = 148;
+
+            int left_s2 = 295;
+            int left_e2 = left_s2 + 121;
+            int top2 = 5;
 
             top += (height + 1);
 
@@ -600,9 +598,333 @@ namespace BDO_Localisation_AddOn
                 throw new Exception(errorText);
             }
 
-            //top = top + height + 1;
+            top = top + height + 1;
 
-            top += (3 * height + 1);
+            formItems = new Dictionary<string, object>();
+            itemName = "DateFromS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("DateFrom"));
+            formItems.Add("LinkTo", "DateFromE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DateFromE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "U_DateFrom");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            top = top + height + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DateToS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("DateTo"));
+            formItems.Add("LinkTo", "DateToE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DateToE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "U_DateTo");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "No.S"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s2);
+            formItems.Add("Width", width_s / 3);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Number"));
+            formItems.Add("LinkTo", "SeriesC");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "SeriesC"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "Series");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            formItems.Add("Left", left_s2 + width_s / 3);
+            formItems.Add("Width", width_s * 2 / 4);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+            formItems.Add("Description", BDOSResources.getTranslate("Series"));
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DocNumE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "DocNum");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e2);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item("DocNumE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+
+            top2 += height + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "StatusS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s2);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Status"));
+            formItems.Add("LinkTo", "StatusC");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "StatusC"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "Status");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            formItems.Add("Left", left_e2);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+            formItems.Add("DisplayDesc", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item("StatusC").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+
+            top2 += height + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "CanceledCH"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUNR");
+            formItems.Add("Alias", "Canceled");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("Width", width_e);
+            formItems.Add("Left", left_e2);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Canceled"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item("CanceledCH").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+
+            top2 += height + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "CreateDatS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s2);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("CreateDate"));
+            formItems.Add("LinkTo", "CreateDatE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "CreateDatE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "CreateDate");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e2);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item("CreateDatE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+
+            top2 += height + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "UpdateDatS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s2);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("UpdateDate"));
+            formItems.Add("LinkTo", "UpdateDatE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "UpdateDatE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "UpdateDate");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e2);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item("UpdateDatE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+
+            top2 += height + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DocDatS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s2);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("PostingDate"));
+            formItems.Add("LinkTo", "DocDateE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DocDateE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "U_DocDate");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e2);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            //oForm.Items.Item("DocDateE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+
+            top += (4 * height + 1);
 
             formItems = new Dictionary<string, object>();
             itemName = "addMTRB"; //10 characters
@@ -613,12 +935,11 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Add"));
-            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -630,12 +951,11 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Delete"));
-            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             top = top + height + 1;
@@ -652,7 +972,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDOSFUC1");
@@ -668,42 +988,35 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Column oColumn = oColumns.Add("LineID", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = "#";
             oColumn.Editable = false;
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "LineId");
 
             oColumn = oColumns.Add("ItemCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("ItemCode");
-
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("AssetCode");
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_ItemCode");
-
             oColumn.ChooseFromListUID = "ItemCodeCFL";
             oColumn.ChooseFromListAlias = "ItemCode";
             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
             oLink.LinkedObjectType = "4"; //Items
 
             oColumn = oColumns.Add("ItemName", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("ItemName");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("AssetName");
             oColumn.Editable = false;
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_ItemName");
 
+            //-------------------------------------------Fuel Types--------------------------------------            
             oColumn = oColumns.Add("FuTpCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelTypeCode");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelType");
             oColumn.Editable = false;
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuTpCode");
-
             oColumn.ChooseFromListUID = "FuelTypeCodeCFL";
             oColumn.ChooseFromListAlias = "Code";
             oLink = oColumn.ExtendedObject;
             oLink.LinkedObjectType = "UDO_F_BDOSFUTP_D"; //Fuel Types
 
             oColumn = oColumns.Add("FuelCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelCode");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Fuel");
             oColumn.Editable = false;
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuelCode");
-
             oColumn.ChooseFromListUID = "FuelCodeCFL";
             oColumn.ChooseFromListAlias = "ItemCode";
             oLink = oColumn.ExtendedObject;
@@ -712,52 +1025,63 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Add("FuUomEntry", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("UomEntry");
             oColumn.Editable = false;
-
+            oColumn.Visible = false;
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuUomEntry");
-
             oLink = oColumn.ExtendedObject;
             oLink.LinkedObjectType = "10000199"; //UoM Master Data
 
+            oColumn = oColumns.Add("FuUomCode", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("UomCode");
+            oColumn.Editable = false;
+            oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuUomCode");
+            
             oColumn = oColumns.Add("FuPerKm", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("PerKm");
             oColumn.Editable = false;
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuPerKm");
 
             oColumn = oColumns.Add("FuPerHr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("PerHr");
             oColumn.Editable = false;
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuPerHr");
+            //-------------------------------------------Fuel Types--------------------------------------
 
             oColumn = oColumns.Add("OdmtrStart", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("StartingValueOfOdometer");
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrStart");
 
             oColumn = oColumns.Add("OdmtrEnd", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("EndingValueOfOdometer");
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrEnd");
 
             oColumn = oColumns.Add("HrsWorked", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("HoursWorked");
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_HrsWorked");
 
             oColumn = oColumns.Add("NormCn", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("NormConsumption");
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_NormCn");
 
             oColumn = oColumns.Add("ActuallyCn", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("ActuallyConsumption");
-
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_ActuallyCn");
 
-            oMatrix.Clear();
-            oDBDataSource.Query();
-            oMatrix.LoadFromDataSource();
+            for (int i = 1; i <= 5; i++)
+            {
+                FormsB1.addChooseFromList(oForm, false, "62", "Dimension" + i + "CFL");
+
+                oColumn = oColumns.Add("Dimension" + i, SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                oColumn.TitleObject.Caption = BDOSResources.getTranslate("Dimension" + i);
+                oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_Dimension" + i);
+                oColumn.ChooseFromListUID = "Dimension" + i + "CFL";
+                oColumn.ChooseFromListAlias = "OcrCode";
+                oLink = oColumn.ExtendedObject;
+                oLink.LinkedObjectType = "62"; //Cost Rate
+            }
+
+            //oMatrix.Clear();
+            //oDBDataSource.Query();
+            //oMatrix.LoadFromDataSource();
 
             GC.Collect();
         }
@@ -781,6 +1105,51 @@ namespace BDO_Localisation_AddOn
                         oCon.CondVal = "Y";
                         oCFL.SetConditions(oCons);
                     }
+                    else if (oCFLEvento.ChooseFromListUID == "ItemCodeCFL")
+                    {
+                        SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
+                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+
+                        SAPbouiCOM.Condition oCon = oCons.Add();
+                        oCon.Alias = "ItemType";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = "F";
+                        oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
+
+                        oCon = oCons.Add();
+                        oCon.Alias = "validFor";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = "Y";
+                        oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
+
+                        SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        oRecordSet.DoQuery(@"SELECT ""Code"" FROM ""OACS"" WHERE ""U_BDOSVhcle"" = 'Y'");
+                        int recordCount = oRecordSet.RecordCount;
+                        int i = 0;
+
+                        while (!oRecordSet.EoF)
+                        {
+                            string assetClassCode = oRecordSet.Fields.Item("Code").Value;
+                            oCon = oCons.Add();
+                            oCon.Alias = "AssetClass";
+                            oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                            oCon.CondVal = assetClassCode;
+                            if (i == 0)
+                                oCon.BracketOpenNum = 1;
+                            if (i < recordCount - 1)
+                            {
+                                oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_OR;
+                            }
+                            if (i == recordCount - 1)
+                            {
+                                oCon.BracketCloseNum = 1;
+                                oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_NONE;
+                            }
+                            i++;
+                            oRecordSet.MoveNext();
+                        }
+                        oCFL.SetConditions(oCons);
+                    }
                 }
                 else
                 {
@@ -793,28 +1162,44 @@ namespace BDO_Localisation_AddOn
                             string prjCode = oDataTable.GetValue("PrjCode", 0);
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjCodeE").Specific.Value = prjCode);
                         }
-                        else if (oCFLEvento.ChooseFromListUID == "FuelCriteriaCodeCFL")
+                        else if(oCFLEvento.ChooseFromListUID == "SpecificationOfFuelNormCodeCFL")
                         {
-                            string crtrCode = oDataTable.GetValue("Code", 0);
+                            string prjCode = oDataTable.GetValue("Code", 0);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("FuNrCodeE").Specific.Value = prjCode);
+                        }
+                        else if (oCFLEvento.ChooseFromListUID == "ItemCodeCFL")
+                        {
+                            string itemCode = oDataTable.GetValue("ItemCode", 0);
+
                             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                            string query = @"SELECT 
-                                           ""@BDOSFUCR"".""Name"", 
-                                           ""@BDOSFUCR"".""U_Value"", 
-                                           ""@BDOSFUCR"".""U_Percentage""
-                                    FROM   ""@BDOSFUCR""
-                                    WHERE  ""@BDOSFUCR"".""Code"" = '" + crtrCode + @"'";
+                            string query = @"SELECT
+	                             ""OITM"".""ItemCode"",
+                                 ""OITM"".""ItemName"",
+	                             ""@BDOSFUTP"".""Code"",
+                                 ""@BDOSFUTP"".""U_ItemCode"",
+	                             ""@BDOSFUTP"".""U_UomEntry"",
+                                 ""@BDOSFUTP"".""U_UomCode"",
+	                             ""@BDOSFUTP"".""U_PerKm"",
+	                             ""@BDOSFUTP"".""U_PerHr""
+                            FROM ""OITM""
+                            LEFT JOIN ""@BDOSFUTP"" ON ""@BDOSFUTP"".""Code"" = ""OITM"".""U_BDOSFuTp""
+                            WHERE ""OITM"".""ItemCode"" = '" + itemCode + "'";
 
                             oRecordSet.DoQuery(query);
 
                             SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
-                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = crtrCode);
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = itemCode);
                             if (!oRecordSet.EoF)
                             {
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrName").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("Name").Value);
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrValue").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_Value").Value);
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrPr").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_Percentage").Value.ToString());
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("ItemName").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("ItemName").Value);
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuTpCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("Code").Value);
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuelCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_ItemCode").Value);
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuUomEntry").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_UomEntry").Value.ToString());
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuUomCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_UomCode").Value);
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuPerKm").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_PerKm").Value.ToString());
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuPerHr").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_PerHr").Value.ToString());
                             }
-                        }
+                        }                     
                     }
                 }
             }
@@ -853,22 +1238,36 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                //oForm.Items.Item("1_U_S").Left = oForm.Items.Item("0_U_S").Left;
-                //oForm.Items.Item("1_U_S").Top = oForm.Items.Item("0_U_S").Top + oForm.Items.Item("0_U_S").Height + 1;
-                //oForm.Items.Item("1_U_E").Left = oForm.Items.Item("0_U_E").Left;
-                //oForm.Items.Item("1_U_E").Top = oForm.Items.Item("0_U_E").Top + oForm.Items.Item("0_U_E").Height + 1;
+                int left_e = 160;
+                oForm.Items.Item("0_U_E").Left = left_e;
                 oForm.Items.Item("1").Top = oForm.ClientHeight - 25;
                 oForm.Items.Item("2").Top = oForm.ClientHeight - 25;
 
-                //SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
-                //int mtrWidth = oForm.ClientWidth / 3 * 2;
-                //oForm.Items.Item("AssetMTR").Width = mtrWidth;
-                //oMatrix.Columns.Item("LineID").Width = 19;
-                //mtrWidth -= 19;
-                //oMatrix.Columns.Item("CrtrCode").Width = mtrWidth / 4;
-                //oMatrix.Columns.Item("CrtrName").Width = mtrWidth / 4;
-                //oMatrix.Columns.Item("CrtrValue").Width = mtrWidth / 4;
-                //oMatrix.Columns.Item("CrtrPr").Width = mtrWidth / 4;
+                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
+                int mtrWidth = oForm.ClientWidth;
+                oForm.Items.Item("AssetMTR").Width = mtrWidth;
+                oForm.Items.Item("AssetMTR").Height = oForm.ClientHeight / 2;
+                oMatrix.Columns.Item("LineID").Width = 19;
+                mtrWidth -= 19;
+                mtrWidth /= 17;
+                oMatrix.Columns.Item("ItemCode").Width = mtrWidth;
+                oMatrix.Columns.Item("ItemName").Width = mtrWidth;
+                oMatrix.Columns.Item("FuTpCode").Width = mtrWidth;
+                oMatrix.Columns.Item("FuelCode").Width = mtrWidth;
+                //oMatrix.Columns.Item("FuUomEntry").Width = mtrWidth;
+                oMatrix.Columns.Item("FuUomCode").Width = mtrWidth;
+                oMatrix.Columns.Item("FuPerKm").Width = mtrWidth;
+                oMatrix.Columns.Item("FuPerHr").Width = mtrWidth;
+                oMatrix.Columns.Item("OdmtrStart").Width = mtrWidth;
+                oMatrix.Columns.Item("OdmtrEnd").Width = mtrWidth;
+                oMatrix.Columns.Item("HrsWorked").Width = mtrWidth;
+                oMatrix.Columns.Item("NormCn").Width = mtrWidth;
+                oMatrix.Columns.Item("ActuallyCn").Width = mtrWidth;
+                oMatrix.Columns.Item("Dimension1").Width = mtrWidth;
+                oMatrix.Columns.Item("Dimension2").Width = mtrWidth;
+                oMatrix.Columns.Item("Dimension3").Width = mtrWidth;
+                oMatrix.Columns.Item("Dimension4").Width = mtrWidth;
+                oMatrix.Columns.Item("Dimension5").Width = mtrWidth;
             }
             catch (Exception ex)
             {
@@ -927,10 +1326,10 @@ namespace BDO_Localisation_AddOn
                 int row = oMatrix.RowCount;
 
                 LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("LineID").Cells.Item(row).Specific.Value = index.ToString());
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrCode").Cells.Item(row).Specific.Value = "");
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrName").Cells.Item(row).Specific.Value = "");
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrValue").Cells.Item(row).Specific.Value = "");
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrPr").Cells.Item(row).Specific.Value = "");
+                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrCode").Cells.Item(row).Specific.Value = "");
+                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrName").Cells.Item(row).Specific.Value = "");
+                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrValue").Cells.Item(row).Specific.Value = "");
+                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrPr").Cells.Item(row).Specific.Value = "");
             }
             catch (Exception ex)
             {

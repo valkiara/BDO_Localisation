@@ -49,6 +49,15 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "UomCode");
+            fieldskeysMap.Add("TableName", "BDOSFUTP");
+            fieldskeysMap.Add("Description", "UoM Code");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 20);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "PerKm");
             fieldskeysMap.Add("TableName", "BDOSFUTP");
             fieldskeysMap.Add("Description", "Per 100 km");
@@ -106,6 +115,9 @@ namespace BDO_Localisation_AddOn
                 oUDOFind.Add();
                 oUDOFind.ColumnAlias = "U_UomEntry";
                 oUDOFind.ColumnDescription = "UoM Abs. Entry";
+                oUDOFind.Add();
+                oUDOFind.ColumnAlias = "U_UomCode";
+                oUDOFind.ColumnDescription = "UoM Code";
                 oUDOFind.Add();
                 oUDOFind.ColumnAlias = "U_PerKm";
                 oUDOFind.ColumnDescription = "Per 100 km";
@@ -178,7 +190,7 @@ namespace BDO_Localisation_AddOn
                     {
                         oForm.Freeze(true);
                         setSizeForm(oForm);
-                        oForm.Title = BDOSResources.getTranslate("FuelTypes");                        
+                        oForm.Title = BDOSResources.getTranslate("FuelTypes");
                         oForm.Freeze(false);
                         Program.FORM_LOAD_FOR_VISIBLE = false;
                     }
@@ -368,7 +380,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             formItems.Add("Left", left_e);
-            formItems.Add("Width", width_e);
+            formItems.Add("Width", width_e / 3);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
@@ -396,6 +408,28 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "UomCodeE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUTP");
+            formItems.Add("Alias", "U_UomCode");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e + width_e / 3);
+            formItems.Add("Width", width_e / 3 * 2);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Enabled", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item("UomCodeE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
             top = top + height + 1;
 
@@ -502,7 +536,7 @@ namespace BDO_Localisation_AddOn
                         oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                         oCon.CondVal = "Y";
                         oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
-                        
+
                         SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                         oRecordSet.DoQuery(@"SELECT ""ItmsGrpCod"" FROM ""OITB"" WHERE ""U_BDOSFuel"" = 'Y'");
                         int recordCount = oRecordSet.RecordCount;
@@ -543,22 +577,26 @@ namespace BDO_Localisation_AddOn
                             string itemCode = oDataTable.GetValue("ItemCode", 0);
                             string itemName = oDataTable.GetValue("ItemName", 0);
                             int uomEntry = oDataTable.GetValue("IUoMEntry", 0);
+                            string uomCode = oDataTable.GetValue("InvntryUom", 0);
 
                             oForm.Items.Item("ItemNameE").Enabled = true;
                             oForm.Items.Item("UomEntryE").Enabled = true;
+                            oForm.Items.Item("UomCodeE").Enabled = true;
 
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("ItemCodeE").Specific.Value = itemCode);
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("ItemNameE").Specific.Value = itemName);
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("UomEntryE").Specific.Value = uomEntry.ToString());
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("UomCodeE").Specific.Value = uomCode);
 
                             oForm.Items.Item("ItemCodeE").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                             oForm.Items.Item("ItemNameE").Enabled = false;
                             oForm.Items.Item("UomEntryE").Enabled = false;
+                            oForm.Items.Item("UomCodeE").Enabled = false;
                         }
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

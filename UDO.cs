@@ -122,6 +122,16 @@ namespace BDO_Localisation_AddOn
                 BDOSFuelConsumption.registerUDO(out errorText);
             }
 
+            //Persona Tables
+            BDOSApprovalProcedures.createMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSAPRP_D") == false)
+            {
+                BDOSApprovalProcedures.registerUDO();
+            }
+            BDOSApprovalStages.createNoObjectUDO(out errorText);
+            BDOSTasksForApproval.createNoObjectUDO(out errorText);
+            //Persona Tables 
+
             //მოგების გადასახადის ცხრილი (ბევრი დოკუმენტი გააკეთებს ჩანაწერებს)
             ProfitTax.createUDO( out errorText);
 

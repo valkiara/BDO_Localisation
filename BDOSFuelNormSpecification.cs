@@ -444,7 +444,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             top = top + height + 1;
@@ -472,7 +472,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -500,7 +500,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             top = top + 3 * height + 1;
@@ -597,7 +597,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -614,7 +614,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             top = top + height + 1;
@@ -632,7 +632,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDOSFUN1");
@@ -679,9 +679,9 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Item("CrtrPr");
             oColumn.DataBind.SetBound(true, "@BDOSFUN1", "U_CrtrPr");
 
-            oMatrix.Clear();
-            oDBDataSource.Query();
-            oMatrix.LoadFromDataSource();
+            //oMatrix.Clear();
+            //oDBDataSource.Query();
+            //oMatrix.LoadFromDataSource();
 
             GC.Collect();
         }

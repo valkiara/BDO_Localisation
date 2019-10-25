@@ -198,11 +198,11 @@ namespace BDO_Localisation_AddOn
             //formItems.Add("FromPane", 6);
             //formItems.Add("ToPane", 6);
 
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                throw new Exception(errorText);
-            }
+            //FormsB1.createFormItem(oForm, formItems, out errorText);
+            //if (errorText != null)
+            //{
+            //    throw new Exception(errorText);
+            //}
         }
 
         public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
@@ -335,6 +335,10 @@ namespace BDO_Localisation_AddOn
                         {
                             string fuelTypeCode = oDataTable.GetValue("Code", 0);
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("FUTPCodeE").Specific.Value = fuelTypeCode);
+                            if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
+                            {
+                                oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+                            }
                         }                        
                     }
                 }

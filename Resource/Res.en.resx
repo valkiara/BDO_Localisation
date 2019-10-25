@@ -445,7 +445,7 @@
     <value>Denied</value>
   </data>
   <data name="DocEntry" xml:space="preserve">
-    <value>Document Internal Key</value>
+    <value>Internal Number</value>
   </data>
   <data name="DocNum" xml:space="preserve">
     <value>Number</value>
@@ -3252,5 +3252,29 @@
   </data>
   <data name="Fixed" xml:space="preserve">
     <value>Fixed</value>
+  </data>
+  <data name="ActuallyConsumption" xml:space="preserve">
+    <value>Actually Consumption</value>
+  </data>
+  <data name="EndingValueOfOdometer" xml:space="preserve">
+    <value>Ending Value of Odometer</value>
+  </data>
+  <data name="FuelConsumptionAct" xml:space="preserve">
+    <value>Fuel Consumption Act</value>
+  </data>
+  <data name="HoursWorked" xml:space="preserve">
+    <value>Hours Worked</value>
+  </data>
+  <data name="NormConsumption" xml:space="preserve">
+    <value>Norm Consumption</value>
+  </data>
+  <data name="StartingValueOfOdometer" xml:space="preserve">
+    <value>Starting Value of Odometer</value>
+  </data>
+  <data name="DateFrom" xml:space="preserve">
+    <value>Date From</value>
+  </data>
+  <data name="DateTo" xml:space="preserve">
+    <value>Date To</value>
   </data>
 </root>

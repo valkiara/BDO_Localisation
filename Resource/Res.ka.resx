@@ -445,7 +445,7 @@
     <value>უარყოფილი</value>
   </data>
   <data name="DocEntry" xml:space="preserve">
-    <value>დოკუმენტი</value>
+    <value>შიდა ნომერი</value>
   </data>
   <data name="DocNum" xml:space="preserve">
     <value>ნომერი</value>
@@ -3231,5 +3231,29 @@
   </data>
   <data name="Fixed" xml:space="preserve">
     <value>ფიქსირებული</value>
+  </data>
+  <data name="ActuallyConsumption" xml:space="preserve">
+    <value>ხარჯი (ფაქტიური)</value>
+  </data>
+  <data name="EndingValueOfOdometer" xml:space="preserve">
+    <value>ოდომეტრის საბოლოო ჩვენება</value>
+  </data>
+  <data name="FuelConsumptionAct" xml:space="preserve">
+    <value>წვის ხარჯვის აქტი</value>
+  </data>
+  <data name="HoursWorked" xml:space="preserve">
+    <value>ნამუშევარი საათები</value>
+  </data>
+  <data name="NormConsumption" xml:space="preserve">
+    <value>ხარჯი (ნორმის მიხედვით)</value>
+  </data>
+  <data name="StartingValueOfOdometer" xml:space="preserve">
+    <value>ოდომეტრის საწყისი ჩვენება</value>
+  </data>
+  <data name="DateFrom" xml:space="preserve">
+    <value>საწყისი თარიღი</value>
+  </data>
+  <data name="DateTo" xml:space="preserve">
+    <value>საბოლოო თარიღი</value>
   </data>
 </root>

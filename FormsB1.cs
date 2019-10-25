@@ -80,6 +80,8 @@ namespace BDO_Localisation_AddOn
             BPBankAccounts.createUserFields(out errorText);
 
             AssetClass.createUserFields(out errorText);
+
+            Projects.createUserFields(out errorText);
         }
 
         public static void addMenusForAddOn( out string errorText)
