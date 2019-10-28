@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -136,7 +137,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields(fieldskeysMap, out errorText);   
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             //წვა 100 კმ-ში
             fieldskeysMap = new Dictionary<string, object>();
@@ -438,6 +439,14 @@ namespace BDO_Localisation_AddOn
                     //    addMatrixRow(oForm);
                 }
 
+                if (pVal.ItemUID == "AssetMTR" && pVal.ItemChanged)
+                {
+                    if (pVal.ColUID == "OdmtrStart" || pVal.ColUID == "OdmtrEnd" || pVal.ColUID == "HrsWorked")
+                    {
+                        calculateConsumptionValue(oForm, pVal.Row - 1);
+                    }
+                }
+
                 if (pVal.ItemUID == "addMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
                     addMatrixRow(oForm);
@@ -475,9 +484,9 @@ namespace BDO_Localisation_AddOn
             int height = 15;
             int top = 5;
             int width_s = 139;
-            int width_e = 148;
+            int width_e = 140;
 
-            int left_s2 = 295;
+            int left_s2 = 300;
             int left_e2 = left_s2 + 121;
             int top2 = 5;
 
@@ -781,28 +790,44 @@ namespace BDO_Localisation_AddOn
             top2 += height + 1;
 
             formItems = new Dictionary<string, object>();
-            itemName = "CanceledCH"; //10 characters
-            formItems.Add("isDataSource", true);
-            formItems.Add("DataSource", "DBDataSources");
-            formItems.Add("TableName", "@BDOSFUNR");
-            formItems.Add("Alias", "Canceled");
-            formItems.Add("Bound", true);
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
-            formItems.Add("Width", width_e);
-            formItems.Add("Left", left_e2);
+            itemName = "CanceledS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s2);
+            formItems.Add("Width", width_s);
             formItems.Add("Top", top2);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Canceled"));
-            formItems.Add("ValOff", "N");
-            formItems.Add("ValOn", "Y");
+            formItems.Add("LinkTo", "CanceledC");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
                 throw new Exception(errorText);
             }
-            oForm.Items.Item("CanceledCH").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+
+            formItems = new Dictionary<string, object>();
+            itemName = "CanceledC"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "Canceled");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            formItems.Add("Left", left_e2);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top2);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+            formItems.Add("DisplayDesc", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item("CanceledC").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
             top2 += height + 1;
 
@@ -1034,7 +1059,7 @@ namespace BDO_Localisation_AddOn
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("UomCode");
             oColumn.Editable = false;
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_FuUomCode");
-            
+
             oColumn = oColumns.Add("FuPerKm", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("PerKm");
             oColumn.Editable = false;
@@ -1060,6 +1085,7 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Add("NormCn", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("NormConsumption");
+            oColumn.Editable = false;
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_NormCn");
 
             oColumn = oColumns.Add("ActuallyCn", SAPbouiCOM.BoFormItemTypes.it_EDIT);
@@ -1104,6 +1130,22 @@ namespace BDO_Localisation_AddOn
                         oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                         oCon.CondVal = "Y";
                         oCFL.SetConditions(oCons);
+                    }
+                    else if (oCFLEvento.ChooseFromListUID == "SpecificationOfFuelNormCodeCFL")
+                    {
+                        SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
+                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+
+                        SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSFUCN");
+                        string prjCode = oDBDataSource.GetValue("U_PrjCode", 0);
+                        if (!string.IsNullOrEmpty(prjCode))
+                        {
+                            SAPbouiCOM.Condition oCon = oCons.Add();
+                            oCon.Alias = "U_PrjCode";
+                            oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                            oCon.CondVal = prjCode;
+                            oCFL.SetConditions(oCons);
+                        }
                     }
                     else if (oCFLEvento.ChooseFromListUID == "ItemCodeCFL")
                     {
@@ -1157,49 +1199,58 @@ namespace BDO_Localisation_AddOn
 
                     if (oDataTable != null)
                     {
+                        SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSFUCN");
+
                         if (oCFLEvento.ChooseFromListUID == "ProjectCodeCFL")
                         {
                             string prjCode = oDataTable.GetValue("PrjCode", 0);
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjCodeE").Specific.Value = prjCode);
                         }
-                        else if(oCFLEvento.ChooseFromListUID == "SpecificationOfFuelNormCodeCFL")
+                        else if (oCFLEvento.ChooseFromListUID == "SpecificationOfFuelNormCodeCFL")
                         {
-                            string prjCode = oDataTable.GetValue("Code", 0);
-                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("FuNrCodeE").Specific.Value = prjCode);
+                            string specificationOfFuelNormCode = oDataTable.GetValue("Code", 0);
+                            string prjCode = oDataTable.GetValue("U_PrjCode", 0);
+
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("FuNrCodeE").Specific.Value = specificationOfFuelNormCode);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjCodeE").Specific.Value = prjCode);
+
+                            updatePerKmHrValue(oForm);
+                            calculateConsumptionValue(oForm);
                         }
                         else if (oCFLEvento.ChooseFromListUID == "ItemCodeCFL")
                         {
                             string itemCode = oDataTable.GetValue("ItemCode", 0);
+                            string docEntryStr = oDBDataSource.GetValue("DocEntry", 0);
+                            int docEntry = 0;
 
-                            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                            string query = @"SELECT
-	                             ""OITM"".""ItemCode"",
-                                 ""OITM"".""ItemName"",
-	                             ""@BDOSFUTP"".""Code"",
-                                 ""@BDOSFUTP"".""U_ItemCode"",
-	                             ""@BDOSFUTP"".""U_UomEntry"",
-                                 ""@BDOSFUTP"".""U_UomCode"",
-	                             ""@BDOSFUTP"".""U_PerKm"",
-	                             ""@BDOSFUTP"".""U_PerHr""
-                            FROM ""OITM""
-                            LEFT JOIN ""@BDOSFUTP"" ON ""@BDOSFUTP"".""Code"" = ""OITM"".""U_BDOSFuTp""
-                            WHERE ""OITM"".""ItemCode"" = '" + itemCode + "'";
+                            if (!string.IsNullOrEmpty(docEntryStr))
+                                docEntry = Convert.ToInt32(oDBDataSource.GetValue("DocEntry", 0));
 
-                            oRecordSet.DoQuery(query);
+                            SAPbobsCOM.Recordset oRecordSet = getFuelType(itemCode);
 
-                            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
+                            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
+
                             LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = itemCode);
-                            if (!oRecordSet.EoF)
+                            if (oRecordSet != null)
                             {
                                 LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("ItemName").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("ItemName").Value);
                                 LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuTpCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("Code").Value);
                                 LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuelCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_ItemCode").Value);
                                 LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuUomEntry").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_UomEntry").Value.ToString());
                                 LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuUomCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_UomCode").Value);
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuPerKm").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_PerKm").Value.ToString());
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuPerHr").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_PerHr").Value.ToString());
+                                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuPerKm").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_PerKm").Value.ToString());
+                                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuPerHr").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_PerHr").Value.ToString());
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuUomCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_UomCode").Value);
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("OdmtrStart").Cells.Item(pVal.Row).Specific.Value = Convert.ToString(getOdmtrStart(itemCode, docEntry)));
                             }
-                        }                     
+                            updatePerKmHrValue(oForm, pVal.Row - 1);
+                            calculateConsumptionValue(oForm, pVal.Row - 1);
+                        }
+
+                        if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
+                        {
+                            oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+                        }
                     }
                 }
             }
@@ -1218,7 +1269,7 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                oForm.ClientHeight = Program.uiApp.Desktop.Width / 6;
+                oForm.ClientHeight = Program.uiApp.Desktop.Height / 4;
                 oForm.Height = Program.uiApp.Desktop.Width / 4;
                 oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
                 oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 3;
@@ -1240,6 +1291,7 @@ namespace BDO_Localisation_AddOn
             {
                 int left_e = 160;
                 oForm.Items.Item("0_U_E").Left = left_e;
+                oForm.Items.Item("0_U_E").Width = 140;
                 oForm.Items.Item("1").Top = oForm.ClientHeight - 25;
                 oForm.Items.Item("2").Top = oForm.ClientHeight - 25;
 
@@ -1377,6 +1429,220 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
                 oForm.Freeze(false);
+            }
+        }
+
+        private static void calculateConsumptionValue(SAPbouiCOM.Form oForm, int rowIndex = -1)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
+                oMatrix.FlushToDataSource();
+
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
+
+                int rowCount = rowIndex == -1 ? oDBDataSourceMTR.Size - 1 : rowIndex;
+                int i = rowIndex == -1 ? 0 : rowIndex;
+
+                for (; i <= rowCount; i++)
+                {
+                    string itemCode = oDBDataSourceMTR.GetValue("U_ItemCode", i);
+                    if (!string.IsNullOrEmpty(itemCode))
+                    {
+                        var fuPerKm = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_FuPerKm", i));
+                        var odmtrStart = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrStart", i));
+                        var odmtrEnd = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrEnd", i));
+                        var fuPerHr = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_FuPerHr", i));
+                        var hrsWorked = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_HrsWorked", i));
+                        decimal normConsumptionKm = fuPerKm * (odmtrEnd - odmtrStart);
+                        decimal normConsumptionHr = fuPerHr * hrsWorked;
+                        decimal normConsumption = normConsumptionKm + normConsumptionHr;
+
+                        oDBDataSourceMTR.SetValue("U_NormCn", i, Convert.ToString(normConsumption));
+                        oDBDataSourceMTR.SetValue("U_ActuallyCn", i, Convert.ToString(normConsumption));
+                    }
+                }
+                oMatrix.LoadFromDataSource();
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
+        }
+
+        private static void updatePerKmHrValue(SAPbouiCOM.Form oForm, int rowIndex = -1)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSFUCN");
+                string fuNrCode = oDBDataSource.GetValue("U_FuNrCode", 0);
+
+                SAPbobsCOM.Recordset oRecordset = getFuelNormSpecification(fuNrCode);
+                decimal perKm = 0;
+                decimal perHr = 0;
+                decimal crtrPr = 0;
+                bool? isFixed = null;
+
+                if (oRecordset != null)
+                {
+                    isFixed = oRecordset.Fields.Item("U_Fixed").Value == "Y";
+                    perKm = Convert.ToDecimal(oRecordset.Fields.Item("U_PerKm").Value);
+                    perHr = Convert.ToDecimal(oRecordset.Fields.Item("U_PerHr").Value);
+                    crtrPr = Convert.ToDecimal(oRecordset.Fields.Item("U_CrtrPr").Value);
+                }
+
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
+                oMatrix.FlushToDataSource();
+
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
+
+                int rowCount = rowIndex == -1 ? oDBDataSourceMTR.Size - 1 : rowIndex;
+                int i = rowIndex == -1 ? 0 : rowIndex;
+
+                for (; i <= rowCount; i++)
+                {
+                    string itemCode = oDBDataSourceMTR.GetValue("U_ItemCode", i);
+                    if (!string.IsNullOrEmpty(itemCode))
+                    {
+                        if (!isFixed.HasValue || !isFixed.Value)
+                        {
+                            SAPbobsCOM.Recordset oRecordsetFuelType = getFuelType(itemCode);
+                            if (oRecordsetFuelType != null)
+                            {
+                                perKm = Convert.ToDecimal(oRecordsetFuelType.Fields.Item("U_PerKm").Value);
+                                perHr = Convert.ToDecimal(oRecordsetFuelType.Fields.Item("U_PerHr").Value);
+                            }
+                            if (isFixed.HasValue)
+                            {
+                                perKm += perKm * crtrPr;
+                                perHr += perHr * crtrPr;
+                            }
+                        }
+                        oDBDataSourceMTR.SetValue("U_FuPerKm", i, Convert.ToString(perKm));
+                        oDBDataSourceMTR.SetValue("U_FuPerHr", i, Convert.ToString(perHr));
+                    }
+                }
+                oMatrix.LoadFromDataSource();
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
+        }
+
+        private static SAPbobsCOM.Recordset getFuelNormSpecification(string fuNrCode)
+        {
+            try
+            {
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                string query = @"SELECT 
+                   ""@BDOSFUNR"".""Code"", 
+                   ""@BDOSFUNR"".""Name"", 
+                   ""@BDOSFUNR"".""U_PrjCode"", 
+                   ""@BDOSFUNR"".""U_Fixed"", 
+                   ""@BDOSFUNR"".""U_PerKm"", 
+                   ""@BDOSFUNR"".""U_PerHr"",
+                   SUM(""@BDOSFUN1"".""U_CrtrPr"")/100 AS ""U_CrtrPr""
+                FROM ""@BDOSFUNR""
+                LEFT JOIN ""@BDOSFUN1""
+                ON ""@BDOSFUNR"".""Code"" = ""@BDOSFUN1"".""Code""
+                WHERE ""@BDOSFUNR"".""Code"" = '" + fuNrCode + @"' 
+                GROUP BY ""@BDOSFUNR"".""Code"", 
+                   ""@BDOSFUNR"".""Name"", 
+                   ""@BDOSFUNR"".""U_PrjCode"", 
+                   ""@BDOSFUNR"".""U_Fixed"", 
+                   ""@BDOSFUNR"".""U_PerKm"", 
+                   ""@BDOSFUNR"".""U_PerHr""";
+
+                oRecordSet.DoQuery(query);
+
+                if (!oRecordSet.EoF)
+                {
+                    return oRecordSet;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private static SAPbobsCOM.Recordset getFuelType(string itemCode)
+        {
+            try
+            {
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                string query = @"SELECT
+	               ""OITM"".""ItemCode"",
+                   ""OITM"".""ItemName"",
+	               ""@BDOSFUTP"".""Code"",
+                   ""@BDOSFUTP"".""U_ItemCode"",
+	               ""@BDOSFUTP"".""U_UomEntry"",
+                   ""@BDOSFUTP"".""U_UomCode"",
+	               ""@BDOSFUTP"".""U_PerKm"",
+	               ""@BDOSFUTP"".""U_PerHr""
+                FROM ""OITM""
+                LEFT JOIN ""@BDOSFUTP"" ON ""@BDOSFUTP"".""Code"" = ""OITM"".""U_BDOSFuTp""
+                WHERE ""OITM"".""ItemCode"" = '" + itemCode + "'";
+
+                oRecordSet.DoQuery(query);
+
+                if (!oRecordSet.EoF)
+                {
+                    return oRecordSet;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private static double getOdmtrStart(string itemCode, int docEntry)
+        {
+            try
+            {
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                StringBuilder query = new StringBuilder();
+                query.Append("SELECT TOP 1 \"@BDOSFUC1\".\"U_OdmtrEnd\" \n");
+                query.Append("FROM \"@BDOSFUCN\" \n");
+                query.Append("INNER JOIN \"@BDOSFUC1\" \n");
+                query.Append("ON \"@BDOSFUCN\".\"DocEntry\" = \"@BDOSFUC1\".\"DocEntry\" \n");
+                query.Append("WHERE \"@BDOSFUCN\".\"Canceled\" = 'N' \n");
+                query.Append("AND \"@BDOSFUC1\".\"U_ItemCode\" = '" + itemCode + "' \n");
+                query.Append("AND \"@BDOSFUCN\".\"DocEntry\" <> " + docEntry + " \n");
+                query.Append("ORDER BY \n");
+                query.Append("\"@BDOSFUCN\".\"U_DocDate\" DESC, \n");
+                query.Append(" \"@BDOSFUCN\".\"DocEntry\" DESC");
+
+                oRecordSet.DoQuery(query.ToString());
+
+                if (!oRecordSet.EoF)
+                {
+                    return oRecordSet.Fields.Item("U_OdmtrEnd").Value;
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }

@@ -301,6 +301,11 @@ namespace BDO_Localisation_AddOn
 
                         oForm.Items.Item("PrjCodeE").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                         setVisibleFormItems(oForm);
+
+                        if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
+                        {
+                            oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+                        }
                     }
                 }
 
@@ -313,12 +318,6 @@ namespace BDO_Localisation_AddOn
                 {
                     deleteMatrixRow(oForm);
                 }
-
-                //if (pVal.ItemUID == "CrtrMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LOAD && !pVal.BeforeAction)
-                //{
-                //    SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("CrtrMTR").Specific));
-                //    oMatrix.AutoResizeColumns();
-                //}
             }
         }
 
