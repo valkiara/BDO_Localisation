@@ -148,7 +148,7 @@ namespace BDO_Localisation_AddOn
 
             BDOSFuelTransferWizard.addMenus(out errorText);
 
-            BDOSFuelConsumption.addMenus(out errorText);
+            //BDOSFuelConsumption.addMenus(out errorText);
         }
 
         public static int getLongIntRGB(int R, int G, int B)

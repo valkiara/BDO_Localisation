@@ -254,6 +254,12 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            List<string> oColumnAlias = new List<string>();
+            oColumnAlias.Add("DocEntry");
+            oColumnAlias.Add("LineId");
+            oColumnAlias.Add("ItemCode");
+            UDO.AddUserKey("BDOSFUC1", "DOC_ITM", oColumnAlias, out errorText);
+
             GC.Collect();
         }
 
@@ -717,6 +723,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
             formItems.Add("Description", BDOSResources.getTranslate("Series"));
+            formItems.Add("DisplayDesc", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1105,9 +1112,86 @@ namespace BDO_Localisation_AddOn
                 oLink.LinkedObjectType = "62"; //Cost Rate
             }
 
-            //oMatrix.Clear();
-            //oDBDataSource.Query();
-            //oMatrix.LoadFromDataSource();
+            top = top + oForm.Items.Item("AssetMTR").Height + 30;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "CreatorS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Creator"));
+            formItems.Add("LinkTo", "CreatorE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "CreatorE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "Creator");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Enabled", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item("CreatorE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+
+            top = top + height + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "RemarksS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Remarks"));
+            formItems.Add("LinkTo", "RemarksE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "RemarksE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSFUCN");
+            formItems.Add("Alias", "Remark");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EXTEDIT);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e * 3);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 3 * height);
+            formItems.Add("UID", itemName);
+            formItems.Add("ScrollBars", SAPbouiCOM.BoScrollBars.sb_Vertical);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
 
             GC.Collect();
         }
@@ -1220,29 +1304,10 @@ namespace BDO_Localisation_AddOn
                         else if (oCFLEvento.ChooseFromListUID == "ItemCodeCFL")
                         {
                             string itemCode = oDataTable.GetValue("ItemCode", 0);
-                            string docEntryStr = oDBDataSource.GetValue("DocEntry", 0);
-                            int docEntry = 0;
-
-                            if (!string.IsNullOrEmpty(docEntryStr))
-                                docEntry = Convert.ToInt32(oDBDataSource.GetValue("DocEntry", 0));
-
-                            SAPbobsCOM.Recordset oRecordSet = getFuelType(itemCode);
-
                             SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
-
                             LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = itemCode);
-                            if (oRecordSet != null)
-                            {
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("ItemName").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("ItemName").Value);
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuTpCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("Code").Value);
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuelCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_ItemCode").Value);
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuUomEntry").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_UomEntry").Value.ToString());
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuUomCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_UomCode").Value);
-                                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuPerKm").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_PerKm").Value.ToString());
-                                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuPerHr").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_PerHr").Value.ToString());
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("FuUomCode").Cells.Item(pVal.Row).Specific.Value = oRecordSet.Fields.Item("U_UomCode").Value);
-                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("OdmtrStart").Cells.Item(pVal.Row).Specific.Value = Convert.ToString(getOdmtrStart(itemCode, docEntry)));
-                            }
+
+                            updateRowByItemCode(oForm, itemCode, pVal.Row - 1);
                             updatePerKmHrValue(oForm, pVal.Row - 1);
                             calculateConsumptionValue(oForm, pVal.Row - 1);
                         }
@@ -1270,7 +1335,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 oForm.ClientHeight = Program.uiApp.Desktop.Height / 4;
-                oForm.Height = Program.uiApp.Desktop.Width / 4;
+                //oForm.Height = Program.uiApp.Desktop.Width / 4;
                 oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
                 oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 3;
             }
@@ -1292,8 +1357,6 @@ namespace BDO_Localisation_AddOn
                 int left_e = 160;
                 oForm.Items.Item("0_U_E").Left = left_e;
                 oForm.Items.Item("0_U_E").Width = 140;
-                oForm.Items.Item("1").Top = oForm.ClientHeight - 25;
-                oForm.Items.Item("2").Top = oForm.ClientHeight - 25;
 
                 SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
                 int mtrWidth = oForm.ClientWidth;
@@ -1320,6 +1383,23 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("Dimension3").Width = mtrWidth;
                 oMatrix.Columns.Item("Dimension4").Width = mtrWidth;
                 oMatrix.Columns.Item("Dimension5").Width = mtrWidth;
+
+                int top = oForm.Items.Item("AssetMTR").Top + oForm.Items.Item("AssetMTR").Height + 30;
+                oForm.Items.Item("CreatorS").Top = top;
+                oForm.Items.Item("CreatorE").Top = top;
+                int height = 15;
+                top += height + 1;
+                oForm.Items.Item("RemarksS").Top = top;
+                oForm.Items.Item("RemarksE").Top = top;
+
+                //ღილაკები
+                int topTemp1 = oForm.Items.Item("RemarksE").Top + height * 4 + 1;
+                int topTemp2 = oForm.ClientHeight - 25;
+                //ღილაკები
+                top = topTemp2 > topTemp1 ? topTemp2 : topTemp1;
+
+                oForm.Items.Item("1").Top = top;
+                oForm.Items.Item("2").Top = top;
             }
             catch (Exception ex)
             {
@@ -1362,26 +1442,22 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
+                oMatrix.FlushToDataSource();
 
-                int index = 0;
-                if (oMatrix.RowCount == 0)
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
+                if (!string.IsNullOrEmpty(oDBDataSourceMTR.GetValue("U_ItemCode", oDBDataSourceMTR.Size - 1)))
                 {
-                    index = 1;
+                    oDBDataSourceMTR.InsertRecord(oDBDataSourceMTR.Size);
                 }
-                else
+                oDBDataSourceMTR.SetValue("LineId", oDBDataSourceMTR.Size - 1, oDBDataSourceMTR.Size.ToString());
+
+                oMatrix.LoadFromDataSource();
+
+                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
                 {
-                    index = Convert.ToInt32(oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value) + 1;
+                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                 }
-
-                oMatrix.AddRow(1, -1);
-                int row = oMatrix.RowCount;
-
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("LineID").Cells.Item(row).Specific.Value = index.ToString());
-                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrCode").Cells.Item(row).Specific.Value = "");
-                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrName").Cells.Item(row).Specific.Value = "");
-                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrValue").Cells.Item(row).Specific.Value = "");
-                //LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrPr").Cells.Item(row).Specific.Value = "");
             }
             catch (Exception ex)
             {
@@ -1415,7 +1491,19 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
+                int rowCount = oDBDataSourceMTR.Size;
+
+                for (int i = 1; i <= rowCount; i++)
+                {
+                    string itemCode = oDBDataSourceMTR.GetValue("U_ItemCode", i - 1);
+                    if (!string.IsNullOrEmpty(itemCode))
+                    {
+                        oDBDataSourceMTR.SetValue("LineId", i - 1, i.ToString());
+                    }
+                }
                 oMatrix.LoadFromDataSource();
+
                 if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE && deletedRowCount > 0)
                 {
                     oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
@@ -1428,6 +1516,79 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 GC.Collect();
+                oForm.Freeze(false);
+            }
+        }
+
+        private static void updateRowByItemCode(SAPbouiCOM.Form oForm, string itemCode, int i)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSFUCN");
+                string docEntryStr = oDBDataSource.GetValue("DocEntry", 0);
+                int docEntry = 0;
+
+                if (!string.IsNullOrEmpty(docEntryStr))
+                    docEntry = Convert.ToInt32(oDBDataSource.GetValue("DocEntry", 0));
+
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
+                oMatrix.FlushToDataSource();
+
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
+
+                SAPbobsCOM.Recordset oRecordSet = getFuelType(itemCode);
+
+                if (!oRecordSet.EoF)
+                {
+                    oDBDataSourceMTR.SetValue("U_ItemName", i, oRecordSet.Fields.Item("ItemName").Value);
+                    oDBDataSourceMTR.SetValue("U_FuTpCode", i, oRecordSet.Fields.Item("Code").Value);
+                    oDBDataSourceMTR.SetValue("U_FuelCode", i, oRecordSet.Fields.Item("U_ItemCode").Value);
+                    oDBDataSourceMTR.SetValue("U_FuUomEntry", i, Convert.ToString(oRecordSet.Fields.Item("U_UomEntry").Value));
+                    oDBDataSourceMTR.SetValue("U_FuUomCode", i, oRecordSet.Fields.Item("U_UomCode").Value);
+
+                    Marshal.ReleaseComObject(oRecordSet);
+                }
+                oDBDataSourceMTR.SetValue("U_OdmtrStart", i, Convert.ToString(getOdmtrStart(itemCode, docEntry)));
+
+                //------------------------------------------>Dimension<------------------------------------------
+                oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                oRecordSet.DoQuery(@"SELECT ""U_BDOSFADim"" FROM ""OADM"" ");
+
+                if (!oRecordSet.EoF)
+                {
+                    string DimensionNbr = oRecordSet.Fields.Item("U_BDOSFADim").Value;
+
+                    Marshal.ReleaseComObject(oRecordSet);
+
+                    oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                    StringBuilder queryDimension = new StringBuilder();
+                    queryDimension.Append("SELECT \"PrcCode\" \n");
+                    queryDimension.Append("FROM \"OPRC\" \n");
+                    queryDimension.Append("WHERE \"OPRC\".\"U_BDOSFACode\" = '" + itemCode + "'");
+
+                    oRecordSet.DoQuery(queryDimension.ToString());
+                    if (!oRecordSet.EoF)
+                    {
+                        var dim_Col = "U_Dimension" + DimensionNbr;
+                        oDBDataSourceMTR.SetValue(dim_Col, i, oRecordSet.Fields.Item("PrcCode").Value);
+
+                        Marshal.ReleaseComObject(oRecordSet);
+                    }
+                }
+                //------------------------------------------>Dimension<------------------------------------------
+
+                oMatrix.LoadFromDataSource();
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+            }
+            finally
+            {
                 oForm.Freeze(false);
             }
         }
@@ -1482,6 +1643,9 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(true);
 
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
+                oMatrix.FlushToDataSource();
+
                 SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSFUCN");
                 string fuNrCode = oDBDataSource.GetValue("U_FuNrCode", 0);
 
@@ -1498,9 +1662,6 @@ namespace BDO_Localisation_AddOn
                     perHr = Convert.ToDecimal(oRecordset.Fields.Item("U_PerHr").Value);
                     crtrPr = Convert.ToDecimal(oRecordset.Fields.Item("U_CrtrPr").Value);
                 }
-
-                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
-                oMatrix.FlushToDataSource();
 
                 SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
 

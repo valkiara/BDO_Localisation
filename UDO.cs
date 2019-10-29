@@ -116,11 +116,11 @@ namespace BDO_Localisation_AddOn
                 BDOSDepreciationAccrualDocument.registerUDO(out errorText);
             }
 
-            BDOSFuelConsumption.createDocumentUDO(out errorText);
-            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUECON_D") == false)
-            {
-                BDOSFuelConsumption.registerUDO(out errorText);
-            }
+            //BDOSFuelConsumption.createDocumentUDO(out errorText);
+            //if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUECON_D") == false)
+            //{
+            //    BDOSFuelConsumption.registerUDO(out errorText);
+            //}
 
             //Persona Tables
             BDOSApprovalProcedures.createMasterDataUDO(out errorText);
@@ -1270,7 +1270,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(sboRec);
+                Marshal.ReleaseComObject(sboRec);
                 sboRec = null;
                 GC.Collect();
             }
@@ -1316,7 +1316,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserKeysMD);
+                Marshal.ReleaseComObject(oUserKeysMD);
                 oUserKeysMD = null;
                 GC.Collect();
             }
