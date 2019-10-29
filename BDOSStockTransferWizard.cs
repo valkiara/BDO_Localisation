@@ -1866,25 +1866,39 @@ namespace BDO_Localisation_AddOn
                     }
                     else if (sCFL_ID == "TableWhsTo_CFL")
                     {
+                        string whsType = null;
+                        SAPbouiCOM.ComboBox oComboBoxDocTyp = (SAPbouiCOM.ComboBox)oForm.Items.Item("DocTypeE").Specific;
+                        string docType = oComboBoxDocTyp.Value;
+                        if (docType == "TransferToWriteOffWarehouse")
+                        {
+                            whsType = "WriteOff";
+                        }
+
                         SAPbouiCOM.Grid oGrid = oForm.Items.Item("WhsTable").Specific;
                         SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTable");
 
                         int dTableRow = oGrid.GetDataTableRowIndex(pVal.Row);
-                        string prjFr = oDataTable.GetValue("PrjFr", dTableRow);
-                        //string whsType = oDataTable.GetValue("WhseTypeFr", dTableRow);
+                        string prjFr = oDataTable.GetValue("PrjFr", dTableRow);                        
                         string whsFr = oDataTable.GetValue("WhsFr", dTableRow);
-                        setWarehousesConditions(prjFr, null, whsFr, oCFL);
+                        setWarehousesConditions(prjFr, whsType, whsFr, oCFL);
                     }
                     else if (sCFL_ID == "DetailTableWhsTo_CFL")
                     {
+                        string whsType = null;
+                        SAPbouiCOM.ComboBox oComboBoxDocTyp = (SAPbouiCOM.ComboBox)oForm.Items.Item("DocTypeE").Specific;
+                        string docType = oComboBoxDocTyp.Value;
+                        if (docType == "TransferToWriteOffWarehouse")
+                        {
+                            whsType = "WriteOff";
+                        }
+
                         SAPbouiCOM.Grid oGrid = oForm.Items.Item("WhsTblDt").Specific;
                         SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTblDt");
 
                         int dTableRow = oGrid.GetDataTableRowIndex(pVal.Row);
                         string prjFr = oDataTable.GetValue("PrjFr", dTableRow);
-                        //string whsType = oDataTable.GetValue("WhseTypeFr", dTableRow);
                         string whsFr = oDataTable.GetValue("WhsFr", dTableRow);
-                        setWarehousesConditions(prjFr, null, whsFr, oCFL);
+                        setWarehousesConditions(prjFr, whsType, whsFr, oCFL);
                     }
                     else if (sCFL_ID == "Category_CFL")
                     {
@@ -2153,6 +2167,7 @@ namespace BDO_Localisation_AddOn
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhseType");
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhseType");
                 oEditTextColumn.Editable = false;
+                oEditTextColumn.Visible = false;
 
                 oColumns.Item("RowsHeader").Visible = false;
 
@@ -2220,6 +2235,13 @@ namespace BDO_Localisation_AddOn
                 for (int i = 0; i < oDataTableFilter.Rows.Count; i++)
                 {
                     if (oDataTableFilter.GetValue("ChkBx", i) == "Y")
+                    {
+                        whseCodes.Add("'" + oDataTableFilter.GetValue("Code", i).Trim() + "'");
+                    }
+                }
+                if (whseCodes.Count == 0)
+                {
+                    for (int i = 0; i < oDataTableFilter.Rows.Count; i++)
                     {
                         whseCodes.Add("'" + oDataTableFilter.GetValue("Code", i).Trim() + "'");
                     }
@@ -2453,6 +2475,7 @@ namespace BDO_Localisation_AddOn
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhseTypeFr");
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhseTypeFrom");
                 oEditTextColumn.Editable = false;
+                oEditTextColumn.Visible = false;
 
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhsTo");
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhsTo");
@@ -2594,6 +2617,7 @@ namespace BDO_Localisation_AddOn
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhseTypeFr");
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhseTypeFrom");
                 oEditTextColumn.Editable = false;
+                oEditTextColumn.Visible = false;
 
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhsTo");
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhsTo");

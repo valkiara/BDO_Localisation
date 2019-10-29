@@ -5473,7 +5473,7 @@ namespace BDO_Localisation_AddOn
                             g_unit = "სხვა";
                         }
                         decimal g_number = Convert.ToDecimal(oRecordSet.Fields.Item("QUANTITY").Value); //რაოდენობა
-                        decimal full_amount = Convert.ToDecimal(oRecordSet.Fields.Item("AMOUNT").Value); //თანხა დღგ-ს და აქციზის ჩათვლლით
+                        decimal full_amount = Convert.ToDecimal(oRecordSet.Fields.Item("AMOUNT").Value); //თანხა დღგ-ის და აქციზის ჩათვლლით
                         decimal drg_amount = Convert.ToDecimal(oRecordSet.Fields.Item("LineVat").Value); //დღგ
                         decimal aqcizi_amount = 0; //აქციზი
                         int akcis_id = 0; //აქციზური საქონლის კოდი  
@@ -5930,7 +5930,7 @@ namespace BDO_Localisation_AddOn
                 string goods = taxDataRowRS["goods"].ToString(); //საქონლის დასახელება
                 //taxDataRowRS["g_unit"].ToString(); //საქონლის ერთეული
                 //taxDataRowRS["g_number"].ToString(); //რაოდენობა
-                //taxDataRowRS["full_amount"].ToString(); //თანხა დღგ-ს და აქციზის ჩათვლლით
+                //taxDataRowRS["full_amount"].ToString(); //თანხა დღგ-ის და აქციზის ჩათვლლით
                 //taxDataRowRS["drg_amount"].ToString(); //დღგ
                 //taxDataRowRS["aqcizi_amount"].ToString(); //აქციზი
                 //taxDataRowRS["akcis_id"].ToString(); //აქციზური საქონლის კოდი
@@ -5944,7 +5944,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //g_number = g_number + Convert.ToDouble(TaxDeclRow.ItemArray[4], CultureInfo.InvariantCulture); //რაოდენობა
-                //full_amount = full_amount + Convert.ToDouble(TaxDeclRow.ItemArray[5], CultureInfo.InvariantCulture); //თანხა დღგ-ს და აქციზის ჩათვლით
+                //full_amount = full_amount + Convert.ToDouble(TaxDeclRow.ItemArray[5], CultureInfo.InvariantCulture); //თანხა დღგ-ის და აქციზის ჩათვლით
                 //drg_amount = drg_amount + Convert.ToDouble(TaxDeclRow.ItemArray[6], CultureInfo.InvariantCulture); //დღგ
                 //aqcizi_amount = aqcizi_amount + Convert.ToDouble(TaxDeclRow.ItemArray[7], CultureInfo.InvariantCulture); //აქციზის თანხა
             }

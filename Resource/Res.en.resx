@@ -3277,4 +3277,22 @@
   <data name="DateTo" xml:space="preserve">
     <value>Date To</value>
   </data>
+  <data name="Post" xml:space="preserve">
+    <value>Post</value>
+  </data>
+  <data name="CheckDocumentAndItsStatus" xml:space="preserve">
+    <value>Please check document and it's status</value>
+  </data>
+  <data name="DataForJournalEntryNotFound" xml:space="preserve">
+    <value>Data for Journal Entry not found</value>
+  </data>
+  <data name="JournalEntryAlreadyCreated" xml:space="preserve">
+    <value>Journal Entry already created</value>
+  </data>
+  <data name="JournalEntryNotCreated" xml:space="preserve">
+    <value>Can't create Journal Entry</value>
+  </data>
+  <data name="DoYouWantToCreateJEForDownPayment" xml:space="preserve">
+    <value>Do you want to create journal entry for down payment invoice</value>
+  </data>
 </root>

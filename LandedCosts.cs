@@ -82,7 +82,7 @@ namespace BDO_Localisation_AddOn
             string BaseType = "";
 
 
-            //დღგ-ს გატარება
+            //დღგ-ის გატარება
             for (int i = 0; i < JEcount; i++)
             {
                 vatCode = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "U_BDOSVatGrp", i).ToString();
