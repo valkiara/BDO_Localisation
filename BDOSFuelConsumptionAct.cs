@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -474,6 +475,34 @@ namespace BDO_Localisation_AddOn
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
                 setVisibleFormItems(oForm);
+            }
+            else if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
+            {
+                if (BusinessObjectInfo.BeforeAction)
+                {
+                    SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSFUCN");
+                    string docDateStr = oDBDataSource.GetValue("U_DocDate", 0);
+                    string dateFromStr = oDBDataSource.GetValue("U_DateFrom", 0);
+                    string dateToStr = oDBDataSource.GetValue("U_DateTo", 0);
+
+                    if (!string.IsNullOrEmpty(docDateStr) && !string.IsNullOrEmpty(dateFromStr) && !string.IsNullOrEmpty(dateToStr))
+                    {
+                        DateTime docDate = Convert.ToDateTime(DateTime.ParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture));
+                        DateTime dateFrom = Convert.ToDateTime(DateTime.ParseExact(dateFromStr, "yyyyMMdd", CultureInfo.InvariantCulture));
+                        DateTime dateTo = Convert.ToDateTime(DateTime.ParseExact(dateToStr, "yyyyMMdd", CultureInfo.InvariantCulture));
+
+                        if (dateFrom > dateTo)
+                        {
+                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("DateFromMustBeLessOrEqualThanDateTo"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                            BubbleEvent = false;
+                        }
+                        else if (docDate < dateFrom || docDate > dateTo)
+                        {
+                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("PostingDateMustBeBetweenDateFromAndDateTo"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                            BubbleEvent = false;
+                        }
+                    }
+                }
             }
         }
 
@@ -1228,8 +1257,8 @@ namespace BDO_Localisation_AddOn
                             oCon.Alias = "U_PrjCode";
                             oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                             oCon.CondVal = prjCode;
-                            oCFL.SetConditions(oCons);
                         }
+                        oCFL.SetConditions(oCons);
                     }
                     else if (oCFLEvento.ChooseFromListUID == "ItemCodeCFL")
                     {
@@ -1545,12 +1574,12 @@ namespace BDO_Localisation_AddOn
                     oDBDataSourceMTR.SetValue("U_ItemName", i, oRecordSet.Fields.Item("ItemName").Value);
                     oDBDataSourceMTR.SetValue("U_FuTpCode", i, oRecordSet.Fields.Item("Code").Value);
                     oDBDataSourceMTR.SetValue("U_FuelCode", i, oRecordSet.Fields.Item("U_ItemCode").Value);
-                    oDBDataSourceMTR.SetValue("U_FuUomEntry", i, Convert.ToString(oRecordSet.Fields.Item("U_UomEntry").Value));
+                    oDBDataSourceMTR.SetValue("U_FuUomEntry", i, FormsB1.ConvertDecimalToString(oRecordSet.Fields.Item("U_UomEntry").Value));
                     oDBDataSourceMTR.SetValue("U_FuUomCode", i, oRecordSet.Fields.Item("U_UomCode").Value);
 
                     Marshal.ReleaseComObject(oRecordSet);
                 }
-                oDBDataSourceMTR.SetValue("U_OdmtrStart", i, Convert.ToString(getOdmtrStart(itemCode, docEntry)));
+                oDBDataSourceMTR.SetValue("U_OdmtrStart", i, FormsB1.ConvertDecimalToString(getOdmtrStart(itemCode, docEntry)));
 
                 //------------------------------------------>Dimension<------------------------------------------
                 oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -1612,17 +1641,17 @@ namespace BDO_Localisation_AddOn
                     string itemCode = oDBDataSourceMTR.GetValue("U_ItemCode", i);
                     if (!string.IsNullOrEmpty(itemCode))
                     {
-                        var fuPerKm = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_FuPerKm", i));
-                        var odmtrStart = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrStart", i));
-                        var odmtrEnd = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrEnd", i));
-                        var fuPerHr = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_FuPerHr", i));
-                        var hrsWorked = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_HrsWorked", i));
-                        decimal normConsumptionKm = fuPerKm * (odmtrEnd - odmtrStart);
+                        var fuPerKm = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_FuPerKm", i), CultureInfo.InvariantCulture);
+                        var odmtrStart = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrStart", i), CultureInfo.InvariantCulture);
+                        var odmtrEnd = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrEnd", i), CultureInfo.InvariantCulture);
+                        var fuPerHr = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_FuPerHr", i), CultureInfo.InvariantCulture);
+                        var hrsWorked = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_HrsWorked", i), CultureInfo.InvariantCulture);
+                        decimal normConsumptionKm = fuPerKm / 100 * (odmtrEnd - odmtrStart);
                         decimal normConsumptionHr = fuPerHr * hrsWorked;
                         decimal normConsumption = normConsumptionKm + normConsumptionHr;
 
-                        oDBDataSourceMTR.SetValue("U_NormCn", i, Convert.ToString(normConsumption));
-                        oDBDataSourceMTR.SetValue("U_ActuallyCn", i, Convert.ToString(normConsumption));
+                        oDBDataSourceMTR.SetValue("U_NormCn", i, FormsB1.ConvertDecimalToString(normConsumption));
+                        oDBDataSourceMTR.SetValue("U_ActuallyCn", i, FormsB1.ConvertDecimalToString(normConsumption));
                     }
                 }
                 oMatrix.LoadFromDataSource();
@@ -1658,9 +1687,9 @@ namespace BDO_Localisation_AddOn
                 if (oRecordset != null)
                 {
                     isFixed = oRecordset.Fields.Item("U_Fixed").Value == "Y";
-                    perKm = Convert.ToDecimal(oRecordset.Fields.Item("U_PerKm").Value);
-                    perHr = Convert.ToDecimal(oRecordset.Fields.Item("U_PerHr").Value);
-                    crtrPr = Convert.ToDecimal(oRecordset.Fields.Item("U_CrtrPr").Value);
+                    perKm = Convert.ToDecimal(oRecordset.Fields.Item("U_PerKm").Value, CultureInfo.InvariantCulture);
+                    perHr = Convert.ToDecimal(oRecordset.Fields.Item("U_PerHr").Value, CultureInfo.InvariantCulture);
+                    crtrPr = Convert.ToDecimal(oRecordset.Fields.Item("U_CrtrPr").Value, CultureInfo.InvariantCulture);
                 }
 
                 SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
@@ -1678,8 +1707,8 @@ namespace BDO_Localisation_AddOn
                             SAPbobsCOM.Recordset oRecordsetFuelType = getFuelType(itemCode);
                             if (oRecordsetFuelType != null)
                             {
-                                perKm = Convert.ToDecimal(oRecordsetFuelType.Fields.Item("U_PerKm").Value);
-                                perHr = Convert.ToDecimal(oRecordsetFuelType.Fields.Item("U_PerHr").Value);
+                                perKm = Convert.ToDecimal(oRecordsetFuelType.Fields.Item("U_PerKm").Value, CultureInfo.InvariantCulture);
+                                perHr = Convert.ToDecimal(oRecordsetFuelType.Fields.Item("U_PerHr").Value, CultureInfo.InvariantCulture);
                             }
                             if (isFixed.HasValue)
                             {
@@ -1687,8 +1716,8 @@ namespace BDO_Localisation_AddOn
                                 perHr += perHr * crtrPr;
                             }
                         }
-                        oDBDataSourceMTR.SetValue("U_FuPerKm", i, Convert.ToString(perKm));
-                        oDBDataSourceMTR.SetValue("U_FuPerHr", i, Convert.ToString(perHr));
+                        oDBDataSourceMTR.SetValue("U_FuPerKm", i, FormsB1.ConvertDecimalToString(perKm));
+                        oDBDataSourceMTR.SetValue("U_FuPerHr", i, FormsB1.ConvertDecimalToString(perHr));
                     }
                 }
                 oMatrix.LoadFromDataSource();
@@ -1716,7 +1745,7 @@ namespace BDO_Localisation_AddOn
                    ""@BDOSFUNR"".""U_Fixed"", 
                    ""@BDOSFUNR"".""U_PerKm"", 
                    ""@BDOSFUNR"".""U_PerHr"",
-                   SUM(""@BDOSFUN1"".""U_CrtrPr"")/100 AS ""U_CrtrPr""
+                   EXP(SUM(LN(CASE WHEN ""@BDOSFUN1"".""U_CrtrPr"" = 0 THEN 1 ELSE ""@BDOSFUN1"".""U_CrtrPr""/100 END))) AS ""U_CrtrPr""
                 FROM ""@BDOSFUNR""
                 LEFT JOIN ""@BDOSFUN1""
                 ON ""@BDOSFUNR"".""Code"" = ""@BDOSFUN1"".""Code""
@@ -1775,7 +1804,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static double getOdmtrStart(string itemCode, int docEntry)
+        private static decimal getOdmtrStart(string itemCode, int docEntry)
         {
             try
             {
@@ -1797,7 +1826,7 @@ namespace BDO_Localisation_AddOn
 
                 if (!oRecordSet.EoF)
                 {
-                    return oRecordSet.Fields.Item("U_OdmtrEnd").Value;
+                    return Convert.ToDecimal(oRecordSet.Fields.Item("U_OdmtrEnd").Value);
                 }
                 return 0;
             }

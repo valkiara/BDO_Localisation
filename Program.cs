@@ -1576,6 +1576,12 @@ namespace BDO_Localisation_AddOn
                     BDOSFuelNormSpecification.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
+                //----------------------------->Fuel Criteria Master Data<----------------------------
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSFUCR_D")
+                {
+                    BDOSFuelCriteria.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
                 //----------------------------->Fuel Consumption Act Document<----------------------------
                 else if (BusinessObjectInfo.Type == "UDO_F_BDOSFUCN_D")
                 {
@@ -1992,30 +1998,30 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFUTP_D")
                 {
                     BDOSFuelTypes.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                    //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
-                    //{
-                    //    removeRecordRow = 1;
-                    //}
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    {
+                        removeRecordRow = 1;
+                    }
                 }
 
                 //----------------------------->Fuel Criteria Master Data<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_F_BDOSFUCR_D")
                 {
                     BDOSFuelCriteria.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                    //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
-                    //{
-                    //    removeRecordRow = 1;
-                    //}
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    {
+                        removeRecordRow = 1;
+                    }
                 }
 
                 //----------------------------->Specification of Fuel Norm Master Data<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFUNR_D")
                 {
                     BDOSFuelNormSpecification.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                    //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
-                    //{
-                    //    removeRecordRow = 1;
-                    //}
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    {
+                        removeRecordRow = 1;
+                    }
                 }
 
                 //----------------------------->Fuel Consumption Act Document<-----------------------------

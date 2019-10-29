@@ -3262,4 +3262,10 @@
   <data name="DoYouWantToCreateJEForDownPayment" xml:space="preserve">
     <value>Do you want to create journal entry for down payment invoice</value>
   </data>
+  <data name="PostingDateMustBeBetweenDateFromAndDateTo" xml:space="preserve">
+    <value>Posting date must be between date from and date to!</value>
+  </data>
+  <data name="DateFromMustBeLessOrEqualThanDateTo" xml:space="preserve">
+    <value>Date from must be less or equal than date to!</value>
+  </data>
 </root>
