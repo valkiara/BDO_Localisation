@@ -367,29 +367,29 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-			//Delete Ln Item
-			if (pVal.BeforeAction && pVal.MenuUID == "5910")
-			{
-				SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
-				if (oDocForm.TypeEx == "80030")
-				{
-					CashFlowLineItem.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
-				}
-			}
+            //Delete Ln Item
+            if (pVal.BeforeAction && pVal.MenuUID == "5910")
+            {
+                SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+                if (oDocForm.TypeEx == "80030")
+                {
+                    CashFlowLineItem.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
+                }
+            }
 
-			//----------------------------->მოგების გადასახადის დაბეგვრის ობიექტების ტიპები<-----------------------------
-			try
-			{
-				if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_PTBT_D")
-				{
-					errorText = null;
-					Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_PTBT_D", "");
-				}
-			}
-			catch (Exception ex)
-			{
-				Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
-			}
+            //----------------------------->მოგების გადასახადის დაბეგვრის ობიექტების ტიპები<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_PTBT_D")
+                {
+                    errorText = null;
+                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_PTBT_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
 
             //----------------------------->მოგების გადასახადის დაბეგვრის ობიექტები<-----------------------------
             try
@@ -504,18 +504,60 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->Fleet Types Master Data<-----------------------------
+            //----------------------------->Fuel Types Master Data<-----------------------------
             try
             {
-                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFLTP_T")
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUTP_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFLTP_T", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUTP_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
+            //----------------------------->Fuel Criteria Master Data<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUCR_D")
+                {
+                    errorText = null;
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUCR_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
+            //----------------------------->Specification of Fuel Norm Master Data<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUNR_D")
+                {
+                    errorText = null;
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUNR_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
+            //----------------------------->Fuel Consumption Act Document<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUCN_D")
+                {
+                    errorText = null;
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUCN_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Waybill document<-----------------------------
@@ -970,13 +1012,7 @@ namespace BDO_Localisation_AddOn
                     {
                         removeRecordTrans = true;
                     }
-
-                    //----------------------------->Fleet Types<-----------------------------
-                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSFLTP_T")
-                    {
-                        removeRecordTrans = true;
-                    }
-				}
+                }
             }
 
             //----------------------------->Remove Line<-----------------------------
@@ -1000,7 +1036,7 @@ namespace BDO_Localisation_AddOn
                     {
                         ARInvoice.formDataLoad(oForm, out errorText);
                     }
-                    //----------------------------->Fixed Asset<-----------------------------
+                    //----------------------------->Asset Master Data<-----------------------------
                     if (oForm.TypeEx == "1473000075")
                     {
                         FixedAsset.formDataLoad(oForm, out errorText);
@@ -1149,7 +1185,7 @@ namespace BDO_Localisation_AddOn
                         Delivery.formDataLoad(oForm, out errorText);
                     }
 
-                    //----------------------------->Fixed Asset<-----------------------------
+                    //----------------------------->Asset Master Data<-----------------------------
                     if (oForm.TypeEx == "1473000075")
                     {
                         FixedAsset.formDataLoad(oForm, out errorText);
@@ -1283,7 +1319,6 @@ namespace BDO_Localisation_AddOn
         static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
 
             if (!localisationAddonLicensed) return;
 
@@ -1296,276 +1331,278 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Cahrt Of Accounts<-----------------------------
-                if (BusinessObjectInfo.Type == "1")
+                else if (BusinessObjectInfo.Type == "1")
                 {
                     ChartOfAccounts.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Outgoing Payment<-----------------------------
-                if (BusinessObjectInfo.Type == "46")
+                else if (BusinessObjectInfo.Type == "46")
                 {
                     OutgoingPayment.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Incoming Payment<-----------------------------
-                if (BusinessObjectInfo.Type == "24")
+                else if (BusinessObjectInfo.Type == "24")
                 {
                     IncomingPayment.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Goods Issue<-----------------------------
-                if (BusinessObjectInfo.Type == "60")
+                else if (BusinessObjectInfo.Type == "60")
                 {
                     GoodsIssue.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->FA Capitalization<-----------------------------
-                if (BusinessObjectInfo.Type == "1470000049")
+                else if (BusinessObjectInfo.Type == "1470000049")
                 {
                     Capitalization.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Retirement<-----------------------------
-                if (BusinessObjectInfo.Type == "1470000094")
+                else if (BusinessObjectInfo.Type == "1470000094")
                 {
                     Retirement.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->House Bank Account<-----------------------------
-                if (BusinessObjectInfo.Type == "231")
+                else if (BusinessObjectInfo.Type == "231")
                 {
                     HouseBankAccounts.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Landed costs<-----------------------------
-                if (BusinessObjectInfo.Type == "69")
+                else if (BusinessObjectInfo.Type == "69")
                 {
                     LandedCosts.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->A/P Invoice || A/P Credit Memo<-----------------------------
-                if ((BusinessObjectInfo.Type == "18") || (BusinessObjectInfo.Type == "19"))
-                {
-                    //დოკუმენტი არ დაემატოს ზედნადების გარეშე, თუ მომწოდებელს ჩართული აქვს
-                    if ((BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE) & (BusinessObjectInfo.BeforeAction == true))
-                    {
-                        SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, currentFormCount);
-                        SAPbouiCOM.DBDataSource DocDBSourceOCRD = oForm.DataSources.DBDataSources.Item(0);
-                    }
-                }
-
                 //----------------------------->Business Partner Master Data<-----------------------------
-                if (BusinessObjectInfo.Type == "2")
+                else if (BusinessObjectInfo.Type == "2")
                 {
                     BusinessPartners.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Items Master Data<-----------------------------
-                if (BusinessObjectInfo.Type == "4")
+                //----------------------------->Item Master Data<-----------------------------
+                else if (BusinessObjectInfo.Type == "4" && BusinessObjectInfo.FormTypeEx == "150")
                 {
                     Items.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Items Groups<-----------------------------
-                if (BusinessObjectInfo.Type == "52")
+                else if (BusinessObjectInfo.Type == "52" && BusinessObjectInfo.FormTypeEx == "63")
                 {
                     ItemGroup.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/P Invoice<-----------------------------
-                if (BusinessObjectInfo.Type == "18" & BusinessObjectInfo.FormTypeEx == "141")
+                else if (BusinessObjectInfo.Type == "18" && BusinessObjectInfo.FormTypeEx == "141")
                 {
                     APInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Goods Receipt PO<-----------------------------
-                if (BusinessObjectInfo.Type == "20" & BusinessObjectInfo.FormTypeEx == "143")
+                else if (BusinessObjectInfo.Type == "20" && BusinessObjectInfo.FormTypeEx == "143")
                 {
                     GoodsReceiptPO.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/P Reserve Invoice<-----------------------------
-                if (BusinessObjectInfo.Type == "18" & BusinessObjectInfo.FormTypeEx == "60092")
+                else if (BusinessObjectInfo.Type == "18" && BusinessObjectInfo.FormTypeEx == "60092")
                 {
                     APReserveInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/P Correction Invoice<-----------------------------
-                if (BusinessObjectInfo.Type == "164")
+                else if (BusinessObjectInfo.Type == "164")
                 {
                     APCorrectionInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/P Credit Memo<-----------------------------
-                if (BusinessObjectInfo.Type == "19")
+                else if (BusinessObjectInfo.Type == "19")
                 {
                     APCreditMemo.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/R Invoice<-----------------------------
-                if (BusinessObjectInfo.Type == "13" & BusinessObjectInfo.FormTypeEx == "133")
+                else if (BusinessObjectInfo.Type == "13" && BusinessObjectInfo.FormTypeEx == "133")
                 {
                     ARInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
-                //----------------------------->fixed assets<-----------------------------
-                if (BusinessObjectInfo.Type == "4" & BusinessObjectInfo.FormTypeEx == "1473000075")
+
+                //----------------------------->Asset Master Data<-----------------------------
+                else if (BusinessObjectInfo.Type == "4" && BusinessObjectInfo.FormTypeEx == "1473000075")
                 {
                     FixedAsset.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
+                //----------------------------->Asset Class<-----------------------------
+                else if (BusinessObjectInfo.Type == "1470000032") // && BusinessObjectInfo.FormTypeEx == "1472000006"
+                {
+                    AssetClass.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
                 //----------------------------->A/R Reserve Invoice<-----------------------------
-                if (BusinessObjectInfo.Type == "13" & BusinessObjectInfo.FormTypeEx == "60091")
+                else if (BusinessObjectInfo.Type == "13" && BusinessObjectInfo.FormTypeEx == "60091")
                 {
                     ARReserveInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/R CreditNote<-----------------------------
-                if (BusinessObjectInfo.Type == "14")
+                else if (BusinessObjectInfo.Type == "14")
                 {
                     ARCreditNote.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Inventory Transfer<-----------------------------
-                if (BusinessObjectInfo.Type == "67")
+                else if (BusinessObjectInfo.Type == "67")
                 {
                     StockTransfer.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Inventory Transfer Request<-----------------------------
-                if (BusinessObjectInfo.Type == "1250000001")
+                else if (BusinessObjectInfo.Type == "1250000001")
                 {
                     StockTransferRequest.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Delivery<-----------------------------
-                if (BusinessObjectInfo.Type == "15")
+                else if (BusinessObjectInfo.Type == "15")
                 {
                     Delivery.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Waybill document<-----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDO_WBLD_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDO_WBLD_D")
                 {
                     BDO_Waybills.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Tax Invoice Received<-----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDO_TAXR_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDO_TAXR_D")
                 {
                     BDO_TaxInvoiceReceived.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Tax Invoice Sent<-----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDO_TAXS_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDO_TAXS_D")
                 {
                     BDO_TaxInvoiceSent.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Company Details<-----------------------------
-                if (BusinessObjectInfo.Type == "39")
+                else if (BusinessObjectInfo.Type == "39")
                 {
                     CompanyDetails.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Profit Tax Accural<-----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDO_TAXP_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDO_TAXP_D")
                 {
                     BDO_ProfitTaxAccrual.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Fixed Asset Transfer Document<-----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDOSFASTRD_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSFASTRD_D")
                 {
                     BDOSFixedAssetTransfer.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Depreciation Accrual Document<-----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDOSDEPACR_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSDEPACR_D")
                 {
                     BDOSDepreciationAccrualDocument.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Fuel Consumption Document<-----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDOSFUECON_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSFUECON_D")
                 {
                     BDOSFuelConsumption.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/R Down Payment Invoice<-----------------------------
-                if (BusinessObjectInfo.Type == "203")
+                else if (BusinessObjectInfo.Type == "203" && BusinessObjectInfo.FormTypeEx == "65300")
                 {
                     ARDownPaymentInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/R Down Payment Request<-----------------------------
-                if (BusinessObjectInfo.Type == "203")
+                else if (BusinessObjectInfo.Type == "203" && BusinessObjectInfo.FormTypeEx == "65308")
                 {
                     ARDownPaymentRequest.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/R Down Payment VAT<-----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDO_ARDPV_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDO_ARDPV_D")
                 {
                     BDOSARDownPaymentVATAccrual.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/P DownPayment Invoice<-----------------------------
-                if (BusinessObjectInfo.Type == "204")
+                else if (BusinessObjectInfo.Type == "204" && BusinessObjectInfo.FormTypeEx == "65301")
                 {
                     APDownPaymentInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->A/P Down Payment Request<-----------------------------
-                if (BusinessObjectInfo.Type == "204")
+                else if (BusinessObjectInfo.Type == "204" && BusinessObjectInfo.FormTypeEx == "65309")
                 {
                     APDownPaymentRequest.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Vehicles<----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDO_VECL_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDO_VECL_D")
                 {
                     BDO_Vehicles.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Drivers<----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDO_DRVS_D")
+                else if (BusinessObjectInfo.Type == "UDO_F_BDO_DRVS_D")
                 {
                     BDO_Drivers.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Fleet Types<----------------------------
-                if (BusinessObjectInfo.Type == "UDO_F_BDOSFLTP_T")
+                //----------------------------->Fuel Types<----------------------------
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSFUTP_D")
                 {
-                    BDOSConsumptionTypes.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                    BDOSFuelTypes.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
+                //----------------------------->Specification of Fuel Norm<----------------------------
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSFUNR_D")
+                {
+                    BDOSFuelNormSpecification.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
+                //----------------------------->Fuel Consumption Act Document<----------------------------
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSFUCN_D")
+                {
+                    BDOSFuelConsumptionAct.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Blanket Agreement<-----------------------------
-                if (BusinessObjectInfo.Type == "1250000025")
+                else if (BusinessObjectInfo.Type == "1250000025")
                 {
                     BlanketAgreement.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Warehouses<-----------------------------
-                if (BusinessObjectInfo.Type == "64")
+                else if (BusinessObjectInfo.Type == "64")
                 {
                     Warehouses.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Landed Costs Setup-----------------------------
-                if (BusinessObjectInfo.Type == "48")
+                else if (BusinessObjectInfo.Type == "48")
                 {
                     LandedCostsSetup.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
-                }
-
-                //----------------------------->Asset Class-----------------------------
-                if (BusinessObjectInfo.Type == "1470000032")
-                {
-                    AssetClass.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -1878,7 +1915,7 @@ namespace BDO_Localisation_AddOn
                     ItemGroup.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Fixed Asset<-----------------------------
+                //----------------------------->Asset Master Data<-----------------------------
                 else if (pVal.FormTypeEx == "1473000075" || pVal.FormUID == "NewCostCenterForm")
                 {
                     FixedAsset.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
@@ -1951,14 +1988,40 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                //----------------------------->Fleet Types Master Data<-----------------------------
-                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFLTP_T")
+                //----------------------------->Fuel Types Master Data<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFUTP_D")
                 {
-                    BDOSConsumptionTypes.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
-                    {
-                        removeRecordRow = 1;
-                    }
+                    BDOSFuelTypes.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    //{
+                    //    removeRecordRow = 1;
+                    //}
+                }
+
+                //----------------------------->Fuel Criteria Master Data<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_F_BDOSFUCR_D")
+                {
+                    BDOSFuelCriteria.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    //{
+                    //    removeRecordRow = 1;
+                    //}
+                }
+
+                //----------------------------->Specification of Fuel Norm Master Data<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFUNR_D")
+                {
+                    BDOSFuelNormSpecification.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    //{
+                    //    removeRecordRow = 1;
+                    //}
+                }
+
+                //----------------------------->Fuel Consumption Act Document<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFUCN_D")
+                {
+                    BDOSFuelConsumptionAct.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Waybill Document<-----------------------------
@@ -2323,7 +2386,7 @@ namespace BDO_Localisation_AddOn
 
             if (eventInfo.BeforeAction == true)
             {
-				if (Program.uiApp.Menus.Exists("6005") == false && oItem != null && DocEntry == "")
+                if (Program.uiApp.Menus.Exists("6005") == false && oItem != null && DocEntry == "")
                 {
                     SAPbouiCOM.MenuItem oMenuItem;
                     SAPbouiCOM.Menus oMenus;

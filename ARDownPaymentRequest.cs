@@ -149,20 +149,17 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
-            if (oForm.TypeEx == "65308")
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
             {
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
-                {
-                    formDataLoad( oForm, out errorText);
-                    setVisibleFormItems(oForm, out errorText);
-                }
+                formDataLoad(oForm, out errorText);
+                setVisibleFormItems(oForm, out errorText);
             }
         }
 

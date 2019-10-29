@@ -44,10 +44,28 @@ namespace BDO_Localisation_AddOn
                 BDO_Drivers.registerUDO( out errorText);
             }
 
-            BDOSConsumptionTypes.createMasterDataUDO(out errorText);
-            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFLTP_T") == false)
+            BDOSFuelTypes.createMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUTP_D") == false)
             {
-                BDOSConsumptionTypes.registerUDO(out errorText);
+                BDOSFuelTypes.registerUDO();
+            }
+
+            BDOSFuelCriteria.createMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUCR_D") == false)
+            {
+                BDOSFuelCriteria.registerUDO();
+            }
+
+            BDOSFuelNormSpecification.createMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUNR_D") == false)
+            {
+                BDOSFuelNormSpecification.registerUDO();
+            }
+
+            BDOSFuelConsumptionAct.createDocumentUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUCN_D") == false)
+            {
+                BDOSFuelConsumptionAct.registerUDO();
             }
 
             BDO_Vehicles.createMasterDataUDO( out errorText);
@@ -98,11 +116,21 @@ namespace BDO_Localisation_AddOn
                 BDOSDepreciationAccrualDocument.registerUDO(out errorText);
             }
 
-            BDOSFuelConsumption.createDocumentUDO(out errorText);
-            if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUECON_D") == false)
+            //BDOSFuelConsumption.createDocumentUDO(out errorText);
+            //if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUECON_D") == false)
+            //{
+            //    BDOSFuelConsumption.registerUDO(out errorText);
+            //}
+
+            //Persona Tables
+            BDOSApprovalProcedures.createMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSAPRP_D") == false)
             {
-                BDOSFuelConsumption.registerUDO(out errorText);
+                BDOSApprovalProcedures.registerUDO();
             }
+            BDOSApprovalStages.createNoObjectUDO(out errorText);
+            BDOSTasksForApproval.createNoObjectUDO(out errorText);
+            //Persona Tables 
 
             //მოგების გადასახადის ცხრილი (ბევრი დოკუმენტი გააკეთებს ჩანაწერებს)
             ProfitTax.createUDO( out errorText);
@@ -338,8 +366,7 @@ namespace BDO_Localisation_AddOn
                 return 0;
             }
             
-            SAPbobsCOM.UserTablesMD oUserTablesMD = null;
-            oUserTablesMD = ((SAPbobsCOM.UserTablesMD)(Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserTables)));
+            SAPbobsCOM.UserTablesMD oUserTablesMD = ((SAPbobsCOM.UserTablesMD)(Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserTables)));
             oUserTablesMD.TableName = tableName;
             oUserTablesMD.TableDescription = description;
             oUserTablesMD.TableType = type;
@@ -1243,7 +1270,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(sboRec);
+                Marshal.ReleaseComObject(sboRec);
                 sboRec = null;
                 GC.Collect();
             }
@@ -1289,7 +1316,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserKeysMD);
+                Marshal.ReleaseComObject(oUserKeysMD);
                 oUserKeysMD = null;
                 GC.Collect();
             }

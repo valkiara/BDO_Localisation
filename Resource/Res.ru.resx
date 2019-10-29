@@ -445,7 +445,7 @@
     <value>Denied</value>
   </data>
   <data name="DocEntry" xml:space="preserve">
-    <value>Document Internal Key</value>
+    <value>Internal Number</value>
   </data>
   <data name="DocNum" xml:space="preserve">
     <value>Number</value>
@@ -3189,6 +3189,60 @@
   </data>
   <data name="WhseTypeFrom" xml:space="preserve">
     <value>Warehouse Type (From)</value>
+  </data>
+  <data name="FuelTypes" xml:space="preserve">
+    <value>Fuel Types</value>
+  </data>
+  <data name="FuelCode" xml:space="preserve">
+    <value>Fuel Code</value>
+  </data>
+  <data name="FuelDescription" xml:space="preserve">
+    <value>Fuel Description</value>
+  </data>
+  <data name="PerHr" xml:space="preserve">
+    <value>Per Hour</value>
+  </data>
+  <data name="PerKm" xml:space="preserve">
+    <value>Per 100 km</value>
+  </data>
+  <data name="FuelCriteria" xml:space="preserve">
+    <value>Fuel Criteria</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>Percentage</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="SpecificationOfFuelNorm" xml:space="preserve">
+    <value>Specification of Fuel Norm</value>
+  </data>
+  <data name="Fixed" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
+  <data name="ActuallyConsumption" xml:space="preserve">
+    <value>Actually Consumption</value>
+  </data>
+  <data name="EndingValueOfOdometer" xml:space="preserve">
+    <value>Ending Value of Odometer</value>
+  </data>
+  <data name="FuelConsumptionAct" xml:space="preserve">
+    <value>Fuel Consumption Act</value>
+  </data>
+  <data name="HoursWorked" xml:space="preserve">
+    <value>Hours Worked</value>
+  </data>
+  <data name="NormConsumption" xml:space="preserve">
+    <value>Norm Consumption</value>
+  </data>
+  <data name="StartingValueOfOdometer" xml:space="preserve">
+    <value>Starting Value of Odometer</value>
+  </data>
+  <data name="DateFrom" xml:space="preserve">
+    <value>Date From</value>
+  </data>
+  <data name="DateTo" xml:space="preserve">
+    <value>Date To</value>
   </data>
   <data name="Post" xml:space="preserve">
     <value>Post</value>

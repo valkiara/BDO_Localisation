@@ -80,6 +80,8 @@ namespace BDO_Localisation_AddOn
             BPBankAccounts.createUserFields(out errorText);
 
             AssetClass.createUserFields(out errorText);
+
+            Projects.createUserFields(out errorText);
         }
 
         public static void addMenusForAddOn( out string errorText)
@@ -102,7 +104,13 @@ namespace BDO_Localisation_AddOn
 
             BDO_Vehicles.addMenus( out errorText);
 
-            BDOSConsumptionTypes.addMenus(out errorText);
+            BDOSFuelTypes.addMenus();
+
+            BDOSFuelCriteria.addMenus();
+
+            BDOSFuelNormSpecification.addMenus();
+
+            BDOSFuelConsumptionAct.addMenus();
 
             BDO_Waybills.addMenus( out errorText);
 
@@ -140,7 +148,7 @@ namespace BDO_Localisation_AddOn
 
             BDOSFuelTransferWizard.addMenus(out errorText);
 
-            BDOSFuelConsumption.addMenus(out errorText);
+            //BDOSFuelConsumption.addMenus(out errorText);
         }
 
         public static int getLongIntRGB(int R, int G, int B)

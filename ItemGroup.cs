@@ -49,14 +49,22 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            GC.Collect();
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSFuel");
+            fieldskeysMap.Add("TableName", "OITB");
+            fieldskeysMap.Add("Description", "Fuel");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
 
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            GC.Collect();
         }
 
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
@@ -67,58 +75,67 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
 
-
-                    chooseFromListAddForm(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
-                    chooseFromList(oForm, pVal.BeforeAction, oCFLEvento, out errorText);
-
+                    chooseFromListAddForm(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction);
+                    chooseFromList(oForm, pVal.BeforeAction, oCFLEvento);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
-                    createFormItems(oForm, out errorText);
+                    createFormItems(oForm);
+                    Program.FORM_LOAD_FOR_VISIBLE = true;
+                    Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
+                {
+                    if (Program.FORM_LOAD_FOR_VISIBLE)
+                    {
+                        Program.FORM_LOAD_FOR_VISIBLE = false;
+                        setVisibleFormItems(oForm);
+                    }
+                }
+
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
                 {
-                    oForm.Freeze(true);
-                    resizeForm(oForm, out errorText);
-                    oForm.Freeze(false);
+                    resizeForm(oForm);
                 }
 
                 if (pVal.ItemUID == "BDOSFxAs" || pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                 {
-                    setVisibility(oForm, out errorText);
+                    setVisibleFormItems(oForm);
                 }
-                
             }
         }
+
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
-            if (oForm.TypeEx == "63")
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
-                {
-                    setVisibility(oForm, out errorText);
-                }
+                setVisibleFormItems(oForm);
             }
         }
 
         public static void reArrangeFormItems(SAPbouiCOM.Form oForm)
         {
-            SAPbouiCOM.Item oItem = null;
+            SAPbouiCOM.Item oItem;
             int height = 15;
 
             int top = oForm.Items.Item("123").Top;
             top = top + height + 1;
-            
+
             oItem = oForm.Items.Item("BDOSFxAs");
             oItem.FromPane = 1;
             oItem.ToPane = 1;
             top = top + height + 1;
+            oItem.Top = top;
+
+            oItem = oForm.Items.Item("BDOSFuel");
+            oItem.FromPane = 1;
+            oItem.ToPane = 1;
             oItem.Top = top;
 
             oItem = oForm.Items.Item("AccDepS");
@@ -130,7 +147,6 @@ namespace BDO_Localisation_AddOn
             oItem.FromPane = 1;
             oItem.ToPane = 1;
             oItem.Top = top;
-            
 
             oItem = oForm.Items.Item("ExpDepS");
             oItem.FromPane = 1;
@@ -153,20 +169,14 @@ namespace BDO_Localisation_AddOn
             oItem.FromPane = 1;
             oItem.ToPane = 1;
             oItem.Top = top;
-
-
-            
         }
 
-        public static void setVisibility(SAPbouiCOM.Form oForm, out string errorText)
+        public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
             oForm.Freeze(true);
-            bool visibleProperties = oForm.DataSources.DBDataSources.Item("OITB").GetValue("U_BDOSFxAs", 0) == "Y";
-
             try
             {
+                bool visibleProperties = oForm.DataSources.DBDataSources.Item("OITB").GetValue("U_BDOSFxAs", 0) == "Y";
                 oForm.Items.Item("AccDep").Visible = visibleProperties;
                 oForm.Items.Item("AccDep").FromPane = 1;
                 oForm.Items.Item("AccDep").ToPane = 1;
@@ -185,34 +195,48 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("UsLifeS").Visible = visibleProperties;
                 oForm.Items.Item("UsLifeS").FromPane = 1;
                 oForm.Items.Item("UsLifeS").ToPane = 1;
-                
+
+                string enableFuelMng = (string)CommonFunctions.getOADM("U_BDOSEnbFlM");
+                if (enableFuelMng == "Y")
+                {
+                    oForm.Items.Item("BDOSFuel").Visible = true;
+                }
             }
-            catch
-            { }
 
-            oForm.Freeze(false);
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
 
+            finally
+            {
+                oForm.Freeze(false);
+            }
         }
-        public static void resizeForm(SAPbouiCOM.Form oForm, out string errorText)
-        {
-            errorText = null;
 
+        public static void resizeForm(SAPbouiCOM.Form oForm)
+        {
+            oForm.Freeze(true);
             try
             {
                 reArrangeFormItems(oForm);
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
-        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
+            string errorText;
 
             Dictionary<string, object> formItems;
-            string itemName = "";
+            string itemName;
 
             int Left = oForm.Items.Item("123").Left;
             int Top = oForm.Items.Item("123").Left + 20;
@@ -227,7 +251,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("DataSource", "UserDataSources");
             formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
             formItems.Add("TableName", "OITB");
-            formItems.Add("Alias", "U_"+itemName);
+            formItems.Add("Alias", "U_" + itemName);
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
             formItems.Add("Width", Width);
@@ -245,7 +269,33 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSFuel"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OITB");
+            formItems.Add("Alias", "U_BDOSFuel");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("Width", Width);
+            formItems.Add("Left", oForm.Items.Item("124").Left);
+            formItems.Add("Top", Top);
+            formItems.Add("Height", Height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Fuel"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+            formItems.Add("Visible", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
             }
 
             Top = Top + Height + 1;
@@ -267,7 +317,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             Left = oForm.Items.Item("124").Left;
@@ -296,12 +346,12 @@ namespace BDO_Localisation_AddOn
             formItems.Add("FromPane", pane);
             formItems.Add("ToPane", pane);
             formItems.Add("Visible", false);
+
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
-
 
             Top = Top + Height + 1;
             Left = oForm.Items.Item("123").Left;
@@ -323,7 +373,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             Left = oForm.Items.Item("124").Left;
@@ -352,12 +402,12 @@ namespace BDO_Localisation_AddOn
             formItems.Add("FromPane", pane);
             formItems.Add("ToPane", pane);
             formItems.Add("Visible", false);
+
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
-
 
             Top = Top + Height + 1;
             Left = oForm.Items.Item("123").Left;
@@ -379,11 +429,10 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             Left = oForm.Items.Item("124").Left;
-            
 
             formItems = new Dictionary<string, object>();
             itemName = "UsLife"; //10 characters
@@ -406,25 +455,20 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
-
-
-
         }
 
-        private static void chooseFromList(SAPbouiCOM.Form oForm, bool BeforeAction, SAPbouiCOM.IChooseFromListEvent oCFLEvento, out string errorText)
+        private static void chooseFromList(SAPbouiCOM.Form oForm, bool BeforeAction, SAPbouiCOM.IChooseFromListEvent oCFLEvento)
         {
-            errorText = null;
-
-            string sCFL_ID = oCFLEvento.ChooseFromListUID;
-            SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
-
-            SAPbouiCOM.DataTable oDataTable = null;
-            oDataTable = oCFLEvento.SelectedObjects;
+            oForm.Freeze(true);
             try
             {
-                if (BeforeAction == false)
+                string sCFL_ID = oCFLEvento.ChooseFromListUID;
+                SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
+                SAPbouiCOM.DataTable oDataTable = oCFLEvento.SelectedObjects;
+
+                if (!BeforeAction)
                 {
                     if (oDataTable != null)
                     {
@@ -449,23 +493,24 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
-        public static void chooseFromListAddForm(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
+
+        public static void chooseFromListAddForm(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction)
         {
-            errorText = null;
+            oForm.Freeze(true);
 
             try
             {
                 string sCFL_ID = oCFLEvento.ChooseFromListUID;
                 SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
 
-                if (beforeAction == true)
+                if (beforeAction)
                 {
                     if (sCFL_ID == "acc_CFL_D")
                     {
@@ -476,9 +521,7 @@ namespace BDO_Localisation_AddOn
                         oCon.Alias = "Postable";
                         oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                         oCon.CondVal = "Y";
-
                         oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_NONE;
-                        
 
                         oCFL.SetConditions(oCons);
                     }
@@ -491,19 +534,19 @@ namespace BDO_Localisation_AddOn
                         oCon.Alias = "Postable";
                         oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                         oCon.CondVal = "Y";
-
                         oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_NONE;
-
 
                         oCFL.SetConditions(oCons);
                     }
-
                 }
-                
             }
             catch (Exception ex)
             {
-                string exsd = ex.Message;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
     }
