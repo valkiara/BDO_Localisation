@@ -3268,4 +3268,7 @@
   <data name="DateFromMustBeLessOrEqualThanDateTo" xml:space="preserve">
     <value>Date from must be less or equal than date to!</value>
   </data>
+  <data name="LessThan" xml:space="preserve">
+    <value>less than</value>
+  </data>
 </root>

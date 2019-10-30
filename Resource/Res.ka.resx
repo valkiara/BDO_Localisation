@@ -3280,4 +3280,7 @@
   <data name="DateFromMustBeLessOrEqualThanDateTo" xml:space="preserve">
     <value>საწყისი თარიღი უნდა იყოს საბოლოო თარიღზე ნაკლები ან ტოლი!</value>
   </data>
+  <data name="LessThan" xml:space="preserve">
+    <value>ნაკლებია ვიდრე</value>
+  </data>
 </root>

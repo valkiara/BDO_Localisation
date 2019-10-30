@@ -396,7 +396,7 @@ namespace BDO_Localisation_AddOn
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
                 {
                     if (Program.FORM_LOAD_FOR_VISIBLE)
                     {
@@ -409,12 +409,12 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
                 {
                     resizeForm(oForm);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
                 {
                     if (Program.FORM_LOAD_FOR_ACTIVATE)
                     {
@@ -437,7 +437,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
                     chooseFromList(oForm, pVal, oCFLEvento);
@@ -446,22 +446,61 @@ namespace BDO_Localisation_AddOn
                     //    addMatrixRow(oForm);
                 }
 
-                if (pVal.ItemUID == "AssetMTR" && pVal.ItemChanged)
+                else if (pVal.ItemUID == "AssetMTR" && pVal.ItemChanged)
                 {
+                    if (pVal.ColUID == "OdmtrStart" || pVal.ColUID == "OdmtrEnd")
+                    {
+                        try
+                        {
+                            oForm.Freeze(true);
+                            if (!checkOdmtrEnd(oForm, pVal.Row - 1))
+                            {
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("EndingValueOfOdometer") + " " + BDOSResources.getTranslate("LessThan") + " " + BDOSResources.getTranslate("StartingValueOfOdometer") + "! " + BDOSResources.getTranslate("TableRow") + ": " + pVal.Row, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                                BubbleEvent = false;
+                                return;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Program.uiApp.SetStatusBarMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                        }
+                        finally
+                        {
+                            oForm.Freeze(false);
+                        }
+                    }
                     if (pVal.ColUID == "OdmtrStart" || pVal.ColUID == "OdmtrEnd" || pVal.ColUID == "HrsWorked")
                     {
                         calculateConsumptionValue(oForm, pVal.Row - 1);
                     }
                 }
 
-                if (pVal.ItemUID == "addMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
+                //else if (pVal.ItemUID == "AssetMTR" && pVal.ColUID == "OdmtrEnd" && pVal.ItemChanged)
+                //{
+                //    try
+                //    {
+                //        if (!checkOdmtrEnd(oForm, pVal.Row - 1))
+                //        {
+                //            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("EndingValueOfOdometer") + " " + BDOSResources.getTranslate("LessThan") + " " + BDOSResources.getTranslate("StartingValueOfOdometer") + "! " + BDOSResources.getTranslate("TableRow") + ": " + pVal.Row, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                //            BubbleEvent = false;
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        Program.uiApp.SetStatusBarMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                //    }
+                //}
+
+                else if (pVal.ItemUID == "addMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
-                    addMatrixRow(oForm);
+                    if (pVal.FormMode == 3) 
+                        addMatrixRow(oForm);
                 }
 
-                if (pVal.ItemUID == "delMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
+                else if (pVal.ItemUID == "delMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
-                    deleteMatrixRow(oForm);
+                    if (pVal.FormMode == 3)
+                        deleteMatrixRow(oForm);
                 }
             }
         }
@@ -568,6 +607,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
             formItems = new Dictionary<string, object>();
             itemName = "PrjLB"; //10 characters
@@ -625,6 +666,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
             formItems = new Dictionary<string, object>();
             itemName = "FuNrLB"; //10 characters
@@ -680,6 +723,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
             top = top + height + 1;
 
@@ -719,6 +764,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
             formItems = new Dictionary<string, object>();
             itemName = "No.S"; //10 characters
@@ -759,6 +806,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
             formItems = new Dictionary<string, object>();
             itemName = "DocNumE"; //10 characters
@@ -779,7 +828,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-            oForm.Items.Item("DocNumE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             top2 += height + 1;
 
@@ -821,7 +871,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-            oForm.Items.Item("StatusC").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             top2 += height + 1;
 
@@ -863,7 +914,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-            oForm.Items.Item("CanceledC").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             top2 += height + 1;
 
@@ -903,7 +955,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-            oForm.Items.Item("CreateDatE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             top2 += height + 1;
 
@@ -943,7 +996,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-            oForm.Items.Item("UpdateDatE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             top2 += height + 1;
 
@@ -983,7 +1037,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-            //oForm.Items.Item("DocDateE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
             top += (4 * height + 1);
 
@@ -1002,6 +1057,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
             formItems = new Dictionary<string, object>();
             itemName = "delMTRB"; //10 characters
@@ -1018,6 +1075,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
             top = top + height + 1;
 
@@ -1141,6 +1200,9 @@ namespace BDO_Localisation_AddOn
                 oLink.LinkedObjectType = "62"; //Cost Rate
             }
 
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
+
             top = top + oForm.Items.Item("AssetMTR").Height + 30;
 
             formItems = new Dictionary<string, object>();
@@ -1180,7 +1242,8 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-            oForm.Items.Item("CreatorE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             top = top + height + 1;
 
@@ -1413,10 +1476,13 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("Dimension4").Width = mtrWidth;
                 oMatrix.Columns.Item("Dimension5").Width = mtrWidth;
 
-                int top = oForm.Items.Item("AssetMTR").Top + oForm.Items.Item("AssetMTR").Height + 30;
-                oForm.Items.Item("CreatorS").Top = top;
-                oForm.Items.Item("CreatorE").Top = top;
                 int height = 15;
+                int top = oForm.Items.Item("AssetMTR").Top - height - 1;
+                oForm.Items.Item("addMTRB").Top = top;
+                oForm.Items.Item("delMTRB").Top = top;
+                top = oForm.Items.Item("AssetMTR").Top + oForm.Items.Item("AssetMTR").Height + 30;
+                oForm.Items.Item("CreatorS").Top = top;
+                oForm.Items.Item("CreatorE").Top = top;             
                 top += height + 1;
                 oForm.Items.Item("RemarksS").Top = top;
                 oForm.Items.Item("RemarksE").Top = top;
@@ -1579,7 +1645,10 @@ namespace BDO_Localisation_AddOn
 
                     Marshal.ReleaseComObject(oRecordSet);
                 }
-                oDBDataSourceMTR.SetValue("U_OdmtrStart", i, FormsB1.ConvertDecimalToString(getOdmtrStart(itemCode, docEntry)));
+                decimal odmtrStart = getOdmtrStart(itemCode, docEntry);
+                oDBDataSourceMTR.SetValue("U_OdmtrStart", i, FormsB1.ConvertDecimalToString(odmtrStart));
+                if (Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrStart", i), CultureInfo.InvariantCulture) == 0)
+                    oDBDataSourceMTR.SetValue("U_OdmtrEnd", i, FormsB1.ConvertDecimalToString(odmtrStart));
 
                 //------------------------------------------>Dimension<------------------------------------------
                 oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -1712,8 +1781,8 @@ namespace BDO_Localisation_AddOn
                             }
                             if (isFixed.HasValue)
                             {
-                                perKm += perKm * crtrPr;
-                                perHr += perHr * crtrPr;
+                                perKm *= crtrPr;
+                                perHr *= crtrPr;
                             }
                         }
                         oDBDataSourceMTR.SetValue("U_FuPerKm", i, FormsB1.ConvertDecimalToString(perKm));
@@ -1730,6 +1799,25 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(false);
             }
+        }
+
+        private static bool checkOdmtrEnd(SAPbouiCOM.Form oForm, int i)
+        {
+            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
+            oMatrix.FlushToDataSource();
+
+            SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
+
+            decimal odmtrStart = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrStart", i), CultureInfo.InvariantCulture);
+            decimal odmtrEnd = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrEnd", i), CultureInfo.InvariantCulture);
+
+            if (odmtrEnd < odmtrStart)
+            {
+                oDBDataSourceMTR.SetValue("U_OdmtrEnd", i, FormsB1.ConvertDecimalToString(odmtrStart));
+                oMatrix.LoadFromDataSource();
+                return false;
+            }
+            return true;
         }
 
         private static SAPbobsCOM.Recordset getFuelNormSpecification(string fuNrCode)
