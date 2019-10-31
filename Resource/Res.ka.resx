@@ -3014,7 +3014,7 @@
     <value>Dimension 1</value>
   </data>
   <data name="FuelWarehouse" xml:space="preserve">
-    <value>საწვავის საწყობი</value>
+    <value>საწვავის აღრიცხვის საწყობი</value>
   </data>
   <data name="Dimension2" xml:space="preserve">
     <value>Dimension 2</value>
@@ -3102,12 +3102,6 @@
   </data>
   <data name="ConsumptionValueMustBeGreaterThanZero" xml:space="preserve">
     <value>Consumption Value Must Be Greater Than Zero</value>
-  </data>
-  <data name="YouMustEnterEndingUnitGreaterThanStartingUnit" xml:space="preserve">
-    <value>You Must Enter Ending Unit Greater Than Starting Unit</value>
-  </data>
-  <data name="YouMustEnterPostingDateAfterEndingDate" xml:space="preserve">
-    <value>You Must Enter Posting Date After Ending Date</value>
   </data>
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>დოკუმენტებთან მიბმა</value>
@@ -3274,13 +3268,22 @@
   <data name="DoYouWantToCreateJEForDownPayment" xml:space="preserve">
     <value>გსურთ შეიქმნას გატარება ავანსის ფაქტურისთვის</value>
   </data>
-  <data name="PostingDateMustBeBetweenDateFromAndDateTo" xml:space="preserve">
-    <value>გატარების თარიღი უნდა იყოს საწყის და საბოლოო თარიღს შორის!</value>
-  </data>
-  <data name="DateFromMustBeLessOrEqualThanDateTo" xml:space="preserve">
-    <value>საწყისი თარიღი უნდა იყოს საბოლოო თარიღზე ნაკლები ან ტოლი!</value>
+  <data name="PostingDateMustBeGreaterOrEqualThanDateTo" xml:space="preserve">
+    <value>გატარების თარიღი უნდა იყოს მეტი ან ტოლი ვიდრე საბოლოო თარიღი!</value>
   </data>
   <data name="LessThan" xml:space="preserve">
     <value>ნაკლებია ვიდრე</value>
+  </data>
+  <data name="CreateDocumentGoodsIssue" xml:space="preserve">
+    <value>შეიქმნას საქონლის ჩამოწერის დოკუმენტი</value>
+  </data>
+  <data name="CloseFuelWriteOffWizard" xml:space="preserve">
+    <value>დაიხუროს საწვავის ჩამოწერის დამხმარე</value>
+  </data>
+  <data name="DataForCreateDocument" xml:space="preserve">
+    <value>მონაცემები დოკუმენტის შესაქმნელად</value>
+  </data>
+  <data name="DataForFilter" xml:space="preserve">
+    <value>მონაცემები ფილტრისთვის</value>
   </data>
 </root>

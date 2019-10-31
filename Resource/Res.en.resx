@@ -3295,13 +3295,22 @@
   <data name="DoYouWantToCreateJEForDownPayment" xml:space="preserve">
     <value>Do you want to create journal entry for down payment invoice</value>
   </data>
-  <data name="PostingDateMustBeBetweenDateFromAndDateTo" xml:space="preserve">
-    <value>Posting date must be between date from and date to!</value>
-  </data>
-  <data name="DateFromMustBeLessOrEqualThanDateTo" xml:space="preserve">
-    <value>Date from must be less or equal than date to!</value>
+  <data name="PostingDateMustBeGreaterOrEqualThanDateTo" xml:space="preserve">
+    <value>Posting date must be greater or equal than date to!</value>
   </data>
   <data name="LessThan" xml:space="preserve">
     <value>less than</value>
+  </data>
+  <data name="CloseFuelWriteOffWizard" xml:space="preserve">
+    <value>Do you want to close fuel write-off wizard</value>
+  </data>
+  <data name="CreateDocumentGoodsIssue" xml:space="preserve">
+    <value>Create document Goods Issue</value>
+  </data>
+  <data name="DataForCreateDocument" xml:space="preserve">
+    <value>Data For Create Document</value>
+  </data>
+  <data name="DataForFilter" xml:space="preserve">
+    <value>Data For Filter</value>
   </data>
 </root>

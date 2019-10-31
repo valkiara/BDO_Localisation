@@ -816,8 +816,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "BDOSFuelWOForm")
                 {
-                    errorText = null;
-                    BDOSFuelWriteOffWizard.createForm(out errorText);
+                    BDOSFuelWriteOffWizard.createForm();
                 }
             }
             catch (Exception ex)

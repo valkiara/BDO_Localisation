@@ -21,16 +21,7 @@ namespace BDO_Localisation_AddOn
             }
 
             Dictionary<string, object> fieldskeysMap;
-
-            fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "ObjectCode");
-            fieldskeysMap.Add("TableName", "BDOSAPRP");
-            fieldskeysMap.Add("Description", "User Defined Object Code");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            fieldskeysMap.Add("EditSize", 20);
-
-            UDO.addUserTableFields(fieldskeysMap, out errorText);
-
+          
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "AllProject");
             fieldskeysMap.Add("TableName", "BDOSAPRP");
@@ -114,9 +105,6 @@ namespace BDO_Localisation_AddOn
                 oUDOFind.Add();
                 oUDOFind.ColumnAlias = "Name";
                 oUDOFind.ColumnDescription = "Name";
-                oUDOFind.Add();
-                oUDOFind.ColumnAlias = "U_ObjectCode";
-                oUDOFind.ColumnDescription = "User Defined Object Code";
                 oUDOFind.Add();
                 oUDOFind.ColumnAlias = "U_AllProject";
                 oUDOFind.ColumnDescription = "All Project";

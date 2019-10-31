@@ -96,7 +96,7 @@ namespace BDO_Localisation_AddOn
 
             BDOSDepreciationAccrualWizard.addMenus(out errorText);
 
-            BDOSFuelWriteOffWizard.addMenus(out errorText);
+            BDOSFuelWriteOffWizard.addMenus();
 
             BDOSTaxJournal.addMenus( out errorText);
 

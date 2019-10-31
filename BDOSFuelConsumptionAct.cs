@@ -255,11 +255,20 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            List<string> oColumnAlias = new List<string>();
-            oColumnAlias.Add("DocEntry");
-            oColumnAlias.Add("LineId");
-            oColumnAlias.Add("ItemCode");
-            UDO.AddUserKey("BDOSFUC1", "DOC_ITM", oColumnAlias, out errorText);
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "DocEntryGI");
+            fieldskeysMap.Add("TableName", "BDOSFUC1");
+            fieldskeysMap.Add("Description", "Goods Issue");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
+            fieldskeysMap.Add("EditSize", 11);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+            
+            //List<string> oColumnAlias = new List<string>();
+            //oColumnAlias.Add("DocEntry");
+            //oColumnAlias.Add("LineId");
+            //oColumnAlias.Add("ItemCode");
+            //UDO.AddUserKey("BDOSFUC1", "DOC_ITM", oColumnAlias, out errorText);
 
             GC.Collect();
         }
@@ -439,7 +448,7 @@ namespace BDO_Localisation_AddOn
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
-                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
+                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                     chooseFromList(oForm, pVal, oCFLEvento);
 
                     //if (pVal.ItemUID == "AssetMTR" && !pVal.BeforeAction)
@@ -530,14 +539,9 @@ namespace BDO_Localisation_AddOn
                         DateTime dateFrom = Convert.ToDateTime(DateTime.ParseExact(dateFromStr, "yyyyMMdd", CultureInfo.InvariantCulture));
                         DateTime dateTo = Convert.ToDateTime(DateTime.ParseExact(dateToStr, "yyyyMMdd", CultureInfo.InvariantCulture));
 
-                        if (dateFrom > dateTo)
+                        if (docDate < dateTo)
                         {
-                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("DateFromMustBeLessOrEqualThanDateTo"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
-                            BubbleEvent = false;
-                        }
-                        else if (docDate < dateFrom || docDate > dateTo)
-                        {
-                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("PostingDateMustBeBetweenDateFromAndDateTo"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("PostingDateMustBeGreaterOrEqualThanDateTo"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
                             BubbleEvent = false;
                         }
                     }
@@ -611,7 +615,7 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
             formItems = new Dictionary<string, object>();
-            itemName = "PrjLB"; //10 characters
+            itemName = "PrjCodeLB"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             formItems.Add("Left", left_e - 20);
             formItems.Add("Top", top);
@@ -1002,7 +1006,7 @@ namespace BDO_Localisation_AddOn
             top2 += height + 1;
 
             formItems = new Dictionary<string, object>();
-            itemName = "DocDatS"; //10 characters
+            itemName = "DocDateS"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
             formItems.Add("Left", left_s2);
             formItems.Add("Width", width_s);
@@ -1199,6 +1203,13 @@ namespace BDO_Localisation_AddOn
                 oLink = oColumn.ExtendedObject;
                 oLink.LinkedObjectType = "62"; //Cost Rate
             }
+
+            oColumn = oColumns.Add("DocEntryGI", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("GoodsIssue");
+            oColumn.Editable = false;
+            oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_DocEntryGI");
+            oLink = oColumn.ExtendedObject;
+            oLink.LinkedObjectType = "60"; //Goods Issue            
 
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
@@ -1456,7 +1467,7 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("AssetMTR").Height = oForm.ClientHeight / 2;
                 oMatrix.Columns.Item("LineID").Width = 19;
                 mtrWidth -= 19;
-                mtrWidth /= 17;
+                mtrWidth /= 18;
                 oMatrix.Columns.Item("ItemCode").Width = mtrWidth;
                 oMatrix.Columns.Item("ItemName").Width = mtrWidth;
                 oMatrix.Columns.Item("FuTpCode").Width = mtrWidth;
@@ -1475,7 +1486,8 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("Dimension3").Width = mtrWidth;
                 oMatrix.Columns.Item("Dimension4").Width = mtrWidth;
                 oMatrix.Columns.Item("Dimension5").Width = mtrWidth;
-
+                oMatrix.Columns.Item("DocEntryGI").Width = mtrWidth;
+                
                 int height = 15;
                 int top = oForm.Items.Item("AssetMTR").Top - height - 1;
                 oForm.Items.Item("addMTRB").Top = top;

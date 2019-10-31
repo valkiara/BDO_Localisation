@@ -68,11 +68,38 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "ExecDate");
+            fieldskeysMap.Add("TableName", "BDOSAPRT");
+            fieldskeysMap.Add("Description", "Execute Date");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
+            fieldskeysMap.Add("EditSize", 15);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "DocCode");
+            fieldskeysMap.Add("TableName", "BDOSAPRT");
+            fieldskeysMap.Add("Description", "Document Code");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 100);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "ObjectCode");
+            fieldskeysMap.Add("TableName", "BDOSAPRT");
+            fieldskeysMap.Add("Description", "User Defined Object Code");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 20);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "Remarks");
             fieldskeysMap.Add("TableName", "BDOSAPRT");
             fieldskeysMap.Add("Description", "Remarks");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            fieldskeysMap.Add("EditSize", 500);
+            fieldskeysMap.Add("EditSize", 254);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
