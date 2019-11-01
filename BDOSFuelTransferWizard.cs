@@ -810,6 +810,7 @@ namespace BDO_Localisation_AddOn
                     oColumn = oColumns.Add("FuGrpCod", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelGroupCode");
                     oColumn.Editable = false;
+                    oColumn.Visible = false;
                     oColumn.DataBind.Bind(UID, "FuGrpCod");
                     oLink = oColumn.ExtendedObject;
                     oLink.LinkedObjectType = "1470000046"; //Asset Groups
@@ -946,7 +947,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
                 int mtrWidth = oForm.ClientWidth;
                 oForm.Items.Item("AssetMTR").Width = mtrWidth;
-                int columnsCount = oMatrix.Columns.Count - 3;
+                int columnsCount = oMatrix.Columns.Count - 4;
 
                 oMatrix.Columns.Item("LineNum").Width = 19;
                 oMatrix.Columns.Item("CheckBox").Width = 19;
@@ -955,7 +956,7 @@ namespace BDO_Localisation_AddOn
 
                 foreach (SAPbouiCOM.Column column in oMatrix.Columns)
                 {
-                    if (column.UniqueID == "LineNum" || column.UniqueID == "CheckBox" || column.UniqueID == "IUoMEntry")
+                    if (column.UniqueID == "LineNum" || column.UniqueID == "CheckBox" || column.UniqueID == "IUoMEntry" || column.UniqueID == "FuGrpCod")
                         continue;
                     column.Width = mtrWidth;
                 }
