@@ -205,113 +205,6 @@ namespace BDO_Localisation_AddOn
 
                     top += height + 1;
 
-                    FormsB1.addChooseFromList(oForm, false, "UDO_F_BDOSFUTP_D", "FuelTypeCodeCFL"); //Fuel Types
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "FuTpCodeS"; //10 characters
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left_s);
-                    formItems.Add("Width", width_s);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("FuelType"));
-                    formItems.Add("LinkTo", "FuTpCodeE");
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        throw new Exception(errorText);
-                    }
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "FuTpCodeE"; //10 characters
-                    formItems.Add("isDataSource", true);
-                    formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("Length", 50);
-                    formItems.Add("TableName", "");
-                    formItems.Add("Alias", itemName);
-                    formItems.Add("Bound", true);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                    formItems.Add("Left", left_e);
-                    formItems.Add("Width", width_e);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("ChooseFromListUID", "FuelTypeCodeCFL");
-                    formItems.Add("ChooseFromListAlias", "Code");
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        throw new Exception(errorText);
-                    }
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "FuTpCodeLB"; //10 characters
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                    formItems.Add("Left", left_e - 20);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("LinkTo", "FuTpCodeE");
-                    formItems.Add("LinkedObjectType", "UDO_F_BDOSFUTP_D");
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        throw new Exception(errorText);
-                    }
-
-                    top += height + 1;
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "FuGroupS"; //10 characters
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left_s);
-                    formItems.Add("Width", width_s);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("FuelGroup"));
-                    formItems.Add("LinkTo", "FuGroupCB");
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        throw new Exception(errorText);
-                    }
-
-                    Dictionary<string, string> listValidValuesItemGroups = getItemGroupsList();
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "FuGroupCB";
-                    formItems.Add("isDataSource", true);
-                    formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("Length", 20);
-                    formItems.Add("TableName", "");
-                    formItems.Add("Alias", itemName);
-                    formItems.Add("Bound", true);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
-                    formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
-                    formItems.Add("DisplayDesc", true);
-                    formItems.Add("Left", left_e);
-                    formItems.Add("Width", width_e);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("ValidValues", listValidValuesItemGroups);
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        throw new Exception(errorText);
-                    }
-
-                    top += height + 1;
-
                     FormsB1.addChooseFromList(oForm, false, "4", "ItemCodeCFL"); //Items
 
                     formItems = new Dictionary<string, object>();
@@ -373,6 +266,67 @@ namespace BDO_Localisation_AddOn
 
                     top += height + 1;
 
+                    FormsB1.addChooseFromList(oForm, false, "UDO_F_BDOSFUTP_D", "FuelTypeCodeCFL"); //Fuel Types
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "FuTpCodeS"; //10 characters
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    formItems.Add("Left", left_s);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("Caption", BDOSResources.getTranslate("FuelType"));
+                    formItems.Add("LinkTo", "FuTpCodeE");
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "FuTpCodeE"; //10 characters
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 50);
+                    formItems.Add("TableName", "");
+                    formItems.Add("Alias", itemName);
+                    formItems.Add("Bound", true);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    formItems.Add("Left", left_e);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("ChooseFromListUID", "FuelTypeCodeCFL");
+                    formItems.Add("ChooseFromListAlias", "Code");
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "FuTpCodeLB"; //10 characters
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    formItems.Add("Left", left_e - 20);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("LinkTo", "FuTpCodeE");
+                    formItems.Add("LinkedObjectType", "UDO_F_BDOSFUTP_D");
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+                   
+                    top += height + 1;
+
                     FormsB1.addChooseFromList(oForm, false, "4", "FuelCodeCFL"); //Items
 
                     formItems = new Dictionary<string, object>();
@@ -425,6 +379,52 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("UID", itemName);
                     formItems.Add("LinkTo", "FuelCodeE");
                     formItems.Add("LinkedObjectType", "4");
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    top += height + 1;
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "FuGroupS"; //10 characters
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    formItems.Add("Left", left_s);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("Caption", BDOSResources.getTranslate("FuelGroup"));
+                    formItems.Add("LinkTo", "FuGroupCB");
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    Dictionary<string, string> listValidValuesItemGroups = getItemGroupsList();
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "FuGroupCB";
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 20);
+                    formItems.Add("TableName", "");
+                    formItems.Add("Alias", itemName);
+                    formItems.Add("Bound", true);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+                    formItems.Add("DisplayDesc", true);
+                    formItems.Add("Left", left_e);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("ValidValues", listValidValuesItemGroups);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
