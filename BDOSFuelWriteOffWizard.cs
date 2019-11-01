@@ -743,7 +743,7 @@ namespace BDO_Localisation_AddOn
 
                     for (int i = 1; i <= 5; i++)
                     {
-                        oDataTable.Columns.Add("Dimension" + i, SAPbouiCOM.BoFieldsType.ft_Text, 50);
+                        oDataTable.Columns.Add("Dimension" + i, SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     }
                     oDataTable.Columns.Add("AcctCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 15);
 
@@ -770,7 +770,7 @@ namespace BDO_Localisation_AddOn
                     oLink.LinkedObjectType = "UDO_F_BDOSFUCN_D"; //Fuel Consumption Act
 
                     oColumn = oColumns.Add("DocEntryGI", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("DocEntry") + "(" + BDOSResources.getTranslate("GoodsIssue") + ")";
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("DocEntry") + " (" + BDOSResources.getTranslate("GoodsIssue") + ")";
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "DocEntryGI");
                     oLink = oColumn.ExtendedObject;
@@ -987,7 +987,7 @@ namespace BDO_Localisation_AddOn
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
-                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
+                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                     chooseFromList(oForm, pVal, oCFLEvento);
                 }
             }
@@ -1382,7 +1382,7 @@ namespace BDO_Localisation_AddOn
 
             DateTime docDate = Convert.ToDateTime(DateTime.ParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture));
 
-            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("AssetMTR").Specific));
+            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
             oMatrix.FlushToDataSource();
 
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("AssetMTR");
@@ -1448,7 +1448,7 @@ namespace BDO_Localisation_AddOn
                 for (int i = 0; i < oDataTable.Rows.Count; i++)
                 {
                     checkBox = oDataTable.GetValue("CheckBox", i);
-                    if (oDataTable.GetValue("DocEntryGI", i) > 0 && checkBox == "Y")
+                    if (docEntryGI > 0 && checkBox == "Y" && oDataTable.GetValue("DocEntryGI", i) == 0)
                     {
                         oDataTable.SetValue("DocEntryGI", i, docEntryGI);
                     }

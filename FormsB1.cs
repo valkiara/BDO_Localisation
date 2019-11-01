@@ -146,9 +146,7 @@ namespace BDO_Localisation_AddOn
 
             BDOSDepreciationAccrualDocument.addMenus(out errorText);
 
-            BDOSFuelTransferWizard.addMenus(out errorText);
-
-            //BDOSFuelConsumption.addMenus(out errorText);
+            BDOSFuelTransferWizard.addMenus();
         }
 
         public static int getLongIntRGB(int R, int G, int B)

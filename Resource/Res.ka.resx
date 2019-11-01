@@ -3286,4 +3286,25 @@
   <data name="DataForFilter" xml:space="preserve">
     <value>მონაცემები ფილტრისთვის</value>
   </data>
+  <data name="AssetClass" xml:space="preserve">
+    <value>ძს კლასი</value>
+  </data>
+  <data name="CloseFuelTransferWizard" xml:space="preserve">
+    <value>დაიხუროს საწვავის გადაადგილების დამხმარე</value>
+  </data>
+  <data name="GroupCode" xml:space="preserve">
+    <value>ჯგუფის კოდი</value>
+  </data>
+  <data name="GroupName" xml:space="preserve">
+    <value>ჯგუფის დასახელება</value>
+  </data>
+  <data name="FuelGroupCode" xml:space="preserve">
+    <value>საწვავის ჯგუფის კოდი</value>
+  </data>
+  <data name="FuelGroupName" xml:space="preserve">
+    <value>საწვავის ჯგუფის დასახელება</value>
+  </data>
+  <data name="CreateDocumentInventoryTransfer" xml:space="preserve">
+    <value>შეიქმნას საქონლის გადაადგილების დოკუმენტი</value>
+  </data>
 </root>

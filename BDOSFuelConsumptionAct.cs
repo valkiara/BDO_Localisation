@@ -1414,6 +1414,12 @@ namespace BDO_Localisation_AddOn
                             updatePerKmHrValue(oForm, pVal.Row - 1);
                             calculateConsumptionValue(oForm, pVal.Row - 1);
                         }
+                        else if (oCFLEvento.ChooseFromListUID.StartsWith("Dimension"))
+                        {
+                            string dimension = oDataTable.GetValue("OcrCode", 0);
+                            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = dimension);
+                        }
 
                         if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
                         {
@@ -1669,7 +1675,7 @@ namespace BDO_Localisation_AddOn
 
                 if (!oRecordSet.EoF)
                 {
-                    string DimensionNbr = oRecordSet.Fields.Item("U_BDOSFADim").Value;
+                    string dimensionNbr = oRecordSet.Fields.Item("U_BDOSFADim").Value;
 
                     Marshal.ReleaseComObject(oRecordSet);
 
@@ -1683,7 +1689,7 @@ namespace BDO_Localisation_AddOn
                     oRecordSet.DoQuery(queryDimension.ToString());
                     if (!oRecordSet.EoF)
                     {
-                        var dim_Col = "U_Dimension" + DimensionNbr;
+                        var dim_Col = "U_Dimension" + dimensionNbr;
                         oDBDataSourceMTR.SetValue(dim_Col, i, oRecordSet.Fields.Item("PrcCode").Value);
 
                         Marshal.ReleaseComObject(oRecordSet);

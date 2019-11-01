@@ -63,12 +63,12 @@ namespace BDO_Localisation_AddOn
             {
                 BDOSAutomaticTasks.importCurrencyRate();
 
-                Program.uiApp.ItemEvent += new SAPbouiCOM._IApplicationEvents_ItemEventEventHandler(uiApp_ItemEvent);
-                Program.uiApp.MenuEvent += new SAPbouiCOM._IApplicationEvents_MenuEventEventHandler(uiApp_MenuEvent);
-                Program.uiApp.FormDataEvent += new SAPbouiCOM._IApplicationEvents_FormDataEventEventHandler(uiApp_FormDataEvent);
-                Program.uiApp.AppEvent += new SAPbouiCOM._IApplicationEvents_AppEventEventHandler(uiApp_AppEvent);
-                Program.uiApp.LayoutKeyEvent += new SAPbouiCOM._IApplicationEvents_LayoutKeyEventEventHandler(uiApp_LayoutKeyEvent);
-                Program.uiApp.RightClickEvent += new SAPbouiCOM._IApplicationEvents_RightClickEventEventHandler(uiApp_RightClickEvent);
+                uiApp.ItemEvent += new SAPbouiCOM._IApplicationEvents_ItemEventEventHandler(uiApp_ItemEvent);
+                uiApp.MenuEvent += new SAPbouiCOM._IApplicationEvents_MenuEventEventHandler(uiApp_MenuEvent);
+                uiApp.FormDataEvent += new SAPbouiCOM._IApplicationEvents_FormDataEventEventHandler(uiApp_FormDataEvent);
+                uiApp.AppEvent += new SAPbouiCOM._IApplicationEvents_AppEventEventHandler(uiApp_AppEvent);
+                uiApp.LayoutKeyEvent += new SAPbouiCOM._IApplicationEvents_LayoutKeyEventEventHandler(uiApp_LayoutKeyEvent);
+                uiApp.RightClickEvent += new SAPbouiCOM._IApplicationEvents_RightClickEventEventHandler(uiApp_RightClickEvent);
 
                 Application.Run();
             }
@@ -87,12 +87,12 @@ namespace BDO_Localisation_AddOn
             if (connectResult == true)
             {
                 //SAPbouiCOM.ProgressBar ProgressBarForm;
-                //ProgressBarForm = Program.uiApp.StatusBar.CreateProgressBar("", 20, true);
+                //ProgressBarForm = uiApp.StatusBar.CreateProgressBar("", 20, true);
                 //ProgressBarForm.Value = 0;
 
-                BDOSResources.initResource(Convert.ToInt32(Program.oCompany.language), out cultureInfo, out resourceManager, out errorText);
+                BDOSResources.initResource(Convert.ToInt32(oCompany.language), out cultureInfo, out resourceManager, out errorText);
 
-                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("AddonConnectedSuccesfully"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
+                uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("AddonConnectedSuccesfully"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
 
                 UserDefinedTablesCurrentCompany = UDO.UserDefinedTablesCurrentCompany();
                 UserDefinedFieldsCurrentCompany = UDO.UserDefinedFieldsCurrentCompany();
@@ -102,8 +102,8 @@ namespace BDO_Localisation_AddOn
                     License.createUserFields(out errorText);
                     if (!String.IsNullOrEmpty(errorText))
                     {
-                        Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("LocalisationLicensingDataCouldNotBeCreated") + BDOSResources.getTranslate("RetryStartingAddon"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                        uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                        uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("LocalisationLicensingDataCouldNotBeCreated") + BDOSResources.getTranslate("RetryStartingAddon"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                         return false;
                     }
                 }
@@ -116,7 +116,7 @@ namespace BDO_Localisation_AddOn
 
                 if (!runLocalisationAddOn()) return false;
 
-                SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                SAPbobsCOM.SBObob oSBOBob = oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
                 LocalCurrency = CommonFunctions.getCurrencyInternationalCode(oSBOBob.GetLocalCurrency().Fields.Item("LocalCurrency").Value);
 
                 MainCurrencySapCode = CurrencyB1.getMainCurrency(out errorText);
@@ -137,7 +137,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, string> CompanyLicenseInfo = CommonFunctions.getCompanyLicenseInfo();
             if (CompanyLicenseInfo["LicenseStatus"] == BDOSResources.getTranslate("Active"))
             {
-                Program.localisationAddonLicensed = true;
+                localisationAddonLicensed = true;
 
                 BDO_BPCatalog.updateFields();
 
@@ -150,10 +150,10 @@ namespace BDO_Localisation_AddOn
                 {
                     if (!String.IsNullOrEmpty(errorText))
                     {
-                        Program.uiApp.StatusBar.SetSystemMessage(errorText);
+                        uiApp.StatusBar.SetSystemMessage(errorText);
                     }
 
-                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("LogTableCouldNotBeCreated") + BDOSResources.getTranslate("RetryStartingAddon"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                    uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("LogTableCouldNotBeCreated") + BDOSResources.getTranslate("RetryStartingAddon"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                     return false;
                 }
 
@@ -173,7 +173,7 @@ namespace BDO_Localisation_AddOn
 
                 CrystalReports.addDocumentTypeCrystalReportForAddOn(Application.StartupPath, out errorText);
 
-                Program.uiApp.MessageBox(BDOSResources.getTranslate("Localisation") + " " + BDOSResources.getTranslate("AddonLoadingSuccesfully"));
+                uiApp.MessageBox(BDOSResources.getTranslate("Localisation") + " " + BDOSResources.getTranslate("AddonLoadingSuccesfully"));
             }
 
             return true;
@@ -186,7 +186,7 @@ namespace BDO_Localisation_AddOn
             {
                 string query = @"select ""U_Version"" from ""@BDOSAVRS"" WHERE ""Name"" = 'Localization'";
 
-                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
                 oRecordSet.DoQuery(query);
 
@@ -208,7 +208,7 @@ namespace BDO_Localisation_AddOn
             {
                 string query = @"Select * FROM ""@BDOSAVRS"" WHERE ""Name"" = 'Localization'";
 
-                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
                 oRecordSet.DoQuery(query);
                 string updateQuery = "";
@@ -240,12 +240,12 @@ namespace BDO_Localisation_AddOn
             switch (EventType)
             {
                 case SAPbouiCOM.BoAppEventTypes.aet_ShutDown:
-                    //Program.uiApp.MessageBox("A Shut Down Event has been caught" + Environment.NewLine + "Terminating 'Add Menu Item' Add On...", 1, "Ok", "", "");
+                    //uiApp.MessageBox("A Shut Down Event has been caught" + Environment.NewLine + "Terminating 'Add Menu Item' Add On...", 1, "Ok", "", "");
                     Application.Exit();
                     break;
                 case SAPbouiCOM.BoAppEventTypes.aet_LanguageChanged:
                     {
-                        BDOSResources.initResource(Convert.ToInt32(Program.uiApp.Language), out cultureInfo, out resourceManager, out errorText);
+                        BDOSResources.initResource(Convert.ToInt32(uiApp.Language), out cultureInfo, out resourceManager, out errorText);
                         FormsB1.addMenusForAddOn(out errorText);
                     }
                     break;
@@ -253,11 +253,11 @@ namespace BDO_Localisation_AddOn
                     {
                         if (runAddOn() == true)
                         {
-                            Program.uiApp.ItemEvent += new SAPbouiCOM._IApplicationEvents_ItemEventEventHandler(uiApp_ItemEvent);
-                            Program.uiApp.MenuEvent += new SAPbouiCOM._IApplicationEvents_MenuEventEventHandler(uiApp_MenuEvent);
-                            Program.uiApp.FormDataEvent += new SAPbouiCOM._IApplicationEvents_FormDataEventEventHandler(uiApp_FormDataEvent);
-                            Program.uiApp.AppEvent += new SAPbouiCOM._IApplicationEvents_AppEventEventHandler(uiApp_AppEvent);
-                            Program.uiApp.LayoutKeyEvent += new SAPbouiCOM._IApplicationEvents_LayoutKeyEventEventHandler(uiApp_LayoutKeyEvent);
+                            uiApp.ItemEvent += new SAPbouiCOM._IApplicationEvents_ItemEventEventHandler(uiApp_ItemEvent);
+                            uiApp.MenuEvent += new SAPbouiCOM._IApplicationEvents_MenuEventEventHandler(uiApp_MenuEvent);
+                            uiApp.FormDataEvent += new SAPbouiCOM._IApplicationEvents_FormDataEventEventHandler(uiApp_FormDataEvent);
+                            uiApp.AppEvent += new SAPbouiCOM._IApplicationEvents_AppEventEventHandler(uiApp_AppEvent);
+                            uiApp.LayoutKeyEvent += new SAPbouiCOM._IApplicationEvents_LayoutKeyEventEventHandler(uiApp_LayoutKeyEvent);
 
                             //Application.Run();
                         }
@@ -277,7 +277,7 @@ namespace BDO_Localisation_AddOn
 
             if (!localisationAddonLicensed) return;
 
-            SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+            SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
             string formUID = eventInfo.FormUID;
 
             //----------------------------->Waybill document<-----------------------------
@@ -298,7 +298,7 @@ namespace BDO_Localisation_AddOn
             //preview  standart    
             if (pVal.BeforeAction && pVal.MenuUID == "6005")
             {
-                SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+                SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
 
                 if (oDocForm.TypeEx == "141" || oDocForm.TypeEx == "60092")
                 {
@@ -335,7 +335,7 @@ namespace BDO_Localisation_AddOn
             //preview addon
             if (pVal.BeforeAction && pVal.MenuUID == "PreviewUDOJrE")
             {
-                SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+                SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
                 if (oDocForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                 {
                     BDO_ProfitTaxAccrual.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
@@ -350,7 +350,7 @@ namespace BDO_Localisation_AddOn
             //preview addon
             if (pVal.BeforeAction && pVal.MenuUID == "PreviewUDOJrE")
             {
-                SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+                SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
                 if (oDocForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                 {
                     BDO_ProfitTaxAccrual.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
@@ -360,7 +360,7 @@ namespace BDO_Localisation_AddOn
 
             if (pVal.BeforeAction && pVal.MenuUID == "1281")
             {
-                SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+                SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
                 if (oDocForm.TypeEx == "150")
                 {
                     Items.uiApp_MenuEvent(ref pVal, out BubbleEvent);
@@ -370,7 +370,7 @@ namespace BDO_Localisation_AddOn
             //Delete Ln Item
             if (pVal.BeforeAction && pVal.MenuUID == "5910")
             {
-                SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+                SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
                 if (oDocForm.TypeEx == "80030")
                 {
                     CashFlowLineItem.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
@@ -383,12 +383,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_PTBT_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_PTBT_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_PTBT_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->მოგების გადასახადის დაბეგვრის ობიექტები<-----------------------------
@@ -397,12 +397,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_PTBS_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_PTBS_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_PTBS_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->მიღებული ზედნადებების ანგარიშგება<-----------------------------
@@ -416,7 +416,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->გაცემული ზედნადებების ანგარიშგება<-----------------------------
@@ -430,7 +430,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->მიღებული ზედნადებების ჟურნალი<-----------------------------
@@ -445,7 +445,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->მიღებული ფაქტურების ჟურნალი<-----------------------------
@@ -459,7 +459,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->RS - ს კოდების მითითება საზომ ერთეულებზე<-----------------------------
@@ -473,7 +473,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Driver Master Data<-----------------------------
@@ -482,12 +482,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_DRVS_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_DRVS_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_DRVS_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Vehicle Master Data<-----------------------------
@@ -496,12 +496,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_VECL_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_VECL_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_VECL_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Fuel Types Master Data<-----------------------------
@@ -566,12 +566,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_WBLD_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_WBLD_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_WBLD_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Tax Invoice Sent<-----------------------------
@@ -580,12 +580,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_TAXS_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_TAXS_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_TAXS_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
 
@@ -595,12 +595,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_ARDPV_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_ARDPV_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_ARDPV_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Profit Tax Accural<-----------------------------
@@ -609,12 +609,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_TAXP_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_TAXP_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_TAXP_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Tax Invoice Received<-----------------------------
@@ -623,12 +623,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDO_TAXR_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_TAXR_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDO_TAXR_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Fixed Asset Transfer<-----------------------------
@@ -637,12 +637,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFASTRD_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFASTRD_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFASTRD_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Fixed Asset Transfer Add/Delete Row<-----------------------------
@@ -650,7 +650,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (!pVal.BeforeAction && (pVal.MenuUID == "BDOSDelRow" || pVal.MenuUID == "BDOSAddRow"))
                 {
-                    SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+                    SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
 
                     if (oDocForm.TypeEx == "UDO_FT_UDO_F_BDOSFASTRD_D")
                     {
@@ -660,7 +660,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Depreciation Accrual<-----------------------------
@@ -669,12 +669,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSDEPACR_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSDEPACR_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSDEPACR_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Depreciation Accrual Add/Delete Row<-----------------------------
@@ -682,7 +682,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (!pVal.BeforeAction && (pVal.MenuUID == "BDOSDelRow" || pVal.MenuUID == "BDOSAddRow"))
                 {
-                    SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+                    SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
 
                     if (oDocForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
                     {
@@ -692,7 +692,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Fuel Consumption<-----------------------------
@@ -701,12 +701,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUECON_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUECON_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUECON_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Fuel Consumption Add/Delete Row<-----------------------------
@@ -714,7 +714,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (!pVal.BeforeAction && (pVal.MenuUID == "BDOSDelRow" || pVal.MenuUID == "BDOSAddRow"))
                 {
-                    SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+                    SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
 
                     if (oDocForm.TypeEx == "UDO_FT_UDO_F_BDOSFUECON_D")
                     {
@@ -724,7 +724,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Internet Banking<-----------------------------
@@ -738,7 +738,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Delete UDF<-----------------------------
@@ -752,7 +752,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Outgoing payment wizzard<-----------------------------
@@ -766,7 +766,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Stock Transfer Wizard-----------------------------
@@ -780,7 +780,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Depreciation Accruing wizzard<-----------------------------
@@ -794,7 +794,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->VAT accrual wizzard<-----------------------------
@@ -808,7 +808,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Fuel Write-Off Wizard<-----------------------------
@@ -821,7 +821,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Reconcilation wizzard<-----------------------------
@@ -835,21 +835,21 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Fuel Transfer Wizard<-----------------------------
             try
             {
-                if (pVal.BeforeAction && pVal.MenuUID == "BDOSFUTRWI")
+                if (pVal.BeforeAction && pVal.MenuUID == "BDOSFuelTransferWizard")
                 {
                     errorText = null;
-                    BDOSFuelTransferWizard.createForm(out errorText);
+                    BDOSFuelTransferWizard.createForm();
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Internet Banking Integration Services Rules<-----------------------------
@@ -858,12 +858,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSINTR_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSINTR_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSINTR_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Item Categories<-----------------------------
@@ -872,12 +872,12 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSITMCTG_D")
                 {
                     errorText = null;
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSITMCTG_D", "");
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSITMCTG_D", "");
                 }
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
             //----------------------------->Cancel<-----------------------------
@@ -885,7 +885,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (pVal.BeforeAction == true)
                 {
-                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
 
                     //----------------------------->A/R Invoice<-----------------------------
                     if (oForm.TypeEx == "133")
@@ -989,7 +989,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (pVal.BeforeAction == true)
                 {
-                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
 
                     //----------------------------->Profit Tax Base Type<-----------------------------
                     if (oForm.TypeEx == "UDO_F_BDO_PTBT_D")
@@ -1025,11 +1025,11 @@ namespace BDO_Localisation_AddOn
             {
                 if (pVal.BeforeAction == true)
                 {
-                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
                 }
                 else if (pVal.BeforeAction == false)
                 {
-                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
                     //----------------------------->A/R Invoice<-----------------------------
                     if (oForm.TypeEx == "133")
                     {
@@ -1152,19 +1152,19 @@ namespace BDO_Localisation_AddOn
             {
                 if (pVal.BeforeAction == true)
                 {
-                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
 
                     //----------------------------->Waybill document<-----------------------------
                     if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_WBLD_D")
                     {
-                        Program.uiApp.MessageBox(BDOSResources.getTranslate("CreateWaybillAllowedBasedOnlyOtherDocument"));
+                        uiApp.MessageBox(BDOSResources.getTranslate("CreateWaybillAllowedBasedOnlyOtherDocument"));
                         BubbleEvent = false;
                     }
                 }
 
                 else if (pVal.BeforeAction == false)
                 {
-                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
 
                     //----------------------------->A/R Invoice<-----------------------------
                     if (oForm.TypeEx == "133")
@@ -1295,7 +1295,7 @@ namespace BDO_Localisation_AddOn
             //----------------------------->Find<-----------------------------
             if (pVal.MenuUID == "1281" & pVal.BeforeAction == false)
             {
-                SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+                SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
                 if (oForm.TypeEx == "")
                 {
 
@@ -1311,7 +1311,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
         }
 
@@ -1613,9 +1613,9 @@ namespace BDO_Localisation_AddOn
 
         public static void translateFormTitle(ref SAPbouiCOM.ItemEvent pVal)
         {
-            if ((pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & Program.FORM_LOAD_FOR_VISIBLE == true || pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD) & pVal.BeforeAction == false)
+            if ((pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & FORM_LOAD_FOR_VISIBLE == true || pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD) & pVal.BeforeAction == false)
             {
-                SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+                SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 string title = oForm.Title;
                 int substringLength = (title.Contains("სია") == true ? 4 : 5);
 
@@ -1660,13 +1660,13 @@ namespace BDO_Localisation_AddOn
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("Waybill");
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & Program.FORM_LOAD_FOR_VISIBLE == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & FORM_LOAD_FOR_VISIBLE == true)
                 {
-                    Program.FORM_LOAD_FOR_VISIBLE = false;
+                    FORM_LOAD_FOR_VISIBLE = false;
                 }
                 else
                 {
-                    Program.FORM_LOAD_FOR_VISIBLE = true;
+                    FORM_LOAD_FOR_VISIBLE = true;
                 }
             }
         }
@@ -1679,7 +1679,7 @@ namespace BDO_Localisation_AddOn
             //----------------------------->ლიცენზირების ფორმა<-----------------------------
             if (pVal.FormUID == "BDOSLocLicForm" && pVal.ItemUID == "3" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
             {
-                SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+                SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 updateProgramLicense(oForm, out errorText);
             }
             if (!localisationAddonLicensed) return;
@@ -1943,7 +1943,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
                     {
-                        SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+                        SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                         if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == false)
                         {
                             SAPbouiCOM.Item oItem;
@@ -1962,7 +1962,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Fuel Transfer Wizard<-----------------------------
-                else if (pVal.FormUID == "BDOSFUTRWI")
+                else if (pVal.FormUID == "BDOSFuelTransferWizard")
                 {
                     BDOSFuelTransferWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
@@ -2315,7 +2315,7 @@ namespace BDO_Localisation_AddOn
                 errorText = ex.Message;
                 try
                 {
-                    Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                    uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                 }
                 catch
                 {
@@ -2334,7 +2334,7 @@ namespace BDO_Localisation_AddOn
             //wizardebi icrasheboda zogjer right click-ze
             try
             {
-                oForm = Program.uiApp.Forms.ActiveForm;
+                oForm = uiApp.Forms.ActiveForm;
 
                 //----------------------------->>Fixed Asset Transfer Document<-----------------------------
                 if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSFASTRD_D")
@@ -2357,12 +2357,12 @@ namespace BDO_Localisation_AddOn
                 {
                     try
                     {
-                        Program.uiApp.Menus.RemoveEx("BDOSAddRow");
+                        uiApp.Menus.RemoveEx("BDOSAddRow");
                     }
                     catch { }
                     try
                     {
-                        Program.uiApp.Menus.RemoveEx("BDOSDelRow");
+                        uiApp.Menus.RemoveEx("BDOSDelRow");
                     }
                     catch { }
                 }
@@ -2391,7 +2391,7 @@ namespace BDO_Localisation_AddOn
 
             if (eventInfo.BeforeAction == true)
             {
-                if (Program.uiApp.Menus.Exists("6005") == false && oItem != null && DocEntry == "")
+                if (uiApp.Menus.Exists("6005") == false && oItem != null && DocEntry == "")
                 {
                     SAPbouiCOM.MenuItem oMenuItem;
                     SAPbouiCOM.Menus oMenus;
@@ -2399,14 +2399,14 @@ namespace BDO_Localisation_AddOn
 
                     try
                     {
-                        oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
+                        oCreationPackage = (SAPbouiCOM.MenuCreationParams)uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
                         oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
                         oCreationPackage.UniqueID = "PreviewUDOJrE";
                         oCreationPackage.String = BDOSResources.getTranslate("PreviewJournalEntry");
                         oCreationPackage.Enabled = true;
                         oCreationPackage.Position = -1;
 
-                        oMenuItem = Program.uiApp.Menus.Item("1280");
+                        oMenuItem = uiApp.Menus.Item("1280");
                         oMenus = oMenuItem.SubMenus;
                         oMenus.AddEx(oCreationPackage);
 
@@ -2421,17 +2421,17 @@ namespace BDO_Localisation_AddOn
                 {
                     try
                     {
-                        Program.uiApp.Menus.RemoveEx("PreviewUDOJrE");
+                        uiApp.Menus.RemoveEx("PreviewUDOJrE");
                     }
                     catch { }
                 }
 
                 //აღდგენის (restore) წაშლა მარჯვენა-კლიკის კონტექსტური მენიუდან
-                if ((Program.uiApp.Menus.Exists("1285") == true))
+                if ((uiApp.Menus.Exists("1285") == true))
                 {
                     try
                     {
-                        Program.uiApp.Menus.RemoveEx("1285");
+                        uiApp.Menus.RemoveEx("1285");
                     }
                     catch { }
                 }
