@@ -1378,7 +1378,8 @@ namespace BDO_Localisation_AddOn
             string docDateStr = oForm.DataSources.UserDataSources.Item("DocDateE").ValueEx;
             string whsToCode = oForm.DataSources.UserDataSources.Item("WhsToE").ValueEx;
             string whsFromCode = oForm.DataSources.UserDataSources.Item("WhsFromE").ValueEx;
-            string prjCode = oForm.DataSources.UserDataSources.Item("PrjToE").ValueEx;
+            string prjToCode = oForm.DataSources.UserDataSources.Item("PrjToE").ValueEx;
+            string prjFromCode = oForm.DataSources.UserDataSources.Item("PrjFromE").ValueEx;
 
             if (string.IsNullOrEmpty(docDateStr) || string.IsNullOrEmpty(whsToCode) || string.IsNullOrEmpty(whsFromCode))
             {
@@ -1393,7 +1394,7 @@ namespace BDO_Localisation_AddOn
             oMatrix.FlushToDataSource();
 
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("AssetMTR");
-            string checkBox;
+            string checkBox = "N";
             string fuTpCode;
 
             SAPbobsCOM.StockTransfer oStockTransfer = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oStockTransfer);
@@ -1401,7 +1402,7 @@ namespace BDO_Localisation_AddOn
             oStockTransfer.TaxDate = docDate;
             oStockTransfer.FromWarehouse = whsFromCode;
             oStockTransfer.ToWarehouse = whsToCode;
-            oStockTransfer.UserFields.Fields.Item("U_BDOSFrPrj").Value = prjCode;
+            oStockTransfer.UserFields.Fields.Item("U_BDOSFrPrj").Value = prjFromCode;
 
             bool existLine = false;
 
@@ -1416,7 +1417,7 @@ namespace BDO_Localisation_AddOn
                     oStockTransfer.Lines.ItemDescription = oDataTable.GetValue("FuelName", i);
                     oStockTransfer.Lines.FromWarehouseCode = whsFromCode;
                     oStockTransfer.Lines.WarehouseCode = whsToCode;
-                    oStockTransfer.Lines.ProjectCode = prjCode;
+                    oStockTransfer.Lines.ProjectCode = prjToCode;
                     if (oDataTable.GetValue("Quantity", i) != 0)
                     {
                         double quantity = Convert.ToDouble(oDataTable.GetValue("Quantity", i), CultureInfo.InvariantCulture);
@@ -1432,11 +1433,13 @@ namespace BDO_Localisation_AddOn
                     existLine = true;
                 }
             }
+            if (checkBox != "Y")
+                return;
 
             if (existLine)
             {
+                CommonFunctions.StartTransaction();
                 int resultCode = oStockTransfer.Add();
-
                 if (resultCode != 0)
                 {
                     int errCode;
@@ -1450,25 +1453,31 @@ namespace BDO_Localisation_AddOn
                     bool newDoc = oStockTransfer.GetByKey(Convert.ToInt32(Program.oCompany.GetNewObjectKey()));
                     if (newDoc == true)
                     {
-                        docEntryST = oStockTransfer.DocEntry;
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + ": " + docEntryST, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
-                    }
-                    else
-                    {
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated"), SAPbouiCOM.BoMessageTime.bmt_Short);
-                        return;
-                    }
-
-                    Marshal.ReleaseComObject(oStockTransfer);
-
-                    for (int i = 0; i < oDataTable.Rows.Count; i++)
-                    {
-                        checkBox = oDataTable.GetValue("CheckBox", i);
-                        if (docEntryST > 0 && checkBox == "Y" && oDataTable.GetValue("DocEntryST", i) == 0)
+                        StockTransfer.UpdateJournalEntry(oStockTransfer.DocEntry.ToString(), "67", prjFromCode, out errorText);
+                        if (string.IsNullOrEmpty(errorText))
                         {
-                            oDataTable.SetValue("DocEntryST", i, docEntryST);
+                            CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+
+                            docEntryST = oStockTransfer.DocEntry;
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + ": " + docEntryST, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+
+                            for (int i = 0; i < oDataTable.Rows.Count; i++)
+                            {
+                                checkBox = oDataTable.GetValue("CheckBox", i);
+                                if (docEntryST > 0 && checkBox == "Y" && oDataTable.GetValue("DocEntryST", i) == 0)
+                                {
+                                    oDataTable.SetValue("DocEntryST", i, docEntryST);
+                                }
+                            }
                         }
                     }
+                    //else
+                    //{
+                    //    CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                    //    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                    //    return;
+                    //}
+                    Marshal.ReleaseComObject(oStockTransfer);                 
                 }
 
                 oForm.Freeze(true);

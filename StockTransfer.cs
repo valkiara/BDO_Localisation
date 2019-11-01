@@ -387,7 +387,6 @@ namespace BDO_Localisation_AddOn
                     {
                         string DocEntry = DocDBSource.GetValue("DocEntry", 0);
                         string fromPrjCode = DocDBSource.GetValue("U_BDOSFrPrj", 0).Trim();
-                        //SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("23").Specific;
 
                         CommonFunctions.StartTransaction();
 

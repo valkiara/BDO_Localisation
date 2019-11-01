@@ -120,7 +120,6 @@
     <Compile Include="BDOSDepreciationAccrualDocument.cs" />
     <Compile Include="BDOSDownPaymentTaxAnalysisReceived.cs" />
     <Compile Include="BDOSFixedAssetTransfer.cs" />
-    <Compile Include="BDOSFuelConsumption.cs" />
     <Compile Include="BDOSInternetBanking.cs" />
     <Compile Include="BDOSInternetBankingDocuments.cs" />
     <Compile Include="BDOSItemCategories.cs" />

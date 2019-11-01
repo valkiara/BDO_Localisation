@@ -280,10 +280,8 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.UserObjectMD_FormColumns oUDOForm = null;
             SAPbobsCOM.IUserObjectMD_ChildTables oUDOChildTables = null;
             GC.Collect();
-
             oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectMD);
-
+            Marshal.ReleaseComObject(oUserObjectMD);
             oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD) as SAPbobsCOM.UserObjectsMD;
             oUDOFind = oUserObjectMD.FindColumns;
             oUDOForm = oUserObjectMD.FormColumns;
@@ -303,7 +301,7 @@ namespace BDO_Localisation_AddOn
                 oUserObjectMD.CanClose = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanYearTransfer = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanCreateDefaultForm = SAPbobsCOM.BoYesNoEnum.tYES;
-                oUserObjectMD.ManageSeries = SAPbobsCOM.BoYesNoEnum.tYES;
+                oUserObjectMD.ManageSeries = SAPbobsCOM.BoYesNoEnum.tNO;
 
                 //Find
                 oUDOFind.ColumnAlias = "DocEntry";
@@ -775,12 +773,12 @@ namespace BDO_Localisation_AddOn
             itemName = "No.S"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
             formItems.Add("Left", left_s2);
-            formItems.Add("Width", width_s / 3);
+            formItems.Add("Width", width_s);
             formItems.Add("Top", top2);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Number"));
-            formItems.Add("LinkTo", "SeriesC");
+            formItems.Add("LinkTo", "DocNumE");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -788,28 +786,6 @@ namespace BDO_Localisation_AddOn
                 throw new Exception(errorText);
             }
 
-            formItems = new Dictionary<string, object>();
-            itemName = "SeriesC"; //10 characters
-            formItems.Add("isDataSource", true);
-            formItems.Add("DataSource", "DBDataSources");
-            formItems.Add("TableName", "@BDOSFUCN");
-            formItems.Add("Alias", "Series");
-            formItems.Add("Bound", true);
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
-            formItems.Add("Left", left_s2 + width_s / 3);
-            formItems.Add("Width", width_s * 2 / 4);
-            formItems.Add("Top", top2);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
-            formItems.Add("Description", BDOSResources.getTranslate("Series"));
-            formItems.Add("DisplayDesc", true);
-
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                throw new Exception(errorText);
-            }
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 

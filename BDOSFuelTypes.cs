@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,6 +85,8 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.UserObjectMD_FindColumns oUDOFind = null;
             SAPbobsCOM.UserObjectMD_FormColumns oUDOForm = null;
             GC.Collect();
+            oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
+            Marshal.ReleaseComObject(oUserObjectMD);
             oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD) as SAPbobsCOM.UserObjectsMD;
             oUDOFind = oUserObjectMD.FindColumns;
             oUDOForm = oUserObjectMD.FormColumns;

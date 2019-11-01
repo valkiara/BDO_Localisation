@@ -695,38 +695,6 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->Fuel Consumption<-----------------------------
-            try
-            {
-                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSFUECON_D")
-                {
-                    errorText = null;
-                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSFUECON_D", "");
-                }
-            }
-            catch (Exception ex)
-            {
-                uiApp.MessageBox(ex.ToString(), 1, "", "");
-            }
-
-            //----------------------------->Fuel Consumption Add/Delete Row<-----------------------------
-            try
-            {
-                if (!pVal.BeforeAction && (pVal.MenuUID == "BDOSDelRow" || pVal.MenuUID == "BDOSAddRow"))
-                {
-                    SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
-
-                    if (oDocForm.TypeEx == "UDO_FT_UDO_F_BDOSFUECON_D")
-                    {
-                        BDOSFuelConsumption.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                uiApp.MessageBox(ex.ToString(), 1, "", "");
-            }
-
             //----------------------------->Internet Banking<-----------------------------
             try
             {
@@ -1515,11 +1483,11 @@ namespace BDO_Localisation_AddOn
                     BDOSDepreciationAccrualDocument.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Fuel Consumption Document<-----------------------------
-                else if (BusinessObjectInfo.Type == "UDO_F_BDOSFUECON_D")
-                {
-                    BDOSFuelConsumption.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
-                }
+                ////----------------------------->Fuel Consumption Document<-----------------------------
+                //else if (BusinessObjectInfo.Type == "UDO_F_BDOSFUECON_D")
+                //{
+                //    BDOSFuelConsumption.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                //}
 
                 //----------------------------->A/R Down Payment Invoice<-----------------------------
                 else if (BusinessObjectInfo.Type == "203" && BusinessObjectInfo.FormTypeEx == "65300")
@@ -2136,22 +2104,16 @@ namespace BDO_Localisation_AddOn
                     BDO_ProfitTaxAccrual.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->>Fixed Asset Transfer Document<-----------------------------
+                //----------------------------->Fixed Asset Transfer Document<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFASTRD_D")
                 {
                     BDOSFixedAssetTransfer.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->>Depreciation Accrual<-----------------------------
+                //----------------------------->Depreciation Accrual<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
                 {
                     BDOSDepreciationAccrualDocument.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-
-                //----------------------------->>Fuel Consumption<-----------------------------
-                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSFUECON_D")
-                {
-                    BDOSFuelConsumption.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Withholding Tax<-----------------------------
@@ -2340,12 +2302,6 @@ namespace BDO_Localisation_AddOn
                 if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSFASTRD_D")
                 {
                     BDOSFixedAssetTransfer.uiApp_RightClickEvent(oForm, eventInfo, out BubbleEvent);
-                }
-
-                //----------------------------->>Fuel Consumption Document<-----------------------------
-                if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSFUECON_D")
-                {
-                    BDOSFuelConsumption.uiApp_RightClickEvent(oForm, eventInfo, out BubbleEvent);
                 }
 
                 //----------------------------->>Depreciation Document<-----------------------------
