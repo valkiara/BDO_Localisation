@@ -103,6 +103,15 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "DocEntry");
+            fieldskeysMap.Add("TableName", "BDOSAPRT");
+            fieldskeysMap.Add("Description", "Internal Number");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
+            fieldskeysMap.Add("EditSize", 11);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             GC.Collect();
         }
     }

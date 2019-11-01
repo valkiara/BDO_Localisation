@@ -32,6 +32,15 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "ObjectCode");
+            fieldskeysMap.Add("TableName", "BDOSAPRP");
+            fieldskeysMap.Add("Description", "User Defined Object Code");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 20);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             tableName = "BDOSAPR1";
             description = "Approval Procedures Child1";
 
@@ -66,6 +75,25 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "No. of Authorizers");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
             fieldskeysMap.Add("EditSize", 11);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            tableName = "BDOSAPR2";
+            description = "Approval Procedures Child2";
+
+            result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_MasterDataLines, out errorText);
+
+            if (result != 0)
+            {
+                return;
+            }
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "PrjCode");
+            fieldskeysMap.Add("TableName", "BDOSAPR2");
+            fieldskeysMap.Add("Description", "Project Code");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 20);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -124,6 +152,11 @@ namespace BDO_Localisation_AddOn
                 oUDOChildTables.SetCurrentLine(oUDOChildTables.Count - 1);
                 oUDOChildTables.TableName = "BDOSAPR1";
                 oUDOChildTables.ObjectName = "BDOSAPR1";
+
+                oUDOChildTables.Add();
+                oUDOChildTables.SetCurrentLine(oUDOChildTables.Count - 1);
+                oUDOChildTables.TableName = "BDOSAPR2";
+                oUDOChildTables.ObjectName = "BDOSAPR2";
 
                 if (!retval)
                 {

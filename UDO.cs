@@ -116,12 +116,6 @@ namespace BDO_Localisation_AddOn
                 BDOSDepreciationAccrualDocument.registerUDO(out errorText);
             }
 
-            //BDOSFuelConsumption.createDocumentUDO(out errorText);
-            //if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUECON_D") == false)
-            //{
-            //    BDOSFuelConsumption.registerUDO(out errorText);
-            //}
-
             //Persona Tables
             BDOSApprovalProcedures.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDOSAPRP_D") == false)
