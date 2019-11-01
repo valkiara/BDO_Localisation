@@ -546,21 +546,19 @@ namespace BDO_Localisation_AddOn
                     {
                         throw new Exception(errorText);
                     }
-
                     top2 += height + 1;
-
-                    FormsB1.addChooseFromList(oForm, false, "63", "ProjectCodeCFL"); //Project Codes
+                    FormsB1.addChooseFromList(oForm, false, "63", "ProjectFromCodeCFL"); //Project Codes
 
                     formItems = new Dictionary<string, object>();
-                    itemName = "PrjCodeS"; //10 characters
+                    itemName = "PrjFromS"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
                     formItems.Add("Left", left_s2);
                     formItems.Add("Width", width_s);
                     formItems.Add("Top", top2);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("Project"));
-                    formItems.Add("LinkTo", "PrjCodeE");
+                    formItems.Add("Caption", BDOSResources.getTranslate("FromProject"));
+                    formItems.Add("LinkTo", "PrjFromE");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -569,7 +567,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     formItems = new Dictionary<string, object>();
-                    itemName = "PrjCodeE"; //10 characters
+                    itemName = "PrjFromE"; //10 characters
                     formItems.Add("isDataSource", true);
                     formItems.Add("DataSource", "UserDataSources");
                     formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
@@ -583,7 +581,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Top", top2);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("ChooseFromListUID", "ProjectCodeCFL");
+                    formItems.Add("ChooseFromListUID", "ProjectFromCodeCFL");
                     formItems.Add("ChooseFromListAlias", "PrjCode");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -593,13 +591,74 @@ namespace BDO_Localisation_AddOn
                     }
 
                     formItems = new Dictionary<string, object>();
-                    itemName = "PrjCodeLB"; //10 characters
+                    itemName = "PrjFromLB"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                     formItems.Add("Left", left_e2 - 20);
                     formItems.Add("Top", top2);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("LinkTo", "PrjCodeE");
+                    formItems.Add("LinkTo", "PrjFromE");
+                    formItems.Add("LinkedObjectType", "63");
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    top2 += height + 1;
+
+                    FormsB1.addChooseFromList(oForm, false, "63", "ProjectToCodeCFL"); //Project Codes
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "PrjToS"; //10 characters
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    formItems.Add("Left", left_s2);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top2);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("Caption", BDOSResources.getTranslate("ToProject"));
+                    formItems.Add("LinkTo", "PrjToE");
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "PrjToE"; //10 characters
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 50);
+                    formItems.Add("TableName", "");
+                    formItems.Add("Alias", itemName);
+                    formItems.Add("Bound", true);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    formItems.Add("Left", left_e2);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top2);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("ChooseFromListUID", "ProjectToCodeCFL");
+                    formItems.Add("ChooseFromListAlias", "PrjCode");
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "PrjToLB"; //10 characters
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    formItems.Add("Left", left_e2 - 20);
+                    formItems.Add("Top", top2);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("LinkTo", "PrjToE");
                     formItems.Add("LinkedObjectType", "63");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -789,6 +848,23 @@ namespace BDO_Localisation_AddOn
                     oLink = oColumn.ExtendedObject;
                     oLink.LinkedObjectType = "1470000032"; //Asset Classes
 
+                    oColumn = oColumns.Add("Employee", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("Employee");
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind(UID, "Employee");
+                    oLink = oColumn.ExtendedObject;
+                    oLink.LinkedObjectType = "171"; //Employees
+
+                    oColumn = oColumns.Add("FirstName", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("FirstName");
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind(UID, "FirstName");
+
+                    oColumn = oColumns.Add("LastName", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("LastName");
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind(UID, "LastName");
+
                     oColumn = oColumns.Add("FuTpCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelType");
                     oColumn.Editable = false;
@@ -825,23 +901,6 @@ namespace BDO_Localisation_AddOn
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelGroupName");
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "FuGrpNam");
-
-                    oColumn = oColumns.Add("Employee", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("Employee");
-                    oColumn.Editable = false;
-                    oColumn.DataBind.Bind(UID, "Employee");
-                    oLink = oColumn.ExtendedObject;
-                    oLink.LinkedObjectType = "171"; //Employees
-
-                    oColumn = oColumns.Add("FirstName", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("FirstName");
-                    oColumn.Editable = false;
-                    oColumn.DataBind.Bind(UID, "FirstName");
-
-                    oColumn = oColumns.Add("LastName", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("LastName");
-                    oColumn.Editable = false;
-                    oColumn.DataBind.Bind(UID, "LastName");
 
                     oColumn = oColumns.Add("Quantity", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("Quantity");
@@ -1014,7 +1073,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.BeforeAction)
                 {
-                    if (oCFLEvento.ChooseFromListUID == "ProjectCodeCFL")
+                    if (oCFLEvento.ChooseFromListUID == "ProjectToCodeCFL" || oCFLEvento.ChooseFromListUID == "ProjectFromCodeCFL")
                     {
                         SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
@@ -1114,7 +1173,7 @@ namespace BDO_Localisation_AddOn
                             oRecordSet.MoveNext();
                         }
                         oCFL.SetConditions(oCons);
-                    }                   
+                    }
                     else if (oCFLEvento.ChooseFromListUID == "WarehouseToCodeCFL")
                     {
                         SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
@@ -1134,11 +1193,17 @@ namespace BDO_Localisation_AddOn
 
                     if (oDataTable != null)
                     {
-                        if (oCFLEvento.ChooseFromListUID == "ProjectCodeCFL")
+                        if (oCFLEvento.ChooseFromListUID == "ProjectToCodeCFL")
                         {
                             string prjCode = oDataTable.GetValue("PrjCode", 0);
-                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjCodeE").Specific.Value = prjCode);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjToE").Specific.Value = prjCode);
                         }
+                        else if (oCFLEvento.ChooseFromListUID == "ProjectFromCodeCFL")
+                        {
+                            string prjCode = oDataTable.GetValue("PrjCode", 0);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjFromE").Specific.Value = prjCode);
+                        }
+
                         else if (oCFLEvento.ChooseFromListUID == "ItemCodeCFL")
                         {
                             string itemCode = oDataTable.GetValue("ItemCode", 0);
@@ -1313,7 +1378,7 @@ namespace BDO_Localisation_AddOn
             string docDateStr = oForm.DataSources.UserDataSources.Item("DocDateE").ValueEx;
             string whsToCode = oForm.DataSources.UserDataSources.Item("WhsToE").ValueEx;
             string whsFromCode = oForm.DataSources.UserDataSources.Item("WhsFromE").ValueEx;
-            string prjCode = oForm.DataSources.UserDataSources.Item("PrjCodeE").ValueEx;
+            string prjCode = oForm.DataSources.UserDataSources.Item("PrjToE").ValueEx;
 
             if (string.IsNullOrEmpty(docDateStr) || string.IsNullOrEmpty(whsToCode) || string.IsNullOrEmpty(whsFromCode))
             {
@@ -1356,7 +1421,7 @@ namespace BDO_Localisation_AddOn
                     {
                         double quantity = Convert.ToDouble(oDataTable.GetValue("Quantity", i), CultureInfo.InvariantCulture);
                         oStockTransfer.Lines.Quantity = quantity;
-                    }                
+                    }
                     oStockTransfer.Lines.DistributionRule = oDataTable.GetValue("Dimension1", i);
                     oStockTransfer.Lines.DistributionRule2 = oDataTable.GetValue("Dimension2", i);
                     oStockTransfer.Lines.DistributionRule3 = oDataTable.GetValue("Dimension3", i);

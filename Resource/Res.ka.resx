@@ -2549,7 +2549,7 @@
     <value>დოკუმენტი არ შექმნილა</value>
   </data>
   <data name="FromProject" xml:space="preserve">
-    <value>გამგზ. პროექტი</value>
+    <value>გამგზავნი პროექტი</value>
   </data>
   <data name="GrossAmount" xml:space="preserve">
     <value>გროს თანხა</value>
