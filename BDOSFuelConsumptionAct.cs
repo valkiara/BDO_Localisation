@@ -263,7 +263,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 11);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-            
+
             //List<string> oColumnAlias = new List<string>();
             //oColumnAlias.Add("DocEntry");
             //oColumnAlias.Add("LineId");
@@ -502,7 +502,7 @@ namespace BDO_Localisation_AddOn
 
                 else if (pVal.ItemUID == "addMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
-                    if (pVal.FormMode == 3) 
+                    if (pVal.FormMode == 3)
                         addMatrixRow(oForm);
                 }
 
@@ -1493,14 +1493,14 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("Dimension4").Width = mtrWidth;
                 oMatrix.Columns.Item("Dimension5").Width = mtrWidth;
                 oMatrix.Columns.Item("DocEntryGI").Width = mtrWidth;
-                
+
                 int height = 15;
                 int top = oForm.Items.Item("AssetMTR").Top - height - 1;
                 oForm.Items.Item("addMTRB").Top = top;
                 oForm.Items.Item("delMTRB").Top = top;
                 top = oForm.Items.Item("AssetMTR").Top + oForm.Items.Item("AssetMTR").Height + 30;
                 oForm.Items.Item("CreatorS").Top = top;
-                oForm.Items.Item("CreatorE").Top = top;             
+                oForm.Items.Item("CreatorE").Top = top;
                 top += height + 1;
                 oForm.Items.Item("RemarksS").Top = top;
                 oForm.Items.Item("RemarksE").Top = top;
@@ -1844,6 +1844,10 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
+                string calculateMultiply = @"EXP(SUM(LOG(CASE WHEN ""@BDOSFUN1"".""U_CrtrPr"" = 0 THEN 1 ELSE ""@BDOSFUN1"".""U_CrtrPr"" / 100 END))) AS ""U_CrtrPr""";
+                if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
+                    calculateMultiply = @"EXP(SUM(LN(CASE WHEN ""@BDOSFUN1"".""U_CrtrPr"" = 0 THEN 1 ELSE ""@BDOSFUN1"".""U_CrtrPr"" / 100 END))) AS ""U_CrtrPr""";
+
                 string query = @"SELECT 
                    ""@BDOSFUNR"".""Code"", 
                    ""@BDOSFUNR"".""Name"", 
@@ -1851,7 +1855,7 @@ namespace BDO_Localisation_AddOn
                    ""@BDOSFUNR"".""U_Fixed"", 
                    ""@BDOSFUNR"".""U_PerKm"", 
                    ""@BDOSFUNR"".""U_PerHr"",
-                   EXP(SUM(LN(CASE WHEN ""@BDOSFUN1"".""U_CrtrPr"" = 0 THEN 1 ELSE ""@BDOSFUN1"".""U_CrtrPr""/100 END))) AS ""U_CrtrPr""
+                   " + calculateMultiply + @"
                 FROM ""@BDOSFUNR""
                 LEFT JOIN ""@BDOSFUN1""
                 ON ""@BDOSFUNR"".""Code"" = ""@BDOSFUN1"".""Code""

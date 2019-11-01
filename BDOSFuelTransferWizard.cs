@@ -1160,8 +1160,8 @@ namespace BDO_Localisation_AddOn
                         }
                         else if (oCFLEvento.ChooseFromListUID == "EmpIDCFL")
                         {
-                            string empID = oDataTable.GetValue("empID", 0);
-                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("EmpIDE").Specific.Value = empID);
+                            int empID = oDataTable.GetValue("empID", 0);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("EmpIDE").Specific.Value = empID.ToString());
                         }
                         else if (oCFLEvento.ChooseFromListUID.StartsWith("Dimension"))
                         {
