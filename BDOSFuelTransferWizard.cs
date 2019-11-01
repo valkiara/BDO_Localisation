@@ -718,11 +718,12 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_Text, 50);
                     oDataTable.Columns.Add("ItemName", SAPbouiCOM.BoFieldsType.ft_Text, 100);
                     oDataTable.Columns.Add("IUoMEntry", SAPbouiCOM.BoFieldsType.ft_Integer, 11);
-                    oDataTable.Columns.Add("InvntryUom", SAPbouiCOM.BoFieldsType.ft_Text, 20);
+                    oDataTable.Columns.Add("InvntryUom", SAPbouiCOM.BoFieldsType.ft_Text, 100);
                     oDataTable.Columns.Add("AssetClass", SAPbouiCOM.BoFieldsType.ft_Text, 20);
                     oDataTable.Columns.Add("FuTpCode", SAPbouiCOM.BoFieldsType.ft_Text, 50);
                     oDataTable.Columns.Add("FuelCode", SAPbouiCOM.BoFieldsType.ft_Text, 50);
                     oDataTable.Columns.Add("FuelName", SAPbouiCOM.BoFieldsType.ft_Text, 100);
+                    oDataTable.Columns.Add("FuelUom", SAPbouiCOM.BoFieldsType.ft_Text, 100);
                     oDataTable.Columns.Add("FuGrpCod", SAPbouiCOM.BoFieldsType.ft_Integer, 6);
                     oDataTable.Columns.Add("FuGrpNam", SAPbouiCOM.BoFieldsType.ft_Text, 20);
                     oDataTable.Columns.Add("Employee", SAPbouiCOM.BoFieldsType.ft_Integer, 11);
@@ -806,6 +807,11 @@ namespace BDO_Localisation_AddOn
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelDescription");
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "FuelName");
+
+                    oColumn = oColumns.Add("FuelUom", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelUomCode");
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind(UID, "FuelUom");
 
                     oColumn = oColumns.Add("FuGrpCod", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelGroupCode");
@@ -1204,6 +1210,7 @@ namespace BDO_Localisation_AddOn
             query.Append("\"OITM\".\"U_BDOSFuTp\" AS \"FuTpCode\", \n");
             query.Append("\"@BDOSFUTP\".\"U_ItemCode\" AS \"FuelCode\", \n");
             query.Append("\"@BDOSFUTP\".\"U_ItemName\" AS \"FuelName\", \n");
+            query.Append("\"@BDOSFUTP\".\"U_UomCode\" AS \"FuelUomCode\", \n");
             query.Append("\"@BDOSFUTP\".\"FuGrpCod\", \n");
             query.Append("\"@BDOSFUTP\".\"FuGrpNam\", \n");
             query.Append("\"OITM\".\"Employee\", \n");
@@ -1270,6 +1277,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.SetValue("FuTpCode", rowIndex, oRecordSet.Fields.Item("FuTpCode").Value);
                     oDataTable.SetValue("FuelCode", rowIndex, oRecordSet.Fields.Item("FuelCode").Value);
                     oDataTable.SetValue("FuelName", rowIndex, oRecordSet.Fields.Item("FuelName").Value);
+                    oDataTable.SetValue("FuelUom", rowIndex, oRecordSet.Fields.Item("FuelUomCode").Value);
                     oDataTable.SetValue("FuGrpCod", rowIndex, oRecordSet.Fields.Item("FuGrpCod").Value);
                     oDataTable.SetValue("FuGrpNam", rowIndex, oRecordSet.Fields.Item("FuGrpNam").Value);
                     oDataTable.SetValue("Employee", rowIndex, oRecordSet.Fields.Item("Employee").Value);
@@ -1330,6 +1338,8 @@ namespace BDO_Localisation_AddOn
             oStockTransfer.ToWarehouse = whsToCode;
             oStockTransfer.UserFields.Fields.Item("U_BDOSFrPrj").Value = prjCode;
 
+            bool existLine = false;
+
             for (int i = 0; i < oDataTable.Rows.Count; i++)
             {
                 checkBox = oDataTable.GetValue("CheckBox", i);
@@ -1354,50 +1364,58 @@ namespace BDO_Localisation_AddOn
                     oStockTransfer.Lines.DistributionRule5 = oDataTable.GetValue("Dimension5", i);
 
                     oStockTransfer.Lines.Add();
+                    existLine = true;
                 }
             }
 
-            int resultCode = oStockTransfer.Add();
+            if (existLine)
+            {
+                int resultCode = oStockTransfer.Add();
 
-            if (resultCode != 0)
-            {
-                int errCode;
-                string errMsg;
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + errMsg, SAPbouiCOM.BoMessageTime.bmt_Short);
-            }
-            else
-            {
-                int docEntryST;
-                bool newDoc = oStockTransfer.GetByKey(Convert.ToInt32(Program.oCompany.GetNewObjectKey()));
-                if (newDoc == true)
+                if (resultCode != 0)
                 {
-                    docEntryST = oStockTransfer.DocEntry;
-                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + ": " + docEntryST, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                    int errCode;
+                    string errMsg;
+                    Program.oCompany.GetLastError(out errCode, out errMsg);
+                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + errMsg, SAPbouiCOM.BoMessageTime.bmt_Short);
                 }
                 else
                 {
-                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated"), SAPbouiCOM.BoMessageTime.bmt_Short);
-                    return;
-                }
-
-                Marshal.ReleaseComObject(oStockTransfer);
-
-                for (int i = 0; i < oDataTable.Rows.Count; i++)
-                {
-                    checkBox = oDataTable.GetValue("CheckBox", i);
-                    if (docEntryST > 0 && checkBox == "Y" && oDataTable.GetValue("DocEntryST", i) == 0)
+                    int docEntryST;
+                    bool newDoc = oStockTransfer.GetByKey(Convert.ToInt32(Program.oCompany.GetNewObjectKey()));
+                    if (newDoc == true)
                     {
-                        oDataTable.SetValue("DocEntryST", i, docEntryST);
+                        docEntryST = oStockTransfer.DocEntry;
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + ": " + docEntryST, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                    }
+                    else
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                        return;
+                    }
+
+                    Marshal.ReleaseComObject(oStockTransfer);
+
+                    for (int i = 0; i < oDataTable.Rows.Count; i++)
+                    {
+                        checkBox = oDataTable.GetValue("CheckBox", i);
+                        if (docEntryST > 0 && checkBox == "Y" && oDataTable.GetValue("DocEntryST", i) == 0)
+                        {
+                            oDataTable.SetValue("DocEntryST", i, docEntryST);
+                        }
                     }
                 }
-            }
 
-            oForm.Freeze(true);
-            oMatrix.Clear();
-            oMatrix.LoadFromDataSource();
-            oForm.Update();
-            oForm.Freeze(false);
+                oForm.Freeze(true);
+                oMatrix.Clear();
+                oMatrix.LoadFromDataSource();
+                oForm.Update();
+                oForm.Freeze(false);
+            }
+            else
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreated") + "! " + BDOSResources.getTranslate("ToCreateNewDocumentPressFillButton"), SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
         }
 
         public static Dictionary<string, string> getItemGroupsList()

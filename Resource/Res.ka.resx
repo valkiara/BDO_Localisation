@@ -3307,4 +3307,10 @@
   <data name="CreateDocumentInventoryTransfer" xml:space="preserve">
     <value>შეიქმნას საქონლის გადაადგილების დოკუმენტი</value>
   </data>
+  <data name="FuelUomCode" xml:space="preserve">
+    <value>საწვავის ერთეულის კოდი</value>
+  </data>
+  <data name="ToCreateNewDocumentPressFillButton" xml:space="preserve">
+    <value>ახალი დოკუმენტის შესაქმნელად დააჭირეთ შევსება ღილაკს</value>
+  </data>
 </root>

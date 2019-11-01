@@ -3301,4 +3301,10 @@
   <data name="CreateDocumentInventoryTransfer" xml:space="preserve">
     <value>Do you want to create document Inventory Transfer</value>
   </data>
+  <data name="FuelUomCode" xml:space="preserve">
+    <value>Fuel UoM Code</value>
+  </data>
+  <data name="ToCreateNewDocumentPressFillButton" xml:space="preserve">
+    <value>To create new document press fill button</value>
+  </data>
 </root>
