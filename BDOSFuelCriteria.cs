@@ -64,7 +64,7 @@ namespace BDO_Localisation_AddOn
                 oUserObjectMD.TableName = "BDOSFUCR";
                 oUserObjectMD.ObjectType = SAPbobsCOM.BoUDOObjType.boud_MasterData;
                 oUserObjectMD.CanFind = SAPbobsCOM.BoYesNoEnum.tYES;
-                oUserObjectMD.CanDelete = SAPbobsCOM.BoYesNoEnum.tNO;
+                oUserObjectMD.CanDelete = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanCancel = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanClose = SAPbobsCOM.BoYesNoEnum.tNO;
                 oUserObjectMD.CanYearTransfer = SAPbobsCOM.BoYesNoEnum.tNO;
@@ -196,6 +196,26 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+
+            SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
+
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_DELETE)
+            {
+                if (BusinessObjectInfo.BeforeAction)
+                {
+                    if (checkRemoving(oForm))
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("RecordIsUsedInDocuments"));
+                        Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                        BubbleEvent = false;
+                    }
+                }
+            }
+        }
+
         public static void changeFormItems(SAPbouiCOM.Form oForm)
         {
             SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("3").Specific));
@@ -237,6 +257,17 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
             }
+        }
+
+        public static bool checkRemoving(SAPbouiCOM.Form oForm)
+        {
+            SAPbouiCOM.DBDataSource DocDBSourceTAXP = oForm.DataSources.DBDataSources.Item(0);
+            string code = DocDBSourceTAXP.GetValue("Code", 0).Trim();
+
+            Dictionary<string, string> listTables = new Dictionary<string, string>();
+            listTables.Add("@BDOSFUN1", "U_CrtrCode");
+
+            return CommonFunctions.codeIsUsed(listTables, code);
         }
     }
 }

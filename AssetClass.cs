@@ -80,11 +80,11 @@ namespace BDO_Localisation_AddOn
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
                 {
-                    if (Program.FORM_LOAD_FOR_VISIBLE)
+                    if (Program.FORM_LOAD_FOR_ACTIVATE)
                     {
-                        Program.FORM_LOAD_FOR_VISIBLE = false;
+                        Program.FORM_LOAD_FOR_ACTIVATE = false;
                         setVisibleFormItems(oForm);
                     }
                 }

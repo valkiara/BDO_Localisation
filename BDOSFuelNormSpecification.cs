@@ -139,7 +139,7 @@ namespace BDO_Localisation_AddOn
                 oUserObjectMD.TableName = "BDOSFUNR";
                 oUserObjectMD.ObjectType = SAPbobsCOM.BoUDOObjType.boud_MasterData;
                 oUserObjectMD.CanFind = SAPbobsCOM.BoYesNoEnum.tYES;
-                oUserObjectMD.CanDelete = SAPbobsCOM.BoYesNoEnum.tNO;
+                oUserObjectMD.CanDelete = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanCancel = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanClose = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanYearTransfer = SAPbobsCOM.BoYesNoEnum.tYES;
@@ -343,6 +343,37 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("0_U_E").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
                 oForm.Items.Item("1_U_E").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 2, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
                 oForm.Items.Item("1_U_E").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
+            }
+            else if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_DELETE)
+            {
+                if (BusinessObjectInfo.BeforeAction)
+                {
+                    if (checkRemoving(oForm))
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("RecordIsUsedInDocuments"));
+                        Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                        BubbleEvent = false;
+                    }
+                }
+            }
+            else if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
+            {
+                if (BusinessObjectInfo.BeforeAction)
+                {
+                    SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSFUNR");
+                    bool isFixed = oForm.DataSources.DBDataSources.Item("@BDOSFUNR").GetValue("U_Fixed", 0) == "Y";
+
+                    if (isFixed)
+                    {
+                        SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUN1");
+                        oDBDataSourceMTR.Clear();
+                    }
+                    else
+                    {
+                        oDBDataSource.SetValue("U_PerKm", 0, "0");
+                        oDBDataSource.SetValue("U_PerHr", 0, "0");
+                    }
+                }
             }
         }
 
@@ -834,26 +865,22 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("CrtrMTR").Specific));
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("CrtrMTR").Specific;
+                oMatrix.FlushToDataSource();
 
-                int index = 0;
-                if (oMatrix.RowCount == 0)
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUN1");
+                if (!string.IsNullOrEmpty(oDBDataSourceMTR.GetValue("U_CrtrCode", oDBDataSourceMTR.Size - 1)))
                 {
-                    index = 1;
+                    oDBDataSourceMTR.InsertRecord(oDBDataSourceMTR.Size);
                 }
-                else
+                oDBDataSourceMTR.SetValue("LineId", oDBDataSourceMTR.Size - 1, oDBDataSourceMTR.Size.ToString());
+
+                oMatrix.LoadFromDataSource();
+
+                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
                 {
-                    index = Convert.ToInt32(oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value) + 1;
+                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                 }
-
-                oMatrix.AddRow(1, -1);
-                int row = oMatrix.RowCount;
-
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("LineID").Cells.Item(row).Specific.Value = index.ToString());
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrCode").Cells.Item(row).Specific.Value = "");
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrName").Cells.Item(row).Specific.Value = "");
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrValue").Cells.Item(row).Specific.Value = "");
-                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CrtrPr").Cells.Item(row).Specific.Value = "");
             }
             catch (Exception ex)
             {
@@ -887,7 +914,19 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUN1");
+                int rowCount = oDBDataSourceMTR.Size;
+
+                for (int i = 1; i <= rowCount; i++)
+                {
+                    string itemCode = oDBDataSourceMTR.GetValue("U_CrtrCode", i - 1);
+                    if (!string.IsNullOrEmpty(itemCode))
+                    {
+                        oDBDataSourceMTR.SetValue("LineId", i - 1, i.ToString());
+                    }
+                }
                 oMatrix.LoadFromDataSource();
+
                 if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE && deletedRowCount > 0)
                 {
                     oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
@@ -902,6 +941,17 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
                 oForm.Freeze(false);
             }
+        }
+
+        public static bool checkRemoving(SAPbouiCOM.Form oForm)
+        {
+            SAPbouiCOM.DBDataSource DocDBSourceTAXP = oForm.DataSources.DBDataSources.Item(0);
+            string code = DocDBSourceTAXP.GetValue("Code", 0).Trim();
+
+            Dictionary<string, string> listTables = new Dictionary<string, string>();
+            listTables.Add("@BDOSFUCN", "U_FuNrCode");
+
+            return CommonFunctions.codeIsUsed(listTables, code);
         }
     }
 }

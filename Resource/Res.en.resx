@@ -3295,4 +3295,43 @@
   <data name="DoYouWantToCreateJEForDownPayment" xml:space="preserve">
     <value>Do you want to create journal entry for down payment invoice</value>
   </data>
+  <data name="PostingDateMustBeGreaterOrEqualThanDateTo" xml:space="preserve">
+    <value>Posting date must be greater or equal than date to!</value>
+  </data>
+  <data name="LessThan" xml:space="preserve">
+    <value>less than</value>
+  </data>
+  <data name="CloseFuelWriteOffWizard" xml:space="preserve">
+    <value>Do you want to close fuel write-off wizard</value>
+  </data>
+  <data name="CreateDocumentGoodsIssue" xml:space="preserve">
+    <value>Do you want to create document Goods Issue</value>
+  </data>
+  <data name="DataForCreateDocument" xml:space="preserve">
+    <value>Data For Create Document</value>
+  </data>
+  <data name="DataForFilter" xml:space="preserve">
+    <value>Data For Filter</value>
+  </data>
+  <data name="CloseFuelTransferWizard" xml:space="preserve">
+    <value>Do you want to close fuel transfer wizard</value>
+  </data>
+  <data name="AssetClass" xml:space="preserve">
+    <value>Asset Class</value>
+  </data>
+  <data name="GroupCode" xml:space="preserve">
+    <value>Group Code</value>
+  </data>
+  <data name="GroupName" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="FuelGroupCode" xml:space="preserve">
+    <value>Fuel Group Code</value>
+  </data>
+  <data name="FuelGroupName" xml:space="preserve">
+    <value>Fuel Group Name</value>
+  </data>
+  <data name="CreateDocumentInventoryTransfer" xml:space="preserve">
+    <value>Do you want to create document Inventory Transfer</value>
+  </data>
 </root>

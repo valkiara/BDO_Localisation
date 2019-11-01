@@ -97,7 +97,7 @@ namespace BDO_Localisation_AddOn
                 oUserObjectMD.TableName = "BDOSFUTP";
                 oUserObjectMD.ObjectType = SAPbobsCOM.BoUDOObjType.boud_MasterData;
                 oUserObjectMD.CanFind = SAPbobsCOM.BoYesNoEnum.tYES;
-                oUserObjectMD.CanDelete = SAPbobsCOM.BoYesNoEnum.tNO;
+                oUserObjectMD.CanDelete = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanCancel = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanClose = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanYearTransfer = SAPbobsCOM.BoYesNoEnum.tYES;
@@ -232,6 +232,18 @@ namespace BDO_Localisation_AddOn
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
                 setVisibleFormItems(oForm);
+            }
+            else if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_DELETE)
+            {
+                if (BusinessObjectInfo.BeforeAction)
+                {
+                    if (checkRemoving(oForm))
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("RecordIsUsedInDocuments"));
+                        Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                        BubbleEvent = false;
+                    }
+                }
             }
         }
 
@@ -661,6 +673,18 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
             }
+        }
+
+        public static bool checkRemoving(SAPbouiCOM.Form oForm)
+        {
+            SAPbouiCOM.DBDataSource DocDBSourceTAXP = oForm.DataSources.DBDataSources.Item(0);
+            string code = DocDBSourceTAXP.GetValue("Code", 0).Trim();
+
+            Dictionary<string, string> listTables = new Dictionary<string, string>();
+            listTables.Add("OITM", "U_BDOSFuTp");
+            listTables.Add("@BDOSFUC1", "U_FuTpCode");
+
+            return CommonFunctions.codeIsUsed(listTables, code);
         }
     }
 }
