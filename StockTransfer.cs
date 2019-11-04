@@ -379,6 +379,17 @@ namespace BDO_Localisation_AddOn
                     BubbleEvent = false;
                 }
 
+                if(BusinessObjectInfo.BeforeAction == true)
+                {
+                    //ძირითადი საშუალებების შემოწმება
+                    bool rejectionAsset = false;
+                    CommonFunctions.blockAssetInvoice(oForm, "OWTR", "WTR1", "", out rejectionAsset);
+                    if (rejectionAsset)
+                    {
+                        BubbleEvent = false;
+                    }
+                }
+
                 if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction)
                 {
                     //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
