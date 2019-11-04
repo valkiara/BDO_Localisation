@@ -566,6 +566,7 @@ namespace BDO_Localisation_AddOn
                 string WBSupName = Waybill_Header["SELLER_NAME"];
                 string WBSupTIN = Waybill_Header["SELLER_TIN"];
                 string WBActDate = Waybill_Header["ACTIVATE_DATE"].Replace("T", " ");
+                string WBStartAdd = Waybill_Header["START_ADDRESS"];
                 string WBEndAdd = Waybill_Header["END_ADDRESS"];
                 double WBSUM = Convert.ToDouble(Waybill_Header["FULL_AMOUNT"], CultureInfo.InvariantCulture);
 
@@ -616,25 +617,26 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue(3, rowIndex, BDO_WBReceivedDocs.detectWBStatus(WBStat));
                 oDataTable.SetValue(4, rowIndex, WBSupName);
                 oDataTable.SetValue(5, rowIndex, ActDt);
-                oDataTable.SetValue(6, rowIndex, WBEndAdd);
-                oDataTable.SetValue(7, rowIndex, WBSUM);
-                oDataTable.SetValue(8, rowIndex, WBSupTIN);
-                oDataTable.SetValue(9, rowIndex, "0");
-                oDataTable.SetValue(13, rowIndex, TYPE);
+                oDataTable.SetValue(6, rowIndex, WBStartAdd);
+                oDataTable.SetValue(7, rowIndex, WBEndAdd);
+                oDataTable.SetValue(8, rowIndex, WBSUM);
+                oDataTable.SetValue(9, rowIndex, WBSupTIN);
+                oDataTable.SetValue(10, rowIndex, "0");
+                oDataTable.SetValue(14, rowIndex, TYPE);
 
                 if (LinkedDocEntryInvoice != 0)
                 {
-                    oDataTable.SetValue(10, rowIndex, LinkedDocEntryInvoice.ToString());
+                    oDataTable.SetValue(11, rowIndex, LinkedDocEntryInvoice.ToString());
                 }
 
                 if (LinkedDocEntryGoodsReceipePO != 0)
                 {
-                    oDataTable.SetValue(11, rowIndex, LinkedDocEntryGoodsReceipePO.ToString());
+                    oDataTable.SetValue(12, rowIndex, LinkedDocEntryGoodsReceipePO.ToString());
                 }
 
                 if (LinkedDocEntryMemo != 0)
                 {
-                    oDataTable.SetValue(12, rowIndex, LinkedDocEntryMemo.ToString());
+                    oDataTable.SetValue(13, rowIndex, LinkedDocEntryMemo.ToString());
                 }
 
                 rowCounter++;
@@ -1785,6 +1787,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("WBStat", SAPbouiCOM.BoFieldsType.ft_Text, 20); //3                
                     oDataTable.Columns.Add("WBSupName", SAPbouiCOM.BoFieldsType.ft_Text, 20); //4
                     oDataTable.Columns.Add("WBActDate", SAPbouiCOM.BoFieldsType.ft_Date, 20); //5
+                    oDataTable.Columns.Add("WBStartAdd", SAPbouiCOM.BoFieldsType.ft_Text, 20); //6
                     oDataTable.Columns.Add("WBEndAdd", SAPbouiCOM.BoFieldsType.ft_Text, 20); //6
                     oDataTable.Columns.Add("WBSUM", SAPbouiCOM.BoFieldsType.ft_Sum, 20); //7
                     oDataTable.Columns.Add("WBSupTIN", SAPbouiCOM.BoFieldsType.ft_Text, 20); //8
@@ -1811,6 +1814,7 @@ namespace BDO_Localisation_AddOn
                         string WBStat = Waybill_Header["STATUS"];
                         string WBSupName = Waybill_Header["SELLER_NAME"];
                         string WBActDate = Waybill_Header["ACTIVATE_DATE"].Replace("T", " ");
+                        string WBStartAdd = Waybill_Header["START_ADDRESS"];
                         string WBEndAdd = Waybill_Header["END_ADDRESS"];
                         string WBSupTIN = Waybill_Header["SELLER_TIN"];
                         double WBSUM = Convert.ToDouble(Waybill_Header["FULL_AMOUNT"], CultureInfo.InvariantCulture);
@@ -1839,11 +1843,12 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue(3, rowIndex, BDO_WBReceivedDocs.detectWBStatus(WBStat));
                         oDataTable.SetValue(4, rowIndex, WBSupName);
                         oDataTable.SetValue(5, rowIndex, ActDt);
-                        oDataTable.SetValue(6, rowIndex, WBEndAdd);
-                        oDataTable.SetValue(7, rowIndex, WBSUM);
-                        oDataTable.SetValue(8, rowIndex, WBSupTIN);
-                        oDataTable.SetValue(9, rowIndex, "0");
-                        oDataTable.SetValue(13, rowIndex, TYPE);
+                        oDataTable.SetValue(6, rowIndex, WBStartAdd);
+                        oDataTable.SetValue(7, rowIndex, WBEndAdd);
+                        oDataTable.SetValue(8, rowIndex, WBSUM);
+                        oDataTable.SetValue(9, rowIndex, WBSupTIN);
+                        oDataTable.SetValue(10, rowIndex, "0");
+                        oDataTable.SetValue(14, rowIndex, TYPE);
 
                         string LinkedDocType = "";
 
@@ -1858,17 +1863,17 @@ namespace BDO_Localisation_AddOn
 
                         if (LinkedDocEntryInvoice != 0)
                         {
-                            oDataTable.SetValue(10, rowIndex, LinkedDocEntryInvoice.ToString());
+                            oDataTable.SetValue(11, rowIndex, LinkedDocEntryInvoice.ToString());
                         }
 
                         if (LinkedDocEntryGoodsReceipePO != 0)
                         {
-                            oDataTable.SetValue(11, rowIndex, LinkedDocEntryGoodsReceipePO.ToString());
+                            oDataTable.SetValue(12, rowIndex, LinkedDocEntryGoodsReceipePO.ToString());
                         }
 
                         if (LinkedDocEntryMemo != 0)
                         {
-                            oDataTable.SetValue(12, rowIndex, LinkedDocEntryMemo.ToString());
+                            oDataTable.SetValue(13, rowIndex, LinkedDocEntryMemo.ToString());
                         }
 
                         rowCounter++;
@@ -1911,7 +1916,7 @@ namespace BDO_Localisation_AddOn
                     oLink.LinkedObject = SAPbouiCOM.BoLinkedObject.lf_PurchaseInvoice;
 
                     oColumn = oColumns.Add("GdsRcpPO", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("GoodsReceipe");
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("GoodsRcptPO");
                     oColumn.Width = 100;
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind("WBTable", "GdsRcpPO");
@@ -1999,6 +2004,12 @@ namespace BDO_Localisation_AddOn
                     oColumn.Width = 100;
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind("WBTable", "WBActDate");
+
+                    oColumn = oColumns.Add("WBStartAdd", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("StartAddress");
+                    oColumn.Width = 100;
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind("WBTable", "WBStartAdd");
 
                     oColumn = oColumns.Add("WBEndAdd", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("EndAddress");
