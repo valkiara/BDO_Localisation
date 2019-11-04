@@ -2990,9 +2990,7 @@ namespace BDO_Localisation_AddOn
                             {
                                 BDOSARDownPaymentVATAccrual.getAmount( docEntry, out amount, out amountTX, out errorText);
                             }
-                            
-                            
-
+                                                        
                             oMatrix.Columns.Item("U_baseDTxt").Cells.Item(cellPos.rowIndex).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                             SAPbouiCOM.EditText oEditText = oMatrix.Columns.Item("U_baseDTxt").Cells.Item(cellPos.rowIndex).Specific;
 
@@ -3031,16 +3029,7 @@ namespace BDO_Localisation_AddOn
                             catch
                             { }
 
-                            decimal TotalAmount = 0;
-                            decimal TotalVAT = 0;
-
-                            for (int i = 1; i <= oMatrix.RowCount; i++)
-                            {
-                                TotalAmount = TotalAmount + Convert.ToDecimal(oMatrix.GetCellSpecific("U_amtBsDc", i).Value, CultureInfo.InvariantCulture);
-                                TotalVAT = TotalVAT + Convert.ToDecimal(oMatrix.GetCellSpecific("U_tAmtBsDc", i).Value, CultureInfo.InvariantCulture);
-                            }
-                            oForm.Items.Item("amountE").Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(TotalAmount);
-                            oForm.Items.Item("amountTXE").Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(TotalVAT);
+                            CalculateAmount(oForm);
 
                             if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
                             {
@@ -3057,6 +3046,36 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 GC.Collect();
+            }
+        }
+
+        public static void CalculateAmount(SAPbouiCOM.Form oForm)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("wblMTR").Specific));
+
+                decimal TotalAmount = 0;
+                decimal TotalVAT = 0;
+
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    TotalAmount = TotalAmount + Convert.ToDecimal(oMatrix.GetCellSpecific("U_amtBsDc", i).Value, CultureInfo.InvariantCulture);
+                    TotalVAT = TotalVAT + Convert.ToDecimal(oMatrix.GetCellSpecific("U_tAmtBsDc", i).Value, CultureInfo.InvariantCulture);
+                }
+                oForm.Items.Item("amountE").Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(TotalAmount);
+                oForm.Items.Item("amountTXE").Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(TotalVAT);
+                oForm.Items.Item("amtOutTXE").Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(TotalAmount - TotalVAT);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
@@ -4812,6 +4831,7 @@ namespace BDO_Localisation_AddOn
                         BubbleEvent = false;
                     }
                 }
+               
 
                 if (pVal.ItemUID == "addMTRB" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
@@ -4821,6 +4841,7 @@ namespace BDO_Localisation_AddOn
                 if (pVal.ItemUID == "delMTRB" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
                     delMatrixRow( oForm, out errorText);
+                    CalculateAmount(oForm);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
