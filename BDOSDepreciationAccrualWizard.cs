@@ -449,7 +449,7 @@ namespace BDO_Localisation_AddOn
         private static void itemPressed(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
             errorText = null;
-
+            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("ItemsMTR").Specific;
             try
             {
                 if (pVal.ItemUID == "DeprMonth")
@@ -460,6 +460,12 @@ namespace BDO_Localisation_AddOn
                     AccrMnth = new DateTime(AccrMnth.Year, AccrMnth.Month, 1);
                     AccrMnth =  AccrMnth.AddMonths(1).AddDays(-1);
                     oEditText.Value = AccrMnth.ToString("yyyyMMdd");
+
+
+                    if(oMatrix.RowCount > 0)
+                    {
+                        oMatrix.Clear();
+                    }
                 }
             }
             catch (Exception ex)
