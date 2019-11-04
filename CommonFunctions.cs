@@ -1136,7 +1136,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static void fillPhysicalEntityTaxes(SAPbouiCOM.Form oFormWtax, SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, out string errorText)
+        public static void fillPhysicalEntityTaxes(string objType, SAPbouiCOM.Form oFormWtax, SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, out string errorText)
         {
             errorText = "";
 
@@ -1238,6 +1238,14 @@ namespace BDO_Localisation_AddOn
                     oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
                     oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
                     oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensCoAm);
+                }
+
+                if (objType != "204") //A/P Reserve Invoice, A/P Invoice, A/P Credit Memo
+                {
+                    decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
+                    PensPhAm = roundAmountByGeneralSettings(taxableAmt * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
+                    WhtAmt = roundAmountByGeneralSettings((taxableAmt - PensPhAm) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
+                    totalTaxes = PensPhAm + WhtAmt;
                 }
 
                 if (physicalEntityTax)
