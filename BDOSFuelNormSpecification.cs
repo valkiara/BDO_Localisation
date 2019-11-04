@@ -375,6 +375,19 @@ namespace BDO_Localisation_AddOn
                     {
                         oDBDataSource.SetValue("U_PerKm", 0, "0");
                         oDBDataSource.SetValue("U_PerHr", 0, "0");
+
+                        //checkDuplicatesInDBDataSources
+                        SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUN1");
+
+                        Dictionary<string, SAPbouiCOM.DBDataSource> oKeysDictionary = new Dictionary<string, SAPbouiCOM.DBDataSource>();
+                        oKeysDictionary.Add("U_CrtrCode", oDBDataSourceMTR);
+                        string errorText;
+                        List<string> crtrCodeList = CommonFunctions.checkDuplicatesInDBDataSources(oDBDataSourceMTR, oKeysDictionary, out errorText);
+                        if (string.IsNullOrEmpty(errorText) == false)
+                        {
+                            Program.uiApp.SetStatusBarMessage(errorText + " " + BDOSResources.getTranslate("Code") + ": " + string.Join(",", crtrCodeList), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                            BubbleEvent = false;
+                        }
                     }
                 }
             }

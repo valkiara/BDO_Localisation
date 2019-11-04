@@ -377,7 +377,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("UomEntry"));
+            formItems.Add("Caption", BDOSResources.getTranslate("UomCode"));
             formItems.Add("LinkTo", "UomEntryE");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -400,6 +400,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Enabled", false);
+            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -417,6 +418,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("LinkTo", "UomEntryE");
             formItems.Add("LinkedObjectType", "10000199"); //UoM Master Data
+            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -432,8 +434,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_UomCode");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left_e + width_e / 3);
-            formItems.Add("Width", width_e / 3 * 2);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);

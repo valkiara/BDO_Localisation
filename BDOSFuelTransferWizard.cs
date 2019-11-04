@@ -865,6 +865,11 @@ namespace BDO_Localisation_AddOn
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "LastName");
 
+                    oColumn = oColumns.Add("FuGrpNam", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelGroupName");
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind(UID, "FuGrpNam");
+
                     oColumn = oColumns.Add("FuTpCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelType");
                     oColumn.Editable = false;
@@ -896,11 +901,6 @@ namespace BDO_Localisation_AddOn
                     oColumn.DataBind.Bind(UID, "FuGrpCod");
                     oLink = oColumn.ExtendedObject;
                     oLink.LinkedObjectType = "1470000046"; //Asset Groups
-
-                    oColumn = oColumns.Add("FuGrpNam", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("FuelGroupName");
-                    oColumn.Editable = false;
-                    oColumn.DataBind.Bind(UID, "FuGrpNam");
 
                     oColumn = oColumns.Add("Quantity", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("Quantity");
@@ -1186,6 +1186,19 @@ namespace BDO_Localisation_AddOn
 
                         oCFL.SetConditions(oCons);
                     }
+                    else if (oCFLEvento.ChooseFromListUID.StartsWith("Dimension"))
+                    {
+                        SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
+                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+
+                        string dimCode = oCFLEvento.ChooseFromListUID.Substring("Dimension".Length, 1);
+
+                        SAPbouiCOM.Condition oCon = oCons.Add();
+                        oCon.Alias = "DimCode";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = dimCode;
+                        oCFL.SetConditions(oCons);
+                    }
                 }
                 else
                 {
@@ -1222,12 +1235,16 @@ namespace BDO_Localisation_AddOn
                         else if (oCFLEvento.ChooseFromListUID == "WarehouseToCodeCFL")
                         {
                             string whsCode = oDataTable.GetValue("WhsCode", 0);
+                            string prjCode = oDataTable.GetValue("U_BDOSPrjCod", 0);
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("WhsToE").Specific.Value = whsCode);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjToE").Specific.Value = prjCode);
                         }
                         else if (oCFLEvento.ChooseFromListUID == "WarehouseFromCodeCFL")
                         {
                             string whsCode = oDataTable.GetValue("WhsCode", 0);
+                            string prjCode = oDataTable.GetValue("U_BDOSPrjCod", 0);
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("WhsFromE").Specific.Value = whsCode);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjFromE").Specific.Value = prjCode);
                         }
                         else if (oCFLEvento.ChooseFromListUID == "EmpIDCFL")
                         {
