@@ -453,7 +453,7 @@ namespace BDO_Localisation_AddOn
                     //    addMatrixRow(oForm);
                 }
 
-                else if (pVal.ItemUID == "AssetMTR" && pVal.ItemChanged)
+                else if (pVal.ItemUID == "AssetMTR" && pVal.ItemChanged && !pVal.BeforeAction)
                 {
                     if (pVal.ColUID == "OdmtrStart" || pVal.ColUID == "OdmtrEnd")
                     {
@@ -480,6 +480,12 @@ namespace BDO_Localisation_AddOn
                     {
                         calculateConsumptionValue(oForm, pVal.Row - 1);
                     }
+                }
+
+                else if (pVal.ItemUID == "FuNrCodeE" && pVal.ItemChanged && !pVal.BeforeAction)
+                {
+                    updatePerKmHrValue(oForm);
+                    calculateConsumptionValue(oForm);
                 }
 
                 //else if (pVal.ItemUID == "AssetMTR" && pVal.ColUID == "OdmtrEnd" && pVal.ItemChanged)
@@ -542,6 +548,19 @@ namespace BDO_Localisation_AddOn
                             Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("PostingDateMustBeGreaterOrEqualThanDateTo"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
                             BubbleEvent = false;
                         }
+                    }
+
+                    //checkDuplicatesInDBDataSources
+                    SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
+
+                    Dictionary<string, SAPbouiCOM.DBDataSource> oKeysDictionary = new Dictionary<string, SAPbouiCOM.DBDataSource>();
+                    oKeysDictionary.Add("U_ItemCode", oDBDataSourceMTR);
+                    string errorText;
+                    List<string> itemCodeList = CommonFunctions.checkDuplicatesInDBDataSources(oDBDataSourceMTR, oKeysDictionary, out errorText);
+                    if (string.IsNullOrEmpty(errorText) == false)
+                    {
+                        Program.uiApp.SetStatusBarMessage(errorText + " " + BDOSResources.getTranslate("AssetCode") + ": " + string.Join(",", itemCodeList), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                        BubbleEvent = false;
                     }
                 }
             }
@@ -811,7 +830,7 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
-            top2 += height + 1;
+            //top2 += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "StatusS"; //10 characters
@@ -823,6 +842,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Status"));
             formItems.Add("LinkTo", "StatusC");
+            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -845,6 +865,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
             formItems.Add("DisplayDesc", true);
+            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1355,6 +1376,19 @@ namespace BDO_Localisation_AddOn
                         }
                         oCFL.SetConditions(oCons);
                     }
+                    else if (oCFLEvento.ChooseFromListUID.StartsWith("Dimension"))
+                    {
+                        SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
+                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+
+                        string dimCode = oCFLEvento.ChooseFromListUID.Substring("Dimension".Length, 1);
+
+                        SAPbouiCOM.Condition oCon = oCons.Add();
+                        oCon.Alias = "DimCode";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = dimCode;
+                        oCFL.SetConditions(oCons);
+                    }
                 }
                 else
                 {
@@ -1609,7 +1643,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void updateRowByItemCode(SAPbouiCOM.Form oForm, string itemCode, int i)
+        static void updateRowByItemCode(SAPbouiCOM.Form oForm, string itemCode, int i)
         {
             try
             {
@@ -1641,8 +1675,7 @@ namespace BDO_Localisation_AddOn
                 }
                 decimal odmtrStart = getOdmtrStart(itemCode, docEntry);
                 oDBDataSourceMTR.SetValue("U_OdmtrStart", i, FormsB1.ConvertDecimalToString(odmtrStart));
-                if (Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrStart", i), CultureInfo.InvariantCulture) == 0)
-                    oDBDataSourceMTR.SetValue("U_OdmtrEnd", i, FormsB1.ConvertDecimalToString(odmtrStart));
+                oDBDataSourceMTR.SetValue("U_OdmtrEnd", i, FormsB1.ConvertDecimalToString(odmtrStart));
 
                 //------------------------------------------>Dimension<------------------------------------------
                 oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -1685,7 +1718,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void calculateConsumptionValue(SAPbouiCOM.Form oForm, int rowIndex = -1)
+        static void calculateConsumptionValue(SAPbouiCOM.Form oForm, int rowIndex = -1)
         {
             try
             {
@@ -1729,7 +1762,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void updatePerKmHrValue(SAPbouiCOM.Form oForm, int rowIndex = -1)
+        static void updatePerKmHrValue(SAPbouiCOM.Form oForm, int rowIndex = -1)
         {
             try
             {
@@ -1795,7 +1828,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static bool checkOdmtrEnd(SAPbouiCOM.Form oForm, int i)
+        static bool checkOdmtrEnd(SAPbouiCOM.Form oForm, int i)
         {
             SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
             oMatrix.FlushToDataSource();
@@ -1814,7 +1847,7 @@ namespace BDO_Localisation_AddOn
             return true;
         }
 
-        private static SAPbobsCOM.Recordset getFuelNormSpecification(string fuNrCode)
+        static SAPbobsCOM.Recordset getFuelNormSpecification(string fuNrCode)
         {
             try
             {
@@ -1857,7 +1890,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static SAPbobsCOM.Recordset getFuelType(string itemCode)
+        static SAPbobsCOM.Recordset getFuelType(string itemCode)
         {
             try
             {
@@ -1890,7 +1923,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static decimal getOdmtrStart(string itemCode, int docEntry)
+        static decimal getOdmtrStart(string itemCode, int docEntry)
         {
             try
             {

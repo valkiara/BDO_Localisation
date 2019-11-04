@@ -3034,9 +3034,6 @@
   <data name="GoodsRcptPO" xml:space="preserve">
     <value>Goods Receipt PO</value>
   </data>
-  <data name="FuelConsumptionDocument" xml:space="preserve">
-    <value>Fuel Consumption Document</value>
-  </data>
   <data name="EmptyBlaAgrError" xml:space="preserve">
     <value>Please fill Blanket Agreement</value>
   </data>

@@ -3064,9 +3064,6 @@
   <data name="FromDate" xml:space="preserve">
     <value>From Date</value>
   </data>
-  <data name="FuelConsumptionDocument" xml:space="preserve">
-    <value>Fuel Consumption Document</value>
-  </data>
   <data name="NormativeConsumption" xml:space="preserve">
     <value>Normative Consumption</value>
   </data>

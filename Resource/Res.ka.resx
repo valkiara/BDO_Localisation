@@ -3043,9 +3043,6 @@
   <data name="FromDate" xml:space="preserve">
     <value>საწყისი თარიღი</value>
   </data>
-  <data name="FuelConsumptionDocument" xml:space="preserve">
-    <value>ხარჯვის აქტი</value>
-  </data>
   <data name="FuelTransferWizard" xml:space="preserve">
     <value>საწვავის გადაადგილების დამხმარე</value>
   </data>
@@ -3233,7 +3230,7 @@
     <value>ოდომეტრის საბოლოო ჩვენება</value>
   </data>
   <data name="FuelConsumptionAct" xml:space="preserve">
-    <value>წვის ხარჯვის აქტი</value>
+    <value>საწვავის ხარჯვის აქტი</value>
   </data>
   <data name="HoursWorked" xml:space="preserve">
     <value>ნამუშევარი საათები</value>
