@@ -321,6 +321,7 @@ namespace BDO_Localisation_AddOn
                     string operation = answer == 1 ? "Update" : "Cancel";
                     BDO_Waybills.cancellation( wblDocEntry, operation, out errorText);
                 }
+
             }
             catch (Exception ex)
             {
@@ -439,11 +440,15 @@ namespace BDO_Localisation_AddOn
                 {
                     if (Program.cancellationTrans == true & Program.canceledDocEntry != 0)
                     {
+
                         cancellation( Program.canceledDocEntry, out errorText);
                         //Program.cancellationTrans = false; //უნდა იყოს დაკომენტარებული!!!
                         Program.canceledDocEntry = 0;
                     }
+
+                    
                 }
+
 
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
                 {
@@ -466,6 +471,28 @@ namespace BDO_Localisation_AddOn
 
             }
         }
+
+        public static void uiApp_MenuEvent(ref SAPbouiCOM.MenuEvent pVal, out bool BubbleEvent, out string errorText)
+        {
+            errorText = null;
+            BubbleEvent = true;
+
+            //----------------------------->Cancel <-----------------------------
+            SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+
+            if (pVal.BeforeAction && pVal.MenuUID == "1284")
+            {
+                //ძირითადი საშუალებების შემოწმება
+                bool rejectionAsset = false;
+                CommonFunctions.blockAssetInvoice(oForm, "OWTR", "WTR1", "", out rejectionAsset);
+                if (rejectionAsset)
+                {
+                    BubbleEvent = false;
+                }
+            }
+           
+        }
+
 
         public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
