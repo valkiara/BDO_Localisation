@@ -3337,4 +3337,7 @@
   <data name="ToCreateNewDocumentPressFillButton" xml:space="preserve">
     <value>To create new document press fill button</value>
   </data>
+  <data name="CorrespondingAccount" xml:space="preserve">
+    <value>Offset Account</value>
+  </data>
 </root>

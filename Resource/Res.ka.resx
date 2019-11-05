@@ -3310,4 +3310,7 @@
   <data name="ToCreateNewDocumentPressFillButton" xml:space="preserve">
     <value>ახალი დოკუმენტის შესაქმნელად დააჭირეთ შევსება ღილაკს</value>
   </data>
+  <data name="CorrespondingAccount" xml:space="preserve">
+    <value>მოკორ. ანგარიში</value>
+  </data>
 </root>
