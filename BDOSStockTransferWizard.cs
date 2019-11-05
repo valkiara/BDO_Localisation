@@ -13,6 +13,7 @@ namespace BDO_Localisation_AddOn
         static SAPbouiCOM.Form oFormWizard;
         public static string currentLineIDWhsTable;
         static SAPbouiCOM.Form oFormDetailWizard;
+        //static SAPbouiCOM.Form oFormDetailWizard2;
 
         public static DataTable TableWhsItemsForDetail;
 
@@ -208,7 +209,7 @@ namespace BDO_Localisation_AddOn
                     Dictionary<string, string> listValidValuesDict = new Dictionary<string, string>();
                     listValidValuesDict.Add("TransferToProjectWarehouse", BDOSResources.getTranslate("TransferToProjectWarehouse"));
                     listValidValuesDict.Add("TransferToWriteOffWarehouse", BDOSResources.getTranslate("TransferToWriteOffWarehouse"));
-                    listValidValuesDict.Add("ReturnToProjectWareHouse", BDOSResources.getTranslate("ReturnToProjectWareHouse"));
+                    listValidValuesDict.Add("ReturnToProjectWarehouse", BDOSResources.getTranslate("ReturnToProjectWarehouse"));
                     listValidValuesDict.Add("ReturnToMainWarehouse", BDOSResources.getTranslate("ReturnToMainWarehouse"));
                     listValidValuesDict.Add("TransferWithoutType", BDOSResources.getTranslate("TransferWithoutType"));
 
@@ -685,26 +686,26 @@ namespace BDO_Localisation_AddOn
 
                     top = top + height + 5;
 
-                    formItems = new Dictionary<string, object>();
-                    itemName = "TableTxt"; //10 characters
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", width_s);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("WareHouses"));
-                    formItems.Add("TextStyle", 4);
-                    formItems.Add("FontSize", 10);
-                    formItems.Add("Enabled", true);
-                    formItems.Add("FromPane", pane);
-                    formItems.Add("ToPane", pane);
+                    //formItems = new Dictionary<string, object>();
+                    //itemName = "TableTxt"; //10 characters
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    //formItems.Add("Left", left);
+                    //formItems.Add("Width", width_s);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("Caption", BDOSResources.getTranslate("Warehouse"));
+                    //formItems.Add("TextStyle", 4);
+                    //formItems.Add("FontSize", 10);
+                    //formItems.Add("Enabled", true);
+                    //formItems.Add("FromPane", pane);
+                    //formItems.Add("ToPane", pane);
 
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    return;
+                    //}
 
                     //FindNext
                     left = oForm.Width - width_s - width_e - 25;
@@ -783,6 +784,8 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("ChkBx", SAPbouiCOM.BoFieldsType.ft_Text, 1);
                     oDataTable.Columns.Add("Code", SAPbouiCOM.BoFieldsType.ft_Text, 20);
                     oDataTable.Columns.Add("Name", SAPbouiCOM.BoFieldsType.ft_Text, 100);
+                    oDataTable.Columns.Add("ProjectCode", SAPbouiCOM.BoFieldsType.ft_Text, 50);
+                    oDataTable.Columns.Add("WhseType", SAPbouiCOM.BoFieldsType.ft_Text, 50);
 
                     //მეორე გვერდი
                     top = 6;
@@ -872,6 +875,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("ChkBx", SAPbouiCOM.BoFieldsType.ft_Text, 1);
                     oDataTable.Columns.Add("LineID", SAPbouiCOM.BoFieldsType.ft_Text, 20);
                     oDataTable.Columns.Add("WhsFr", SAPbouiCOM.BoFieldsType.ft_Text, 20);
+                    oDataTable.Columns.Add("WhseTypeFr", SAPbouiCOM.BoFieldsType.ft_Text, 50);
                     oDataTable.Columns.Add("WhsTo", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
                     oDataTable.Columns.Add("PrjFr", SAPbouiCOM.BoFieldsType.ft_Text, 20);
                     oDataTable.Columns.Add("PrjTo", SAPbouiCOM.BoFieldsType.ft_Text, 20);
@@ -895,11 +899,9 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static void createDetailForm(out SAPbouiCOM.Form oForm, string whsFr, string whsTo, string docType, out string errorText)
+        public static void createDetailForm(string whsFr, string whseTypeFr, string whsTo, string docType, out string errorText)
         {
             errorText = null;
-
-            oForm = null;
 
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
             formProperties.Add("UniqueID", "BDOSStockTransferDetail");
@@ -909,14 +911,11 @@ namespace BDO_Localisation_AddOn
             formProperties.Add("ClientWidth", 750);
             formProperties.Add("Top", 335);
             formProperties.Add("ClientHeight", 400);
+            //formProperties.Add("Modality", SAPbouiCOM.BoFormModality.fm_Modal);
 
+            SAPbouiCOM.Form oForm;
             bool newForm;
             bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
-
-            if (errorText != null)
-            {
-                return;
-            }
 
             if (formExist == true)
             {
@@ -951,7 +950,7 @@ namespace BDO_Localisation_AddOn
                     Dictionary<string, string> listValidValuesDict = new Dictionary<string, string>();
                     listValidValuesDict.Add("TransferToProjectWarehouse", BDOSResources.getTranslate("TransferToProjectWarehouse"));
                     listValidValuesDict.Add("TransferToWriteOffWarehouse", BDOSResources.getTranslate("TransferToWriteOffWarehouse"));
-                    listValidValuesDict.Add("ReturnToProjectWareHouse", BDOSResources.getTranslate("ReturnToProjectWareHouse"));
+                    listValidValuesDict.Add("ReturnToProjectWarehouse", BDOSResources.getTranslate("ReturnToProjectWarehouse"));
                     listValidValuesDict.Add("ReturnToMainWarehouse", BDOSResources.getTranslate("ReturnToMainWarehouse"));
                     listValidValuesDict.Add("TransferWithoutType", BDOSResources.getTranslate("TransferWithoutType"));
 
@@ -1237,6 +1236,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("ChkBx", SAPbouiCOM.BoFieldsType.ft_Text, 1);
                     oDataTable.Columns.Add("LineID", SAPbouiCOM.BoFieldsType.ft_Text, 20);
                     oDataTable.Columns.Add("WhsFr", SAPbouiCOM.BoFieldsType.ft_Text, 20);
+                    oDataTable.Columns.Add("WhseTypeFr", SAPbouiCOM.BoFieldsType.ft_Text, 50);
                     oDataTable.Columns.Add("WhsTo", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
                     oDataTable.Columns.Add("ItemName", SAPbouiCOM.BoFieldsType.ft_Text, 100);
@@ -1245,10 +1245,11 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("UomCode", SAPbouiCOM.BoFieldsType.ft_Text, 20);
                     oDataTable.Columns.Add("InStock", SAPbouiCOM.BoFieldsType.ft_Sum, 20);
                     oDataTable.Columns.Add("Cost", SAPbouiCOM.BoFieldsType.ft_Sum, 20);
+                    oDataTable.Columns.Add("CostInStock", SAPbouiCOM.BoFieldsType.ft_Sum, 20);
                     oDataTable.Columns.Add("Qty", SAPbouiCOM.BoFieldsType.ft_Sum, 20);
 
                     FormsB1.addChooseFromList(oForm, true, "64", "DetailTableWhsTo_CFL"); //საწყობებით დეტალური ცხრილისთვის
-                    fillDetailTable(oForm, currentLineIDWhsTable, whsFr, whsTo, docType, out errorText);
+                    fillDetailTable(oForm, currentLineIDWhsTable, whsFr, whseTypeFr, whsTo, docType, out errorText);
 
                     //ღილაკები
                     top = oForm.ClientHeight - 25;
@@ -1381,6 +1382,7 @@ namespace BDO_Localisation_AddOn
             TableWhsItemsForDetail.Columns.Add("LineID", typeof(string));
             TableWhsItemsForDetail.Columns.Add("ChkBx", typeof(string));
             TableWhsItemsForDetail.Columns.Add("WhsFr", typeof(string));
+            TableWhsItemsForDetail.Columns.Add("WhseTypeFr", typeof(string));
             TableWhsItemsForDetail.Columns.Add("WhsTo", typeof(string));
             TableWhsItemsForDetail.Columns.Add("PrjFr", typeof(string));
             TableWhsItemsForDetail.Columns.Add("PrjTo", typeof(string));
@@ -1390,6 +1392,7 @@ namespace BDO_Localisation_AddOn
             TableWhsItemsForDetail.Columns.Add("InStock", typeof(decimal));
             TableWhsItemsForDetail.Columns.Add("Qty", typeof(decimal));
             TableWhsItemsForDetail.Columns.Add("Cost", typeof(decimal));
+            TableWhsItemsForDetail.Columns.Add("CostInStock", typeof(decimal));
 
             return TableWhsItemsForDetail;
         }
@@ -1405,6 +1408,15 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.FormUID == "BDOSSTTRWZ")
                 {
+                    //try
+                    //{
+                    //    oFormDetailWizard2.Close();
+                    //}
+                    //catch
+                    //{
+
+                    //}
+
                     oFormWizard = oForm;
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE & pVal.BeforeAction == true)
                     {
@@ -1440,20 +1452,19 @@ namespace BDO_Localisation_AddOn
                         if (pVal.Row >= 0)
                         {
                             oFormWizard = oForm;
-                            SAPbouiCOM.Form oFormDetail;
-
                             SAPbouiCOM.Grid oGrid = oForm.Items.Item("WhsTable").Specific;
                             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTable");
 
                             int dTableRow = oGrid.GetDataTableRowIndex(pVal.Row);
                             string whsTo = oDataTable.GetValue("WhsTo", dTableRow);
                             string whsFr = oDataTable.GetValue("WhsFr", dTableRow);
+                            string whseTypeFr = oDataTable.GetValue("WhseTypeFr", dTableRow);
                             currentLineIDWhsTable = oDataTable.GetValue("LineID", dTableRow);
 
                             SAPbouiCOM.ComboBox oComboBoxDocType = (SAPbouiCOM.ComboBox)oForm.Items.Item("DocTypeE").Specific;
                             string docType = oComboBoxDocType.Value;
 
-                            createDetailForm(out oFormDetail, whsFr, whsTo, docType, out errorText);
+                            createDetailForm(whsFr, whseTypeFr, whsTo, docType, out errorText);
                         }
                     }
 
@@ -1468,31 +1479,32 @@ namespace BDO_Localisation_AddOn
                     {
                         fillFiltTable(oForm, out errorText);
                     }
-					if (pVal.ItemUID == "Prev" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
-					{
-						int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("AllDataWillBeCleared"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-						if (answer == 1)
-						{
-							if (oForm.Items.Item("Prev").Enabled)
-							{
-								changePane(oForm, -1);
-							}
-						}
-						else {
-							BubbleEvent = false;
-							return;
-						}
-					}
+                    if (pVal.ItemUID == "Prev" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+                    {
+                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("AllDataWillBeCleared"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        if (answer == 1)
+                        {
+                            if (oForm.Items.Item("Prev").Enabled)
+                            {
+                                changePane(oForm, -1);
+                            }
+                        }
+                        else
+                        {
+                            BubbleEvent = false;
+                            return;
+                        }
+                    }
 
-					if (pVal.ItemUID == "Next" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+                    if (pVal.ItemUID == "Next" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                     {
                         changePane(oForm, 1);
                     }
 
-					if (pVal.ItemUID == "CategoryE" &&  pVal.BeforeAction == false)
-                    {	
-						SAPbouiCOM.EditText oEdit = oForm.Items.Item("CategoryE").Specific;
-						string category = oEdit.Value;
+                    if (pVal.ItemUID == "CategoryE" && pVal.BeforeAction == false)
+                    {
+                        SAPbouiCOM.EditText oEdit = oForm.Items.Item("CategoryE").Specific;
+                        string category = oEdit.Value;
                         if (string.IsNullOrEmpty(category))
                         {
                             oForm.Items.Item("CategoryN").Specific.Value = "";
@@ -1509,10 +1521,10 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                         oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
 
-                        chooseFromList(oForm, oCFLEvento, pVal, out errorText);
+                        chooseFromList(oForm, oCFLEvento, pVal);
                     }
 
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
                     {
                         oForm.Freeze(true);
                         resizeForm(oForm, out errorText);
@@ -1521,28 +1533,29 @@ namespace BDO_Localisation_AddOn
                 }
                 else if (pVal.FormUID == "BDOSStockTransferDetail")
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.ItemUID == "1" && pVal.BeforeAction == false && oForm.Mode == SAPbouiCOM.BoFormMode.fm_UPDATE_MODE)
+                    //oFormDetailWizard2 = oForm;
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.ItemUID == "1" && !pVal.BeforeAction && oForm.Mode == SAPbouiCOM.BoFormMode.fm_UPDATE_MODE)
                     {
                         updateDetailTable(oForm, out errorText);
                     }
 
-                    if ((pVal.ItemUID == "Check" || pVal.ItemUID == "Uncheck") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+                    if ((pVal.ItemUID == "Check" || pVal.ItemUID == "Uncheck") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                     {
                         checkUncheckTables(oForm, pVal.ItemUID, "WhsTblDt", out errorText);
-						//updateDetailTable(oForm, out errorText);
-					}
+                        //updateDetailTable(oForm, out errorText);
+                    }
 
-                    if (pVal.ItemUID == "FindNext" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+                    if (pVal.ItemUID == "FindNext" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                     {
                         findNextRow(oForm, "WhsTblDt", "ItemCode", "ItemName", true, out errorText);
                     }
 
-                    if (pVal.ItemUID == "FindNextE" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_KEY_DOWN &&  pVal.BeforeAction == false)
+                    if (pVal.ItemUID == "FindNextE" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_KEY_DOWN && !pVal.BeforeAction)
                     {
                         findNextRow(oForm, "WhsTblDt", "ItemCode", "ItemName", false, out errorText);
                     }
 
-                    if (pVal.ItemUID == "Split" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+                    if (pVal.ItemUID == "Split" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                     {
                         SAPbouiCOM.Grid oGrid = ((SAPbouiCOM.Grid)(oForm.Items.Item("WhsTblDt").Specific));
                         SAPbouiCOM.SelectedRows selectedRows = oGrid.Rows.SelectedRows;
@@ -1554,15 +1567,57 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
+                    if (pVal.ItemUID == "WhsTblDt" && pVal.ColUID == "Qty" && (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE || pVal.ItemChanged))
+                    {
+                        try
+                        {
+                            oForm.Freeze(true);
+
+                            SAPbouiCOM.Grid oGrid = oForm.Items.Item("WhsTblDt").Specific;
+                            SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTblDt");
+                            int dTableRow = oGrid.GetDataTableRowIndex(pVal.Row);
+
+                            decimal qty = Convert.ToDecimal(oDataTable.GetValue("Qty", dTableRow), CultureInfo.InvariantCulture);
+                            decimal inStock = Convert.ToDecimal(oDataTable.GetValue("InStock", dTableRow), CultureInfo.InvariantCulture);
+
+                            if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE && pVal.BeforeAction)
+                            {
+                                if (qty > inStock)
+                                {
+                                    oDataTable.SetValue("Qty", dTableRow, oDataTable.GetValue("InStock", dTableRow));
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("InsufficientStockBalance") + "! " + BDOSResources.getTranslate("TableRow") + ": " + (dTableRow + 1), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                                    BubbleEvent = true;
+                                }
+                            }
+
+                            else if (pVal.ItemChanged)
+                            {
+                                decimal costInStock = Convert.ToDecimal(oDataTable.GetValue("CostInStock", dTableRow), CultureInfo.InvariantCulture);
+                                decimal price = inStock != 0 ? costInStock / inStock : 0;
+                                decimal newCost = price * qty;
+
+                                oDataTable.SetValue("Cost", dTableRow, Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(newCost, "Sum")));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Program.uiApp.SetStatusBarMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                        }
+                        finally
+                        {
+                            oForm.Freeze(false);
+                        }
+                    }
+
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                         oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
 
-                        chooseFromList(oForm, oCFLEvento, pVal, out errorText);
+                        chooseFromList(oForm, oCFLEvento, pVal);
                     }
 
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
                     {
                         oForm.Freeze(true);
                         resizeForm(oForm, out errorText);
@@ -1613,10 +1668,10 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-					oItem = oForm.Items.Item("WhsToLB");
-					oItem.Left = oForm.Items.Item("WhsToS").Left + oForm.Items.Item("WhsToS").Width-15;
+                    oItem = oForm.Items.Item("WhsToLB");
+                    oItem.Left = oForm.Items.Item("WhsToS").Left + oForm.Items.Item("WhsToS").Width - 15;
 
-					oItem = oForm.Items.Item("WhsToE");
+                    oItem = oForm.Items.Item("WhsToE");
                     oItem.Left = oForm.Items.Item("WhsToS").Left + oForm.Items.Item("WhsToS").Width + 5;
 
                     oItem = oForm.Items.Item("FindNextE");
@@ -1701,20 +1756,17 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(false);
         }
 
-        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, SAPbouiCOM.ItemEvent pVal)
         {
-            errorText = null;
-
             bool beforeAction = pVal.BeforeAction;
             int row = pVal.Row;
             string sCFL_ID = oCFLEvento.ChooseFromListUID;
-
 
             try
             {
                 SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
 
-                if (beforeAction == false)
+                if (!beforeAction)
                 {
                     SAPbouiCOM.DataTable oDataTableSelectedObjects = null;
                     oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
@@ -1808,45 +1860,51 @@ namespace BDO_Localisation_AddOn
                         string docType = oComboBoxDocTyp.Value;
                         if (docType == "TransferToProjectWarehouse" || docType == "ReturnToMainWarehouse")
                         {
-                            //პირობის დადება 
                             whsType = (docType == "TransferToProjectWarehouse" ? "Project" : "Main"); //სხვა ოპ.ტიპის დროს არ აქვს ფილტრი                           
                         }
-                        setWarehousesConditions("", whsType, oCFL);
+                        setWarehousesConditions("", whsType, null, oCFL);
                     }
                     else if (sCFL_ID == "TableWhsTo_CFL")
                     {
+                        string whsType = null;
+                        SAPbouiCOM.ComboBox oComboBoxDocTyp = (SAPbouiCOM.ComboBox)oForm.Items.Item("DocTypeE").Specific;
+                        string docType = oComboBoxDocTyp.Value;
+                        if (docType == "TransferToWriteOffWarehouse")
+                        {
+                            whsType = "WriteOff";
+                        }
+
                         SAPbouiCOM.Grid oGrid = oForm.Items.Item("WhsTable").Specific;
                         SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTable");
 
                         int dTableRow = oGrid.GetDataTableRowIndex(pVal.Row);
-                        string prjTo = ""; // oDataTable.GetValue("PrjTo", dTableRow);
-
-                        SAPbouiCOM.ComboBox oComboBoxDocType = (SAPbouiCOM.ComboBox)oForm.Items.Item("DocTypeE").Specific;
-                        string docType = oComboBoxDocType.Value;
-
-                        string whsType = (docType == "TransferToWriteOffWarehouse" ? "WriteOff" : "Project");
-                        setWarehousesConditions(prjTo, whsType, oCFL);
+                        string prjFr = oDataTable.GetValue("PrjFr", dTableRow);                        
+                        string whsFr = oDataTable.GetValue("WhsFr", dTableRow);
+                        setWarehousesConditions(prjFr, whsType, whsFr, oCFL);
                     }
                     else if (sCFL_ID == "DetailTableWhsTo_CFL")
                     {
+                        string whsType = null;
+                        SAPbouiCOM.ComboBox oComboBoxDocTyp = (SAPbouiCOM.ComboBox)oForm.Items.Item("DocTypeE").Specific;
+                        string docType = oComboBoxDocTyp.Value;
+                        if (docType == "TransferToWriteOffWarehouse")
+                        {
+                            whsType = "WriteOff";
+                        }
+
                         SAPbouiCOM.Grid oGrid = oForm.Items.Item("WhsTblDt").Specific;
                         SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTblDt");
 
                         int dTableRow = oGrid.GetDataTableRowIndex(pVal.Row);
-                        string prjTo = ""; //oDataTable.GetValue("PrjTo", dTableRow);
-
-                        SAPbouiCOM.ComboBox oComboBoxDocType = (SAPbouiCOM.ComboBox)oForm.Items.Item("DocTypeE").Specific;
-                        string docType = oComboBoxDocType.Value;
-
-                        string whsType = (docType == "TransferToWriteOffWarehouse" ? "WriteOff" : "Project");
-                        setWarehousesConditions(prjTo, whsType, oCFL);
+                        string prjFr = oDataTable.GetValue("PrjFr", dTableRow);
+                        string whsFr = oDataTable.GetValue("WhsFr", dTableRow);
+                        setWarehousesConditions(prjFr, whsType, whsFr, oCFL);
                     }
                     else if (sCFL_ID == "Category_CFL")
                     {
                         SAPbouiCOM.ComboBox oComboBoxCatLevel = (SAPbouiCOM.ComboBox)oForm.Items.Item("CatLvlE").Specific;
                         string catLevel = oComboBoxCatLevel.Value;
 
-                        //პირობის დადება 
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
                         SAPbouiCOM.Condition oCon = oCons.Add();
                         oCon.Alias = "U_Level";
@@ -1854,21 +1912,34 @@ namespace BDO_Localisation_AddOn
                         oCon.CondVal = catLevel;
                         oCFL.SetConditions(oCons);
                     }
+                    else if (sCFL_ID == "ItemFr_CFL")
+                    {
+                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+                        SAPbouiCOM.Condition oCon = oCons.Add();
+                        oCon.Alias = "ManBtchNum";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = "N";
+                        oCFL.SetConditions(oCons);
+                    }
+                    else if (sCFL_ID == "ItemTo_CFL")
+                    {
+                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+                        SAPbouiCOM.Condition oCon = oCons.Add();
+                        oCon.Alias = "ManBtchNum";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = "N";
+                        oCFL.SetConditions(oCons);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                Program.uiApp.SetStatusBarMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, true);
             }
             finally
             {
                 GC.Collect();
             }
-
         }
 
         private static void checkUncheckTables(SAPbouiCOM.Form oForm, string CheckOperation, string tableName, out string errorText)
@@ -1884,11 +1955,11 @@ namespace BDO_Localisation_AddOn
             {
                 oDataTable.SetValue("ChkBx", i, ChkBx);
             }
-			oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
-			oForm.Freeze(false);
+            oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+            oForm.Freeze(false);
         }
 
-        public static void setWarehousesConditions(string prjCode, string whsType, SAPbouiCOM.ChooseFromList oCFL)
+        public static void setWarehousesConditions(string prjCode, string whsType, string whsCode, SAPbouiCOM.ChooseFromList oCFL)
         {
             SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
             SAPbouiCOM.Condition oCon;
@@ -1902,6 +1973,14 @@ namespace BDO_Localisation_AddOn
                 oCFL.SetConditions(oCons);
 
                 oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
+
+                oCon = oCons.Add();
+                oCon.Alias = "WhsCode";
+                oCon.Operation = SAPbouiCOM.BoConditionOperation.co_NOT_EQUAL;
+                oCon.CondVal = whsCode;
+                oCFL.SetConditions(oCons);
+
+                oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
             }
 
             if (!string.IsNullOrEmpty(whsType))
@@ -1910,6 +1989,14 @@ namespace BDO_Localisation_AddOn
                 oCon.Alias = "U_BDOSWhType";
                 oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                 oCon.CondVal = whsType;
+                oCFL.SetConditions(oCons);
+
+                oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
+
+                oCon = oCons.Add();
+                oCon.Alias = "WhsCode";
+                oCon.Operation = SAPbouiCOM.BoConditionOperation.co_NOT_EQUAL;
+                oCon.CondVal = whsCode;
                 oCFL.SetConditions(oCons);
 
                 oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
@@ -1965,8 +2052,8 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.ComboBox oComboBoxDocType = (SAPbouiCOM.ComboBox)oForm.Items.Item("DocTypeE").Specific;
             string docType = oComboBoxDocType.Value;
 
-            SAPbouiCOM.StaticText oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("TableTxt").Specific;
-            oStaticText.Caption = (docType == "TransferToProjectWarehouse" || docType == "TransferWithoutType" ? BDOSResources.getTranslate("WareHouses") : BDOSResources.getTranslate("Project"));
+            //SAPbouiCOM.StaticText oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("TableTxt").Specific;
+            //oStaticText.Caption = (docType == "TransferToProjectWarehouse" || docType == "TransferWithoutType" ? BDOSResources.getTranslate("WareHouses") : BDOSResources.getTranslate("Project"));
 
             bool visibleWhsTo = oForm.PaneLevel == 1 && (docType == "TransferToProjectWarehouse" || docType == "ReturnToMainWarehouse" || docType == "TransferWithoutType");
             oForm.Items.Item("WhsToS").Visible = visibleWhsTo;
@@ -2026,19 +2113,31 @@ namespace BDO_Localisation_AddOn
                 Sbuilder.Append(XML);
                 Sbuilder.Append("<Rows>");
 
-                string query = @"Select 'N' AS ""ChkBx"", ""WhsCode"" AS ""Code"",""WhsName"" AS ""Name"" FROM ""OWHS"" WHERE ""Inactive"" = 'N' AND ""DropShip"" = 'N' AND ""Locked"" = 'N'";
-                if (docType == "TransferToProjectWarehouse")
+                string query = @"SELECT 'N' AS ""ChkBx"",
+                       ""WhsCode"" AS ""Code"",
+                       ""WhsName"" AS ""Name"",
+                       ""U_BDOSPrjCod"" AS ""ProjectCode"",
+                       ""U_BDOSWhType"" AS ""WhseType""
+                FROM ""OWHS""
+                WHERE ""Inactive"" = 'N'
+                  AND ""DropShip"" = 'N'
+                  AND ""Locked"" = 'N'";
+
+                if (docType == "TransferToProjectWarehouse") //გადაადგილება პროექტის საწყობზე
                 {
-                    query = query + @" AND ""U_BDOSWhType"" = 'Main'";
+                    query = query + @" AND ""OWHS"".""U_BDOSWhType"" = 'Main'";
                 }
-				else if (docType == "TransferToWriteOffWarehouse")
-				{
-					query = query + (@" AND ""OWHS"".""U_BDOSWhType"" = 'Project'");
-				}
-				else if (docType != "TransferWithoutType")
+                else if (docType == "TransferToWriteOffWarehouse" || docType == "ReturnToMainWarehouse") //გადაადგილება ხარჯვის საწყობზე || დაბრუნება ცენტრალურ საწყობზე
                 {
-                    query = @"Select 'N' AS ""ChkBx"",  ""PrjCode"" AS ""Code"",""PrjName"" AS ""Name"" FROM ""OPRJ"" WHERE ""Active"" = 'Y' AND ""Locked"" = 'N'";
+                    query = query + (@" AND ""OWHS"".""U_BDOSWhType"" = 'Project'");
                 }
+                else if (docType == "ReturnToProjectWarehouse") //დაბრუნება პროექტის საწყობზე
+                {
+                    query = query + (@" AND ""OWHS"".""U_BDOSWhType"" = 'WriteOff'");
+                }
+                //else if (docType != "TransferWithoutType") //გადაადგილება ტიპის განსაზღვრის გარეშე
+                //{
+                //}
 
                 oDataTable.ExecuteQuery(query);
 
@@ -2052,13 +2151,23 @@ namespace BDO_Localisation_AddOn
                 oColumn.Width = 20;
 
                 SAPbouiCOM.EditTextColumn oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("Code");
-                oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("Code");
+                oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("Warehouse");
                 oEditTextColumn.Editable = false;
-                oEditTextColumn.LinkedObjectType = (docType == "TransferToProjectWarehouse" || docType == "TransferWithoutType" ? "64" : "63");
+                oEditTextColumn.LinkedObjectType = "64"; //პროექტი-63, საწყობი-64 (docType == "ReturnToProjectWarehouse" || docType == "ReturnToMainWarehouse" ? "63" : "64");
 
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("Name");
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("Name");
                 oEditTextColumn.Editable = false;
+
+                oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("ProjectCode");
+                oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("Project");
+                oEditTextColumn.Editable = false;
+                oEditTextColumn.LinkedObjectType = "63"; //პროექტი-63
+
+                oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhseType");
+                oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhseType");
+                oEditTextColumn.Editable = false;
+                oEditTextColumn.Visible = false;
 
                 oColumns.Item("RowsHeader").Visible = false;
 
@@ -2120,94 +2229,132 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.DataTable oDataTableFilter = oForm.DataSources.DataTables.Item("FiltTable");
                 DateTime date = DateTime.ParseExact(dateStr, "yyyyMMdd", null);
+                DateTime today = DateTime.Today;
+                
+                List<string> whseCodes = new List<string>();
+                for (int i = 0; i < oDataTableFilter.Rows.Count; i++)
+                {
+                    if (oDataTableFilter.GetValue("ChkBx", i) == "Y")
+                    {
+                        whseCodes.Add("'" + oDataTableFilter.GetValue("Code", i).Trim() + "'");
+                    }
+                }
+                if (whseCodes.Count == 0)
+                {
+                    for (int i = 0; i < oDataTableFilter.Rows.Count; i++)
+                    {
+                        whseCodes.Add("'" + oDataTableFilter.GetValue("Code", i).Trim() + "'");
+                    }
+                }
+                string whseCodesStr = string.Join(",", whseCodes);
 
                 StringBuilder queryBuilder = new StringBuilder();
-                queryBuilder.Append(@"SELECT
-	                                     ""OIVL"".""LocCode"",
-	                                     ""OIVL"".""ItemCode"",
-	                                     ""OITM"".""ItemName"",
-	                                     ""OWHS"".""U_BDOSPrjCod"" AS ""PrjFr"",
-                                         ""OWHS"".""U_BDOSWhType"" AS ""WhType"",
-	                                     SUM(""OIVL"".""InQty"" - ""OIVL"".""OutQty"") AS ""Qty"",
-	                                     SUM(""OIVL"".""SumStock"") AS ""Cost"" 
-                                    FROM ""OIVL"" 
-                                    LEFT JOIN ""OWHS"" ON ""OIVL"".""LocCode"" = ""OWHS"".""WhsCode"" 
-                                    LEFT JOIN ""OITM"" ON ""OIVL"".""ItemCode"" = ""OITM"".""ItemCode"" 
-                                    WHERE ""DocDate"" <= '");
-                queryBuilder.Append(date.ToString("yyyyMMdd"));
-                queryBuilder.Append("' ");
 
-                if (!string.IsNullOrEmpty(itemCodeFrom))
-                {
-                    queryBuilder.Append(@" AND ""OIVL"".""ItemCode"" >= '");
-                    queryBuilder.Append(itemCodeFrom.Trim());
-                    queryBuilder.Append("' ");
-                }
-
-                if (!string.IsNullOrEmpty(itemCodeTo))
-                {
-                    queryBuilder.Append(@" AND ""OIVL"".""ItemCode"" <= '");
-                    queryBuilder.Append(itemCodeTo.Trim());
-                    queryBuilder.Append("' ");
-                }
-
-                if (!string.IsNullOrEmpty(itemCategoryLevel) && !string.IsNullOrEmpty(itemCategory))
-                {
-                    queryBuilder.Append(@" AND ""OITM"".""U_BDOSCtg""");
-                    queryBuilder.Append(itemCategoryLevel.Trim());
-                    queryBuilder.Append(@" = '");
-                    queryBuilder.Append(itemCategory);
-                    queryBuilder.Append("' ");
-                }
-
+                queryBuilder.Append(@"SELECT ""OIVL"".""LocCode"",
+                       ""OIVL"".""ItemCode"",
+                       ""OIVL"".""ItemName"",
+                       ""OWHS"".""U_BDOSPrjCod"" AS ""PrjFr"",
+                       ""OWHS"".""U_BDOSWhType"" AS ""WhseTypeFr"",
+                       MIN(""OIVL"".""Qty"") AS ""Qty"",
+                       MIN(""OIVL"".""Cost"") AS ""Cost""
+                FROM
+                  (SELECT ""OIVL"".""LocCode"",
+                          ""OIVL"".""ItemCode"",
+                          ""OITM"".""ItemName"",
+                          SUM(""OIVL"".""InQty"" - ""OIVL"".""OutQty"") AS ""Qty"",
+                          SUM(""OIVL"".""SumStock"") AS ""Cost""
+                   FROM ""OIVL""
+                   LEFT JOIN ""OITM"" ON ""OIVL"".""ItemCode"" = ""OITM"".""ItemCode""
+                   WHERE
+                     ""DocDate"" <= '" + date.ToString("yyyyMMdd") + @"'
+                     AND ""OITM"".""ManBtchNum"" = 'N' AND ""OITM"".""ManSerNum"" = 'N' ");
                 if (!string.IsNullOrEmpty(itemGroup))
                 {
                     queryBuilder.Append(@" AND ""OITM"".""ItmsGrpCod"" = '");
                     queryBuilder.Append(itemGroup.Trim());
                     queryBuilder.Append("' ");
                 }
-				int count = 0;
-                bool byWhs = (docType == "TransferToProjectWarehouse" || docType == "TransferWithoutType");
-                for (int i = 0; i < oDataTableFilter.Rows.Count; i++)
-                {	
-                    if (oDataTableFilter.GetValue("ChkBx", i) == "Y")
-                    {
-						count++;
-						if (count == 1)
-						{
-							queryBuilder.Append(byWhs ? @" AND ""OIVL"".""LocCode"" = '" : @" AND ""OWHS"".""U_BDOSPrjCod"" = '");
-							queryBuilder.Append(oDataTableFilter.GetValue("Code", i).Trim());
-							queryBuilder.Append("' ");
-						}
-						else if(count>1){
-							queryBuilder.Append(byWhs ? @" OR ""OIVL"".""LocCode"" = '" : @" AND ""OWHS"".""U_BDOSPrjCod"" = '");
-							queryBuilder.Append(oDataTableFilter.GetValue("Code", i).Trim());
-							queryBuilder.Append("' ");
-						}
-                    }
-                }
-				count = 0;
-
-                if (docType == "TransferToProjectWarehouse")
+                if (!string.IsNullOrEmpty(itemCategoryLevel) && !string.IsNullOrEmpty(itemCategory))
                 {
-                    queryBuilder.Append(@" AND ""OWHS"".""U_BDOSWhType"" = 'Main'");
+                    queryBuilder.Append(@" AND ""OITM"".""U_BDOSCtg");
+                    queryBuilder.Append(itemCategoryLevel.Trim());
+                    queryBuilder.Append(@""" = '");
+                    queryBuilder.Append(itemCategory);
+                    queryBuilder.Append("' ");
                 }
-                else if (docType == "TransferToWriteOffWarehouse" || docType == "ReturnToMainWarehouse")
+                if (!string.IsNullOrEmpty(itemCodeFrom))
                 {
-                    queryBuilder.Append(@" AND ""OWHS"".""U_BDOSWhType"" = 'Project'");
+                    queryBuilder.Append(@" AND ""OIVL"".""ItemCode"" >= '");
+                    queryBuilder.Append(itemCodeFrom.Trim());
+                    queryBuilder.Append("' ");
                 }
-                else if (docType == "ReturnToProjectWareHouse")
+                if (!string.IsNullOrEmpty(itemCodeTo))
                 {
-                    queryBuilder.Append(@" AND ""OWHS"".""U_BDOSWhType"" = 'WriteOff'");
+                    queryBuilder.Append(@" AND ""OIVL"".""ItemCode"" <= '");
+                    queryBuilder.Append(itemCodeTo.Trim());
+                    queryBuilder.Append("' ");
                 }
-
-                queryBuilder.Append(@" GROUP BY 
-	                                     ""OIVL"".""LocCode"",
-	                                     ""OIVL"".""ItemCode"",
-	                                     ""OITM"".""ItemName"",
-	                                     ""OWHS"".""U_BDOSPrjCod"",
-                                         ""OWHS"".""U_BDOSWhType""
-									ORDER BY ""OIVL"".""LocCode"" ");
+                if (!string.IsNullOrEmpty(whseCodesStr))
+                {
+                    queryBuilder.Append(@"AND ""OIVL"".""LocCode"" IN (");
+                    queryBuilder.Append(whseCodesStr.Trim());
+                    queryBuilder.Append(") ");
+                }
+                queryBuilder.Append(@"GROUP BY ""OIVL"".""LocCode"",
+                            ""OIVL"".""ItemCode"",
+                            ""OITM"".""ItemName""
+                   UNION ALL SELECT ""OIVL"".""LocCode"",
+                                    ""OIVL"".""ItemCode"",
+                                    ""OITM"".""ItemName"",
+                                    SUM(""OIVL"".""InQty"" - ""OIVL"".""OutQty"") AS ""Qty"",
+                                    SUM(""OIVL"".""SumStock"") AS ""Cost""
+                   FROM ""OIVL""
+                   LEFT JOIN ""OITM"" ON ""OIVL"".""ItemCode"" = ""OITM"".""ItemCode""
+                   WHERE
+                     ""DocDate"" <= '" + today.ToString("yyyyMMdd") + @"'
+                     AND ""OITM"".""ManBtchNum"" = 'N' AND ""OITM"".""ManSerNum"" = 'N' ");
+                if (!string.IsNullOrEmpty(itemGroup))
+                {
+                    queryBuilder.Append(@" AND ""OITM"".""ItmsGrpCod"" = '");
+                    queryBuilder.Append(itemGroup.Trim());
+                    queryBuilder.Append("' ");
+                }
+                if (!string.IsNullOrEmpty(itemCategoryLevel) && !string.IsNullOrEmpty(itemCategory))
+                {
+                    queryBuilder.Append(@" AND ""OITM"".""U_BDOSCtg");
+                    queryBuilder.Append(itemCategoryLevel.Trim());
+                    queryBuilder.Append(@""" = '");
+                    queryBuilder.Append(itemCategory);
+                    queryBuilder.Append("' ");
+                }
+                if (!string.IsNullOrEmpty(itemCodeFrom))
+                {
+                    queryBuilder.Append(@" AND ""OIVL"".""ItemCode"" >= '");
+                    queryBuilder.Append(itemCodeFrom.Trim());
+                    queryBuilder.Append("' ");
+                }
+                if (!string.IsNullOrEmpty(itemCodeTo))
+                {
+                    queryBuilder.Append(@" AND ""OIVL"".""ItemCode"" <= '");
+                    queryBuilder.Append(itemCodeTo.Trim());
+                    queryBuilder.Append("' ");
+                }
+                if (!string.IsNullOrEmpty(whseCodesStr))
+                {
+                    queryBuilder.Append(@"AND ""OIVL"".""LocCode"" IN (");
+                    queryBuilder.Append(whseCodesStr.Trim());
+                    queryBuilder.Append(") ");
+                }
+                queryBuilder.Append(@"GROUP BY ""OIVL"".""LocCode"",
+                            ""OIVL"".""ItemCode"",
+                            ""OITM"".""ItemName"") AS ""OIVL""
+                LEFT JOIN ""OWHS"" ON ""OIVL"".""LocCode"" = ""OWHS"".""WhsCode""
+                GROUP BY ""OIVL"".""LocCode"",
+                         ""OIVL"".""ItemCode"",
+                         ""OIVL"".""ItemName"",
+                         ""OWHS"".""U_BDOSPrjCod"",
+                         ""OWHS"".""U_BDOSWhType""
+                ORDER BY ""OIVL"".""LocCode""");
 
                 string query = queryBuilder.ToString();
 
@@ -2232,23 +2379,22 @@ namespace BDO_Localisation_AddOn
                 int rowDetail = 0;
                 string LocCode = "";
                 string tmpLocCode = "";
+
                 while (!oRecordSet.EoF)
                 {
-                    
                     qty = Convert.ToDecimal(oRecordSet.Fields.Item("Qty").Value);
-                    
 
                     if (qty > 0)
                     {
-						tmpLocCode = oRecordSet.Fields.Item("LocCode").Value;
-						rowDetail++;
-						if (LocCode != tmpLocCode)
+                        tmpLocCode = oRecordSet.Fields.Item("LocCode").Value;
+                        rowDetail++;
+                        if (LocCode != tmpLocCode)
                         {
                             row++;
                             if (row > 1)
                             {
                                 //წინა სტრიქონში ჯამები და დახურვა
-                                SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Position", (rowDetail-1).ToString());
+                                SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Position", (rowDetail - 1).ToString());
                                 SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Qty", FormsB1.ConvertDecimalToString(totalQty));
                                 SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Cost", FormsB1.ConvertDecimalToString(totalCost));
                                 SbuilderWhs.Append("</Row>");
@@ -2262,14 +2408,13 @@ namespace BDO_Localisation_AddOn
                             SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "ChkBx", "N");
                             SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "LineID", row.ToString());
                             SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "WhsFr", tmpLocCode);
+                            SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "WhseTypeFr", oRecordSet.Fields.Item("WhseTypeFr").Value);
                             SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "WhsTo", whsTo);
                             SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "PrjFr", oRecordSet.Fields.Item("PrjFr").Value);
                             SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "PrjTo", prjTo);
-
-
                         }
 
-						totalQty = totalQty + qty;
+                        totalQty = totalQty + qty;
                         totalCost = totalCost + Convert.ToDecimal(oRecordSet.Fields.Item("Cost").Value);
 
                         DataRow dataRow = TableWhsItemsForDetail.Rows.Add();
@@ -2277,6 +2422,7 @@ namespace BDO_Localisation_AddOn
                         dataRow["LineID"] = rowDetail;
                         dataRow["ChkBx"] = 'Y';
                         dataRow["WhsFr"] = tmpLocCode;
+                        dataRow["WhseTypeFr"] = oRecordSet.Fields.Item("WhseTypeFr").Value;
                         dataRow["WhsTo"] = whsTo;
                         dataRow["PrjFr"] = oRecordSet.Fields.Item("PrjFr").Value;
                         dataRow["PrjTo"] = prjTo;
@@ -2286,7 +2432,7 @@ namespace BDO_Localisation_AddOn
                         dataRow["InStock"] = qty;
                         dataRow["Qty"] = qty;
                         dataRow["Cost"] = oRecordSet.Fields.Item("Cost").Value;
-
+                        dataRow["CostInStock"] = oRecordSet.Fields.Item("Cost").Value;
                     }
                     oRecordSet.MoveNext();
                     LocCode = tmpLocCode;
@@ -2326,6 +2472,11 @@ namespace BDO_Localisation_AddOn
                 oEditTextColumn.Editable = false;
                 oEditTextColumn.LinkedObjectType = objType;
 
+                oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhseTypeFr");
+                oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhseTypeFrom");
+                oEditTextColumn.Editable = false;
+                oEditTextColumn.Visible = false;
+
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhsTo");
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhsTo");
                 oEditTextColumn.Editable = (string.IsNullOrEmpty(whsTo) ? true : false);
@@ -2356,7 +2507,7 @@ namespace BDO_Localisation_AddOn
                 oEditTextColumn.Editable = false;
 
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("DocID");
-                oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("StockTransfer");
+                oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("InventoryTransfer");
                 oEditTextColumn.LinkedObjectType = "67";
                 oEditTextColumn.Editable = false;
 
@@ -2377,7 +2528,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void fillDetailTable(SAPbouiCOM.Form oForm, string LineIDWhsTable, string whsFr, string whsTo, string docType, out string errorText)
+        public static void fillDetailTable(SAPbouiCOM.Form oForm, string LineIDWhsTable, string whsFr, string whseTypeFr, string whsTo, string docType, out string errorText)
         {
             errorText = null;
 
@@ -2394,7 +2545,7 @@ namespace BDO_Localisation_AddOn
                 XMLWhs = XMLWhs.Replace("<Rows/></DataTable>", "");
                 SbuilderWhs.Append(XMLWhs);
                 SbuilderWhs.Append("<Rows>");
-                
+
                 string expression = "LineIDWhsTable = '" + LineIDWhsTable + "'";
                 DataRow[] foundRows = TableWhsItemsForDetail.Select(expression);
 
@@ -2420,6 +2571,7 @@ namespace BDO_Localisation_AddOn
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "ChkBx", foundRows[i]["ChkBx"].ToString());
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "LineID", row.ToString());
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "WhsFr", whsFr);
+                        SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "WhseTypeFr", whseTypeFr);
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "WhsTo", tmpWhsTo);
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "PrjFr", foundRows[i]["PrjFr"].ToString());
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "PrjTo", tmpPrjTo);
@@ -2429,6 +2581,7 @@ namespace BDO_Localisation_AddOn
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "InStock", FormsB1.ConvertDecimalToString(Convert.ToDecimal(foundRows[i]["InStock"].ToString())));
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Qty", FormsB1.ConvertDecimalToString(Convert.ToDecimal(foundRows[i]["Qty"].ToString())));
                         SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "Cost", FormsB1.ConvertDecimalToString(Convert.ToDecimal(foundRows[i]["Cost"].ToString())));
+                        SbuilderWhs = CommonFunctions.AddCellXML(SbuilderWhs, "CostInStock", FormsB1.ConvertDecimalToString(Convert.ToDecimal(foundRows[i]["CostInStock"].ToString())));
                         SbuilderWhs.Append("</Row>");
 
                         row++;
@@ -2460,6 +2613,11 @@ namespace BDO_Localisation_AddOn
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhsFr");
                 oEditTextColumn.Editable = false;
                 oEditTextColumn.LinkedObjectType = objType;
+
+                oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhseTypeFr");
+                oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhseTypeFrom");
+                oEditTextColumn.Editable = false;
+                oEditTextColumn.Visible = false;
 
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("WhsTo");
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("WhsTo");
@@ -2501,9 +2659,12 @@ namespace BDO_Localisation_AddOn
 
                 oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("Cost");
                 oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("Cost");
-                oEditTextColumn.Editable = false;
+                oEditTextColumn.Editable = false; 
 
-                //oColumns.Item("RowsHeader").Visible = false;
+                oEditTextColumn = (SAPbouiCOM.EditTextColumn)oColumns.Item("CostInStock");
+                oEditTextColumn.TitleObject.Caption = BDOSResources.getTranslate("CostInStock");
+                oEditTextColumn.Editable = false;
+                oEditTextColumn.Visible = false;
             }
             catch (Exception ex)
             {
@@ -2567,12 +2728,12 @@ namespace BDO_Localisation_AddOn
                     dataRow["InStock"] = tmpInStock;
                     dataRow["Qty"] = tmpQty;
                     dataRow["Cost"] = Convert.ToDecimal(oDataTable.GetValue("Cost", i));
-
+                    dataRow["CostInStock"] = Convert.ToDecimal(oDataTable.GetValue("CostInStock", i));
+                    
                     if (oDataTable.GetValue("ChkBx", i).ToString() == "Y")
                     {
-
                         totalQty = totalQty + tmpQty;
-                        totalCost = totalCost + (tmpInStock > 0 ? tmpQty * (tmpCost / tmpInStock) : 0);
+                        totalCost = totalCost + tmpCost;
                         position++;
                     }
                 }
@@ -2671,7 +2832,6 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue("InStock", i, Convert.ToDouble(newQty));
                 oDataTable.SetValue("Qty", i, Convert.ToDouble(newQty));
                 oDataTable.SetValue("Cost", i, Convert.ToDouble(oDataTable.GetValue("Cost", rowIndex), CultureInfo.InvariantCulture));
-
                 oDataTable.SetValue("InStock", rowIndex, Convert.ToDouble(inStock - newQty, CultureInfo.InvariantCulture));
                 oDataTable.SetValue("Qty", rowIndex, Convert.ToDouble(inStock - newQty, CultureInfo.InvariantCulture));
 
@@ -2702,12 +2862,19 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("WhsTable");
             for (int i = 0; i < oDataTable.Rows.Count; i++)
             {
-                if (oDataTable.GetValue("ChkBx", i) == "Y" && string.IsNullOrEmpty(oDataTable.GetValue("DocID", i)))
+                if (oDataTable.GetValue("ChkBx", i) == "Y")
                 {
+                    string lineIDWhsTable = oDataTable.GetValue("LineID", i);
+
+                    if (!string.IsNullOrEmpty(oDataTable.GetValue("DocID", i)))
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreated") + "! " + BDOSResources.getTranslate("TableRow") + ": " + lineIDWhsTable, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);                 
+                        continue;
+                    }
+
                     SAPbobsCOM.StockTransfer oStockTransfer = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oStockTransfer);
                     SAPbobsCOM.StockTransfer oStockTransferNew = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oStockTransfer);
-
-                    string lineIDWhsTable = oDataTable.GetValue("LineID", i);
+              
                     string expression = "LineIDWhsTable = '" + lineIDWhsTable + "'";
                     DataRow[] foundRows = TableWhsItemsForDetail.Select(expression);
 
@@ -2737,7 +2904,6 @@ namespace BDO_Localisation_AddOn
 
                                 oStockTransfer.Lines.Add();
                             }
-
                         }
 
                         CommonFunctions.StartTransaction();
@@ -2756,7 +2922,7 @@ namespace BDO_Localisation_AddOn
 
                                     DocumentCreated = true;
                                     oDataTable.SetValue("DocID", i, oStockTransferNew.DocEntry);
-                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("LineID") + ": " + lineIDWhsTable + ", " + BDOSResources.getTranslate("DocumentCreate"), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("OperationCompletedSuccessfully") + "! " + BDOSResources.getTranslate("TableRow") + ": " + lineIDWhsTable, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                                 }
                             }
                         }
@@ -2767,10 +2933,9 @@ namespace BDO_Localisation_AddOn
 
                             int errorCode;
                             Program.oCompany.GetLastError(out errorCode, out errorText);
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("LineID") + ": " + lineIDWhsTable + ", " + errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("OperationCompletedUnSuccessfully") + "! " + errorText + "! " + BDOSResources.getTranslate("TableRow") + ": " + lineIDWhsTable, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                         }
                     }
-
                 }
             }
         }

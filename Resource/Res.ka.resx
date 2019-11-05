@@ -124,7 +124,7 @@
     <value>აქტიური</value>
   </data>
   <data name="ActualVatAmount" xml:space="preserve">
-    <value>დღგ-ს ფაქტობრივი თანხა</value>
+    <value>დღგ-ის ფაქტობრივი თანხა</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>დამატება</value>
@@ -445,7 +445,7 @@
     <value>უარყოფილი</value>
   </data>
   <data name="DocEntry" xml:space="preserve">
-    <value>დოკუმენტი</value>
+    <value>შიდა ნომერი</value>
   </data>
   <data name="DocNum" xml:space="preserve">
     <value>ნომერი</value>
@@ -832,7 +832,7 @@
     <value>პროგრამის კოდი</value>
   </data>
   <data name="ProjectVatAmount" xml:space="preserve">
-    <value>პროექტის დღგ-ს თანხა</value>
+    <value>პროექტის დღგ-ის თანხა</value>
   </data>
   <data name="ProtocolMode" xml:space="preserve">
     <value>პროტოკოლის რეჟიმი</value>
@@ -1213,13 +1213,13 @@
     <value>მომხმარებლის ტიპი RS.GE-ზე</value>
   </data>
   <data name="VatAmount" xml:space="preserve">
-    <value>დღგ-ს თანხა</value>
+    <value>დღგ-ის თანხა</value>
   </data>
   <data name="VatGroup" xml:space="preserve">
     <value>გადასახადის ჯგუფი</value>
   </data>
   <data name="VatPercent" xml:space="preserve">
-    <value>დღგ-ს განაკვეთი</value>
+    <value>დღგ-ის განაკვეთი</value>
   </data>
   <data name="VATReceived" xml:space="preserve">
     <value>ჩათვლილი</value>
@@ -1228,16 +1228,16 @@
     <value>ჩათვლის თვე</value>
   </data>
   <data name="VATReceivedDate" xml:space="preserve">
-    <value>დღგ-ს ჩათვლის თარიღი</value>
+    <value>დღგ-ის ჩათვლის თარიღი</value>
   </data>
   <data name="VATType0" xml:space="preserve">
-    <value>დღგ-ს ტიპი 0%</value>
+    <value>დღგ-ის ტიპი 0%</value>
   </data>
   <data name="VATTypeNone" xml:space="preserve">
-    <value>დღგ-ს გარეშე</value>
+    <value>დღგ-ის გარეშე</value>
   </data>
   <data name="VATTypeNormal" xml:space="preserve">
-    <value>დღგ-ს ტიპი ნორმალური</value>
+    <value>დღგ-ის ტიპი ნორმალური</value>
   </data>
   <data name="Vehicle" xml:space="preserve">
     <value>სატრანსპორტო საშუალება</value>
@@ -1405,7 +1405,7 @@
     <value>ზედნადების მიღება</value>
   </data>
   <data name="CheckVatGroupForWHT" xml:space="preserve">
-    <value>გადაამოწმეთ საშემოსავლოზე მითითებული დღგ-ს ჯგუფი!</value>
+    <value>გადაამოწმეთ საშემოსავლოზე მითითებული დღგ-ის ჯგუფი!</value>
   </data>
   <data name="RSOperations" xml:space="preserve">
     <value>RS ოპერაციები</value>
@@ -1898,7 +1898,7 @@
     <value>გადასახადები</value>
   </data>
   <data name="VatExpense" xml:space="preserve">
-    <value>დღგ-ს ხარჯში ჩამოწერის</value>
+    <value>დღგ-ის ხარჯში ჩამოწერის</value>
   </data>
   <data name="ModeIsNotSelected" xml:space="preserve">
     <value>რეჟიმი არ არის არჩეული</value>
@@ -2549,7 +2549,7 @@
     <value>დოკუმენტი არ შექმნილა</value>
   </data>
   <data name="FromProject" xml:space="preserve">
-    <value>გამგზ. პროექტი</value>
+    <value>გამგზავნი პროექტი</value>
   </data>
   <data name="GrossAmount" xml:space="preserve">
     <value>გროს თანხა</value>
@@ -2567,7 +2567,7 @@
     <value>დოკ. არჩევა</value>
   </data>
   <data name="VatAmountCanNotBeMoreThanOpenVatRow" xml:space="preserve">
-    <value>დღგ-ს თანხა არ უნდა იყოს დარჩენილ დღგ-ზე მეტი. სტრიქონი: </value>
+    <value>დღგ-ის თანხა არ უნდა იყოს დარჩენილ დღგ-ზე მეტი. სტრიქონი: </value>
   </data>
   <data name="DocumentAlreadyAddedRow" xml:space="preserve">
     <value>დოკუმენტი უკვე დამატებულია. სტრიქონი: </value>
@@ -2609,16 +2609,16 @@
     <value>თარიღის შეცვლის შემდეგ ფორმა დაიხურება და ხელახლა გაიხსნება</value>
   </data>
   <data name="ARDownPaymentVATAccrual" xml:space="preserve">
-    <value>ავანსის დღგ-ს დარიცხვის დოკუმენტი</value>
+    <value>ავანსის დღგ-ის დარიცხვის დოკუმენტი</value>
   </data>
   <data name="ARVATAccrualWizard" xml:space="preserve">
-    <value>ავანსის დღგ-ს დარიცხვის დამხმარე</value>
+    <value>ავანსის დღგ-ის დარიცხვის დამხმარე</value>
   </data>
   <data name="DocEntVT" xml:space="preserve">
-    <value>დღგ-ს დარიცხვის დოკუმენტი</value>
+    <value>დღგ-ის დარიცხვის დოკუმენტი</value>
   </data>
   <data name="DocNumVT" xml:space="preserve">
-    <value>დღგ-ს დარიცხვის დოკუმენტის ნომერი</value>
+    <value>დღგ-ის დარიცხვის დოკუმენტის ნომერი</value>
   </data>
   <data name="ChangeDocDate" xml:space="preserve">
     <value>თარიღის შეცვლა</value>
@@ -2633,7 +2633,7 @@
     <value>ახალი თარიღი</value>
   </data>
   <data name="CreateVATAccrualDocuments" xml:space="preserve">
-    <value>შეიქმნას დღგ-ს დარიცხვის დოკუმენტი</value>
+    <value>შეიქმნას დღგ-ის დარიცხვის დოკუმენტი</value>
   </data>
   <data name="AlRcnSum" xml:space="preserve">
     <value>გატარებული თანხა</value>
@@ -2939,7 +2939,7 @@
     <value>ხარჯვის</value>
   </data>
   <data name="AlrDeprAmt" xml:space="preserve">
-    <value>დარიცხული თანხა</value>
+    <value>დარიცხული ცვეთა</value>
   </data>
   <data name="BatchNumber" xml:space="preserve">
     <value>პარტიის ნომერი</value>
@@ -2966,10 +2966,10 @@
     <value>პარტის ნომერი</value>
   </data>
   <data name="ItmsGrpCod" xml:space="preserve">
-    <value>საქინლის ჯგუფი</value>
+    <value>საქონლის ჯგუფი</value>
   </data>
   <data name="NtBookVal" xml:space="preserve">
-    <value>საბალანსო რირებულება</value>
+    <value>საბალანსო ღირებულება</value>
   </data>
   <data name="UseLife" xml:space="preserve">
     <value>გამოყენების ვადა (თვე)</value>
@@ -3005,7 +3005,7 @@
     <value>საწვავის მართვის მოდულის გამოყენება</value>
   </data>
   <data name="FuelType" xml:space="preserve">
-    <value>საწვავის ტიპი</value>
+    <value>წვის ტიპი</value>
   </data>
   <data name="FuelByFixedAssets" xml:space="preserve">
     <value>საწვავის ნაშთის აღრიცხვა სატრანსპორტო საშუალებების ჭრილში</value>
@@ -3014,7 +3014,7 @@
     <value>Dimension 1</value>
   </data>
   <data name="FuelWarehouse" xml:space="preserve">
-    <value>საწვავის საწყობი</value>
+    <value>საწვავის აღრიცხვის საწყობი</value>
   </data>
   <data name="Dimension2" xml:space="preserve">
     <value>Dimension 2</value>
@@ -3037,20 +3037,11 @@
   <data name="Dimension5" xml:space="preserve">
     <value>Dimension 5</value>
   </data>
-  <data name="PerHour" xml:space="preserve">
-    <value>სთ-ში</value>
-  </data>
   <data name="EndingUnit" xml:space="preserve">
     <value>ოდომეტრის საბოლოო ჩვენება(კმ)</value>
   </data>
   <data name="FromDate" xml:space="preserve">
     <value>საწყისი თარიღი</value>
-  </data>
-  <data name="PerHunKm" xml:space="preserve">
-    <value>100 კმ.-ზე</value>
-  </data>
-  <data name="FuelConsumptionDocument" xml:space="preserve">
-    <value>ხარჯვის აქტი</value>
   </data>
   <data name="FuelTransferWizard" xml:space="preserve">
     <value>საწვავის გადაადგილების დამხმარე</value>
@@ -3109,12 +3100,6 @@
   <data name="ConsumptionValueMustBeGreaterThanZero" xml:space="preserve">
     <value>Consumption Value Must Be Greater Than Zero</value>
   </data>
-  <data name="YouMustEnterEndingUnitGreaterThanStartingUnit" xml:space="preserve">
-    <value>You Must Enter Ending Unit Greater Than Starting Unit</value>
-  </data>
-  <data name="YouMustEnterPostingDateAfterEndingDate" xml:space="preserve">
-    <value>You Must Enter Posting Date After Ending Date</value>
-  </data>
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>დოკუმენტებთან მიბმა</value>
   </data>
@@ -3156,5 +3141,173 @@
   </data>
   <data name="ShowStockByDate" xml:space="preserve">
     <value>ნაშთები თარიღის მიხედვით</value>
+  </data>
+  <data name="fillMTR" xml:space="preserve">
+    <value>ცხრილის შევსება</value>
+  </data>
+  <data name="DepcDoc" xml:space="preserve">
+    <value>ცვეთის დოკუმენტი</value>
+  </data>
+  <data name="Depreciation" xml:space="preserve">
+    <value>ცვეთის დარიცხვა</value>
+  </data>
+  <data name="Retirement" xml:space="preserve">
+    <value>ცვეთის ჩამოწერა</value>
+  </data>
+  <data name="DoYouWantCreateJournalEntryForTaxWithTaxInvoiceDate" xml:space="preserve">
+    <value>გსურთ გატარება შეიქმნას ფაქტურის დადასტურების თარიღით</value>
+  </data>
+  <data name="IfNoPleaseFillTaxDateAndTryAgain" xml:space="preserve">
+    <value>უარყოფის შემთხვევაში შეავსეთ დღგ-ის თარიღი</value>
+  </data>
+  <data name="PleaseFillTaxDate" xml:space="preserve">
+    <value>შეავსეთ დღგ-ის თარიღი</value>
+  </data>
+  <data name="TaxDate" xml:space="preserve">
+    <value>დღგ-ის თარიღი</value>
+  </data>
+  <data name="ForCreateJournalEntryPleaseFillTaxDateAndUpdateDocument" xml:space="preserve">
+    <value>გატარების შესაქმნელად შეავსეთ დღგ-ის თარიღი და განაახლეთ დოკუმენტი</value>
+  </data>
+  <data name="IfNoPleaseFillTaxDateAndUpdateDocument" xml:space="preserve">
+    <value>უარყოფის შემთხვევაში შეავსეთ დღგ-ის თარიღი და განაახლეთ დოკუმენტი</value>
+  </data>
+  <data name="CostInStock" xml:space="preserve">
+    <value>ღირებულება (ნაშთში)</value>
+  </data>
+  <data name="DocumentAlreadyCreated" xml:space="preserve">
+    <value>დოკუმენტი უკვე შექმნილია</value>
+  </data>
+  <data name="InsufficientStockBalance" xml:space="preserve">
+    <value>არასაკმარისი ნაშთი</value>
+  </data>
+  <data name="ProjectFrom" xml:space="preserve">
+    <value>პროექტიდან</value>
+  </data>
+  <data name="ProjectTo" xml:space="preserve">
+    <value>პროექტზე</value>
+  </data>
+  <data name="WhseType" xml:space="preserve">
+    <value>საწყობის ტიპი</value>
+  </data>
+  <data name="WhseTypeFrom" xml:space="preserve">
+    <value>საწყობის ტიპი (დან)</value>
+  </data>
+  <data name="FuelTypes" xml:space="preserve">
+    <value>წვის ტიპები</value>
+  </data>
+  <data name="FuelCode" xml:space="preserve">
+    <value>საწვავის კოდი</value>
+  </data>
+  <data name="FuelDescription" xml:space="preserve">
+    <value>საწვავის აღწერა</value>
+  </data>
+  <data name="PerHr" xml:space="preserve">
+    <value>სთ-ში</value>
+  </data>
+  <data name="PerKm" xml:space="preserve">
+    <value>100 კმ-ზე</value>
+  </data>
+  <data name="FuelCriteria" xml:space="preserve">
+    <value>წვის კრიტერიუმები</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>პროცენტულობა</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>მნიშვნელობა</value>
+  </data>
+  <data name="SpecificationOfFuelNorm" xml:space="preserve">
+    <value>წვის ნორმის დაზუსტება</value>
+  </data>
+  <data name="Fixed" xml:space="preserve">
+    <value>ფიქსირებული</value>
+  </data>
+  <data name="ActuallyConsumption" xml:space="preserve">
+    <value>ხარჯი (ფაქტიური)</value>
+  </data>
+  <data name="EndingValueOfOdometer" xml:space="preserve">
+    <value>ოდომეტრის საბოლოო ჩვენება</value>
+  </data>
+  <data name="FuelConsumptionAct" xml:space="preserve">
+    <value>საწვავის ხარჯვის აქტი</value>
+  </data>
+  <data name="HoursWorked" xml:space="preserve">
+    <value>ნამუშევარი საათები</value>
+  </data>
+  <data name="NormConsumption" xml:space="preserve">
+    <value>ხარჯი (ნორმის მიხედვით)</value>
+  </data>
+  <data name="StartingValueOfOdometer" xml:space="preserve">
+    <value>ოდომეტრის საწყისი ჩვენება</value>
+  </data>
+  <data name="DateFrom" xml:space="preserve">
+    <value>საწყისი თარიღი</value>
+  </data>
+  <data name="DateTo" xml:space="preserve">
+    <value>საბოლოო თარიღი</value>
+  </data>
+  <data name="Post" xml:space="preserve">
+    <value>გატარება</value>
+  </data>
+  <data name="CheckDocumentAndItsStatus" xml:space="preserve">
+    <value>გადაამოწმეთ დოკუმენტი და მისი სტატუსი</value>
+  </data>
+  <data name="DataForJournalEntryNotFound" xml:space="preserve">
+    <value>მონაცემები გატარებისთვის არ მოიძებნა</value>
+  </data>
+  <data name="JournalEntryAlreadyCreated" xml:space="preserve">
+    <value>გატარება უკვე შექმნილია</value>
+  </data>
+  <data name="JournalEntryNotCreated" xml:space="preserve">
+    <value>ვერ მოხერხდა გატარების შექმნა</value>
+  </data>
+  <data name="DoYouWantToCreateJEForDownPayment" xml:space="preserve">
+    <value>გსურთ შეიქმნას გატარება ავანსის ფაქტურისთვის</value>
+  </data>
+  <data name="PostingDateMustBeGreaterOrEqualThanDateTo" xml:space="preserve">
+    <value>გატარების თარიღი უნდა იყოს მეტი ან ტოლი ვიდრე საბოლოო თარიღი!</value>
+  </data>
+  <data name="LessThan" xml:space="preserve">
+    <value>ნაკლებია ვიდრე</value>
+  </data>
+  <data name="CreateDocumentGoodsIssue" xml:space="preserve">
+    <value>შეიქმნას საქონლის ჩამოწერის დოკუმენტი</value>
+  </data>
+  <data name="CloseFuelWriteOffWizard" xml:space="preserve">
+    <value>დაიხუროს საწვავის ჩამოწერის დამხმარე</value>
+  </data>
+  <data name="DataForCreateDocument" xml:space="preserve">
+    <value>მონაცემები დოკუმენტის შესაქმნელად</value>
+  </data>
+  <data name="DataForFilter" xml:space="preserve">
+    <value>მონაცემები ფილტრისთვის</value>
+  </data>
+  <data name="AssetClass" xml:space="preserve">
+    <value>ძს კლასი</value>
+  </data>
+  <data name="CloseFuelTransferWizard" xml:space="preserve">
+    <value>დაიხუროს საწვავის გადაადგილების დამხმარე</value>
+  </data>
+  <data name="GroupCode" xml:space="preserve">
+    <value>ჯგუფის კოდი</value>
+  </data>
+  <data name="GroupName" xml:space="preserve">
+    <value>ჯგუფის დასახელება</value>
+  </data>
+  <data name="FuelGroupCode" xml:space="preserve">
+    <value>საწვავის ჯგუფის კოდი</value>
+  </data>
+  <data name="FuelGroupName" xml:space="preserve">
+    <value>საწვავის ჯგუფის დასახელება</value>
+  </data>
+  <data name="CreateDocumentInventoryTransfer" xml:space="preserve">
+    <value>შეიქმნას საქონლის გადაადგილების დოკუმენტი</value>
+  </data>
+  <data name="FuelUomCode" xml:space="preserve">
+    <value>საწვავის ერთეულის კოდი</value>
+  </data>
+  <data name="ToCreateNewDocumentPressFillButton" xml:space="preserve">
+    <value>ახალი დოკუმენტის შესაქმნელად დააჭირეთ შევსება ღილაკს</value>
   </data>
 </root>

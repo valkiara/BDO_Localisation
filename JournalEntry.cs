@@ -11,7 +11,7 @@ namespace BDO_Localisation_AddOn
 {
     static partial class JournalEntry
     {
-        public static void createUserFields( out string errorText)
+        public static void createUserFields(out string errorText)
         {
             errorText = null;
             Dictionary<string, object> fieldskeysMap;
@@ -23,7 +23,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             GC.Collect();
 
@@ -38,7 +38,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static void JrnEntry( string jeReference, string jeReference2, string remark, DateTime jeDate, DataTable jeLines, out string errorText)
+        public static void JrnEntry(string jeReference, string jeReference2, string remark, DateTime jeDate, DataTable jeLines, out string errorText)
         {
             errorText = null;
 
@@ -62,7 +62,7 @@ namespace BDO_Localisation_AddOn
             for (int i = 0; i < jeLines.Rows.Count; i++)
             {
                 jeLine = jeLines.Rows[i];
-                if(jeLine["FCCurrency"].ToString() != "" && jeLine["FCCurrency"].ToString() != Program.LocalCurrency)
+                if (jeLine["FCCurrency"].ToString() != "" && jeLine["FCCurrency"].ToString() != Program.LocalCurrency)
                 {
                     isFCCurr = true;
                 }
@@ -85,7 +85,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                    oJLines.FCCurrency = isFCCurr?Program.LocalCurrency:"";
+                    oJLines.FCCurrency = isFCCurr ? Program.LocalCurrency : "";
                     oJLines.FCCredit = 0;
                     oJLines.FCDebit = 0;
                 }
@@ -132,7 +132,7 @@ namespace BDO_Localisation_AddOn
             jeLines.Columns.Add("CostingCode3", typeof(string));
             jeLines.Columns.Add("CostingCode4", typeof(string));
             jeLines.Columns.Add("CostingCode5", typeof(string));
-            
+
             jeLines.Columns.Add("VatGroup", typeof(string));
             jeLines.Columns.Add("U_BDOSEmpID", typeof(string));
 
@@ -210,7 +210,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -381,11 +381,11 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            ShowAdditionalEntries( oForm, out errorText);
+            ShowAdditionalEntries(oForm, out errorText);
 
         }
 
-        private static void ShowAdditionalEntries(  SAPbouiCOM.Form oForm, out string errorText)
+        private static void ShowAdditionalEntries(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -626,7 +626,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     JDT1_BDO.SetValue("AcctName", i, oMatrix.Columns.Item("2").Cells.Item(i + 1).Specific.Value);
-                    JDT1_BDO.SetValue("prFrmItm", i, getCashFlow( JDT1_BDO.GetValue("TransId", i).ToString(), JDT1_BDO.GetValue("Line_ID", i).ToString()));
+                    JDT1_BDO.SetValue("prFrmItm", i, getCashFlow(JDT1_BDO.GetValue("TransId", i).ToString(), JDT1_BDO.GetValue("Line_ID", i).ToString()));
 
                 }
 
@@ -685,7 +685,7 @@ namespace BDO_Localisation_AddOn
                         JDT1_BDO.SetValue("FCCredit", GlCount, dtRow["FCCredit"]);
                         JDT1_BDO.SetValue("FCDebit", GlCount, dtRow["FCDebit"]);
                         JDT1_BDO.SetValue("FCCurrency", GlCount, dtRow["FCCurrency"]);
-                        JDT1_BDO.SetValue("AcctName", GlCount, getAcctName( JDT1_BDO.GetValue("Account", GlCount)));
+                        JDT1_BDO.SetValue("AcctName", GlCount, getAcctName(JDT1_BDO.GetValue("Account", GlCount)));
 
                         JDT1_BDO.SetValue("ProfitCode", GlCount, dtRow["CostingCode"].ToString());
                         JDT1_BDO.SetValue("OcrCode2", GlCount, dtRow["CostingCode2"].ToString());
@@ -695,7 +695,7 @@ namespace BDO_Localisation_AddOn
                         JDT1_BDO.SetValue("Project", GlCount, dtRow["ProjectCode"].ToString());
                         JDT1_BDO.SetValue("VatGroup", GlCount, dtRow["VatGroup"].ToString());
                         JDT1_BDO.SetValue("U_BDOSEmpID", GlCount, dtRow["U_BDOSEmpID"].ToString());
-                        
+
                     }
 
                     Program.JrnLinesGlobal = new DataTable();
@@ -740,14 +740,14 @@ namespace BDO_Localisation_AddOn
                             JDT1_BDO.SetValue("FCCredit", GlCount, oRecordSet.Fields.Item("FCCredit").Value);
                             JDT1_BDO.SetValue("FCDebit", GlCount, oRecordSet.Fields.Item("FCDebit").Value);
                             JDT1_BDO.SetValue("FCCurrency", GlCount, oRecordSet.Fields.Item("FCCurrency").Value);
-                            JDT1_BDO.SetValue("AcctName", GlCount, getAcctName( JDT1_BDO.GetValue("Account", GlCount)));
+                            JDT1_BDO.SetValue("AcctName", GlCount, getAcctName(JDT1_BDO.GetValue("Account", GlCount)));
                             JDT1_BDO.SetValue("ProfitCode", GlCount, oRecordSet.Fields.Item("ProfitCode").Value);
                             JDT1_BDO.SetValue("OcrCode2", GlCount, oRecordSet.Fields.Item("OcrCode2").Value);
                             JDT1_BDO.SetValue("OcrCode3", GlCount, oRecordSet.Fields.Item("OcrCode3").Value);
                             JDT1_BDO.SetValue("OcrCode4", GlCount, oRecordSet.Fields.Item("OcrCode4").Value);
                             JDT1_BDO.SetValue("OcrCode5", GlCount, oRecordSet.Fields.Item("OcrCode5").Value);
                             JDT1_BDO.SetValue("Project", GlCount, oRecordSet.Fields.Item("Project").Value);
-                            JDT1_BDO.SetValue("prFrmItm", GlCount, getCashFlow( JDT1_BDO.GetValue("TransId", GlCount).ToString(), JDT1_BDO.GetValue("Line_ID", GlCount).ToString()));
+                            JDT1_BDO.SetValue("prFrmItm", GlCount, getCashFlow(JDT1_BDO.GetValue("TransId", GlCount).ToString(), JDT1_BDO.GetValue("Line_ID", GlCount).ToString()));
                             JDT1_BDO.SetValue("U_BDOSEmpID", GlCount, oRecordSet.Fields.Item("U_BDOSEmpID").Value);
                             GlCount++;
                             oRecordSet.MoveNext();
@@ -765,7 +765,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                 errorText = ex.Message;
+                errorText = ex.Message;
                 //Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
 
             }
@@ -781,7 +781,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static string getAcctName( string Account)
+        public static string getAcctName(string Account)
         {
 
             SAPbobsCOM.Recordset oRecordSetOACT = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -798,7 +798,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static string getCashFlow( string TransId, string Line_ID)
+        public static string getCashFlow(string TransId, string Line_ID)
         {
             SAPbobsCOM.Recordset oRecordSetOACT = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string queryOACT = @"SELECT
@@ -816,7 +816,7 @@ namespace BDO_Localisation_AddOn
             return "";
         }
 
-        public static void formDataLoad( SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -857,7 +857,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -866,11 +866,11 @@ namespace BDO_Localisation_AddOn
 
             if (oForm.TypeEx == "392" & BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
             {
-                JournalEntry.formDataLoad( oForm, out errorText);
+                JournalEntry.formDataLoad(oForm, out errorText);
             }
         }
 
-        public static void cancellation( SAPbouiCOM.Form oForm, int Ref1, string Ref2, out string errorText)
+        public static void cancellation(SAPbouiCOM.Form oForm, int Ref1, string Ref2, out string errorText)
         {
             errorText = null;
             SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
@@ -929,7 +929,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -940,12 +940,12 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    JournalEntry.createFormItems( oForm, out errorText);
+                    JournalEntry.createFormItems(oForm, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & pVal.BeforeAction == false)
                 {
-                    JournalEntry.formDataLoad( oForm, out errorText);
+                    JournalEntry.formDataLoad(oForm, out errorText);
                     setVisibility(oForm, out errorText);
                 }
 
@@ -954,7 +954,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.ItemUID == "BDOSAddEnt" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.InnerEvent == false && pVal.BeforeAction == false)
                     {
 
-                        ShowAdditionalEntries( oForm, out errorText);
+                        ShowAdditionalEntries(oForm, out errorText);
                     }
                 }
 
@@ -988,7 +988,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.LinkedButton oLink = oAccount.ExtendedObject;
                         oLink.LinkedObjectType = "1";
                     }
-                    
+
                 }
             }
         }
@@ -997,35 +997,42 @@ namespace BDO_Localisation_AddOn
         {
             errorText = "";
 
-            if (DocEntry != "" && TransType != "" && ACNumber != "")
+            if (!string.IsNullOrEmpty(DocEntry) && !string.IsNullOrEmpty(TransType) && !string.IsNullOrEmpty(ACNumber))
             {
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                string query = @"SELECT 
-                            *  
-                            FROM ""OJDT"" 
-                            WHERE ""StornoToTr"" IS NULL   
-                            AND ""TransType"" = '" + TransType + @"'  
-                            AND ""CreatedBy"" = '" + DocEntry + "' ";
 
-                oRecordSet.DoQuery(query);
+                StringBuilder query = new StringBuilder();
+                query.Append("SELECT \"TransId\" \n");
+                query.Append("FROM \"OJDT\" \n");
+                query.Append("WHERE \"StornoToTr\" IS NULL \n");
+                query.Append("AND \"TransType\" = '" + TransType + "' \n");
+                query.Append("AND \"CreatedBy\" = '" + DocEntry + "' \n");
+                query.Append("UNION ALL \n");
+                query.Append("SELECT \"TransId\" \n");
+                query.Append("FROM \"OJDT\" \n");
+                query.Append("WHERE \"StornoToTr\" IS NULL \n");
+                query.Append("AND \"Ref2\" = '" + TransType + "' \n");
+                query.Append("AND \"Ref1\" = '" + DocEntry + "'");
 
-                if (!oRecordSet.EoF)
+                oRecordSet.DoQuery(query.ToString());
+
+                while (!oRecordSet.EoF)
                 {
                     SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
                     oJounalEntry.GetByKey(oRecordSet.Fields.Item("TransId").Value);
-
                     oJounalEntry.UserFields.Fields.Item("U_BDOSACNum").Value = ACNumber.Trim();
 
-                    int updateCode = 0;
-                    updateCode = oJounalEntry.Update();
+                    int updateCode = oJounalEntry.Update();
 
                     if (updateCode != 0)
                     {
                         Program.oCompany.GetLastError(out updateCode, out errorText);
                     }
+                    Marshal.ReleaseComObject(oJounalEntry);
+
+                    oRecordSet.MoveNext();
                 }
             }
         }
-
     }
 }

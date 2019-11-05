@@ -350,7 +350,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("181", Program.currentFormCount);
 
                             //საპენსიოს დათვლა
-                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "ORPC", "RPC1", out errorText);
+                            CommonFunctions.fillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormDoc, "ORPC", "RPC1", out errorText);
                         }
 
                         //A/P Invoice
@@ -359,7 +359,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("141", Program.currentFormCount);
 
                             //საპენსიოს დათვლა
-                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "OPCH", "PCH1", out errorText);
+                            CommonFunctions.fillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormDoc, "OPCH", "PCH1", out errorText);
                         }
 
                         //A/P Reserve Invoice
@@ -368,7 +368,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("60092", Program.currentFormCount);
 
                             //საპენსიოს დათვლა
-                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "OPCH", "PCH1", out errorText);
+                            CommonFunctions.fillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormDoc, "OPCH", "PCH1", out errorText);
                         }
 
                         //A/P Down Payment Request
@@ -377,7 +377,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("65309", Program.currentFormCount);
 
                             //საპენსიოს დათვლა
-                            CommonFunctions.fillPhysicalEntityTaxes(oForm, oFormDoc, "ODPO", "DPO1", out errorText);
+                            CommonFunctions.fillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormDoc, "ODPO", "DPO1", out errorText);
                         }
 
                         if(!string.IsNullOrEmpty(errorText))

@@ -43,11 +43,12 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSFADim");
             fieldskeysMap.Add("TableName", "OADM");
-            fieldskeysMap.Add("Description", "Fixed asset dimension");
+            fieldskeysMap.Add("Description", "Fixed Asset Dimension");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             GC.Collect();
         }
 

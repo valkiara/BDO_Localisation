@@ -104,17 +104,22 @@
     <Compile Include="ARInvoice.cs" />
     <Compile Include="AssetClass.cs" />
     <Compile Include="BalanceSheet.cs" />
+    <Compile Include="BDOSApprovalProcedures.cs" />
+    <Compile Include="BDOSApprovalStages.cs" />
     <Compile Include="BDOSARDownPaymentVATAccrual.cs" />
     <Compile Include="BDOSAutomaticTasks.cs" />
+    <Compile Include="BDOSFuelConsumptionAct.cs" />
+    <Compile Include="BDOSFuelCriteria.cs" />
+    <Compile Include="BDOSFuelNormSpecification.cs" />
+    <Compile Include="BDOSFuelTransferWizard.cs" />
+    <Compile Include="BDOSFuelTypes.cs" />
+    <Compile Include="BDOSFuelWriteOffWizard.cs" />
+    <Compile Include="BDOSTasksForApproval.cs" />
     <Compile Include="CashFlowLineItem.cs" />
-    <Compile Include="BDOSConsumptionTypes.cs" />
     <Compile Include="BDOSDeleteUDF.cs" />
     <Compile Include="BDOSDepreciationAccrualDocument.cs" />
     <Compile Include="BDOSDownPaymentTaxAnalysisReceived.cs" />
     <Compile Include="BDOSFixedAssetTransfer.cs" />
-    <Compile Include="BDOSFuelConsumption.cs" />
-    <Compile Include="BDOSFuelTransferWizard.cs" />
-    <Compile Include="BDOSFuelWriteOffWizard.cs" />
     <Compile Include="BDOSInternetBanking.cs" />
     <Compile Include="BDOSInternetBankingDocuments.cs" />
     <Compile Include="BDOSItemCategories.cs" />
@@ -181,12 +186,14 @@
     <Compile Include="BDOSInternetBankingIntegrationServicesRules.cs" />
     <Compile Include="IssueForProduction.cs" />
     <Compile Include="LandedCostsSetup.cs" />
+    <Compile Include="LanguageUtils.cs" />
     <Compile Include="License.cs" />
     <Compile Include="Locations.cs" />
     <Compile Include="ItemGroup.cs" />
     <Compile Include="PaymentMeans.cs" />
     <Compile Include="ProfitAndLossStatement.cs" />
     <Compile Include="ProfitTax.cs" />
+    <Compile Include="Projects.cs" />
     <Compile Include="Resource\Res.en.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

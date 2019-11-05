@@ -1949,7 +1949,7 @@ namespace BDO_Localisation_AddOn
             return my_ip;
         }
 
-        /// <summary>არის თუ არა დღგ-ს გადამხდელი</summary>
+        /// <summary>არის თუ არა დღგ-ის გადამხდელი</summary>
         /// <param name="tin">გადამხდელის საიდენტიფიკაციო ნომერი ან პირადი ნომერი</param>
         /// <param name="errorText"></param>
         /// <returns></returns>

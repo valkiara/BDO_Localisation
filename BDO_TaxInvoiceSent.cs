@@ -10,7 +10,7 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_TaxInvoiceSent
     {
-        public static void createDocumentUDO( out string errorText)
+        public static void createDocumentUDO(out string errorText)
         {
             errorText = null;
             string tableName = "BDO_TAXS";
@@ -20,7 +20,7 @@ namespace BDO_Localisation_AddOn
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
 
-            int result = UDO.addUserTable( tableName, description, SAPbobsCOM.BoUTBTableType.bott_Document, out errorText);
+            int result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_Document, out errorText);
 
             if (result != 0)
             {
@@ -37,7 +37,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 15);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ბიზნესპარტნიორი (სახელი)
             fieldskeysMap.Add("Name", "cardCodeN");
@@ -46,7 +46,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ბიზნესპარტნიორი (გსნ)
             fieldskeysMap.Add("Name", "cardCodeT");
@@ -55,7 +55,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //გაგზავნის თარიღი
             fieldskeysMap.Add("Name", "sentDate");
@@ -63,7 +63,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Sent Date");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ID
             fieldskeysMap.Add("Name", "invID");
@@ -72,7 +72,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ნომერი
             fieldskeysMap.Add("Name", "number");
@@ -81,7 +81,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //სერია
             fieldskeysMap.Add("Name", "series");
@@ -90,7 +90,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             Dictionary<string, string> listValidValuesDict = new Dictionary<string, string>(); //სტატუსი
             listValidValuesDict.Add("empty", "");
@@ -119,7 +119,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValuesDict);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //დადასტურების თარიღი
             fieldskeysMap.Add("Name", "confDate");
@@ -127,7 +127,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Confirmation Date");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //დეკლარაციის თვე
             fieldskeysMap.Add("Name", "declDate");
@@ -135,7 +135,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Declaration Date");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //დეკლარაციის ნომერი
             fieldskeysMap.Add("Name", "declNumber");
@@ -144,7 +144,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ოპერაციის თვე
             fieldskeysMap.Add("Name", "opDate");
@@ -152,7 +152,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Operation Date");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "amount"); //თანხა დღგ-ის ჩათვლით
@@ -161,7 +161,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "amountTX"); //დღგ-ის თანხა
@@ -170,7 +170,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "amtOutTX"); //თანხა დღგ-ის გარეშე 
@@ -179,7 +179,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //მაკორექტირებელი ანგარიშ–ფაქტურისთვის
             fieldskeysMap.Add("Name", "corrInv");
@@ -189,7 +189,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "N");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             listValidValues = new List<string>(); //კორექტირების მიზეზები
             listValidValues.Add("");
@@ -206,7 +206,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 100);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ელექტრონული სახით
             fieldskeysMap.Add("Name", "elctrnic");
@@ -216,7 +216,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "Y");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ჩათვლის თვე
             fieldskeysMap.Add("Name", "vatRDate");
@@ -224,7 +224,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Vat Receive Date");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //კომენტარი
             fieldskeysMap.Add("Name", "comment");
@@ -233,7 +233,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 254);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "corrDoc"); //კორექტირების დოკუმენტი
@@ -242,7 +242,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
             fieldskeysMap.Add("EditSize", 11);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "corrDTxt"); //კორექტირების დოკუმენტი (TXT)
@@ -251,7 +251,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 11);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "corrDocID"); //კორექტირების დოკუმენტის ID
@@ -260,7 +260,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ავანსის ანგარიშ–ფაქტურა
             fieldskeysMap.Add("Name", " downPaymnt");
@@ -270,12 +270,12 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "N");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             tableName = "BDO_TXS1";
             description = "Tax Invoice Sent Child1";
 
-            result = UDO.addUserTable( tableName, description, SAPbobsCOM.BoUTBTableType.bott_DocumentLines, out errorText);
+            result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_DocumentLines, out errorText);
 
             if (result != 0)
             {
@@ -297,10 +297,10 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValuesDict);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            bool result2 = UDO.addNewValidValuesUserFieldsMD( "@BDO_TXS1", "baseDocT", "ARDownPaymentRequest", "ARDownPaymentRequest", out errorText);
-            result2 = UDO.addNewValidValuesUserFieldsMD( "@BDO_TXS1", "baseDocT", "ARDownPaymentVAT", "ARDownPaymentVAT", out errorText);
+            bool result2 = UDO.addNewValidValuesUserFieldsMD("@BDO_TXS1", "baseDocT", "ARDownPaymentRequest", "ARDownPaymentRequest", out errorText);
+            result2 = UDO.addNewValidValuesUserFieldsMD("@BDO_TXS1", "baseDocT", "ARDownPaymentVAT", "ARDownPaymentVAT", out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "baseDoc"); //საფუძველი დოკუმენტი
@@ -309,7 +309,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
             fieldskeysMap.Add("EditSize", 11);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "baseDTxt"); //საფუძველი დოკუმენტი (TXT)
@@ -318,7 +318,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 11);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "amtBsDc"); //საფუძველი დოკუმენტის თანხა
@@ -327,7 +327,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "tAmtBsDc"); //საფუძველი დოკუმენტის დღგ-ის თანხა
@@ -336,7 +336,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "wbNumber"); //ზედნადების ნომერი
@@ -345,12 +345,12 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             GC.Collect();
         }
 
-        public static void registerUDO( out string errorText)
+        public static void registerUDO(out string errorText)
         {
             errorText = null;
             string code = "UDO_F_BDO_TAXS_D"; //20 characters (must include at least one alphabetical character).
@@ -459,12 +459,12 @@ namespace BDO_Localisation_AddOn
 
             formProperties.Add("ChildTables", listChildTables);
 
-            UDO.registerUDO( code, formProperties, out errorText);
+            UDO.registerUDO(code, formProperties, out errorText);
 
             GC.Collect();
         }
 
-        public static void addMenus( out string errorText)
+        public static void addMenus(out string errorText)
         {
             errorText = null;
 
@@ -492,7 +492,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             Dictionary<string, object> formItems;
@@ -529,7 +529,7 @@ namespace BDO_Localisation_AddOn
             bool multiSelection = false;
             string objectType = "2"; //SAPbouiCOM.BoLinkedObject.lf_BusinessPartner, Business Partner object 
             string uniqueID_lf_BusinessPartnerCFL = "BusinessPartner_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL);
 
             //პირობის დადება ბიზნესპარტნიორის არჩევის სიაზე
             SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(uniqueID_lf_BusinessPartnerCFL);
@@ -767,10 +767,10 @@ namespace BDO_Localisation_AddOn
             multiSelection = false;
             objectType = "UDO_F_BDO_TAXS_D"; //Tax Invoice Sent
             string uniqueID_CorrDocCFL = "CorrDoc_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_CorrDocCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_CorrDocCFL);
             //<----
 
-            left_s = 295;
+            left_s = 300;
             left_e = left_s + 121;
 
             formItems = new Dictionary<string, object>();
@@ -1434,7 +1434,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            left_s = 295;
+            left_s = 300;
             left_e = left_s + 121;
             top = 70 + 40;
             top = top + 25;
@@ -1512,7 +1512,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
+            //formItems.Add("DisplayDesc", true);
             formItems.Add("Enabled", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -1554,7 +1554,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
+            //formItems.Add("DisplayDesc", true);
             formItems.Add("Enabled", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -1596,7 +1596,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
+            //formItems.Add("DisplayDesc", true);
             formItems.Add("Enabled", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -1730,12 +1730,12 @@ namespace BDO_Localisation_AddOn
             formItems.Add("isDataSource", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
             formItems.Add("Left", left_s);
-            formItems.Add("Width", wblMTRWidth);
+            //formItems.Add("Width", wblMTRWidth);
             formItems.Add("Top", top);
             formItems.Add("Height", 100);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("AffectsFormMode", false);
+            //formItems.Add("DisplayDesc", true);
+            //formItems.Add("AffectsFormMode", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1751,23 +1751,21 @@ namespace BDO_Localisation_AddOn
             multiSelection = false;
             objectType = "13"; //SAPbouiCOM.BoLinkedObject.lf_Invoice
             string uniqueID_lf_InvoiceCFL = "Invoice_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_InvoiceCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_InvoiceCFL);
             objectType = "14"; //SAPbouiCOM.BoLinkedObject.lf_InvoiceCreditMemo 
             string uniqueID_lf_InvoiceCreditMemoCFL = "InvoiceCreditMemo_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_InvoiceCreditMemoCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_InvoiceCreditMemoCFL);
             objectType = "203"; //A/R Down Payment Invoice
             string uniqueID_lf_DownPaymentInvoiceCFL = "DownPaymentInvoice_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_DownPaymentInvoiceCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_DownPaymentInvoiceCFL);
 
             objectType = "UDO_F_BDO_ARDPV_D"; //A/R Down Payment Invoice
             string uniqueID_lf_ARDownPaymentVAT_CFL = "ARDownPaymentVAT_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_ARDownPaymentVAT_CFL);
-        
-            oColumn = oColumns.Add("LineID", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "  ";
-            oColumn.Width = 20 - 1;
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_ARDownPaymentVAT_CFL);
+
+            oColumn = oColumns.Add("LineId", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = "#";
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             wblMTRWidth = wblMTRWidth - 20 - 1;
 
@@ -1776,9 +1774,7 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Add("U_baseDocT", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("DocumentType");
-            oColumn.Width = wblMTRWidth / 5;
             oColumn.Editable = true;
-            oColumn.Visible = true;
 
             foreach (SAPbobsCOM.ValidValue keyValue in oValidValues)
             {
@@ -1787,39 +1783,30 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Add("U_baseDoc", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Document");
-            oColumn.Width = wblMTRWidth / 5;
             oColumn.Editable = true;
             oColumn.Visible = false;
 
             oColumn = oColumns.Add("U_baseDTxt", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Document");
-            oColumn.Width = wblMTRWidth / 5;
             oColumn.Editable = true;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("U_amtBsDc", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("AmountWithVat");
-            oColumn.Width = wblMTRWidth / 5;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("U_tAmtBsDc", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatAmount");
-            oColumn.Width = wblMTRWidth / 5;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("U_wbNumber", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("WaybillNumber");
-            oColumn.Width = wblMTRWidth / 5;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             SAPbouiCOM.DBDataSource oDBDataSource;
             oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDO_TXS1");
 
-            oColumn = oColumns.Item("LineID");
-            oColumn.DataBind.SetBound(true, "@BDO_TXS1", "LineID");
+            oColumn = oColumns.Item("LineId");
+            oColumn.DataBind.SetBound(true, "@BDO_TXS1", "LineId");
 
             oColumn = oColumns.Item("U_baseDocT");
             oColumn.DataBind.SetBound(true, "@BDO_TXS1", "U_baseDocT");
@@ -1841,10 +1828,10 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Item("U_wbNumber");
             oColumn.DataBind.SetBound(true, "@BDO_TXS1", "U_wbNumber");
 
-            oMatrix.Clear();
-            oDBDataSource.Query();
-            oMatrix.LoadFromDataSource();
-            oMatrix.AutoResizeColumns();
+            //oMatrix.Clear();
+            //oDBDataSource.Query();
+            //oMatrix.LoadFromDataSource();
+            //oMatrix.AutoResizeColumns();
 
             //სარდაფი
             left_s = 6;
@@ -1973,7 +1960,7 @@ namespace BDO_Localisation_AddOn
 
             //ღილაკები
 
-            left_s = 295;
+            left_s = 300;
             left_e = left_s + 121;
 
             top = top + height + 1;
@@ -2008,249 +1995,259 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void reArrangeFormItems(SAPbouiCOM.Form oForm)
+        public static void resizeForm(SAPbouiCOM.Form oForm)
         {
-            SAPbouiCOM.Item oItem = null;
-            int height = 15;
-            int top = 6;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("cardCodeS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("cardCodeE");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("cardCodeNE");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("cardCodeLB");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("cardCodeTS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("cardCodeTE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("sentDateS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("sentDateE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("corrInvCH");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("elctrnicCH");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("corrDocIDS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("corrDocIDE");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("corrDocE");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("corrDocLB");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("downPmntCH");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("corrTypeCB");
-            oItem.Top = top;
-
-            top = 6;
-
-            oItem = oForm.Items.Item("No.S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("SeriesC");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("DocNumE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("StatusS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("StatusC");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("CreateDatS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("CreateDatE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("UpdateDatS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("UpdateDatE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            //ელექტრონული ანგარიშ-ფაქტურა ---->
-
-            top = 70 + 40;
-
-            oItem = oForm.Items.Item("taxInvS");
-            oItem.Top = top;
-
-            top = top + 25;
-
-            oItem = oForm.Items.Item("seriesS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("seriesE");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("numberE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("invIDS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("invIDE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("statusS1");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("statusCB");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("confDateS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("confDateE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("declNumS");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("declDateS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("declDateE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("declNmberS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("declNmberE");
-            oItem.Top = top;
-
-            top = 70 + 40;
-            top = top + 25;
-
-            oItem = oForm.Items.Item("opDateS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("opDateE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("amountS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("amountE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("amountTXS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("amountTXE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("amtOutTXS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("amtOutTXE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            top = oForm.Items.Item("declNmberS").Top;
-            oItem = oForm.Items.Item("declStatS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("declStatS1");
-            oItem.Top = top;
-            top = top + 2 * height + 1;
-
-            oItem = oForm.Items.Item("vatRDateS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("vatRDateE");
-            oItem.Top = top;
-            top = top + 2 * height + 1;
-
-            oItem = oForm.Items.Item("addMTRB");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("delMTRB");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("wblMTR");
-            oItem.Top = top;
-            oItem.Width = oForm.ClientWidth;
-
-            int wblMTRWidth = oForm.ClientWidth;
-            FormsB1.resetWidthMatrixColumns(oForm, "wblMTR", "LineID", wblMTRWidth);
-
-            //სარდაფი
-
-            top = top + oForm.Items.Item("wblMTR").Height + 40;
-
-            oItem = oForm.Items.Item("CreatorS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("CreatorE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("RemarksS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("RemarksE");
-            oItem.Top = top;
-            top = top + 3 * height + 1;
-
-            oItem = oForm.Items.Item("CommentS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("CommentE");
-            oItem.Top = top;
-
-            int topTemp1 = oForm.Items.Item("CommentE").Top + 2 * height + 1;
-            int topTemp2 = oForm.ClientHeight - 25;
-            //ღილაკები
-            top = topTemp2 > topTemp1 ? topTemp2 : topTemp1;
-
-            oItem = oForm.Items.Item("1");
-            oItem.Top = top;
-
-            oItem = oForm.Items.Item("2");
-            oItem.Top = top;
-
-            oItem = oForm.Items.Item("operationB");
-            oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
-            oItem.Top = top;
-        }
-
-        public static void setSizeForm( SAPbouiCOM.Form oForm, out string errorText)
-        {
-            errorText = null;
+            oForm.Freeze(true);
             try
             {
-                oForm.ClientHeight = oForm.Height * 5 + 20; //1400;
-                oForm.ClientWidth = oForm.Width * 2; //1000;
+                int height = 15;
+                int top = 6;
+                top = top + height + 1;
+
+                SAPbouiCOM.Item oItem = oForm.Items.Item("cardCodeS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("cardCodeE");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("cardCodeNE");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("cardCodeLB");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("cardCodeTS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("cardCodeTE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("sentDateS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("sentDateE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("corrInvCH");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("elctrnicCH");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("corrDocIDS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("corrDocIDE");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("corrDocE");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("corrDocLB");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("downPmntCH");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("corrTypeCB");
+                oItem.Top = top;
+
+                top = 6;
+
+                oItem = oForm.Items.Item("No.S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("SeriesC");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("DocNumE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("StatusS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("StatusC");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("CreateDatS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("CreateDatE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("UpdateDatS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("UpdateDatE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                //ელექტრონული ანგარიშ-ფაქტურა ---->
+
+                top = 70 + 40;
+
+                oItem = oForm.Items.Item("taxInvS");
+                oItem.Top = top;
+
+                top = top + 25;
+
+                oItem = oForm.Items.Item("seriesS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("seriesE");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("numberE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("invIDS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("invIDE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("statusS1");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("statusCB");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("confDateS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("confDateE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("declNumS");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("declDateS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("declDateE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("declNmberS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("declNmberE");
+                oItem.Top = top;
+
+                top = 70 + 40;
+                top = top + 25;
+
+                oItem = oForm.Items.Item("opDateS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("opDateE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("amountS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("amountE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("amountTXS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("amountTXE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("amtOutTXS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("amtOutTXE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                top = oForm.Items.Item("declNmberS").Top;
+                oItem = oForm.Items.Item("declStatS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("declStatS1");
+                oItem.Top = top;
+                top = top + 2 * height + 1;
+
+                oItem = oForm.Items.Item("vatRDateS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("vatRDateE");
+                oItem.Top = top;
+                top = top + 2 * height + 1;
+
+                oItem = oForm.Items.Item("addMTRB");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("delMTRB");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+                int mtrWidth = oForm.ClientWidth;
+                oForm.Items.Item("wblMTR").Width = mtrWidth;
+                oForm.Items.Item("wblMTR").Top = top;
+                oForm.Items.Item("wblMTR").Height = oForm.ClientHeight / 3;
+                oMatrix.Columns.Item("LineId").Width = 19;
+                mtrWidth -= 19;
+                mtrWidth /= 5;
+                oMatrix.Columns.Item("U_baseDocT").Width = mtrWidth;
+                oMatrix.Columns.Item("U_baseDTxt").Width = mtrWidth;
+                oMatrix.Columns.Item("U_amtBsDc").Width = mtrWidth;
+                oMatrix.Columns.Item("U_tAmtBsDc").Width = mtrWidth;
+                oMatrix.Columns.Item("U_wbNumber").Width = mtrWidth;
+
+                //სარდაფი
+
+                top = top + oForm.Items.Item("wblMTR").Height + 40;
+
+                oItem = oForm.Items.Item("CreatorS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("CreatorE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("RemarksS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("RemarksE");
+                oItem.Top = top;
+                top = top + 3 * height + 1;
+
+                oItem = oForm.Items.Item("CommentS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("CommentE");
+                oItem.Top = top;
+
+                int topTemp1 = oForm.Items.Item("CommentE").Top + 2 * height + 1;
+                int topTemp2 = oForm.ClientHeight - 25;
+                //ღილაკები
+                top = topTemp2 > topTemp1 ? topTemp2 : topTemp1;
+
+                oItem = oForm.Items.Item("1");
+                oItem.Top = top;
+
+                oItem = oForm.Items.Item("2");
+                oItem.Top = top;
+
+                oItem = oForm.Items.Item("operationB");
+                oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
+                oItem.Top = top;
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
-        public static void resizeForm( SAPbouiCOM.Form oForm, out string errorText)
+        public static void setSizeForm(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
+            oForm.Freeze(true);
             try
             {
-                reArrangeFormItems(oForm);
+                oForm.ClientHeight = Program.uiApp.Desktop.Height / 4;
+                //oForm.Height = Program.uiApp.Desktop.Width / 4;
+                //oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
+                //oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 3;
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
@@ -2291,7 +2288,7 @@ namespace BDO_Localisation_AddOn
                     oItem = oForm.Items.Item("invIDE"); //ID
                     oItem.Enabled = true;
                     oItem = oForm.Items.Item("statusCB"); //ID
-                    oItem.Enabled = true;                    
+                    oItem.Enabled = true;
                     oItem = oForm.Items.Item("confDateE"); //დადასტურების თარიღი
                     oItem.Enabled = true;
                     oItem = oForm.Items.Item("declNmberE"); //დეკლარაციის ნომერი
@@ -2314,7 +2311,7 @@ namespace BDO_Localisation_AddOn
                     oItem = oForm.Items.Item("invIDE"); //ID
                     oItem.Enabled = false;
                     oItem = oForm.Items.Item("statusCB"); //ID
-                    oItem.Enabled = false;       
+                    oItem.Enabled = false;
                     oItem = oForm.Items.Item("confDateE"); //დადასტურების თარიღი
                     oItem.Enabled = false;
                     oItem = oForm.Items.Item("declNmberE"); //დეკლარაციის ნომერი
@@ -2353,7 +2350,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void comboSelect(  SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void comboSelect(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
             errorText = null;
 
@@ -2437,7 +2434,7 @@ namespace BDO_Localisation_AddOn
 
                         if (selectedOperation != null)
                         {
-                            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+                            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
                             if (errorText != null)
                             {
                                 return;
@@ -2448,7 +2445,7 @@ namespace BDO_Localisation_AddOn
 
                             TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-                            bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+                            bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
                             if (chek_service_user == false)
                             {
                                 Program.uiApp.MessageBox(BDOSResources.getTranslate("ServiceUserPasswordNotCorrect"));
@@ -2460,7 +2457,7 @@ namespace BDO_Localisation_AddOn
                                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
                                 string errorTextWb;
                                 string errorTextGoods;
-                                operationRS( oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                                 if (errorText != null)
                                 {
                                     Program.uiApp.MessageBox(errorText);
@@ -2475,7 +2472,7 @@ namespace BDO_Localisation_AddOn
                                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
                                 string errorTextWb;
                                 string errorTextGoods;
-                                operationRS( oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                                 if (errorText != null)
                                 {
                                     Program.uiApp.MessageBox(errorText);
@@ -2490,7 +2487,7 @@ namespace BDO_Localisation_AddOn
                                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
                                 string errorTextWb;
                                 string errorTextGoods;
-                                operationRS( oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                                 if (errorText != null)
                                 {
                                     Program.uiApp.MessageBox(errorText);
@@ -2505,7 +2502,7 @@ namespace BDO_Localisation_AddOn
                                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
                                 string errorTextWb;
                                 string errorTextGoods;
-                                operationRS( oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                                 if (errorText != null)
                                 {
                                     Program.uiApp.MessageBox(errorText);
@@ -2520,7 +2517,7 @@ namespace BDO_Localisation_AddOn
                                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
                                 string errorTextWb;
                                 string errorTextGoods;
-                                operationRS( oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                                 if (errorText != null)
                                 {
                                     Program.uiApp.MessageBox(errorText);
@@ -2535,7 +2532,7 @@ namespace BDO_Localisation_AddOn
                                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
                                 string errorTextWb;
                                 string errorTextGoods;
-                                operationRS( oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
+                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
                                 if (errorText != null)
                                 {
                                     Program.uiApp.MessageBox(errorText);
@@ -2721,7 +2718,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = "UDO_F_BDO_ARDPV_D"; //A/R Down Payment Invoice
                         }
-                        
+
                     }
                 }
                 else
@@ -2739,7 +2736,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void itemPressed( SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void itemPressed(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
             errorText = null;
 
@@ -2787,12 +2784,12 @@ namespace BDO_Localisation_AddOn
                 {
                     setVisibleFormItems(oForm, out errorText);
 
-                    SAPbouiCOM.Item oItem = oForm.Items.Item("wblMTR");
-                    oItem.Width = oForm.ClientWidth;
+                    //SAPbouiCOM.Item oItem = oForm.Items.Item("wblMTR");
+                    //oItem.Width = oForm.ClientWidth;
 
-                    int wblMTRWidth = oForm.ClientWidth;
-                    FormsB1.resetWidthMatrixColumns(oForm, "wblMTR", "LineID", wblMTRWidth);
-                }              
+                    //int wblMTRWidth = oForm.ClientWidth;
+                    //FormsB1.resetWidthMatrixColumns(oForm, "wblMTR", "LineId", wblMTRWidth);
+                }
             }
             catch (Exception ex)
             {
@@ -2810,7 +2807,7 @@ namespace BDO_Localisation_AddOn
 
             try
             {
-                if (pVal.ColUID == "LineID")
+                if (pVal.ColUID == "LineId")
                 {
                     if (pVal.BeforeAction == false)
                     {
@@ -2830,7 +2827,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void chooseFromList( SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, int row, out string errorText)
+        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, int row, out string errorText)
         {
             errorText = null;
 
@@ -2868,11 +2865,11 @@ namespace BDO_Localisation_AddOn
                                 docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("docEntry", 0));
                             }
                             catch
-                            {                                
+                            {
                                 oForm.Freeze(false);
                                 return;
                             }
-                            
+
                             SAPbobsCOM.CompanyService oCompanyService = null;
                             SAPbobsCOM.GeneralService oGeneralService = null;
                             SAPbobsCOM.GeneralData oGeneralData = null;
@@ -2895,17 +2892,17 @@ namespace BDO_Localisation_AddOn
                                 default: baseDocType = null; break;
                             }
                             List<string> exclList = new List<string>();
-                            
+
                             for (int i = 1; i <= oMatrix.RowCount; i++)
                             {
-                                if(i!= row && baseDocType == oMatrix.GetCellSpecific("U_baseDocT", i).Value.ToString() && oMatrix.GetCellSpecific("U_baseDTxt", i).Value.ToString()!="")
+                                if (i != row && baseDocType == oMatrix.GetCellSpecific("U_baseDocT", i).Value.ToString() && oMatrix.GetCellSpecific("U_baseDTxt", i).Value.ToString() != "")
                                 {
                                     exclList.Add(oMatrix.GetCellSpecific("U_baseDTxt", i).Value.ToString());
                                 }
                             }
                             exclList.Add("0");
 
-                            DataTable baseDocs = getListBaseDoc( oGeneralData, wbNumber, null, baseDocType, docEntry, exclList, out errorText);
+                            DataTable baseDocs = getListBaseDoc(oGeneralData, wbNumber, null, baseDocType, docEntry, exclList, out errorText);
 
                             int docCount = baseDocs.Rows.Count;
                             SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
@@ -2972,75 +2969,32 @@ namespace BDO_Localisation_AddOn
 
                             if (sCFL_ID == "Invoice_CFL")
                             {
-                                ARInvoice.getAmount( docEntry, out amount, out amountTX, out errorText);
-                                wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( docEntry, "13", out errorText);
+                                ARInvoice.getAmount(docEntry, out amount, out amountTX, out errorText);
+                                wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(docEntry, "13", out errorText);
                                 wbNumber = wblDocInfo["number"];
                             }
                             else if (sCFL_ID == "InvoiceCreditMemo_CFL")
                             {
-                                ARCreditNote.getAmount( docEntry, out amount, out amountTX, out errorText);
-                                wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( docEntry, "14", out errorText);
+                                ARCreditNote.getAmount(docEntry, out amount, out amountTX, out errorText);
+                                wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(docEntry, "14", out errorText);
                                 wbNumber = wblDocInfo["number"];
                             }
                             else if (sCFL_ID == "DownPaymentInvoice_CFL")
                             {
-                                ARDownPaymentRequest.getAmount( docEntry, out amount, out amountTX, out errorText);
+                                ARDownPaymentRequest.getAmount(docEntry, out amount, out amountTX, out errorText);
                             }
-                             else if (sCFL_ID == "ARDownPaymentVAT_CFL")
+                            else if (sCFL_ID == "ARDownPaymentVAT_CFL")
                             {
-                                BDOSARDownPaymentVATAccrual.getAmount( docEntry, out amount, out amountTX, out errorText);
+                                BDOSARDownPaymentVATAccrual.getAmount(docEntry, out amount, out amountTX, out errorText);
                             }
-                            
-                            
 
-                            oMatrix.Columns.Item("U_baseDTxt").Cells.Item(cellPos.rowIndex).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                            SAPbouiCOM.EditText oEditText = oMatrix.Columns.Item("U_baseDTxt").Cells.Item(cellPos.rowIndex).Specific;
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_baseDTxt").Cells.Item(cellPos.rowIndex).Specific.Value = docEntry.ToString());
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_baseDoc").Cells.Item(cellPos.rowIndex).Specific.Value = docEntry.ToString());
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_amtBsDc").Cells.Item(cellPos.rowIndex).Specific.Value = amount.ToString(Nfi));
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(cellPos.rowIndex).Specific.Value = amountTX.ToString(Nfi));
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_wbNumber").Cells.Item(cellPos.rowIndex).Specific.Value = wbNumber);
 
-                            try
-                            {
-                                oEditText.Value = docEntry.ToString();
-                            }
-                            catch
-                            { }
-                            try
-                            {
-                                oEditText = oMatrix.Columns.Item("U_baseDoc").Cells.Item(cellPos.rowIndex).Specific;
-                                oEditText.Value = docEntry.ToString();
-                            }
-                            catch
-                            { }
-                            try
-                            {
-                                oEditText = oMatrix.Columns.Item("U_amtBsDc").Cells.Item(cellPos.rowIndex).Specific; //თანხა დღგ-ის ჩათვლით
-                                oEditText.Value = amount.ToString(Nfi);
-                            }
-                            catch
-                            { }
-                            try
-                            {
-                                oEditText = oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(cellPos.rowIndex).Specific; //დღგ-ის თანხა
-                                oEditText.Value = amountTX.ToString(Nfi);
-                            }
-                            catch
-                            { }
-                            try
-                            {
-                                oEditText = oMatrix.Columns.Item("U_wbNumber").Cells.Item(cellPos.rowIndex).Specific;
-                                oEditText.Value = wbNumber;
-                            }
-                            catch
-                            { }
-
-                            decimal TotalAmount = 0;
-                            decimal TotalVAT = 0;
-
-                            for (int i = 1; i <= oMatrix.RowCount; i++)
-                            {
-                                TotalAmount = TotalAmount + Convert.ToDecimal(oMatrix.GetCellSpecific("U_amtBsDc", i).Value, CultureInfo.InvariantCulture);
-                                TotalVAT = TotalVAT + Convert.ToDecimal(oMatrix.GetCellSpecific("U_tAmtBsDc", i).Value, CultureInfo.InvariantCulture);
-                            }
-                            oForm.Items.Item("amountE").Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(TotalAmount);
-                            oForm.Items.Item("amountTXE").Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(TotalVAT);
+                            CalculateAmount(oForm);
 
                             if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
                             {
@@ -3057,6 +3011,58 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 GC.Collect();
+            }
+        }
+
+        public static void CalculateAmount(SAPbouiCOM.Form oForm)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+                oMatrix.FlushToDataSource();
+
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDO_TXS1");
+
+                int rowCount = oDBDataSourceMTR.Size - 1;
+
+                decimal totalAmount = 0;
+                decimal totalVAT = 0;
+
+                for (int i = 0; i <= rowCount; i++)
+                {
+                    string baseDocT = oDBDataSourceMTR.GetValue("U_baseDocT", i);
+                    if (!string.IsNullOrEmpty(baseDocT))
+                    {
+                        if (oDBDataSourceMTR.GetValue("U_baseDocT", i) == "ARCreditNote")
+                        {
+                            totalAmount = totalAmount - Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_amtBsDc", i), CultureInfo.InvariantCulture);
+                            totalVAT = totalVAT - Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_tAmtBsDc", i), CultureInfo.InvariantCulture);
+                        }
+                        else
+                        {
+                            totalAmount = totalAmount + Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_amtBsDc", i), CultureInfo.InvariantCulture);
+                            totalVAT = totalVAT + Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_tAmtBsDc", i), CultureInfo.InvariantCulture);
+                        }
+                    }
+                }
+                //SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDO_TAXS");
+                //oDBDataSource.SetValue("U_amount", 0, FormsB1.ConvertDecimalToString(totalAmount));
+                //oDBDataSource.SetValue("U_amountTX", 0, FormsB1.ConvertDecimalToString(totalVAT));
+                //oDBDataSource.SetValue("U_amtOutTX", 0, FormsB1.ConvertDecimalToString(totalAmount - totalVAT));
+
+                LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("amountE").Specific.Value = FormsB1.ConvertDecimalToString(totalAmount));
+                LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("amountTXE").Specific.Value = FormsB1.ConvertDecimalToString(totalVAT));
+                LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("amtOutTXE").Specific.Value = FormsB1.ConvertDecimalToString(totalAmount - totalVAT));
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
@@ -3098,7 +3104,7 @@ namespace BDO_Localisation_AddOn
                 return "empty";
         }
 
-        public static Dictionary<string, object> getTaxInvoiceSentDocumentInfo( int docEntry, string baseDocType, string cardCode, out string errorText)
+        public static Dictionary<string, object> getTaxInvoiceSentDocumentInfo(int docEntry, string baseDocType, string cardCode, out string errorText)
         {
             errorText = null;
 
@@ -3157,7 +3163,7 @@ namespace BDO_Localisation_AddOn
             return taxDocInfo;
         }
 
-        public static void getPrimaryBaseDoc( int docEntry, string cardCode, out List<int> baseDocList, out string errorText)
+        public static void getPrimaryBaseDoc(int docEntry, string cardCode, out List<int> baseDocList, out string errorText)
         {
             errorText = null;
             int corrDoc = 0;
@@ -3194,7 +3200,7 @@ namespace BDO_Localisation_AddOn
                     {
                         corrInv = oRecordSet.Fields.Item("corrInv").Value.ToString();
                         //baseDocType = oRecordSet.Fields.Item("baseDocT").Value.ToString();
-                        
+
                         if (corrInv == "Y")
                             corrDoc = Convert.ToInt32(oRecordSet.Fields.Item("corrDoc").Value);
                         else
@@ -3204,7 +3210,7 @@ namespace BDO_Localisation_AddOn
                     }
                     if (corrInv == "Y" && corrDoc != 0)
                     {
-                        getPrimaryBaseDoc( corrDoc, cardCode, out baseDocList, out errorText);
+                        getPrimaryBaseDoc(corrDoc, cardCode, out baseDocList, out errorText);
                     }
                 }
             }
@@ -3220,7 +3226,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static DataTable getListBaseDoc( SAPbobsCOM.GeneralData oGeneralData, string overhead_no, string overhead_dt_str, string baseDocType, int docEntryTaxInv, List<string> exclList, out string errorText)
+        public static DataTable getListBaseDoc(SAPbobsCOM.GeneralData oGeneralData, string overhead_no, string overhead_dt_str, string baseDocType, int docEntryTaxInv, List<string> exclList, out string errorText)
         {
             errorText = null;
 
@@ -3284,15 +3290,15 @@ namespace BDO_Localisation_AddOn
             List<int> connectedDocList = new List<int>();
             if (corrInv)
             {
-                getPrimaryBaseDoc( corrDoc, cardCode, out primaryBaseDocList, out errorText);
+                getPrimaryBaseDoc(corrDoc, cardCode, out primaryBaseDocList, out errorText);
 
                 if (downPaymnt)
                 {
-                    connectedDocList = ARDownPaymentRequest.getAllConnectedDoc( primaryBaseDocList, out errorText);
+                    connectedDocList = ARDownPaymentRequest.getAllConnectedDoc(primaryBaseDocList, out errorText);
                 }
                 else
                 {
-                    connectedDocList = ARCreditNote.getAllConnectedDoc( primaryBaseDocList, "13", out errorText);
+                    connectedDocList = ARCreditNote.getAllConnectedDoc(primaryBaseDocList, "13", out errorText);
                 }
             }
 
@@ -3391,7 +3397,7 @@ namespace BDO_Localisation_AddOn
             return baseDocs;
         }
 
-        public static string getAllConnectedDoc( int docEntry, ref List<int> docEntryARInvoiceList, ref List<int> docEntryARCreditNoteList)
+        public static string getAllConnectedDoc(int docEntry, ref List<int> docEntryARInvoiceList, ref List<int> docEntryARCreditNoteList)
         {
             int corrDoc = 0;
             string corrInv = null;
@@ -3447,14 +3453,14 @@ namespace BDO_Localisation_AddOn
                     }
                     if (corrInv == "Y" && corrDoc != 0)
                     {
-                        getAllConnectedDoc( corrDoc, ref docEntryARInvoiceList, ref docEntryARCreditNoteList);
+                        getAllConnectedDoc(corrDoc, ref docEntryARInvoiceList, ref docEntryARCreditNoteList);
                     }
                 }
                 return null;
-            }               
+            }
             catch (Exception ex)
             {
-                 return ex.Message;
+                return ex.Message;
             }
             finally
             {
@@ -3464,61 +3470,51 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void addMatrixRow( SAPbouiCOM.Form oForm, out string errorText)
+        public static void addMatrixRow(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
             oForm.Freeze(true);
-
             try
             {
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("wblMTR").Specific));
-                int index = 0;
-                if (oMatrix.RowCount == 0)
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+                oMatrix.FlushToDataSource();
+
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDO_TXS1");
+                if (!string.IsNullOrEmpty(oDBDataSourceMTR.GetValue("U_baseDocT", oDBDataSourceMTR.Size - 1)))
                 {
-                    index = 1;
+                    oDBDataSourceMTR.InsertRecord(oDBDataSourceMTR.Size);
                 }
-                else
-                {
-                    index = Convert.ToInt32(oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value) + 1;
-                }
+                oDBDataSourceMTR.SetValue("LineId", oDBDataSourceMTR.Size - 1, oDBDataSourceMTR.Size.ToString());
 
                 string downPaymnt = oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("U_downPaymnt", 0).Trim();
-                oMatrix.AddRow(1, -1);
-                oMatrix.AutoResizeColumns();
-                oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value = index;
-                SAPbouiCOM.ComboBox oComboBox = oMatrix.Columns.Item("U_baseDocT").Cells.Item(oMatrix.RowCount).Specific;
-
                 if (downPaymnt == "Y")
                 {
-                    oComboBox.Select("ARDownPaymentRequest", SAPbouiCOM.BoSearchKey.psk_ByValue);
+                    oDBDataSourceMTR.SetValue("U_baseDocT", oDBDataSourceMTR.Size - 1, "ARDownPaymentRequest");
                 }
                 else
                 {
-                    oComboBox.Select("ARInvoice", SAPbouiCOM.BoSearchKey.psk_ByValue);
+                    oDBDataSourceMTR.SetValue("U_baseDocT", oDBDataSourceMTR.Size - 1, "ARInvoice");
                 }
 
-                oMatrix.Columns.Item("U_baseDoc").Cells.Item(oMatrix.RowCount).Specific.Value = 0;
-                oMatrix.Columns.Item("U_baseDTxt").Cells.Item(oMatrix.RowCount).Specific.Value = "";
-                oMatrix.Columns.Item("U_amtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = 0;
-                oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = 0;
-                oMatrix.Columns.Item("U_wbNumber").Cells.Item(oMatrix.RowCount).Specific.Value = "";
+                oMatrix.LoadFromDataSource();
+
+                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
+                {
+                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+                }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
-                GC.Collect();
                 oForm.Freeze(false);
             }
         }
 
-        public static void delMatrixRow( SAPbouiCOM.Form oForm, out string errorText)
+        public static void deleteMatrixRow(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
             oForm.Freeze(true);
-
             try
             {
                 SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("wblMTR").Specific));
@@ -3538,7 +3534,19 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDO_TXS1");
+                int rowCount = oDBDataSourceMTR.Size;
+
+                for (int i = 1; i <= rowCount; i++)
+                {
+                    string itemCode = oDBDataSourceMTR.GetValue("U_baseDocT", i - 1);
+                    if (!string.IsNullOrEmpty(itemCode))
+                    {
+                        oDBDataSourceMTR.SetValue("LineId", i - 1, i.ToString());
+                    }
+                }
                 oMatrix.LoadFromDataSource();
+
                 if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE && deletedRowCount > 0)
                 {
                     oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
@@ -3546,7 +3554,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -3594,37 +3602,37 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void createDocument(  string objectType, int baseDocEntry, string corrType, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, List<int>docEntryARCreditNoteList, out int newDocEntry, out string errorText)
+        public static void createDocument(string objectType, int baseDocEntry, string corrType, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, List<int> docEntryARCreditNoteList, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
 
             if (objectType == "13")  //A/R Invoice
             {
-                createDocumentARInvoiceType( baseDocEntry, fromDoc, answer, oGeneralData, union, docEntryARCreditNoteList, out newDocEntry, out errorText);
+                createDocumentARInvoiceType(baseDocEntry, fromDoc, answer, oGeneralData, union, docEntryARCreditNoteList, out newDocEntry, out errorText);
             }
             else if (objectType == "14") //A/R Credit Memo 
             {
-                createDocumentInvoiceCreditMemoType( baseDocEntry, corrType, fromDoc, answer, oGeneralData, union, out newDocEntry, out errorText);
+                createDocumentInvoiceCreditMemoType(baseDocEntry, corrType, fromDoc, answer, oGeneralData, union, out newDocEntry, out errorText);
             }
             else if (objectType == "203") //A/R Down Payment Invoice 
             {
-                createDocumentInvoiceARDownPaymentRequestType( baseDocEntry, corrType, fromDoc, out newDocEntry, out errorText);
+                createDocumentInvoiceARDownPaymentRequestType(baseDocEntry, corrType, fromDoc, out newDocEntry, out errorText);
             }
             else if (objectType == "UDO_F_BDO_ARDPV_D") //A/R Down Payment VAT 
             {
-                createDocumentInvoiceARDownPaymentVAT( baseDocEntry, corrType, fromDoc, out newDocEntry, out errorText);
+                createDocumentInvoiceARDownPaymentVAT(baseDocEntry, corrType, fromDoc, out newDocEntry, out errorText);
             }
         }
 
-        public static void createDocumentForUnion(  DataTable UnionTable, string PrevCardCode, DateTime PrevOpDate, ref string docEntry, out string errorText)
+        public static void createDocumentForUnion(DataTable UnionTable, string PrevCardCode, DateTime PrevOpDate, ref string docEntry, out string errorText)
         {
             errorText = null;
 
-            createDocumentARInvoiceTypeForUnion( PrevCardCode, PrevOpDate, UnionTable, ref docEntry, out errorText);
+            createDocumentARInvoiceTypeForUnion(PrevCardCode, PrevOpDate, UnionTable, ref docEntry, out errorText);
         }
 
-        private static void createDocumentARInvoiceType(  int baseDocEntry, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, List<int>docEntryARCreditNoteList, out int newDocEntry, out string errorText)
+        private static void createDocumentARInvoiceType(int baseDocEntry, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, List<int> docEntryARCreditNoteList, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -3677,7 +3685,7 @@ namespace BDO_Localisation_AddOn
                         oGeneralData.SetProperty("U_status", "empty");
                     }
 
-                    Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( baseDocEntry, "13", out errorText);
+                    Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(baseDocEntry, "13", out errorText);
 
                     SAPbobsCOM.GeneralDataCollection oChildren = null;
 
@@ -3693,7 +3701,7 @@ namespace BDO_Localisation_AddOn
                     oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
 
                     //კორექტირების დოკუმენტები 
-                    List<int> connectedDocList = ARInvoice.getAllConnectedDoc( new List<int>() { baseDocEntry }, "13", docDate, new DateTime(), 0, out errorText);
+                    List<int> connectedDocList = ARInvoice.getAllConnectedDoc(new List<int>() { baseDocEntry }, "13", docDate, new DateTime(), 0, out errorText);
                     int rowCount = connectedDocList.Count();
 
                     if (rowCount != 0)
@@ -3718,9 +3726,9 @@ namespace BDO_Localisation_AddOn
                                     continue;
                                 }
 
-                                BDO_CNTp = CommonFunctions.getValue( "ORIN", "U_BDO_CNTp", "DocEntry", creditNoteDocEntry.ToString()).ToString(); //0=კორექტირება, 1=დაბრუნება
+                                BDO_CNTp = CommonFunctions.getValue("ORIN", "U_BDO_CNTp", "DocEntry", creditNoteDocEntry.ToString()).ToString(); //0=კორექტირება, 1=დაბრუნება
 
-                                Dictionary<string, object> taxDocInfo = getTaxInvoiceSentDocumentInfo( creditNoteDocEntry, "ARCreditNote", cardCode, out errorText);
+                                Dictionary<string, object> taxDocInfo = getTaxInvoiceSentDocumentInfo(creditNoteDocEntry, "ARCreditNote", cardCode, out errorText);
                                 if (taxDocInfo != null)
                                 {
                                     corrDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]); //კორექტირების ა/ფ-ის Entry //წესით არ უნდა იყოს შევსებული
@@ -3731,15 +3739,15 @@ namespace BDO_Localisation_AddOn
                                 {
                                     double gTotal;
                                     double lineVat;
-                                    ARCreditNote.getAmount( creditNoteDocEntry, out gTotal, out lineVat, out errorText);
+                                    ARCreditNote.getAmount(creditNoteDocEntry, out gTotal, out lineVat, out errorText);
 
                                     if (BDO_CNTp == "0") //კორექტირება
                                     {
-                                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( baseDocEntry, "13", out errorText);
+                                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(baseDocEntry, "13", out errorText);
                                     }
                                     else //დაბრუნება
                                     {
-                                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( creditNoteDocEntry, "14", out errorText);
+                                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(creditNoteDocEntry, "14", out errorText);
                                     }
 
                                     oChild = oChildren.Add();
@@ -3796,10 +3804,10 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static SAPbobsCOM.GeneralData createDocumentForUnion( string cardCode, DateTime docDate, out string errorText)
+        public static SAPbobsCOM.GeneralData createDocumentForUnion(string cardCode, DateTime docDate, out string errorText)
         {
             errorText = null;
-          
+
             SAPbobsCOM.CompanyService oCompanyService = null;
             SAPbobsCOM.GeneralService oGeneralService = null;
             SAPbobsCOM.GeneralData oGeneralData = null;
@@ -3840,7 +3848,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void createDocumentARInvoiceTypeForUnion(  string cardCode, DateTime docDate, DataTable baseDocs, ref string docEntry, out string errorText)
+        private static void createDocumentARInvoiceTypeForUnion(string cardCode, DateTime docDate, DataTable baseDocs, ref string docEntry, out string errorText)
         {
             errorText = null;
 
@@ -3872,7 +3880,7 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.GeneralDataCollection oChildren = oGeneralData.Child("BDO_TXS1");
             SAPbobsCOM.GeneralData oChild = null;
-          
+
             Dictionary<string, string> wblDocInfo = null;
 
             decimal amount = 0;
@@ -3886,7 +3894,7 @@ namespace BDO_Localisation_AddOn
             string baseDocTWb = null;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            
+
             int rowCount = baseDocs.Rows.Count;
 
             for (int i = 0; i < rowCount; i++)
@@ -3946,7 +3954,7 @@ namespace BDO_Localisation_AddOn
                         else
                             baseDocTWb = "14";
                     }
-                    ARCreditNote.getBaseDoc( baseDoc, "13", out ARInvoiceDocEntry);
+                    ARCreditNote.getBaseDoc(baseDoc, "13", out ARInvoiceDocEntry);
                 }
 
                 if (CreditMemoEntry > 0)
@@ -3961,11 +3969,11 @@ namespace BDO_Localisation_AddOn
 
                 if (baseDocTWb == "13")
                 {
-                    wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( ARInvoiceDocEntry, "13", out errorText);
+                    wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(ARInvoiceDocEntry, "13", out errorText);
                 }
                 else
                 {
-                    wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( baseDoc, baseDocTWb, out errorText);
+                    wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(baseDoc, baseDocTWb, out errorText);
                 }
 
                 string wblNum = wblDocInfo["number"];
@@ -4012,7 +4020,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void createDocumentInvoiceCreditMemoType(  int baseDocEntry, string corrType, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, out int newDocEntry, out string errorText)
+        private static void createDocumentInvoiceCreditMemoType(int baseDocEntry, string corrType, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -4073,13 +4081,13 @@ namespace BDO_Localisation_AddOn
                     }
 
                     int ARInvoiceDocEntry = 0;
-                    ARCreditNote.getBaseDoc( baseDocEntry, "13", out ARInvoiceDocEntry);
+                    ARCreditNote.getBaseDoc(baseDocEntry, "13", out ARInvoiceDocEntry);
 
                     Dictionary<string, string> wblDocInfo = null;
                     if (BDO_CNTp == "0" && ARInvoiceDocEntry != 0) //კორექტირება                   
-                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( ARInvoiceDocEntry, "13", out errorText);
+                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(ARInvoiceDocEntry, "13", out errorText);
                     else
-                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( baseDocEntry, "14", out errorText);
+                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(baseDocEntry, "14", out errorText);
 
                     if (ARInvoiceDocEntry == 0)
                     {
@@ -4124,7 +4132,7 @@ namespace BDO_Localisation_AddOn
                             }
                             catch (Exception ex)
                             {
-                                errorText = BDOSResources.getTranslate("ErrorDocumentAddEdit") + " : " + ex.Message; 
+                                errorText = BDOSResources.getTranslate("ErrorDocumentAddEdit") + " : " + ex.Message;
                                 return;
                             }
                         }
@@ -4160,13 +4168,13 @@ namespace BDO_Localisation_AddOn
                         oGeneralData.SetProperty("U_corrType", corrType);
 
                         //კორექტირების დოკუმენტები                    
-                        List<int> connectedDocList = ARInvoice.getAllConnectedDoc( new List<int>() { ARInvoiceDocEntry }, "13", docDate, docDate, docTime, out errorText);
+                        List<int> connectedDocList = ARInvoice.getAllConnectedDoc(new List<int>() { ARInvoiceDocEntry }, "13", docDate, docDate, docTime, out errorText);
                         int rowCount = connectedDocList.Count();
 
                         //რეალიზაციის დოკუმენტის თანხა -->
                         double gTotal;
                         double lineVat;
-                        ARInvoice.getAmount( ARInvoiceDocEntry, out gTotal, out lineVat, out errorText);
+                        ARInvoice.getAmount(ARInvoiceDocEntry, out gTotal, out lineVat, out errorText);
 
                         decimal amountInvoice = Convert.ToDecimal(gTotal); //რეალიზაციის თანხას უნდა გამოაკლდეს
                         decimal amountTXInvoice = Convert.ToDecimal(lineVat);
@@ -4178,7 +4186,7 @@ namespace BDO_Localisation_AddOn
                         string corrARStatus = null;
                         string text;
 
-                        taxDocInfo = getTaxInvoiceSentDocumentInfo( ARInvoiceDocEntry, "ARInvoice", cardCode, out errorText);
+                        taxDocInfo = getTaxInvoiceSentDocumentInfo(ARInvoiceDocEntry, "ARInvoice", cardCode, out errorText);
                         if (taxDocInfo != null)
                         {
                             corrARDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]); //კორექტირების ა/ფ-ის Entry
@@ -4236,9 +4244,9 @@ namespace BDO_Localisation_AddOn
 
                                 //if (creditNoteDocEntry != baseDocEntry)
                                 //{
-                                BDO_CNTp = CommonFunctions.getValue( "ORIN", "U_BDO_CNTp", "DocEntry", creditNoteDocEntry.ToString()).ToString(); //0=კორექტირება, 1=დაბრუნება
+                                BDO_CNTp = CommonFunctions.getValue("ORIN", "U_BDO_CNTp", "DocEntry", creditNoteDocEntry.ToString()).ToString(); //0=კორექტირება, 1=დაბრუნება
 
-                                taxDocInfo = getTaxInvoiceSentDocumentInfo( creditNoteDocEntry, "ARCreditNote", cardCode, out errorText);
+                                taxDocInfo = getTaxInvoiceSentDocumentInfo(creditNoteDocEntry, "ARCreditNote", cardCode, out errorText);
                                 if (taxDocInfo != null)
                                 {
                                     corrDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]); //კორექტირების ა/ფ-ის Entry
@@ -4270,15 +4278,15 @@ namespace BDO_Localisation_AddOn
 
                                 if (BDO_CNTp == "0" && ARInvoiceDocEntry != 0) //კორექტირება
                                 {
-                                    wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( ARInvoiceDocEntry, "13", out errorText);
+                                    wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(ARInvoiceDocEntry, "13", out errorText);
                                 }
                                 else //დაბრუნება
                                 {
-                                    wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( creditNoteDocEntry, "14", out errorText);
+                                    wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(creditNoteDocEntry, "14", out errorText);
                                 }
 
                                 //თანხები ---------->
-                                ARCreditNote.getAmount( creditNoteDocEntry, out gTotal, out lineVat, out errorText);
+                                ARCreditNote.getAmount(creditNoteDocEntry, out gTotal, out lineVat, out errorText);
                                 amountInvoice = amountInvoice - Convert.ToDecimal(gTotal); //რეალიზაციის თანხას უნდა გამოაკლდეს
                                 amountTXInvoice = amountTXInvoice - Convert.ToDecimal(lineVat);
                                 //თანხები <----------
@@ -4328,7 +4336,7 @@ namespace BDO_Localisation_AddOn
                         {
                             errorText = BDOSResources.getTranslate("ErrorDocumentAddEdit") + " : " + ex.Message;
                             return;
-                        }                       
+                        }
                     }
                     oRecordSet.MoveNext();
                     break;
@@ -4346,7 +4354,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void createDocumentInvoiceARDownPaymentRequestType(  int baseDocEntry, string corrType, bool fromDoc, out int newDocEntry, out string errorText)
+        private static void createDocumentInvoiceARDownPaymentRequestType(int baseDocEntry, string corrType, bool fromDoc, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -4406,7 +4414,7 @@ namespace BDO_Localisation_AddOn
 
                     DateTime docDate = oRecordSet.Fields.Item("DocDate").Value;
 
-                    if (ARDownPaymentRequest.checkDocumentForTaxInvoice( baseDocEntry, docDate, docDate, out primary, out confirmedInvoices, out errorText) == false)
+                    if (ARDownPaymentRequest.checkDocumentForTaxInvoice(baseDocEntry, docDate, docDate, out primary, out confirmedInvoices, out errorText) == false)
                     {
                         return;
                     }
@@ -4487,11 +4495,11 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void createDocumentInvoiceARDownPaymentVAT(  int baseDocEntry, string corrType, bool fromDoc, out int newDocEntry, out string errorText)
+        private static void createDocumentInvoiceARDownPaymentVAT(int baseDocEntry, string corrType, bool fromDoc, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
-                                    
+
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             string query = @"SELECT
@@ -4608,7 +4616,7 @@ namespace BDO_Localisation_AddOn
         /// <param name="cardCode">сreditNote-ის cardCode</param>
         /// <param name="сreditNotes"></param>
         /// <param name="errorText"></param>
-        public static DataTable getCorrDocs( int docEntry, DateTime docDate, DateTime docDateForMonth, int ARInvoiceDocEntry, string cardCode, out string errorText)
+        public static DataTable getCorrDocs(int docEntry, DateTime docDate, DateTime docDateForMonth, int ARInvoiceDocEntry, string cardCode, out string errorText)
         {
             errorText = null;
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -4702,7 +4710,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -4741,7 +4749,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -4752,27 +4760,25 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    createFormItems( oForm, out errorText);
+                    createFormItems(oForm, out errorText);
                     Program.FORM_LOAD_FOR_VISIBLE = true;
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
                 {
                     if (Program.FORM_LOAD_FOR_VISIBLE == true)
                     {
-                        setSizeForm( oForm, out errorText);
+                        setSizeForm(oForm);
                         oForm.Title = BDOSResources.getTranslate("TaxInvoiceSent");
                         Program.FORM_LOAD_FOR_VISIBLE = false;
                     }
                     setVisibleFormItems(oForm, out errorText);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
                 {
-                    oForm.Freeze(true);
-                    resizeForm( oForm, out errorText);
-                    oForm.Freeze(false);
+                    resizeForm(oForm);
                 }
 
                 if ((pVal.ItemUID == "cardCodeE" || pVal.ItemUID == "wblMTR") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
@@ -4780,7 +4786,7 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
 
-                    chooseFromList( oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, pVal.Row ,out errorText);
+                    chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, pVal.Row, out errorText);
                 }
 
                 if (pVal.ItemUID == "wblMTR" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)
@@ -4796,37 +4802,25 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
                 {
                     oForm.Freeze(true);
-                    itemPressed( oForm, pVal, out errorText);
+                    itemPressed(oForm, pVal, out errorText);
                     oForm.Freeze(false);
                 }
 
-                if (pVal.ItemUID == "addMTRB" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == true)
+                if (pVal.ItemUID == "addMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
-
-                    try
-                    {
-                        int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("docEntry", 0));
-                    }
-                    catch
-                    {
-                        BubbleEvent = false;
-                    }
+                    addMatrixRow(oForm);
                 }
 
-                if (pVal.ItemUID == "addMTRB" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
+                if (pVal.ItemUID == "delMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
-                    addMatrixRow( oForm, out errorText);
-                }
-
-                if (pVal.ItemUID == "delMTRB" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
-                {
-                    delMatrixRow( oForm, out errorText);
+                    deleteMatrixRow(oForm);
+                    CalculateAmount(oForm);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
                 {
                     oForm.Freeze(true);
-                    comboSelect( oForm, pVal, out errorText);
+                    comboSelect(oForm, pVal, out errorText);
                     oForm.Freeze(false);
                 }
 
@@ -4855,7 +4849,7 @@ namespace BDO_Localisation_AddOn
 
         //--------------------------------------------RS.GE-------------------------------------------->
 
-        public static void operationRS( TaxInvoice oTaxInvoice, string operation, int docEntry, int seqNum, DateTime DeclDate, out string errorText, out string errorTextWb, out string errorTextGoods)
+        public static void operationRS(TaxInvoice oTaxInvoice, string operation, int docEntry, int seqNum, DateTime DeclDate, out string errorText, out string errorTextWb, out string errorTextGoods)
         {
             errorText = null;
             errorTextWb = null;
@@ -4906,11 +4900,11 @@ namespace BDO_Localisation_AddOn
                 {
                     if (String.IsNullOrEmpty(status) == true || status == "empty")
                     {
-                        save_invoice( oTaxInvoice, oGeneralData, out errorText, out errorTextWb, out errorTextGoods);
+                        save_invoice(oTaxInvoice, oGeneralData, out errorText, out errorTextWb, out errorTextGoods);
                     }
                     else
                     {
-                        update_invoice( oTaxInvoice, oGeneralData, null, operation, out errorText, out errorTextWb, out errorTextGoods);
+                        update_invoice(oTaxInvoice, oGeneralData, null, operation, out errorText, out errorTextWb, out errorTextGoods);
                     }
                     oGeneralService.Update(oGeneralData);
                 }
@@ -4918,11 +4912,11 @@ namespace BDO_Localisation_AddOn
                 {
                     if (String.IsNullOrEmpty(status) == true || status == "empty")
                     {
-                        k_invoice( oTaxInvoice, oGeneralData, oGeneralDataCorr, out errorText, out errorTextWb, out errorTextGoods);
+                        k_invoice(oTaxInvoice, oGeneralData, oGeneralDataCorr, out errorText, out errorTextWb, out errorTextGoods);
                     }
                     else
                     {
-                        update_invoice( oTaxInvoice, oGeneralData, oGeneralDataCorr, operation, out errorText, out errorTextWb, out errorTextGoods);
+                        update_invoice(oTaxInvoice, oGeneralData, oGeneralDataCorr, operation, out errorText, out errorTextWb, out errorTextGoods);
                     }
                     oGeneralService.Update(oGeneralData);
                 }
@@ -4933,25 +4927,25 @@ namespace BDO_Localisation_AddOn
                 {
                     if (corrInv == false)
                     {
-                        save_invoice( oTaxInvoice, oGeneralData, out errorText, out errorTextWb, out errorTextGoods);
+                        save_invoice(oTaxInvoice, oGeneralData, out errorText, out errorTextWb, out errorTextGoods);
                     }
                     else
                     {
-                        k_invoice( oTaxInvoice, oGeneralData, oGeneralDataCorr, out errorText, out errorTextWb, out errorTextGoods);
+                        k_invoice(oTaxInvoice, oGeneralData, oGeneralDataCorr, out errorText, out errorTextWb, out errorTextGoods);
                     }
                 }
                 else
                 {
-                    get_invoice( oTaxInvoice, oGeneralData, operation, out errorText);
+                    get_invoice(oTaxInvoice, oGeneralData, operation, out errorText);
                     status = oGeneralData.GetProperty("U_status");
 
                     if (corrInv == false && (status == "incompleteShipped" || status == "denied" || status == "created" || status == "shipped"))
                     {
-                        update_invoice( oTaxInvoice, oGeneralData, null, operation, out errorText, out errorTextWb, out errorTextGoods);
+                        update_invoice(oTaxInvoice, oGeneralData, null, operation, out errorText, out errorTextWb, out errorTextGoods);
                     }
                     else if (corrInv == true && (status == "incompleteShipped" || status == "denied" || status == "correctionCreated" || status == "correctionShipped"))
                     {
-                        update_invoice( oTaxInvoice, oGeneralData, oGeneralDataCorr, operation, out errorText, out errorTextWb, out errorTextGoods);
+                        update_invoice(oTaxInvoice, oGeneralData, oGeneralDataCorr, operation, out errorText, out errorTextWb, out errorTextGoods);
                     }
                 }
 
@@ -4960,10 +4954,10 @@ namespace BDO_Localisation_AddOn
 
                 if (status == "created" || status == "correctionCreated" || status == "denied")
                 {
-                    send_invoice( oTaxInvoice, oGeneralData, operation, out errorText);
+                    send_invoice(oTaxInvoice, oGeneralData, operation, out errorText);
                     if (errorText == null)
                     {
-                        get_invoice( oTaxInvoice, oGeneralData, operation, out errorText);
+                        get_invoice(oTaxInvoice, oGeneralData, operation, out errorText);
                         oGeneralService.Update(oGeneralData);
                     }
                 }
@@ -4977,7 +4971,7 @@ namespace BDO_Localisation_AddOn
             }
             else if (operation == "updateStatus") //სტატუსების განახლება
             {
-                get_invoice( oTaxInvoice, oGeneralData, operation, out errorText);
+                get_invoice(oTaxInvoice, oGeneralData, operation, out errorText);
                 if (errorText == null)
                 {
                     oGeneralService.Update(oGeneralData);
@@ -4985,7 +4979,7 @@ namespace BDO_Localisation_AddOn
             }
             else if (operation == "remove") //წაშლა
             {
-                get_invoice( oTaxInvoice, oGeneralData, operation, out errorText);
+                get_invoice(oTaxInvoice, oGeneralData, operation, out errorText);
                 status = oGeneralData.GetProperty("U_status");
 
                 if (status == "removed")
@@ -4997,7 +4991,7 @@ namespace BDO_Localisation_AddOn
 
                 if (status == "created" || status == "correctionCreated" || status == "incompleteShipped" || status == "shipped" || status == "correctionShipped" || status == "denied")
                 {
-                    remove_invoice( oTaxInvoice, oGeneralData, out errorText);
+                    remove_invoice(oTaxInvoice, oGeneralData, out errorText);
                     if (errorText == null)
                     {
                         oGeneralService.Update(oGeneralData);
@@ -5010,7 +5004,7 @@ namespace BDO_Localisation_AddOn
             }
             else if (operation == "cancel") //გაუქმება
             {
-                get_invoice( oTaxInvoice, oGeneralData, operation, out errorText);
+                get_invoice(oTaxInvoice, oGeneralData, operation, out errorText);
                 status = oGeneralData.GetProperty("U_status");
                 declNumber = oGeneralData.GetProperty("U_declNumber");
 
@@ -5023,7 +5017,7 @@ namespace BDO_Localisation_AddOn
 
                 if ((status == "confirmed" || status == "correctionConfirmed") && string.IsNullOrEmpty(declNumber) == true)
                 {
-                    cancel_invoice( oTaxInvoice, oGeneralData, out errorText);
+                    cancel_invoice(oTaxInvoice, oGeneralData, out errorText);
                     if (errorText == null)
                     {
                         oGeneralService.Update(oGeneralData);
@@ -5040,7 +5034,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (status == "confirmed" || status == "correctionConfirmed" || status == "primary" || status == "corrected")
                     {
-                        add_inv_to_decl( oTaxInvoice, oGeneralData, seqNum, DeclDate, out errorText);
+                        add_inv_to_decl(oTaxInvoice, oGeneralData, seqNum, DeclDate, out errorText);
                         if (errorText == null)
                         {
                             oGeneralService.Update(oGeneralData);
@@ -5059,7 +5053,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>შენახვა</summary>
-        private static void save_invoice( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, out string errorText, out string errorTextWb, out string errorTextGoods)
+        private static void save_invoice(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, out string errorText, out string errorTextWb, out string errorTextGoods)
         {
             errorText = null;
             errorTextWb = null;
@@ -5107,14 +5101,14 @@ namespace BDO_Localisation_AddOn
                 status = "0"; //შექმნილი
 
                 //ზედნადებების ცხრილის დამატება
-                response = save_ntos_invoices_inv_nos( oTaxInvoice, oGeneralData, null, inv_ID, out errorTextWb);
+                response = save_ntos_invoices_inv_nos(oTaxInvoice, oGeneralData, null, inv_ID, out errorTextWb);
                 if (response == false)
                 {
                     status = "9"; //არასრულად შექმნილი
                 }
 
                 //საქონლის ცხრილის დამატება
-                response = save_invoice_desc( oTaxInvoice, oGeneralData, inv_ID, out errorTextGoods);
+                response = save_invoice_desc(oTaxInvoice, oGeneralData, inv_ID, out errorTextGoods);
                 if (response == false)
                 {
                     status = "9"; //არასრულად შექმნილი
@@ -5137,7 +5131,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>შენახვა (კორექტირების ა/ფ)</summary>
-        private static void k_invoice( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, SAPbobsCOM.GeneralData oGeneralDataCorr, out string errorText, out string errorTextWb, out string errorTextGoods)
+        private static void k_invoice(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, SAPbobsCOM.GeneralData oGeneralDataCorr, out string errorText, out string errorTextWb, out string errorTextGoods)
         {
             errorText = null;
             errorTextWb = null;
@@ -5203,14 +5197,14 @@ namespace BDO_Localisation_AddOn
                 status = "4"; //შექმნილი კორექტირებული
 
                 //ზედნადებების ცხრილის დამატება
-                response = save_ntos_invoices_inv_nos( oTaxInvoice, oGeneralData, oGeneralDataCorr, inv_ID, out errorTextWb);
+                response = save_ntos_invoices_inv_nos(oTaxInvoice, oGeneralData, oGeneralDataCorr, inv_ID, out errorTextWb);
                 if (response == false)
                 {
                     status = "9"; //არასრულად შექმნილი
                 }
 
                 //საქონლის ცხრილის დამატება
-                response = save_invoice_desc( oTaxInvoice, oGeneralData, inv_ID, out errorTextGoods);
+                response = save_invoice_desc(oTaxInvoice, oGeneralData, inv_ID, out errorTextGoods);
                 if (response == false)
                 {
                     status = "9"; //არასრულად შექმნილი
@@ -5233,7 +5227,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>ზედნადებების ცხრილის დამატება (ჯერ იშლება)</summary>
-        private static bool save_ntos_invoices_inv_nos( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, SAPbobsCOM.GeneralData oGeneralDataCorr, int inv_ID, out string errorText)
+        private static bool save_ntos_invoices_inv_nos(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, SAPbobsCOM.GeneralData oGeneralDataCorr, int inv_ID, out string errorText)
         {
             errorText = null;
             try
@@ -5300,7 +5294,7 @@ namespace BDO_Localisation_AddOn
                     {
                         oDocument = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInvoices);
                         oDocument.GetByKey(baseDoc); //13
-                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( baseDoc, "13", out errorText);
+                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(baseDoc, "13", out errorText);
                     }
                     else if (baseDocT == "ARCreditNote")
                     {
@@ -5309,7 +5303,7 @@ namespace BDO_Localisation_AddOn
 
                         if (oDocument.UserFields.Fields.Item("U_BDO_CNTp").Value == "1") //დაბრუნების ტიპია
                         {
-                            wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( baseDoc, "14", out errorText);
+                            wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(baseDoc, "14", out errorText);
                         }
                     }
 
@@ -5351,7 +5345,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message; 
+                errorText = ex.Message;
                 return false;
             }
             finally
@@ -5362,7 +5356,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>საქონლის ცხრილის დამატება (ჯერ იშლება)</summary>
-        private static bool save_invoice_desc( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, int inv_ID, out string errorText)
+        private static bool save_invoice_desc(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, int inv_ID, out string errorText)
         {
             errorText = null;
             try
@@ -5413,7 +5407,7 @@ namespace BDO_Localisation_AddOn
                         }
                         if (corrInv == true)
                         {
-                            errorText = getAllConnectedDoc( docEntry, ref docEntryARInvoiceList, ref docEntryARCreditNoteList);
+                            errorText = getAllConnectedDoc(docEntry, ref docEntryARInvoiceList, ref docEntryARCreditNoteList);
                             if (string.IsNullOrEmpty(errorText) == false)
                                 return false;
                         }
@@ -5423,7 +5417,7 @@ namespace BDO_Localisation_AddOn
                             errorText = BDOSResources.getTranslate("TaxInvoiceTableEmpty");
                             return false;
                         }
-                        query = getQueryArrayGoodsARInvoiceARCreditNoteType( docEntryARInvoiceList, docEntryARCreditNoteList, inv_ID);
+                        query = getQueryArrayGoodsARInvoiceARCreditNoteType(docEntryARInvoiceList, docEntryARCreditNoteList, inv_ID);
                     }
                     else
                     {
@@ -5449,7 +5443,7 @@ namespace BDO_Localisation_AddOn
                             errorText = BDOSResources.getTranslate("TaxInvoiceTableEmpty");
                             return false;
                         }
-                        query = getQueryArrayGoodsARDownPaymentVATType( string.Join("','", docEntryARDownPaymentRequestList), inv_ID);
+                        query = getQueryArrayGoodsARDownPaymentVATType(string.Join("','", docEntryARDownPaymentRequestList), inv_ID);
                     }
 
                     SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -5473,7 +5467,7 @@ namespace BDO_Localisation_AddOn
                             g_unit = "სხვა";
                         }
                         decimal g_number = Convert.ToDecimal(oRecordSet.Fields.Item("QUANTITY").Value); //რაოდენობა
-                        decimal full_amount = Convert.ToDecimal(oRecordSet.Fields.Item("AMOUNT").Value); //თანხა დღგ-ს და აქციზის ჩათვლლით
+                        decimal full_amount = Convert.ToDecimal(oRecordSet.Fields.Item("AMOUNT").Value); //თანხა დღგ-ის და აქციზის ჩათვლლით
                         decimal drg_amount = Convert.ToDecimal(oRecordSet.Fields.Item("LineVat").Value); //დღგ
                         decimal aqcizi_amount = 0; //აქციზი
                         int akcis_id = 0; //აქციზური საქონლის კოდი  
@@ -5504,7 +5498,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message; 
+                errorText = ex.Message;
                 return false;
             }
             finally
@@ -5515,7 +5509,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>რეკვიზიტების განახლება</summary>
-        private static void get_invoice( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, string operation, out string errorText)
+        private static void get_invoice(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, string operation, out string errorText)
         {
             errorText = null;
 
@@ -5609,15 +5603,15 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string getQueryArrayGoodsARInvoiceARCreditNoteType( List<int> docEntryARInvoiceList, List<int> docEntryARCreditNoteList, int inv_ID)
+        public static string getQueryArrayGoodsARInvoiceARCreditNoteType(List<int> docEntryARInvoiceList, List<int> docEntryARCreditNoteList, int inv_ID)
         {
-            if(docEntryARInvoiceList.Count == 0)
+            if (docEntryARInvoiceList.Count == 0)
                 docEntryARInvoiceList.Add(-99);
             if (docEntryARCreditNoteList.Count == 0)
                 docEntryARCreditNoteList.Add(-99);
 
-                        //""BDO_RSUOM"".""U_RSCode"" AS ""UNIT_ID"",
-                        //     ""OITM"".""InvntryUom"" AS ""UNIT_TXT"",
+            //""BDO_RSUOM"".""U_RSCode"" AS ""UNIT_ID"",
+            //     ""OITM"".""InvntryUom"" AS ""UNIT_TXT"",
 
             //CASE WHEN ""BDO_RSUOM"".""U_RSCode"" is null THEN '99' ELSE ""BDO_RSUOM"".""U_RSCode"" END AS ""UNIT_ID"", 
             //CASE WHEN ""OITM"".""InvntryUom"" = '' THEN 'სხვა' ELSE ""OITM"".""InvntryUom"" END  AS ""UNIT_TXT"",
@@ -5779,7 +5773,7 @@ namespace BDO_Localisation_AddOn
             return query;
         }
 
-        private static string getQueryArrayGoodsARDownPaymentVATType( string baseDocEntry, int inv_ID)
+        private static string getQueryArrayGoodsARDownPaymentVATType(string baseDocEntry, int inv_ID)
         {
             string query = @"SELECT
             	 ""MNTB"".""ID"" AS ""ID"",
@@ -5844,7 +5838,7 @@ namespace BDO_Localisation_AddOn
             return query;
         }
 
-        private static string getQueryArrayGoodsARDownPaymentRequestType( string baseDocEntry, int inv_ID)
+        private static string getQueryArrayGoodsARDownPaymentRequestType(string baseDocEntry, int inv_ID)
         {
             string query = @"SELECT
             	 ""MNTB"".""ID"" AS ""ID"",
@@ -5930,7 +5924,7 @@ namespace BDO_Localisation_AddOn
                 string goods = taxDataRowRS["goods"].ToString(); //საქონლის დასახელება
                 //taxDataRowRS["g_unit"].ToString(); //საქონლის ერთეული
                 //taxDataRowRS["g_number"].ToString(); //რაოდენობა
-                //taxDataRowRS["full_amount"].ToString(); //თანხა დღგ-ს და აქციზის ჩათვლლით
+                //taxDataRowRS["full_amount"].ToString(); //თანხა დღგ-ის და აქციზის ჩათვლლით
                 //taxDataRowRS["drg_amount"].ToString(); //დღგ
                 //taxDataRowRS["aqcizi_amount"].ToString(); //აქციზი
                 //taxDataRowRS["akcis_id"].ToString(); //აქციზური საქონლის კოდი
@@ -5944,7 +5938,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //g_number = g_number + Convert.ToDouble(TaxDeclRow.ItemArray[4], CultureInfo.InvariantCulture); //რაოდენობა
-                //full_amount = full_amount + Convert.ToDouble(TaxDeclRow.ItemArray[5], CultureInfo.InvariantCulture); //თანხა დღგ-ს და აქციზის ჩათვლით
+                //full_amount = full_amount + Convert.ToDouble(TaxDeclRow.ItemArray[5], CultureInfo.InvariantCulture); //თანხა დღგ-ის და აქციზის ჩათვლით
                 //drg_amount = drg_amount + Convert.ToDouble(TaxDeclRow.ItemArray[6], CultureInfo.InvariantCulture); //დღგ
                 //aqcizi_amount = aqcizi_amount + Convert.ToDouble(TaxDeclRow.ItemArray[7], CultureInfo.InvariantCulture); //აქციზის თანხა
             }
@@ -5976,7 +5970,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>გადაგზავნა</summary>
-        private static void send_invoice( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, string operation, out string errorText)
+        private static void send_invoice(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, string operation, out string errorText)
         {
             errorText = null;
 
@@ -6025,7 +6019,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>წაშლა</summary>
-        private static void remove_invoice( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, out string errorText)
+        private static void remove_invoice(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, out string errorText)
         {
             errorText = null;
 
@@ -6066,7 +6060,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>გაუქმება</summary>
-        private static void cancel_invoice( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, out string errorText)
+        private static void cancel_invoice(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, out string errorText)
         {
             errorText = null;
 
@@ -6115,7 +6109,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>დეკლარაციაში დამატება</summary>
-        private static void add_inv_to_decl( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, int seqNum, DateTime declDate, out string errorText)
+        private static void add_inv_to_decl(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, int seqNum, DateTime declDate, out string errorText)
         {
             errorText = null;
 
@@ -6188,7 +6182,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>რეკვიზიტების განახლება (+ აბრუნებს დადასტურების თარიღს, აბრუნებს უარყოფილია თუ არა (წაშლილი ა/ფ არ ჩანს))</summary>
-        private static void get_seller_invoices( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, DataRow taxDataRow, out string errorText)
+        private static void get_seller_invoices(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, DataRow taxDataRow, out string errorText)
         {
             errorText = null;
 
@@ -6274,7 +6268,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>განახლება</summary>
-        private static void update_invoice( TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, SAPbobsCOM.GeneralData oGeneralDataCorr, string operation, out string errorText, out string errorTextWb, out string errorTextGoods)
+        private static void update_invoice(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, SAPbobsCOM.GeneralData oGeneralDataCorr, string operation, out string errorText, out string errorTextWb, out string errorTextGoods)
         {
             errorText = null;
             errorTextWb = null;
@@ -6295,14 +6289,14 @@ namespace BDO_Localisation_AddOn
                 int inv_ID = Convert.ToInt32(invID);
 
                 //ზედნადებების ცხრილის დამატება
-                bool response = save_ntos_invoices_inv_nos( oTaxInvoice, oGeneralData, oGeneralDataCorr, inv_ID, out errorTextWb);
+                bool response = save_ntos_invoices_inv_nos(oTaxInvoice, oGeneralData, oGeneralDataCorr, inv_ID, out errorTextWb);
                 if (response == false)
                 {
                     status = "9"; //არასრულად შექმნილი
                 }
 
                 //საქონლის ცხრილის დამატება
-                response = save_invoice_desc( oTaxInvoice, oGeneralData, inv_ID, out errorTextGoods);
+                response = save_invoice_desc(oTaxInvoice, oGeneralData, inv_ID, out errorTextGoods);
                 if (response == false)
                 {
                     status = "9"; //არასრულად შექმნილი
@@ -6315,7 +6309,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                    get_invoice( oTaxInvoice, oGeneralData, operation, out errorText);
+                    get_invoice(oTaxInvoice, oGeneralData, operation, out errorText);
                 }
             }
             catch (Exception ex)

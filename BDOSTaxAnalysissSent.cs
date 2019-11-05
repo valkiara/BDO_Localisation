@@ -360,7 +360,7 @@ namespace BDO_Localisation_AddOn
                             if (k_taxDataTable.Columns.Contains("full_amount"))
                             {
 
-                                TANXA_First = TANXA_First + Convert.ToDecimal(k_taxDeclRow["full_amount"], CultureInfo.InvariantCulture); //თანხა დღგ-ს და აქციზის ჩათვლით
+                                TANXA_First = TANXA_First + Convert.ToDecimal(k_taxDeclRow["full_amount"], CultureInfo.InvariantCulture); //თანხა დღგ-ის და აქციზის ჩათვლით
                             }
 
                             if (k_taxDataTable.Columns.Contains("drg_amount"))
