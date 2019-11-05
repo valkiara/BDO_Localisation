@@ -864,6 +864,9 @@ namespace BDO_Localisation_AddOn
                     //----------------------------->Inventory Transfer<-----------------------------
                     else if (oForm.TypeEx == "940")
                     {
+
+                        StockTransfer.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
+
                         cancellationTrans = true;
                         canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OWTR").GetValue("DocEntry", 0));
                     }
