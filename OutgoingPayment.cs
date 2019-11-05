@@ -544,7 +544,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("CreditAccount"));
+            formItems.Add("Caption", BDOSResources.getTranslate("CorrespondingAccount"));
             formItems.Add("LinkTo", "creditActE");
             formItems.Add("Visible", false);
 
