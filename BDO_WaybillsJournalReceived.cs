@@ -1189,7 +1189,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
                     formItems.Add("Left", left);
-                    formItems.Add("Width", 120);
+                    formItems.Add("Width", 160);
                     formItems.Add("Top", Top);
                     formItems.Add("Caption", BDOSResources.getTranslate("VehicleNumber"));
                     formItems.Add("UID", itemName);
@@ -1200,7 +1200,7 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    left = left + 128 + 10;
+                    left = left + 160 + 10;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "CarNo";
@@ -1225,25 +1225,11 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     //     UPDATE
                     itemName = "10";
                     formItems = new Dictionary<string, object>();
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
-                    formItems.Add("Left", left + 100 + 10);
+                    formItems.Add("Left", left + 100 + 5);
                     formItems.Add("Width", 65);
                     formItems.Add("Top", Top);
                     formItems.Add("Height", 19);
@@ -1352,7 +1338,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
                     formItems.Add("Left", left);
-                    formItems.Add("Width", 65);
+                    formItems.Add("Width", 100);
                     formItems.Add("Top", Top);
                     formItems.Add("Caption", BDOSResources.getTranslate("WaybillType"));
                     formItems.Add("UID", itemName);
@@ -1396,8 +1382,7 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
                    
-                    //left = left + 128+ 10;
-                    left = 1000;
+                    left = oForm.Items.Item("10").Left;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "GdsRcpt";
@@ -1424,11 +1409,6 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-
-
-
-
-
 
                     //რიგი3
                     Top = Top + 20;
@@ -1570,7 +1550,7 @@ namespace BDO_Localisation_AddOn
 
                     //პროექტი
 
-                    left = 1000;
+                    left = oForm.Items.Item("10").Left;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "PrjCodeST";
@@ -1757,22 +1737,9 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-
-                    //მიმაგრების სტატუსი
-
-                    //ზედნადების ტიპი
-                    left = left + 95 + 10;
-
-
-                    //ზედნადების ტიპი
-
+                    left = oForm.Items.Item("10").Left;
 
                     //საწყობი
-
-                    left = 1000;
-
-                    //left = left + 128+ 10;
-
                     formItems = new Dictionary<string, object>();
                     itemName = "WhsST";
                     formItems.Add("Size", 20);
@@ -1819,8 +1786,6 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-
-                    //საწყობი
 
                     //რიგი5
                     Top = Top + 20;
