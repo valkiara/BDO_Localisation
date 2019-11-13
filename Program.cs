@@ -1755,16 +1755,16 @@ namespace BDO_Localisation_AddOn
                     ChartOfAccounts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Landed Costs<-----------------------------
-                else if (pVal.FormTypeEx == "369")
-                {
-                    ExchangeRateDiffs.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
+                //----------------------------->Exchange Rate Differences<-----------------------------
+                //else if (pVal.FormTypeEx == "369")
+                //{
+                //    ExchangeRateDiffs.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                //}
 
-                else if (pVal.FormTypeEx == "370")
-                {
-                    ExchangeRateDiffs.uiApp_ItemEvent1(FormUID, ref pVal, out BubbleEvent);
-                }
+                //else if (pVal.FormTypeEx == "370")
+                //{
+                //    ExchangeRateDiffs.uiApp_ItemEvent1(FormUID, ref pVal, out BubbleEvent);
+                //}
 
                 //----------------------------->Landed Costs<-----------------------------
                 else if (pVal.FormTypeEx == "992")

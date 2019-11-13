@@ -955,23 +955,27 @@ namespace BDO_Localisation_AddOn
 
             Dictionary<string, object> oDictionary = new Dictionary<string, object>();
             DateTime DocDate = new DateTime();
+             
+            string canceled;
 
             if (oForm != null)
             {
-                SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item(0);
-                if (DocDBSourcePAYR.GetValue("DocType", 0).Trim() == "A")
+                SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("ORCT");
+                canceled = oDBDataSource.GetValue("CANCELED", 0).Trim();
+                
+                if (oDBDataSource.GetValue("DocType", 0).Trim() == "A")
                 {
-                    oDictionary.Add("CANCELED", DocDBSourcePAYR.GetValue("CANCELED", 0).Trim());
-                    oDictionary.Add("DocEntry", DocDBSourcePAYR.GetValue("DocEntry", 0).Trim());
-                    oDictionary.Add("DocNum", DocDBSourcePAYR.GetValue("DocNum", 0).Trim());
-                    oDictionary.Add("DocRate", DocDBSourcePAYR.GetValue("DocRate", 0).Trim());
-                    oDictionary.Add("DocCurr", DocDBSourcePAYR.GetValue("DocCurr", 0).Trim());
-                    oDictionary.Add("DocDate", DocDBSourcePAYR.GetValue("DocDate", 0));
+                    oDictionary.Add("CANCELED", canceled);
+                    oDictionary.Add("DocEntry", oDBDataSource.GetValue("DocEntry", 0).Trim());
+                    oDictionary.Add("DocNum", oDBDataSource.GetValue("DocNum", 0).Trim());
+                    oDictionary.Add("DocRate", oDBDataSource.GetValue("DocRate", 0).Trim());
+                    oDictionary.Add("DocCurr", oDBDataSource.GetValue("DocCurr", 0).Trim());
+                    oDictionary.Add("DocDate", oDBDataSource.GetValue("DocDate", 0));
                     oDictionary.Add("CardCode", oForm.DataSources.DBDataSources.Item("RCT4").GetValue("AcctCode", 0).Trim());
-                    oDictionary.Add("TrsfrSum", DocDBSourcePAYR.GetValue("TrsfrSum", 0));
-                    oDictionary.Add("U_outDoc", DocDBSourcePAYR.GetValue("U_outDoc", 0).Trim());
-                    oDictionary.Add("DocType", DocDBSourcePAYR.GetValue("DocType", 0).Trim());
-                    oDictionary.Add("PrjCode", DocDBSourcePAYR.GetValue("PrjCode", 0).Trim());
+                    oDictionary.Add("TrsfrSum", oDBDataSource.GetValue("TrsfrSum", 0));
+                    oDictionary.Add("U_outDoc", oDBDataSource.GetValue("U_outDoc", 0).Trim());
+                    oDictionary.Add("DocType", oDBDataSource.GetValue("DocType", 0).Trim());
+                    oDictionary.Add("PrjCode", oDBDataSource.GetValue("PrjCode", 0).Trim());
                     DocDate = DateTime.ParseExact(oDictionary["DocDate"].ToString(), "yyyyMMdd", CultureInfo.InvariantCulture);
                 }
             }
@@ -981,9 +985,10 @@ namespace BDO_Localisation_AddOn
                 oIncomingPayment = (SAPbobsCOM.Payments)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oIncomingPayments);
                 if (oIncomingPayment.GetByKey(Convert.ToInt32(DocEntry)))
                 {
+                    canceled = oIncomingPayment.Cancelled == SAPbobsCOM.BoYesNoEnum.tNO ? "N" : "Y";
                     if (oIncomingPayment.DocType == SAPbobsCOM.BoRcptTypes.rAccount)
                     {
-                        oDictionary.Add("CANCELED", oIncomingPayment.Cancelled == SAPbobsCOM.BoYesNoEnum.tNO ? "N" : "Y");
+                        oDictionary.Add("CANCELED", canceled);
                         oDictionary.Add("DocEntry", oIncomingPayment.DocEntry);
                         oDictionary.Add("DocNum", oIncomingPayment.DocNum);
                         oDictionary.Add("DocRate", oIncomingPayment.DocRate);
@@ -1000,23 +1005,20 @@ namespace BDO_Localisation_AddOn
                 else
                 {
                     Marshal.FinalReleaseComObject(oIncomingPayment);
-                    oIncomingPayment = null;
                     bubbleEvent = false;
                     return;
                 }
                 Marshal.FinalReleaseComObject(oIncomingPayment);
-                oIncomingPayment = null;
             }
 
-            string canceled = oDictionary["CANCELED"].ToString();
-            DocEntry = oDictionary["DocEntry"].ToString();
-            string DocCurrency = oDictionary["DocCurr"].ToString();
-            decimal DocRate = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits( oDictionary["DocRate"].ToString()));
-            string DocNum = oDictionary["DocNum"].ToString();
-
             //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
-            if (canceled == "N")
-            {
+            if (canceled == "N" && oDictionary.Count() > 0)
+            {                
+                DocEntry = oDictionary["DocEntry"].ToString();
+                string DocCurrency = oDictionary["DocCurr"].ToString();
+                decimal DocRate = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oDictionary["DocRate"].ToString()));
+                string DocNum = oDictionary["DocNum"].ToString();
+
                 CommonFunctions.StartTransaction();
 
                 Program.JrnLinesGlobal = new DataTable();
