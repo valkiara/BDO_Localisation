@@ -1246,7 +1246,7 @@
     <value>სატრანსპორტო საშუალების ცნობარი</value>
   </data>
   <data name="VehicleNumber" xml:space="preserve">
-    <value>სატრანსპორტო საშუალების ნომერი</value>
+    <value>სატრანს. საშუალების ნომერი</value>
   </data>
   <data name="Vehicles" xml:space="preserve">
     <value>ავტომანქანები</value>
