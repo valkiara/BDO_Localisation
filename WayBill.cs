@@ -447,6 +447,21 @@ namespace BDO_Localisation_AddOn
             return waybill_units_map;
         }
 
+        public string get_waybill_unit_name_by_code(string unit_code)
+        {
+            try
+            {
+                string errorText;
+                Dictionary<string, string> RSUnits = get_waybill_units(out errorText);
+                KeyValuePair<string, string> temp = RSUnits.Where(x => x.Key.Equals(unit_code)).FirstOrDefault(); //Contains
+                return temp.Value;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         /// <summary>ტრანსპორტირების ტიპის გამოტანა</summary>
         /// <param name="errorText"></param>
         /// <returns>Dictionary, ან NULL</returns>
