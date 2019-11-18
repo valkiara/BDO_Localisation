@@ -2487,81 +2487,56 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string WhsCode = oDataTableSelectedObjects.GetValue("WhsCode", 0);
 
-                        SAPbouiCOM.EditText whsEdit = oForm.Items.Item("Whs").Specific;
-                        whsEdit.Value = WhsCode;
+                        LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("Whs").Specific.Value = WhsCode);
                     }
 
-                    if (oCFLEvento.ChooseFromListUID == "CFLItmCd")
+                    else if (oCFLEvento.ChooseFromListUID == "CFLItmCd")
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string ItemCode = oDataTableSelectedObjects.GetValue("ItemCode", 0);
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBGdMatrix").Specific));
-
-                        oMatrix.Columns.Item("ItemCode").Cells.Item(oCFLEvento.Row).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                        oForm.Freeze(false);
-                        SAPbouiCOM.EditText ItemCodeEdit = oMatrix.Columns.Item("ItemCode").Cells.Item(oCFLEvento.Row).Specific;
-
-                        try
-                        {
-                            ItemCodeEdit.Value = ItemCode;
-                        }
-                        catch
-                        {
-                            oMatrix.Columns.Item("ItemName").Cells.Item(oCFLEvento.Row).Specific.value = oDataTableSelectedObjects.GetValue("ItemName", 0);
-                        }
-
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("ItemCode").Cells.Item(oCFLEvento.Row).Specific.Value = ItemCode);
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("ItemName").Cells.Item(oCFLEvento.Row).Specific.Value = oDataTableSelectedObjects.GetValue("ItemName", 0));
                     }
 
-                    if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
+                    else if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string UoMCode = oDataTableSelectedObjects.GetValue("UomCode", 0);
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBGdMatrix").Specific));
-
-                        oMatrix.Columns.Item("WBUntCode").Cells.Item(oCFLEvento.Row).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                        oForm.Freeze(false);
-                        SAPbouiCOM.EditText UoMCodeEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("WBUntCode").Cells.Item(oCFLEvento.Row).Specific;
-
-                        UoMCodeEdit.Value = UoMCode;
-
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBUntCode").Cells.Item(oCFLEvento.Row).Specific.Value = UoMCode);
                     }
 
-                    if (oCFLEvento.ChooseFromListUID == "Project_CFLA")
+                    else if (oCFLEvento.ChooseFromListUID == "Project_CFLA")
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string PrjCode = oDataTableSelectedObjects.GetValue("PrjCode", 0);
 
-                        SAPbouiCOM.EditText PrjEdit = oForm.Items.Item("PrjCode").Specific;
-                        PrjEdit.Value = PrjCode;
+                        LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjCode").Specific.Value = PrjCode);
                     }
 
-
-                    if (oCFLEvento.ChooseFromListUID == "WBBlankAgr_CFLA")
+                    else if (oCFLEvento.ChooseFromListUID == "WBBlankAgr_CFLA")
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string WBBPCode = oDataTableSelectedObjects.GetValue("AbsID", 0).ToString();
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBMatrix").Specific));
-
-                        oMatrix.Columns.Item("WBBlankAgr").Cells.Item(oCFLEvento.Row).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                        oForm.Freeze(false);
-                        SAPbouiCOM.EditText WBBlankAgr = (SAPbouiCOM.EditText)oMatrix.Columns.Item("WBBlankAgr").Cells.Item(oCFLEvento.Row).Specific;
-                        WBBlankAgr.Value = WBBPCode;
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBBlankAgr").Cells.Item(oCFLEvento.Row).Specific.Value = WBBPCode);
                     }
 
-                    if (oCFLEvento.ChooseFromListUID == "WBProject_CFLA")
+                    else if (oCFLEvento.ChooseFromListUID == "WBProject_CFLA")
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string WBPrjCode = oDataTableSelectedObjects.GetValue("PrjCode", 0);
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBGdMatrix").Specific));
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBPrjCode").Cells.Item(oCFLEvento.Row).Specific.Value = WBPrjCode);
 
-                        oMatrix.Columns.Item("WBPrjCode").Cells.Item(oCFLEvento.Row).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                        oForm.Freeze(false);
-                        SAPbouiCOM.EditText WBPrjCodeEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("WBPrjCode").Cells.Item(oCFLEvento.Row).Specific;
-
+                        //oMatrix.Columns.Item("WBPrjCode").Cells.Item(oCFLEvento.Row).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                        //oForm.Freeze(false);
+                        //SAPbouiCOM.EditText WBPrjCodeEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("WBPrjCode").Cells.Item(oCFLEvento.Row).Specific;
 
                         string[][] array_GOODS = null;
 
@@ -2569,101 +2544,78 @@ namespace BDO_Localisation_AddOn
 
                         //DataRow wbLinesRow = null;
 
-                        try
+                        //try
+                        //{
+                        //    WBPrjCodeEdit.Value = WBPrjCode;
+                        //}
+                        //catch
+                        //{
+                        for (int i = 1; i <= oMatrix.RowCount; i++)
                         {
-                            WBPrjCodeEdit.Value = WBPrjCode;
-                        }
-                        catch
-                        {
+                            //    wbLinesRow = wbLines.Rows.Add();
 
-                            for (int i = 1; i <= oMatrix.RowCount; i++)
-                            {
+                            //    wbLinesRow["WBPrjCode"] = oMatrix.Columns.Item("WBPrjCode").Cells.Item(i).Specific;
 
-                                //    wbLinesRow = wbLines.Rows.Add();
+                            array_GOODS[i - 1] = new string[14];
+                            //array_GOODS[i][0] = oMatrix.Columns.Item("WBNo").Cells.Item(i).Specific;
 
-                                //    wbLinesRow["WBPrjCode"] = oMatrix.Columns.Item("WBPrjCode").Cells.Item(i).Specific;
+                            array_GOODS[i - 1][1] = oMatrix.GetCellSpecific("WBItmName", i).Value;
+                            array_GOODS[i - 1][2] = oMatrix.GetCellSpecific("WBUntCdRS", i).Value;
+                            array_GOODS[i - 1][3] = oMatrix.GetCellSpecific("WBQty", i).Value;
+                            array_GOODS[i - 1][4] = oMatrix.GetCellSpecific("WBPrice", i).Value;
+                            array_GOODS[i - 1][5] = oMatrix.GetCellSpecific("WBSum", i).Value;
+                            array_GOODS[i - 1][6] = oMatrix.GetCellSpecific("WBBarcode", i).Value;
+                            array_GOODS[i - 1][8] = oMatrix.GetCellSpecific("RSVatCode", i).Value;
+                            array_GOODS[i - 1][12] = oMatrix.GetCellSpecific("WBPrjCode", i).Value;
+                            array_GOODS[i - 1][13] = oMatrix.GetCellSpecific("WbUntNmRS", i).Value;
 
+                            //    array_GOODS[i][0] = (itemNode.SelectSingleNode("ID") == null) ? "" : itemNode.SelectSingleNode("ID").InnerText;
+                            //    array_GOODS[i][1] = (itemNode.SelectSingleNode("W_NAME") == null) ? "" : itemNode.SelectSingleNode("W_NAME").InnerText;
+                            //    array_GOODS[i][2] = (itemNode.SelectSingleNode("UNIT_ID") == null) ? "" : itemNode.SelectSingleNode("UNIT_ID").InnerText;
+                            //    array_GOODS[i][3] = (itemNode.SelectSingleNode("QUANTITY") == null) ? "" : itemNode.SelectSingleNode("QUANTITY").InnerText;
+                            //    array_GOODS[i][4] = (itemNode.SelectSingleNode("PRICE") == null) ? "" : itemNode.SelectSingleNode("PRICE").InnerText;
+                            //    array_GOODS[i][5] = (itemNode.SelectSingleNode("AMOUNT") == null) ? "" : itemNode.SelectSingleNode("AMOUNT").InnerText;
+                            //    array_GOODS[i][6] = (itemNode.SelectSingleNode("BAR_CODE") == null) ? "" : itemNode.SelectSingleNode("BAR_CODE").InnerText;
+                            //    array_GOODS[i][7] = (itemNode.SelectSingleNode("A_ID") == null) ? "" : itemNode.SelectSingleNode("A_ID").InnerText;
+                            //    array_GOODS[i][8] = (itemNode.SelectSingleNode("VAT_TYPE") == null) ? "" : itemNode.SelectSingleNode("VAT_TYPE").InnerText;
+                            //    array_GOODS[i][9] = (itemNode.SelectSingleNode("QUANTITY_EXT") == null) ? "" : itemNode.SelectSingleNode("QUANTITY_EXT").InnerText;
+                            //    array_GOODS[i][10] = (itemNode.SelectSingleNode("STATUS") == null) ? "" : itemNode.SelectSingleNode("STATUS").InnerText;
+                            //    array_GOODS[i][11] = (itemNode.SelectSingleNode("QUANTITY_F") == null) ? "" : itemNode.SelectSingleNode("QUANTITY_F").InnerText;
 
-                                array_GOODS[i - 1] = new string[14];
-                                //array_GOODS[i][0] = oMatrix.Columns.Item("WBNo").Cells.Item(i).Specific;
-
-                                array_GOODS[i - 1][1] = oMatrix.GetCellSpecific("WBItmName", i).Value;
-                                array_GOODS[i - 1][2] = oMatrix.GetCellSpecific("WBUntCdRS", i).Value;
-                                array_GOODS[i - 1][3] = oMatrix.GetCellSpecific("WBQty", i).Value;
-                                array_GOODS[i - 1][4] = oMatrix.GetCellSpecific("WBPrice", i).Value;
-                                array_GOODS[i - 1][5] = oMatrix.GetCellSpecific("WBSum", i).Value;
-                                array_GOODS[i - 1][6] = oMatrix.GetCellSpecific("WBBarcode", i).Value;
-                                array_GOODS[i - 1][8] = oMatrix.GetCellSpecific("RSVatCode", i).Value;
-                                array_GOODS[i - 1][12] = oMatrix.GetCellSpecific("WBPrjCode", i).Value;
-                                array_GOODS[i - 1][13] = oMatrix.GetCellSpecific("WbUntNmRS", i).Value;
-
-                                //    array_GOODS[i][0] = (itemNode.SelectSingleNode("ID") == null) ? "" : itemNode.SelectSingleNode("ID").InnerText;
-                                //    array_GOODS[i][1] = (itemNode.SelectSingleNode("W_NAME") == null) ? "" : itemNode.SelectSingleNode("W_NAME").InnerText;
-                                //    array_GOODS[i][2] = (itemNode.SelectSingleNode("UNIT_ID") == null) ? "" : itemNode.SelectSingleNode("UNIT_ID").InnerText;
-                                //    array_GOODS[i][3] = (itemNode.SelectSingleNode("QUANTITY") == null) ? "" : itemNode.SelectSingleNode("QUANTITY").InnerText;
-                                //    array_GOODS[i][4] = (itemNode.SelectSingleNode("PRICE") == null) ? "" : itemNode.SelectSingleNode("PRICE").InnerText;
-                                //    array_GOODS[i][5] = (itemNode.SelectSingleNode("AMOUNT") == null) ? "" : itemNode.SelectSingleNode("AMOUNT").InnerText;
-                                //    array_GOODS[i][6] = (itemNode.SelectSingleNode("BAR_CODE") == null) ? "" : itemNode.SelectSingleNode("BAR_CODE").InnerText;
-                                //    array_GOODS[i][7] = (itemNode.SelectSingleNode("A_ID") == null) ? "" : itemNode.SelectSingleNode("A_ID").InnerText;
-                                //    array_GOODS[i][8] = (itemNode.SelectSingleNode("VAT_TYPE") == null) ? "" : itemNode.SelectSingleNode("VAT_TYPE").InnerText;
-                                //    array_GOODS[i][9] = (itemNode.SelectSingleNode("QUANTITY_EXT") == null) ? "" : itemNode.SelectSingleNode("QUANTITY_EXT").InnerText;
-                                //    array_GOODS[i][10] = (itemNode.SelectSingleNode("STATUS") == null) ? "" : itemNode.SelectSingleNode("STATUS").InnerText;
-                                //    array_GOODS[i][11] = (itemNode.SelectSingleNode("QUANTITY_F") == null) ? "" : itemNode.SelectSingleNode("QUANTITY_F").InnerText;
-
-                            }
-
-                            if (oMatrix.RowCount > 0)
-                            {
-                                string[][] wbTempTable = null;
-
-                                if (wbTempLines.TryGetValue(oMatrix.GetCellSpecific("WBNo", 1).Value, out wbTempTable))
-                                {
-                                    wbTempLines[oMatrix.GetCellSpecific("WBNo", 1).Value] = array_GOODS;
-                                }
-                                else
-                                {
-                                    wbTempLines.Add(oMatrix.GetCellSpecific("WBNo", 1).Value, array_GOODS);
-                                }
-
-                            }
                         }
 
+                        if (oMatrix.RowCount > 0)
+                        {
+                            string[][] wbTempTable = null;
 
+                            if (wbTempLines.TryGetValue(oMatrix.GetCellSpecific("WBNo", 1).Value, out wbTempTable))
+                            {
+                                wbTempLines[oMatrix.GetCellSpecific("WBNo", 1).Value] = array_GOODS;
+                            }
+                            else
+                            {
+                                wbTempLines.Add(oMatrix.GetCellSpecific("WBNo", 1).Value, array_GOODS);
+                            }
+                        }
                     }
 
-                }
-                catch (Exception ex)
-                {
-                    int errCode;
-                    string errMsg;
-
-                    Program.oCompany.GetLastError(out errCode, out errMsg);
-                    errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
-                }
-                finally
-                {
-                    GC.Collect();
-                }
-
-                try
-                {
-                    if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
+                    else if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects;
                         oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string UoMName = oDataTableSelectedObjects.GetValue("UomName", 0);
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBGdMatrix").Specific));
-
-                        oMatrix.Columns.Item("WBUntName").Cells.Item(oCFLEvento.Row).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                        oForm.Freeze(false);
-                        SAPbouiCOM.EditText UoMNameEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item("WBUntName").Cells.Item(oCFLEvento.Row).Specific;
-
-                        UoMNameEdit.Value = UoMName;
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBUntName").Cells.Item(oCFLEvento.Row).Specific.Value = UoMName);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    GC.Collect();
                 }
             }
             else
@@ -2684,7 +2636,6 @@ namespace BDO_Localisation_AddOn
                     oCon.CondVal = BusinessPartners.GetCardCodeByTin(TIN, "S", out cardName);
                     oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
 
-
                     oCon = oCons.Add();
                     oCon.Alias = "Method";
                     oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
@@ -2697,11 +2648,10 @@ namespace BDO_Localisation_AddOn
                     oCon.CondVal = "A";
                     oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_NONE;
 
-
                     oCFL.SetConditions(oCons);
-
                 }
-                if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
+
+                else if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
                 {
                     string sCFL_ID = oCFLEvento.ChooseFromListUID;
                     SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
@@ -2741,6 +2691,7 @@ namespace BDO_Localisation_AddOn
                         errorText = ex.Message;
                     }
                 }
+
                 else if (oCFLEvento.ChooseFromListUID == "CFLItmCd")
                 {
                     string sCFL_ID = oCFLEvento.ChooseFromListUID;

@@ -10,7 +10,7 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDOSWaybillsAnalysisReceived
     {
-        public static void createForm(  out string errorText)
+        public static void createForm(out string errorText)
         {
             errorText = null;
 
@@ -26,7 +26,7 @@ namespace BDO_Localisation_AddOn
 
             SAPbouiCOM.Form oForm;
             bool newForm;
-            bool formExist = FormsB1.createForm( formProperties, out oForm, out newForm, out errorText);
+            bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
 
             if (errorText != null)
             {
@@ -37,7 +37,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (newForm == true)
                 {
-                    Dictionary<string, object> formItems = null;
+                    Dictionary<string, object> formItems;
 
                     oForm.DataSources.DataTables.Add("WbTable");
 
@@ -83,34 +83,40 @@ namespace BDO_Localisation_AddOn
                     //დეტალური როცა არის
                     oDataTable.Columns.Add("BaseDType", SAPbouiCOM.BoFieldsType.ft_Text, 50);//32----
 
+                    string itemName;
 
-                    string itemName = "";
-                    int left = 6;
-                    int Top = 5;
-                    //int leftSC = 400;
-                    //List<string> listValidValues;
+                    int left_s = 6;
+                    int left_e = 110;
+                    int height = 15;
+                    int top = 6;
+                    int width_s = 100;
+                    int width_e = 140;
+
+                    int left_s2 = 290;
+                    int left_e2 = left_s2 + 104;
+                    int top2 = 6;
 
                     formItems = new Dictionary<string, object>();
-                    itemName = "DateFrom";
-                    formItems.Add("Size", 20);
+                    itemName = "PeriodS"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 50);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Caption", BDOSResources.getTranslate("StartDate"));
+                    formItems.Add("Left", left_s);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
+                    formItems.Add("Caption", BDOSResources.getTranslate("Period"));
+                    formItems.Add("LinkTo", "DateFromE");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
-                    left = left + 50 + 10;
-
                     string startOfMonthStr = DateTime.Today.ToString("yyyyMMdd");
+
                     formItems = new Dictionary<string, object>();
-                    itemName = "StartDate";
+                    itemName = "DateFromE";
                     formItems.Add("isDataSource", true);
                     formItems.Add("DataSource", "UserDataSources");
                     formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_DATE);
@@ -120,107 +126,64 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("TableName", "");
                     formItems.Add("Alias", itemName);
                     formItems.Add("Bound", true);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 100);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 19);
+                    formItems.Add("Left", left_e);
+                    formItems.Add("Width", width_e / 2);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("ValueEx", startOfMonthStr);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
-
-                    left = left + 100 + 10;
-
-                    itemName = "dateTo";
-                    formItems = new Dictionary<string, object>();
-                    formItems.Add("Size", 20);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 50);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Caption", "To");
-                    formItems.Add("UID", itemName);
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
-
-                    left = left + 50 + 10;
 
                     string endOfMonthStr = DateTime.Today.ToString("yyyyMMdd");
+
                     formItems = new Dictionary<string, object>();
-                    itemName = "EndDate";
+                    itemName = "DateToE";
                     formItems.Add("isDataSource", true);
-                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_DATE);
                     formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_DATE);
                     formItems.Add("Length", 1);
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     formItems.Add("TableName", "");
                     formItems.Add("Alias", itemName);
                     formItems.Add("Bound", true);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 100);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 19);
+                    formItems.Add("Left", left_e + width_e / 2);
+                    formItems.Add("Width", width_e / 2);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("ValueEx", endOfMonthStr);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
-                    left = left + 100 + 10;
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "WbFillTb";
-                    formItems.Add("Caption", BDOSResources.getTranslate("Fill"));
-                    formItems.Add("Size", 20);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 100);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 19);
-                    formItems.Add("UID", itemName);
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
-
-                    //რიგი 2
-                    Top = Top + 20;
-                    left = 6;
+                    top += height + 1;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "WBDocTpSt";
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 50);
-                    formItems.Add("Top", Top);
+                    formItems.Add("Left", left_s);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top);
                     formItems.Add("Caption", BDOSResources.getTranslate("Type"));
                     formItems.Add("UID", itemName);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
-                    left = left + 50 + 10;
-
-                    Dictionary<string, string> listValidValuesDict = null;
-
+                    Dictionary<string, string> listValidValuesDict;
                     listValidValuesDict = new Dictionary<string, string>();
                     listValidValuesDict.Add("0", BDOSResources.getTranslate("WithoutFilter"));
                     listValidValuesDict.Add("1", BDOSResources.getTranslate("InternalShipment"));
@@ -240,127 +203,41 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
                     formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
                     formItems.Add("DisplayDesc", true);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 100);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 19);
+                    formItems.Add("Left", left_e);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("ValidValues", listValidValuesDict);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
-
-                    left = left + 100 + 10;
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "WBStatusSt";
-                    formItems.Add("Size", 20);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 50);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Caption", BDOSResources.getTranslate("Status"));
-                    formItems.Add("UID", itemName);
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
-
-                    left = left + 50 + 10;
-
-                    listValidValuesDict = new Dictionary<string, string>();
-                    listValidValuesDict.Add("-99", BDOSResources.getTranslate("WithoutFilter"));
-                    listValidValuesDict.Add("-2", BDOSResources.getTranslate("Canceled"));
-                    listValidValuesDict.Add("-1", BDOSResources.getTranslate("deleted"));
-                    listValidValuesDict.Add("0", BDOSResources.getTranslate("Saved"));
-                    listValidValuesDict.Add("1", BDOSResources.getTranslate("Active"));
-                    listValidValuesDict.Add("2", BDOSResources.getTranslate("finished"));
-                    listValidValuesDict.Add("7", BDOSResources.getTranslate("SentToTransporter"));
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "WBStatus";
-                    formItems.Add("Size", 20);
-                    formItems.Add("isDataSource", true);
-                    formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("Length", 30);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
-                    formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
-                    formItems.Add("DisplayDesc", true);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 100);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 19);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("ValidValues", listValidValuesDict);
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
-
-                    //გაფერადება
-                    left = left + 100 + 10;
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "StGrColor";
-                    formItems.Add("isDataSource", true);
-                    formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("TableName", "");
-                    formItems.Add("Alias", itemName);
-                    formItems.Add("Bound", true);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
-                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("Length", 1);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 150);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 14);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("SetGridColor"));
-                    formItems.Add("ValOff", "N");
-                    formItems.Add("ValOn", "Y");
-                    formItems.Add("DisplayDesc", true);
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
-
-                    //რიგი 3
-                    Top = Top + 20;
-                    left = 6;
+                    top += height + 1;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "ClientIDSt";
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 50);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Caption", BDOSResources.getTranslate("BP"));
+                    formItems.Add("Left", left_s);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top);
+                    formItems.Add("Caption", BDOSResources.getTranslate("CardCode"));
                     formItems.Add("UID", itemName);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
-
-                    left = left + 50 + 10;
 
                     bool multiSelection = false;
                     string objectType = "2"; //SAPbouiCOM.BoLinkedObject.lf_BusinessPartner, Business Partner object 
                     string uniqueID_lf_BusinessPartnerCFL = "BusinessPartner_CFL";
-                    FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL);
+                    FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL);
 
                     //პირობის დადება ბიზნესპარტნიორის არჩევის სიაზე
                     SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(uniqueID_lf_BusinessPartnerCFL);
@@ -382,10 +259,10 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("TableName", "");
                     formItems.Add("Alias", itemName);
                     formItems.Add("Bound", true);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 100);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 19);
+                    formItems.Add("Left", left_e);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("ChooseFromListUID", uniqueID_lf_BusinessPartnerCFL);
                     formItems.Add("ChooseFromListAlias", "CardCode");
@@ -393,20 +270,111 @@ namespace BDO_Localisation_AddOn
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
-                    //compare status
-                    left = left + 100 + 10;
+                    top += height + 10;
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "WbFillTb";
+                    formItems.Add("Caption", BDOSResources.getTranslate("Fill"));
+                    formItems.Add("Size", 20);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+                    formItems.Add("Left", left_s);
+                    formItems.Add("Width", 100);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "WBStatusSt";
+                    formItems.Add("Size", 20);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    formItems.Add("Left", left_s2);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top2);
+                    formItems.Add("Caption", BDOSResources.getTranslate("Status"));
+                    formItems.Add("UID", itemName);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    listValidValuesDict = new Dictionary<string, string>();
+                    listValidValuesDict.Add("-99", BDOSResources.getTranslate("WithoutFilter"));
+                    listValidValuesDict.Add("-2", BDOSResources.getTranslate("Canceled"));
+                    listValidValuesDict.Add("-1", BDOSResources.getTranslate("deleted"));
+                    listValidValuesDict.Add("0", BDOSResources.getTranslate("Saved"));
+                    listValidValuesDict.Add("1", BDOSResources.getTranslate("Active"));
+                    listValidValuesDict.Add("2", BDOSResources.getTranslate("finished"));
+                    listValidValuesDict.Add("7", BDOSResources.getTranslate("SentToTransporter"));
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "WBStatus";
+                    formItems.Add("Size", 20);
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 30);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+                    formItems.Add("DisplayDesc", true);
+                    formItems.Add("Left", left_e2);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top2);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("ValidValues", listValidValuesDict);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "StGrColor";
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("TableName", "");
+                    formItems.Add("Alias", itemName);
+                    formItems.Add("Bound", true);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 1);
+                    formItems.Add("Left", left_e2 + width_e + 20);
+                    formItems.Add("Width", width_s * 2);
+                    formItems.Add("Top", top2);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("Caption", BDOSResources.getTranslate("SetGridColor"));
+                    formItems.Add("ValOff", "N");
+                    formItems.Add("ValOn", "Y");
+                    formItems.Add("DisplayDesc", true);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    top2 += height + 1;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "CompStatSt";
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 50);
-                    formItems.Add("Top", Top);
-                    //formItems.Add("Height", 38);
+                    formItems.Add("Left", left_s2);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top2);
                     formItems.Add("Caption", BDOSResources.getTranslate("CompSt"));
                     formItems.Add("Description", BDOSResources.getTranslate("CompareStatus"));
                     formItems.Add("UID", itemName);
@@ -414,10 +382,8 @@ namespace BDO_Localisation_AddOn
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
-
-                    left = left + 50 + 10;
 
                     listValidValuesDict = new Dictionary<string, string>();
                     listValidValuesDict.Add("0", BDOSResources.getTranslate("WithoutFilter"));
@@ -439,40 +405,36 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
                     formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
                     formItems.Add("DisplayDesc", true);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 100);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 19);
+                    formItems.Add("Left", left_e2);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top2);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("ValidValues", listValidValuesDict);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
-
-                    //ვარიანტი
-                    left = left + 100 + 10;
+                    top2 += height + 1;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "OptionSt";
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 50);
-                    formItems.Add("Top", Top);
+                    formItems.Add("Left", left_s2);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top2);
                     formItems.Add("Caption", BDOSResources.getTranslate("Option"));
                     formItems.Add("UID", itemName);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
-
-                    left = left + 50 + 10;
 
                     listValidValuesDict = new Dictionary<string, string>();
                     listValidValuesDict.Add("0", BDOSResources.getTranslate("Details"));
@@ -488,17 +450,17 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
                     formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
                     formItems.Add("DisplayDesc", true);
-                    formItems.Add("Left", left);
-                    formItems.Add("Width", 100);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 19);
+                    formItems.Add("Left", left_e2);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top2);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("ValidValues", listValidValuesDict);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
                     SAPbouiCOM.ComboBox oComboBox_WBDocTp = (SAPbouiCOM.ComboBox)oForm.Items.Item("WBDocTp").Specific;
@@ -514,27 +476,26 @@ namespace BDO_Localisation_AddOn
                     oComboBox_Option.Select("1", SAPbouiCOM.BoSearchKey.psk_ByValue);
 
                     //Grid
-                    Top = Top + 30;
-                    left = 6;
+                    top = top + 30;
 
                     itemName = "WbTable";
                     formItems = new Dictionary<string, object>();
                     formItems.Add("isDataSource", true);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_GRID);
-                    formItems.Add("Left", left);
+                    formItems.Add("Left", left_s);
                     formItems.Add("Width", 750);
-                    formItems.Add("Top", Top);
+                    formItems.Add("Top", top);
                     formItems.Add("Height", 280);
                     formItems.Add("UID", itemName);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
-                    Top = Top + 280 + 6;
-                    left = 750 - 120;
+                    top = top + 280 + 6;
+                    int left = 750 - 120;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "btnColl";
@@ -542,16 +503,16 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Caption", BDOSResources.getTranslate("Collapse"));
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
                     formItems.Add("Left", left);
-                    formItems.Add("Width", 110);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 20);
+                    formItems.Add("Width", 100);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("AffectsFormMode", false);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
                     left = 750 - 120 - 115;
@@ -562,18 +523,17 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Caption", BDOSResources.getTranslate("Expand"));
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
                     formItems.Add("Left", left);
-                    formItems.Add("Width", 110);
-                    formItems.Add("Top", Top);
-                    formItems.Add("Height", 20);
+                    formItems.Add("Width", 100);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("AffectsFormMode", false);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
-
                 }
 
                 oForm.Visible = true;
@@ -581,208 +541,164 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void updateGrid(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void updateGrid(SAPbouiCOM.Form oForm)
         {
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
-            if (errorText != null)
+            try
             {
-                return;
-            }
+                oForm.Freeze(true);
 
-            string su = rsSettings["SU"];
-            string sp = rsSettings["SP"];
-            WayBill oWayBill = new WayBill(su, sp, rsSettings["ProtocolType"]);
-
-            bool chek_service_user = oWayBill.chek_service_user(su, sp, out errorText);
-            if (chek_service_user == false)
-            {
-                errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
-                return;
-            }
-
-            DateTime startDate;
-            string startDateStr = oForm.DataSources.UserDataSources.Item("StartDate").ValueEx;
-            DateTime BeginDate = new DateTime(1, 1, 1);
-
-            if (DateTime.TryParseExact(startDateStr, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
-            {
-                BeginDate = startDate;
-            }
-
-            DateTime endDate;
-            string endDateStr = oForm.DataSources.UserDataSources.Item("EndDate").ValueEx;
-            DateTime EndDate = DateTime.Today;
-
-            if (DateTime.TryParseExact(endDateStr, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
-            {
-                EndDate = endDate;
-            }
-
-            string itypes = oForm.DataSources.UserDataSources.Item("WBDocTp").ValueEx;
-
-            string cardCode = oForm.DataSources.UserDataSources.Item("ClientID").Value;
-            cardCode = cardCode.Trim();
-            string buyer_tin = "";
-
-            if (cardCode != "")
-            {
-                SAPbobsCOM.BusinessPartners oBP;
-                oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
-                oBP.GetByKey(cardCode);
-
-                buyer_tin = oBP.UserFields.Fields.Item("LicTradNum").Value;
-            }
-
-            string Fstatus = oForm.DataSources.UserDataSources.Item("WBStatus").ValueEx;
-            string FOption = oForm.DataSources.UserDataSources.Item("option").ValueEx;
-
-            string query = getQueryText(BeginDate, EndDate, cardCode, itypes, Fstatus, FOption);
-
-
-            if (itypes == "0" || itypes == "")
-            {
-                itypes = "1,2,3,4,5,6";
-            }
-
-            string statuses;
-            if (Fstatus == "-99" || Fstatus == "")
-            {
-                statuses = ",,1,2,-1,-2,7,";
-            }
-            else if (Fstatus == "0")
-            {
-                statuses = ",,";
-            }
-            else
-            {
-                statuses = "," + Fstatus + ",";
-            }
-
-            DateTime EndDateForWS = EndDate.AddDays(1).AddMilliseconds(-1);
-
-            DataTable RSDataTable = new DataTable();
-            RSDataTable.Columns.Add("RowLinked", typeof(string));
-            RSDataTable.Columns.Add("ID", typeof(string));
-            RSDataTable.Columns.Add("WAYBILL_NUMBER", typeof(string));
-            RSDataTable.Columns.Add("FULL_AMOUNT", typeof(string));
-            RSDataTable.Columns.Add("STATUS", typeof(string));
-            RSDataTable.Columns.Add("TIN", typeof(string));
-            RSDataTable.Columns.Add("NAME", typeof(string));
-            RSDataTable.Columns.Add("BEGIN_DATE", typeof(string));
-            RSDataTable.Columns.Add("TYPE", typeof(string));
-            RSDataTable.Columns.Add("START_ADDRESS", typeof(string));
-            RSDataTable.Columns.Add("END_ADDRESS", typeof(string));
-            RSDataTable.Columns.Add("DELIVERY_DATE", typeof(string));
-            RSDataTable.Columns.Add("ACTIVATE_DATE", typeof(string));
-            RSDataTable.Columns.Add("CAR_NUMBER", typeof(string));
-            RSDataTable.Columns.Add("DRIVER_TIN", typeof(string));
-            RSDataTable.Columns.Add("TRANSPORT_COAST", typeof(string));
-
-            RSDataTable.Columns.Add("ItemCode", typeof(string));
-            RSDataTable.Columns.Add("W_NAME", typeof(string));
-            RSDataTable.Columns.Add("BAR_CODE", typeof(string));
-            RSDataTable.Columns.Add("AMOUNT", typeof(string));
-            RSDataTable.Columns.Add("Quantity", typeof(string));
-
-
-            string car_number = "";
-            DateTime begin_date_s = startDate;
-            DateTime begin_date_e = endDate;
-            DateTime create_date_s = startDate;
-            DateTime create_date_e = endDate;
-            string driver_tin = null;
-            DateTime delivery_date_s = startDate;
-            DateTime delivery_date_e = endDate;
-            decimal full_amount = 0;
-            string waybill_number = "";
-            DateTime close_date_s = startDate;
-            DateTime close_date_e = endDate;
-            string s_user_id = "";
-            string comment = null;
-            string seller_id = buyer_tin;
-            string StartAddress = "";
-            string EndAddress = "";
-
-            DateTime startDateParam = new DateTime();
-            DateTime endDateParam = new DateTime();
-            startDateParam = startDate;
-
-            while (startDateParam < EndDateForWS)
-            {
-                endDateParam = startDateParam.AddDays(2);
-
-                if (endDateParam > EndDateForWS)
+                string errorText;
+                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
+                if (errorText != null)
                 {
-                    endDateParam = EndDateForWS;
+                    throw new Exception(errorText);
                 }
 
-                Dictionary<string, Dictionary<string, string>> waybills_map_part = oWayBill.get_buyer_waybills(itypes, seller_id, ",,1,2,-1,-2,7,", car_number, startDateParam, endDateParam, startDateParam, endDateParam, driver_tin, startDateParam, endDateParam, full_amount, waybill_number, startDateParam, endDateParam, s_user_id, comment, StartAddress, EndAddress, out errorText);
-                foreach (KeyValuePair<string, Dictionary<string, string>> map_record in waybills_map_part)
+                string su = rsSettings["SU"];
+                string sp = rsSettings["SP"];
+                WayBill oWayBill = new WayBill(su, sp, rsSettings["ProtocolType"]);
+
+                bool chek_service_user = oWayBill.chek_service_user(su, sp, out errorText);
+                if (chek_service_user == false)
                 {
-                    Dictionary<string, string> Waybill_Header = map_record.Value;
+                    errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
+                    throw new Exception(errorText);
+                }
 
-                    string SELLER_TIN = Waybill_Header["SELLER_TIN"];
-                    string SELLER_NAME = Waybill_Header["SELLER_NAME"];
-                    string WBID = Waybill_Header["ID"];
+                DateTime startDate;
+                string startDateStr = oForm.DataSources.UserDataSources.Item("DateFromE").ValueEx;
+                DateTime BeginDate = new DateTime(1, 1, 1);
 
-                    if (FOption != "0")
+                if (DateTime.TryParseExact(startDateStr, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
+                {
+                    BeginDate = startDate;
+                }
+
+                DateTime endDate;
+                string endDateStr = oForm.DataSources.UserDataSources.Item("DateToE").ValueEx;
+                DateTime EndDate = DateTime.Today;
+
+                if (DateTime.TryParseExact(endDateStr, "yyyyMMdd",CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
+                {
+                    EndDate = endDate;
+                }
+
+                string itypes = oForm.DataSources.UserDataSources.Item("WBDocTp").ValueEx;
+
+                string cardCode = oForm.DataSources.UserDataSources.Item("ClientID").Value;
+                cardCode = cardCode.Trim();
+                string buyer_tin = "";
+
+                if (cardCode != "")
+                {
+                    SAPbobsCOM.BusinessPartners oBP;
+                    oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
+                    oBP.GetByKey(cardCode);
+
+                    buyer_tin = oBP.UserFields.Fields.Item("LicTradNum").Value;
+                }
+
+                string Fstatus = oForm.DataSources.UserDataSources.Item("WBStatus").ValueEx;
+                string FOption = oForm.DataSources.UserDataSources.Item("option").ValueEx;
+
+                string query = getQueryText(BeginDate, EndDate, cardCode, itypes, Fstatus, FOption);
+
+
+                if (itypes == "0" || itypes == "")
+                {
+                    itypes = "1,2,3,4,5,6";
+                }
+
+                string statuses;
+                if (Fstatus == "-99" || Fstatus == "")
+                {
+                    statuses = ",,1,2,-1,-2,7,";
+                }
+                else if (Fstatus == "0")
+                {
+                    statuses = ",,";
+                }
+                else
+                {
+                    statuses = "," + Fstatus + ",";
+                }
+
+                DateTime EndDateForWS = EndDate.AddDays(1).AddMilliseconds(-1);
+
+                DataTable RSDataTable = new DataTable();
+                RSDataTable.Columns.Add("RowLinked", typeof(string));
+                RSDataTable.Columns.Add("ID", typeof(string));
+                RSDataTable.Columns.Add("WAYBILL_NUMBER", typeof(string));
+                RSDataTable.Columns.Add("FULL_AMOUNT", typeof(string));
+                RSDataTable.Columns.Add("STATUS", typeof(string));
+                RSDataTable.Columns.Add("TIN", typeof(string));
+                RSDataTable.Columns.Add("NAME", typeof(string));
+                RSDataTable.Columns.Add("BEGIN_DATE", typeof(string));
+                RSDataTable.Columns.Add("TYPE", typeof(string));
+                RSDataTable.Columns.Add("START_ADDRESS", typeof(string));
+                RSDataTable.Columns.Add("END_ADDRESS", typeof(string));
+                RSDataTable.Columns.Add("DELIVERY_DATE", typeof(string));
+                RSDataTable.Columns.Add("ACTIVATE_DATE", typeof(string));
+                RSDataTable.Columns.Add("CAR_NUMBER", typeof(string));
+                RSDataTable.Columns.Add("DRIVER_TIN", typeof(string));
+                RSDataTable.Columns.Add("TRANSPORT_COAST", typeof(string));
+
+                RSDataTable.Columns.Add("ItemCode", typeof(string));
+                RSDataTable.Columns.Add("W_NAME", typeof(string));
+                RSDataTable.Columns.Add("BAR_CODE", typeof(string));
+                RSDataTable.Columns.Add("AMOUNT", typeof(string));
+                RSDataTable.Columns.Add("Quantity", typeof(string));
+
+                string car_number = "";
+                DateTime begin_date_s = startDate;
+                DateTime begin_date_e = endDate;
+                DateTime create_date_s = startDate;
+                DateTime create_date_e = endDate;
+                string driver_tin = null;
+                DateTime delivery_date_s = startDate;
+                DateTime delivery_date_e = endDate;
+                decimal full_amount = 0;
+                string waybill_number = "";
+                DateTime close_date_s = startDate;
+                DateTime close_date_e = endDate;
+                string s_user_id = "";
+                string comment = null;
+                string seller_id = buyer_tin;
+                string StartAddress = "";
+                string EndAddress = "";
+
+                DateTime startDateParam = new DateTime();
+                DateTime endDateParam = new DateTime();
+                startDateParam = startDate;
+
+                while (startDateParam < EndDateForWS)
+                {
+                    endDateParam = startDateParam.AddDays(2);
+
+                    if (endDateParam > EndDateForWS)
                     {
-                        DataRow taxDataRow = RSDataTable.Rows.Add();
-                        taxDataRow["RowLinked"] = "N";
-                        taxDataRow["ID"] = WBID;
-                        taxDataRow["WAYBILL_NUMBER"] = Waybill_Header["WAYBILL_NUMBER"];
-                        taxDataRow["FULL_AMOUNT"] = Waybill_Header["FULL_AMOUNT"];
-                        taxDataRow["STATUS"] = Waybill_Header["STATUS"];
-                        taxDataRow["TIN"] = SELLER_TIN;
-                        taxDataRow["NAME"] = SELLER_NAME;
-                        taxDataRow["BEGIN_DATE"] = Waybill_Header["BEGIN_DATE"];
-                        taxDataRow["TYPE"] = Waybill_Header["TYPE"];
-                        taxDataRow["START_ADDRESS"] = Waybill_Header["START_ADDRESS"];
-                        taxDataRow["END_ADDRESS"] = Waybill_Header["END_ADDRESS"];
-                        taxDataRow["DELIVERY_DATE"] = Waybill_Header["DELIVERY_DATE"];
-                        taxDataRow["ACTIVATE_DATE"] = Waybill_Header["ACTIVATE_DATE"];
-                        taxDataRow["CAR_NUMBER"] = Waybill_Header["CAR_NUMBER"];
-                        taxDataRow["DRIVER_TIN"] = Waybill_Header["DRIVER_TIN"];
-                        taxDataRow["TRANSPORT_COAST"] = Waybill_Header["TRANSPORT_COAST"];
+                        endDateParam = EndDateForWS;
                     }
-                    else
+
+                    Dictionary<string, Dictionary<string, string>> waybills_map_part = oWayBill.get_buyer_waybills(itypes, seller_id, ",,1,2,-1,-2,7,", car_number, startDateParam, endDateParam, startDateParam, endDateParam, driver_tin, startDateParam, endDateParam, full_amount, waybill_number, startDateParam, endDateParam, s_user_id, comment, StartAddress, EndAddress, out errorText);
+                    foreach (KeyValuePair<string, Dictionary<string, string>> map_record in waybills_map_part)
                     {
-                        //ცხრილი
-                        string[] array_HEADER;
-                        string[][] array_GOODS, array_SUB_WAYBILLS;
-                        int returnCode = oWayBill.get_waybill(Convert.ToInt32(WBID), out array_HEADER, out array_GOODS, out array_SUB_WAYBILLS, out errorText);
+                        Dictionary<string, string> Waybill_Header = map_record.Value;
 
-                        int rowCounter = 1;
-                        int rowIndex = 0;
+                        string SELLER_TIN = Waybill_Header["SELLER_TIN"];
+                        string SELLER_NAME = Waybill_Header["SELLER_NAME"];
+                        string WBID = Waybill_Header["ID"];
 
-                        foreach (string[] goodsRow in array_GOODS)
+                        if (FOption != "0")
                         {
-                            string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
-                            string WBItmName = goodsRow[1];
-
-                            string ItmCode = "";
-                            string cardName;
-                            string Cardcode = BusinessPartners.GetCardCodeByTin( SELLER_TIN, "S", out cardName);
-                            if (Cardcode != null)
-                            {
-                                ItmCode = BDO_WaybillsJournalReceived.findItemByNameOITM( WBItmName, WBBarcode, Cardcode, out errorText);
-
-                                SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
-
-                                if (CatalogEntry != null)
-                                {
-                                    ItmCode = CatalogEntry.Fields.Item("ItemCode").Value;
-                                }
-                            }
-
                             DataRow taxDataRow = RSDataTable.Rows.Add();
                             taxDataRow["RowLinked"] = "N";
-                            taxDataRow["ID"] = Waybill_Header["ID"];
+                            taxDataRow["ID"] = WBID;
                             taxDataRow["WAYBILL_NUMBER"] = Waybill_Header["WAYBILL_NUMBER"];
                             taxDataRow["FULL_AMOUNT"] = Waybill_Header["FULL_AMOUNT"];
                             taxDataRow["STATUS"] = Waybill_Header["STATUS"];
-                            taxDataRow["TIN"] = Waybill_Header["SELLER_TIN"];
-                            taxDataRow["NAME"] = Waybill_Header["SELLER_NAME"];
+                            taxDataRow["TIN"] = SELLER_TIN;
+                            taxDataRow["NAME"] = SELLER_NAME;
                             taxDataRow["BEGIN_DATE"] = Waybill_Header["BEGIN_DATE"];
                             taxDataRow["TYPE"] = Waybill_Header["TYPE"];
                             taxDataRow["START_ADDRESS"] = Waybill_Header["START_ADDRESS"];
@@ -792,399 +708,262 @@ namespace BDO_Localisation_AddOn
                             taxDataRow["CAR_NUMBER"] = Waybill_Header["CAR_NUMBER"];
                             taxDataRow["DRIVER_TIN"] = Waybill_Header["DRIVER_TIN"];
                             taxDataRow["TRANSPORT_COAST"] = Waybill_Header["TRANSPORT_COAST"];
-
-                            taxDataRow["ItemCode"] = ItmCode;
-                            taxDataRow["W_NAME"] = WBItmName;
-                            taxDataRow["BAR_CODE"] = WBBarcode;
-                            taxDataRow["AMOUNT"] = goodsRow[5];
-                            taxDataRow["Quantity"] = goodsRow[3];
-
-                            rowCounter++;
-                            rowIndex++;
                         }
-                    }
-                }
-                startDateParam = endDateParam;
-            }
-
-            int count = 0;
-
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            oRecordSet.DoQuery(query);
-
-            SAPbouiCOM.DataTable oDataTable;
-
-            oDataTable = oForm.DataSources.DataTables.Item("WbTable");
-            oDataTable.Rows.Clear();
-
-            string XML = "";
-            XML = oDataTable.GetAsXML();
-            XML = XML.Replace("<Rows/></DataTable>", "");
-
-            StringBuilder Sbuilder = new StringBuilder();
-            Sbuilder.Append(XML);
-            Sbuilder.Append("<Rows>");
-
-            string FilterCompStat = oForm.DataSources.UserDataSources.Item("CompStat").ValueEx;
-
-            string WBNum;
-            int BaseDocNum;
-            string BaseDType;
-            int DocEntry;
-            string ItemCode;
-            double Amount;
-            double Amount_Full;
-            double RSAmount;
-            double RSAmount_Full;
-            double RSQuantity;
-            string RS_W_NAME;
-            string wbCompStat;
-            string RS_STATUS;
-            string TYPE;
-            string START_ADDRESS;
-            string END_ADDRESS;
-            string CAR_NUMBER;
-            string DRIVER_TIN;
-            double TRANSPORT_COAST = 0;
-            bool foundonRS;
-            DateTime DeliveryDate;
-            DateTime BegDate;
-            DateTime ActivateDate;
-            string strDELIVERY_DATE;
-            string strACTIVATE_DATE;
-            string strBEGIN_DATE;
-
-            while (!oRecordSet.EoF)
-            {
-                WBNum = oRecordSet.Fields.Item("WBNo").Value;
-                WBNum = WBNum.Trim();
-
-                ItemCode = "";
-                if (FOption != "1")
-                {
-                    ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
-                }
-
-                Amount = oRecordSet.Fields.Item("Gtotal").Value;
-                Amount_Full = oRecordSet.Fields.Item("DocTotal").Value;
-                RSAmount = 0;
-                RSAmount_Full = 0;
-                RSQuantity = 0;
-                RS_W_NAME = "";
-                wbCompStat = "";
-                RS_STATUS = "";
-                TYPE = "";
-                START_ADDRESS = "";
-                END_ADDRESS = "";
-                CAR_NUMBER = "";
-                DRIVER_TIN = "";
-                TRANSPORT_COAST = 0;
-                strDELIVERY_DATE = "";
-                strACTIVATE_DATE = "";
-                strBEGIN_DATE = "";
-
-                if (WBNum != "")
-                {
-                    foundonRS = false;
-
-                    if (RSDataTable.Rows.Count > 0)
-                    {
-                        if (RSDataTable.Columns.Contains("WAYBILL_NUMBER"))
+                        else
                         {
-                            DataRow[] foundRows;
-                            if (FOption != "1")
-                            {
-                                foundRows = RSDataTable.Select("WAYBILL_NUMBER = '" + WBNum + "'" + " and " + "ItemCode = '" + ItemCode.Replace("'", "''") + "'");
-                            }
-                            else
-                            {
-                                foundRows = RSDataTable.Select("WAYBILL_NUMBER = '" + WBNum + "'");
-                            }
+                            //ცხრილი
+                            string[] array_HEADER;
+                            string[][] array_GOODS, array_SUB_WAYBILLS;
+                            int returnCode = oWayBill.get_waybill(Convert.ToInt32(WBID), out array_HEADER, out array_GOODS, out array_SUB_WAYBILLS, out errorText);
 
-                            for (int i = 0; i < foundRows.Length; i++)
-                            {
-                                foundonRS = true;
-                                foundRows[i]["RowLinked"] = "Y";
+                            int rowCounter = 1;
+                            int rowIndex = 0;
 
-                                if (FOption != "1")
+                            foreach (string[] goodsRow in array_GOODS)
+                            {
+                                string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
+                                string WBItmName = goodsRow[1];
+
+                                string ItmCode = "";
+                                string cardName;
+                                string Cardcode = BusinessPartners.GetCardCodeByTin(SELLER_TIN, "S", out cardName);
+                                if (Cardcode != null)
                                 {
-                                    RSAmount = Convert.ToDouble(foundRows[i]["AMOUNT"], System.Globalization.CultureInfo.InvariantCulture);
-                                    RSQuantity = Convert.ToDouble(foundRows[i]["Quantity"], System.Globalization.CultureInfo.InvariantCulture);
-                                    RS_W_NAME = foundRows[i]["W_NAME"].ToString();
+                                    ItmCode = BDO_WaybillsJournalReceived.findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out errorText);
+
+                                    SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
+
+                                    if (CatalogEntry != null)
+                                    {
+                                        ItmCode = CatalogEntry.Fields.Item("ItemCode").Value;
+                                    }
                                 }
 
-                                RSAmount_Full = Convert.ToDouble(foundRows[i]["FULL_AMOUNT"], System.Globalization.CultureInfo.InvariantCulture);
-                                RS_STATUS = foundRows[i]["STATUS"].ToString();
-                                TYPE = foundRows[i]["TYPE"].ToString();
-                                START_ADDRESS = foundRows[i]["START_ADDRESS"].ToString();
-                                END_ADDRESS = foundRows[i]["END_ADDRESS"].ToString();
-                                CAR_NUMBER = foundRows[i]["CAR_NUMBER"].ToString();
-                                DRIVER_TIN = foundRows[i]["DRIVER_TIN"].ToString();
+                                DataRow taxDataRow = RSDataTable.Rows.Add();
+                                taxDataRow["RowLinked"] = "N";
+                                taxDataRow["ID"] = Waybill_Header["ID"];
+                                taxDataRow["WAYBILL_NUMBER"] = Waybill_Header["WAYBILL_NUMBER"];
+                                taxDataRow["FULL_AMOUNT"] = Waybill_Header["FULL_AMOUNT"];
+                                taxDataRow["STATUS"] = Waybill_Header["STATUS"];
+                                taxDataRow["TIN"] = Waybill_Header["SELLER_TIN"];
+                                taxDataRow["NAME"] = Waybill_Header["SELLER_NAME"];
+                                taxDataRow["BEGIN_DATE"] = Waybill_Header["BEGIN_DATE"];
+                                taxDataRow["TYPE"] = Waybill_Header["TYPE"];
+                                taxDataRow["START_ADDRESS"] = Waybill_Header["START_ADDRESS"];
+                                taxDataRow["END_ADDRESS"] = Waybill_Header["END_ADDRESS"];
+                                taxDataRow["DELIVERY_DATE"] = Waybill_Header["DELIVERY_DATE"];
+                                taxDataRow["ACTIVATE_DATE"] = Waybill_Header["ACTIVATE_DATE"];
+                                taxDataRow["CAR_NUMBER"] = Waybill_Header["CAR_NUMBER"];
+                                taxDataRow["DRIVER_TIN"] = Waybill_Header["DRIVER_TIN"];
+                                taxDataRow["TRANSPORT_COAST"] = Waybill_Header["TRANSPORT_COAST"];
 
-                                if (String.IsNullOrEmpty((string)foundRows[i]["TRANSPORT_COAST"]))
+                                taxDataRow["ItemCode"] = ItmCode;
+                                taxDataRow["W_NAME"] = WBItmName;
+                                taxDataRow["BAR_CODE"] = WBBarcode;
+                                taxDataRow["AMOUNT"] = goodsRow[5];
+                                taxDataRow["Quantity"] = goodsRow[3];
+
+                                rowCounter++;
+                                rowIndex++;
+                            }
+                        }
+                    }
+                    startDateParam = endDateParam;
+                }
+
+                int count = 0;
+
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                oRecordSet.DoQuery(query);
+
+                SAPbouiCOM.DataTable oDataTable;
+
+                oDataTable = oForm.DataSources.DataTables.Item("WbTable");
+                oDataTable.Rows.Clear();
+
+                string XML = "";
+                XML = oDataTable.GetAsXML();
+                XML = XML.Replace("<Rows/></DataTable>", "");
+
+                StringBuilder Sbuilder = new StringBuilder();
+                Sbuilder.Append(XML);
+                Sbuilder.Append("<Rows>");
+
+                string FilterCompStat = oForm.DataSources.UserDataSources.Item("CompStat").ValueEx;
+
+                string WBNum;
+                int BaseDocNum;
+                string BaseDType;
+                int DocEntry;
+                string ItemCode;
+                decimal Amount;
+                decimal Amount_Full;
+                decimal RSAmount;
+                decimal RSAmount_Full;
+                decimal RSQuantity;
+                string RS_W_NAME;
+                string wbCompStat;
+                string RS_STATUS;
+                string TYPE;
+                string START_ADDRESS;
+                string END_ADDRESS;
+                string CAR_NUMBER;
+                string DRIVER_TIN;
+                decimal TRANSPORT_COAST = 0;
+                bool foundonRS;
+                DateTime DeliveryDate;
+                DateTime BegDate;
+                DateTime ActivateDate;
+                string strDELIVERY_DATE;
+                string strACTIVATE_DATE;
+                string strBEGIN_DATE;
+
+                while (!oRecordSet.EoF)
+                {
+                    WBNum = oRecordSet.Fields.Item("WBNo").Value;
+                    WBNum = WBNum.Trim();
+
+                    ItemCode = "";
+                    if (FOption != "1")
+                    {
+                        ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
+                    }
+
+                    Amount = Convert.ToDecimal(oRecordSet.Fields.Item("Gtotal").Value, CultureInfo.InvariantCulture);
+                    Amount_Full = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value, CultureInfo.InvariantCulture);
+                    RSAmount = 0;
+                    RSAmount_Full = 0;
+                    RSQuantity = 0;
+                    RS_W_NAME = "";
+                    wbCompStat = "";
+                    RS_STATUS = "";
+                    TYPE = "";
+                    START_ADDRESS = "";
+                    END_ADDRESS = "";
+                    CAR_NUMBER = "";
+                    DRIVER_TIN = "";
+                    TRANSPORT_COAST = 0;
+                    strDELIVERY_DATE = "";
+                    strACTIVATE_DATE = "";
+                    strBEGIN_DATE = "";
+
+                    if (WBNum != "")
+                    {
+                        foundonRS = false;
+
+                        if (RSDataTable.Rows.Count > 0)
+                        {
+                            if (RSDataTable.Columns.Contains("WAYBILL_NUMBER"))
+                            {
+                                DataRow[] foundRows;
+                                if (FOption != "1")
                                 {
-                                    TRANSPORT_COAST = 0;
+                                    foundRows = RSDataTable.Select("WAYBILL_NUMBER = '" + WBNum + "'" + " and " + "ItemCode = '" + ItemCode.Replace("'", "''") + "'");
                                 }
                                 else
                                 {
-                                TRANSPORT_COAST = Convert.ToDouble(foundRows[i]["TRANSPORT_COAST"], System.Globalization.CultureInfo.InvariantCulture);
+                                    foundRows = RSDataTable.Select("WAYBILL_NUMBER = '" + WBNum + "'");
                                 }
 
-                                strDELIVERY_DATE = foundRows[i]["DELIVERY_DATE"].ToString();
-                                strACTIVATE_DATE = foundRows[i]["ACTIVATE_DATE"].ToString();
-                                strBEGIN_DATE = foundRows[i]["BEGIN_DATE"].ToString();
+                                for (int i = 0; i < foundRows.Length; i++)
+                                {
+                                    foundonRS = true;
+                                    foundRows[i]["RowLinked"] = "Y";
+
+                                    if (FOption != "1")
+                                    {
+                                        RSAmount = FormsB1.cleanStringOfNonDigits(foundRows[i]["AMOUNT"].ToString());
+                                        RSQuantity = FormsB1.cleanStringOfNonDigits(foundRows[i]["Quantity"].ToString());
+                                        RS_W_NAME = foundRows[i]["W_NAME"].ToString();
+                                    }
+
+                                    RSAmount_Full = FormsB1.cleanStringOfNonDigits(foundRows[i]["FULL_AMOUNT"].ToString());
+                                    RS_STATUS = foundRows[i]["STATUS"].ToString();
+                                    TYPE = foundRows[i]["TYPE"].ToString();
+                                    START_ADDRESS = foundRows[i]["START_ADDRESS"].ToString();
+                                    END_ADDRESS = foundRows[i]["END_ADDRESS"].ToString();
+                                    CAR_NUMBER = foundRows[i]["CAR_NUMBER"].ToString();
+                                    DRIVER_TIN = foundRows[i]["DRIVER_TIN"].ToString();
+
+                                    if (string.IsNullOrEmpty(foundRows[i]["TRANSPORT_COAST"].ToString()))
+                                    {
+                                        TRANSPORT_COAST = 0;
+                                    }
+                                    else
+                                    {
+                                        TRANSPORT_COAST = FormsB1.cleanStringOfNonDigits(foundRows[i]["TRANSPORT_COAST"].ToString());
+                                    }
+
+                                    strDELIVERY_DATE = foundRows[i]["DELIVERY_DATE"].ToString();
+                                    strACTIVATE_DATE = foundRows[i]["ACTIVATE_DATE"].ToString();
+                                    strBEGIN_DATE = foundRows[i]["BEGIN_DATE"].ToString();
+                                }
                             }
                         }
-                    }
 
-                    if (!foundonRS)
-                    {
-                        wbCompStat = "2";
-                    }
-                    else if (oRecordSet.Fields.Item("CANCELED").Value == "Y")
-                    {
-                        wbCompStat = "5";
-                    }
-                    else if (Amount_Full != RSAmount_Full)
-                    {
-                        wbCompStat = "3";
+                        if (!foundonRS)
+                        {
+                            wbCompStat = "2";
+                        }
+                        else if (oRecordSet.Fields.Item("CANCELED").Value == "Y")
+                        {
+                            wbCompStat = "5";
+                        }
+                        else if (Amount_Full != RSAmount_Full)
+                        {
+                            wbCompStat = "3";
+                        }
+                        else
+                        {
+                            wbCompStat = "4";
+                        }
                     }
                     else
                     {
-                        wbCompStat = "4";
+                        wbCompStat = "6";
                     }
-                }
-                else
-                {
-                    wbCompStat = "6";
-                }
 
-                if (FilterCompStat != "0" & FilterCompStat != "")
-                {
-                    if (FilterCompStat != wbCompStat)
+                    if (FilterCompStat != "0" & FilterCompStat != "")
+                    {
+                        if (FilterCompStat != wbCompStat)
+                        {
+                            oRecordSet.MoveNext();
+                            continue;
+                        }
+                    }
+
+                    //სტატუსის ფილტრი
+                    if (((Fstatus == "-99" || Fstatus == "") || statuses.IndexOf(RS_STATUS) > 0) == false)
                     {
                         oRecordSet.MoveNext();
                         continue;
                     }
-                }
-
-                //სტატუსის ფილტრი
-                if (((Fstatus == "-99" || Fstatus == "") || statuses.IndexOf(RS_STATUS) > 0) == false)
-                {
-                    oRecordSet.MoveNext();
-                    continue;
-                }
-
-                Sbuilder.Append("<Row>");
-                Sbuilder.Append("<Cell> <ColumnUid>BaseCard</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("BaseCard").Value);
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>ComparStat</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, wbCompStat);
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>WB_number</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, WBNum);
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>LineNum</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, (count + 1).ToString());
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>LicTradNum</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("LicTradNum").Value);
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>CardName</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("CardName").Value);
-                Sbuilder.Append("</Value></Cell>");
-
-                if (strBEGIN_DATE != "")
-                {
-                    Sbuilder.Append("<Cell> <ColumnUid>WB_begDate</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DateTime.TryParse(strBEGIN_DATE, out BegDate) == false ? DateTime.MinValue : BegDate).ToString("yyyyMMdd"));
-                    Sbuilder.Append("</Value></Cell>");
-                }
-
-                Sbuilder.Append("<Cell> <ColumnUid>TYPE</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, TYPE);
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>WB_strAddrs</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, START_ADDRESS);
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>WB_endAddrs</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, END_ADDRESS);
-                Sbuilder.Append("</Value></Cell>");
-
-                if (strDELIVERY_DATE != "")
-                {
-                    Sbuilder.Append("<Cell> <ColumnUid>WB_delvDate</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DateTime.TryParse(strDELIVERY_DATE, out DeliveryDate) == false ? DateTime.MinValue : DeliveryDate).ToString("yyyyMMdd"));
-                    Sbuilder.Append("</Value></Cell>");
-                }
-
-                Sbuilder.Append("<Cell> <ColumnUid>WB_ID</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("WBID").Value);
-                Sbuilder.Append("</Value></Cell>");
-
-                if (strACTIVATE_DATE != "")
-                {
-                    Sbuilder.Append("<Cell> <ColumnUid>WB_actDate</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DateTime.TryParse(strACTIVATE_DATE, out ActivateDate) == false ? DateTime.MinValue : ActivateDate).ToString("yyyyMMdd"));
-                    Sbuilder.Append("</Value></Cell>");
-                }
-
-                Sbuilder.Append("<Cell> <ColumnUid>WB_vehicNum</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, CAR_NUMBER);
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>WB_drivTin</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, DRIVER_TIN);
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>WB_trnsExpn</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(TRANSPORT_COAST)));
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>WB_begDate</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("BaseDocDate").Value.ToString("yyyyMMdd") == "18991230" ? "" : oRecordSet.Fields.Item("BaseDocDate").Value.ToString("yyyyMMdd"));
-                Sbuilder.Append("</Value></Cell>");
-
-                BaseDocNum = (int)oRecordSet.Fields.Item("BaseDocNum").Value;
-                Sbuilder.Append("<Cell> <ColumnUid>DocNum</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, (BaseDocNum == 0 ? "" : BaseDocNum.ToString()));
-                Sbuilder.Append("</Value></Cell>");
-
-                BaseDType = (string)oRecordSet.Fields.Item("BaseDType").Value;
-                Sbuilder.Append("<Cell> <ColumnUid>BaseDType</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, (BaseDType == "" ? "" : BaseDType.ToString()));
-                Sbuilder.Append("</Value></Cell>");
-
-                DocEntry = (int)oRecordSet.Fields.Item("DocEntry").Value;
-                Sbuilder.Append("<Cell> <ColumnUid>BaseDoc</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DocEntry == 0 ? "" : DocEntry.ToString()));
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>Whs</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("Whs").Value);
-                Sbuilder.Append("</Value></Cell>");
-
-                Sbuilder.Append("<Cell> <ColumnUid>RS_Status</ColumnUid> <Value>");
-                Sbuilder = CommonFunctions.AppendXML(Sbuilder, RS_STATUS);
-                Sbuilder.Append("</Value></Cell>");
-
-                //დეტალური როცა არის
-                if (FOption != "1")
-                {
-                    Sbuilder.Append("<Cell> <ColumnUid>RSAmount</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(RSAmount)));
-                    Sbuilder.Append("</Value></Cell>");
-
-                    Sbuilder.Append("<Cell> <ColumnUid>Gtotal</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(Amount)));
-                    Sbuilder.Append("</Value></Cell>");
-
-                    Sbuilder.Append("<Cell> <ColumnUid>ItemCode</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("ItemCode").Value);
-                    Sbuilder.Append("</Value></Cell>");
-
-                    Sbuilder.Append("<Cell> <ColumnUid>InvntryUom</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("InvntryUom").Value);
-                    Sbuilder.Append("</Value></Cell>");
-
-                    Sbuilder.Append("<Cell> <ColumnUid>Quantity</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value)));
-                    Sbuilder.Append("</Value></Cell>");
-
-                    Sbuilder.Append("<Cell> <ColumnUid>RSQuantity</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(RSQuantity)));
-                    Sbuilder.Append("</Value></Cell>");
-
-                    Sbuilder.Append("<Cell> <ColumnUid>RSName</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RS_W_NAME);
-                    Sbuilder.Append("</Value></Cell>");
-
-                }
-                else
-                {
-                    Sbuilder.Append("<Cell> <ColumnUid>RSAmount</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(RSAmount_Full)));
-                    Sbuilder.Append("</Value></Cell>");
-
-                    Sbuilder.Append("<Cell> <ColumnUid>Gtotal</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(Amount_Full)));
-                    Sbuilder.Append("</Value></Cell>");
-                }
-
-                Sbuilder.Append("</Row>");
-
-                count++;
-
-                oRecordSet.MoveNext();
-            }
-
-            if (RSDataTable.Rows.Count > 0 & (FilterCompStat == "1" || FilterCompStat == "0" || FilterCompStat == ""))
-            {
-                DataRow[] RemainingRows;
-                RemainingRows = RSDataTable.Select("RowLinked = 'N'");
-
-                double TranspCost;
-                string cardName;
-                string WAYBILL_NUMBER;
-                string cTIN;
-                string cCode;
-                double RSFULL_AMOUNT = 0;
-                string wbTRANSPORT_COAST;
-                string RS_st;
-
-                for (int i = 0; i < RemainingRows.Length; i++)
-                {
-                    RS_st = RemainingRows[i]["STATUS"].ToString();
-                    //სტატუსის ფილტრი
-                    if (((Fstatus == "-99" || Fstatus == "") || statuses.IndexOf(RS_st) > 0) == false)
-                    {
-                        continue;
-                    }
 
                     Sbuilder.Append("<Row>");
-
-                    cardName = "";
-                    WAYBILL_NUMBER = "";
-                    cTIN = RemainingRows[i]["TIN"].ToString().Trim();
-                    cCode = BusinessPartners.GetCardCodeByTin( cTIN, "S", out cardName);
-
-                    if (String.IsNullOrWhiteSpace(cCode) == false)
-                    {
-                        Sbuilder.Append("<Cell> <ColumnUid>BaseCard</ColumnUid> <Value>");
-                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, cCode);
-                        Sbuilder.Append("</Value></Cell>");
-                    }
-
-                    Sbuilder.Append("<Cell> <ColumnUid>ComparStat</ColumnUid> <Value>1</Value></Cell>");
-
-                    WAYBILL_NUMBER = RemainingRows[i]["WAYBILL_NUMBER"].ToString();
-                    Sbuilder.Append("<Cell> <ColumnUid>WB_number</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, WAYBILL_NUMBER);
+                    Sbuilder.Append("<Cell> <ColumnUid>BaseCard</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("BaseCard").Value);
                     Sbuilder.Append("</Value></Cell>");
 
+                    Sbuilder.Append("<Cell> <ColumnUid>ComparStat</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, wbCompStat);
+                    Sbuilder.Append("</Value></Cell>");
+
+                    Sbuilder.Append("<Cell> <ColumnUid>WB_number</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, WBNum);
+                    Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>LineNum</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, (count + 1).ToString());
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>LicTradNum</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, cTIN);
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("LicTradNum").Value);
                     Sbuilder.Append("</Value></Cell>");
 
-                    cardName = RemainingRows[i]["NAME"].ToString();
                     Sbuilder.Append("<Cell> <ColumnUid>CardName</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, cardName);
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("CardName").Value);
                     Sbuilder.Append("</Value></Cell>");
 
-                    strBEGIN_DATE = RemainingRows[i]["BEGIN_DATE"].ToString();
                     if (strBEGIN_DATE != "")
                     {
                         Sbuilder.Append("<Cell> <ColumnUid>WB_begDate</ColumnUid> <Value>");
@@ -1193,22 +972,17 @@ namespace BDO_Localisation_AddOn
                     }
 
                     Sbuilder.Append("<Cell> <ColumnUid>TYPE</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["TYPE"].ToString());
-                    Sbuilder.Append("</Value></Cell>");
-
-                    Sbuilder.Append("<Cell> <ColumnUid>WB_status</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RS_st);
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, TYPE);
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>WB_strAddrs</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["START_ADDRESS"].ToString());
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, START_ADDRESS);
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>WB_endAddrs</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["END_ADDRESS"].ToString());
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, END_ADDRESS);
                     Sbuilder.Append("</Value></Cell>");
 
-                    strDELIVERY_DATE = RemainingRows[i]["DELIVERY_DATE"].ToString();
                     if (strDELIVERY_DATE != "")
                     {
                         Sbuilder.Append("<Cell> <ColumnUid>WB_delvDate</ColumnUid> <Value>");
@@ -1217,10 +991,9 @@ namespace BDO_Localisation_AddOn
                     }
 
                     Sbuilder.Append("<Cell> <ColumnUid>WB_ID</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["ID"].ToString());
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("WBID").Value);
                     Sbuilder.Append("</Value></Cell>");
 
-                    strACTIVATE_DATE = RemainingRows[i]["ACTIVATE_DATE"].ToString();
                     if (strACTIVATE_DATE != "")
                     {
                         Sbuilder.Append("<Cell> <ColumnUid>WB_actDate</ColumnUid> <Value>");
@@ -1229,233 +1002,449 @@ namespace BDO_Localisation_AddOn
                     }
 
                     Sbuilder.Append("<Cell> <ColumnUid>WB_vehicNum</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["CAR_NUMBER"].ToString());
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, CAR_NUMBER);
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>WB_drivTin</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["DRIVER_TIN"].ToString());
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, DRIVER_TIN);
                     Sbuilder.Append("</Value></Cell>");
 
-                    wbTRANSPORT_COAST = RemainingRows[i]["TRANSPORT_COAST"].ToString();
                     Sbuilder.Append("<Cell> <ColumnUid>WB_trnsExpn</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(Double.TryParse(wbTRANSPORT_COAST, out TranspCost) == false ? 0 : TranspCost)));
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, TRANSPORT_COAST == 0 ? "" : FormsB1.ConvertDecimalToString(TRANSPORT_COAST));
+                    Sbuilder.Append("</Value></Cell>");
+
+                    Sbuilder.Append("<Cell> <ColumnUid>WB_begDate</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("BaseDocDate").Value.ToString("yyyyMMdd") == "18991230" ? "" : oRecordSet.Fields.Item("BaseDocDate").Value.ToString("yyyyMMdd"));
+                    Sbuilder.Append("</Value></Cell>");
+
+                    BaseDocNum = (int)oRecordSet.Fields.Item("BaseDocNum").Value;
+                    Sbuilder.Append("<Cell> <ColumnUid>DocNum</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, (BaseDocNum == 0 ? "" : BaseDocNum.ToString()));
+                    Sbuilder.Append("</Value></Cell>");
+
+                    BaseDType = (string)oRecordSet.Fields.Item("BaseDType").Value;
+                    Sbuilder.Append("<Cell> <ColumnUid>BaseDType</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, (BaseDType == "" ? "" : BaseDType.ToString()));
+                    Sbuilder.Append("</Value></Cell>");
+
+                    DocEntry = (int)oRecordSet.Fields.Item("DocEntry").Value;
+                    Sbuilder.Append("<Cell> <ColumnUid>BaseDoc</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DocEntry == 0 ? "" : DocEntry.ToString()));
+                    Sbuilder.Append("</Value></Cell>");
+
+                    Sbuilder.Append("<Cell> <ColumnUid>Whs</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("Whs").Value);
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>RS_Status</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["STATUS"].ToString());
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, RS_STATUS);
                     Sbuilder.Append("</Value></Cell>");
+
+                    if (TYPE == "5") //დაბრუნება
+                    {
+                        RSAmount *= -1;
+                        Amount *= -1;
+                        Amount_Full *= -1;
+                        RSAmount_Full *= -1;
+                    }
 
                     //დეტალური როცა არის
                     if (FOption != "1")
                     {
-                        RSAmount = Convert.ToDouble(RemainingRows[i]["AMOUNT"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
                         Sbuilder.Append("<Cell> <ColumnUid>RSAmount</ColumnUid> <Value>");
-                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(RSAmount)));
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(RSAmount));
                         Sbuilder.Append("</Value></Cell>");
 
-                        Sbuilder.Append("<Cell> <ColumnUid>BarCode</ColumnUid> <Value>");
-                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["BAR_CODE"].ToString());
+                        Sbuilder.Append("<Cell> <ColumnUid>Gtotal</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Amount));
                         Sbuilder.Append("</Value></Cell>");
 
-                        RSQuantity = Convert.ToDouble(RemainingRows[i]["Quantity"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                        Sbuilder.Append("<Cell> <ColumnUid>ItemCode</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("ItemCode").Value);
+                        Sbuilder.Append("</Value></Cell>");
+
+                        Sbuilder.Append("<Cell> <ColumnUid>InvntryUom</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("InvntryUom").Value);
+                        Sbuilder.Append("</Value></Cell>");
+
+                        Sbuilder.Append("<Cell> <ColumnUid>Quantity</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(oRecordSet.Fields.Item("Quantity").Value, CultureInfo.InvariantCulture)));
+                        Sbuilder.Append("</Value></Cell>");
+
                         Sbuilder.Append("<Cell> <ColumnUid>RSQuantity</ColumnUid> <Value>");
-                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(RSQuantity)));
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(RSQuantity));
                         Sbuilder.Append("</Value></Cell>");
 
                         Sbuilder.Append("<Cell> <ColumnUid>RSName</ColumnUid> <Value>");
-                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["W_NAME"].ToString());
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RS_W_NAME);
                         Sbuilder.Append("</Value></Cell>");
                     }
                     else
                     {
-                        RSFULL_AMOUNT = Convert.ToDouble(RemainingRows[i]["FULL_AMOUNT"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
                         Sbuilder.Append("<Cell> <ColumnUid>RSAmount</ColumnUid> <Value>");
-                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Convert.ToDecimal(RSFULL_AMOUNT)));
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(RSAmount_Full));
+                        Sbuilder.Append("</Value></Cell>");
+
+                        Sbuilder.Append("<Cell> <ColumnUid>Gtotal</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(Amount_Full));
                         Sbuilder.Append("</Value></Cell>");
                     }
 
                     Sbuilder.Append("</Row>");
+
                     count++;
+
+                    oRecordSet.MoveNext();
                 }
-            }
 
-            Sbuilder.Append("</Rows>");
-            Sbuilder.Append("</DataTable>");
+                if (RSDataTable.Rows.Count > 0 & (FilterCompStat == "1" || FilterCompStat == "0" || FilterCompStat == ""))
+                {
+                    DataRow[] RemainingRows;
+                    RemainingRows = RSDataTable.Select("RowLinked = 'N'");
 
-            XML = Sbuilder.ToString();
-            oDataTable.LoadFromXML(XML);
+                    string cardName;
+                    string WAYBILL_NUMBER;
+                    string cTIN;
+                    string cCode;
+                    string RS_st;
+                    string rsType;
+                    decimal fullAmount;
+                    decimal transportCoast;
+                    decimal amount;
+                    decimal quantity;
 
-            SAPbouiCOM.Grid oGrid = ((SAPbouiCOM.Grid)(oForm.Items.Item("WbTable").Specific));
-            SAPbouiCOM.GridColumns oColumns = oGrid.Columns;
+                    for (int i = 0; i < RemainingRows.Length; i++)
+                    {
+                        rsType = RemainingRows[i]["TYPE"].ToString();
+                        fullAmount = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["FULL_AMOUNT"].ToString());
+                        transportCoast = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["TRANSPORT_COAST"].ToString());
+                        amount = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["AMOUNT"].ToString());
+                        quantity = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["Quantity"].ToString());
 
-            oGrid.SelectionMode = SAPbouiCOM.BoMatrixSelect.ms_Auto;
+                        if (rsType == "5") //დაბრუნება
+                        {
+                            fullAmount *= -1;
+                            amount *= -1;
+                        }
 
-            oGrid.DataTable = oDataTable;
-            oGrid.Columns.Item("BaseCard").TitleObject.Caption = BDOSResources.getTranslate("BP");
-            oGrid.Columns.Item("ComparStat").TitleObject.Caption = BDOSResources.getTranslate("CompareStatus");
-            oGrid.Columns.Item("WB_number").TitleObject.Caption = BDOSResources.getTranslate("WaybillNumber");
+                        RS_st = RemainingRows[i]["STATUS"].ToString();
+                        //სტატუსის ფილტრი
+                        if (((Fstatus == "-99" || Fstatus == "") || statuses.IndexOf(RS_st) > 0) == false)
+                        {
+                            continue;
+                        }
 
-            oGrid.Columns.Item("LineNum").TitleObject.Caption = "#";
-            oGrid.Columns.Item("LicTradNum").TitleObject.Caption = BDOSResources.getTranslate("Tin");
-            oGrid.Columns.Item("CardName").TitleObject.Caption = BDOSResources.getTranslate("Name");
-            oGrid.Columns.Item("WB_begDate").TitleObject.Caption = BDOSResources.getTranslate("TransBeginTime");
-            oGrid.Columns.Item("TYPE").TitleObject.Caption = BDOSResources.getTranslate("Type");
-            oGrid.Columns.Item("WB_status").TitleObject.Caption = BDOSResources.getTranslate("Status");
-            oGrid.Columns.Item("WB_strAddrs").TitleObject.Caption = BDOSResources.getTranslate("StartAddress");
-            oGrid.Columns.Item("WB_endAddrs").TitleObject.Caption = BDOSResources.getTranslate("EndAddress");
-            oGrid.Columns.Item("WB_delvDate").TitleObject.Caption = BDOSResources.getTranslate("DeliveryDate");
+                        Sbuilder.Append("<Row>");
 
-            oGrid.Columns.Item("WB_ID").TitleObject.Caption = BDOSResources.getTranslate("WaybillID");
-            oGrid.Columns.Item("WB_actDate").TitleObject.Caption = BDOSResources.getTranslate("ActivateDate");
-            oGrid.Columns.Item("WB_vehicNum").TitleObject.Caption = BDOSResources.getTranslate("Vehicle");
-            oGrid.Columns.Item("WB_drivTin").TitleObject.Caption = BDOSResources.getTranslate("TransporterTin");
-            oGrid.Columns.Item("WB_trnsExpn").TitleObject.Caption = BDOSResources.getTranslate("TransportationExpense");
-            oGrid.Columns.Item("WBLD_Doc").TitleObject.Caption = BDOSResources.getTranslate("WaybillDocEntry");
+                        //cardName = "";
+                        //WAYBILL_NUMBER = "";
+                        cTIN = RemainingRows[i]["TIN"].ToString().Trim();
+                        cCode = BusinessPartners.GetCardCodeByTin(cTIN, "S", out cardName);
 
-            oGrid.Columns.Item("DocDate").TitleObject.Caption = BDOSResources.getTranslate("Date");
-            oGrid.Columns.Item("DocNum").TitleObject.Caption = BDOSResources.getTranslate("DocNum");
-            oGrid.Columns.Item("BaseDoc").TitleObject.Caption = BDOSResources.getTranslate("BaseDocument");
-            oGrid.Columns.Item("Whs").TitleObject.Caption = BDOSResources.getTranslate("Warehouse");
-            oGrid.Columns.Item("WhsFrom").TitleObject.Caption = BDOSResources.getTranslate("FromWarehouse");
+                        if (string.IsNullOrWhiteSpace(cCode) == false)
+                        {
+                            Sbuilder.Append("<Cell> <ColumnUid>BaseCard</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, cCode);
+                            Sbuilder.Append("</Value></Cell>");
+                        }
 
-            oGrid.Columns.Item("RS_Status").TitleObject.Caption = BDOSResources.getTranslate("Status") + " RS";
-            oGrid.Columns.Item("RSAmount").TitleObject.Caption = BDOSResources.getTranslate("Amount") + " RS";
-            oGrid.Columns.Item("Gtotal").TitleObject.Caption = BDOSResources.getTranslate("Amount") + " " + BDOSResources.getTranslate("Document");
+                        Sbuilder.Append("<Cell> <ColumnUid>ComparStat</ColumnUid> <Value>1</Value></Cell>");
 
-            oGrid.Columns.Item("ItemCode").TitleObject.Caption = BDOSResources.getTranslate("ItemCode");
-            oGrid.Columns.Item("InvntryUom").TitleObject.Caption = BDOSResources.getTranslate("UomEntry");
-            oGrid.Columns.Item("BarCode").TitleObject.Caption = BDOSResources.getTranslate("Code");
-            oGrid.Columns.Item("Quantity").TitleObject.Caption = BDOSResources.getTranslate("Quantity");
-            oGrid.Columns.Item("RSQuantity").TitleObject.Caption = BDOSResources.getTranslate("Quantity") + " RS";
-            oGrid.Columns.Item("RSName").TitleObject.Caption = BDOSResources.getTranslate("Name") + " RS";
+                        WAYBILL_NUMBER = RemainingRows[i]["WAYBILL_NUMBER"].ToString();
+                        Sbuilder.Append("<Cell> <ColumnUid>WB_number</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, WAYBILL_NUMBER);
+                        Sbuilder.Append("</Value></Cell>");
 
-            //GTotal                 
-            SAPbouiCOM.GridColumn oGC = oGrid.Columns.Item(25);
-            oGC.Type = SAPbouiCOM.BoGridColumnType.gct_EditText;
-            SAPbouiCOM.EditTextColumn oEditGC = (SAPbouiCOM.EditTextColumn)oGC;
-            SAPbouiCOM.BoColumnSumType oST = oEditGC.ColumnSetting.SumType;
-            oEditGC.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+                        Sbuilder.Append("<Cell> <ColumnUid>LineNum</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, (count + 1).ToString());
+                        Sbuilder.Append("</Value></Cell>");
 
-            //RSAmount                 
-            SAPbouiCOM.GridColumn oAC = oGrid.Columns.Item(24);
-            oGC.Type = SAPbouiCOM.BoGridColumnType.gct_EditText;
-            SAPbouiCOM.EditTextColumn oEditAC = (SAPbouiCOM.EditTextColumn)oAC;
-            SAPbouiCOM.BoColumnSumType oAST = oEditGC.ColumnSetting.SumType;
-            oEditAC.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+                        Sbuilder.Append("<Cell> <ColumnUid>LicTradNum</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, cTIN);
+                        Sbuilder.Append("</Value></Cell>");
 
-            //ComparStat
-            oGrid.Columns.Item(1).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
+                        cardName = RemainingRows[i]["NAME"].ToString();
+                        Sbuilder.Append("<Cell> <ColumnUid>CardName</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, cardName);
+                        Sbuilder.Append("</Value></Cell>");
 
-            SAPbouiCOM.ComboBoxColumn oComboComparStat = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(1);
-            oComboComparStat.DisplayType = SAPbouiCOM.BoComboDisplayType.cdt_Description;
-            oComboComparStat.ValidValues.Add("1", BDOSResources.getTranslate("OnlyOnSite"));
-            oComboComparStat.ValidValues.Add("2", BDOSResources.getTranslate("OnlyOnProgram"));
-            oComboComparStat.ValidValues.Add("3", BDOSResources.getTranslate("AmountsNotEqual"));
-            oComboComparStat.ValidValues.Add("4", BDOSResources.getTranslate("EqualAmounts"));
-            oComboComparStat.ValidValues.Add("5", BDOSResources.getTranslate("Linked") + " " + BDOSResources.getTranslate("Document") + " " + BDOSResources.getTranslate("NotPosted"));
-            oComboComparStat.ValidValues.Add("6", BDOSResources.getTranslate("SavedStatus"));
-            oComboComparStat.ValidValues.Add("7", BDOSResources.getTranslate("NotFoundOnSiteOnThisPeriod"));
+                        strBEGIN_DATE = RemainingRows[i]["BEGIN_DATE"].ToString();
+                        if (strBEGIN_DATE != "")
+                        {
+                            Sbuilder.Append("<Cell> <ColumnUid>WB_begDate</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DateTime.TryParse(strBEGIN_DATE, out BegDate) == false ? DateTime.MinValue : BegDate).ToString("yyyyMMdd"));
+                            Sbuilder.Append("</Value></Cell>");
+                        }
 
-            //TYPE
-            oGrid.Columns.Item(7).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
+                        Sbuilder.Append("<Cell> <ColumnUid>TYPE</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, rsType);
+                        Sbuilder.Append("</Value></Cell>");
 
-            SAPbouiCOM.ComboBoxColumn oComboTYPE = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(7);
-            oComboTYPE.DisplayType = SAPbouiCOM.BoComboDisplayType.cdt_Description;
-            oComboTYPE.ValidValues.Add("1", BDOSResources.getTranslate("InternalShipment"));
-            oComboTYPE.ValidValues.Add("2", BDOSResources.getTranslate("WithTransport"));
-            oComboTYPE.ValidValues.Add("3", BDOSResources.getTranslate("WithoutTransport"));
-            oComboTYPE.ValidValues.Add("4", BDOSResources.getTranslate("Distribution"));
-            oComboTYPE.ValidValues.Add("5", BDOSResources.getTranslate("Return"));
-            oComboTYPE.ValidValues.Add("6", BDOSResources.getTranslate("SubWaybill"));
-            oComboTYPE.ValidValues.Add("", "");
+                        Sbuilder.Append("<Cell> <ColumnUid>WB_status</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RS_st);
+                        Sbuilder.Append("</Value></Cell>");
 
-            //WB_Status
-            oGrid.Columns.Item(8).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
+                        Sbuilder.Append("<Cell> <ColumnUid>WB_strAddrs</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["START_ADDRESS"].ToString());
+                        Sbuilder.Append("</Value></Cell>");
 
-            SAPbouiCOM.ComboBoxColumn oWB_Status = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(8);
-            oWB_Status.DisplayType = SAPbouiCOM.BoComboDisplayType.cdt_Description;
-            oWB_Status.ValidValues.Add("-2", BDOSResources.getTranslate("Canceled"));
-            oWB_Status.ValidValues.Add("-1", BDOSResources.getTranslate("deleted"));
-            oWB_Status.ValidValues.Add("0", BDOSResources.getTranslate("Saved"));
-            oWB_Status.ValidValues.Add("1", BDOSResources.getTranslate("Active"));
-            oWB_Status.ValidValues.Add("2", BDOSResources.getTranslate("finished"));
-            oWB_Status.ValidValues.Add("8", BDOSResources.getTranslate("SentToTransporter"));
+                        Sbuilder.Append("<Cell> <ColumnUid>WB_endAddrs</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["END_ADDRESS"].ToString());
+                        Sbuilder.Append("</Value></Cell>");
 
-            //RS_Status
-            oGrid.Columns.Item(23).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
+                        strDELIVERY_DATE = RemainingRows[i]["DELIVERY_DATE"].ToString();
+                        if (strDELIVERY_DATE != "")
+                        {
+                            Sbuilder.Append("<Cell> <ColumnUid>WB_delvDate</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DateTime.TryParse(strDELIVERY_DATE, out DeliveryDate) == false ? DateTime.MinValue : DeliveryDate).ToString("yyyyMMdd"));
+                            Sbuilder.Append("</Value></Cell>");
+                        }
 
-            SAPbouiCOM.ComboBoxColumn oRS_Status = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(23);
-            oRS_Status.DisplayType = SAPbouiCOM.BoComboDisplayType.cdt_Description;
-            oRS_Status.ValidValues.Add("-2", BDOSResources.getTranslate("Canceled"));
-            oRS_Status.ValidValues.Add("-1", BDOSResources.getTranslate("deleted"));
-            oRS_Status.ValidValues.Add("0", BDOSResources.getTranslate("Saved"));
-            oRS_Status.ValidValues.Add("1", BDOSResources.getTranslate("Active"));
-            oRS_Status.ValidValues.Add("2", BDOSResources.getTranslate("finished"));
-            oRS_Status.ValidValues.Add("8", BDOSResources.getTranslate("SentToTransporter"));
-            oRS_Status.ValidValues.Add("", "");
+                        Sbuilder.Append("<Cell> <ColumnUid>WB_ID</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["ID"].ToString());
+                        Sbuilder.Append("</Value></Cell>");
 
-            //BaseCard
-            SAPbouiCOM.EditTextColumn oBaseCard = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("BaseCard");
-            oBaseCard.LinkedObjectType = "2";
+                        strACTIVATE_DATE = RemainingRows[i]["ACTIVATE_DATE"].ToString();
+                        if (strACTIVATE_DATE != "")
+                        {
+                            Sbuilder.Append("<Cell> <ColumnUid>WB_actDate</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DateTime.TryParse(strACTIVATE_DATE, out ActivateDate) == false ? DateTime.MinValue : ActivateDate).ToString("yyyyMMdd"));
+                            Sbuilder.Append("</Value></Cell>");
+                        }
 
-            //Whs
-            SAPbouiCOM.EditTextColumn oWhs = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("Whs");
-            oWhs.LinkedObjectType = "64";
+                        Sbuilder.Append("<Cell> <ColumnUid>WB_vehicNum</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["CAR_NUMBER"].ToString());
+                        Sbuilder.Append("</Value></Cell>");
 
-            //WhsFrom
-            SAPbouiCOM.EditTextColumn oWhsFrom = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("WhsFrom");
-            oWhsFrom.LinkedObjectType = "64";
+                        Sbuilder.Append("<Cell> <ColumnUid>WB_drivTin</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["DRIVER_TIN"].ToString());
+                        Sbuilder.Append("</Value></Cell>");
 
-            //U_vehicNum
-            SAPbouiCOM.EditTextColumn oU_vehicNum = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("WB_vehicNum");
-            oU_vehicNum.LinkedObjectType = "UDO_F_BDO_VECL_D";
+                        Sbuilder.Append("<Cell> <ColumnUid>WB_trnsExpn</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, transportCoast == 0 ? "" : FormsB1.ConvertDecimalToString(transportCoast));
+                        Sbuilder.Append("</Value></Cell>");
 
-            //U_baseDocT
-            SAPbouiCOM.EditTextColumn obaseDocT = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("BaseDoc");
-            obaseDocT.LinkedObjectType = "14";
+                        Sbuilder.Append("<Cell> <ColumnUid>RS_Status</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["STATUS"].ToString());
+                        Sbuilder.Append("</Value></Cell>");
 
-            //WBLD_Doc
-            SAPbouiCOM.EditTextColumn oWBLD_Doc = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("WBLD_Doc");
-            oWBLD_Doc.LinkedObjectType = "UDO_F_BDO_WBLD_D";
+                        //დეტალური როცა არის
+                        if (FOption != "1")
+                        {
+                            Sbuilder.Append("<Cell> <ColumnUid>RSAmount</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(amount));
+                            Sbuilder.Append("</Value></Cell>");
 
-            //ItemCode
-            SAPbouiCOM.EditTextColumn oItemCode = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("ItemCode");
-            oItemCode.LinkedObjectType = "4";
+                            Sbuilder.Append("<Cell> <ColumnUid>BarCode</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["BAR_CODE"].ToString());
+                            Sbuilder.Append("</Value></Cell>");
 
-            for (int i = 0; i < oColumns.Count; i++)
-            {
-                oColumns.Item(i).Editable = false;
-            }
+                            Sbuilder.Append("<Cell> <ColumnUid>RSQuantity</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(quantity));
+                            Sbuilder.Append("</Value></Cell>");
 
-            oColumns.Item(3).Visible = false;
-            oColumns.Item(8).Visible = false;
-            oColumns.Item(17).Visible = false;
-            oColumns.Item(22).Visible = false;
-            oColumns.Item(28).Visible = false;
-            oColumns.Item(32).Visible = false;
-            if (FOption == "1")
-            {
-                oColumns.Item(26).Visible = false;
-                oColumns.Item(27).Visible = false;
+                            Sbuilder.Append("<Cell> <ColumnUid>RSName</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["W_NAME"].ToString());
+                            Sbuilder.Append("</Value></Cell>");
+                        }
+                        else
+                        {
+                            Sbuilder.Append("<Cell> <ColumnUid>RSAmount</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(fullAmount));
+                            Sbuilder.Append("</Value></Cell>");
+                        }
+
+                        Sbuilder.Append("</Row>");
+                        count++;
+                    }
+                }
+
+                Sbuilder.Append("</Rows>");
+                Sbuilder.Append("</DataTable>");
+
+                XML = Sbuilder.ToString();
+                oDataTable.LoadFromXML(XML);
+
+                SAPbouiCOM.Grid oGrid = ((SAPbouiCOM.Grid)(oForm.Items.Item("WbTable").Specific));
+                SAPbouiCOM.GridColumns oColumns = oGrid.Columns;
+
+                oGrid.SelectionMode = SAPbouiCOM.BoMatrixSelect.ms_Auto;
+
+                oGrid.DataTable = oDataTable;
+                oGrid.Columns.Item("BaseCard").TitleObject.Caption = BDOSResources.getTranslate("CardCode");
+                oGrid.Columns.Item("ComparStat").TitleObject.Caption = BDOSResources.getTranslate("CompareStatus");
+                oGrid.Columns.Item("WB_number").TitleObject.Caption = BDOSResources.getTranslate("WaybillNumber");
+
+                oGrid.Columns.Item("LineNum").TitleObject.Caption = "#";
+                oGrid.Columns.Item("LicTradNum").TitleObject.Caption = BDOSResources.getTranslate("Tin");
+                oGrid.Columns.Item("CardName").TitleObject.Caption = BDOSResources.getTranslate("Name");
+                oGrid.Columns.Item("WB_begDate").TitleObject.Caption = BDOSResources.getTranslate("TransBeginTime");
+                oGrid.Columns.Item("TYPE").TitleObject.Caption = BDOSResources.getTranslate("Type");
+                oGrid.Columns.Item("WB_status").TitleObject.Caption = BDOSResources.getTranslate("Status");
+                oGrid.Columns.Item("WB_strAddrs").TitleObject.Caption = BDOSResources.getTranslate("StartAddress");
+                oGrid.Columns.Item("WB_endAddrs").TitleObject.Caption = BDOSResources.getTranslate("EndAddress");
+                oGrid.Columns.Item("WB_delvDate").TitleObject.Caption = BDOSResources.getTranslate("DeliveryDate");
+
+                oGrid.Columns.Item("WB_ID").TitleObject.Caption = BDOSResources.getTranslate("WaybillID");
+                oGrid.Columns.Item("WB_actDate").TitleObject.Caption = BDOSResources.getTranslate("ActivateDate");
+                oGrid.Columns.Item("WB_vehicNum").TitleObject.Caption = BDOSResources.getTranslate("Vehicle");
+                oGrid.Columns.Item("WB_drivTin").TitleObject.Caption = BDOSResources.getTranslate("TransporterTin");
+                oGrid.Columns.Item("WB_trnsExpn").TitleObject.Caption = BDOSResources.getTranslate("TransportationExpense");
+                oGrid.Columns.Item("WBLD_Doc").TitleObject.Caption = BDOSResources.getTranslate("WaybillDocEntry");
+
+                oGrid.Columns.Item("DocDate").TitleObject.Caption = BDOSResources.getTranslate("Date");
+                oGrid.Columns.Item("DocNum").TitleObject.Caption = BDOSResources.getTranslate("DocNum");
+                oGrid.Columns.Item("BaseDoc").TitleObject.Caption = BDOSResources.getTranslate("BaseDocument");
+                oGrid.Columns.Item("Whs").TitleObject.Caption = BDOSResources.getTranslate("Warehouse");
+                oGrid.Columns.Item("WhsFrom").TitleObject.Caption = BDOSResources.getTranslate("FromWarehouse");
+
+                oGrid.Columns.Item("RS_Status").TitleObject.Caption = BDOSResources.getTranslate("Status") + " RS";
+                oGrid.Columns.Item("RSAmount").TitleObject.Caption = BDOSResources.getTranslate("Amount") + " RS";
+                oGrid.Columns.Item("Gtotal").TitleObject.Caption = BDOSResources.getTranslate("Amount") + " " + BDOSResources.getTranslate("Document");
+
+                oGrid.Columns.Item("ItemCode").TitleObject.Caption = BDOSResources.getTranslate("ItemCode");
+                oGrid.Columns.Item("InvntryUom").TitleObject.Caption = BDOSResources.getTranslate("UomEntry");
+                oGrid.Columns.Item("BarCode").TitleObject.Caption = BDOSResources.getTranslate("Code");
+                oGrid.Columns.Item("Quantity").TitleObject.Caption = BDOSResources.getTranslate("Quantity");
+                oGrid.Columns.Item("RSQuantity").TitleObject.Caption = BDOSResources.getTranslate("Quantity") + " RS";
+                oGrid.Columns.Item("RSName").TitleObject.Caption = BDOSResources.getTranslate("Name") + " RS";
+
+                //GTotal                 
+                SAPbouiCOM.GridColumn oGC = oGrid.Columns.Item(25);
+                oGC.Type = SAPbouiCOM.BoGridColumnType.gct_EditText;
+                SAPbouiCOM.EditTextColumn oEditGC = (SAPbouiCOM.EditTextColumn)oGC;
+                SAPbouiCOM.BoColumnSumType oST = oEditGC.ColumnSetting.SumType;
+                oEditGC.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
+                //RSAmount                 
+                SAPbouiCOM.GridColumn oAC = oGrid.Columns.Item(24);
+                oGC.Type = SAPbouiCOM.BoGridColumnType.gct_EditText;
+                SAPbouiCOM.EditTextColumn oEditAC = (SAPbouiCOM.EditTextColumn)oAC;
+                SAPbouiCOM.BoColumnSumType oAST = oEditGC.ColumnSetting.SumType;
+                oEditAC.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
+                //ComparStat
+                oGrid.Columns.Item(1).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
+
+                SAPbouiCOM.ComboBoxColumn oComboComparStat = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(1);
+                oComboComparStat.DisplayType = SAPbouiCOM.BoComboDisplayType.cdt_Description;
+                oComboComparStat.ValidValues.Add("1", BDOSResources.getTranslate("OnlyOnSite"));
+                oComboComparStat.ValidValues.Add("2", BDOSResources.getTranslate("OnlyOnProgram"));
+                oComboComparStat.ValidValues.Add("3", BDOSResources.getTranslate("AmountsNotEqual"));
+                oComboComparStat.ValidValues.Add("4", BDOSResources.getTranslate("EqualAmounts"));
+                oComboComparStat.ValidValues.Add("5", BDOSResources.getTranslate("Linked") + " " + BDOSResources.getTranslate("Document") + " " + BDOSResources.getTranslate("NotPosted"));
+                oComboComparStat.ValidValues.Add("6", BDOSResources.getTranslate("SavedStatus"));
+                oComboComparStat.ValidValues.Add("7", BDOSResources.getTranslate("NotFoundOnSiteOnThisPeriod"));
+
+                //TYPE
+                oGrid.Columns.Item(7).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
+
+                SAPbouiCOM.ComboBoxColumn oComboTYPE = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(7);
+                oComboTYPE.DisplayType = SAPbouiCOM.BoComboDisplayType.cdt_Description;
+                oComboTYPE.ValidValues.Add("1", BDOSResources.getTranslate("InternalShipment"));
+                oComboTYPE.ValidValues.Add("2", BDOSResources.getTranslate("WithTransport"));
+                oComboTYPE.ValidValues.Add("3", BDOSResources.getTranslate("WithoutTransport"));
+                oComboTYPE.ValidValues.Add("4", BDOSResources.getTranslate("Distribution"));
+                oComboTYPE.ValidValues.Add("5", BDOSResources.getTranslate("Return"));
+                oComboTYPE.ValidValues.Add("6", BDOSResources.getTranslate("SubWaybill"));
+                oComboTYPE.ValidValues.Add("", "");
+
+                //WB_Status
+                oGrid.Columns.Item(8).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
+
+                SAPbouiCOM.ComboBoxColumn oWB_Status = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(8);
+                oWB_Status.DisplayType = SAPbouiCOM.BoComboDisplayType.cdt_Description;
+                oWB_Status.ValidValues.Add("-2", BDOSResources.getTranslate("Canceled"));
+                oWB_Status.ValidValues.Add("-1", BDOSResources.getTranslate("deleted"));
+                oWB_Status.ValidValues.Add("0", BDOSResources.getTranslate("Saved"));
+                oWB_Status.ValidValues.Add("1", BDOSResources.getTranslate("Active"));
+                oWB_Status.ValidValues.Add("2", BDOSResources.getTranslate("finished"));
+                oWB_Status.ValidValues.Add("8", BDOSResources.getTranslate("SentToTransporter"));
+
+                //RS_Status
+                oGrid.Columns.Item(23).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
+
+                SAPbouiCOM.ComboBoxColumn oRS_Status = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(23);
+                oRS_Status.DisplayType = SAPbouiCOM.BoComboDisplayType.cdt_Description;
+                oRS_Status.ValidValues.Add("-2", BDOSResources.getTranslate("Canceled"));
+                oRS_Status.ValidValues.Add("-1", BDOSResources.getTranslate("deleted"));
+                oRS_Status.ValidValues.Add("0", BDOSResources.getTranslate("Saved"));
+                oRS_Status.ValidValues.Add("1", BDOSResources.getTranslate("Active"));
+                oRS_Status.ValidValues.Add("2", BDOSResources.getTranslate("finished"));
+                oRS_Status.ValidValues.Add("8", BDOSResources.getTranslate("SentToTransporter"));
+                oRS_Status.ValidValues.Add("", "");
+
+                //BaseCard
+                SAPbouiCOM.EditTextColumn oBaseCard = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("BaseCard");
+                oBaseCard.LinkedObjectType = "2";
+
+                //Whs
+                SAPbouiCOM.EditTextColumn oWhs = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("Whs");
+                oWhs.LinkedObjectType = "64";
+
+                //WhsFrom
+                SAPbouiCOM.EditTextColumn oWhsFrom = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("WhsFrom");
+                oWhsFrom.LinkedObjectType = "64";
+
+                //U_vehicNum
+                SAPbouiCOM.EditTextColumn oU_vehicNum = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("WB_vehicNum");
+                oU_vehicNum.LinkedObjectType = "UDO_F_BDO_VECL_D";
+
+                //U_baseDocT
+                SAPbouiCOM.EditTextColumn obaseDocT = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("BaseDoc");
+                obaseDocT.LinkedObjectType = "14";
+
+                //WBLD_Doc
+                SAPbouiCOM.EditTextColumn oWBLD_Doc = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("WBLD_Doc");
+                oWBLD_Doc.LinkedObjectType = "UDO_F_BDO_WBLD_D";
+
+                //ItemCode
+                SAPbouiCOM.EditTextColumn oItemCode = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("ItemCode");
+                oItemCode.LinkedObjectType = "4";
+
+                for (int i = 0; i < oColumns.Count; i++)
+                {
+                    oColumns.Item(i).Editable = false;
+                }
+
+                oColumns.Item(3).Visible = false;
+                oColumns.Item(8).Visible = false;
+                oColumns.Item(17).Visible = false;
+                oColumns.Item(22).Visible = false;
                 oColumns.Item(28).Visible = false;
-                oColumns.Item(29).Visible = false;
-                oColumns.Item(30).Visible = false;
-                oColumns.Item(31).Visible = false;
-            }
+                oColumns.Item(32).Visible = false;
+                if (FOption == "1")
+                {
+                    oColumns.Item(26).Visible = false;
+                    oColumns.Item(27).Visible = false;
+                    oColumns.Item(28).Visible = false;
+                    oColumns.Item(29).Visible = false;
+                    oColumns.Item(30).Visible = false;
+                    oColumns.Item(31).Visible = false;
+                }
 
-            if (FOption == "1")
+                if (FOption == "1")
+                {
+                    oGrid.CollapseLevel = 2;
+                }
+                else
+                {
+                    oGrid.CollapseLevel = 3;
+                }
+
+                oGrid.AutoResizeColumns();
+
+                SetGridColor(oForm, false, out errorText);
+            }
+            catch (Exception ex)
             {
-                oGrid.CollapseLevel = 2;
+                throw new Exception(ex.Message);
             }
-            else
+            finally
             {
-                oGrid.CollapseLevel = 3;
+                oForm.Update();
+                oForm.Freeze(false);
             }
-
-            oGrid.AutoResizeColumns();
-
-            SetGridColor(oForm, false, out errorText);
-
         }
 
         public static void SetGridColor(SAPbouiCOM.Form oForm, Boolean itemPressed, out string errorText)
@@ -1545,7 +1534,7 @@ namespace BDO_Localisation_AddOn
             oGrid.Rows.ExpandAll();
         }
 
-        public static void gridColumnSetCfl( SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void gridColumnSetCfl(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
             errorText = null;
 
@@ -1600,7 +1589,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void addMenus( out string errorText)
+        public static void addMenus(out string errorText)
         {
             errorText = null;
 
@@ -1789,26 +1778,31 @@ namespace BDO_Localisation_AddOn
 	         ""ORPC"".""CANCELED"" 
 		        FROM ""RPC1"" 
 		        INNER JOIN ""ORPC"" ON ""ORPC"".""DocEntry"" = ""RPC1"".""DocEntry"" 
-		        WHERE ""RPC1"".""TargetType"" < 0 AND NOT ""ORPC"".""U_BDO_WBID"" IN (SELECT ""OPCH"".""U_BDO_WBID"" FROM ""OPCH"" WHERE ""OPCH"".""CANCELED"" = 'Y')
-		        ) AS ""BASEDOCGDS""   
+		        WHERE ""RPC1"".""TargetType"" < 0 AND ""ORPC"".""CANCELED"" = 'N'
+
+
+
+) AS ""BASEDOCGDS""   
 	        LEFT JOIN ""OCRD"" AS ""OCRD"" ON ""BASEDOCGDS"".""BaseCard"" = ""OCRD"".""CardCode"" 
 	        LEFT JOIN ""OITM"" ON ""BASEDOCGDS"".""ItemCode"" = ""OITM"".""ItemCode"" 
 	        WHERE ((""OITM"".""ItemType"" = 'I' 
 	        AND ""OITM"".""InvntItem"" = 'Y') OR ""OITM"".""ItemType"" = 'F') AND ""BASEDOCGDS"".""CANCELED"" = 'N' " +
+
+            //NOT ""ORPC"".""U_BDO_WBID"" IN (SELECT ""OPCH"".""U_BDO_WBID"" FROM ""OPCH"" WHERE ""OPCH"".""CANCELED"" = 'Y')
 
             ((startDate != new DateTime(1, 1, 1)) ? @" AND ""BASEDOCGDS"".""DocDate"" >= '" + startDate.ToString("yyyyMMdd") + "' " : " ") +
               ((endDate != new DateTime(1, 1, 1)) ? @" AND ""BASEDOCGDS"".""DocDate"" <= '" + endDate.ToString("yyyyMMdd") + "' " : " ") +
               ((cardCode != "") ? @" AND ""BASEDOCGDS"".""BaseCard"" = N'" + cardCode.Replace("'", "''") + "' " : " ") +
               ((itypes == "2" || itypes == "3" || itypes == "5") ? @" AND ""BASEDOCGDS"".""Type"" ='" + ((itypes == "5") ? "5" : "2") + "' " : " ") +
 
-//   ((statuses != "" && statuses != "-99") ? @"AND (CASE WHEN ""U_BDO_WBSt"" = '1' 
-                //	    THEN '0' WHEN ""U_BDO_WBSt""= '2' 
-                //	    THEN '1' WHEN ""U_BDO_WBSt"" = '3' 
-                //	    THEN '2' WHEN ""U_BDO_WBSt"" = '4' 
-                //	    THEN '-1' WHEN ""U_BDO_WBSt"" = '5' 
-                //	    THEN '-2' 
-                //	    ELSE '8' 
-                //	    END) = '" + statuses + "' " : " ") +
+    //   ((statuses != "" && statuses != "-99") ? @"AND (CASE WHEN ""U_BDO_WBSt"" = '1' 
+    //	    THEN '0' WHEN ""U_BDO_WBSt""= '2' 
+    //	    THEN '1' WHEN ""U_BDO_WBSt"" = '3' 
+    //	    THEN '2' WHEN ""U_BDO_WBSt"" = '4' 
+    //	    THEN '-1' WHEN ""U_BDO_WBSt"" = '5' 
+    //	    THEN '-2' 
+    //	    ELSE '8' 
+    //	    END) = '" + statuses + "' " : " ") +
 
     @"GROUP BY 
              ""BASEDOCGDS"".""Type"",
@@ -1836,17 +1830,23 @@ namespace BDO_Localisation_AddOn
 
         public static void reArrangeFormItems(SAPbouiCOM.Form oForm)
         {
-            SAPbouiCOM.Item oItem = null;
+            SAPbouiCOM.Item oItem;
 
+            int left_s2 = 290;
+            int left_e2 = left_s2 + 104;
+            int width_e = 140;
+
+            oItem = oForm.Items.Item("CompStat");
+            oItem.Left = left_e2;
+            oItem = oForm.Items.Item("WBStatus");
+            oItem.Left = left_e2;
             oItem = oForm.Items.Item("Option");
-            oItem.Left = 395;
-
-            //oItem = oForm.Items.Item("33_U_BC");
-            //oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
-            //oItem.Top = oForm.ClientHeight - 25;
+            oItem.Left = left_e2;
+            oItem = oForm.Items.Item("StGrColor");
+            oItem.Left = left_e2 + width_e + 20;
         }
 
-        public static void resizeForm( SAPbouiCOM.Form oForm, out string errorText)
+        public static void resizeForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -1860,7 +1860,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void chooseFromList( SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
+        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
         {
             errorText = null;
 
@@ -1890,7 +1890,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -1904,17 +1904,14 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
 
-                    chooseFromList( oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
+                    chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
                     if (pVal.ItemUID == "WbFillTb")
                     {
-                        oForm.Freeze(true);
-                        updateGrid(  oForm, out errorText);
-                        oForm.Update();
-                        oForm.Freeze(false);
+                        updateGrid(oForm);
                     }
                     if (pVal.ItemUID == "btnColl")
                     {
@@ -1933,7 +1930,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
                 {
-                    gridColumnSetCfl( oForm, pVal, out errorText);
+                    gridColumnSetCfl(oForm, pVal, out errorText);
                 }
 
                 if ((pVal.ItemUID == "StGrColor") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
@@ -1944,7 +1941,7 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
                 {
                     oForm.Freeze(true);
-                    resizeForm( oForm, out errorText);
+                    resizeForm(oForm, out errorText);
                     oForm.Freeze(false);
                 }
             }
