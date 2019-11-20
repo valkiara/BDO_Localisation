@@ -124,405 +124,417 @@ namespace BDO_Localisation_AddOn
 
                 if (checkedLine)
                 {
-                    CommonFunctions.StartTransaction();
-                    SAPbobsCOM.Documents APInv = null;
-                    bool NotToCreate = false;
-                    SAPbouiCOM.ComboBox ComboboxStatus = (SAPbouiCOM.ComboBox)oMatrix.Columns.Item("TYPE").Cells.Item(row).Specific;
-                    string TYPE = ComboboxStatus.Value;
-
-                    if (TYPE == "2") //2
-                        if (oGdsRcpt == "Y")
-                            APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseDeliveryNotes);
-                        else
-                            APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
-                    else if (TYPE == "1") //1
-                        APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseCreditNotes);
-
-                    SAPbouiCOM.EditText Edtfieldtxt = oMatrix.Columns.Item("WBID").Cells.Item(row).Specific;
-                    string WBID = Edtfieldtxt.Value;
-
-                    Edtfieldtxt = oForm.Items.Item("Whs").Specific;
-                    string whs = Edtfieldtxt.Value;
-
-                    Edtfieldtxt = oForm.Items.Item("PrjCode").Specific;
-                    string PrjCode = Edtfieldtxt.Value;
-
-                    Edtfieldtxt = oMatrix.Columns.Item("WBNo").Cells.Item(row).Specific;
-                    string WBNo = Edtfieldtxt.Value;
-
-                    Edtfieldtxt = oMatrix.Columns.Item("WBSupTIN").Cells.Item(row).Specific;
-                    string TIN = Edtfieldtxt.Value;
-
-                    SAPbouiCOM.ComboBox Combobox = oMatrix.Columns.Item("WBStat").Cells.Item(row).Specific;
-                    string WBStat = Combobox.Value;
-
-                    string cardName;
-                    string CardCode = BusinessPartners.GetCardCodeByTin(TIN, "S", out cardName);
-                    if (CardCode == null)
+                    SAPbouiCOM.ComboBox statusOfInvoice = (SAPbouiCOM.ComboBox)oMatrix.Columns.Item("WBStat").Cells.Item(row).Specific;
+                    string statusOFINVOICE = statusOfInvoice.Value;
+                    if (statusOFINVOICE != "5")
                     {
-                        oForm.Freeze(false);
-                        errorText = BDOSResources.getTranslate("BPNotFound") + BDOSResources.getTranslate("BPTin") + " : " + TIN;
-                        return;
-                    }
-                    //Edtfieldtxt = oMatrix.Columns.Item("WBActDate").Cells.Item(row).Specific;
-                    DateTime WBActDate = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBActDate", row - 1);
-                    string WBBlankAgr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBBlankAgr", row - 1);
 
 
-                    //SAPbobsCOM.CompanyService oCompanyService;
-                    //SAPbobsCOM.BlanketAgreementsService oAcuerdoServicio;
-                    //SAPbobsCOM.BlanketAgreement oAcuerdo;
-                    //SAPbobsCOM.BlanketAgreementParams oParams;
-                    //// Initialize it
-                    //oCompanyService = Program.oCompany.GetCompanyService();
-                    //oAcuerdoServicio = oCompanyService.GetBusinessService(SAPbobsCOM.ServiceTypes.BlanketAgreementsService);
-                    //oParams = oAcuerdoServicio.GetDataInterface(SAPbobsCOM.BlanketAgreementsServiceDataInterfaces.basBlanketAgreementParams);
+                        CommonFunctions.StartTransaction();
+                        SAPbobsCOM.Documents APInv = null;
+                        bool NotToCreate = false;
+                        SAPbouiCOM.ComboBox ComboboxStatus = (SAPbouiCOM.ComboBox)oMatrix.Columns.Item("TYPE").Cells.Item(row).Specific;
+                        string TYPE = ComboboxStatus.Value;
+                        if (TYPE == "2") //2
+                            if (oGdsRcpt == "Y")
+                                APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseDeliveryNotes);
+                            else
+                                APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
+                        else if (TYPE == "1") //1
+                            APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseCreditNotes);
 
-                    //oParams.AgreementNo = Convert.ToInt32(WBBlankAgr);
-                    //oAcuerdo = oAcuerdoServicio.GetBlanketAgreement(oParams);
+                        SAPbouiCOM.EditText Edtfieldtxt = oMatrix.Columns.Item("WBID").Cells.Item(row).Specific;
+                        string WBID = Edtfieldtxt.Value;
 
-                    //int PaymentGroupCode = oAcuerdo.PaymentTerms;
+                        Edtfieldtxt = oForm.Items.Item("Whs").Specific;
+                        string whs = Edtfieldtxt.Value;
 
+                        Edtfieldtxt = oForm.Items.Item("PrjCode").Specific;
+                        string PrjCode = Edtfieldtxt.Value;
 
-                    SAPbobsCOM.Recordset oRecordSetWH = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                    string queryPr = @"SELECT ""U_BDOSPrjCod"" FROM ""OWHS"" WHERE ""WhsCode"" = '" + whs + "'";
+                        Edtfieldtxt = oMatrix.Columns.Item("WBNo").Cells.Item(row).Specific;
+                        string WBNo = Edtfieldtxt.Value;
 
-                    oRecordSetWH.DoQuery(queryPr);
+                        Edtfieldtxt = oMatrix.Columns.Item("WBSupTIN").Cells.Item(row).Specific;
+                        string TIN = Edtfieldtxt.Value;
 
-                    if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null || oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
-                    {
-                        APInv.Project = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
-                    }
+                        SAPbouiCOM.ComboBox Combobox = oMatrix.Columns.Item("WBStat").Cells.Item(row).Specific;
+                        string WBStat = Combobox.Value;
 
-                    if (PrjCode != "")
-                    {
-                        APInv.Project = PrjCode;
-                    }
-
-
-                    if (WBBlankAgr != "")
-                    {
-                        APInv.BlanketAgreementNumber = Convert.ToInt32(WBBlankAgr);
-                        SAPbobsCOM.Recordset oRecordSetBA = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                        string query = @"SELECT ""Project"" FROM ""OOAT"" WHERE ""AbsID"" = '" + Convert.ToInt32(WBBlankAgr) + "'";
-
-                        oRecordSetBA.DoQuery(query);
-
-
-                        if (!oRecordSetBA.EoF)
-                        {
-                            APInv.Project = oRecordSetBA.Fields.Item("Project").Value;
-                        }
-
-                    }
-                    //APInv.PaymentGroupCode = PaymentGroupCode;
-                    APInv.CardCode = CardCode;
-                    APInv.DocDate = WBActDate;
-                    APInv.VatDate = WBActDate;
-                    APInv.TaxDate = WBActDate;
-
-                    //APInv.DocCurrency = Program.LocalCurrency;
-
-                    APInv.UserFields.Fields.Item("U_BDO_WBNo").Value = WBNo;
-                    APInv.UserFields.Fields.Item("U_BDO_WBSt").Value = WBStat;
-                    APInv.UserFields.Fields.Item("U_BDO_WBID").Value = WBID;
-
-                    APInv.UserFields.Fields.Item("U_actDate").Value = WBActDate;
-
-                    Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
-                    if (errorText != null)
-                    {
-                        oForm.Freeze(false);
-                        return;
-                    }
-
-                    string su = rsSettings["SU"];
-                    string sp = rsSettings["SP"];
-                    WayBill oWayBill = new WayBill(rsSettings["ProtocolType"]);
-
-                    bool chek_service_user = oWayBill.chek_service_user(su, sp, out errorText);
-                    if (chek_service_user == false)
-                    {
-                        errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
-                        return;
-                    }
-
-                    string[] array_HEADER;
-                    string[][] array_GOODS, array_SUB_WAYBILLS;
-                    int returnCode = oWayBill.get_waybill(Convert.ToInt32(WBID), out array_HEADER, out array_GOODS, out array_SUB_WAYBILLS, out errorText);
-
-                    string[][] wbTempTable = null;
-
-                    if (wbTempLines.TryGetValue(WBNo, out wbTempTable))
-                    {
-                        array_GOODS = wbTempTable;
-                    }
-
-                    int rowCounter = 1;
-                    //int rowIndex = 0;
-
-                    string BPID = TIN;
-
-                    int index = 0;
-
-                    foreach (string[] goodsRow in array_GOODS)
-                    {
-                        string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
-                        string WBItmName = goodsRow[1];
-                        string WBGUntName = "";
-                        string WBGUntCode = "";
-                        string WBUntCdRS = goodsRow[2];
-                        string Cardcode = BusinessPartners.GetCardCodeByTin(BPID, "S", out cardName);
+                        string cardName;
+                        string CardCode = BusinessPartners.GetCardCodeByTin(TIN, "S", out cardName);
                         if (CardCode == null)
                         {
                             oForm.Freeze(false);
-                            errorText = BDOSResources.getTranslate("BPNotFound") + BDOSResources.getTranslate("BPTin") + " : " + BPID;
+                            errorText = BDOSResources.getTranslate("BPNotFound") + BDOSResources.getTranslate("BPTin") + " : " + TIN;
                             return;
                         }
-                        string ItemCode = "";
+                        //Edtfieldtxt = oMatrix.Columns.Item("WBActDate").Cells.Item(row).Specific;
+                        DateTime WBActDate = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBActDate", row - 1);
+                        string WBBlankAgr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBBlankAgr", row - 1);
 
-                        ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out errorText);
 
-                        SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
+                        //SAPbobsCOM.CompanyService oCompanyService;
+                        //SAPbobsCOM.BlanketAgreementsService oAcuerdoServicio;
+                        //SAPbobsCOM.BlanketAgreement oAcuerdo;
+                        //SAPbobsCOM.BlanketAgreementParams oParams;
+                        //// Initialize it
+                        //oCompanyService = Program.oCompany.GetCompanyService();
+                        //oAcuerdoServicio = oCompanyService.GetBusinessService(SAPbobsCOM.ServiceTypes.BlanketAgreementsService);
+                        //oParams = oAcuerdoServicio.GetDataInterface(SAPbobsCOM.BlanketAgreementsServiceDataInterfaces.basBlanketAgreementParams);
 
-                        if (CatalogEntry != null)
-                        {
-                            ItemCode = CatalogEntry.Fields.Item("ItemCode").Value;
-                            WBGUntCode = CatalogEntry.Fields.Item("U_BDO_UoMCod").Value;
-                        }
+                        //oParams.AgreementNo = Convert.ToInt32(WBBlankAgr);
+                        //oAcuerdo = oAcuerdoServicio.GetBlanketAgreement(oParams);
 
-                        SAPbobsCOM.Recordset oRecordsetbyRSCODE = BDO_RSUoM.getUomByRSCode(ItemCode, WBUntCdRS, out errorText);
+                        //int PaymentGroupCode = oAcuerdo.PaymentTerms;
 
-                        if (oRecordsetbyRSCODE != null)
-                        {
-                            if (WBGUntCode == "")
-                            {
-                                WBGUntCode = oRecordsetbyRSCODE.Fields.Item("UomCode").Value;
-                            }
-                        }
 
-                        SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                        string query = @"SELECT * FROM ""OUOM"" WHERE ""UomCode"" = N'" + WBGUntCode + "'";
+                        SAPbobsCOM.Recordset oRecordSetWH = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        string queryPr = @"SELECT ""U_BDOSPrjCod"" FROM ""OWHS"" WHERE ""WhsCode"" = '" + whs + "'";
 
-                        oRecordSet.DoQuery(query);
-
-                        int UomEntry = -1;
-                        if (!oRecordSet.EoF)
-                        {
-                            WBGUntName = oRecordSet.Fields.Item("UomName").Value;
-                            UomEntry = oRecordSet.Fields.Item("UomEntry").Value;
-                        }
-
-                        //double WBQty = Convert.ToDouble(goodsRow[3], CultureInfo.InvariantCulture);
-                        ////double WBPrice = Convert.ToDouble(goodsRow[4], CultureInfo.InvariantCulture);
-                        //double WBSum = Convert.ToDouble(goodsRow[5], CultureInfo.InvariantCulture);
-                        //------------------
-
-                        decimal WBQty = FormsB1.cleanStringOfNonDigits(goodsRow[3]);
-                        //double WBPrice = Convert.ToDouble(goodsRow[4], CultureInfo.InvariantCulture);
-                        decimal WBSum = FormsB1.cleanStringOfNonDigits(goodsRow[5]);
-                        decimal price = CommonFunctions.roundAmountByGeneralSettings(WBSum / WBQty, "Price");
-
-                        SAPbobsCOM.Recordset oRecordSetIt = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                        string queryIt = @"SELECT ""ManBtchNum"" FROM ""OITM"" WHERE ""ItemCode"" = '" + ItemCode + "'";
-
-                        oRecordSetIt.DoQuery(queryIt);
-
-                        string ManBtchNum = "N";
-                        if (!oRecordSetIt.EoF)
-                        {
-                            ManBtchNum = oRecordSetIt.Fields.Item("ManBtchNum").Value;
-                        }
-
-                        if (ManBtchNum == "Y")
-                        {
-                            string BatchNumber = oMatrixGoods.GetCellSpecific("DistNumber", index + 1).Value;
-                            if (BatchNumber == "")
-                            {
-                                string BatchNumberFinal = Items.creatBatchNumbers(ItemCode, index, out errorText);
-                                if (errorText != null)
-                                {
-                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Error") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID + " " + errorText);
-                                    CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                                    NotToCreate = true;
-                                    break;
-                                }
-                                APInv.Lines.BatchNumbers.Add();
-                                APInv.Lines.BatchNumbers.BatchNumber = BatchNumberFinal;
-                                APInv.Lines.BatchNumbers.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
-
-                                oMatrixGoods.GetCellSpecific("DistNumber", index + 1).Value = BatchNumberFinal;
-                            }
-                            else
-                            {
-                                APInv.Lines.BatchNumbers.Add();
-                                APInv.Lines.BatchNumbers.BatchNumber = BatchNumber;
-                                APInv.Lines.BatchNumbers.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
-
-                            }
-                        }
-
-                        //--------------------------------------------------
-                        APInv.Lines.ItemCode = ItemCode;
-                        //APInv.Lines.ItemDescription = WBItmName;
-
-                        //Uom Entry ირკვევა UOMCODe-ის მიხედვით ცხრილში OUOM
-                        APInv.Lines.UoMEntry = UomEntry;
-
-                        APInv.Lines.WarehouseCode = whs;
+                        oRecordSetWH.DoQuery(queryPr);
 
                         if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null || oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
                         {
-                            APInv.Lines.ProjectCode = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
+                            APInv.Project = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
                         }
-
-                        string WBPrjCode = "";
-
-                        WBPrjCode = oMatrixGoods.GetCellSpecific("WBPrjCode", index + 1).Value;
-
-                        goodsRow[12] = WBPrjCode;
 
                         if (PrjCode != "")
                         {
-                            APInv.Lines.ProjectCode = PrjCode;
+                            APInv.Project = PrjCode;
                         }
 
-                        if (WBPrjCode != "")
-                        {
-                            APInv.Lines.ProjectCode = WBPrjCode;
-                        }
 
                         if (WBBlankAgr != "")
                         {
-                            APInv.Lines.AgreementNo = Convert.ToInt32(WBBlankAgr);
-
+                            APInv.BlanketAgreementNumber = Convert.ToInt32(WBBlankAgr);
                             SAPbobsCOM.Recordset oRecordSetBA = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                            string queryP = @"SELECT ""Project"" FROM ""OOAT"" WHERE ""AbsID"" = '" + Convert.ToInt32(WBBlankAgr) + "'";
+                            string query = @"SELECT ""Project"" FROM ""OOAT"" WHERE ""AbsID"" = '" + Convert.ToInt32(WBBlankAgr) + "'";
 
-                            oRecordSetBA.DoQuery(queryP);
+                            oRecordSetBA.DoQuery(query);
+
 
                             if (!oRecordSetBA.EoF)
                             {
-                                APInv.Lines.ProjectCode = oRecordSetBA.Fields.Item("Project").Value;
+                                APInv.Project = oRecordSetBA.Fields.Item("Project").Value;
                             }
+
+                        }
+                        //APInv.PaymentGroupCode = PaymentGroupCode;
+                        APInv.CardCode = CardCode;
+                        APInv.DocDate = WBActDate;
+                        APInv.VatDate = WBActDate;
+                        APInv.TaxDate = WBActDate;
+
+                        //APInv.DocCurrency = Program.LocalCurrency;
+
+                        APInv.UserFields.Fields.Item("U_BDO_WBNo").Value = WBNo;
+                        APInv.UserFields.Fields.Item("U_BDO_WBSt").Value = WBStat;
+                        APInv.UserFields.Fields.Item("U_BDO_WBID").Value = WBID;
+
+                        APInv.UserFields.Fields.Item("U_actDate").Value = WBActDate;
+
+                        Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
+                        if (errorText != null)
+                        {
+                            oForm.Freeze(false);
+                            return;
                         }
 
-                        SAPbobsCOM.Recordset oRecordSetVat = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                        string queryVat = @"SELECT ""VatStatus"",""ECVatGroup"" FROM ""OCRD"" WHERE ""OCRD"".""CardCode"" ='" + Cardcode + "'";
-                        oRecordSetVat.DoQuery(queryVat);
-                        string status = "";
-                        string VatCode = "";
-                        if (!oRecordSetVat.EoF)
+                        string su = rsSettings["SU"];
+                        string sp = rsSettings["SP"];
+                        WayBill oWayBill = new WayBill(rsSettings["ProtocolType"]);
+
+                        bool chek_service_user = oWayBill.chek_service_user(su, sp, out errorText);
+                        if (chek_service_user == false)
                         {
-                            status = oRecordSetVat.Fields.Item("VatStatus").Value;
-                            VatCode = oRecordSetVat.Fields.Item("ECVatGroup").Value;
-                        }
-                        if (status == "Y")
-                        {
-                            string RSVatCode = goodsRow[8];
-                            APInv.Lines.VatGroup = DetectVATByRSCode(RSVatCode, out errorText);
-                        }
-                        else if (status == "N")
-                        {
-                            APInv.Lines.VatGroup = oRecordSetVat.Fields.Item("ECVatGroup").Value;
+                            errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
+                            return;
                         }
 
-                        if (APInv.Lines.VatGroup == null || APInv.Lines.VatGroup == "")
+                        string[] array_HEADER;
+                        string[][] array_GOODS, array_SUB_WAYBILLS;
+                        int returnCode = oWayBill.get_waybill(Convert.ToInt32(WBID), out array_HEADER, out array_GOODS, out array_SUB_WAYBILLS, out errorText);
+
+                        string[][] wbTempTable = null;
+
+                        if (wbTempLines.TryGetValue(WBNo, out wbTempTable))
                         {
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + " " + rowCounter + " " + BDOSResources.getTranslate("CannotFindVATCodeDocumentNotCreated"));
+                            array_GOODS = wbTempTable;
                         }
 
-                        APInv.Lines.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
-                        //APInv.Lines.LineTotal = WBSum;
+                        int rowCounter = 1;
+                        //int rowIndex = 0;
 
-                        oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
-                        oBP.GetByKey(CardCode);
+                        string BPID = TIN;
 
-                        pricelistnum = oBP.PriceListNum;
+                        int index = 0;
 
-                        oPL = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPriceLists);
-                        oPL.GetByKey(pricelistnum.ToString());
-
-                        //if (oPL.IsGrossPrice == SAPbobsCOM.BoYesNoEnum.tYES)
-                        //{
-                        //    APInv.Lines.UnitPrice = WBSum / WBQty;
-                        //}
-                        //else
-                        //{
-                        //    double percent = detectVATRate( APInv.Lines.VatGroup, out errorText);
-                        //    double coefficient = 1 + percent / 100;
-                        //    if (RSVatCode == "0") APInv.Lines.UnitPrice = (WBSum / WBQty) / coefficient;
-                        //    else if (RSVatCode == "1") APInv.Lines.UnitPrice = WBSum / WBQty;
-                        //    else if (RSVatCode == "2") APInv.Lines.UnitPrice = WBSum / WBQty;
-                        //}
-                        APInv.Lines.Currency = Program.LocalCurrency;
-
-                        APInv.Lines.PriceAfterVAT = Convert.ToDouble(price, CultureInfo.InvariantCulture);
-
-                        APInv.Lines.Add();
-
-                        index++;
-                        rowCounter++;
-                        //rowIndex++;
-                    }
-
-                    wbTempLines[oMatrix.GetCellSpecific("WBNo", 1).Value] = array_GOODS;
-
-                    if (NotToCreate)
-                    {
-                        continue;
-                    }
-
-
-                    int retvals = APInv.Add();
-
-                    if (retvals == 0)
-                    {
-                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                        string LinkedDocType = "";
-                        int LinkedDocEnrty = 0;
-
-                        if (TYPE == "2")//2
+                        foreach (string[] goodsRow in array_GOODS)
                         {
-                            if (oGdsRcpt == "Y")
+                            string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
+                            string WBItmName = goodsRow[1];
+                            string WBGUntName = "";
+                            string WBGUntCode = "";
+                            string WBUntCdRS = goodsRow[2];
+                            string Cardcode = BusinessPartners.GetCardCodeByTin(BPID, "S", out cardName);
+                            if (CardCode == null)
                             {
-                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("GoodsRcptPO") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
-                                BDO_WBReceivedDocs.getGoodsReceipePOByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
-                                oMatrix.Columns.Item("GdsRcpPO").Cells.Item(row).Specific.Value = LinkedDocEnrty;
+                                oForm.Freeze(false);
+                                errorText = BDOSResources.getTranslate("BPNotFound") + BDOSResources.getTranslate("BPTin") + " : " + BPID;
+                                return;
                             }
-                            else
+                            string ItemCode = "";
+
+                            ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out errorText);
+
+                            SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
+
+                            if (CatalogEntry != null)
                             {
-                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("Purchase") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
-                                BDO_WBReceivedDocs.getInvoiceByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
-                                oMatrix.Columns.Item("APInvoice").Cells.Item(row).Specific.Value = LinkedDocEnrty;
+                                ItemCode = CatalogEntry.Fields.Item("ItemCode").Value;
+                                WBGUntCode = CatalogEntry.Fields.Item("U_BDO_UoMCod").Value;
+                            }
+
+                            SAPbobsCOM.Recordset oRecordsetbyRSCODE = BDO_RSUoM.getUomByRSCode(ItemCode, WBUntCdRS, out errorText);
+
+                            if (oRecordsetbyRSCODE != null)
+                            {
+                                if (WBGUntCode == "")
+                                {
+                                    WBGUntCode = oRecordsetbyRSCODE.Fields.Item("UomCode").Value;
+                                }
+                            }
+
+                            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                            string query = @"SELECT * FROM ""OUOM"" WHERE ""UomCode"" = N'" + WBGUntCode + "'";
+
+                            oRecordSet.DoQuery(query);
+
+                            int UomEntry = -1;
+                            if (!oRecordSet.EoF)
+                            {
+                                WBGUntName = oRecordSet.Fields.Item("UomName").Value;
+                                UomEntry = oRecordSet.Fields.Item("UomEntry").Value;
+                            }
+
+                            //double WBQty = Convert.ToDouble(goodsRow[3], CultureInfo.InvariantCulture);
+                            ////double WBPrice = Convert.ToDouble(goodsRow[4], CultureInfo.InvariantCulture);
+                            //double WBSum = Convert.ToDouble(goodsRow[5], CultureInfo.InvariantCulture);
+                            //------------------
+
+                            decimal WBQty = FormsB1.cleanStringOfNonDigits(goodsRow[3]);
+                            //double WBPrice = Convert.ToDouble(goodsRow[4], CultureInfo.InvariantCulture);
+                            decimal WBSum = FormsB1.cleanStringOfNonDigits(goodsRow[5]);
+                            decimal price = CommonFunctions.roundAmountByGeneralSettings(WBSum / WBQty, "Price");
+
+                            SAPbobsCOM.Recordset oRecordSetIt = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                            string queryIt = @"SELECT ""ManBtchNum"" FROM ""OITM"" WHERE ""ItemCode"" = '" + ItemCode + "'";
+
+                            oRecordSetIt.DoQuery(queryIt);
+
+                            string ManBtchNum = "N";
+                            if (!oRecordSetIt.EoF)
+                            {
+                                ManBtchNum = oRecordSetIt.Fields.Item("ManBtchNum").Value;
+                            }
+
+                            if (ManBtchNum == "Y")
+                            {
+                                string BatchNumber = oMatrixGoods.GetCellSpecific("DistNumber", index + 1).Value;
+                                if (BatchNumber == "")
+                                {
+                                    string BatchNumberFinal = Items.creatBatchNumbers(ItemCode, index, out errorText);
+                                    if (errorText != null)
+                                    {
+                                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Error") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID + " " + errorText);
+                                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                                        NotToCreate = true;
+                                        break;
+                                    }
+                                    APInv.Lines.BatchNumbers.Add();
+                                    APInv.Lines.BatchNumbers.BatchNumber = BatchNumberFinal;
+                                    APInv.Lines.BatchNumbers.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
+
+                                    oMatrixGoods.GetCellSpecific("DistNumber", index + 1).Value = BatchNumberFinal;
+                                }
+                                else
+                                {
+                                    APInv.Lines.BatchNumbers.Add();
+                                    APInv.Lines.BatchNumbers.BatchNumber = BatchNumber;
+                                    APInv.Lines.BatchNumbers.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
+
+                                }
+                            }
+
+                            //--------------------------------------------------
+                            APInv.Lines.ItemCode = ItemCode;
+                            //APInv.Lines.ItemDescription = WBItmName;
+
+                            //Uom Entry ირკვევა UOMCODe-ის მიხედვით ცხრილში OUOM
+                            APInv.Lines.UoMEntry = UomEntry;
+
+                            APInv.Lines.WarehouseCode = whs;
+
+                            if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null || oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
+                            {
+                                APInv.Lines.ProjectCode = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
+                            }
+
+                            string WBPrjCode = "";
+
+                            WBPrjCode = oMatrixGoods.GetCellSpecific("WBPrjCode", index + 1).Value;
+
+                            goodsRow[12] = WBPrjCode;
+
+                            if (PrjCode != "")
+                            {
+                                APInv.Lines.ProjectCode = PrjCode;
+                            }
+
+                            if (WBPrjCode != "")
+                            {
+                                APInv.Lines.ProjectCode = WBPrjCode;
+                            }
+
+                            if (WBBlankAgr != "")
+                            {
+                                APInv.Lines.AgreementNo = Convert.ToInt32(WBBlankAgr);
+
+                                SAPbobsCOM.Recordset oRecordSetBA = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                                string queryP = @"SELECT ""Project"" FROM ""OOAT"" WHERE ""AbsID"" = '" + Convert.ToInt32(WBBlankAgr) + "'";
+
+                                oRecordSetBA.DoQuery(queryP);
+
+                                if (!oRecordSetBA.EoF)
+                                {
+                                    APInv.Lines.ProjectCode = oRecordSetBA.Fields.Item("Project").Value;
+                                }
+                            }
+
+                            SAPbobsCOM.Recordset oRecordSetVat = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                            string queryVat = @"SELECT ""VatStatus"",""ECVatGroup"" FROM ""OCRD"" WHERE ""OCRD"".""CardCode"" ='" + Cardcode + "'";
+                            oRecordSetVat.DoQuery(queryVat);
+                            string status = "";
+                            string VatCode = "";
+                            if (!oRecordSetVat.EoF)
+                            {
+                                status = oRecordSetVat.Fields.Item("VatStatus").Value;
+                                VatCode = oRecordSetVat.Fields.Item("ECVatGroup").Value;
+                            }
+                            if (status == "Y")
+                            {
+                                string RSVatCode = goodsRow[8];
+                                APInv.Lines.VatGroup = DetectVATByRSCode(RSVatCode, out errorText);
+                            }
+                            else if (status == "N")
+                            {
+                                APInv.Lines.VatGroup = oRecordSetVat.Fields.Item("ECVatGroup").Value;
+                            }
+
+                            if (APInv.Lines.VatGroup == null || APInv.Lines.VatGroup == "")
+                            {
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + " " + rowCounter + " " + BDOSResources.getTranslate("CannotFindVATCodeDocumentNotCreated"));
+                            }
+
+                            APInv.Lines.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
+                            //APInv.Lines.LineTotal = WBSum;
+
+                            oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
+                            oBP.GetByKey(CardCode);
+
+                            pricelistnum = oBP.PriceListNum;
+
+                            oPL = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPriceLists);
+                            oPL.GetByKey(pricelistnum.ToString());
+
+                            //if (oPL.IsGrossPrice == SAPbobsCOM.BoYesNoEnum.tYES)
+                            //{
+                            //    APInv.Lines.UnitPrice = WBSum / WBQty;
+                            //}
+                            //else
+                            //{
+                            //    double percent = detectVATRate( APInv.Lines.VatGroup, out errorText);
+                            //    double coefficient = 1 + percent / 100;
+                            //    if (RSVatCode == "0") APInv.Lines.UnitPrice = (WBSum / WBQty) / coefficient;
+                            //    else if (RSVatCode == "1") APInv.Lines.UnitPrice = WBSum / WBQty;
+                            //    else if (RSVatCode == "2") APInv.Lines.UnitPrice = WBSum / WBQty;
+                            //}
+                            APInv.Lines.Currency = Program.LocalCurrency;
+
+                            APInv.Lines.PriceAfterVAT = Convert.ToDouble(price, CultureInfo.InvariantCulture);
+
+                            APInv.Lines.Add();
+
+                            index++;
+                            rowCounter++;
+                            //rowIndex++;
+                        }
+
+                        wbTempLines[oMatrix.GetCellSpecific("WBNo", 1).Value] = array_GOODS;
+
+                        if (NotToCreate)
+                        {
+                            continue;
+                        }
+
+
+                        int retvals = APInv.Add();
+
+                        if (retvals == 0)
+                        {
+                            CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                            string LinkedDocType = "";
+                            int LinkedDocEnrty = 0;
+
+                            if (TYPE == "2")//2
+                            {
+                                if (oGdsRcpt == "Y")
+                                {
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("GoodsRcptPO") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                                    BDO_WBReceivedDocs.getGoodsReceipePOByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
+                                    oMatrix.Columns.Item("GdsRcpPO").Cells.Item(row).Specific.Value = LinkedDocEnrty;
+                                }
+                                else
+                                {
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("Purchase") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                                    BDO_WBReceivedDocs.getInvoiceByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
+                                    oMatrix.Columns.Item("APInvoice").Cells.Item(row).Specific.Value = LinkedDocEnrty;
+                                }
+                            }
+
+                            if (TYPE == "1")//1
+                            {
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("Return") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                                BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
+                                oMatrix.Columns.Item("CredMemo").Cells.Item(row).Specific.Value = LinkedDocEnrty;
+                            }
+
+                            oMatrix.Columns.Item("WBCheckbox").Cells.Item(row).Specific.Checked = false;
+
+                        }
+                        else
+                        {
+                            CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                            int errCode;
+                            string errMSG;
+
+                            Program.oCompany.GetLastError(out errCode, out errMSG);
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Error") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID + " " + errMSG);
+
+                            int ind = 0;
+                            foreach (string[] goodsRow in array_GOODS)
+                            {
+                                oMatrixGoods.GetCellSpecific("DistNumber", ind + 1).Value = "";
+                                ind++;
                             }
                         }
-
-                        if (TYPE == "1")//1
-                        {
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("Return") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
-                            BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
-                            oMatrix.Columns.Item("CredMemo").Cells.Item(row).Specific.Value = LinkedDocEnrty;
-                        }
-
-                        oMatrix.Columns.Item("WBCheckbox").Cells.Item(row).Specific.Checked = false;
-
                     }
                     else
                     {
-                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                        int errCode;
-                        string errMSG;
+                        string errMSG = "UnableToCreateDocumentOnCanceledInvoice";
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Error") + " : "  +BDOSResources.getTranslate (errMSG));
 
-                        Program.oCompany.GetLastError(out errCode, out errMSG);
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Error") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID + " " + errMSG);
-
-                        int ind = 0;
-                        foreach (string[] goodsRow in array_GOODS)
-                        {
-                            oMatrixGoods.GetCellSpecific("DistNumber", ind + 1).Value = "";
-                            ind++;
-                        }
                     }
                 }
             }
