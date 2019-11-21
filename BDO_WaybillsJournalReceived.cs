@@ -586,6 +586,7 @@ namespace BDO_Localisation_AddOn
                 //       }
 
                 string TYPE = Waybill_Header["TYPE"];
+                string WBCOM = Waybill_Header["WAYBILL_COMMENT"];
                 Console.WriteLine(TYPE);
                 if (TYPE == "5")
                 {
@@ -653,6 +654,7 @@ namespace BDO_Localisation_AddOn
                 {
                     oDataTable.SetValue(13, rowIndex, LinkedDocEntryMemo.ToString());
                 }
+                oDataTable.SetValue(16, rowIndex, WBCOM);
 
                 rowCounter++;
                 rowIndex++;
@@ -1998,17 +2000,16 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("WBSupName", SAPbouiCOM.BoFieldsType.ft_Text, 20); //4
                     oDataTable.Columns.Add("WBActDate", SAPbouiCOM.BoFieldsType.ft_Date, 20); //5
                     oDataTable.Columns.Add("WBStartAdd", SAPbouiCOM.BoFieldsType.ft_Text, 20); //6
-                    oDataTable.Columns.Add("WBEndAdd", SAPbouiCOM.BoFieldsType.ft_Text, 20); //6
-                    oDataTable.Columns.Add("WBSUM", SAPbouiCOM.BoFieldsType.ft_Sum, 20); //7
-                    oDataTable.Columns.Add("WBSupTIN", SAPbouiCOM.BoFieldsType.ft_Text, 20); //8
-                    oDataTable.Columns.Add("WBCheckbox", SAPbouiCOM.BoFieldsType.ft_Text, 20); //9
-                    oDataTable.Columns.Add("APInvoice", SAPbouiCOM.BoFieldsType.ft_Text, 20); //10
-                    oDataTable.Columns.Add("GdsRcpPO", SAPbouiCOM.BoFieldsType.ft_Text, 20); //11
-                    oDataTable.Columns.Add("CredMemo", SAPbouiCOM.BoFieldsType.ft_Text, 20); //12
-
-                    oDataTable.Columns.Add("TYPE", SAPbouiCOM.BoFieldsType.ft_Text, 20); //13
-
-                    oDataTable.Columns.Add("WBBlankAgr", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //14
+                    oDataTable.Columns.Add("WBEndAdd", SAPbouiCOM.BoFieldsType.ft_Text, 20); //7
+                    oDataTable.Columns.Add("WBSUM", SAPbouiCOM.BoFieldsType.ft_Sum, 20); //8
+                    oDataTable.Columns.Add("WBSupTIN", SAPbouiCOM.BoFieldsType.ft_Text, 20); //9
+                    oDataTable.Columns.Add("WBCheckbox", SAPbouiCOM.BoFieldsType.ft_Text, 20); //10
+                    oDataTable.Columns.Add("APInvoice", SAPbouiCOM.BoFieldsType.ft_Text, 20); //11
+                    oDataTable.Columns.Add("GdsRcpPO", SAPbouiCOM.BoFieldsType.ft_Text, 20); //12
+                    oDataTable.Columns.Add("CredMemo", SAPbouiCOM.BoFieldsType.ft_Text, 20); //13    
+                    oDataTable.Columns.Add("TYPE", SAPbouiCOM.BoFieldsType.ft_Text, 20); //14
+                    oDataTable.Columns.Add("WBBlankAgr", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //15
+                    oDataTable.Columns.Add("WBCOMMENT", SAPbouiCOM.BoFieldsType.ft_Text, 20); //16
 
                     int rowCounter = 1;
                     int rowIndex = 0;
@@ -2028,6 +2029,7 @@ namespace BDO_Localisation_AddOn
                         string WBSupTIN = Waybill_Header["SELLER_TIN"];
                         double WBSUM = Convert.ToDouble(Waybill_Header["FULL_AMOUNT"], CultureInfo.InvariantCulture);
                         string TYPE = Waybill_Header["TYPE"];
+                        string WBCOM = Waybill_Header["WAYBILL_COMMENT"];
 
                         DateTime ActDt = new DateTime(1, 1, 1);
 
@@ -2058,6 +2060,7 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue(9, rowIndex, WBSupTIN);
                         oDataTable.SetValue(10, rowIndex, "0");
                         oDataTable.SetValue(14, rowIndex, TYPE);
+                        oDataTable.SetValue(16, rowIndex, WBCOM);
 
                         string LinkedDocType = "";
 
@@ -2232,6 +2235,12 @@ namespace BDO_Localisation_AddOn
                     oColumn.Width = 100;
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind("WBTable", "TYPE");
+
+                    oColumn = oColumns.Add("WBCOMMENT", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("Comment");
+                    oColumn.Width = 100;
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind("WBTable", "WBCOMMENT");
 
                     oColumn.ValidValues.Add("1", BDOSResources.getTranslate("Return"));//1
                     oColumn.ValidValues.Add("2", BDOSResources.getTranslate("Purchase"));//2
