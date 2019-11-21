@@ -3340,4 +3340,7 @@
   <data name="CorrespondingAccount" xml:space="preserve">
     <value>Offset Account</value>
   </data>
+  <data name="UnableToCreateDocumentOnCanceledInvoice" xml:space="preserve">
+    <value>Unable To Create Document On Canceled Invoice</value>
+  </data>
 </root>

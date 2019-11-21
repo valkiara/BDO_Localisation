@@ -3313,4 +3313,7 @@
   <data name="CorrespondingAccount" xml:space="preserve">
     <value>მოკორ. ანგარიში</value>
   </data>
+  <data name="UnableToCreateDocumentOnCanceledInvoice" xml:space="preserve">
+    <value>დოკუმენტის შექმნა შეუძლებელია გაუქმებულ ზედნადებებზე</value>
+  </data>
 </root>
