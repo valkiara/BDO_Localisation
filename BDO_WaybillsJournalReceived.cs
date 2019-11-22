@@ -1755,6 +1755,7 @@ namespace BDO_Localisation_AddOn
                     left = oForm.Items.Item("10").Left;
 
                     //საწყობი
+                    
                     formItems = new Dictionary<string, object>();
                     itemName = "WhsST";
                     formItems.Add("Size", 20);
@@ -1770,7 +1771,7 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-
+                    
                     left = left + 70 + 10;
                     multiSelection = false;
                     objectType = "64"; //Warehouse
@@ -1801,6 +1802,24 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "BDOSPrjLB"; //10 characters
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    formItems.Add("Left", left-20);
+                    formItems.Add("Top", Top);
+                    formItems.Add("Height", 19);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("LinkTo", "Whs");
+                    formItems.Add("LinkedObjectType", objectType);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+
 
                     //რიგი5
                     Top = Top + 20;
@@ -2509,8 +2528,11 @@ namespace BDO_Localisation_AddOn
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string WhsCode = oDataTableSelectedObjects.GetValue("WhsCode", 0);
-
-                        LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("Whs").Specific.Value = WhsCode);
+                        string projectCode = oDataTableSelectedObjects.GetValue("U_BDOSPrjCod", 0);
+                        LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("Whs").Specific.Value = WhsCode);    
+                        LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjCode").Specific.Value = projectCode);
+                        SAPbouiCOM.EditText oEdit = oForm.Items.Item("Whs").Specific;
+                        oEdit.Value = WhsCode;
                     }
 
                     else if (oCFLEvento.ChooseFromListUID == "CFLItmCd")
