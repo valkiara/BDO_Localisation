@@ -122,7 +122,7 @@ namespace BDO_Localisation_AddOn
 
         public static bool IsDevelopment()
         {
-            return UDO.UserDefinedFieldExists("OVPM", "BDOSBdgCf") && (CommonFunctions.getOADM("U_BDOSDevCmp").ToString().Trim() == "Y") && UDO.UserDefinedFieldExists("OINV", "BDOSLnOpTp");
+            return UDO.UserDefinedFieldExists("OVPM", "BDOSBdgCf") && (getOADM("U_BDOSDevCmp").ToString().Trim() == "Y") && UDO.UserDefinedFieldExists("OINV", "BDOSLnOpTp");
         }
 
         public static string GetAccountDetermination(string Code, string Value)
@@ -339,7 +339,7 @@ namespace BDO_Localisation_AddOn
                     INNER JOIN ""OCRD"" ON ""OCRB"".""CardCode"" = ""OCRD"".""CardCode"" 
                     WHERE ""Account"" = '" + account + @"' AND ""OCRD"".""CardType"" = '" + cardType + "'";
 
-                    if (string.IsNullOrEmpty(licTradNum) == false)
+                    if (!string.IsNullOrEmpty(licTradNum))
                     {
                         query = query + @" AND ""OCRD"".""LicTradNum"" = '" + licTradNum + "'";
                     }
@@ -349,14 +349,17 @@ namespace BDO_Localisation_AddOn
                     {
                         return oRecordSet;
                     }
-                }
-                Marshal.FinalReleaseComObject(oRecordSet);
-                oRecordSet = null;
+                }                
                 return null;
             }
             catch
             {
                 return null;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+                oRecordSet = null;
             }
         }
 
@@ -1042,7 +1045,7 @@ namespace BDO_Localisation_AddOn
                 DocCurr = DBDataSourceO.GetValue("DocCur", 0);
             }
             else DocCurr = DBDataSourceO.GetValue("DocCurr", 0);
-            if (DocCurr == CommonFunctions.getLocalCurrency())
+            if (DocCurr == getLocalCurrency())
             {
                 return;
             }
@@ -1061,7 +1064,7 @@ namespace BDO_Localisation_AddOn
 
                 if (UseBlaAgRt == "Y")
                 {
-                    DocRate = BlanketAgreement.GetBlAgremeentCurrencyRate(BlaAgrDocEntry, DocDate, out errorText);
+                    DocRate = BlanketAgreement.GetBlAgremeentCurrencyRate(BlaAgrDocEntry, DocDate);
 
                 }
             }
@@ -1105,7 +1108,7 @@ namespace BDO_Localisation_AddOn
 
 
 
-                    DocRate = (CommonFunctions.roundAmountByGeneralSettings(DocTotalFC * DocRate, "Sum") + GrossSum) / (DocTotalFC + GrossFCSum);
+                    DocRate = (roundAmountByGeneralSettings(DocTotalFC * DocRate, "Sum") + GrossSum) / (DocTotalFC + GrossFCSum);
 
                 }
             }
@@ -1148,13 +1151,13 @@ namespace BDO_Localisation_AddOn
                 string wtCode = docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim();
 
                 bool physicalEntityTax = (docDBSources.Item("OCRD").GetValue("WTLiable", 0).Trim() == "Y" &&
-                                            CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
+                                            getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
 
                 Dictionary<string, decimal> PhysicalEntityPensionRates;
 
                 string errorTextCheck;
                 string docDatestr = docDBSources.Item(docDBSourcesName).GetValue("DocDate", 0).Trim();
-                bool frgn = docDBSources.Item(docDBSourcesName).GetValue("DocCur", 0).Trim() != CommonFunctions.getLocalCurrency();
+                bool frgn = docDBSources.Item(docDBSourcesName).GetValue("DocCur", 0).Trim() != getLocalCurrency();
                 if (physicalEntityTax)
                 {
                     if (string.IsNullOrEmpty(docDatestr))
@@ -1214,7 +1217,7 @@ namespace BDO_Localisation_AddOn
 
                     if (physicalEntityTax && DBDataSourceTable.GetValue("WtLiable", row).Trim() == "Y")
                     {
-                        GrossAmount = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
+                        GrossAmount = Convert.ToDecimal(getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
 
                         PensPhAm = roundAmountByGeneralSettings(GrossAmount * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
                         WhtAmt = roundAmountByGeneralSettings((GrossAmount - PensPhAm) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
@@ -1222,7 +1225,7 @@ namespace BDO_Localisation_AddOn
 
                         if (frgn)
                         {
-                            GrossAmountFC = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "TotalFrgn", row), CultureInfo.InvariantCulture);
+                            GrossAmountFC = Convert.ToDecimal(getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "TotalFrgn", row), CultureInfo.InvariantCulture);
                             PensPhAmFC = roundAmountByGeneralSettings(GrossAmountFC * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
                             WhtAmtFC = roundAmountByGeneralSettings((GrossAmountFC - PensPhAmFC) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
                             totalTaxes = totalTaxes + PensPhAmFC + WhtAmtFC;
@@ -1250,7 +1253,7 @@ namespace BDO_Localisation_AddOn
 
                 if (physicalEntityTax)
                 {
-                    decimal oldWhtAmt = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(docDBSources.Item(docDBSourcesName), null, null, "WTSum", 0), CultureInfo.InvariantCulture);
+                    decimal oldWhtAmt = Convert.ToDecimal(getChildOrDbDataSourceValue(docDBSources.Item(docDBSourcesName), null, null, "WTSum", 0), CultureInfo.InvariantCulture);
                     if (oldWhtAmt != totalTaxes)
                     {
                         if (frgn)
@@ -1306,7 +1309,7 @@ namespace BDO_Localisation_AddOn
 
                 decimal futureDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("FutureDeprAmt").Value, CultureInfo.InvariantCulture);
                 decimal CurrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture);
-                if (CurrDeprAmt > 0 || futureDeprAmt >0)
+                if (CurrDeprAmt > 0 || futureDeprAmt > 0)
                 {
                     rejection = true;
                     Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem") + " " + ItemCode + ": " + DistNumber);
@@ -1334,7 +1337,7 @@ namespace BDO_Localisation_AddOn
                 {
                     string docDatestr = docDBSources.Item(docDBSourcesName).GetValue("DocDate", 0).Trim();
 
-                    string blockStock = CommonFunctions.getOADM("U_BDOSBlcPDt").ToString().Trim();
+                    string blockStock = getOADM("U_BDOSBlcPDt").ToString().Trim();
                     bool blockStockByCompany = (blockStock == "ByCompany");
                     bool blockStockByWarehouse = (blockStock == "ByWarehouse");
 
@@ -1373,11 +1376,11 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.DBDataSource DBDataSourceTable = docDBSources.Item(tableDBSourcesName);
                         for (int row = 0; row < DBDataSourceTable.Size; row++)
                         {
-                            itemCode = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "ItemCode", row).ToString().Trim();
-                            if (CommonFunctions.getValue("OITM", "InvntItem", "ItemCode", itemCode).ToString() == "Y")
+                            itemCode = getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "ItemCode", row).ToString().Trim();
+                            if (getValue("OITM", "InvntItem", "ItemCode", itemCode).ToString() == "Y")
                             {
-                                quantity = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "Quantity", row), CultureInfo.InvariantCulture);
-                                whsCode = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, null, whsFieldName, row).ToString().Trim();
+                                quantity = Convert.ToDecimal(getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "Quantity", row), CultureInfo.InvariantCulture);
+                                whsCode = getChildOrDbDataSourceValue(DBDataSourceTable, null, null, whsFieldName, row).ToString().Trim();
 
                                 if (row == 0)
                                 {

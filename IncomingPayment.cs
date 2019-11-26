@@ -1948,23 +1948,21 @@ namespace BDO_Localisation_AddOn
                     errorText = errorText + BDOSResources.getTranslate("TheFollowingFieldIsMandatory") + " : \"" + BDOSResources.getTranslate("CashFlowLineItemID") + "\"! ";
                 string partnerTaxCode = oDataTable.GetValue("PartnerTaxCode", i);
                 string blnkAgr = oDataTable.GetValue("BlnkAgr", i);
+                string useBlaAgRt = oDataTable.GetValue("UseBlaAgRt", i);
                 SAPbobsCOM.Recordset oRecordSet = CommonFunctions.getBPBankInfo( partnerAccountNumber + partnerCurrency, partnerTaxCode, "C");
                 if (oRecordSet == null)
                 {
                     errorText = BDOSResources.getTranslate("CouldNotFindBusinessPartner") + "! " + BDOSResources.getTranslate("Account") + " \"" + partnerAccountNumber + currency + "\"";
-                    if (string.IsNullOrEmpty(partnerTaxCode) == false)
-                    {
+                    if (!string.IsNullOrEmpty(partnerTaxCode))
                         errorText = errorText + ", " + BDOSResources.getTranslate("Tin") + " \"" + partnerTaxCode + "\"! ";
-                    }
                     else errorText = errorText + "! ";
                 }
 
-                if (string.IsNullOrEmpty(errorText) == false)
+                if (!string.IsNullOrEmpty(errorText))
                 {
                     errorText = BDOSResources.getTranslate("OperationCompletedUnSuccessfully") + "! " + errorText + BDOSResources.getTranslate("TableRow") + " : " + (i + 1);
                     return null;
                 }
-
 
                 string cardCode = oRecordSet.Fields.Item("CardCode").Value;
                 oPayments.CardCode = cardCode;
@@ -1983,18 +1981,28 @@ namespace BDO_Localisation_AddOn
                 oPayments.DocDate = docDate;
                 oPayments.TaxDate = docDate;
 
+                decimal docRate = Convert.ToDecimal(oDataTable.GetValue("DocRateIN", i), NumberFormatInfo.InvariantInfo);
+
+                double docRateByBlnktAgr = 0;
+                double docRateINByBlnktAgr = 0;
                 if (!string.IsNullOrEmpty(blnkAgr))
                 {
                     oPayments.BlanketAgreement = Convert.ToInt32(blnkAgr);
+                    oPayments.UserFields.Fields.Item("U_UseBlaAgRt").Value = useBlaAgRt;
+                    if (useBlaAgRt == "Y")
+                    {
+                        docRateByBlnktAgr = Convert.ToDouble(BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnkAgr), docDate), NumberFormatInfo.InvariantInfo);
+                        if (docRate != 0)
+                            docRateINByBlnktAgr = Convert.ToDouble(BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnkAgr), null, docRate), NumberFormatInfo.InvariantInfo);
+                    }
                 }
 
-                decimal docRate = Convert.ToDecimal(oDataTable.GetValue("DocRateIN", i), NumberFormatInfo.InvariantInfo);
+                //docRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : oSBOBob.GetCurrencyRate(BPCurrency, docDate).Fields.Item("CurrencyRate").Value;
+
                 decimal transferSumLC = 0;
                 decimal transferSumFC = 0;
                 decimal amount = Convert.ToDecimal(oDataTable.GetValue("Amount", i), NumberFormatInfo.InvariantInfo);
-
                 decimal invoicesamount = Convert.ToDecimal(oDataTable.GetValue("InvoicesAmount", i), NumberFormatInfo.InvariantInfo);
-
                 decimal addDPAmt = 0;
                 decimal addDPamtLocal = 0;
                 if (automaticPaymentInternetBanking)
@@ -2016,9 +2024,9 @@ namespace BDO_Localisation_AddOn
                             oPayments.DocCurrency = BPCurrency;
                             oPayments.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tYES;
                             if (docRate != 0)
-                                oPayments.DocRate = Convert.ToDouble(docRate, NumberFormatInfo.InvariantInfo);
+                                oPayments.DocRate = useBlaAgRt == "Y" ? docRateINByBlnktAgr : Convert.ToDouble(docRate, NumberFormatInfo.InvariantInfo);
                             else
-                                oPayments.DocRate = oSBOBob.GetCurrencyRate(BPCurrency, docDate).Fields.Item("CurrencyRate").Value;
+                                oPayments.DocRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : oSBOBob.GetCurrencyRate(BPCurrency, docDate).Fields.Item("CurrencyRate").Value;
                             docRate = Convert.ToDecimal(oPayments.DocRate);
                             transferSumLC = amount;
                             transferSumFC = amount / docRate;
@@ -2028,9 +2036,9 @@ namespace BDO_Localisation_AddOn
                             oPayments.DocCurrency = BPCurrency;
                             oPayments.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tNO;
                             if (docRate != 0)
-                                oPayments.DocRate = Convert.ToDouble(docRate, NumberFormatInfo.InvariantInfo);
+                                oPayments.DocRate = useBlaAgRt == "Y" ? docRateINByBlnktAgr : Convert.ToDouble(docRate, NumberFormatInfo.InvariantInfo);
                             else
-                                oPayments.DocRate = oSBOBob.GetCurrencyRate(BPCurrency, docDate).Fields.Item("CurrencyRate").Value;
+                                oPayments.DocRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : oSBOBob.GetCurrencyRate(BPCurrency, docDate).Fields.Item("CurrencyRate").Value;
                             docRate = Convert.ToDecimal(oPayments.DocRate);
                             transferSumLC = amount * docRate;
                             transferSumFC = amount;
@@ -2072,9 +2080,9 @@ namespace BDO_Localisation_AddOn
                             oPayments.DocCurrency = partnerCurrencySapCode;
                             oPayments.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tNO;
                             if (docRate != 0)
-                                oPayments.DocRate = Convert.ToDouble(docRate, NumberFormatInfo.InvariantInfo);
+                                oPayments.DocRate = useBlaAgRt == "Y" ? docRateINByBlnktAgr : Convert.ToDouble(docRate, NumberFormatInfo.InvariantInfo);
                             else
-                                oPayments.DocRate = oSBOBob.GetCurrencyRate(BPCurrency, docDate).Fields.Item("CurrencyRate").Value;
+                                oPayments.DocRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : oSBOBob.GetCurrencyRate(partnerCurrencySapCode, docDate).Fields.Item("CurrencyRate").Value;
                             docRate = Convert.ToDecimal(oPayments.DocRate);
                             transferSumLC = amount * docRate;
                             transferSumFC = amount;
@@ -2228,9 +2236,7 @@ namespace BDO_Localisation_AddOn
 
                             oRecordSet.MoveNext();
                         }
-
                     }
-
                 }
 
                 if (automaticPaymentInternetBanking)
@@ -2836,7 +2842,7 @@ namespace BDO_Localisation_AddOn
                             if (docRate != 0)
                                 oPayments.DocRate = Convert.ToDouble(docRate, NumberFormatInfo.InvariantInfo);
                             else
-                                oPayments.DocRate = oSBOBob.GetCurrencyRate(BPCurrency, docDate).Fields.Item("CurrencyRate").Value;
+                                oPayments.DocRate = oSBOBob.GetCurrencyRate(partnerCurrencySapCode, docDate).Fields.Item("CurrencyRate").Value;
                             docRate = Convert.ToDecimal(oPayments.DocRate);
                             cashSumLC = amount * docRate;
                             cashSumFC = amount;
