@@ -356,11 +356,6 @@ namespace BDO_Localisation_AddOn
             {
                 return null;
             }
-            finally
-            {
-                Marshal.FinalReleaseComObject(oRecordSet);
-                oRecordSet = null;
-            }
         }
 
         public static bool isBPAccountTreasury(string cardCode, string bankCode, string account)
