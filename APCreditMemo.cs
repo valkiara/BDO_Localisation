@@ -130,8 +130,6 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
-
             oForm.DataSources.UserDataSources.Add("BDO_TaxSer", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 20);
             oForm.DataSources.UserDataSources.Add("BDO_TaxNum", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 20);
             oForm.DataSources.UserDataSources.Add("BDO_TaxDat", SAPbouiCOM.BoDataType.dt_DATE, 20);
@@ -175,8 +173,52 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
             formItems.Add("Enabled", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            top += height + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDO_TpSt";
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("OperationType"));
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            List<string> listValidValues = new List<string>();
+            listValidValues.Add(BDOSResources.getTranslate("Correction")); //0 //კორექტირება
+            listValidValues.Add(BDOSResources.getTranslate("Return")); //1 //დაბრუნება
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDO_CNTp";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "ORPC");
+            formItems.Add("Alias", "U_BDO_CNTp");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("ValidValues", listValidValues);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -191,6 +233,22 @@ namespace BDO_Localisation_AddOn
         {
             errorText = null;
             BDO_WBReceivedDocs.createUserFields("ORPC", out errorText);
+
+            List<string> listValidValues;
+            Dictionary<string, object> fieldskeysMap;
+            listValidValues = new List<string>();
+            listValidValues.Add("Correction"); //0 //კორექტირება
+            listValidValues.Add("Return"); //1 //დაბრუნება
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDO_CNTp");
+            fieldskeysMap.Add("TableName", "ORPC");
+            fieldskeysMap.Add("Description", "CreditNote Type");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+            fieldskeysMap.Add("ValidValues", listValidValues);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
         }
 
         public static void attachWBToDoc(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
@@ -356,6 +414,26 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oRecordSet = null;
                 GC.Collect();
+            }
+        }
+
+        public static void setValues(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+            try
+            {
+                string docEntry = oForm.DataSources.DBDataSources.Item("ORPC").GetValue("DocEntry", 0).Trim();
+
+                if (!string.IsNullOrEmpty(docEntry))
+                {
+                    return;
+                }
+                SAPbouiCOM.ComboBox oCombo = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_CNTp").Specific;
+                oCombo.Select("0", SAPbouiCOM.BoSearchKey.psk_ByValue);
+            }
+            catch (Exception ex)
+            {
+                errorText = ex.Message;
             }
         }
 
@@ -707,16 +785,20 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
                     createFormItems(oForm, out errorText);
                     formDataLoad(oForm, out errorText);
                 }
-
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && !pVal.BeforeAction)
+                {
+                    setValues(oForm, out errorText);
+                }
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.ItemUID == "WBOper" & pVal.BeforeAction == false)
                 {
                     Program.oIncWaybDocFormCrMemo = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
-
+                   
+                    SAPbouiCOM.DBDataSource DocDBSourceOPCH =Program.oIncWaybDocFormCrMemo.DataSources.DBDataSources.Item(0);
                     oForm.Freeze(true);
                     BDO_WBReceivedDocs.comboSelect(oForm, Program.oIncWaybDocFormCrMemo, pVal.ItemUID, "CreditMemo", out errorText);
                     oForm.Freeze(false);
