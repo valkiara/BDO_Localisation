@@ -288,7 +288,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("Descript"));
+                    formItems.Add("Caption", BDOSResources.getTranslate("Description"));
                     formItems.Add("FromPane", 0);
                     formItems.Add("ToPane", 0);
 

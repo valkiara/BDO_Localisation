@@ -10,7 +10,6 @@ namespace BDO_Localisation_AddOn
 {
     class BDOSOutgoingPaymentsWizard
     {
-
         public static void createForm(out string errorText)
         {
             errorText = null;
@@ -103,7 +102,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("BPCardCode"));
+                    formItems.Add("Caption", BDOSResources.getTranslate("CardCode"));
                     formItems.Add("FromPane", 0);
                     formItems.Add("ToPane", 0);
 
@@ -253,7 +252,6 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    //golden errow
                     formItems = new Dictionary<string, object>();
                     itemName = "GLAccLB"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
@@ -269,7 +267,6 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-
 
                     formItems = new Dictionary<string, object>();
                     itemName = "CTAccS"; //10 characters
@@ -288,7 +285,6 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-
 
                     formItems = new Dictionary<string, object>();
                     itemName = "CTAcc"; //10 characters
@@ -318,7 +314,6 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    //golden errow
                     formItems = new Dictionary<string, object>();
                     itemName = "CTAccLB"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
@@ -383,7 +378,6 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-
                     formItems = new Dictionary<string, object>();
                     itemName = "WHtaxS"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
@@ -392,7 +386,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("WHTax"));
+                    formItems.Add("Caption", BDOSResources.getTranslate("WithholdingTax"));
                     formItems.Add("FromPane", 0);
                     formItems.Add("ToPane", 0);
 
@@ -401,8 +395,6 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-
-
 
                     formItems = new Dictionary<string, object>();
                     itemName = "WHTax"; //10 characters
@@ -437,7 +429,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("DispType"));
+                    formItems.Add("Caption", BDOSResources.getTranslate("DispatchType"));
                     formItems.Add("FromPane", 0);
                     formItems.Add("ToPane", 0);
 
@@ -523,7 +515,7 @@ namespace BDO_Localisation_AddOn
                     }
                     try
                     {
-                    oForm.Items.Item("CashFlowI").Specific.Select(CommonFunctions.getOADM("CfwOutDflt").ToString(), SAPbouiCOM.BoSearchKey.psk_ByValue);
+                        oForm.Items.Item("CashFlowI").Specific.Select(CommonFunctions.getOADM("CfwOutDflt").ToString(), SAPbouiCOM.BoSearchKey.psk_ByValue);
                     }
                     catch
                     { }
@@ -588,7 +580,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("Descript"));
+                    formItems.Add("Caption", BDOSResources.getTranslate("Description"));
                     formItems.Add("FromPane", 0);
                     formItems.Add("ToPane", 0);
 
@@ -842,8 +834,11 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("TotalPaymentNet", SAPbouiCOM.BoFieldsType.ft_Sum); //Default - Balance Due
                     oDataTable.Columns.Add("Currency", SAPbouiCOM.BoFieldsType.ft_Text, 50); //დოკუმენტის ვალუტა
                     oDataTable.Columns.Add("TotalPaymentLocal", SAPbouiCOM.BoFieldsType.ft_Sum); //Default - Balance Due
+                    oDataTable.Columns.Add("BlnktAgr", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //Blanket Agreement
+                    oDataTable.Columns.Add("CFWId", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 11);
+                    oDataTable.Columns.Add("Description", SAPbouiCOM.BoFieldsType.ft_Text, 100);
                     oDataTable.Columns.Add("Comments", SAPbouiCOM.BoFieldsType.ft_Text, 254); //კომენტარი
-
+                  
                     if (CommonFunctions.IsDevelopment())
                     {
                         oDataTable.Columns.Add("BudgetCashFlowID", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 11);
@@ -851,19 +846,16 @@ namespace BDO_Localisation_AddOn
                     }
 
                     string uniqueID_lf_Budg_CFL = "Budg_CFL";
-                    
+
                     if (CommonFunctions.IsDevelopment())
                     {
-                        multiSelection = false;
-                       
-                        FormsB1.addChooseFromList(oForm, multiSelection, "UDO_F_BDOSBUCFW_D", uniqueID_lf_Budg_CFL);
+                        FormsB1.addChooseFromList(oForm, false, "UDO_F_BDOSBUCFW_D", uniqueID_lf_Budg_CFL);
                     }
-                    
-                    multiSelection = false;
-                    string uniqueID_lf_Proj_CFL = "Proj_CFL";
-                    FormsB1.addChooseFromList(oForm, multiSelection, "63", uniqueID_lf_Proj_CFL);
 
-                    //foreach (SAPbouiCOM.DataColumn column in oDataTable.Columns)
+                    FormsB1.addChooseFromList(oForm, false, "63", "Proj_CFL");
+                    FormsB1.addChooseFromList(oForm, false, "1250000025", "BlnktAgr_CFL"); //Blanket Agreement
+                    //FormsB1.addChooseFromList(oForm, false, "242", "CashFlowLineItem_CFL");
+
                     for (int count = 0; count < oDataTable.Columns.Count; count++)
                     {
                         var column = oDataTable.Columns.Item(count);
@@ -875,17 +867,14 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = "#";
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "CheckBox")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
-                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Selected");
-                            oColumn.Editable = true;
+                            oColumn.TitleObject.Caption = "";
                             oColumn.ValOff = "N";
                             oColumn.ValOn = "Y";
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "DocEntry")
                         {
@@ -895,7 +884,6 @@ namespace BDO_Localisation_AddOn
                             oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = "13"; // - A/R Invoice, "14" - A/R Credit Note, A/R Down Payment Request - "203", Journal Entry - "30"
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "InstallmentID")
                         {
@@ -903,7 +891,6 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "LineID")
                         {
@@ -911,10 +898,8 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                             oColumn.Visible = false;
                         }
-
                         else if (columnName == "DocType")
                         {
                             oColumn = oColumns.Add("DocType", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
@@ -924,12 +909,10 @@ namespace BDO_Localisation_AddOn
                             oColumn.DisplayDesc = true;
                             oColumn.TitleObject.Sortable = true;
                             oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
-                            oColumn.AffectsFormMode = false;
 
                             oColumn.ValidValues.Add("204", "DT");
                             oColumn.ValidValues.Add("18", "PU"); //BDOSResources.getTranslate("ARInvoice")
                             oColumn.ValidValues.Add("163", "CU"); //BDOSResources.getTranslate("ARCreditNote")
-
                         }
                         else if (columnName == "Arrears")
                         {
@@ -937,23 +920,18 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = "*";
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "TotalPayment")
                         {
                             oColumn = oColumns.Add("TotalPymnt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
-                            oColumn.Editable = true;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "TotalPaymentNet")
                         {
                             oColumn = oColumns.Add("TtlPymntNt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
-                            oColumn.Editable = true;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "WTSum")
                         {
@@ -961,16 +939,13 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("WTaxAmount");
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
-
                         else if (columnName == "TotalPaymentLocal")
                         {
                             oColumn = oColumns.Add("TotalPmntL", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "BudgetCashFlowID")
                         {
@@ -980,7 +955,6 @@ namespace BDO_Localisation_AddOn
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
                             oColumn.ChooseFromListUID = uniqueID_lf_Budg_CFL;
                             oColumn.ChooseFromListAlias = "Code";
-                            //oColumn.Width = 30;
                         }
                         else if (columnName == "BudgetCashFlowName")
                         {
@@ -995,7 +969,6 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "Comments")
                         {
@@ -1003,7 +976,6 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("DocumentRemarks");
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                         else if (columnName == "Project")
                         {
@@ -1011,25 +983,48 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Project");
                             oColumn.Editable = true;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.ChooseFromListUID = uniqueID_lf_Proj_CFL;
+                            oColumn.ChooseFromListUID = "Proj_CFL";
                             oColumn.ChooseFromListAlias = "PrjCode";
-                            oColumn.AffectsFormMode = false;
                         }
-                        
+                        else if(columnName == "BlnktAgr")
+                        {
+                            oColumn = oColumns.Add("BlnkAgr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("BlanketAgreement");
+                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
+                            oColumn.ChooseFromListUID = "BlnktAgr_CFL";
+                            oColumn.ChooseFromListAlias = "AbsID";
+                        }
+                        else if (columnName == "CFWId")
+                        {
+                            oColumn = oColumns.Add("CFWId", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("CashFlowLineItemID");
+                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
+                            oColumn.DisplayDesc = true;
+                            oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
+
+                            foreach (KeyValuePair<string, string> keyValue in CFWList)
+                            {
+                                oColumn.ValidValues.Add(keyValue.Key, keyValue.Value);
+                            }
+                        }
+                        else if (columnName == "Description")
+                        {
+                            oColumn = oColumns.Add("Descrpt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
+                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
+                        }
                         else
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
                         }
                     }
                     oMatrix.Clear();
                     oMatrix.LoadFromDataSource();
                     oMatrix.AutoResizeColumns();
                 }
-
                 resizeItems(oForm);
                 oForm.Visible = true;
                 oForm.Select();
@@ -1079,7 +1074,7 @@ namespace BDO_Localisation_AddOn
             DTSource.Columns.Add("NoDocSum");
             DTSource.Columns.Add("U_BDOSPnPhAm");
             DTSource.Columns.Add("U_BDOSPnCoAm");
-            
+
 
             string LocalCurrency = CurrencyB1.getMainCurrency(out errorText);
             string BankAccount = headerLine["BankAccount"].ToString();
@@ -1098,7 +1093,7 @@ namespace BDO_Localisation_AddOn
             string CardCode = headerLine["CardCode"].ToString();
             string Project = headerLine["Project"].ToString();
             string WTCode = headerLine["WTCode"].ToString();
-            
+
             double WtAmount = Convert.ToDouble(headerLine["WtAmount"]);
             double PensioAmount = Convert.ToDouble(headerLine["PensionAmount"]);
 
@@ -1110,7 +1105,7 @@ namespace BDO_Localisation_AddOn
             OutPay.DocDate = DocDate;
             OutPay.ProjectCode = Project;
 
-            
+
 
             if (CommonFunctions.IsDevelopment())
             {
@@ -1173,7 +1168,7 @@ namespace BDO_Localisation_AddOn
                 OutPay.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tYES;
             }
 
-            OutPay.TransferSum =  Convert.ToDouble(TransferSum);
+            OutPay.TransferSum = Convert.ToDouble(TransferSum);
             if (WTCode != "")
             {
                 OutPay.WTCode = WTCode;
@@ -1181,10 +1176,10 @@ namespace BDO_Localisation_AddOn
                 OutPay.WTAmount = WtAmount + PensioAmount;
             }
 
-                OutPay.UserFields.Fields.Item("U_BDOSWhtAmt").Value = WtAmount;
-                OutPay.UserFields.Fields.Item("U_BDOSPnPhAm").Value = PensioAmount;
-                OutPay.UserFields.Fields.Item("U_BDOSPnCoAm").Value = PensioAmount;
-            
+            OutPay.UserFields.Fields.Item("U_BDOSWhtAmt").Value = WtAmount;
+            OutPay.UserFields.Fields.Item("U_BDOSPnPhAm").Value = PensioAmount;
+            OutPay.UserFields.Fields.Item("U_BDOSPnCoAm").Value = PensioAmount;
+
 
             decimal OnAccount = 0;
             //ცხრილური ნაწილი
@@ -1230,10 +1225,10 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                    OnAccount = OnAccount + Convert.ToDecimal(AccountPaymentsLine["SumApplied"],CultureInfo.InvariantCulture);
+                    OnAccount = OnAccount + Convert.ToDecimal(AccountPaymentsLine["SumApplied"], CultureInfo.InvariantCulture);
                 }
             }
-            
+
             if (GetAccountCashFlowRelevant(TransferAccount))
             {
                 OutPay.PrimaryFormItems.CashFlowLineItemID = Convert.ToInt32(headerLine["CashFlowID"]);
@@ -1265,8 +1260,8 @@ namespace BDO_Localisation_AddOn
             DTSourceRow["U_liablePrTx"] = "N";
             DTSourceRow["U_prBase"] = "";
 
-            
-                DTSourceRow["NoDocSum"] = OnAccount;
+
+            DTSourceRow["NoDocSum"] = OnAccount;
             DTSourceRow["U_BDOSWhtAmt"] = WtAmount;
             DTSourceRow["U_BDOSPnPhAm"] = PensioAmount;
             DTSourceRow["U_BDOSPnCoAm"] = PensioAmount;
@@ -1315,7 +1310,7 @@ namespace BDO_Localisation_AddOn
                     }
                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + ": " + docEntryS, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                 }
-                
+
 
                 return Convert.ToInt32(docEntryS);
             }
@@ -1383,7 +1378,7 @@ namespace BDO_Localisation_AddOn
                 {
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
-                                        
+
                     chooseFromList(oForm, pVal.BeforeAction, oCFLEvento, out errorText);
 
                 }
@@ -1432,7 +1427,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
                         string RowDocEntry = oMatrix.GetCellSpecific("DocEntry", pVal.Row).Value;
                         if (RowDocEntry != "0")
-                        {   
+                        {
                             checkDueAmount(oForm, pVal.Row, out BubbleEvent);
                         }
                     }
@@ -1462,7 +1457,7 @@ namespace BDO_Localisation_AddOn
             row = row - 1;
             decimal TotalPymnt = Convert.ToDecimal(oMatrix.GetCellSpecific("TotalPymnt", row + 1).Value, CultureInfo.InvariantCulture);
             decimal BalanceDue = Convert.ToDecimal(oMatrix.GetCellSpecific("BalanceDue", row + 1).Value, CultureInfo.InvariantCulture);
-            if(BalanceDue< TotalPymnt)
+            if (BalanceDue < TotalPymnt)
             {
                 TotalPymnt = Convert.ToDecimal(oDataTable.GetValue("TotalPayment", row), CultureInfo.InvariantCulture);
                 oMatrix.GetCellSpecific("TotalPymnt", row + 1).Value = TotalPymnt;
@@ -1485,9 +1480,9 @@ namespace BDO_Localisation_AddOn
 
             SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
-            
+
             row = row - 1;
-            decimal TtlPymntNt = Convert.ToDecimal(oMatrix.GetCellSpecific("TtlPymntNt", row+1).Value, CultureInfo.InvariantCulture);
+            decimal TtlPymntNt = Convert.ToDecimal(oMatrix.GetCellSpecific("TtlPymntNt", row + 1).Value, CultureInfo.InvariantCulture);
             decimal TotalPymnt = Convert.ToDecimal(oMatrix.GetCellSpecific("TotalPymnt", row + 1).Value, CultureInfo.InvariantCulture);
 
 
@@ -1501,9 +1496,9 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.WithholdingTaxCodes oWhTax;
             oWhTax = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oWithholdingTaxCodes);
-            if (oWhTax.GetByKey(WHTaxCode)==true)
+            if (oWhTax.GetByKey(WHTaxCode) == true)
             {
-                if(oWhTax.UserFields.Fields.Item("U_BDOSPhisTx").Value == "Y")
+                if (oWhTax.UserFields.Fields.Item("U_BDOSPhisTx").Value == "Y")
                 {
                     string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
                     filter = "WTCode = '" + pensionCoWTCode + "'";
@@ -1516,11 +1511,11 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-           
+
             decimal WTRate = 0;
             filter = "WTCode = '" + WHTaxCode + "'";
             oWHTaxCode = WTaxDefinitons.Select(filter);
-            if (oWHTaxCode.Count()>0)
+            if (oWHTaxCode.Count() > 0)
             {
                 WTRate = Convert.ToDecimal(oWHTaxCode[0]["Rate"]);
             }
@@ -1529,7 +1524,7 @@ namespace BDO_Localisation_AddOn
             decimal PensSum = 0;
             decimal WTSum = 0;
 
-            if (Column== "TtlPymntNt")
+            if (Column == "TtlPymntNt")
             {
                 TotalPymnt = TtlPymntNt / (1 - WTRate / 100) / (1 - pensionRate / 100);
 
@@ -1590,7 +1585,6 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
         private static void checkUncheck(SAPbouiCOM.Form oForm, string CheckOperation, string type, out string errorText)
         {
             errorText = null;
@@ -1610,7 +1604,6 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Freeze(false);
         }
-
 
         public static void matrixColumnSetLinkedObjectTypeInvoicesMTR(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
@@ -1665,7 +1658,6 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
         private static void AddRow(SAPbouiCOM.Form oForm)
         {
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
@@ -1674,7 +1666,7 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.EditText oEditTextDocDate = (SAPbouiCOM.EditText)oForm.Items.Item("DocPstDt").Specific;
             String DocDateS = oEditTextDocDate.Value;
             DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(DocDateS, "yyyyMMdd", CultureInfo.InvariantCulture));
-            
+
             string GLAccount = oForm.Items.Item("GLAcc").Specific.Value;
 
             SAPbobsCOM.ChartOfAccounts oChartOfAccounts = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oChartOfAccounts);
@@ -1732,9 +1724,6 @@ namespace BDO_Localisation_AddOn
 
         }
 
-
-
-
         private static void createPaymentDocuments(SAPbouiCOM.Form oForm)
         {
             int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CreatePaymentDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
@@ -1783,7 +1772,7 @@ namespace BDO_Localisation_AddOn
             string errorText;
             if (PayblCur == "##")
             {
-               
+
                 PayblCur = CurrencyB1.getMainCurrency(out errorText);
 
             }
@@ -1794,7 +1783,7 @@ namespace BDO_Localisation_AddOn
             string filter = "";
             DataRow[] oWHTaxCode = null;
             double pensionRate = 0;
-                       
+
             SAPbobsCOM.WithholdingTaxCodes oWhTax;
             oWhTax = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oWithholdingTaxCodes);
             if (oWhTax.GetByKey(WHTaxCode) == true)
@@ -1807,7 +1796,7 @@ namespace BDO_Localisation_AddOn
                     pensionRate = 0;
                     if (oWHTaxCode.Count() > 0)
                     {
-                        pensionRate = Convert.ToDouble(oWHTaxCode[0]["Rate"],CultureInfo.InvariantCulture);
+                        pensionRate = Convert.ToDouble(oWHTaxCode[0]["Rate"], CultureInfo.InvariantCulture);
                     }
                 }
             }
@@ -1853,7 +1842,7 @@ namespace BDO_Localisation_AddOn
             colDecimal = new DataColumn("WtAmount");
             colDecimal.DataType = System.Type.GetType("System.Decimal");
             AccountHeader.Columns.Add(colDecimal);
-            
+
             AccountHeader.Columns.Add("BankAccount");
             AccountHeader.Columns.Add("TransferAccount");
             AccountHeader.Columns.Add("ControlAccount");
@@ -1867,7 +1856,7 @@ namespace BDO_Localisation_AddOn
             AccountHeader.Columns.Add("AddDescrpt");
             AccountHeader.Columns.Add("Project");
             AccountHeader.Columns.Add("WTCode");
-            
+
             AccountHeader.Columns.Add("BudgetCashFlowID");
             AccountHeader.Columns.Add("BudgetCashFlowName");
 
@@ -1877,13 +1866,13 @@ namespace BDO_Localisation_AddOn
             AccountPaymentsLines.Columns.Add("DocEntry");
             AccountPaymentsLines.Columns.Add("DocNum");
             AccountPaymentsLines.Columns.Add("InstallmentId");
-            
+
             colDecimal = new DataColumn("SumApplied");
             colDecimal.DataType = System.Type.GetType("System.Decimal");
             AccountPaymentsLines.Columns.Add(colDecimal);
 
             string WTCode = oForm.Items.Item("WHTax").Specific.Value;
-                       
+
 
             for (int row = 1; row <= oMatrix.RowCount; row++)
             {
@@ -1957,8 +1946,8 @@ namespace BDO_Localisation_AddOn
                         headerLine["BankAccount"] = BankAccount;
                         headerLine["TransferAccount"] = GLAccount;
                         headerLine["ControlAccount"] = ControlAccount;
-                        headerLine["WTCode"] = DocIsEmpty=="True"?WTCode:"";
-                        
+                        headerLine["WTCode"] = DocIsEmpty == "True" ? WTCode : "";
+
                         headerLine["accrualDate"] = DocDate;
                         headerLine["CashFlowID"] = CashFlowID;
                         headerLine["DispType"] = DispType;
@@ -2004,7 +1993,7 @@ namespace BDO_Localisation_AddOn
                         PayblAmtGross = PayblAmtGross / (1 - WTRate / 100) / (1 - pensionRate / 100);
 
 
-                            PensionAmount = PayblAmtGross * pensionRate/100;
+                        PensionAmount = PayblAmtGross * pensionRate / 100;
                         WtAmount = (PayblAmtGross - PensionAmount) * WTRate / 100;
                         WtAmountTotal = WtAmountTotal + WtAmount;
                         PensionAmountTotal = PensionAmountTotal + PensionAmount;
@@ -2053,8 +2042,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-
-        private static void chooseFromList(SAPbouiCOM.Form oForm, bool BeforeAction, SAPbouiCOM.IChooseFromListEvent oCFLEvento,  out string errorText)
+        private static void chooseFromList(SAPbouiCOM.Form oForm, bool BeforeAction, SAPbouiCOM.IChooseFromListEvent oCFLEvento, out string errorText)
         {
             errorText = null;
 
@@ -2222,6 +2210,7 @@ namespace BDO_Localisation_AddOn
 
 
         }
+
         public static void setWhtCodes(SAPbouiCOM.Form oForm)
         {
             SAPbouiCOM.ComboBox oItem = oForm.Items.Item("WHTax").Specific;
@@ -2256,7 +2245,6 @@ namespace BDO_Localisation_AddOn
             }
 
         }
-
 
         public static void fillMTRInvoice(SAPbouiCOM.Form oForm)
         {
@@ -2585,7 +2573,5 @@ namespace BDO_Localisation_AddOn
                 errorText = ex.Message;
             }
         }
-
-
     }
 }

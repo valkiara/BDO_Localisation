@@ -107,7 +107,7 @@ namespace BDO_Localisation_AddOn
 
             Dictionary<string, string> CurList = new Dictionary<string, string>();
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string query = @"SELECT * FROM ""OCFW"" WHERE ""Postable"" = 'Y'";
+            string query = @"SELECT ""CFWId"", ""CFWname"" FROM ""OCFW"" WHERE ""Postable"" = 'Y'";
 
             oRecordSet.DoQuery(query);
 
