@@ -306,7 +306,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                     {                      
                         if (oStatementDetail.Count > 0)
                         {
-                            BDOSInternetBanking.fillExportMTR_BOG( form, oStatementDetail, false, out errorText);
+                            BDOSInternetBanking.fillExportMTR_BOG( form, oStatementDetail, false);
                         }
                     }
                 }
