@@ -213,10 +213,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static DataTable getWtaxCodeDefinitionByDate(DateTime date, out string errorText)
+        public static DataTable getWtaxCodeDefinitionByDate(DateTime date)
         {
-            errorText = null;
-
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             string query = @"SELECT
@@ -272,7 +270,7 @@ namespace BDO_Localisation_AddOn
             PhysicalEntityPensionRates.Add("PensionWTaxRate", 0);
             PhysicalEntityPensionRates.Add("PensionCoWTaxRate", 0);
 
-            DataTable WTaxDefinitons = getWtaxCodeDefinitionByDate(DocDate, out errorText);
+            DataTable WTaxDefinitons = getWtaxCodeDefinitionByDate(DocDate);
             string pensionWTCode = CommonFunctions.getOADM("U_BDOSPnPh").ToString();
             string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
 

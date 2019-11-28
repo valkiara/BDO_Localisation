@@ -1051,8 +1051,6 @@ namespace BDO_Localisation_AddOn
 
                     oCheckBox.Checked = (checkOperation == "checkB");
                 }
-                oForm.Freeze(false);
-
             }
             catch (Exception ex)
             {
