@@ -3343,4 +3343,7 @@
   <data name="UnableToCreateDocumentOnCanceledInvoice" xml:space="preserve">
     <value>Unable To Create Document On Canceled Invoice</value>
   </data>
+  <data name="OnlyBlank" xml:space="preserve">
+    <value>Only blank</value>
+  </data>
 </root>

@@ -2502,7 +2502,9 @@ namespace BDO_Localisation_AddOn
             top = top + height + 5;
 
             formItems = new Dictionary<string, object>();
-            itemName = "addMTRB"; //10 characters
+            itemName = "addMTRB"; //10 characters 
+
+
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
             formItems.Add("Left", left_s);
             formItems.Add("Width", 100);
