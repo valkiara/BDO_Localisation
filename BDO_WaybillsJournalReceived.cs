@@ -581,23 +581,8 @@ namespace BDO_Localisation_AddOn
                 string WBtype = Waybill_Header["TYPE"];
                 string WBveh = Waybill_Header["CAR_NUMBER"];
                 double WBSUM = Convert.ToDouble(Waybill_Header["FULL_AMOUNT"], CultureInfo.InvariantCulture);
-                //       foreach (var key in Waybill_Header) 
-                //       {
-                //           Console.WriteLine(key);
-                //       }
-
                 string TYPE = Waybill_Header["TYPE"];
                 string WBCOM = Waybill_Header["WAYBILL_COMMENT"];
-                Console.WriteLine(TYPE);
-                if (TYPE == "5")
-                {
-                    TYPE = "1";
-                }
-                else
-                {
-                    TYPE = "2";
-                }
-
                 string LinkedDocType = "";
 
                 int LinkedDocEntryInvoice = 0;
@@ -844,6 +829,15 @@ namespace BDO_Localisation_AddOn
                             string WBStat = Waybill_Header["STATUS"];
                             string WBActDate = Waybill_Header["ACTIVATE_DATE"].Replace("T", " ");
                             string WBActDat = Waybill_Header["ACTIVATE_DATE"];
+                            string WBTYPE = Waybill_Header["TYPE"];
+                            if (WBTYPE == "5")
+                            {
+                                Waybill_Header["TYPE"] = "Return";
+                            }
+                            else
+                            {
+                                Waybill_Header["TYPE"] = "Procurement";
+                            }
                             double WBSUM = Convert.ToDouble(Waybill_Header["FULL_AMOUNT"], CultureInfo.InvariantCulture);
                             SAPbouiCOM.EditText wBIDD = (SAPbouiCOM.EditText)(oForm.Items.Item("wayBID").Specific);
                             SAPbouiCOM.EditText actDate = (SAPbouiCOM.EditText)(oForm.Items.Item("ActDate").Specific);
@@ -1755,7 +1749,7 @@ namespace BDO_Localisation_AddOn
                     left = oForm.Items.Item("10").Left;
 
                     //საწყობი
-                    
+
                     formItems = new Dictionary<string, object>();
                     itemName = "WhsST";
                     formItems.Add("Size", 20);
@@ -1771,7 +1765,7 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-                    
+
                     left = left + 70 + 10;
                     multiSelection = false;
                     objectType = "64"; //Warehouse
@@ -1806,7 +1800,7 @@ namespace BDO_Localisation_AddOn
                     formItems = new Dictionary<string, object>();
                     itemName = "BDOSPrjLB"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                    formItems.Add("Left", left-20);
+                    formItems.Add("Left", left - 20);
                     formItems.Add("Top", Top);
                     formItems.Add("Height", 19);
                     formItems.Add("UID", itemName);
@@ -1948,6 +1942,7 @@ namespace BDO_Localisation_AddOn
                     int DocEntry = 0;
                     string DocType = "";
                     string docDate = "";
+                    string oCNTp = "";
 
                     if (oDocForm != null)
                     {
@@ -1960,43 +1955,43 @@ namespace BDO_Localisation_AddOn
 
                         WBTIN = oBP.UserFields.Fields.Item("LicTradNum").Value;
 
-                        SAPbouiCOM.DBDataSource DocDBSourceOPCH = oDocForm.DataSources.DBDataSources.Item(0);
-                        WbNo = DocDBSourceOPCH.GetValue("U_BDO_WBNo", 0);
-
-                        docDate = DocDBSourceOPCH.GetValue("DocDate", 0);
+                        SAPbouiCOM.DBDataSource oDBDataSource = oDocForm.DataSources.DBDataSources.Item(0);
+                        WbNo = oDBDataSource.GetValue("U_BDO_WBNo", 0);
+                        docDate = oDBDataSource.GetValue("DocDate", 0);
                         //DateTime docDate = DateTime.ParseExact(DocDBSourceOCRD.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
 
                         try
                         {
-                            DocEntry = Convert.ToInt32(DocDBSourceOPCH.GetValue("DocEntry", 0));
+                            DocEntry = Convert.ToInt32(oDBDataSource.GetValue("DocEntry", 0));
                         }
                         catch
                         {
                             DocEntry = 0;
                         }
 
-                        if (DocDBSourceOPCH.TableName == "OPCH")
+                        if (oDBDataSource.TableName == "OPCH")
                         {
                             DocType = "1"; // A/P Invoice
                         }
-                        else if (DocDBSourceOPCH.TableName == "ORPC")
+                        else if (oDBDataSource.TableName == "ORPC")
                         {
-                            DocType = "2"; // Credit Memo ?
+                            DocType = "2"; // Credit Memo
+                            oCNTp = oDBDataSource.GetValue("U_BDO_CNTp", 0);
                         }
-                        else if (DocDBSourceOPCH.TableName == "OPDN")
+                        else if (oDBDataSource.TableName == "OPDN")
                         {
                             DocType = "3"; // Goods Receipt PO
                         }
                     }
 
-                    oForm.DataSources.UserDataSources.Item("WBNo").Value = WbNo;
+                    oForm.DataSources.UserDataSources.Item("WBNo").Value = oCNTp == "1" ? "" : WbNo;
+                    oForm.DataSources.UserDataSources.Item("WaybType").Value = oCNTp == "1" ? "1" : "";
                     oForm.DataSources.UserDataSources.Item("WBSuplNo").Value = WBTIN;
                     if (DocEntry > 0)
                     {
                         oForm.DataSources.UserDataSources.Item("DocEntry").Value = DocEntry.ToString();
                     }
                     oForm.DataSources.UserDataSources.Item("DocType").Value = DocType;
-
                     oForm.DataSources.UserDataSources.Item("StartDate").Value = docDate;
                     oForm.DataSources.UserDataSources.Item("EndDate").Value = docDate;
 
@@ -2060,11 +2055,11 @@ namespace BDO_Localisation_AddOn
 
                         if (TYPE == "5")
                         {
-                            TYPE = "1";
+                            TYPE = "Return";
                         }
                         else
                         {
-                            TYPE = "2";
+                            TYPE = "Procurement";
                         }
 
                         oDataTable.Rows.Add();
@@ -2529,7 +2524,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string WhsCode = oDataTableSelectedObjects.GetValue("WhsCode", 0);
                         string projectCode = oDataTableSelectedObjects.GetValue("U_BDOSPrjCod", 0);
-                        LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("Whs").Specific.Value = WhsCode);    
+                        LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("Whs").Specific.Value = WhsCode);
                         LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjCode").Specific.Value = projectCode);
                         SAPbouiCOM.EditText oEdit = oForm.Items.Item("Whs").Specific;
                         oEdit.Value = WhsCode;
@@ -3622,15 +3617,15 @@ namespace BDO_Localisation_AddOn
                                             itemCodeOld = null;
                                         }
                                     }
-                                    catch(Exception ex)
+                                    catch (Exception ex)
                                     {
                                         itemCodeOld = null;
                                         throw new Exception(ex.Message);
                                     }
                                     finally
-                                    {                                        
+                                    {
                                         oForm.Freeze(false);
-                                    }                                    
+                                    }
                                 }
                             }
                         }
@@ -3721,5 +3716,6 @@ namespace BDO_Localisation_AddOn
                 }
             }
         }
+
     }
 }
