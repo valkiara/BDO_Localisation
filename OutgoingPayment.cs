@@ -3024,47 +3024,51 @@ namespace BDO_Localisation_AddOn
 
                 if (BusinessObjectInfo.BeforeAction)
                 {
-                    fillPhysicalEntityTaxes(oForm, out errorText);
-
-                    // მოგების გადასახადი
-                    if (ProfitTaxTypeIsSharing)
+                    SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item(0);
+                    if (oDBDataSource.GetValue("Canceled", 0) == "N" && !Program.cancellationTrans)
                     {
-                        if (oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocType", 0) == "S")
+                        fillPhysicalEntityTaxes(oForm, out errorText);
+
+                        // მოგების გადასახადი
+                        if (ProfitTaxTypeIsSharing)
                         {
-                            bool TaxAccountsIsEmpty = ProfitTax.TaxAccountsIsEmpty();
-                            if (TaxAccountsIsEmpty == true)
+                            if (oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocType", 0) == "S")
                             {
-                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TaxAccounts") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
-                                Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                                BubbleEvent = false;
+                                bool TaxAccountsIsEmpty = ProfitTax.TaxAccountsIsEmpty();
+                                if (TaxAccountsIsEmpty == true)
+                                {
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TaxAccounts") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
+                                    Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                                    BubbleEvent = false;
+                                }
+                            }
+
+                            if (oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_liablePrTx", 0) == "Y")
+                            {
+                                if (string.IsNullOrEmpty(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_prBase", 0)))
+                                {
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TaxableObject") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
+                                    Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                                    BubbleEvent = false;
+                                }
                             }
                         }
 
-                        if (oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_liablePrTx", 0) == "Y")
+                        CheckAccounts(oForm, out errorText);
+                        if (errorText != null)
                         {
-                            if (string.IsNullOrEmpty(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_prBase", 0)))
-                            {
-                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TaxableObject") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
-                                Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                                BubbleEvent = false;
-                            }
+                            Program.uiApp.MessageBox(errorText);
+                            BubbleEvent = false;
                         }
-                    }
 
-                    CheckAccounts(oForm, out errorText);
-                    if (errorText != null)
-                    {
-                        Program.uiApp.MessageBox(errorText);
-                        BubbleEvent = false;
-                    }
-
-                    checkFillDoc(oForm, out errorText);
-                    if (errorText != null)
-                    {
-                        SAPbouiCOM.ComboBox oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("statusCB").Specific;
-                        oComboBox.Select("notToUpload", SAPbouiCOM.BoSearchKey.psk_ByValue);
-                        Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, false);
-                        BubbleEvent = false;
+                        checkFillDoc(oForm, out errorText);
+                        if (errorText != null)
+                        {
+                            SAPbouiCOM.ComboBox oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("statusCB").Specific;
+                            oComboBox.Select("notToUpload", SAPbouiCOM.BoSearchKey.psk_ByValue);
+                            Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, false);
+                            BubbleEvent = false;
+                        }
                     }
                 }
 
@@ -3072,7 +3076,7 @@ namespace BDO_Localisation_AddOn
                 {
                     //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
                     SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item(0);
-                    if (oDBDataSource.GetValue("Canceled", 0) == "N")
+                    if (oDBDataSource.GetValue("Canceled", 0) == "N" && !Program.cancellationTrans)
                     {
                         string opType = oDBDataSource.GetValue("U_opType", 0).Trim();
                         if (opType != "salaryPayment" & opType != "paymentToEmployee")
@@ -4720,18 +4724,18 @@ namespace BDO_Localisation_AddOn
                 if (cashFlowRelevant == true && string.IsNullOrEmpty(cashFlowLineItemID))
                     errorText = errorText + BDOSResources.getTranslate("TheFollowingFieldIsMandatory") + " : \"" + BDOSResources.getTranslate("CashFlowLineItemID") + "\"! ";
                 string partnerTaxCode = oDataTable.GetValue("PartnerTaxCode", i);
+                string blnkAgr = oDataTable.GetValue("BlnkAgr", i);
+                string useBlaAgRt = oDataTable.GetValue("UseBlaAgRt", i);
                 SAPbobsCOM.Recordset oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, "S");
                 if (oRecordSet == null)
                 {
                     errorText = BDOSResources.getTranslate("CouldNotFindBusinessPartner") + "! " + BDOSResources.getTranslate("Account") + " \"" + partnerAccountNumber + currency + "\"";
-                    if (string.IsNullOrEmpty(partnerTaxCode) == false)
-                    {
+                    if (!string.IsNullOrEmpty(partnerTaxCode))
                         errorText = errorText + ", " + BDOSResources.getTranslate("Tin") + " \"" + partnerTaxCode + "\"! ";
-                    }
                     else errorText = errorText + "! ";
                 }
 
-                if (string.IsNullOrEmpty(errorText) == false)
+                if (!string.IsNullOrEmpty(errorText))
                 {
                     errorText = BDOSResources.getTranslate("OperationCompletedUnSuccessfully") + "! " + errorText + BDOSResources.getTranslate("TableRow") + " : " + (i + 1);
                     return null;
@@ -4755,6 +4759,17 @@ namespace BDO_Localisation_AddOn
                 oPayments.DocDate = docDate;
                 oPayments.TaxDate = docDate;
 
+                double docRateByBlnktAgr = 0;
+                if (!string.IsNullOrEmpty(blnkAgr))
+                {
+                    oPayments.BlanketAgreement = Convert.ToInt32(blnkAgr);
+                    oPayments.UserFields.Fields.Item("U_UseBlaAgRt").Value = useBlaAgRt;
+                    if (useBlaAgRt == "Y")
+                    {
+                        docRateByBlnktAgr = Convert.ToDouble(BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnkAgr), docDate), NumberFormatInfo.InvariantInfo);
+                    }
+                }
+
                 decimal docRate;
                 decimal transferSumLC = 0;
                 decimal transferSumFC = 0;
@@ -4768,7 +4783,7 @@ namespace BDO_Localisation_AddOn
                         {
                             oPayments.DocCurrency = BPCurrency;
                             oPayments.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tYES;
-                            oPayments.DocRate = oSBOBob.GetCurrencyRate(BPCurrency, docDate).Fields.Item("CurrencyRate").Value;
+                            oPayments.DocRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : oSBOBob.GetCurrencyRate(BPCurrency, docDate).Fields.Item("CurrencyRate").Value;
                             docRate = Convert.ToDecimal(oPayments.DocRate);
                             transferSumLC = amount;
                             transferSumFC = amount / docRate;
@@ -4777,8 +4792,8 @@ namespace BDO_Localisation_AddOn
                         {
                             oPayments.DocCurrency = BPCurrency;
                             oPayments.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tNO;
-                            oPayments.DocRate = oSBOBob.GetCurrencyRate(partnerCurrencySapCode, docDate).Fields.Item("CurrencyRate").Value;
-                            docRate = Convert.ToDecimal(oPayments.DocRate);
+                            oPayments.DocRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : oSBOBob.GetCurrencyRate(partnerCurrencySapCode, docDate).Fields.Item("CurrencyRate").Value;
+                            docRate = docRate = Convert.ToDecimal(oPayments.DocRate);
                             transferSumLC = amount * docRate;
                             transferSumFC = amount;
                         }
@@ -4818,8 +4833,8 @@ namespace BDO_Localisation_AddOn
                         {
                             oPayments.DocCurrency = partnerCurrencySapCode;
                             oPayments.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tNO;
-                            oPayments.DocRate = oSBOBob.GetCurrencyRate(partnerCurrencySapCode, docDate).Fields.Item("CurrencyRate").Value;
-                            docRate = Convert.ToDecimal(oPayments.DocRate);
+                            oPayments.DocRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : oSBOBob.GetCurrencyRate(partnerCurrencySapCode, docDate).Fields.Item("CurrencyRate").Value;
+                            docRate = docRate = Convert.ToDecimal(oPayments.DocRate);
                             transferSumLC = amount * docRate;
                             transferSumFC = amount;
                         }

@@ -643,7 +643,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                                 }
                                 else
                                 {
-                                    BDOSInternetBanking.fillExportMTR_TBC( form, oBaseQueryResultIo, oAccountMovementDetailIo, false, out errorText);
+                                    BDOSInternetBanking.fillExportMTR_TBC( form, oBaseQueryResultIo, oAccountMovementDetailIo, false);
                                 }
                             }
                             if (operation != null)

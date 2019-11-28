@@ -1174,16 +1174,10 @@ namespace BDO_Localisation_AddOn
                     string START_ADDRESS = (itemNode.SelectSingleNode("START_ADDRESS") == null) ? "" : itemNode.SelectSingleNode("START_ADDRESS").InnerText;
                     string END_ADDRESS = (itemNode.SelectSingleNode("END_ADDRESS") == null) ? "" : itemNode.SelectSingleNode("END_ADDRESS").InnerText;
 
-                    if (StartAddress != "" && StartAddress != START_ADDRESS)
-                    {
-                        continue;
-                    }
-
-
-                    if (EndAddress != "" && EndAddress != END_ADDRESS)
-                    {
-                        continue;
-                    }
+                    if (StartAddress == "blank" && START_ADDRESS != "") continue;                    
+                    if (EndAddress == "blank" && END_ADDRESS != "") continue;
+                    if (StartAddress != "" && StartAddress!="blank" && StartAddress != START_ADDRESS) continue;
+                    if (EndAddress != "" && EndAddress!="blank" && EndAddress != END_ADDRESS) continue;
 
                     waybill_map = new Dictionary<string, string>();
 
