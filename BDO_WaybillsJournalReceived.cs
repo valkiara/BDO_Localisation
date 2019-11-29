@@ -817,12 +817,17 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string stAdd = oForm.DataSources.UserDataSources.Item("stAddEm").ValueEx;
-                string enAdd= oForm.DataSources.UserDataSources.Item("endAddEm").ValueEx;
-                string startAd = oForm.DataSources.UserDataSources.Item("startAdd").ValueEx;
+                string enAdd = oForm.DataSources.UserDataSources.Item("endAddEm").ValueEx;
+                string startAd = oForm.DataSources.UserDataSources.Item("StartAdd").ValueEx;
                 string endAd = oForm.DataSources.UserDataSources.Item("EndAdd").ValueEx;
-                if (stAdd == "Y") startAd = "blank";
-                if (enAdd == "Y") endAd = "blank";
- 
+                if (stAdd == "Y")
+                {
+                    startAd = "blank";
+                }
+                if (enAdd == "Y")
+                {
+                    endAd = "blank";
+                }
 
                 Dictionary<string, Dictionary<string, string>> waybills_map_part = oWayBill.get_buyer_waybills(itypes, seller_id, statuses, car_number, startDateParam, endDateParam, startDateParam, endDateParam, driver_tin, startDateParam, endDateParam, full_amount, waybill_number, startDateParam, endDateParam, s_user_id, comment, startAd, endAd, out errorText);
                 foreach (KeyValuePair<string, Dictionary<string, string>> keyvalue in waybills_map_part)
@@ -1007,15 +1012,11 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
                 }
-
                 oForm.Visible = true;
                 //oForm.Select();
             }
 
-
             GC.Collect();
-
-
         }
         public static void createForm(SAPbouiCOM.Form oDocForm, out string errorText)
         {
@@ -1035,14 +1036,12 @@ namespace BDO_Localisation_AddOn
             bool newForm;
             bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
 
-            if (formExist == true)
+            if (formExist)
             {
-                if (newForm == true)
+                if (newForm)
                 {
-
                     oForm.DataSources.UserDataSources.Add("DocEntry", SAPbouiCOM.BoDataType.dt_SHORT_NUMBER, 50);
                     oForm.DataSources.UserDataSources.Add("DocType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
-
                     oForm.DataSources.UserDataSources.Add("CurrWBNo", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
                     oForm.DataSources.UserDataSources.Add("CurrWBID", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
                     oForm.DataSources.UserDataSources.Add("CurrWBSt", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
@@ -1216,7 +1215,7 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-                    
+
                     left = left + 110 + 10;
 
                     formItems = new Dictionary<string, object>();
@@ -3549,9 +3548,21 @@ namespace BDO_Localisation_AddOn
                     {
                         SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
+
+
                         if (pVal.ItemUID == "10")
-                        {
                             updateForm(oForm, out errorText);
+                        else if (pVal.ItemUID == "stAddEm")
+                        {
+                            if (oForm.ActiveItem == "StartAdd")
+                                oForm.Items.Item("CarNo").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                            oForm.Items.Item("StartAdd").Enabled = ((SAPbouiCOM.CheckBox)oForm.Items.Item("stAddEm").Specific).Checked;
+                        }
+                        else if (pVal.ItemUID == "endAddEm")
+                        {
+                            if (oForm.ActiveItem == "EndAdd")
+                                oForm.Items.Item("CarNo").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                            oForm.Items.Item("EndAdd").Enabled = ((SAPbouiCOM.CheckBox)oForm.Items.Item("endAddEm").Specific).Checked;
                         }
                         else if (pVal.ItemUID == "AddRow")
                         {
@@ -3561,11 +3572,9 @@ namespace BDO_Localisation_AddOn
                                 createFormNewRow(noForm, out errorText);
                             }
                         }
-
-                        string DocType = oForm.DataSources.UserDataSources.Item("DocType").Value;
-
-                        if (pVal.ItemUID == "3")
+                        else if (pVal.ItemUID == "3")
                         {
+                            string DocType = oForm.DataSources.UserDataSources.Item("DocType").Value;
                             if (Program.oIncWaybDocFormAPInv != null || Program.oIncWaybDocFormCrMemo != null || Program.oIncWaybDocFormGdsRecpPO != null)
                             {
                                 if (DocType == "1")
@@ -3584,11 +3593,10 @@ namespace BDO_Localisation_AddOn
                             else
                             {
                                 oForm.Close();
-                                //Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("IndividualLinkAllowdOnlyFromDocumentForm"));
                             }
                         }
 
-                        if (pVal.ItemUID == "CreateDocs")
+                        else if (pVal.ItemUID == "CreateDocs")
                         {
                             int answer = 0;
 
