@@ -368,10 +368,15 @@ namespace BDO_Localisation_AddOn
 
                     formItems = new Dictionary<string, object>();
                     itemName = "WHTax"; //10 characters
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    formItems.Add("isDataSource", true);
                     formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("Length", 1);
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("TableName", "");
+                    formItems.Add("Length", 4);
                     formItems.Add("Size", 20);
+                    formItems.Add("Alias", itemName);
+                    formItems.Add("Bound", true);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
                     formItems.Add("Left", left_e2);
                     formItems.Add("Width", width_e);
                     formItems.Add("Top", top);
@@ -1005,21 +1010,18 @@ namespace BDO_Localisation_AddOn
 
         private static int createPaymentDocument(SAPbouiCOM.Form oForm, DataRow headerLine, DataTable AccountPaymentsLines)
         {
-            string errorText = null;
+            string errorText;
 
-            SAPbouiCOM.EditText oEditTextDocDate = (SAPbouiCOM.EditText)oForm.Items.Item("DocPstDt").Specific;
-            string DocDateS = oEditTextDocDate.Value;
-            DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(DocDateS, "yyyyMMdd", CultureInfo.InvariantCulture));
+            string docDateS = oForm.DataSources.UserDataSources.Item("DocPstDt").ValueEx;
+            DateTime docDate = Convert.ToDateTime(DateTime.ParseExact(docDateS, "yyyyMMdd", CultureInfo.InvariantCulture));
 
-            SAPbobsCOM.SBObob vObj;
-            vObj = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+            SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
 
             DataTable DTSourceVPM2 = new DataTable();
             DTSourceVPM2.Columns.Add("InvType");
             DTSourceVPM2.Columns.Add("DocEntry");
             DTSourceVPM2.Columns.Add("AppliedFC");
             DTSourceVPM2.Columns.Add("SumApplied");
-
 
             DataTable DTSource = new DataTable();
             DTSource.Columns.Add("WtCode");
@@ -1033,111 +1035,104 @@ namespace BDO_Localisation_AddOn
             DTSource.Columns.Add("U_BDOSPnPhAm");
             DTSource.Columns.Add("U_BDOSPnCoAm");
 
-
             string LocalCurrency = CurrencyB1.getMainCurrency(out errorText);
             string BankAccount = headerLine["BankAccount"].ToString();
             string TransferAccount = headerLine["TransferAccount"].ToString();
             string ControlAccount = headerLine["ControlAccount"].ToString();
-
             string DocCurrency = headerLine["Currency"].ToString();
             string PayblCur = headerLine["PayblCur"].ToString();
             string remarks = headerLine["remarks"].ToString();
-
             string ChrgDtls = headerLine["ChrgDtls"].ToString();
             string DispType = headerLine["DispType"].ToString();
-
             double TransferSumFC = Convert.ToDouble(headerLine["PayblAmtFC"]);
             double TransferSum = Convert.ToDouble(headerLine["PayblAmt"]);
             string CardCode = headerLine["CardCode"].ToString();
             string Project = headerLine["Project"].ToString();
             string WTCode = headerLine["WTCode"].ToString();
-
             double WtAmount = Convert.ToDouble(headerLine["WtAmount"]);
             double PensioAmount = Convert.ToDouble(headerLine["PensionAmount"]);
+            string useBlaAgRt = headerLine["UseBlaAgRt"].ToString();
+            string blnktAgr = headerLine["BlnktAgr"].ToString();
 
-            SAPbobsCOM.Payments OutPay = null;
+            SAPbobsCOM.Payments oPayment;
 
-            OutPay = (SAPbobsCOM.Payments)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVendorPayments);
-            OutPay.DocObjectCode = SAPbobsCOM.BoPaymentsObjectType.bopot_OutgoingPayments;
+            oPayment = (SAPbobsCOM.Payments)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVendorPayments);
+            oPayment.DocObjectCode = SAPbobsCOM.BoPaymentsObjectType.bopot_OutgoingPayments;
+            oPayment.DocDate = docDate;
+            oPayment.ProjectCode = Project;
 
-            OutPay.DocDate = DocDate;
-            OutPay.ProjectCode = Project;
-
-
+            double docRateByBlnktAgr = 0;
+            if (!string.IsNullOrEmpty(blnktAgr))
+            {
+                oPayment.BlanketAgreement = Convert.ToInt32(blnktAgr);
+                oPayment.UserFields.Fields.Item("U_UseBlaAgRt").Value = useBlaAgRt;
+                if (useBlaAgRt == "Y")
+                {
+                    docRateByBlnktAgr = Convert.ToDouble(BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnktAgr), docDate), NumberFormatInfo.InvariantInfo);
+                }
+            }
 
             if (CommonFunctions.IsDevelopment())
             {
                 string BudgetCashFlowID = headerLine["BudgetCashFlowID"].ToString();
                 string BudgetCashFlowName = headerLine["BudgetCashFlowName"].ToString();
 
-                if (string.IsNullOrEmpty(BudgetCashFlowID) == false)
+                if (!string.IsNullOrEmpty(BudgetCashFlowID))
                 {
-                    OutPay.UserFields.Fields.Item("U_BDOSBdgCf").Value = BudgetCashFlowID;
-                    OutPay.UserFields.Fields.Item("U_BDOSBdgCfN").Value = BudgetCashFlowName;
+                    oPayment.UserFields.Fields.Item("U_BDOSBdgCf").Value = BudgetCashFlowID;
+                    oPayment.UserFields.Fields.Item("U_BDOSBdgCfN").Value = BudgetCashFlowName;
                 }
             }
 
             try
             {
-                OutPay.UserFields.Fields.Item("U_status").Value = "readyToLoad";
-                OutPay.UserFields.Fields.Item("U_chrgDtls").Value = ChrgDtls;
-                OutPay.UserFields.Fields.Item("U_dsptchType").Value = DispType;
-                OutPay.UserFields.Fields.Item("U_descrpt").Value = headerLine["Descrpt"].ToString();
-                OutPay.UserFields.Fields.Item("U_addDescrpt").Value = headerLine["AddDescrpt"].ToString();
+                oPayment.UserFields.Fields.Item("U_status").Value = "readyToLoad";
+                oPayment.UserFields.Fields.Item("U_chrgDtls").Value = ChrgDtls;
+                oPayment.UserFields.Fields.Item("U_dsptchType").Value = DispType;
+                oPayment.UserFields.Fields.Item("U_descrpt").Value = headerLine["Descrpt"].ToString();
+                oPayment.UserFields.Fields.Item("U_addDescrpt").Value = headerLine["AddDescrpt"].ToString();
             }
             catch
             { }
 
-            OutPay.CardCode = CardCode;
-            OutPay.DocTypte = SAPbobsCOM.BoRcptTypes.rSupplier;
+            oPayment.CardCode = CardCode;
+            oPayment.DocTypte = SAPbobsCOM.BoRcptTypes.rSupplier;
 
-            if (BankAccount == "")
-            {
-                OutPay.IsPayToBank = SAPbobsCOM.BoYesNoEnum.tNO;
-            }
+            if (string.IsNullOrEmpty(BankAccount))
+                oPayment.IsPayToBank = SAPbobsCOM.BoYesNoEnum.tNO;
             else
-            {
-                OutPay.IsPayToBank = SAPbobsCOM.BoYesNoEnum.tYES;
-            }
+                oPayment.IsPayToBank = SAPbobsCOM.BoYesNoEnum.tYES;
 
-            OutPay.TransferAccount = TransferAccount;
-            OutPay.ControlAccount = ControlAccount;
+            oPayment.TransferAccount = TransferAccount;
+            oPayment.ControlAccount = ControlAccount;
+            oPayment.Remarks = remarks;
+            double DocRate;
 
-            OutPay.Remarks = remarks;
-            double DocRate = 0;
             if (DocCurrency == LocalCurrency)
-            {
-                OutPay.DocRate = 0;
-            }
+                oPayment.DocRate = 0;
             else
             {
-                DocRate = vObj.GetCurrencyRate(DocCurrency, DocDate).Fields.Item("CurrencyRate").Value;
-                OutPay.DocRate = DocRate;
+                DocRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : oSBOBob.GetCurrencyRate(DocCurrency, docDate).Fields.Item("CurrencyRate").Value;
+                oPayment.DocRate = DocRate;
             }
-
-            OutPay.DocCurrency = PayblCur;
+            oPayment.DocCurrency = PayblCur;
 
             if (DocCurrency == PayblCur)
-            {
-                OutPay.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tNO;
-            }
+                oPayment.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tNO;
             else
+                oPayment.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tYES;
+
+            oPayment.TransferSum = Convert.ToDouble(TransferSum);
+            if (!string.IsNullOrEmpty(WTCode))
             {
-                OutPay.LocalCurrency = SAPbobsCOM.BoYesNoEnum.tYES;
+                oPayment.WTCode = WTCode;
+                oPayment.WtBaseSum = TransferSum;
+                oPayment.WTAmount = WtAmount + PensioAmount;
             }
 
-            OutPay.TransferSum = Convert.ToDouble(TransferSum);
-            if (WTCode != "")
-            {
-                OutPay.WTCode = WTCode;
-                OutPay.WtBaseSum = TransferSum;
-                OutPay.WTAmount = WtAmount + PensioAmount;
-            }
-
-            OutPay.UserFields.Fields.Item("U_BDOSWhtAmt").Value = WtAmount;
-            OutPay.UserFields.Fields.Item("U_BDOSPnPhAm").Value = PensioAmount;
-            OutPay.UserFields.Fields.Item("U_BDOSPnCoAm").Value = PensioAmount;
-
+            oPayment.UserFields.Fields.Item("U_BDOSWhtAmt").Value = WtAmount;
+            oPayment.UserFields.Fields.Item("U_BDOSPnPhAm").Value = PensioAmount;
+            oPayment.UserFields.Fields.Item("U_BDOSPnCoAm").Value = PensioAmount;
 
             decimal OnAccount = 0;
             //ცხრილური ნაწილი
@@ -1146,40 +1141,30 @@ namespace BDO_Localisation_AddOn
             {
                 AccountPaymentsLine = AccountPaymentsLines.Rows[i];
 
-
                 if (AccountPaymentsLine["DocEntry"].ToString() != "0")
                 {
-
                     SAPbobsCOM.BoRcptInvTypes InvType;
                     int InvTypeInt = Convert.ToInt32(AccountPaymentsLine["InvType"]);
 
                     if (InvTypeInt == 18)
-                    {
                         InvType = SAPbobsCOM.BoRcptInvTypes.it_PurchaseInvoice;
-                    }
                     else if (InvTypeInt == 204)
-                    {
                         InvType = SAPbobsCOM.BoRcptInvTypes.it_PurchaseDownPayment;
-                    }
                     else
-                    {
                         InvType = SAPbobsCOM.BoRcptInvTypes.it_APCorrectionInvoice;
-                    }
 
-
-                    OutPay.Invoices.DocEntry = Convert.ToInt32(AccountPaymentsLine["DocEntry"]);
-                    OutPay.Invoices.InvoiceType = InvType;
-                    OutPay.Invoices.SumApplied = (OutPay.DocRate == 0 ? 1 : OutPay.DocRate) * Convert.ToDouble(AccountPaymentsLine["SumApplied"]);
-                    OutPay.Invoices.AppliedFC = Convert.ToDouble(AccountPaymentsLine["SumApplied"]);
-
-                    OutPay.Invoices.InstallmentId = Convert.ToInt32(AccountPaymentsLine["InstallmentId"]);
+                    oPayment.Invoices.DocEntry = Convert.ToInt32(AccountPaymentsLine["DocEntry"]);
+                    oPayment.Invoices.InvoiceType = InvType;
+                    oPayment.Invoices.SumApplied = (oPayment.DocRate == 0 ? 1 : oPayment.DocRate) * Convert.ToDouble(AccountPaymentsLine["SumApplied"]);
+                    oPayment.Invoices.AppliedFC = Convert.ToDouble(AccountPaymentsLine["SumApplied"]);
+                    oPayment.Invoices.InstallmentId = Convert.ToInt32(AccountPaymentsLine["InstallmentId"]);
 
                     DataRow DTSourceRowVPM2 = DTSourceVPM2.Rows.Add();
                     DTSourceRowVPM2["DocEntry"] = Convert.ToInt32(AccountPaymentsLine["DocEntry"]);
                     DTSourceRowVPM2["InvType"] = InvTypeInt;
-                    DTSourceRowVPM2["SumApplied"] = OutPay.Invoices.SumApplied;
-                    DTSourceRowVPM2["AppliedFC"] = OutPay.Invoices.AppliedFC;
-                    OutPay.Invoices.Add();
+                    DTSourceRowVPM2["SumApplied"] = oPayment.Invoices.SumApplied;
+                    DTSourceRowVPM2["AppliedFC"] = oPayment.Invoices.AppliedFC;
+                    oPayment.Invoices.Add();
                 }
                 else
                 {
@@ -1189,18 +1174,15 @@ namespace BDO_Localisation_AddOn
 
             if (GetAccountCashFlowRelevant(TransferAccount))
             {
-                OutPay.PrimaryFormItems.CashFlowLineItemID = Convert.ToInt32(headerLine["CashFlowID"]);
+                oPayment.PrimaryFormItems.CashFlowLineItemID = Convert.ToInt32(headerLine["CashFlowID"]);
             }
-            OutPay.PrimaryFormItems.AmountFC = (OutPay.DocRate == 0 ? 1 : OutPay.DocRate) * TransferSumFC;
+            oPayment.PrimaryFormItems.AmountFC = (oPayment.DocRate == 0 ? 1 : oPayment.DocRate) * TransferSumFC;
 
             if (DocCurrency == LocalCurrency)
-            {
-                OutPay.PrimaryFormItems.AmountLC = TransferSum;
-            }
+                oPayment.PrimaryFormItems.AmountLC = TransferSum;
 
-            OutPay.PrimaryFormItems.PaymentMeans = SAPbobsCOM.PaymentMeansTypeEnum.pmtBankTransfer;
-            OutPay.PrimaryFormItems.Add();
-
+            oPayment.PrimaryFormItems.PaymentMeans = SAPbobsCOM.PaymentMeansTypeEnum.pmtBankTransfer;
+            oPayment.PrimaryFormItems.Add();
 
             DataRow DTSourceRow = DTSource.Rows.Add();
 
@@ -1217,42 +1199,38 @@ namespace BDO_Localisation_AddOn
             DTSourceRow["PrjCode"] = Project;
             DTSourceRow["U_liablePrTx"] = "N";
             DTSourceRow["U_prBase"] = "";
-
-
             DTSourceRow["NoDocSum"] = OnAccount;
             DTSourceRow["U_BDOSWhtAmt"] = WtAmount;
             DTSourceRow["U_BDOSPnPhAm"] = PensioAmount;
             DTSourceRow["U_BDOSPnCoAm"] = PensioAmount;
 
-
             CommonFunctions.StartTransaction();
 
-            int resultCode = OutPay.Add();
+            int resultCode = oPayment.Add();
 
             if (resultCode != 0)
             {
-                string errorMessage = "";
+                string errorMessage;
                 Program.oCompany.GetLastError(out resultCode, out errorMessage);
                 if (Program.oCompany.InTransaction)
                 {
                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
                 }
 
-                errorMessage = "";
                 Program.oCompany.GetLastError(out resultCode, out errorMessage);
                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + errorMessage, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                 return 0;
             }
             else
             {
-                string docEntryS = "";
+                string docEntryS;
                 Program.oCompany.GetNewObjectCode(out docEntryS);
-                DataTable reLines = null;
+                DataTable reLines;
 
-                DataTable JrnLinesDT = OutgoingPayment.createAdditionalEntries(null, null, DTSource, DTSourceVPM2, OutPay.DocCurrency, out reLines, Convert.ToDecimal(OutPay.DocRate));
-                OutgoingPayment.JrnEntry(docEntryS, docEntryS, OutPay.DocDate, JrnLinesDT, reLines, out errorText);
+                DataTable JrnLinesDT = OutgoingPayment.createAdditionalEntries(null, null, DTSource, DTSourceVPM2, oPayment.DocCurrency, out reLines, Convert.ToDecimal(oPayment.DocRate));
+                OutgoingPayment.JrnEntry(docEntryS, docEntryS, oPayment.DocDate, JrnLinesDT, reLines, out errorText);
 
-                if (errorText != null)
+                if (!string.IsNullOrEmpty(errorText))
                 {
                     if (Program.oCompany.InTransaction)
                     {
@@ -1269,10 +1247,8 @@ namespace BDO_Localisation_AddOn
                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + ": " + docEntryS, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                 }
 
-
                 return Convert.ToInt32(docEntryS);
             }
-
         }
 
         private static bool GetAccountCashFlowRelevant(string GLAccount)
@@ -1402,7 +1378,7 @@ namespace BDO_Localisation_AddOn
                                     throw new Exception(ex.Message);
                                 }
                                 finally
-                                {                                    
+                                {
                                     oForm.Freeze(false);
                                 }
                             }
@@ -1738,49 +1714,46 @@ namespace BDO_Localisation_AddOn
             }
 
             SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
+            oMatrix.FlushToDataSource();
 
-            SAPbouiCOM.EditText oEditTextDocDate = (SAPbouiCOM.EditText)oForm.Items.Item("DocPstDt").Specific;
-            string DocDateS = oEditTextDocDate.Value;
-            DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(DocDateS, "yyyyMMdd", CultureInfo.InvariantCulture));
-
-            int DocEntry;
-            int totalSuccesfull = 0;
-            int totalUnsuccesfull = 0;
-
-            int CashFlowID = Convert.ToInt32(oForm.Items.Item("CashFlowI").Specific.Value);
-
+            //SAPbouiCOM.EditText oEditTextDocDate = (SAPbouiCOM.EditText)oForm.Items.Item("DocPstDt").Specific;
+            string docDateS = oForm.DataSources.UserDataSources.Item("DocPstDt").ValueEx;
+            DateTime docDate = Convert.ToDateTime(DateTime.ParseExact(docDateS, "yyyyMMdd", CultureInfo.InvariantCulture));
+            int docEntry;
+            //string cashFlowIDStr = oForm.DataSources.UserDataSources.Item("CashFlowI").ValueEx;
+            //int cashFlowID = string.IsNullOrEmpty(cashFlowIDStr) ? 0 : Convert.ToInt32(cashFlowIDStr);
             string prevCurrency = null;
             string prevProject = null;
             string prevDocIsEmpty = null;
-
             string prevBudgetCashFlowID = null;
-
+            string prevUseBlaAgRt = null;
+            string prevBlnktAgr = null;
+            string prevCashFlowID = null;
+            string prevDescription = null;
             double PayblAmtFCTotal = 0;
             double PayblAmtTotal = 0;
-            double WtAmountTotal = 0;
-            double PensionAmountTotal = 0;
+            double wtAmountTotal = 0;
+            double pensionAmountTotal = 0;
+            string bankAccount = oForm.DataSources.UserDataSources.Item("HBAcc").ValueEx; //oForm.Items.Item("HBAcc").Specific.Value;
+            //string descrpt = oForm.DataSources.UserDataSources.Item("Descrpt").ValueEx; //oForm.Items.Item("Descrpt").Specific.Value;
 
-            string BankAccount = oForm.Items.Item("HBAcc").Specific.Value;
-            string Descrpt = oForm.Items.Item("Descrpt").Specific.Value;
-            if (BankAccount != "" && Descrpt == "")
-            {
-                Program.uiApp.StatusBar.SetSystemMessage("DescriptionIsMandatory", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-                return;
-            }
-            string GLAccount = oForm.Items.Item("GLAcc").Specific.Value;
+            //if (!string.IsNullOrEmpty(bankAccount) && string.IsNullOrEmpty(descrpt))
+            //{
+            //    Program.uiApp.StatusBar.SetSystemMessage("DescriptionIsMandatory", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+            //    return;
+            //}
+            string glAccount = oForm.DataSources.UserDataSources.Item("GLAcc").ValueEx; //oForm.Items.Item("GLAcc").Specific.Value;
 
             SAPbobsCOM.ChartOfAccounts oChartOfAccounts = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oChartOfAccounts);
-            oChartOfAccounts.GetByKey(GLAccount);
+            oChartOfAccounts.GetByKey(glAccount);
 
-            string PayblCur = oChartOfAccounts.AcctCurrency;
+            string payblCur = oChartOfAccounts.AcctCurrency;
             string errorText;
-            if (PayblCur == "##")
-            {
-                PayblCur = CurrencyB1.getMainCurrency(out errorText);
-            }
+            if (payblCur == "##")
+                payblCur = CurrencyB1.getMainCurrency(out errorText);
 
             //WT
-            string WHTaxCode = oForm.Items.Item("WHTax").Specific.Value;
+            string WHTaxCode = oForm.DataSources.UserDataSources.Item("WHTax").ValueEx; //oForm.Items.Item("WHTax").Specific.Value;
             DataTable WTaxDefinitons = WithholdingTax.getWtaxCodeDefinitionByDate(DateTime.Now);
             string filter;
             DataRow[] oWHTaxCode;
@@ -1788,7 +1761,7 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.WithholdingTaxCodes oWhTax;
             oWhTax = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oWithholdingTaxCodes);
-            if (oWhTax.GetByKey(WHTaxCode) == true)
+            if (oWhTax.GetByKey(WHTaxCode))
             {
                 if (oWhTax.UserFields.Fields.Item("U_BDOSPhisTx").Value == "Y")
                 {
@@ -1797,23 +1770,20 @@ namespace BDO_Localisation_AddOn
                     oWHTaxCode = WTaxDefinitons.Select(filter);
                     pensionRate = 0;
                     if (oWHTaxCode.Count() > 0)
-                    {
                         pensionRate = Convert.ToDouble(oWHTaxCode[0]["Rate"], CultureInfo.InvariantCulture);
-                    }
                 }
             }
 
             double WTRate = 0;
             filter = "WTCode = '" + WHTaxCode + "'";
             oWHTaxCode = WTaxDefinitons.Select(filter);
-            if (oWHTaxCode.Count() > 0)
-            {
-                WTRate = Convert.ToDouble(oWHTaxCode[0]["Rate"], CultureInfo.InvariantCulture);
-            }
 
-            string ControlAccount = oForm.Items.Item("CTAcc").Specific.Value;
-            string DispType = oForm.Items.Item("DispType").Specific.Value.Trim();
-            string ChrgDtls = oForm.Items.Item("ChrgDtls").Specific.Value.Trim();
+            if (oWHTaxCode.Count() > 0)
+                WTRate = Convert.ToDouble(oWHTaxCode[0]["Rate"], CultureInfo.InvariantCulture);
+
+            string ControlAccount = oForm.DataSources.UserDataSources.Item("CTAcc").ValueEx; //oForm.Items.Item("CTAcc").Specific.Value;
+            string DispType = oForm.DataSources.UserDataSources.Item("DispType").ValueEx; //oForm.Items.Item("DispType").Specific.Value.Trim();
+            string ChrgDtls = oForm.DataSources.UserDataSources.Item("ChrgDtls").ValueEx; //oForm.Items.Item("ChrgDtls").Specific.Value.Trim();
 
             DataTable AccountHeader = new DataTable();
             DataRow headerLine = AccountHeader.Rows.Add();
@@ -1823,23 +1793,23 @@ namespace BDO_Localisation_AddOn
             AccountHeader.Columns.Add("PayblCur");
 
             DataColumn colDecimal = new DataColumn("PayblCRt");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
+            colDecimal.DataType = Type.GetType("System.Decimal");
             AccountHeader.Columns.Add(colDecimal);
 
             colDecimal = new DataColumn("PayblAmt");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
+            colDecimal.DataType = Type.GetType("System.Decimal");
             AccountHeader.Columns.Add(colDecimal);
 
             colDecimal = new DataColumn("PayblAmtFC");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
+            colDecimal.DataType = Type.GetType("System.Decimal");
             AccountHeader.Columns.Add(colDecimal);
 
             colDecimal = new DataColumn("PensionAmount");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
+            colDecimal.DataType = Type.GetType("System.Decimal");
             AccountHeader.Columns.Add(colDecimal);
 
             colDecimal = new DataColumn("WtAmount");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
+            colDecimal.DataType = Type.GetType("System.Decimal");
             AccountHeader.Columns.Add(colDecimal);
 
             AccountHeader.Columns.Add("BankAccount");
@@ -1856,6 +1826,8 @@ namespace BDO_Localisation_AddOn
             AccountHeader.Columns.Add("WTCode");
             AccountHeader.Columns.Add("BudgetCashFlowID");
             AccountHeader.Columns.Add("BudgetCashFlowName");
+            AccountHeader.Columns.Add("UseBlaAgRt");
+            AccountHeader.Columns.Add("BlnktAgr");
 
             DataTable AccountPaymentsLines = new DataTable();
 
@@ -1865,69 +1837,69 @@ namespace BDO_Localisation_AddOn
             AccountPaymentsLines.Columns.Add("InstallmentId");
 
             colDecimal = new DataColumn("SumApplied");
-            colDecimal.DataType = System.Type.GetType("System.Decimal");
+            colDecimal.DataType = Type.GetType("System.Decimal");
             AccountPaymentsLines.Columns.Add(colDecimal);
 
-            string WTCode = oForm.Items.Item("WHTax").Specific.Value;
+            SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
 
-            for (int row = 1; row <= oMatrix.RowCount; row++)
+            for (int i = 0; i < oDataTable.Rows.Count; i++)
             {
-                SAPbouiCOM.CheckBox Edtfield = oMatrix.Columns.Item("CheckBox").Cells.Item(row).Specific;
-                bool checkedLine = (Edtfield.Checked);
-
-                if (checkedLine)
+                if (oDataTable.GetValue("CheckBox", i) == "Y")
                 {
-                    string Currency = oMatrix.Columns.Item("Currency").Cells.Item(row).Specific.Value;
+                    string Currency = oDataTable.GetValue("Currency", i);
 
                     string BudgetCashFlowID = null;
                     if (CommonFunctions.IsDevelopment())
                     {
-                        BudgetCashFlowID = oMatrix.Columns.Item("BCFWId").Cells.Item(row).Specific.Value;
+                        BudgetCashFlowID = oDataTable.GetValue("BudgetCashFlowID", i);
                     }
 
                     //double DocRate = oMatrix.Columns.Item("PayblCRt").Cells.Item(row).Specific.Value;
-                    double PayblAmt = Convert.ToDouble(oMatrix.Columns.Item("TotalPymnt").Cells.Item(row).Specific.Value, NumberFormatInfo.InvariantInfo);
-                    double PayblAmtFC = Convert.ToDouble(oMatrix.Columns.Item("TotalPymnt").Cells.Item(row).Specific.Value, NumberFormatInfo.InvariantInfo);
-                    double WtAmount = Convert.ToDouble(oMatrix.Columns.Item("WTSum").Cells.Item(row).Specific.Value, NumberFormatInfo.InvariantInfo);
-                    double PensionAmount = Convert.ToDouble(oMatrix.Columns.Item("PensSum").Cells.Item(row).Specific.Value, NumberFormatInfo.InvariantInfo);
+                    double PayblAmt = Convert.ToDouble(oDataTable.GetValue("TotalPayment", i), NumberFormatInfo.InvariantInfo);
+                    double PayblAmtFC = Convert.ToDouble(oDataTable.GetValue("TotalPayment", i), NumberFormatInfo.InvariantInfo);
+                    double WtAmount = Convert.ToDouble(oDataTable.GetValue("WTSum", i), NumberFormatInfo.InvariantInfo);
+                    double PensionAmount = Convert.ToDouble(oDataTable.GetValue("PensSum", i), NumberFormatInfo.InvariantInfo);
 
-                    string Project = oMatrix.Columns.Item("Project").Cells.Item(row).Specific.Value;
-                    string InvType = oMatrix.Columns.Item("DocType").Cells.Item(row).Specific.Value;
-                    string InvDocEntry = oMatrix.Columns.Item("DocEntry").Cells.Item(row).Specific.Value;
-                    string DocIsEmpty = (oMatrix.Columns.Item("DocEntry").Cells.Item(row).Specific.Value == "0").ToString();
-                    string InvDocNum = oMatrix.Columns.Item("DocNum").Cells.Item(row).Specific.Value;
-                    string InstallmentId = oMatrix.Columns.Item("InstlmntID").Cells.Item(row).Specific.Value;
+                    string Project = oDataTable.GetValue("Project", i);
+                    string InvType = oDataTable.GetValue("DocType", i);
+                    string InvDocEntry = oDataTable.GetValue("DocEntry", i).ToString();
+                    string DocIsEmpty = oDataTable.GetValue("DocEntry", i).ToString();
+                    string InvDocNum = oDataTable.GetValue("DocNum", i).ToString();
+                    string InstallmentId = oDataTable.GetValue("InstallmentID", i).ToString();
+                    string cashFlowIDStr = oDataTable.GetValue("CFWId", i).ToString();
+                    int cashFlowID = string.IsNullOrEmpty(cashFlowIDStr) ? 0 : Convert.ToInt32(cashFlowIDStr);
+                    string useBlaAgRt = oDataTable.GetValue("UseBlaAgRt", i);
+                    string blnktAgr = oDataTable.GetValue("BlnktAgr", i);
+                    string description = oDataTable.GetValue("Description", i);
 
                     if (PayblAmt == 0)
                     {
                         continue;
                     }
 
-                    if (prevProject != Project || prevCurrency != Currency || prevDocIsEmpty != DocIsEmpty || (CommonFunctions.IsDevelopment() && prevBudgetCashFlowID != BudgetCashFlowID))
+                    if (prevProject != Project
+                        || prevCurrency != Currency
+                        || prevDocIsEmpty != DocIsEmpty
+                        || prevUseBlaAgRt != useBlaAgRt
+                        || prevBlnktAgr != blnktAgr
+                        || prevCashFlowID != cashFlowIDStr
+                        || prevDescription != description
+                        || (CommonFunctions.IsDevelopment() && prevBudgetCashFlowID != BudgetCashFlowID))
                     {
                         if (prevProject != null)
                         {
                             headerLine["PayblAmt"] = PayblAmtTotal;
                             headerLine["PayblAmtFC"] = PayblAmtFCTotal;
-                            headerLine["WtAmount"] = WtAmountTotal;
-                            headerLine["PensionAmount"] = PensionAmountTotal;
+                            headerLine["WtAmount"] = wtAmountTotal;
+                            headerLine["PensionAmount"] = pensionAmountTotal;
 
                             //გაკეთდება დოკუმენტი
                             try
                             {
-                                DocEntry = createPaymentDocument(oForm, headerLine, AccountPaymentsLines);
-                                if (DocEntry > 0)
-                                {
-                                    totalSuccesfull++;
-                                }
-                                else
-                                {
-                                    totalUnsuccesfull++;
-                                }
+                                docEntry = createPaymentDocument(oForm, headerLine, AccountPaymentsLines);
                             }
                             catch (Exception ex)
                             {
-                                totalUnsuccesfull++;
                                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                             }
 
@@ -1937,14 +1909,14 @@ namespace BDO_Localisation_AddOn
 
                         headerLine["CardCode"] = oForm.Items.Item("BPCode").Specific.Value;
                         headerLine["Currency"] = Currency;
-                        headerLine["PayblCur"] = PayblCur;
+                        headerLine["PayblCur"] = payblCur;
                         headerLine["PayblCRt"] = 1;
-                        headerLine["BankAccount"] = BankAccount;
-                        headerLine["TransferAccount"] = GLAccount;
+                        headerLine["BankAccount"] = bankAccount;
+                        headerLine["TransferAccount"] = glAccount;
                         headerLine["ControlAccount"] = ControlAccount;
-                        headerLine["WTCode"] = DocIsEmpty == "True" ? WTCode : "";
-                        headerLine["accrualDate"] = DocDate;
-                        headerLine["CashFlowID"] = CashFlowID;
+                        headerLine["WTCode"] = DocIsEmpty == "True" ? WHTaxCode : "";
+                        headerLine["accrualDate"] = docDate;
+                        headerLine["CashFlowID"] = cashFlowID;
                         headerLine["DispType"] = DispType;
                         headerLine["ChrgDtls"] = ChrgDtls;
                         headerLine["Project"] = Project;
@@ -1955,12 +1927,14 @@ namespace BDO_Localisation_AddOn
                             headerLine["BudgetCashFlowName"] = UDO.GetUDOFieldValueByParam("UDO_F_BDOSBUCFW_D", "Code", BudgetCashFlowID, "Name");
                         }
 
-                        headerLine["Descrpt"] = Descrpt;
+                        headerLine["Descrpt"] = description;
+                        headerLine["UseBlaAgRt"] = useBlaAgRt;
+                        headerLine["BlnktAgr"] = blnktAgr;
 
                         PayblAmtTotal = 0;
                         PayblAmtFCTotal = 0;
-                        WtAmountTotal = 0;
-                        PensionAmountTotal = 0;
+                        wtAmountTotal = 0;
+                        pensionAmountTotal = 0;
 
                         AccountPaymentsLines.Rows.Clear();
                     }
@@ -1978,8 +1952,8 @@ namespace BDO_Localisation_AddOn
 
                     if (DocIsEmpty == "True")
                     {
-                        WtAmountTotal = WtAmountTotal + WtAmount;
-                        PensionAmountTotal = PensionAmountTotal + PensionAmount;
+                        wtAmountTotal = wtAmountTotal + WtAmount;
+                        pensionAmountTotal = pensionAmountTotal + PensionAmount;
                     }
                     else
                     {
@@ -1987,13 +1961,17 @@ namespace BDO_Localisation_AddOn
                         PayblAmtGross = PayblAmtGross / (1 - WTRate / 100) / (1 - pensionRate / 100);
                         PensionAmount = PayblAmtGross * pensionRate / 100;
                         WtAmount = (PayblAmtGross - PensionAmount) * WTRate / 100;
-                        WtAmountTotal = WtAmountTotal + WtAmount;
-                        PensionAmountTotal = PensionAmountTotal + PensionAmount;
+                        wtAmountTotal = wtAmountTotal + WtAmount;
+                        pensionAmountTotal = pensionAmountTotal + PensionAmount;
                     }
 
                     prevCurrency = Currency;
                     prevProject = Project;
                     prevDocIsEmpty = DocIsEmpty;
+                    prevUseBlaAgRt = useBlaAgRt;
+                    prevBlnktAgr = blnktAgr;
+                    prevCashFlowID = cashFlowIDStr;
+                    prevDescription = description;
 
                     if (CommonFunctions.IsDevelopment())
                     {
@@ -2006,24 +1984,14 @@ namespace BDO_Localisation_AddOn
             {
                 headerLine["PayblAmt"] = PayblAmtTotal;
                 headerLine["PayblAmtFC"] = PayblAmtFCTotal;
-                headerLine["WtAmount"] = WtAmountTotal;
-                headerLine["PensionAmount"] = PensionAmountTotal;
+                headerLine["WtAmount"] = wtAmountTotal;
+                headerLine["PensionAmount"] = pensionAmountTotal;
                 try
                 {
-                    DocEntry = createPaymentDocument(oForm, headerLine, AccountPaymentsLines);
-
-                    if (DocEntry > 0)
-                    {
-                        totalSuccesfull++;
-                    }
-                    else
-                    {
-                        totalUnsuccesfull++;
-                    }
+                    docEntry = createPaymentDocument(oForm, headerLine, AccountPaymentsLines);
                 }
                 catch (Exception ex)
                 {
-                    totalUnsuccesfull++;
                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
                 }
@@ -2041,15 +2009,27 @@ namespace BDO_Localisation_AddOn
                 {
                     if (oCFLEvento.ChooseFromListUID == "BlnktAgr_CFL")
                     {
-                        SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
-                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+                        if (pVal.ItemUID == "InvoiceMTR" && pVal.ColUID == "BlnktAgr")
+                        {
+                            SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
+                            SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
 
-                        SAPbouiCOM.Condition oCon = oCons.Add();
-                        oCon.Alias = "BpCode";
-                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
-                        oCon.CondVal = oForm.DataSources.UserDataSources.Item("BpCode").ValueEx;
+                            SAPbouiCOM.Condition oCon = oCons.Add();
+                            oCon.Alias = "BpCode";
+                            oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                            oCon.CondVal = oForm.DataSources.UserDataSources.Item("BpCode").ValueEx;
 
-                        oCFL.SetConditions(oCons);
+                            oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
+
+                            SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
+
+                            oCon = oCons.Add();
+                            oCon.Alias = "BPCurr";
+                            oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                            oCon.CondVal = oDataTable.GetValue("Currency", pVal.Row - 1);
+
+                            oCFL.SetConditions(oCons);
+                        }
                     }
                 }
                 else
@@ -2122,12 +2102,6 @@ namespace BDO_Localisation_AddOn
                                 setMTRCellEditableSetting(oForm, pVal.ItemUID, pVal.Row);
                             }
                         }
-                        //}
-                        //catch (Exception ex)
-                        //{ ra xdebaaaaaaaaaaa?
-                        //setWhtCodes(oForm);
-                        //fillMTRInvoice(oForm);
-                        //}
                     }
                 }
             }
@@ -2209,7 +2183,6 @@ namespace BDO_Localisation_AddOn
 
             try
             {
-
                 while (oItem.ValidValues.Count > 0)
                 {
                     oItem.ValidValues.Remove(0, SAPbouiCOM.BoSearchKey.psk_Index);
@@ -2233,9 +2206,8 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                string error = ex.Message;
+                throw new Exception(ex.Message);
             }
-
         }
 
         public static void fillMTRInvoice(SAPbouiCOM.Form oForm)

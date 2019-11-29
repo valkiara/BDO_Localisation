@@ -352,7 +352,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static decimal GetBlAgremeentCurrencyRate(int docEntry, DateTime? docDate = null, decimal docRate = 0)
+        public static decimal GetBlAgremeentCurrencyRate(int absID, DateTime? docDate = null, decimal docRate = 0)
         {
             decimal minRate = 0;
             decimal maxRate = 0;
@@ -368,7 +368,7 @@ namespace BDO_Localisation_AddOn
                     ""OOAT"".""U_BDOSMinRat"" AS ""MinRate"",
                     ""OOAT"".""U_BDOSMaxRat"" AS ""MaxRate""
                     FROM ""OOAT"" AS ""OOAT"" 
-                    WHERE ""OOAT"".""AbsID"" = '" + docEntry + @"'";
+                    WHERE ""OOAT"".""AbsID"" = '" + absID + @"'";
 
                 oRecordSetC.DoQuery(query);
 
