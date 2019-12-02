@@ -136,12 +136,12 @@ namespace BDO_Localisation_AddOn
                         bool NotToCreate = false;
                         SAPbouiCOM.ComboBox ComboboxStatus = (SAPbouiCOM.ComboBox)oMatrix.Columns.Item("TYPE").Cells.Item(row).Specific;
                         string TYPE = ComboboxStatus.Value;
-                        if (TYPE == "2") //2
+                        if (TYPE == "Procurement") //2
                             if (oGdsRcpt == "Y")
                                 APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseDeliveryNotes);
                             else
                                 APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
-                        else if (TYPE == "1") //1
+                        else if (TYPE == "Return") //1
                             APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseCreditNotes);
 
                         SAPbouiCOM.EditText Edtfieldtxt = oMatrix.Columns.Item("WBID").Cells.Item(row).Specific;
@@ -174,6 +174,8 @@ namespace BDO_Localisation_AddOn
                         DateTime WBActDate = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBActDate", row - 1);
                         string WBBlankAgr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBBlankAgr", row - 1);
 
+                        string comment= oForm.DataSources.DataTables.Item("WBTable").GetValue("WBCOMMENT", row - 1);
+
 
                         //SAPbobsCOM.CompanyService oCompanyService;
                         //SAPbobsCOM.BlanketAgreementsService oAcuerdoServicio;
@@ -194,8 +196,7 @@ namespace BDO_Localisation_AddOn
                         string queryPr = @"SELECT ""U_BDOSPrjCod"" FROM ""OWHS"" WHERE ""WhsCode"" = '" + whs + "'";
 
                         oRecordSetWH.DoQuery(queryPr);
-
-                        if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null || oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
+                        if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null && oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
                         {
                             APInv.Project = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
                         }
@@ -203,6 +204,7 @@ namespace BDO_Localisation_AddOn
                         if (PrjCode != "")
                         {
                             APInv.Project = PrjCode;
+
                         }
 
 
@@ -226,7 +228,7 @@ namespace BDO_Localisation_AddOn
                         APInv.DocDate = WBActDate;
                         APInv.VatDate = WBActDate;
                         APInv.TaxDate = WBActDate;
-
+                        APInv.Comments = comment;
                         //APInv.DocCurrency = Program.LocalCurrency;
 
                         APInv.UserFields.Fields.Item("U_BDO_WBNo").Value = WBNo;
@@ -397,7 +399,7 @@ namespace BDO_Localisation_AddOn
                             {
                                 APInv.Lines.ProjectCode = WBPrjCode;
                             }
-
+                            
                             if (WBBlankAgr != "")
                             {
                                 APInv.Lines.AgreementNo = Convert.ToInt32(WBBlankAgr);
@@ -488,7 +490,7 @@ namespace BDO_Localisation_AddOn
                             string LinkedDocType = "";
                             int LinkedDocEnrty = 0;
 
-                            if (TYPE == "2")//2
+                            if (TYPE == "Procurement")//2
                             {
                                 if (oGdsRcpt == "Y")
                                 {
@@ -504,7 +506,7 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
 
-                            if (TYPE == "1")//1
+                            if (TYPE == "Return")//1
                             {
                                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("Return") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                                 BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
@@ -817,12 +819,12 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string stAdd = oForm.DataSources.UserDataSources.Item("stAddEm").ValueEx;
-                string enAdd= oForm.DataSources.UserDataSources.Item("endAddEm").ValueEx;
+                string enAdd = oForm.DataSources.UserDataSources.Item("endAddEm").ValueEx;
                 string startAd = oForm.DataSources.UserDataSources.Item("startAdd").ValueEx;
                 string endAd = oForm.DataSources.UserDataSources.Item("EndAdd").ValueEx;
                 if (stAdd == "Y") startAd = "blank";
                 if (enAdd == "Y") endAd = "blank";
- 
+
 
                 Dictionary<string, Dictionary<string, string>> waybills_map_part = oWayBill.get_buyer_waybills(itypes, seller_id, statuses, car_number, startDateParam, endDateParam, startDateParam, endDateParam, driver_tin, startDateParam, endDateParam, full_amount, waybill_number, startDateParam, endDateParam, s_user_id, comment, startAd, endAd, out errorText);
                 foreach (KeyValuePair<string, Dictionary<string, string>> keyvalue in waybills_map_part)
@@ -1216,7 +1218,7 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
-                    
+
                     left = left + 110 + 10;
 
                     formItems = new Dictionary<string, object>();
