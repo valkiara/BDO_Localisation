@@ -235,6 +235,7 @@ namespace BDO_Localisation_AddOn
 
                         APInv.UserFields.Fields.Item("U_actDate").Value = WBActDate;
 
+
                         Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
                         if (errorText != null)
                         {
