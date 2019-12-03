@@ -2011,10 +2011,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void addMenus(out string errorText)
+        public static void addMenus()
         {
-            errorText = null;
-
             SAPbouiCOM.MenuItem menuItem;
             SAPbouiCOM.MenuItem fatherMenuItem;
             SAPbouiCOM.MenuCreationParams oCreationPackage;
@@ -2031,9 +2029,9 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch (Exception ex)
+            catch 
             {
-                errorText = ex.Message;
+
             }
 
 
@@ -2052,9 +2050,9 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch (Exception ex)
+            catch 
             {
-                errorText = ex.Message;
+
             }
         }
 

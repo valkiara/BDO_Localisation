@@ -100,24 +100,33 @@ namespace BDO_Localisation_AddOn
 
         }
 
-
-        public static Dictionary<string, string> getCashFlowLineItemsList(out string errorText)
+        public static Dictionary<string, string> getCashFlowLineItemsList()
         {
-            errorText = null;
-
-            Dictionary<string, string> CurList = new Dictionary<string, string>();
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string query = @"SELECT * FROM ""OCFW"" WHERE ""Postable"" = 'Y'";
-
-            oRecordSet.DoQuery(query);
-
-            while (!oRecordSet.EoF)
+            try
             {
-                CurList.Add(oRecordSet.Fields.Item("CFWId").Value.ToString(), oRecordSet.Fields.Item("CFWname").Value.ToString());
-                oRecordSet.MoveNext();
-            }
+                Dictionary<string, string> CurList = new Dictionary<string, string>();
 
-            return CurList;
+                string query = @"SELECT ""CFWId"", ""CFWName"" FROM ""OCFW"" WHERE ""Postable"" = 'Y'";
+
+                oRecordSet.DoQuery(query);
+
+                while (!oRecordSet.EoF)
+                {
+                    CurList.Add(oRecordSet.Fields.Item("CFWId").Value.ToString(), oRecordSet.Fields.Item("CFWName").Value.ToString());
+                    oRecordSet.MoveNext();
+                }
+
+                return CurList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+            }
         }
 
         public static bool IsDevelopment()
@@ -349,7 +358,39 @@ namespace BDO_Localisation_AddOn
                     {
                         return oRecordSet;
                     }
-                }                
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static SAPbobsCOM.Recordset getBPBankInfo(string cardCode)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                if (!string.IsNullOrEmpty(cardCode))
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.Append("SELECT \"CardCode\", \n");
+                    query.Append("\"CardName\", \n");
+                    query.Append("\"DebPayAcct\", \n");
+                    query.Append("\"Currency\", \n");
+                    query.Append("\"BankCountr\", \n");
+                    query.Append("\"BankCode\", \n");
+                    query.Append("\"DflAccount\" \n");
+                    query.Append("FROM   \"OCRD\" \n");
+                    query.Append("WHERE  \"CardCode\" = '" + cardCode + "'");
+
+                    oRecordSet.DoQuery(query.ToString());
+                    if (!oRecordSet.EoF)
+                    {
+                        return oRecordSet;
+                    }
+                }
                 return null;
             }
             catch
@@ -1272,6 +1313,7 @@ namespace BDO_Localisation_AddOn
                 oForm.Freeze(false);
             }
         }
+
         public static void blockAssetInvoice(SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, string whsFieldName, out bool rejection)
         {
             rejection = false;
@@ -1313,9 +1355,6 @@ namespace BDO_Localisation_AddOn
                 oRecordSet.MoveNext();
             }
         }
-
-
-
 
         public static void blockNegativeStockByDocDate(SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, string whsFieldName, out bool rejection)
         {

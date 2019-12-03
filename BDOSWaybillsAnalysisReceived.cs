@@ -1639,10 +1639,9 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
-        public static void addMenus(out string errorText)
-        {
-            errorText = null;
 
+        public static void addMenus()
+        {
             SAPbouiCOM.Menus moduleMenus;
             SAPbouiCOM.MenuItem menuItem;
             SAPbouiCOM.MenuCreationParams oCreationPackage;
@@ -1666,9 +1665,9 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = moduleMenus.AddEx(oCreationPackage);
             }
-            catch (Exception ex)
+            catch
             {
-                errorText = ex.Message;
+               
             }
         }
         public static string getQueryText(DateTime startDate, DateTime endDate, string cardCode, string itypes, string statuses, string foption)

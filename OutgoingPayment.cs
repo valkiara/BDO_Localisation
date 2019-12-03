@@ -5460,14 +5460,6 @@ namespace BDO_Localisation_AddOn
 
 
         //--------------------------------------------INTERNET BANK-------------------------------------------->
-        /// <summary>იმპორტი ინტერნეტ ბანკში</summary>
-        /// <param name="Program.oCompany"></param>
-        /// <param name="oPaymentService"></param>
-        /// <param name="docEntryList"></param>
-        /// <param name="importBatchPaymentOrders"></param>
-        /// <param name="batchName"></param>
-        /// <param name="errorText"></param>
-        /// <returns></returns>
         public static List<string> importPaymentOrderTBC(PaymentService oPaymentService, List<int> docEntryList, bool importBatchPaymentOrders, string batchName, out string errorText)
         {
             errorText = null;
@@ -6535,10 +6527,6 @@ namespace BDO_Localisation_AddOn
             return query;
         }
 
-        /// <summary>ინტერნეტ ბანკის სტატუსების განახლება</summary>
-        /// <param name="Program.oCompany"></param>
-        /// <param name="docEntry"></param>
-        /// <param name="errorText"></param>
         public static List<string> updateStatusPaymentOrderTBC(PaymentService oPaymentService, List<int> docEntryList, out string errorText)
         {
             errorText = null;

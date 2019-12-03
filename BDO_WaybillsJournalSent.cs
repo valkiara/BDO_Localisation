@@ -759,10 +759,8 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void addMenus( out string errorText)
+        public static void addMenus()
         {
-            errorText = null;
-
             SAPbouiCOM.Menus moduleMenus;
             SAPbouiCOM.MenuItem menuItem;
             SAPbouiCOM.MenuItem fatherMenuItem;
@@ -790,9 +788,9 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch (Exception ex)
+            catch
             {
-                errorText = ex.Message;
+
             }
         }
 

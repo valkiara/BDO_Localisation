@@ -199,7 +199,7 @@
     <value>საფუძველი დოკუმენტს ტიპი</value>
   </data>
   <data name="BPCardCode" xml:space="preserve">
-    <value>BP კოდი</value>
+    <value>ბპ. კოდი</value>
   </data>
   <data name="BPCatalogueDescription" xml:space="preserve">
     <value>ბიზნეს პარტნიორების კატალოგის განმარტება</value>
@@ -208,13 +208,13 @@
     <value>ბიზნეს პარტნიორზე ჩართულია კონტროლი RS მონაცემების მიხედვით, მიამაგრეთ დოკუმენტს ზედნადები!</value>
   </data>
   <data name="BPName" xml:space="preserve">
-    <value>BP სახელი</value>
+    <value>ბპ. სახელი</value>
   </data>
   <data name="BPNotFound" xml:space="preserve">
     <value>ბიზნესპარტნიორი არ მოიძებნა!</value>
   </data>
   <data name="BPTin" xml:space="preserve">
-    <value>BP გსნ</value>
+    <value>ბპ. გსნ</value>
   </data>
   <data name="Brand" xml:space="preserve">
     <value>მარკა</value>
@@ -1957,9 +1957,6 @@
   <data name="AliasID" xml:space="preserve">
     <value>სინონიმის ID</value>
   </data>
-  <data name="Descr" xml:space="preserve">
-    <value>აღწერა</value>
-  </data>
   <data name="FieldID" xml:space="preserve">
     <value>Field ID</value>
   </data>
@@ -2524,9 +2521,6 @@
   <data name="ControlAccount" xml:space="preserve">
     <value>საკონტ. ანგარიში</value>
   </data>
-  <data name="Descript" xml:space="preserve">
-    <value>მინიშნება</value>
-  </data>
   <data name="DispType" xml:space="preserve">
     <value>Dispatche ტიპი</value>
   </data>
@@ -2540,7 +2534,7 @@
     <value>ფულ. სახ. მუხლი</value>
   </data>
   <data name="DescriptionIsMandatory" xml:space="preserve">
-    <value>მინიშნება არის აუცილებლად შესავსები!</value>
+    <value>დანიშნულება არის აუცილებლად შესავსები!</value>
   </data>
   <data name="DocumentCreatedSuccesfully" xml:space="preserve">
     <value>წარმატებით შეიქმნა დოკუმენტი </value>
@@ -2654,7 +2648,7 @@
     <value>ლოკალიზაციის</value>
   </data>
   <data name="AddonLicense" xml:space="preserve">
-    <value>Addon ლიცენზია</value>
+    <value>AddOn ლიცენზია</value>
   </data>
   <data name="AfterChangingLicenseKey" xml:space="preserve">
     <value>ლიცენზიის კოდის შეცვლის შემდეგ დაიხურება ყველა ფანჯარა, გაგარძელდეს?</value>
@@ -3094,12 +3088,6 @@
   <data name="Fixed Assets Dimension" xml:space="preserve">
     <value>ძირითადი საშუალების განზომილება</value>
   </data>
-  <data name="ConsumptionColumnMustBeFilled" xml:space="preserve">
-    <value>Consumption Column Must Be Filled</value>
-  </data>
-  <data name="ConsumptionValueMustBeGreaterThanZero" xml:space="preserve">
-    <value>Consumption Value Must Be Greater Than Zero</value>
-  </data>
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>დოკუმენტებთან მიბმა</value>
   </data>
@@ -3315,6 +3303,18 @@
   </data>
   <data name="UnableToCreateDocumentOnCanceledInvoice" xml:space="preserve">
     <value>დოკუმენტის შექმნა შეუძლებელია გაუქმებულ ზედნადებებზე</value>
+  </data>
+  <data name="PensionAmount" xml:space="preserve">
+    <value>საპენსიო თანხა</value>
+  </data>
+  <data name="BlanketAgreement" xml:space="preserve">
+    <value>საერთო შეთანხმება</value>
+  </data>
+  <data name="TotalPaymentFC" xml:space="preserve">
+    <value>მთლიანი გადახდა (უცხ. ვალუტა)</value>
+  </data>
+  <data name="TotalPaymentLC" xml:space="preserve">
+    <value>მთლიანი გადახდა (ეროვნ. ვალუტა)</value>
   </data>
   <data name="OnlyBlank" xml:space="preserve">
     <value>მხოლოდ ცარიელი</value>

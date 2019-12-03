@@ -84,25 +84,25 @@ namespace BDO_Localisation_AddOn
             Projects.createUserFields(out errorText);
         }
 
-        public static void addMenusForAddOn( out string errorText)
+        public static void addMenusForAddOn()
         {
-            BDO_ProfitTaxBase.addMenus( out errorText);
+            BDO_ProfitTaxBase.addMenus();
 
-            BDO_ProfitTaxBaseType.addMenus( out errorText); 
-            
-            BDO_WaybillsJournalSent.addMenus( out errorText);
+            BDO_ProfitTaxBaseType.addMenus();
 
-            BDO_WaybillsJournalReceived.addMenus( out errorText);
+            BDO_WaybillsJournalSent.addMenus();
 
-            BDOSDepreciationAccrualWizard.addMenus(out errorText);
+            BDO_WaybillsJournalReceived.addMenus();
+
+            BDOSDepreciationAccrualWizard.addMenus();
 
             BDOSFuelWriteOffWizard.addMenus();
 
-            BDOSTaxJournal.addMenus( out errorText);
+            BDOSTaxJournal.addMenus();
 
-            BDO_Drivers.addMenus( out errorText);
+            BDO_Drivers.addMenus();
 
-            BDO_Vehicles.addMenus( out errorText);
+            BDO_Vehicles.addMenus();
 
             BDOSFuelTypes.addMenus();
 
@@ -112,39 +112,39 @@ namespace BDO_Localisation_AddOn
 
             BDOSFuelConsumptionAct.addMenus();
 
-            BDO_Waybills.addMenus( out errorText);
+            BDO_Waybills.addMenus();
 
-            BDO_TaxInvoiceSent.addMenus( out errorText);
+            BDO_TaxInvoiceSent.addMenus();
 
-            BDOSARDownPaymentVATAccrual.addMenus( out errorText);
+            BDOSARDownPaymentVATAccrual.addMenus();
 
-            BDO_ProfitTaxAccrual.addMenus( out errorText);
+            BDO_ProfitTaxAccrual.addMenus();
 
-            BDO_TaxInvoiceReceived.addMenus( out errorText);
+            BDO_TaxInvoiceReceived.addMenus();
 
-            BDOSInternetBanking.addMenus( out errorText);
+            BDOSInternetBanking.addMenus();
 
-            BDOSWaybillsAnalysisSent.addMenus( out errorText);
+            BDOSWaybillsAnalysisSent.addMenus();
 
-            BDOSWaybillsAnalysisReceived.addMenus( out errorText);
+            BDOSWaybillsAnalysisReceived.addMenus();
 
-            BDOSDeleteUDF.addMenus( out errorText);
+            BDOSDeleteUDF.addMenus();
 
-            BDOSInternetBankingIntegrationServicesRules.addMenus( out errorText);
+            BDOSInternetBankingIntegrationServicesRules.addMenus();
 
-            BDOSItemCategories.addMenus( out errorText);
+            BDOSItemCategories.addMenus();
 
-            BDOSOutgoingPaymentsWizard.addMenus( out errorText);
+            BDOSOutgoingPaymentsWizard.addMenus();
 
-            BDOSVATAccrualWizard.addMenus( out errorText);
+            BDOSVATAccrualWizard.addMenus();
 
-            BDOSVATReconcilationWizard.addMenus( out errorText);
+            BDOSVATReconcilationWizard.addMenus();
 
-            BDOSFixedAssetTransfer.addMenus(out errorText);
-            
-            BDOSStockTransferWizard.addMenus(out errorText);
+            BDOSFixedAssetTransfer.addMenus();
 
-            BDOSDepreciationAccrualDocument.addMenus(out errorText);
+            BDOSStockTransferWizard.addMenus();
+
+            BDOSDepreciationAccrualDocument.addMenus();
 
             BDOSFuelTransferWizard.addMenus();
         }

@@ -1951,9 +1951,6 @@
   <data name="AliasID" xml:space="preserve">
     <value>Alias ID</value>
   </data>
-  <data name="Descr" xml:space="preserve">
-    <value>Description</value>
-  </data>
   <data name="ErrorRemovingUDF" xml:space="preserve">
     <value>Error removing UDF</value>
   </data>
@@ -2520,9 +2517,6 @@
   </data>
   <data name="ControlAccount" xml:space="preserve">
     <value>Control account</value>
-  </data>
-  <data name="Descript" xml:space="preserve">
-    <value>Description</value>
   </data>
   <data name="DispType" xml:space="preserve">
     <value>Dispatche type</value>
@@ -3118,12 +3112,6 @@
   <data name="FixedAssetsDimension" xml:space="preserve">
     <value>Fixed Assets Dimension</value>
   </data>
-  <data name="ConsumptionColumnMustBeFilled" xml:space="preserve">
-    <value>Consumption Column Must Be Filled</value>
-  </data>
-  <data name="ConsumptionValueMustBeGreaterThanZero" xml:space="preserve">
-    <value>Consumption Value Must Be Greater Than Zero</value>
-  </data>
   <data name="YouMustEnterEndingUnitGreaterThanStartingUnit" xml:space="preserve">
     <value>You Must Enter Ending Unit Greater Than Starting Unit</value>
   </data>
@@ -3150,9 +3138,6 @@
   </data>
   <data name="CannotDeleteACashFlowLineItemAssignedInInternetBankingIntegrationServicesRules" xml:space="preserve">
     <value>Cannot delete a Cash Flow line item assigned  in Internet Banking Integration Services Rules</value>
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value />
   </data>
   <data name="TreasuryTransferPaymentOrderIoBP" xml:space="preserve">
     <value>Treasury Transfer (BP)</value>
@@ -3342,6 +3327,21 @@
   </data>
   <data name="UnableToCreateDocumentOnCanceledInvoice" xml:space="preserve">
     <value>Unable To Create Document On Canceled Invoice</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PensionAmount" xml:space="preserve">
+    <value>Pension Amount</value>
+  </data>
+  <data name="BlanketAgreement" xml:space="preserve">
+    <value>Blanket Agreement</value>
+  </data>
+  <data name="TotalPaymentFC" xml:space="preserve">
+    <value>Total Payment FC</value>
+  </data>
+  <data name="TotalPaymentLC" xml:space="preserve">
+    <value>Total Payment LC</value>
   </data>
   <data name="OnlyBlank" xml:space="preserve">
     <value>Only blank</value>
