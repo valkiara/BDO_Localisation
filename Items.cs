@@ -7,7 +7,7 @@ namespace BDO_Localisation_AddOn
 {
     static partial class Items
     {
-        public static bool isStockItem( string ItemCode)
+        public static bool isStockItem(string ItemCode)
         {
             SAPbobsCOM.Recordset oRecordset = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
@@ -24,7 +24,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void createUserFields( out string errorText)
+        public static void createUserFields(out string errorText)
         {
             errorText = null;
             Dictionary<string, object> fieldskeysMap;
@@ -37,7 +37,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN1");
@@ -46,7 +46,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtg2");
@@ -56,7 +56,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN2");
@@ -65,7 +65,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtg3");
@@ -75,7 +75,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN3");
@@ -84,7 +84,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtg4");
@@ -94,7 +94,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN4");
@@ -103,7 +103,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtg5");
@@ -113,7 +113,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN5");
@@ -122,7 +122,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtg6");
@@ -132,7 +132,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN6");
@@ -141,7 +141,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtg7");
@@ -151,7 +151,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN7");
@@ -160,7 +160,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtg8");
@@ -170,7 +170,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN8");
@@ -179,7 +179,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtg9");
@@ -189,7 +189,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN9");
@@ -198,7 +198,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtg10");
@@ -208,7 +208,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("LinkedTable", "BDOSITMCTG");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSCtgN10");
@@ -217,7 +217,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSUsLife");
@@ -232,7 +232,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        public static void createFormItems( SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -304,7 +304,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 uniqueID_CFL = "CFL_ItmCtg" + i;
-                FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_CFL);
+                FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_CFL);
 
                 ////პირობის დადება კატეგორიის არჩევის სიაზე
                 //SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(uniqueID_CFL);
@@ -447,7 +447,7 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -458,7 +458,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    createFormItems( oForm, out errorText);
+                    createFormItems(oForm, out errorText);
                 }
 
                 if (pVal.ItemUID == "UsLife" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE && pVal.BeforeAction == true)
@@ -478,21 +478,21 @@ namespace BDO_Localisation_AddOn
                     setVisibleFormItems(oForm, out errorText);
                 }
 
-                if(pVal.ItemUID == "39" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.BeforeAction == false)
+                if (pVal.ItemUID == "39" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.BeforeAction == false)
                 {
                     setVisibleFormItems(oForm, out errorText);
                     if (oForm.Mode != SAPbouiCOM.BoFormMode.fm_FIND_MODE)
                     {
                         FillUsLife(oForm, out errorText);
                     }
-                    
+
                 }
 
                 if (pVal.ItemUID != "" && pVal.ItemUID.Length > 7 && pVal.ItemUID.Substring(0, 7) == "BDOSCtg" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_KEY_DOWN && pVal.BeforeAction == false)
                 {
                     oForm.Freeze(true);
                     int curlevel = Convert.ToInt32(pVal.ItemUID.Substring(7));
-                    fillCategories( oForm, curlevel, "", "", out errorText);
+                    fillCategories(oForm, curlevel, "", "", out errorText);
                     oForm.Freeze(false);
                 }
 
@@ -506,13 +506,13 @@ namespace BDO_Localisation_AddOn
                         int curlevel = 0;
                         string eFatherID = "";
                         string eFatherN = "";
-                        chooseFromList( oForm, oCFLEvento, out curlevel, out eFatherID, out eFatherN, out errorText);
+                        chooseFromList(oForm, oCFLEvento, out curlevel, out eFatherID, out eFatherN, out errorText);
 
-                        fillCategories( oForm, curlevel, eFatherID, eFatherN, out errorText);
+                        fillCategories(oForm, curlevel, eFatherID, eFatherN, out errorText);
                     }
                     else
                     {
-                        chooseFromListBeforeAction( oForm, oCFLEvento, out errorText);
+                        chooseFromListBeforeAction(oForm, oCFLEvento, out errorText);
                     }
                     oForm.Freeze(false);
                 }
@@ -537,7 +537,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void chooseFromList(  SAPbouiCOM.Form oForm, SAPbouiCOM.ChooseFromListEvent oCFL,out int curlevel, out string eFatherID, out string eFatherN, out string errorText)
+        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ChooseFromListEvent oCFL, out int curlevel, out string eFatherID, out string eFatherN, out string errorText)
         {
             errorText = null;
             curlevel = 0;
@@ -568,7 +568,7 @@ namespace BDO_Localisation_AddOn
                         CategoryEdit.Value = eName;
                     }
                     catch { }
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -585,16 +585,16 @@ namespace BDO_Localisation_AddOn
                         oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                     }
 
-                    setVisibleFormItems( oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                     GC.Collect();
                 }
             }
 
         }
 
-        public static void fillCategories(  SAPbouiCOM.Form oForm, int curlevel, string eFatherID, string eFatherN, out string errorText)
+        public static void fillCategories(SAPbouiCOM.Form oForm, int curlevel, string eFatherID, string eFatherN, out string errorText)
         {
-            errorText = null;            
+            errorText = null;
 
             if (string.IsNullOrEmpty(oForm.Items.Item("BDOSCtg" + curlevel).Specific.Value))
             {
@@ -677,13 +677,13 @@ namespace BDO_Localisation_AddOn
                     oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                 }
 
-                setVisibleFormItems( oForm, out errorText);
+                setVisibleFormItems(oForm, out errorText);
                 GC.Collect();
 
             }
         }
 
-        public static void chooseFromListBeforeAction(  SAPbouiCOM.Form oForm, SAPbouiCOM.ChooseFromListEvent oCFL, out string errorText)
+        public static void chooseFromListBeforeAction(SAPbouiCOM.Form oForm, SAPbouiCOM.ChooseFromListEvent oCFL, out string errorText)
         {
             errorText = null;
 
@@ -727,7 +727,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -738,7 +738,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
                 {
-                    setVisibleFormItems( oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
 
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == false)
@@ -757,7 +757,6 @@ namespace BDO_Localisation_AddOn
                     FillUsLife(oForm, out errorText);
                     oForm.Freeze(false);
                 }
-
             }
         }
 
@@ -790,9 +789,9 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
             }
-        }   
+        }
 
-        public static void setVisibleFormItems( SAPbouiCOM.Form oForm, out string errorText)
+        public static void setVisibleFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -873,7 +872,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (oRecordSetSu.Fields.Item("BatchNumber").Value == 0)
                     {
-                        BatchNumberFinal = String.Concat(BatchNumberPrefix, 10000000 + index+1);
+                        BatchNumberFinal = String.Concat(BatchNumberPrefix, 10000000 + index + 1);
                     }
 
                     else
@@ -885,13 +884,9 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-
                 errorText = ex.ToString();
                 return errorText;
             }
-
-
-
         }
 
         public static void CheckUsLife(SAPbouiCOM.Form oForm, out string errorText)
@@ -902,23 +897,25 @@ namespace BDO_Localisation_AddOn
             string itemCode = oItemCode.Value;
 
             SAPbouiCOM.EditText oUsLife = oForm.Items.Item("UsLife").Specific;
-            int usLife = Convert.ToInt32(oUsLife.Value);
-
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string query = @"SELECT COUNT(""@BDOSDEPAC1"".""DocEntry"") as ""DepNum"" from ""@BDOSDEPAC1"" " +
-                @"join ""@BDOSDEPACR"" on ""@BDOSDEPAC1"".""DocEntry"" = ""@BDOSDEPACR"".""DocEntry"" where ""U_ItemCode"" = '" + itemCode + @"' AND ""Canceled"" = 'N'";
-
-            oRecordSet.DoQuery(query);
-
-            if (!oRecordSet.EoF)
+            if (!string.IsNullOrEmpty(oUsLife.Value))
             {
-                if (usLife <= oRecordSet.Fields.Item("DepNum").Value)
+                int usLife = Convert.ToInt32(oUsLife.Value);
+
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                string query = @"SELECT COUNT(""@BDOSDEPAC1"".""DocEntry"") as ""DepNum"" from ""@BDOSDEPAC1"" " +
+                    @"join ""@BDOSDEPACR"" on ""@BDOSDEPAC1"".""DocEntry"" = ""@BDOSDEPACR"".""DocEntry"" where ""U_ItemCode"" = '" + itemCode + @"' AND ""Canceled"" = 'N'";
+
+                oRecordSet.DoQuery(query);
+
+                if (!oRecordSet.EoF)
                 {
-                    errorText = BDOSResources.getTranslate("UsLifeError");
-                    return;
+                    if (usLife <= oRecordSet.Fields.Item("DepNum").Value)
+                    {
+                        errorText = BDOSResources.getTranslate("UsLifeError");
+                        return;
+                    }
                 }
             }
         }
-
     }
 }
