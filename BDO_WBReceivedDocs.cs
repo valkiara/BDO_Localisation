@@ -1028,18 +1028,15 @@ namespace BDO_Localisation_AddOn
                 {
                     operationRS = oButtonCombo.Selected.Value;
                 }
-
                 oForm.Freeze(false);
-                oButtonCombo.Caption = BDOSResources.getTranslate("Operations");
-
+                oButtonCombo.Caption = BDOSResources.getTranslate("Operations");               
                 string WBID = oForm.DataSources.DBDataSources.Item(0).GetValue("U_BDO_WBID", 0);
-
+              
                 if (operationRS == "0")
                 {
                     SAPbobsCOM.BusinessPartners oBP;
                     oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
                     oBP.GetByKey(oForm.DataSources.DBDataSources.Item(0).GetValue("CardCode", 0).Trim());
-
                     if (oBP.UserFields.Fields.Item("LicTradNum").Value.Trim() == "")
                     {
                         Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CheckBPTin"));
@@ -1054,6 +1051,7 @@ namespace BDO_Localisation_AddOn
                             return;
                         }
                     }
+                    
                     BDO_WaybillsJournalReceived.createForm( oIncWaybForm, out errorText);
 
                 }

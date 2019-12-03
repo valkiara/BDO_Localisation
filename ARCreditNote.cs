@@ -385,7 +385,7 @@ namespace BDO_Localisation_AddOn
                 string wblSts = "";
                 string objType = "14";
 
-                String oCNTp = oForm.DataSources.DBDataSources.Item("ORIN").GetValue("U_BDO_CNTp", 0).Trim();
+                string oCNTp = oForm.DataSources.DBDataSources.Item("ORIN").GetValue("U_BDO_CNTp", 0).Trim();
 
                 if (oCNTp == "0")
                 {

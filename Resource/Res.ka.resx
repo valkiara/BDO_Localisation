@@ -3316,4 +3316,7 @@
   <data name="TotalPaymentLC" xml:space="preserve">
     <value>მთლიანი გადახდა (ეროვნ. ვალუტა)</value>
   </data>
+  <data name="OnlyBlank" xml:space="preserve">
+    <value>მხოლოდ ცარიელი</value>
+  </data>
 </root>

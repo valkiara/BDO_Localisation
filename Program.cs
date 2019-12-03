@@ -59,7 +59,7 @@ namespace BDO_Localisation_AddOn
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            if (runAddOn() == true)
+            if (runAddOn())
             {
                 BDOSAutomaticTasks.importCurrencyRate();
 
@@ -84,7 +84,7 @@ namespace BDO_Localisation_AddOn
             string errorText;
 
             bool connectResult = ConnectB1.connectShared(out errorText);
-            if (connectResult == true)
+            if (connectResult )
             {
                 //SAPbouiCOM.ProgressBar ProgressBarForm;
                 //ProgressBarForm = uiApp.StatusBar.CreateProgressBar("", 20, true);
@@ -97,7 +97,7 @@ namespace BDO_Localisation_AddOn
                 UserDefinedTablesCurrentCompany = UDO.UserDefinedTablesCurrentCompany();
                 UserDefinedFieldsCurrentCompany = UDO.UserDefinedFieldsCurrentCompany();
 
-                if (UDO.UserDefinedFieldExists("OADM", "BDOSLocLic") == false)
+                if (!UDO.UserDefinedFieldExists("OADM", "BDOSLocLic"))
                 {
                     License.createUserFields(out errorText);
                     if (!String.IsNullOrEmpty(errorText))
