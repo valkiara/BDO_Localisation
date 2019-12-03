@@ -643,6 +643,7 @@ namespace BDO_Localisation_AddOn
 
                 string Fstatus = oForm.DataSources.UserDataSources.Item("WBStatus").ValueEx;
                 string FOption = oForm.DataSources.UserDataSources.Item("option").ValueEx;
+                string FNUMBER = oForm.DataSources.UserDataSources.Item("WBNumber").ValueEx;
 
                 string query = getQueryText(BeginDate, EndDate, cardCode, itypes, Fstatus, FOption);
 
@@ -985,6 +986,11 @@ namespace BDO_Localisation_AddOn
                         oRecordSet.MoveNext();
                         continue;
                     }
+                    if (FNUMBER != "" && FNUMBER != WBNum)
+                    {
+                        oRecordSet.MoveNext();
+                        continue;
+                    }
 
                     Sbuilder.Append("<Row>");
                     Sbuilder.Append("<Cell> <ColumnUid>BaseCard</ColumnUid> <Value>");
@@ -1167,6 +1173,7 @@ namespace BDO_Localisation_AddOn
                         transportCoast = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["TRANSPORT_COAST"].ToString());
                         amount = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["AMOUNT"].ToString());
                         quantity = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["Quantity"].ToString());
+                        WAYBILL_NUMBER = RemainingRows[i]["WAYBILL_NUMBER"].ToString();
 
                         if (rsType == "5") //დაბრუნება
                         {
@@ -1180,6 +1187,7 @@ namespace BDO_Localisation_AddOn
                         {
                             continue;
                         }
+
 
                         Sbuilder.Append("<Row>");
 
