@@ -1057,7 +1057,7 @@ namespace BDO_Localisation_AddOn
             string BlaAgrDocEntryStr = DBDataSourceO.GetValue("AgrNo", 0);
             if (BlaAgrDocEntryStr != "")
             {
-                int BlaAgrDocEntry = Convert.ToInt32(DBDataSourceO.GetValue("AgrNo", 0));
+                int BlaAgrDocEntry = Convert.ToInt32(BlaAgrDocEntryStr);
 
                 if (UseBlaAgRt == "Y")
                 {
