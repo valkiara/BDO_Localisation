@@ -3310,4 +3310,10 @@
   <data name="BlanketAgreement" xml:space="preserve">
     <value>საერთო შეთანხმება</value>
   </data>
+  <data name="TotalPaymentFC" xml:space="preserve">
+    <value>მთლიანი გადახდა (უცხ. ვალუტა)</value>
+  </data>
+  <data name="TotalPaymentLC" xml:space="preserve">
+    <value>მთლიანი გადახდა (ეროვნ. ვალუტა)</value>
+  </data>
 </root>

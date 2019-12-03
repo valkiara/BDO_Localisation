@@ -33,7 +33,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void createUserFields( out string errorText)
+        public static void createUserFields(out string errorText)
         {
             errorText = null;
             Dictionary<string, object> fieldskeysMap;
@@ -66,7 +66,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             //საქონლის ძიების პარამეტრი
             fieldskeysMap = new Dictionary<string, object>();
@@ -82,7 +82,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             //შესაბამისობის კოტროლი შესყიდვისას
             fieldskeysMap = new Dictionary<string, object>();
@@ -99,7 +99,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDO_NotInv");
@@ -109,7 +109,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "N");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDO_NeedWB");
@@ -119,7 +119,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "N");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             //მოგების გადასახადი
             fieldskeysMap = new Dictionary<string, object>(); // გათავისუფლებული მოგების გადასახადისგან
@@ -130,7 +130,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "N");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // ოფშორულ ქვეყნებში რეგისტრირებული
             fieldskeysMap.Add("Name", "BDO_RIOfsh");
@@ -140,7 +140,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "N");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             listValidValues = new List<string>();
             listValidValues.Add(""); //-1
@@ -155,7 +155,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 150);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             GC.Collect();
         }
@@ -550,22 +550,22 @@ namespace BDO_Localisation_AddOn
                         int paneLevel = oForm.PaneLevel;
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("178").Specific));
-                        
-                        for (int j = 1; j <= oMatrix.RowCount; )
+
+                        for (int j = 1; j <= oMatrix.RowCount;)
                         {
-                            
+
                             string countryCode = oMatrix.Columns.Item("8").Cells.Item(j).Specific.Value;
 
                             if (countryCode != "GE")
-                            {                                
+                            {
                                 string cardType = oForm.DataSources.DBDataSources.Item("OCRD").GetValue("CardType", 0).Trim();
-                
+
                                 if (cardType == "C" || cardType == "L") //თუ მყიდველია ან პოტენციური კლიენტი
                                 {
                                     oForm.PaneLevel = 10;
                                     SAPbouiCOM.CheckBox oBDO_NotInv = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_NotInv").Specific));
                                     oBDO_NotInv.Checked = true;
-                                    
+
                                 }
 
                             }
@@ -592,7 +592,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void setVisibleFormItems( SAPbouiCOM.Form oForm, out string errorText)
+        public static void setVisibleFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             try
@@ -641,7 +641,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void BDO_TinBtn_OnClick(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void BDO_TinBtn_OnClick(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -652,7 +652,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -699,18 +699,18 @@ namespace BDO_Localisation_AddOn
                 }
                 //if (cardType == "C" || cardType == "L") //თუ მყიდველია ან პოტენციური კლიენტი
                 //{
-                    if (isVatPayer == true & BDO_NotInv != "N")
-                    {
-                        oForm.PaneLevel = 10;
-                        SAPbouiCOM.CheckBox oBDO_NotInv = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_NotInv").Specific));
-                        oBDO_NotInv.Checked = false;
-                    }
-                    else if (isVatPayer == false & BDO_NotInv != "Y")
-                    {
-                        oForm.PaneLevel = 10;
-                        SAPbouiCOM.CheckBox oBDO_NotInv = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_NotInv").Specific));
-                        oBDO_NotInv.Checked = true;
-                    }
+                if (isVatPayer == true & BDO_NotInv != "N")
+                {
+                    oForm.PaneLevel = 10;
+                    SAPbouiCOM.CheckBox oBDO_NotInv = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_NotInv").Specific));
+                    oBDO_NotInv.Checked = false;
+                }
+                else if (isVatPayer == false & BDO_NotInv != "Y")
+                {
+                    oForm.PaneLevel = 10;
+                    SAPbouiCOM.CheckBox oBDO_NotInv = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_NotInv").Specific));
+                    oBDO_NotInv.Checked = true;
+                }
                 //}
 
                 oForm.PaneLevel = panelLevel;
@@ -762,57 +762,68 @@ namespace BDO_Localisation_AddOn
 
                     switch (OrganizationType)
                     {
-                        case "ი/მ": if (oBDO_TaxTyp.Value.Trim() != "1") //ინდივიდუალური მეწარმე
+                        case "ი/მ":
+                            if (oBDO_TaxTyp.Value.Trim() != "1") //ინდივიდუალური მეწარმე
                             {
                                 oBDO_TaxTyp.Select("1", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "შპს": if (oBDO_TaxTyp.Value.Trim() != "2") //შეზღუდული პასუხისმგებლობის საზოგადოება
+                        case "შპს":
+                            if (oBDO_TaxTyp.Value.Trim() != "2") //შეზღუდული პასუხისმგებლობის საზოგადოება
                             {
                                 oBDO_TaxTyp.Select("2", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "ფ/პ": if (oBDO_TaxTyp.Value.Trim() != "3") //ფიზიკური პირი
+                        case "ფ/პ":
+                            if (oBDO_TaxTyp.Value.Trim() != "3") //ფიზიკური პირი
                             {
                                 oBDO_TaxTyp.Select("3", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "სპს": if (oBDO_TaxTyp.Value.Trim() != "4") //სოლიდარული პასუხისმგებლობის საზოგადოება
+                        case "სპს":
+                            if (oBDO_TaxTyp.Value.Trim() != "4") //სოლიდარული პასუხისმგებლობის საზოგადოება
                             {
                                 oBDO_TaxTyp.Select("4", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "სს": if (oBDO_TaxTyp.Value.Trim() != "5") //სააქციო საზოგადოება
+                        case "სს":
+                            if (oBDO_TaxTyp.Value.Trim() != "5") //სააქციო საზოგადოება
                             {
                                 oBDO_TaxTyp.Select("5", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "კს": if (oBDO_TaxTyp.Value.Trim() != "6") //კომანდიტური საზოგადოება
+                        case "კს":
+                            if (oBDO_TaxTyp.Value.Trim() != "6") //კომანდიტური საზოგადოება
                             {
                                 oBDO_TaxTyp.Select("6", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "კოოპ.": if (oBDO_TaxTyp.Value.Trim() != "7") //კოოპერატივი
+                        case "კოოპ.":
+                            if (oBDO_TaxTyp.Value.Trim() != "7") //კოოპერატივი
                             {
                                 oBDO_TaxTyp.Select("7", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "ა(ა)იპ": if (oBDO_TaxTyp.Value.Trim() != "8") //არაკომერციული იურიდიული პირი
+                        case "ა(ა)იპ":
+                            if (oBDO_TaxTyp.Value.Trim() != "8") //არაკომერციული იურიდიული პირი
                             {
                                 oBDO_TaxTyp.Select("8", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "უცხ.საწ.ფილ.": if (oBDO_TaxTyp.Value.Trim() != "9") //უცხოური საწარმოს ფილიალი
+                        case "უცხ.საწ.ფილ.":
+                            if (oBDO_TaxTyp.Value.Trim() != "9") //უცხოური საწარმოს ფილიალი
                             {
                                 oBDO_TaxTyp.Select("9", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "სსიპ": if (oBDO_TaxTyp.Value.Trim() != "12") //საჯარო სამართლის იურიდიული პირი
+                        case "სსიპ":
+                            if (oBDO_TaxTyp.Value.Trim() != "12") //საჯარო სამართლის იურიდიული პირი
                             {
                                 oBDO_TaxTyp.Select("12", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
                             break;
-                        case "ამხანაგობა": if (oBDO_TaxTyp.Value.Trim() != "14") //ამხანაგობა
+                        case "ამხანაგობა":
+                            if (oBDO_TaxTyp.Value.Trim() != "14") //ამხანაგობა
                             {
                                 oBDO_TaxTyp.Select("14", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             };
@@ -851,7 +862,7 @@ namespace BDO_Localisation_AddOn
                                     oEditBillTo = oMatrixBillTo.Columns.Item("20").Cells.Item(k).Specific;
                                     if (oEditBillTo.Value == "იურ. მისამართი")
                                     {
-                                        for (int j = 1; j <= oMatrix.RowCount; )
+                                        for (int j = 1; j <= oMatrix.RowCount;)
                                         {
                                             oEdit = oMatrix.Columns.Item("2").Cells.Item(j).Specific;
                                             if (oEdit.Value != Address)
@@ -863,7 +874,7 @@ namespace BDO_Localisation_AddOn
                                     }
                                     else if (oEditBillTo.Value == "Define New")
                                     {
-                                        for (int j = 1; j <= oMatrix.RowCount; )
+                                        for (int j = 1; j <= oMatrix.RowCount;)
                                         {
                                             oEdit = oMatrix.Columns.Item("1").Cells.Item(j).Specific;
                                             oEdit.Value = "იურ. მისამართი";
@@ -893,13 +904,13 @@ namespace BDO_Localisation_AddOn
                     //<--- მისამართის ჩაწერა                               
                 }
             }
-        
+
             if (getInitFromTIN == true)
-            {                
-                string name = BDO_Waybills.getInitFromTIN( tin, out errorText);
+            {
+                string name = BDO_Waybills.getInitFromTIN(tin, out errorText);
 
                 if (name != "")
-                {      
+                {
                     string cardName = oForm.DataSources.DBDataSources.Item("OCRD").GetValue("CardName", 0).Trim();
 
                     int changeCardName = 1;
@@ -907,7 +918,7 @@ namespace BDO_Localisation_AddOn
                     if (cardName != "")
                     {
                         changeCardName = Program.uiApp.MessageBox(BDOSResources.getTranslate("NameMismatchFromEnregDoYouWantEditDr"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-        }
+                    }
 
                     if (changeCardName == 1)
                     {
@@ -924,8 +935,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -936,7 +946,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
                 {
-                    BusinessPartners.setVisibleFormItems( oForm, out errorText);
+                    BusinessPartners.setVisibleFormItems(oForm, out errorText);
                 }
 
                 //გსნ-თი და ბპ ტიპით უნიკალურობის კონტროლი
@@ -983,7 +993,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -995,7 +1005,7 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
                     BusinessPartners.createFormItems(oForm, out errorText);
-                    BusinessPartners.setVisibleFormItems( oForm, out errorText);
+                    BusinessPartners.setVisibleFormItems(oForm, out errorText);
                 }
 
                 if (pVal.ItemUID == "BDO_TinBtn")
@@ -1005,7 +1015,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.Button oButton = (SAPbouiCOM.Button)oForm.Items.Item("BDO_TinBtn").Specific;
                         oButton.Image = "15886_MENU_CHECKED";
                         oForm.Freeze(true);
-                        BusinessPartners.BDO_TinBtn_OnClick( oForm, out errorText);
+                        BusinessPartners.BDO_TinBtn_OnClick(oForm, out errorText);
                         oForm.Freeze(false);
                         oButton.Image = "15886_MENU";
                         if (errorText != null)
@@ -1016,7 +1026,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.BeforeAction==false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.BeforeAction == false)
                 {
                     oForm.Freeze(true);
                     comboSelect(oForm, pVal.ItemUID, pVal.BeforeAction, out errorText);
@@ -1029,10 +1039,33 @@ namespace BDO_Localisation_AddOn
                     if (pVal.ItemUID == "262")
                     {
                         oForm.Freeze(true);
-                        BusinessPartners.setVisibleFormItems( oForm, out errorText);
+                        BusinessPartners.setVisibleFormItems(oForm, out errorText);
                         oForm.Freeze(false);
                     }
                 }
+            }
+        }
+
+        public static bool isWTLiable(string cardCode)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                string query = @"SELECT ""CardCode"" FROM ""OCRD"" WHERE ""CardCode"" = '" + cardCode + @"' AND ""WTLiable"" = 'Y'";
+                oRecordSet.DoQuery(query);
+                if (!oRecordSet.EoF)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
             }
         }
     }

@@ -3337,4 +3337,10 @@
   <data name="BlanketAgreement" xml:space="preserve">
     <value>Blanket Agreement</value>
   </data>
+  <data name="TotalPaymentFC" xml:space="preserve">
+    <value>Total Payment FC</value>
+  </data>
+  <data name="TotalPaymentLC" xml:space="preserve">
+    <value>Total Payment LC</value>
+  </data>
 </root>

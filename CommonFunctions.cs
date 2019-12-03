@@ -367,6 +367,38 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static SAPbobsCOM.Recordset getBPBankInfo(string cardCode)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                if (!string.IsNullOrEmpty(cardCode))
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.Append("SELECT \"CardCode\", \n");
+                    query.Append("\"CardName\", \n");
+                    query.Append("\"DebPayAcct\", \n");
+                    query.Append("\"Currency\", \n");
+                    query.Append("\"BankCountr\", \n");
+                    query.Append("\"BankCode\", \n");
+                    query.Append("\"DflAccount\" \n");
+                    query.Append("FROM   \"OCRD\" \n");
+                    query.Append("WHERE  \"CardCode\" = '" + cardCode + "'");
+
+                    oRecordSet.DoQuery(query.ToString());
+                    if (!oRecordSet.EoF)
+                    {
+                        return oRecordSet;
+                    }
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static bool isBPAccountTreasury(string cardCode, string bankCode, string account)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
