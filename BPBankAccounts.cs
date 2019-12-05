@@ -30,11 +30,9 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void changeFormItems(SAPbouiCOM.Form oForm, out string errorText)
+        public static void changeFormItems(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
-            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("3").Specific));
+            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("3").Specific;
 
             SAPbouiCOM.Columns oColumns = oMatrix.Columns;
             SAPbouiCOM.Column oColumn = oColumns.Item("U_treasury");      
@@ -45,15 +43,14 @@ namespace BDO_Localisation_AddOn
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText;
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
-                    changeFormItems(oForm, out errorText);
+                    changeFormItems(oForm);
                 }
             }
         }
