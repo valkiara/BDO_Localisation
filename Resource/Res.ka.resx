@@ -3319,4 +3319,10 @@
   <data name="OnlyBlank" xml:space="preserve">
     <value>მხოლოდ ცარიელი</value>
   </data>
+  <data name="BPBankAccount" xml:space="preserve">
+    <value>ბპ. ბანკის ანგარიში</value>
+  </data>
+  <data name="WTCode" xml:space="preserve">
+    <value>საშემოსავლოს კოდი</value>
+  </data>
 </root>

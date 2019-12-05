@@ -367,6 +367,40 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static SAPbobsCOM.Recordset getBPBankInfo(string account, string cardCode)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                if (!string.IsNullOrEmpty(account) && !string.IsNullOrEmpty(cardCode))
+                {
+                    string query = @"SELECT
+                    	 ""OCRB"".""CardCode"",
+                    	 ""OCRD"".""CardType"",
+                         ""OCRD"".""Currency"",
+                    	 ""OCRB"".""BankCode"",
+                    	 ""OCRB"".""Country"",
+                    	 ""OCRB"".""Account"",
+                    	 ""OCRB"".""AcctName"",
+                         ""OCRB"".""U_treasury""
+                    FROM ""OCRB"" 
+                    INNER JOIN ""OCRD"" ON ""OCRB"".""CardCode"" = ""OCRD"".""CardCode"" 
+                    WHERE ""Account"" = '" + account + @"' AND ""OCRD"".""CardCode"" = '" + cardCode + "'";
+
+                    oRecordSet.DoQuery(query);
+                    if (!oRecordSet.EoF)
+                    {
+                        return oRecordSet;
+                    }
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static SAPbobsCOM.Recordset getBPBankInfo(string cardCode)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
