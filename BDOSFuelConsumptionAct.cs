@@ -462,14 +462,14 @@ namespace BDO_Localisation_AddOn
                             oForm.Freeze(true);
                             if (!checkOdmtrEnd(oForm, pVal.Row - 1))
                             {
-                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("EndingValueOfOdometer") + " " + BDOSResources.getTranslate("LessThan") + " " + BDOSResources.getTranslate("StartingValueOfOdometer") + "! " + BDOSResources.getTranslate("TableRow") + ": " + pVal.Row, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("EndingValueOfOdometer") + " " + BDOSResources.getTranslate("LessThan") + " " + BDOSResources.getTranslate("StartingValueOfOdometer") + "! " + BDOSResources.getTranslate("TableRow") + ": " + pVal.Row, SAPbouiCOM.BoMessageTime.bmt_Short);
                                 BubbleEvent = false;
                                 return;
                             }
                         }
                         catch (Exception ex)
                         {
-                            Program.uiApp.SetStatusBarMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                            Program.uiApp.SetStatusBarMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
                         }
                         finally
                         {
@@ -494,7 +494,7 @@ namespace BDO_Localisation_AddOn
                 //    {
                 //        if (!checkOdmtrEnd(oForm, pVal.Row - 1))
                 //        {
-                //            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("EndingValueOfOdometer") + " " + BDOSResources.getTranslate("LessThan") + " " + BDOSResources.getTranslate("StartingValueOfOdometer") + "! " + BDOSResources.getTranslate("TableRow") + ": " + pVal.Row, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                //            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("EndingValueOfOdometer") + " " + BDOSResources.getTranslate("LessThan") + " " + BDOSResources.getTranslate("StartingValueOfOdometer") + "! " + BDOSResources.getTranslate("TableRow") + ": " + pVal.Row, SAPbouiCOM.BoMessageTime.bmt_Short);
                 //            BubbleEvent = false;
                 //        }
                 //    }
@@ -545,21 +545,38 @@ namespace BDO_Localisation_AddOn
 
                         if (docDate < dateTo)
                         {
-                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("PostingDateMustBeGreaterOrEqualThanDateTo"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("PostingDateMustBeGreaterOrEqualThanDateTo"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                            BubbleEvent = false;
+                        }
+                    }
+
+                    SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
+                    oMatrix.FlushToDataSource();
+                    if (oMatrix.RowCount == 0)
+                    {
+                        Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TheTableCanNotBeEmpty") + "!", SAPbouiCOM.BoMessageTime.bmt_Short);
+                        BubbleEvent = false;
+                    }
+
+                    SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
+                    int rowCount = oDBDataSourceMTR.Size;
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        if (Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_ActuallyCn", i), NumberFormatInfo.InvariantInfo) == 0)
+                        {
+                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TheFollowingFieldIsMandatory") + ": \"" + BDOSResources.getTranslate("ActuallyConsumption") + "\" " + BDOSResources.getTranslate("TableRow") + ": " + i, SAPbouiCOM.BoMessageTime.bmt_Short);
                             BubbleEvent = false;
                         }
                     }
 
                     //checkDuplicatesInDBDataSources
-                    SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
-
                     Dictionary<string, SAPbouiCOM.DBDataSource> oKeysDictionary = new Dictionary<string, SAPbouiCOM.DBDataSource>();
                     oKeysDictionary.Add("U_ItemCode", oDBDataSourceMTR);
                     string errorText;
                     List<string> itemCodeList = CommonFunctions.checkDuplicatesInDBDataSources(oDBDataSourceMTR, oKeysDictionary, out errorText);
-                    if (string.IsNullOrEmpty(errorText) == false)
+                    if (!string.IsNullOrEmpty(errorText))
                     {
-                        Program.uiApp.SetStatusBarMessage(errorText + " " + BDOSResources.getTranslate("AssetCode") + ": " + string.Join(",", itemCodeList), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                        Program.uiApp.SetStatusBarMessage(errorText + " " + BDOSResources.getTranslate("AssetCode") + ": " + string.Join(",", itemCodeList), SAPbouiCOM.BoMessageTime.bmt_Short);
                         BubbleEvent = false;
                     }
                 }
@@ -1710,7 +1727,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
             finally
             {
@@ -1754,7 +1771,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
             finally
             {
@@ -1820,7 +1837,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
             finally
             {

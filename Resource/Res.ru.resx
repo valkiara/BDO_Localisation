@@ -2990,7 +2990,7 @@
     <value>Fuel Group</value>
   </data>
   <data name="FuelType" xml:space="preserve">
-    <value>Fuel Type</value>
+    <value>Consumption Type</value>
   </data>
   <data name="Canceled" xml:space="preserve">
     <value>Canceled</value>
@@ -3179,7 +3179,7 @@
     <value>Warehouse Type (From)</value>
   </data>
   <data name="FuelTypes" xml:space="preserve">
-    <value>Fuel Types</value>
+    <value>Consumption Types</value>
   </data>
   <data name="FuelCode" xml:space="preserve">
     <value>Fuel Code</value>
@@ -3321,5 +3321,8 @@
   </data>
   <data name="WTCode" xml:space="preserve">
     <value>WTax Code</value>
+  </data>
+  <data name="TheTableCanNotBeEmpty" xml:space="preserve">
+    <value>The table can not be empty</value>
   </data>
 </root>

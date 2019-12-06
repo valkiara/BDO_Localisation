@@ -3325,4 +3325,7 @@
   <data name="WTCode" xml:space="preserve">
     <value>საშემოსავლოს კოდი</value>
   </data>
+  <data name="TheTableCanNotBeEmpty" xml:space="preserve">
+    <value>ცხრილი არ შეიძლება იყოს ცარიელი</value>
+  </data>
 </root>
