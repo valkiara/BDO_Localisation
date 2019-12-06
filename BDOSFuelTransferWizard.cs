@@ -1426,18 +1426,15 @@ namespace BDO_Localisation_AddOn
                 checkBox = oDataTable.GetValue("CheckBox", i);
                 fuTpCode = oDataTable.GetValue("FuTpCode", i);
 
-                if (checkBox == "Y" && !string.IsNullOrEmpty(fuTpCode) && oDataTable.GetValue("DocEntryST", i) == 0)
+                if (checkBox == "Y" && !string.IsNullOrEmpty(fuTpCode) && oDataTable.GetValue("DocEntryST", i) == 0 && oDataTable.GetValue("Quantity", i) > 0)
                 {
                     oStockTransfer.Lines.ItemCode = oDataTable.GetValue("FuelCode", i);
                     oStockTransfer.Lines.ItemDescription = oDataTable.GetValue("FuelName", i);
                     oStockTransfer.Lines.FromWarehouseCode = whsFromCode;
                     oStockTransfer.Lines.WarehouseCode = whsToCode;
                     oStockTransfer.Lines.ProjectCode = prjToCode;
-                    if (oDataTable.GetValue("Quantity", i) != 0)
-                    {
-                        double quantity = Convert.ToDouble(oDataTable.GetValue("Quantity", i), CultureInfo.InvariantCulture);
-                        oStockTransfer.Lines.Quantity = quantity;
-                    }
+                    double quantity = Convert.ToDouble(oDataTable.GetValue("Quantity", i), CultureInfo.InvariantCulture);
+                    oStockTransfer.Lines.Quantity = quantity;
                     oStockTransfer.Lines.DistributionRule = oDataTable.GetValue("Dimension1", i);
                     oStockTransfer.Lines.DistributionRule2 = oDataTable.GetValue("Dimension2", i);
                     oStockTransfer.Lines.DistributionRule3 = oDataTable.GetValue("Dimension3", i);
@@ -1492,7 +1489,7 @@ namespace BDO_Localisation_AddOn
                     //    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated"), SAPbouiCOM.BoMessageTime.bmt_Short);
                     //    return;
                     //}
-                    Marshal.ReleaseComObject(oStockTransfer);                 
+                    Marshal.ReleaseComObject(oStockTransfer);
                 }
 
                 oForm.Freeze(true);

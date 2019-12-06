@@ -1248,7 +1248,7 @@ namespace BDO_Localisation_AddOn
             }
             else
             {
-                docRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : oSBOBob.GetCurrencyRate(invCurrency, docDate).Fields.Item("CurrencyRate").Value;
+                docRate = useBlaAgRt == "Y" ? docRateByBlnktAgr : Convert.ToDecimal(oSBOBob.GetCurrencyRate(invCurrency, docDate).Fields.Item("CurrencyRate").Value, NumberFormatInfo.InvariantInfo);
                 transferSum = transferSumFC;
             }
 
@@ -2851,9 +2851,9 @@ namespace BDO_Localisation_AddOn
 
                     if (!string.IsNullOrEmpty(wtCode))
                     {
-                        bool physicalEntityTax = (BusinessPartners.isWTLiable(cardCode) && CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
+                        bool physicalEntityTax = CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y";
 
-                        if (physicalEntityTax)
+                        if (BusinessPartners.isWTLiable(cardCode))
                         {
                             DateTime date = oDataTable.GetValue("DocDate", i - 1);
                             physicalEntityPensionRates = WithholdingTax.getPhysicalEntityPensionRates(date, wtCode, out errorText);
@@ -2865,8 +2865,8 @@ namespace BDO_Localisation_AddOn
                                 decimal totalPaymentFC = Convert.ToDecimal(oDataTable.GetValue("TotalPaymentFC", i - 1), CultureInfo.InvariantCulture);
 
                                 decimal wtRate = physicalEntityPensionRates["WTRate"] / 100;
-                                decimal pensionWTaxRate = physicalEntityPensionRates["PensionWTaxRate"] / 100;
-                                decimal pensionCoWTaxRate = physicalEntityPensionRates["PensionCoWTaxRate"] / 100;
+                                decimal pensionWTaxRate = physicalEntityTax ? physicalEntityPensionRates["PensionWTaxRate"] / 100 : 0;
+                                decimal pensionCoWTaxRate = physicalEntityTax ? physicalEntityPensionRates["PensionCoWTaxRate"] / 100 : 0;
 
                                 grossAmt = totalPaymentLC / (1 - wtRate) / (1 - pensionWTaxRate);
 

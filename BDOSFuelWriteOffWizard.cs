@@ -324,7 +324,7 @@ namespace BDO_Localisation_AddOn
                     {
                         throw new Exception(errorText);
                     }
-                   
+
                     top += height + 1;
 
                     FormsB1.addChooseFromList(oForm, false, "4", "FuelCodeCFL"); //Items
@@ -1397,16 +1397,13 @@ namespace BDO_Localisation_AddOn
                 checkBox = oDataTable.GetValue("CheckBox", i);
                 fuTpCode = oDataTable.GetValue("FuTpCode", i);
 
-                if (checkBox == "Y" && !string.IsNullOrEmpty(fuTpCode) && oDataTable.GetValue("DocEntryGI", i) == 0)
+                if (checkBox == "Y" && !string.IsNullOrEmpty(fuTpCode) && oDataTable.GetValue("DocEntryGI", i) == 0 && oDataTable.GetValue("ActuallyCn", i) > 0)
                 {
                     oGoodsIssue.Lines.ItemCode = oDataTable.GetValue("FuelCode", i);
                     oGoodsIssue.Lines.ItemDescription = oDataTable.GetValue("FuelName", i);
                     oGoodsIssue.Lines.WarehouseCode = whsCode;
-                    if (oDataTable.GetValue("ActuallyCn", i) > 0)
-                    {
-                        double actuallyCn = Convert.ToDouble(oDataTable.GetValue("ActuallyCn", i), CultureInfo.InvariantCulture);
-                        oGoodsIssue.Lines.Quantity = actuallyCn;
-                    }
+                    double actuallyCn = Convert.ToDouble(oDataTable.GetValue("ActuallyCn", i), CultureInfo.InvariantCulture);
+                    oGoodsIssue.Lines.Quantity = actuallyCn;
                     oGoodsIssue.Lines.AccountCode = oDataTable.GetValue("AcctCode", i);
                     oGoodsIssue.Lines.ProjectCode = oDataTable.GetValue("PrjCode", i);
                     oGoodsIssue.Lines.CostingCode = oDataTable.GetValue("Dimension1", i);
