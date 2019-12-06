@@ -1308,13 +1308,13 @@ namespace BDO_Localisation_AddOn
                     {
                         sumApplied = Math.Min(balanceDue, sumAppliedLC);
                         oPayment.Invoices.SumApplied = Convert.ToDouble(sumApplied, NumberFormatInfo.InvariantInfo);
-                        noDocSum += Math.Abs(sumAppliedLC - balanceDue);
+                        noDocSum += (sumAppliedLC - balanceDue);
                     }
                     else
                     {
                         sumApplied = Math.Min(balanceDue, sumAppliedFC);
                         oPayment.Invoices.AppliedFC = Convert.ToDouble(sumApplied, NumberFormatInfo.InvariantInfo);
-                        noDocSum += Math.Abs(sumAppliedFC - balanceDue);
+                        noDocSum += (sumAppliedFC - balanceDue);
                     }
 
                     DataRow DTSourceRowVPM2 = DTSourceVPM2.Rows.Add();
@@ -1352,7 +1352,8 @@ namespace BDO_Localisation_AddOn
             DTSourceRow["PrjCode"] = project;
             DTSourceRow["U_liablePrTx"] = "N";
             DTSourceRow["U_prBase"] = "";
-            DTSourceRow["NoDocSum"] = Convert.ToDouble(noDocSum, NumberFormatInfo.InvariantInfo);
+            if (noDocSum > 0)
+                DTSourceRow["NoDocSum"] = Convert.ToDouble(noDocSum, NumberFormatInfo.InvariantInfo);
             DTSourceRow["U_BDOSWhtAmt"] = Convert.ToDouble(wtAmount, NumberFormatInfo.InvariantInfo);
             DTSourceRow["U_BDOSPnPhAm"] = Convert.ToDouble(pensEmployedAmount, NumberFormatInfo.InvariantInfo);
             DTSourceRow["U_BDOSPnCoAm"] = Convert.ToDouble(pensEmployerAmount, NumberFormatInfo.InvariantInfo);
