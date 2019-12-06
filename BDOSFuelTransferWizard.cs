@@ -1307,7 +1307,7 @@ namespace BDO_Localisation_AddOn
             query.Append("INNER JOIN \"OITM\" ON \"OITM\".\"ItemCode\" = \"@BDOSFUTP\".\"U_ItemCode\" \n");
             query.Append("INNER JOIN \"OITB\" ON \"OITM\".\"ItmsGrpCod\" = \"OITB\".\"ItmsGrpCod\") AS \"@BDOSFUTP\" \n");
             query.Append("ON \"OITM\".\"U_BDOSFuTp\" = \"@BDOSFUTP\".\"Code\" \n");
-            query.Append("INNER JOIN \"OHEM\" ON \"OITM\".\"Employee\" = \"OHEM\".\"empID\" \n");
+            query.Append("LEFT JOIN \"OHEM\" ON \"OITM\".\"Employee\" = \"OHEM\".\"empID\" \n");
             query.Append("INNER JOIN \"OPRC\" ON \"OITM\".\"ItemCode\" = \"OPRC\".\"U_BDOSFACode\" \n");
             query.Append("WHERE \"OITM\".\"ItemType\" = 'F' \n");
             query.Append("AND \"OITM\".\"validFor\" = 'Y' \n");
