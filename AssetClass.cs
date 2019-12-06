@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -124,6 +125,32 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 oForm.Freeze(false);
+            }
+        }
+
+        public static bool isVehicle(string assetClass)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                if (!string.IsNullOrEmpty(assetClass))
+                {
+                    oRecordSet.DoQuery(@"SELECT ""Code"" FROM ""OACS"" WHERE ""U_BDOSVhcle"" = 'Y' AND ""Code"" = '" + assetClass + "'");
+                    if (!oRecordSet.EoF)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
             }
         }
     }

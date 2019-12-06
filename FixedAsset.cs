@@ -214,9 +214,12 @@ namespace BDO_Localisation_AddOn
 
                 if (enableFuelMng == "Y" && oForm.PaneLevel == 8)
                 {
-                    oForm.Items.Item("FUTPCodeS").Visible = true;
-                    oForm.Items.Item("FUTPCodeE").Visible = true;
-                    oForm.Items.Item("FUTPCodeLB").Visible = true;
+                    bool isVehicle = AssetClass.isVehicle(oForm.DataSources.DBDataSources.Item(0).GetValue("AssetClass", 0));
+                    //if (oForm.ActiveItem == "FUTPCodeE")
+                    //oForm.Items.Item("1470002152").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                    oForm.Items.Item("FUTPCodeS").Visible = isVehicle;
+                    oForm.Items.Item("FUTPCodeE").Visible = isVehicle;
+                    oForm.Items.Item("FUTPCodeLB").Visible = isVehicle;
                 }
             }
 
@@ -227,6 +230,7 @@ namespace BDO_Localisation_AddOn
 
             finally
             {
+                oForm.Update();
                 oForm.Freeze(false);
             }
         }
@@ -286,7 +290,7 @@ namespace BDO_Localisation_AddOn
                         Program.FORM_LOAD_FOR_ACTIVATE = true;
                     }
 
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
                     {
                         if (Program.FORM_LOAD_FOR_VISIBLE)
                         {
@@ -295,25 +299,23 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.ItemUID == "BDODistTXT" && pVal.BeforeAction)
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.ItemUID == "BDODistTXT" && pVal.BeforeAction)
                     {
                         if (oForm.DataSources.UserDataSources.Item("BDSDistCod").ValueEx != "")
-                        {
                             return;
-                        }
 
                         CurrentForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
                         createNewCreationForm();
                     }
 
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST && pVal.ItemUID == "FUTPCodeE")
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         SAPbouiCOM.IChooseFromListEvent oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
                         chooseFromList(oForm, pVal, oCFLEvento);
                     }
 
-                    if(pVal.ItemUID == "1470002137" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
+                    else if (pVal.ItemUID == "1470002137" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                     {
                         setVisibleFormItems(oForm);
                     }
@@ -336,14 +338,21 @@ namespace BDO_Localisation_AddOn
 
                     if (oDataTable != null)
                     {
-                        if (oCFLEvento.ChooseFromListUID == "FuelTypeCodeCFL")
+                        if (pVal.ItemUID == "FUTPCodeE" && oCFLEvento.ChooseFromListUID == "FuelTypeCodeCFL")
                         {
                             string fuelTypeCode = oDataTable.GetValue("Code", 0);
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("FUTPCodeE").Specific.Value = fuelTypeCode);
-                            if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
-                            {
-                                oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
-                            }
+                        }
+                        else if (pVal.ItemUID == "1470002152")
+                        {
+                            string enableFuelMng = (string)CommonFunctions.getOADM("U_BDOSEnbFlM");
+
+                            if (enableFuelMng == "Y" && oForm.PaneLevel == 8 && !AssetClass.isVehicle(oForm.DataSources.DBDataSources.Item(0).GetValue("AssetClass", 0)))
+                                LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("FUTPCodeE").Specific.Value = "");
+                        }
+                        if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
+                        {
+                            oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                         }
                     }
                 }
@@ -354,6 +363,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
+                oForm.Update();
                 oForm.Freeze(false);
             }
         }

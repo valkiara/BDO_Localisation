@@ -547,6 +547,7 @@ namespace BDO_Localisation_AddOn
                         {
                             Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("PostingDateMustBeGreaterOrEqualThanDateTo"), SAPbouiCOM.BoMessageTime.bmt_Short);
                             BubbleEvent = false;
+                            return;
                         }
                     }
 
@@ -556,28 +557,35 @@ namespace BDO_Localisation_AddOn
                     {
                         Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TheTableCanNotBeEmpty") + "!", SAPbouiCOM.BoMessageTime.bmt_Short);
                         BubbleEvent = false;
+                        return;
                     }
 
+                    string errorText;
                     SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
                     int rowCount = oDBDataSourceMTR.Size;
                     for (int i = 0; i < rowCount; i++)
                     {
-                        if (Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_ActuallyCn", i), NumberFormatInfo.InvariantInfo) == 0)
+                        if (string.IsNullOrEmpty(oDBDataSourceMTR.GetValue("U_ItemCode", i)) || Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_ActuallyCn", i), NumberFormatInfo.InvariantInfo) == 0)
                         {
-                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TheFollowingFieldIsMandatory") + ": \"" + BDOSResources.getTranslate("ActuallyConsumption") + "\" " + BDOSResources.getTranslate("TableRow") + ": " + i, SAPbouiCOM.BoMessageTime.bmt_Short);
+                               errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory")
+                                + "\", \"" + BDOSResources.getTranslate("AssetCode")
+                                + "\", \"" + BDOSResources.getTranslate("ActuallyConsumption")
+                                + "\" " + BDOSResources.getTranslate("TableRow") + ": " + (i + 1);
+                            Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
                             BubbleEvent = false;
+                            return;
                         }
                     }
 
                     //checkDuplicatesInDBDataSources
                     Dictionary<string, SAPbouiCOM.DBDataSource> oKeysDictionary = new Dictionary<string, SAPbouiCOM.DBDataSource>();
-                    oKeysDictionary.Add("U_ItemCode", oDBDataSourceMTR);
-                    string errorText;
+                    oKeysDictionary.Add("U_ItemCode", oDBDataSourceMTR);                    
                     List<string> itemCodeList = CommonFunctions.checkDuplicatesInDBDataSources(oDBDataSourceMTR, oKeysDictionary, out errorText);
                     if (!string.IsNullOrEmpty(errorText))
                     {
                         Program.uiApp.SetStatusBarMessage(errorText + " " + BDOSResources.getTranslate("AssetCode") + ": " + string.Join(",", itemCodeList), SAPbouiCOM.BoMessageTime.bmt_Short);
                         BubbleEvent = false;
+                        return;
                     }
                 }
             }
