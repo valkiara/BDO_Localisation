@@ -427,6 +427,33 @@ namespace BDO_Localisation_AddOn
 
                     top2 += height + 1;
 
+                    formItems = new Dictionary<string, object>();
+                    itemName = "ReturnCH"; //10 characters
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 1);
+                    formItems.Add("TableName", "");
+                    formItems.Add("Alias", itemName);
+                    formItems.Add("Bound", true);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Left", left_e2);
+                    formItems.Add("Top", top2);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("Caption", BDOSResources.getTranslate("Return"));
+                    formItems.Add("ValOff", "N");
+                    formItems.Add("ValOn", "Y");
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    top2 += height + 1;
+
                     FormsB1.addChooseFromList(oForm, false, "64", "WarehouseFromCodeCFL"); //Warehouses
 
                     formItems = new Dictionary<string, object>();
@@ -1177,10 +1204,28 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
 
-                        SAPbouiCOM.Condition oCon = oCons.Add();
-                        oCon.Alias = "U_BDOSWhType";
-                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
-                        oCon.CondVal = "Fuel";
+                        if (oForm.DataSources.UserDataSources.Item("ReturnCH").ValueEx == "N")
+                        {
+                            SAPbouiCOM.Condition oCon = oCons.Add();
+                            oCon.Alias = "U_BDOSWhType";
+                            oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                            oCon.CondVal = "Fuel";
+                        }
+
+                        oCFL.SetConditions(oCons);
+                    }
+                    else if (oCFLEvento.ChooseFromListUID == "WarehouseFromCodeCFL")
+                    {
+                        SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
+                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+
+                        if (oForm.DataSources.UserDataSources.Item("ReturnCH").ValueEx == "Y")
+                        {
+                            SAPbouiCOM.Condition oCon = oCons.Add();
+                            oCon.Alias = "U_BDOSWhType";
+                            oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                            oCon.CondVal = "Fuel";
+                        }
 
                         oCFL.SetConditions(oCons);
                     }
@@ -1445,8 +1490,6 @@ namespace BDO_Localisation_AddOn
                     existLine = true;
                 }
             }
-            if (checkBox != "Y")
-                return;
 
             if (existLine)
             {
@@ -1483,12 +1526,12 @@ namespace BDO_Localisation_AddOn
                             }
                         }
                     }
-                    //else
-                    //{
-                    //    CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                    //    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated"), SAPbouiCOM.BoMessageTime.bmt_Short);
-                    //    return;
-                    //}
+                    else
+                    {
+                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                        //return;
+                    }
                     Marshal.ReleaseComObject(oStockTransfer);
                 }
 
@@ -1500,8 +1543,12 @@ namespace BDO_Localisation_AddOn
             }
             else
             {
-                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreated") + "! " + BDOSResources.getTranslate("ToCreateNewDocumentPressFillButton"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + BDOSResources.getTranslate("TheTableCanNotBeEmpty"), SAPbouiCOM.BoMessageTime.bmt_Short);
             }
+            //else
+            //{
+            //    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreated") + "! " + BDOSResources.getTranslate("ToCreateNewDocumentPressFillButton"), SAPbouiCOM.BoMessageTime.bmt_Short);
+            //}
         }
 
         public static Dictionary<string, string> getItemGroupsList()

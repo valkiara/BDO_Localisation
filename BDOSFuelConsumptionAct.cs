@@ -1066,7 +1066,7 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
-            top += (4 * height + 1);
+            top += (2 * height + 1);
 
             formItems = new Dictionary<string, object>();
             itemName = "addMTRB"; //10 characters
@@ -1236,7 +1236,7 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
             oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
 
-            top = top + oForm.Items.Item("AssetMTR").Height + 30;
+            top = top + oForm.Items.Item("AssetMTR").Height + 10;
 
             formItems = new Dictionary<string, object>();
             itemName = "CreatorS"; //10 characters
@@ -1533,7 +1533,7 @@ namespace BDO_Localisation_AddOn
                 int top = oForm.Items.Item("AssetMTR").Top - height - 1;
                 oForm.Items.Item("addMTRB").Top = top;
                 oForm.Items.Item("delMTRB").Top = top;
-                top = oForm.Items.Item("AssetMTR").Top + oForm.Items.Item("AssetMTR").Height + 30;
+                top = oForm.Items.Item("AssetMTR").Top + oForm.Items.Item("AssetMTR").Height + 10;
                 oForm.Items.Item("CreatorS").Top = top;
                 oForm.Items.Item("CreatorE").Top = top;
                 top += height + 1;
@@ -1541,7 +1541,7 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("RemarksE").Top = top;
 
                 //ღილაკები
-                int topTemp1 = oForm.Items.Item("RemarksE").Top + height * 4 + 1;
+                int topTemp1 = oForm.Items.Item("RemarksE").Top + height * 2 + 1;
                 int topTemp2 = oForm.ClientHeight - 25;
                 //ღილაკები
                 top = topTemp2 > topTemp1 ? topTemp2 : topTemp1;
