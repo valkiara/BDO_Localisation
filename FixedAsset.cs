@@ -243,6 +243,7 @@ namespace BDO_Localisation_AddOn
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
+                formDataLoad(oForm);
                 setVisibleFormItems(oForm);
             }
         }
@@ -272,7 +273,7 @@ namespace BDO_Localisation_AddOn
 
                         oForm.Close();
 
-                        formDataLoad(oFormFA, out errorText);
+                        formDataLoad(oFormFA);
                     }
                 }
             }
@@ -285,7 +286,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                     {
                         createFormItems(oForm);
-                        formDataLoad(oForm, out errorText); //?????????
+                        formDataLoad(oForm);
                         Program.FORM_LOAD_FOR_VISIBLE = true;
                         Program.FORM_LOAD_FOR_ACTIVATE = true;
                     }
@@ -561,58 +562,57 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataLoad(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-            string caption = BDOSResources.getTranslate("CreateDistributionRule");
+            oForm.Freeze(true);
             try
             {
-                string Code = oForm.DataSources.DBDataSources.Item(0).GetValue("ItemCode", 0);
+                string caption = BDOSResources.getTranslate("CreateDistributionRule");
+                string code = oForm.DataSources.DBDataSources.Item(0).GetValue("ItemCode", 0);
 
                 //-------------------------------------------Distribution rule----------------------------------->
-                string DistrRuleCode = "";
-                string DistrRuleName = "";
-                if (Code != "")
+                string distrRuleCode = "";
+                string distrRuleName = "";
+
+                if (!string.IsNullOrEmpty(code))
                 {
                     string Query = @"Select * from OOCR
-                    inner join OPRC on OPRC.""PrcCode"" = OOCR.""OcrCode"" and OPRC.""U_BDOSFACode"" = '" + Code + "'";
+                    inner join OPRC on OPRC.""PrcCode"" = OOCR.""OcrCode"" and OPRC.""U_BDOSFACode"" = '" + code + "'";
                     SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
                     oRecordSet.DoQuery(Query);
 
                     if (!oRecordSet.EoF)
                     {
-                        DistrRuleCode = oRecordSet.Fields.Item("OcrCode").Value.ToString();
-                        DistrRuleName = oRecordSet.Fields.Item("OcrName").Value.ToString();
+                        distrRuleCode = oRecordSet.Fields.Item("OcrCode").Value.ToString();
+                        distrRuleName = oRecordSet.Fields.Item("OcrName").Value.ToString();
                     }
                     else
-                    {
-                        DistrRuleCode = "";
-                    }
+                        distrRuleCode = "";
 
-
-                    if (DistrRuleCode != "")
-                    {
-                        caption = BDOSResources.getTranslate("DistributionRule") + ": " + DistrRuleCode + "(" + DistrRuleName + ")";
-                    }
+                    if (distrRuleCode != "")
+                        caption = BDOSResources.getTranslate("DistributionRule") + ": " + distrRuleCode + "(" + distrRuleName + ")";
                 }
                 else
                 {
                     caption = BDOSResources.getTranslate("CreateDistributionRule");
-                    DistrRuleCode = "";
+                    distrRuleCode = "";
                 }
-
-                oForm.Items.Item("BDODistTXT").Specific.Caption = caption;
-                oForm.DataSources.UserDataSources.Item("BDSDistCod").ValueEx = DistrRuleCode;
-
-                //<-------------------------------------------სასაქონლო ზედნადები-----------------------------------
+                SAPbouiCOM.StaticText oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("BDODistTXT").Specific;
+                oStaticText.Caption = caption;
+                //LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("BDODistTXT").Specific.Value = caption);
+                oForm.DataSources.UserDataSources.Item("BDSDistCod").ValueEx = distrRuleCode;
             }
             catch (Exception ex)
             {
-                //oForm.Items.Item("BDODistTXT").Specific.Caption = caption;
                 oForm.DataSources.UserDataSources.Item("BDSDistCod").ValueEx = "";
+                throw new Exception(ex.Message);
             }
-
+            finally
+            {
+                oForm.Freeze(false);
+                GC.Collect();
+            }
         }
 
         public static string getFADimension(string ItemCode)
@@ -620,15 +620,12 @@ namespace BDO_Localisation_AddOn
             string ProfitCode = "";
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string Query = @"select ""OPRC"".""PrcCode"" from ""OPRC""
+            string query = @"select ""OPRC"".""PrcCode"" from ""OPRC""
             inner join ""OOCR"" on ""OPRC"".""PrcCode"" = ""OOCR"".""OcrCode"" and ""OPRC"".""U_BDOSFACode"" = '" + ItemCode + "'";
 
-
-            oRecordSet.DoQuery(Query);
+            oRecordSet.DoQuery(query);
             if (!oRecordSet.EoF)
-            {
                 return oRecordSet.Fields.Item("PrcCode").Value.ToString();
-            }
 
             return ProfitCode;
         }
@@ -643,9 +640,7 @@ namespace BDO_Localisation_AddOn
 
             oRecordSet.DoQuery(Query);
             if (!oRecordSet.EoF)
-            {
                 return oRecordSet.Fields.Item("AcctDtn").Value.ToString();
-            }
 
             return ClassDet;
         }
@@ -666,9 +661,7 @@ namespace BDO_Localisation_AddOn
             oRecordSet.DoQuery(Query);
 
             if (!oRecordSet.EoF)
-            {
                 return;
-            }
 
             try
             {
