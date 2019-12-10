@@ -352,11 +352,11 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static decimal GetBlAgremeentCurrencyRate(int absID, DateTime? docDate = null, decimal docRate = 0)
+        public static decimal GetBlAgremeentCurrencyRate(int absID, out string docCurr, DateTime? docDate = null, decimal docRate = 0)
         {
             decimal minRate = 0;
             decimal maxRate = 0;
-            string docCurr = null;
+            docCurr = null;
             decimal rateByBlnktAgr = 0;
 
             try
