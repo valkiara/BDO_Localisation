@@ -352,13 +352,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static decimal GetBlAgremeentCurrencyRate(int docEntry, DateTime DocDate, out string errorText)
+        public static decimal GetBlAgremeentCurrencyRate(int docEntry, DateTime DocDate, out string errorText, out string docCurr)
         {
             errorText = null;
 
             decimal MinRate = 0;
             decimal MaxRate = 0;
-            string DocCurr = null;
+            docCurr = null;
             decimal DocRate = 0;
 
 
@@ -381,14 +381,14 @@ namespace BDO_Localisation_AddOn
                 {
                     MinRate = Convert.ToDecimal(oRecordSetC.Fields.Item("MinRate").Value, CultureInfo.InvariantCulture);
                     MaxRate = Convert.ToDecimal(oRecordSetC.Fields.Item("MaxRate").Value, CultureInfo.InvariantCulture);
-                    DocCurr = oRecordSetC.Fields.Item("DocCurr").Value;
+                    docCurr = oRecordSetC.Fields.Item("DocCurr").Value;
                     oRecordSetC.MoveNext();
                     break;
                 }
 
 
                 SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(DocCurr, DocDate);
+                SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(docCurr, DocDate);
 
                 while (!RateRecordset.EoF)
                 {

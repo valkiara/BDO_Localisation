@@ -1058,10 +1058,10 @@ namespace BDO_Localisation_AddOn
             if (BlaAgrDocEntryStr != "")
             {
                 int BlaAgrDocEntry = Convert.ToInt32(BlaAgrDocEntryStr);
-
+                string docCurr;
                 if (UseBlaAgRt == "Y")
                 {
-                    DocRate = BlanketAgreement.GetBlAgremeentCurrencyRate(BlaAgrDocEntry, DocDate, out errorText);
+                    DocRate = BlanketAgreement.GetBlAgremeentCurrencyRate(BlaAgrDocEntry, DocDate, out errorText, out docCurr);
 
                 }
             }
