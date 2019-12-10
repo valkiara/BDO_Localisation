@@ -229,6 +229,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
+
             GC.Collect();
         }
 
@@ -246,6 +247,16 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "CancellF");
+            fieldskeysMap.Add("TableName", "OWTR");
+            fieldskeysMap.Add("Description", "Cancelled project");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+            cancellSapDocs();
         }
 
         public static void formDataLoad( SAPbouiCOM.Form oForm, out string errorText)
@@ -440,7 +451,6 @@ namespace BDO_Localisation_AddOn
                 {
                     if (Program.cancellationTrans == true & Program.canceledDocEntry != 0)
                     {
-
                         cancellation( Program.canceledDocEntry, out errorText);
                         //Program.cancellationTrans = false; //უნდა იყოს დაკომენტარებული!!!
                         Program.canceledDocEntry = 0;
@@ -565,6 +575,7 @@ namespace BDO_Localisation_AddOn
                             oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                             //oCon.CondVal = "";
 
+
                             oCFL.SetConditions(oCons);
                         }
                     }
@@ -592,6 +603,7 @@ namespace BDO_Localisation_AddOn
                             
                             int newDocEntry = oDataTableSelectedObjects.GetValue("DocEntry", 0);
                             int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OWTR").GetValue("DocEntry", 0));
+
 
                             //არჩეულ ზედნადებში უნდა ჩავწეროთ ამ დოკუმენტის ნომრები
                             SAPbobsCOM.CompanyService oCompanyService = null;
@@ -791,5 +803,35 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
+        public static void cancellSapDocs()
+        {
+            SAPbobsCOM.Recordset WTR1REC = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            StringBuilder queryWTR1 = new StringBuilder();
+            queryWTR1.Append("select \"DocEntry\" from \"WTR1\" \n");
+            queryWTR1.Append("where \"Quantity\"<0");
+            WTR1REC.DoQuery(queryWTR1.ToString());
+            while (!WTR1REC.EoF)
+            {
+                int docEntry = WTR1REC.Fields.Item("DocEntry").Value;
+                SAPbobsCOM.Recordset OWTRREC = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                StringBuilder queryOWTR = new StringBuilder();
+                queryOWTR.Append("UPDATE \"OWTR\" \n");
+                queryOWTR.Append("SET \"U_CancellF\"= 'Y' \n");
+                queryOWTR.Append("WHERE \"DocEntry\"='" + docEntry + "'");
+                OWTRREC.DoQuery(queryOWTR.ToString());
+                WTR1REC.MoveNext();
+            }
+            SAPbobsCOM.Recordset UPDREC = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            StringBuilder queryUPD = new StringBuilder();
+            queryUPD.Append("UPDATE \"OWTR\" \n");
+            queryUPD.Append("SET \"U_CancellF\"=\"CANCELED\" \n");
+            queryUPD.Append("Where \"U_CancellF\" is null");
+            UPDREC.DoQuery(queryUPD.ToString());
+
+
+
+
+        }
     }
+
 }
