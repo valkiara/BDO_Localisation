@@ -12,7 +12,7 @@ namespace BDO_Localisation_AddOn
     {
         public static SAPbouiCOM.DataTable TableForPaymentDetail;
 
-        public static void createUserFields( out string errorText)
+        public static void createUserFields(out string errorText)
         {
             errorText = null;
 
@@ -45,7 +45,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Price);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSGrsAmt");
@@ -55,11 +55,11 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-            
+
             GC.Collect();
         }
 
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -113,7 +113,7 @@ namespace BDO_Localisation_AddOn
             }
 
             //------------------
-            
+
             oItem = oForm.Items.Item("1250000035");
             int left = oItem.Left;
             oItem = oForm.Items.Item("1720000061");
@@ -151,7 +151,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", oItem.Top);
             formItems.Add("UID", itemName);
             formItems.Add("DisplayDesc", true);
-            
+
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -201,12 +201,12 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            
+
 
             GC.Collect();
         }
 
-        public static void formDataLoad( SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -232,7 +232,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -243,11 +243,11 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    createFormItems( oForm, out errorText);
+                    createFormItems(oForm, out errorText);
                     Program.FORM_LOAD_FOR_VISIBLE = true;
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
 
-                    formDataLoad( oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
                     setVisibleFormItems(oForm, out errorText);
                 }
 
@@ -267,76 +267,76 @@ namespace BDO_Localisation_AddOn
                         setVisibleFormItems(oForm, out errorText);
                     }
                 }
-               
+
                 if (pVal.ItemUID == "1250000045" && (pVal.ColUID == "U_BDOSGrsPrc" || pVal.ColUID == "1250000009" || pVal.ColUID == "1250000007") & pVal.ItemChanged && pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE & pVal.BeforeAction == false)
                 {
                     oForm.Freeze(true);
-                    
+
                     SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("1250000045").Specific;
                     string ItemCode = oMatrix.Columns.Item("1250000001").Cells.Item(pVal.Row).Specific.Value;
-                    decimal UnitPrice = (FormsB1.cleanStringOfNonDigits( oMatrix.Columns.Item("1250000009").Cells.Item(pVal.Row).Specific.Value));
-                    decimal Qty = (FormsB1.cleanStringOfNonDigits( oMatrix.Columns.Item("1250000007").Cells.Item(pVal.Row).Specific.Value));
-                    decimal GrossPrice = (FormsB1.cleanStringOfNonDigits( oMatrix.Columns.Item("U_BDOSGrsPrc").Cells.Item(pVal.Row).Specific.Value));
+                    decimal UnitPrice = (FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("1250000009").Cells.Item(pVal.Row).Specific.Value));
+                    decimal Qty = (FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("1250000007").Cells.Item(pVal.Row).Specific.Value));
+                    decimal GrossPrice = (FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("U_BDOSGrsPrc").Cells.Item(pVal.Row).Specific.Value));
                     int row = pVal.Row;
-                    decimal VatRate = CommonFunctions.GetVatGroupRate( "", ItemCode);
-                    
+                    decimal VatRate = CommonFunctions.GetVatGroupRate("", ItemCode);
+
                     if (pVal.ColUID == "1250000009")
                     {
-                        GrossPrice = CommonFunctions.roundAmountByGeneralSettings( UnitPrice * (100 + VatRate) / 100, "Price");
-                        oMatrix.Columns.Item("U_BDOSGrsPrc").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings( GrossPrice);
+                        GrossPrice = CommonFunctions.roundAmountByGeneralSettings(UnitPrice * (100 + VatRate) / 100, "Price");
+                        oMatrix.Columns.Item("U_BDOSGrsPrc").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(GrossPrice);
                         decimal amount = GrossPrice * Qty;
-                        oMatrix.Columns.Item("U_BDOSGrsAmt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings( amount);
+                        oMatrix.Columns.Item("U_BDOSGrsAmt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(amount);
                     }
                     else if (pVal.ColUID == "U_BDOSGrsPrc")
                     {
-                        UnitPrice = CommonFunctions.roundAmountByGeneralSettings( GrossPrice * 100 / (100 + VatRate), "Price");
-                        oMatrix.Columns.Item("1250000009").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings( UnitPrice);
+                        UnitPrice = CommonFunctions.roundAmountByGeneralSettings(GrossPrice * 100 / (100 + VatRate), "Price");
+                        oMatrix.Columns.Item("1250000009").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(UnitPrice);
                         decimal amount = GrossPrice * Qty;
-                        oMatrix.Columns.Item("U_BDOSGrsAmt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings( amount);
+                        oMatrix.Columns.Item("U_BDOSGrsAmt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(amount);
                     }
-                    else 
+                    else
                     {
                         decimal amount = GrossPrice * Qty;
-                        oMatrix.Columns.Item("U_BDOSGrsAmt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings( amount);
+                        oMatrix.Columns.Item("U_BDOSGrsAmt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(amount);
                     }
                     oForm.Freeze(false);
                 }
 
                 if (pVal.ItemUID == "BDOSPay" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                 {
-                    if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE && 
+                    if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE &&
                                                         oForm.DataSources.DBDataSources.Item("OOAT").GetValue("Status", 0).Trim() == "A")
                     {
-                    SAPbouiCOM.DBDataSource dBDataSource = oForm.DataSources.DBDataSources.Item("OOAT");
+                        SAPbouiCOM.DBDataSource dBDataSource = oForm.DataSources.DBDataSources.Item("OOAT");
 
-                    DateTime docDate = DateTime.Today;
-                    string cardCode = dBDataSource.GetValue("BpCode", 0);
-                    string cardName = dBDataSource.GetValue("BpName", 0);
-                    string bpCurrency = dBDataSource.GetValue("BPCurr", 0);
-                    string blnkAgr = dBDataSource.GetValue("AbsID", 0);
-                    string locCurr = CommonFunctions.getLocalCurrency();
+                        DateTime docDate = DateTime.Today;
+                        string cardCode = dBDataSource.GetValue("BpCode", 0);
+                        string cardName = dBDataSource.GetValue("BpName", 0);
+                        string bpCurrency = dBDataSource.GetValue("BPCurr", 0);
+                        string blnkAgr = dBDataSource.GetValue("AbsID", 0);
+                        string locCurr = CommonFunctions.getLocalCurrency();
 
-                    TableForPaymentDetail.Rows.Clear();
-                    TableForPaymentDetail.Rows.Add();
-                    TableForPaymentDetail.SetValue("LineNum", 0, 0);
-                    TableForPaymentDetail.SetValue("CardCode", 0, cardCode);
-                    TableForPaymentDetail.SetValue("CardName", 0, cardName);
-                    TableForPaymentDetail.SetValue("BPCurrency", 0, bpCurrency);
+                        TableForPaymentDetail.Rows.Clear();
+                        TableForPaymentDetail.Rows.Add();
+                        TableForPaymentDetail.SetValue("LineNum", 0, 0);
+                        TableForPaymentDetail.SetValue("CardCode", 0, cardCode);
+                        TableForPaymentDetail.SetValue("CardName", 0, cardName);
+                        TableForPaymentDetail.SetValue("BPCurrency", 0, bpCurrency);
                         TableForPaymentDetail.SetValue("PartnerCurrency", 0, locCurr);
                         TableForPaymentDetail.SetValue("currency", 0, locCurr);
-                    TableForPaymentDetail.SetValue("BlnkAgr", 0, blnkAgr);
-                    TableForPaymentDetail.SetValue("Project", 0, dBDataSource.GetValue("Project", 0));
-                    
-                    SAPbouiCOM.Form oFormInternetBankingDocuments;
-                    
-                    BDOSInternetBankingDocuments.automaticPaymentInternetBanking = true;
-                    BDOSInternetBankingDocuments.openFromBlnkAgr = true;
-                    BDOSInternetBankingDocuments.createForm(oForm, docDate, cardCode, cardName, bpCurrency, 0, locCurr, 0, 0, 0, 0, 0, out oFormInternetBankingDocuments, out errorText);
-                    BDOSInternetBanking.TableExportMTRForDetail = BDOSInternetBanking.create_TableExportMTRForDetail();
-                    BDOSInternetBankingDocuments.fillInvoicesMTR(oFormInternetBankingDocuments, blnkAgr, out errorText);
+                        TableForPaymentDetail.SetValue("BlnkAgr", 0, blnkAgr);
+                        TableForPaymentDetail.SetValue("Project", 0, dBDataSource.GetValue("Project", 0));
+
+                        SAPbouiCOM.Form oFormInternetBankingDocuments;
+
+                        BDOSInternetBankingDocuments.automaticPaymentInternetBanking = true;
+                        BDOSInternetBankingDocuments.openFromBlnkAgr = true;
+                        BDOSInternetBankingDocuments.createForm(oForm, docDate, cardCode, cardName, bpCurrency, 0, locCurr, 0, 0, 0, 0, 0, out oFormInternetBankingDocuments, out errorText);
+                        BDOSInternetBanking.TableExportMTRForDetail = BDOSInternetBanking.create_TableExportMTRForDetail();
+                        BDOSInternetBankingDocuments.fillInvoicesMTR(oFormInternetBankingDocuments, blnkAgr, out errorText);
+                    }
                 }
             }
-        }
         }
 
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
@@ -352,15 +352,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static decimal GetBlAgremeentCurrencyRate(int docEntry, DateTime DocDate, out string errorText, out string docCurr)
+        public static decimal GetBlAgremeentCurrencyRate(int absID, out string docCurr, DateTime? docDate = null, decimal docRate = 0)
         {
-            errorText = null;
-
-            decimal MinRate = 0;
-            decimal MaxRate = 0;
+            decimal minRate = 0;
+            decimal maxRate = 0;
             docCurr = null;
-            decimal DocRate = 0;
-
+            decimal rateByBlnktAgr = 0;
 
             try
             {
@@ -370,50 +367,82 @@ namespace BDO_Localisation_AddOn
                     ""OOAT"".""BPCurr"" AS ""DocCurr"",
                     ""OOAT"".""U_BDOSMinRat"" AS ""MinRate"",
                     ""OOAT"".""U_BDOSMaxRat"" AS ""MaxRate""
-
                     FROM ""OOAT"" AS ""OOAT"" 
-                    WHERE ""OOAT"".""AbsID"" = '" + docEntry + @"'";
-
+                    WHERE ""OOAT"".""AbsID"" = '" + absID + @"'";
 
                 oRecordSetC.DoQuery(query);
 
                 while (!oRecordSetC.EoF)
                 {
-                    MinRate = Convert.ToDecimal(oRecordSetC.Fields.Item("MinRate").Value, CultureInfo.InvariantCulture);
-                    MaxRate = Convert.ToDecimal(oRecordSetC.Fields.Item("MaxRate").Value, CultureInfo.InvariantCulture);
+                    minRate = Convert.ToDecimal(oRecordSetC.Fields.Item("MinRate").Value, CultureInfo.InvariantCulture);
+                    maxRate = Convert.ToDecimal(oRecordSetC.Fields.Item("MaxRate").Value, CultureInfo.InvariantCulture);
                     docCurr = oRecordSetC.Fields.Item("DocCurr").Value;
                     oRecordSetC.MoveNext();
                     break;
                 }
 
-
-                SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(docCurr, DocDate);
-
-                while (!RateRecordset.EoF)
+                if (docDate.HasValue)
                 {
-                    decimal TempRate = Convert.ToDecimal(RateRecordset.Fields.Item("CurrencyRate").Value);
+                    SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                    SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(docCurr, docDate.Value);
 
-                    if (TempRate > MaxRate)
+                    while (!RateRecordset.EoF)
                     {
-                        DocRate = MaxRate;
-                    }
-                    else if (TempRate < MinRate)
-                    {
-                        DocRate = MinRate;
-                    }
-                    else DocRate = TempRate;
+                        decimal TempRate = Convert.ToDecimal(RateRecordset.Fields.Item("CurrencyRate").Value);
 
-                    RateRecordset.MoveNext();
+                        if (TempRate > maxRate)
+                            rateByBlnktAgr = maxRate;
+                        else if (TempRate < minRate)
+                            rateByBlnktAgr = minRate;
+                        else rateByBlnktAgr = TempRate;
+
+                        RateRecordset.MoveNext();
+                    }
+                }
+                else
+                {
+                    decimal TempRate = docRate;
+
+                    if (TempRate > maxRate)
+                        rateByBlnktAgr = maxRate;
+                    else if (TempRate < minRate)
+                        rateByBlnktAgr = minRate;
+                    else rateByBlnktAgr = TempRate;
                 }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
-            return DocRate;
-            
+            return rateByBlnktAgr;
         }
-        
+
+        public static bool UsesCurrencyExchangeRates(int absID)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                string query = @"SELECT ""OOAT"".""AbsID"" 
+                FROM ""OOAT""
+                WHERE (""OOAT"".""U_BDOSMinRat"" > 0 OR ""OOAT"".""U_BDOSMaxRat"" > 0) 
+                     AND ""OOAT"".""AbsID"" = '" + absID + @"'";
+
+                oRecordSet.DoQuery(query);
+
+                if (!oRecordSet.EoF)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
+            }
+        }
     }
 }

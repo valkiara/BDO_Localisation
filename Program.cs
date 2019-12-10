@@ -59,7 +59,7 @@ namespace BDO_Localisation_AddOn
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            if (runAddOn() == true)
+            if (runAddOn())
             {
                 BDOSAutomaticTasks.importCurrencyRate();
 
@@ -84,7 +84,7 @@ namespace BDO_Localisation_AddOn
             string errorText;
 
             bool connectResult = ConnectB1.connectShared(out errorText);
-            if (connectResult == true)
+            if (connectResult )
             {
                 //SAPbouiCOM.ProgressBar ProgressBarForm;
                 //ProgressBarForm = uiApp.StatusBar.CreateProgressBar("", 20, true);
@@ -97,7 +97,7 @@ namespace BDO_Localisation_AddOn
                 UserDefinedTablesCurrentCompany = UDO.UserDefinedTablesCurrentCompany();
                 UserDefinedFieldsCurrentCompany = UDO.UserDefinedFieldsCurrentCompany();
 
-                if (UDO.UserDefinedFieldExists("OADM", "BDOSLocLic") == false)
+                if (!UDO.UserDefinedFieldExists("OADM", "BDOSLocLic"))
                 {
                     License.createUserFields(out errorText);
                     if (!String.IsNullOrEmpty(errorText))
@@ -167,7 +167,7 @@ namespace BDO_Localisation_AddOn
 
                 updateAddonVersion(version);
 
-                FormsB1.addMenusForAddOn(out errorText);
+                FormsB1.addMenusForAddOn();
 
                 CrystalReports.addStandAloneCrystalReportForAddOn(Application.StartupPath, out errorText);
 
@@ -246,7 +246,7 @@ namespace BDO_Localisation_AddOn
                 case SAPbouiCOM.BoAppEventTypes.aet_LanguageChanged:
                     {
                         BDOSResources.initResource(Convert.ToInt32(uiApp.Language), out cultureInfo, out resourceManager, out errorText);
-                        FormsB1.addMenusForAddOn(out errorText);
+                        FormsB1.addMenusForAddOn();
                     }
                     break;
                 case SAPbouiCOM.BoAppEventTypes.aet_CompanyChanged:
@@ -994,11 +994,11 @@ namespace BDO_Localisation_AddOn
             //----------------------------->Duplicate<-----------------------------
             if (pVal.MenuUID == "1287")
             {
-                if (pVal.BeforeAction == true)
+                if (pVal.BeforeAction)
                 {
                     SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
                 }
-                else if (pVal.BeforeAction == false)
+                else if (!pVal.BeforeAction)
                 {
                     SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
                     //----------------------------->A/R Invoice<-----------------------------
@@ -1009,7 +1009,7 @@ namespace BDO_Localisation_AddOn
                     //----------------------------->Asset Master Data<-----------------------------
                     if (oForm.TypeEx == "1473000075")
                     {
-                        FixedAsset.formDataLoad(oForm, out errorText);
+                        FixedAsset.formDataLoad(oForm);
                     }
 
                     //----------------------------->Depreciation Accrual Document<-----------------------------
@@ -1121,7 +1121,7 @@ namespace BDO_Localisation_AddOn
             //----------------------------->Add<-----------------------------
             if (pVal.MenuUID == "1282")
             {
-                if (pVal.BeforeAction == true)
+                if (pVal.BeforeAction)
                 {
                     SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
 
@@ -1133,7 +1133,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                else if (pVal.BeforeAction == false)
+                else if (!pVal.BeforeAction)
                 {
                     SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
 
@@ -1158,7 +1158,7 @@ namespace BDO_Localisation_AddOn
                     //----------------------------->Asset Master Data<-----------------------------
                     if (oForm.TypeEx == "1473000075")
                     {
-                        FixedAsset.formDataLoad(oForm, out errorText);
+                        FixedAsset.formDataLoad(oForm);
                     }
 
                     //----------------------------->A/R Reserve Invoice<-----------------------------
@@ -1578,7 +1578,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
         }
 

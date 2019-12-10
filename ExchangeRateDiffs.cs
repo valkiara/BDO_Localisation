@@ -182,7 +182,7 @@ namespace BDO_Localisation_AddOn
                             {
                                 if (useBlaAgrRt == "Y")
                                 {
-                                    blaAgrRt = BlanketAgreement.GetBlAgremeentCurrencyRate(agrNo, DateTime.Today, out errorText, out docCur);
+                                    blaAgrRt = BlanketAgreement.GetBlAgremeentCurrencyRate(agrNo, out docCur, DateTime.Today );
 
                                     SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
                                     SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(docCur, DateTime.Today);

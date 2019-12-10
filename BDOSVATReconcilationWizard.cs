@@ -287,7 +287,7 @@ namespace BDO_Localisation_AddOn
                     //formItems.Add("Top", top);
                     //formItems.Add("Height", height);
                     //formItems.Add("UID", itemName);
-                    //formItems.Add("Caption", BDOSResources.getTranslate("Descript"));
+                    //formItems.Add("Caption", BDOSResources.getTranslate("Description"));
                     //formItems.Add("FromPane", 0);
                     //formItems.Add("ToPane", 0);
 
@@ -1240,7 +1240,8 @@ namespace BDO_Localisation_AddOn
                     DocNum = oRecordSet.Fields.Item("DocNum").Value == 0 ? "" : oRecordSet.Fields.Item("DocNum").Value.ToString();
                     DocDate = oRecordSet.Fields.Item("DocDate").Value.ToString("yyyyMMdd");
                     DocEntVT = oRecordSet.Fields.Item("DocEntVT").Value == 0 ? "" : oRecordSet.Fields.Item("DocEntVT").Value.ToString();
-                    
+                   
+                    decimal allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString(), CultureInfo.InvariantCulture);
                     TransId = oRecordSet.Fields.Item("TransId").Value == 0 ? "" : oRecordSet.Fields.Item("TransId").Value.ToString();
                     
                     DocTotal = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value, CultureInfo.InvariantCulture);
@@ -1251,7 +1252,12 @@ namespace BDO_Localisation_AddOn
                     CardCode = oRecordSet.Fields.Item("CardCode").Value;
                     CardName = oRecordSet.Fields.Item("CardName").Value;
                     LicTradNum = oRecordSet.Fields.Item("LicTradNum").Value;
-
+               
+                    if (Math.Abs(AlRcnSum - ReconSum) <= allowableDeviation)
+                    {
+                        AlRcnSum = ReconSum;
+                    }
+                    
                     if (TransId=="" && ReconSum==0)
                     {
                         oRecordSet.MoveNext();
@@ -1304,14 +1310,10 @@ namespace BDO_Localisation_AddOn
                 oForm.Freeze(false);
                 oRecordSet = null;
             }
-
-
         }
 
-        public static void addMenus( out string errorText)
+        public static void addMenus()
         {
-            errorText = null;
-
             SAPbouiCOM.MenuItem menuItem;
             SAPbouiCOM.MenuItem fatherMenuItem;
             SAPbouiCOM.MenuCreationParams oCreationPackage;
@@ -1331,9 +1333,9 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch (Exception ex)
+            catch 
             {
-                errorText = ex.Message;
+               
             }
         }
     }
