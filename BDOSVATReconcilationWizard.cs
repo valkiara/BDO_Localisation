@@ -1241,7 +1241,7 @@ namespace BDO_Localisation_AddOn
                     DocDate = oRecordSet.Fields.Item("DocDate").Value.ToString("yyyyMMdd");
                     DocEntVT = oRecordSet.Fields.Item("DocEntVT").Value == 0 ? "" : oRecordSet.Fields.Item("DocEntVT").Value.ToString();
                    
-                    decimal allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString());
+                    decimal allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString(), CultureInfo.InvariantCulture);
                     TransId = oRecordSet.Fields.Item("TransId").Value == 0 ? "" : oRecordSet.Fields.Item("TransId").Value.ToString();
                     
                     DocTotal = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value, CultureInfo.InvariantCulture);
