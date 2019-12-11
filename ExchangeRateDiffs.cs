@@ -6,6 +6,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Data;
+using System.Xml;
+using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 namespace BDO_Localisation_AddOn
 {
@@ -68,11 +71,11 @@ namespace BDO_Localisation_AddOn
             int transId;
             int agrNo;
             string useBlaAgrRt = "N";
-            string errorText;
-            decimal blaAgrRt = 0;
-            decimal dayrt = 0;
+            double blaAgrRt = 0;
+            double dayrt = 0;
             string docCur = "";
             string docChildTable = "";
+            double docRate = 0;
 
             SAPbobsCOM.Recordset oRecordSetJDT1 = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             SAPbobsCOM.Recordset oRecordSetDoc = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -90,8 +93,8 @@ namespace BDO_Localisation_AddOn
                 string ref3 = oRecordSetJDT1.Fields.Item("Ref3Line").Value;
                 if (ref3 != "")
                 {
-                    decimal debit = 0;
-                    decimal credit = 0;
+                    double debit = 0;
+                    double credit = 0;
 
                     StringBuilder queryDoc = new StringBuilder();
 
@@ -141,20 +144,20 @@ namespace BDO_Localisation_AddOn
                     {
                         docTable = "OVPM";
 
-                        queryDoc.Append("select \"PrjCode\" as \"Project\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                        queryDoc.Append("select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
                         queryDoc.Append("from " + docTable + " \n");
                         queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
-                        queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"U_UseBlaAgRt\"");
+                        queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\",\"U_UseBlaAgRt\"");
                         goto shortCut;
                     }
                     else if (docType == "RC")
                     {
                         docTable = "ORCT";
 
-                        queryDoc.Append("select \"PrjCode\" as \"Project\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                        queryDoc.Append("select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
                         queryDoc.Append("from " + docTable + " \n");
                         queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
-                        queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"U_UseBlaAgRt\"");
+                        queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\", \"U_UseBlaAgRt\"");
                         goto shortCut;
                     }
                     else
@@ -163,10 +166,10 @@ namespace BDO_Localisation_AddOn
                         continue;
                     }
 
-                    queryDoc.Append("select " + docTable + ".\"Project\", " + docTable + ".\"AgrNo\", " + docTable + ".\"U_UseBlaAgRt\", sum(" + docChildTable + ".\"OpenSumFC\") as \"Amount\" \n");
+                    queryDoc.Append("select " + docTable + ".\"Project\", " + docTable + ".\"DocRate\", " + docTable + ".\"AgrNo\", " + docTable + ".\"U_UseBlaAgRt\", sum(" + docChildTable + ".\"OpenSumFC\") as \"Amount\" \n");
                     queryDoc.Append("from " + docTable + " inner join " + docChildTable + " on " + docTable + ".\"DocEntry\"= " + docChildTable + ".\"DocEntry\" \n");
                     queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
-                    queryDoc.Append("group by " + docTable + ".\"Project\", " + docTable + ".\"AgrNo\", " + docTable + ".\"U_UseBlaAgRt\"");
+                    queryDoc.Append("group by " + docTable + ".\"Project\", " + docTable + ".\"AgrNo\", " + docTable + ".\"DocRate\", " + docTable + ".\"U_UseBlaAgRt\"");
 
                 shortCut:
                     oRecordSetDoc.DoQuery(queryDoc.ToString());
@@ -182,17 +185,19 @@ namespace BDO_Localisation_AddOn
                             {
                                 if (useBlaAgrRt == "Y")
                                 {
-                                    blaAgrRt = BlanketAgreement.GetBlAgremeentCurrencyRate(agrNo, out docCur, DateTime.Today );
+                                    blaAgrRt = Convert.ToDouble(BlanketAgreement.GetBlAgremeentCurrencyRate(agrNo, out docCur, DateTime.Today));
 
                                     SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
                                     SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(docCur, DateTime.Today);
 
                                     if (!RateRecordset.EoF)
                                     {
-                                        dayrt = Convert.ToDecimal(RateRecordset.Fields.Item("CurrencyRate").Value);
+                                        dayrt = RateRecordset.Fields.Item("CurrencyRate").Value;
                                     }
 
-                                    decimal amount = Convert.ToDecimal(oRecordSetDoc.Fields.Item("Amount").Value);
+                                    docRate = oRecordSetDoc.Fields.Item("DocRate").Value;
+
+                                    double amount = oRecordSetDoc.Fields.Item("Amount").Value * 1.18; //დღგ-ს გათვალისწინება
 
                                     debit = oRecordSetJDT1.Fields.Item("Debit").Value;
                                     credit = oRecordSetJDT1.Fields.Item("Credit").Value;
@@ -201,70 +206,92 @@ namespace BDO_Localisation_AddOn
                                     {
                                         if (credit != 0)
                                         {
-                                            credit = amount * blaAgrRt;
+                                            credit = amount * Math.Abs(blaAgrRt - docRate);
                                         }
                                         else if (debit != 0)
                                         {
-                                            debit = amount * blaAgrRt;
+                                            debit = amount * Math.Round(Math.Abs(blaAgrRt - docRate), 4);
                                         }
                                     }
 
                                 }
                             }
                         }
-                        UpdateJournalEntryTable(transId, ref3, project, agrNo, credit, debit);
+                        UpdateJournalEntryTable(transId, ref3, project, agrNo, credit, debit, docCur);
                     }
                 }
                 oRecordSetJDT1.MoveNext();
             }
         }
 
-        private static void UpdateJournalEntryTable(int transId, string ref3, string project, int agrNo, decimal credit, decimal debit)
+        private static void UpdateJournalEntryTable(int transId, string ref3, string project, int agrNo, double credit, double debit, string docCur)
         {
             string error;
             SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
             oJounalEntry.GetByKey(transId);
 
+
             for (int line = 0; line < oJounalEntry.Lines.Count; line++)
             {
                 oJounalEntry.Lines.SetCurrentLine(line);
-                
+
                 if (!string.IsNullOrEmpty(project))
                 {
                     oJounalEntry.Lines.ProjectCode = project;
                 }
-
                 if (agrNo != 0)
                 {
                     //oJounalEntry.UserFields.Fields.Item("blanket agreementis columni").Value = agrNo;
 
-                    
+
                     if (oJounalEntry.Lines.AdditionalReference == ref3) //for bp
                     {
                         if (credit != 0)
                         {
-                            oJounalEntry.Lines.Credit = Convert.ToDouble(credit);
+                            oJounalEntry.Lines.Credit = credit;
                         }
                         else if (debit != 0)
                         {
-                            oJounalEntry.Lines.Debit = Convert.ToDouble(debit);
+                            oJounalEntry.Lines.Debit = debit;
                         }
                     }
                     else if (oJounalEntry.Lines.AdditionalReference != ref3)  //for second account
                     {
+                        oJounalEntry.Lines.FCCurrency = docCur;
                         if (credit != 0)
                         {
-                            oJounalEntry.Lines.Debit = Convert.ToDouble(debit);
+                            oJounalEntry.Lines.Debit = credit;
                         }
                         else if (debit != 0)
                         {
-                            oJounalEntry.Lines.Credit = Convert.ToDouble(credit);
+                            oJounalEntry.Lines.Credit = debit;
                         }
                     }
                 }
             }
 
-            int updateCode = oJounalEntry.Update();
+            Program.oCompany.XMLAsString = true;
+            Program.oCompany.XmlExportType = SAPbobsCOM.BoXmlExportTypes.xet_ExportImportMode;
+
+            string xml = oJounalEntry.GetAsXML();
+
+            int updateCode = oJounalEntry.Cancel();
+            if (updateCode != 0)
+            {
+                Program.oCompany.GetLastError(out updateCode, out error);
+                Program.uiApp.StatusBar.SetSystemMessage(error, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+            }
+            if(credit == 0 && debit == 0)
+            {
+                goto shortcut;
+            }
+            xml = Regex.Replace(xml, @"<\?.*?\?>|<DebitSys>.*?</DebitSys>|<CreditSys>.*?</CreditSys>|<JdtNum>.*?</JdtNum>|<SystemBaseAmount>.*?</SystemBaseAmount>|<VatAmount>.*?</VatAmount>|<SystemVatAmount>.*?</SystemVatAmount>|<GrossValue>.*?</GrossValue>", "");
+
+            SAPbobsCOM.JournalEntries oJounalEntryNew = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
+
+            oJounalEntryNew.Browser.ReadXml(xml, 0);
+
+            updateCode = oJounalEntryNew.Add();
 
             if (updateCode != 0)
             {
@@ -272,6 +299,8 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.StatusBar.SetSystemMessage(error, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
             }
 
+            Marshal.ReleaseComObject(oJounalEntryNew);
+            shortcut:
             Marshal.ReleaseComObject(oJounalEntry);
         }
     }
