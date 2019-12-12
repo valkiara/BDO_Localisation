@@ -287,7 +287,7 @@ namespace BDO_Localisation_AddOn
                     //formItems.Add("Top", top);
                     //formItems.Add("Height", height);
                     //formItems.Add("UID", itemName);
-                    //formItems.Add("Caption", BDOSResources.getTranslate("Descript"));
+                    //formItems.Add("Caption", BDOSResources.getTranslate("Description"));
                     //formItems.Add("FromPane", 0);
                     //formItems.Add("ToPane", 0);
 
@@ -1304,14 +1304,10 @@ namespace BDO_Localisation_AddOn
                 oForm.Freeze(false);
                 oRecordSet = null;
             }
-
-
         }
 
-        public static void addMenus( out string errorText)
+        public static void addMenus()
         {
-            errorText = null;
-
             SAPbouiCOM.MenuItem menuItem;
             SAPbouiCOM.MenuItem fatherMenuItem;
             SAPbouiCOM.MenuCreationParams oCreationPackage;
@@ -1331,9 +1327,9 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch (Exception ex)
+            catch 
             {
-                errorText = ex.Message;
+               
             }
         }
     }

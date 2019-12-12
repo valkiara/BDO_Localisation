@@ -1954,9 +1954,6 @@
   <data name="AliasID" xml:space="preserve">
     <value>Alias ID</value>
   </data>
-  <data name="Descr" xml:space="preserve">
-    <value>Description</value>
-  </data>
   <data name="ErrorRemovingUDF" xml:space="preserve">
     <value>Error removing UDF</value>
   </data>
@@ -2502,9 +2499,6 @@
   </data>
   <data name="ControlAccount" xml:space="preserve">
     <value>Control account</value>
-  </data>
-  <data name="Descript" xml:space="preserve">
-    <value>Description</value>
   </data>
   <data name="DispType" xml:space="preserve">
     <value>Dispatche type</value>
@@ -3094,9 +3088,6 @@
   <data name="LinkToAPDocuments" xml:space="preserve">
     <value>Link To A/P Documents</value>
   </data>
-  <data name="ConsumptionValueMustBeGreaterThanZero" xml:space="preserve">
-    <value>Consumption Value Must Be Greater Than Zero</value>
-  </data>
   <data name="Treasury" xml:space="preserve">
     <value>Treasury</value>
   </data>
@@ -3309,6 +3300,18 @@
   </data>
   <data name="UnableToCreateDocumentOnCanceledInvoice" xml:space="preserve">
     <value>Unable To Create Document On Canceled Invoice</value>
+  </data>
+  <data name="PensionAmount" xml:space="preserve">
+    <value>Pension Amount</value>
+  </data>
+  <data name="BlanketAgreement" xml:space="preserve">
+    <value>Blanket Agreement</value>
+  </data>
+  <data name="TotalPaymentFC" xml:space="preserve">
+    <value>Total Payment FC</value>
+  </data>
+  <data name="TotalPaymentLC" xml:space="preserve">
+    <value>Total Payment LC</value>
   </data>
   <data name="OnlyBlank" xml:space="preserve">
     <value>Only Blank</value>

@@ -2516,10 +2516,8 @@ namespace BDO_Localisation_AddOn
             }
             GC.Collect();
         }
-        public static void addMenus(out string errorText)
+        public static void addMenus()
         {
-            errorText = null;
-
             SAPbouiCOM.Menus moduleMenus;
             SAPbouiCOM.MenuItem menuItem;
             SAPbouiCOM.MenuItem fatherMenuItem;
@@ -2534,8 +2532,6 @@ namespace BDO_Localisation_AddOn
                 // Get the menu collection of SAP Business One
                 //moduleMenus = menuItem.SubMenus;
 
-                //fatherMenuItem = moduleMenus.Item(4);
-
                 // Add a pop-up menu item
                 oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
                 oCreationPackage.Checked = false;
@@ -2547,9 +2543,9 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch (Exception ex)
+            catch
             {
-                errorText = ex.Message;
+
             }
 
             try
@@ -2560,8 +2556,6 @@ namespace BDO_Localisation_AddOn
 
                 // Get the menu collection of SAP Business One
                 moduleMenus = menuItem.SubMenus;
-
-
                 fatherMenuItem = moduleMenus.Item("11520");
 
                 // Add a pop-up menu item
@@ -2575,9 +2569,9 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch (Exception ex)
+            catch
             {
-                errorText = ex.Message;
+
             }
         }
         public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ChooseFromListEvent oCFLEvento, string ItemUID, bool BeforeAction, int row, out string errorText)

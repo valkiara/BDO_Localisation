@@ -167,7 +167,7 @@ namespace BDO_Localisation_AddOn
 
                 updateAddonVersion(version);
 
-                FormsB1.addMenusForAddOn(out errorText);
+                FormsB1.addMenusForAddOn();
 
                 CrystalReports.addStandAloneCrystalReportForAddOn(Application.StartupPath, out errorText);
 
@@ -246,7 +246,7 @@ namespace BDO_Localisation_AddOn
                 case SAPbouiCOM.BoAppEventTypes.aet_LanguageChanged:
                     {
                         BDOSResources.initResource(Convert.ToInt32(uiApp.Language), out cultureInfo, out resourceManager, out errorText);
-                        FormsB1.addMenusForAddOn(out errorText);
+                        FormsB1.addMenusForAddOn();
                     }
                     break;
                 case SAPbouiCOM.BoAppEventTypes.aet_CompanyChanged:
