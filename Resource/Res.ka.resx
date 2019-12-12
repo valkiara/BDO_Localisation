@@ -1246,7 +1246,7 @@
     <value>სატრანსპორტო საშუალების ცნობარი</value>
   </data>
   <data name="VehicleNumber" xml:space="preserve">
-    <value>სატრანსპორტო საშუალების ნომერი</value>
+    <value>სატრანს. საშუალების ნომერი</value>
   </data>
   <data name="Vehicles" xml:space="preserve">
     <value>ავტომანქანები</value>
@@ -1748,7 +1748,7 @@
     <value>შესაბამისობის სტატუსი</value>
   </data>
   <data name="CompSt" xml:space="preserve">
-    <value>შესაბ. სტ.</value>
+    <value>შესაბ. სტატუსი</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>დეტალური</value>
@@ -3309,5 +3309,14 @@
   </data>
   <data name="ToCreateNewDocumentPressFillButton" xml:space="preserve">
     <value>ახალი დოკუმენტის შესაქმნელად დააჭირეთ შევსება ღილაკს</value>
+  </data>
+  <data name="CorrespondingAccount" xml:space="preserve">
+    <value>მოკორ. ანგარიში</value>
+  </data>
+  <data name="UnableToCreateDocumentOnCanceledInvoice" xml:space="preserve">
+    <value>დოკუმენტის შექმნა შეუძლებელია გაუქმებულ ზედნადებებზე</value>
+  </data>
+  <data name="OnlyBlank" xml:space="preserve">
+    <value>მხოლოდ ცარიელი</value>
   </data>
 </root>

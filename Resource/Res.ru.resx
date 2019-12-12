@@ -1745,7 +1745,7 @@
     <value>Compare Status</value>
   </data>
   <data name="CompSt" xml:space="preserve">
-    <value>Comp.St.</value>
+    <value>Comp. Status</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Details</value>
@@ -3303,5 +3303,17 @@
   </data>
   <data name="ToCreateNewDocumentPressFillButton" xml:space="preserve">
     <value>To create new document press fill button</value>
+  </data>
+  <data name="CorrespondingAccount" xml:space="preserve">
+    <value>Offset Account</value>
+  </data>
+  <data name="UnableToCreateDocumentOnCanceledInvoice" xml:space="preserve">
+    <value>Unable To Create Document On Canceled Invoice</value>
+  </data>
+  <data name="OnlyBlank" xml:space="preserve">
+    <value>Only Blank</value>
+  </data>
+  <data name="invNumS" xml:space="preserve">
+    <value>Invoice Number</value>
   </data>
 </root>

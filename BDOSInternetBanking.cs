@@ -21,11 +21,11 @@ namespace BDO_Localisation_AddOn
         public static int CurrentRowExportMTRForDetail;
         public static DataTable TableExportMTRForDetail;
         public static bool SelectAllImportPressed = false;
-
         public static List<int> RowsWithDifferentDates;
         public static List<int> RowsWithCorrectedDates;
+        public static string blnkAgrOld;
 
-        //----------------------------->Import Data into Bank System<-----------------------------
+        #region Import Data into Bank System
         public static void chooseFromListImport(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
             errorText = null;
@@ -75,13 +75,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void comboSelectImport(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void comboSelectImport(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
         {
-            errorText = null;
-
             try
             {
-                if (pVal.BeforeAction == false)
+                string errorText;
+
+                if (!pVal.BeforeAction)
                 {
                     if (pVal.ItemUID == "operationB")
                     {
@@ -212,7 +212,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-                else if (pVal.BeforeAction == true)
+                else
                 {
                     if (pVal.ItemUID == "operationB")
                     {
@@ -226,7 +226,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -326,15 +326,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void matrixColumnSetLinkedObjectTypeImport(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void matrixColumnSetLinkedObjectTypeImport(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
         {
-            errorText = null;
-
             try
             {
                 if (pVal.ColUID == "CardCode")
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED & pVal.BeforeAction == true)
+                    if (pVal.BeforeAction)
                     {
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("importMTR").Specific));
 
@@ -357,14 +355,10 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-                else
-                {
-
-                }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -453,9 +447,6 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
-
-
-
 
         public static void fillImportMTR(SAPbouiCOM.Form oForm, out string errorText)
         {
@@ -578,9 +569,9 @@ namespace BDO_Localisation_AddOn
                 oRecordSet = null;
             }
         }
-        //----------------------------->Import Data into Bank System<-----------------------------
+        #endregion 
 
-        //----------------------------->Get Data from Bank System<-----------------------------
+        #region Get Data from Bank System
         public static void setVisibleFormItemsExport(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
@@ -644,15 +635,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void matrixColumnSetLinkedObjectTypeExport(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void matrixColumnSetLinkedObjectTypeExport(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
         {
-            errorText = null;
-
             try
             {
                 if (pVal.ColUID == "DocEntry")
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED & pVal.BeforeAction == true)
+                    if (!pVal.BeforeAction)
                     {
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));
 
@@ -675,14 +664,10 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-                else
-                {
-
-                }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -690,13 +675,11 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void comboSelectExport(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void comboSelectExport(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
         {
-            errorText = null;
-
             try
             {
-                if (pVal.BeforeAction == false)
+                if (!pVal.BeforeAction)
                 {
                     if (pVal.ItemUID == "transTypCB")
                     {
@@ -713,12 +696,12 @@ namespace BDO_Localisation_AddOn
                         string bankProgram = TBCOB == "1" ? "TBC" : "BOG";
 
                         if (bankProgram == "TBC" && oBaseQueryResultIoStc != null && oAccountMovementDetailIoStc != null)
-                            fillExportMTR_TBC(oForm, oBaseQueryResultIoStc, oAccountMovementDetailIoStc, true, out errorText);
+                            fillExportMTR_TBC(oForm, oBaseQueryResultIoStc, oAccountMovementDetailIoStc, true);
                         else if (bankProgram == "BOG" && oStatementDetailStc != null)
-                            fillExportMTR_BOG(oForm, oStatementDetailStc, true, out errorText);
+                            fillExportMTR_BOG(oForm, oStatementDetailStc, true);
                     }
                 }
-                else if (pVal.BeforeAction == true)
+                else
                 {
                     if (pVal.ItemUID == "transTypCB")
                     {
@@ -728,7 +711,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -792,12 +775,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void chooseFromListExport(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void chooseFromListExport(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, SAPbouiCOM.ItemEvent pVal)
         {
-            errorText = null;
-
             try
             {
+                oForm.Freeze(true);
+
                 string sCFL_ID = oCFLEvento.ChooseFromListUID;
                 SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
 
@@ -860,14 +843,24 @@ namespace BDO_Localisation_AddOn
                         string partnerAccountNumber = oDataTable.GetValue("PartnerAccountNumber", pVal.Row - 1);
                         string partnerCurrency = oDataTable.GetValue("PartnerCurrency", pVal.Row - 1);
                         string partnerTaxCode = oDataTable.GetValue("PartnerTaxCode", pVal.Row - 1);
+                        string transactionType = oDataTable.GetValue("TransactionType", pVal.Row - 1);
+                        string cardType = null;
+                        if (transactionType == OperationTypeFromIntBank.TransferFromBP.ToString())
+                        {
+                            cardType = "C";
+                        }
+                        else if (transactionType == OperationTypeFromIntBank.TransferToBP.ToString() || transactionType == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString())
+                        {
+                            cardType = "S";
+                        }
 
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
                         SAPbouiCOM.Condition oCon = oCons.Add();
                         oCon.Alias = "BpType";
                         oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
-                        oCon.CondVal = "C";
+                        oCon.CondVal = cardType;
 
-                        SAPbobsCOM.Recordset oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, "C");
+                        SAPbobsCOM.Recordset oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, cardType);
                         if (oRecordSet != null)
                         {
                             oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
@@ -891,20 +884,11 @@ namespace BDO_Localisation_AddOn
                         if (sCFL_ID == "HouseBankAccount_CFL2" && pVal.ItemUID == "accountE2")
                         {
                             string account = Convert.ToString(oDataTable.GetValue("Account", 0));
-                            SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("accountE2").Specific;
                             string currency;
                             CommonFunctions.accountParse(account, out currency);
-                            try
-                            {
-                                oEditText.Value = account;
-                            }
-                            catch { }
-                            try
-                            {
-                                SAPbouiCOM.ComboBox oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("currencyCB").Specific;
-                                oComboBox.Select(currency, SAPbouiCOM.BoSearchKey.psk_ByValue);
-                            }
-                            catch { }
+
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("accountE2").Specific.Value = account);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("currencyCB").Specific.Select(currency, SAPbouiCOM.BoSearchKey.psk_ByValue));
                         }
                         if (oCFLEvento.ChooseFromListUID == "Budg_CFL")
                         {
@@ -912,30 +896,11 @@ namespace BDO_Localisation_AddOn
                             {
                                 string BCFWId = Convert.ToString(oDataTable.GetValue("Code", 0));
                                 string BCFWName = Convert.ToString(oDataTable.GetValue("Name", 0));
+
                                 SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));
-                                SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
-                                if (cellPos == null)
-                                {
-                                    return;
-                                }
-
-                                SAPbouiCOM.EditText oEditText;
-
-                                try
-                                {
-                                    oEditText = oMatrix.Columns.Item("BCFWId").Cells.Item(cellPos.rowIndex).Specific;
-                                    oEditText.Value = BCFWId;
-                                }
-                                catch { }
-
-                                try
-                                {
-                                    oEditText = oMatrix.Columns.Item("BCFWName").Cells.Item(cellPos.rowIndex).Specific;
-                                    oEditText.Value = BCFWName;
-                                }
-                                catch { }
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("BCFWId").Cells.Item(pVal.Row).Specific.Value = BCFWId);
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("BCFWName").Cells.Item(pVal.Row).Specific.Value = BCFWName);
                             }
-
                         }
                         else if (sCFL_ID == "GLAccount_CFL")
                         {
@@ -944,55 +909,29 @@ namespace BDO_Localisation_AddOn
                                 string acctCode = Convert.ToString(oDataTable.GetValue("AcctCode", 0));
 
                                 SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));
-                                SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
-                                if (cellPos == null)
-                                {
-                                    return;
-                                }
-                                SAPbouiCOM.EditText oEditText;
-                                try
-                                {
-                                    oEditText = oMatrix.Columns.Item("GLAcctCode").Cells.Item(cellPos.rowIndex).Specific;
-                                    oEditText.Value = acctCode;
-                                }
-                                catch { }
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = acctCode);
                             }
                         }
                         else if (sCFL_ID == "Project_CFLA")
                         {
                             if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "Project")
                             {
-                                SAPbouiCOM.EditText oEditText;
-                                SAPbouiCOM.DataTable expDataTable = oForm.DataSources.DataTables.Item("exportMTR");
-                                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));
-                                SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
-
                                 string prjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
-                                try
-                                {
-                                    oEditText = oMatrix.Columns.Item("Project").Cells.Item(cellPos.rowIndex).Specific;
-                                    oEditText.Value = prjCode;
-                                }
-                                catch { }
+
+                                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = prjCode);
                             }
                         }
                         else if (sCFL_ID == "BlnkAgr_CFL")
                         {
                             if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "BlnkAgr")
                             {
-                                SAPbouiCOM.EditText oEditText;
-                                SAPbouiCOM.DataTable expDataTable = oForm.DataSources.DataTables.Item("exportMTR");
-                                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));
-                                SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
-
                                 string absID = Convert.ToString(oDataTable.GetValue("AbsID", 0));
-                                try
-                                {
-                                    oEditText = oMatrix.Columns.Item("BlnkAgr").Cells.Item(cellPos.rowIndex).Specific;
-                                    oEditText.Value = absID;
-                                }
-                                catch { }
-                                oMatrix.FlushToDataSource();
+
+                                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));                               
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = absID);
+
+                                setMTRCellEditableSetting(oForm, pVal.ItemUID, pVal.Row);
                             }
                         }
                         else if (sCFL_ID == "CashFlowLineItem_CFL")
@@ -1001,28 +940,10 @@ namespace BDO_Localisation_AddOn
                             {
                                 string CFWId = Convert.ToString(oDataTable.GetValue("CFWId", 0));
                                 string CFWName = Convert.ToString(oDataTable.GetValue("CFWName", 0));
+
                                 SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));
-                                SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
-                                if (cellPos == null)
-                                {
-                                    return;
-                                }
-
-                                SAPbouiCOM.EditText oEditText;
-
-                                try
-                                {
-                                    oEditText = oMatrix.Columns.Item("CFWId").Cells.Item(cellPos.rowIndex).Specific;
-                                    oEditText.Value = CFWId;
-                                }
-                                catch { }
-
-                                try
-                                {
-                                    oEditText = oMatrix.Columns.Item("CFWName").Cells.Item(cellPos.rowIndex).Specific;
-                                    oEditText.Value = CFWName;
-                                }
-                                catch { }
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item(pVal.ColUID).Cells.Item(pVal.Row).Specific.Value = CFWId);
+                                LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("CFWName").Cells.Item(pVal.Row).Specific.Value = CFWName);
                             }
                         }
                     }
@@ -1030,11 +951,47 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
-                GC.Collect();
+                oForm.Freeze(false);
+            }
+        }
+
+        private static void setMTRCellEditableSetting(SAPbouiCOM.Form oForm, string mtrName, int rowIndex = 0)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item(mtrName).Specific;
+                int rowCount = rowIndex == 0 ? oMatrix.RowCount : rowIndex;
+                int i = rowIndex == 0 ? 1 : rowIndex;
+
+                for (; i <= rowCount; i++)
+                {
+                    string absID = oMatrix.GetCellSpecific("BlnkAgr", i).Value;
+                    if (!string.IsNullOrEmpty(absID) && BlanketAgreement.UsesCurrencyExchangeRates(Convert.ToInt32(absID)))
+                    {
+                        //oMatrix.CommonSetting.SetCellEditable(i, 31, true);
+                        oMatrix.CommonSetting.SetCellEditable(i, 30, true);
+                    }
+                    else
+                    {
+                        //oMatrix.CommonSetting.SetCellEditable(i, 31, false);
+                        oMatrix.CommonSetting.SetCellEditable(i, 30, false);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Update();
+                oForm.Freeze(false);
             }
         }
 
@@ -1151,9 +1108,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void fillExportMTR_TBC(SAPbouiCOM.Form oForm, BaseQueryResultIo oBaseQueryResultIo, AccountMovementDetailIo[] oAccountMovementDetailIo, bool filterByTransType, out string errorText)
+        public static void fillExportMTR_TBC(SAPbouiCOM.Form oForm, BaseQueryResultIo oBaseQueryResultIo, AccountMovementDetailIo[] oAccountMovementDetailIo, bool filterByTransType)
         {
-            errorText = null;
             SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));
 
             RowsWithDifferentDates = new List<int>();
@@ -1465,12 +1421,11 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                oForm.Freeze(false);
-
+                setMTRCellEditableSetting(oForm, "exportMTR");
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -1478,10 +1433,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void fillExportMTR_BOG(SAPbouiCOM.Form oForm, List<StatementDetail> oStatementDetail, bool filterByTransType, out string errorText)
+        public static void fillExportMTR_BOG(SAPbouiCOM.Form oForm, List<StatementDetail> oStatementDetail, bool filterByTransType)
         {
-            errorText = null;
-
             RowsWithDifferentDates = new List<int>();
             RowsWithCorrectedDates = new List<int>();
 
@@ -1879,11 +1832,11 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                oForm.Freeze(false);
+                setMTRCellEditableSetting(oForm, "exportMTR");
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -1978,90 +1931,113 @@ namespace BDO_Localisation_AddOn
 
         private static OperationTypeFromIntBank getOperationTypeIntBankBOG(string transactionType, string partnerAccountNumber, string partnerCurrency, string partnerTaxCode, int debitCredit, string treasuryCode, out string GLAccountCodeBP, out string projectCod, out string blnkAgr)
         {
-            OperationTypeFromIntBank oOperationType;
-            SAPbobsCOM.Recordset oRecordSet;
-            string cardType = debitCredit == 0 ? "S" : "C";
-            GLAccountCodeBP = null;
-            projectCod = null;
-            blnkAgr = null;
-
-            if (transactionType == "COM" || transactionType == "FEE")
-                oOperationType = OperationTypeFromIntBank.BankCharge;
-            else if (CommonFunctions.isAccountInHouseBankAccount(partnerAccountNumber + partnerCurrency) == true && transactionType != "CCO")
-                oOperationType = OperationTypeFromIntBank.TransferToOwnAccount;
-            else if (string.IsNullOrEmpty(treasuryCode) == false)
+            try
             {
-                oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
-                if (debitCredit == 0)
-                {
-                    oRecordSet = CommonFunctions.getBPBankInfo(treasuryCode + "GEL", partnerTaxCode, cardType);
+                OperationTypeFromIntBank oOperationType;
+                SAPbobsCOM.Recordset oRecordSet;
+                string cardType = debitCredit == 0 ? "S" : "C";
+                GLAccountCodeBP = null;
+                projectCod = null;
+                blnkAgr = null;
 
-                    if (oRecordSet != null && oRecordSet.Fields.Item("U_treasury").Value == "Y")
+                if (transactionType == "COM" || transactionType == "FEE")
+                    oOperationType = OperationTypeFromIntBank.BankCharge;
+                else if (CommonFunctions.isAccountInHouseBankAccount(partnerAccountNumber + partnerCurrency) == true && transactionType != "CCO")
+                    oOperationType = OperationTypeFromIntBank.TransferToOwnAccount;
+                else if (string.IsNullOrEmpty(treasuryCode) == false)
+                {
+                    oOperationType = OperationTypeFromIntBank.TreasuryTransfer;
+                    if (debitCredit == 0)
+                    {
+                        oRecordSet = CommonFunctions.getBPBankInfo(treasuryCode + "GEL", partnerTaxCode, cardType);
+
+                        if (oRecordSet != null && oRecordSet.Fields.Item("U_treasury").Value == "Y")
+                        {
+                            GLAccountCodeBP = oRecordSet.Fields.Item("DebPayAcct").Value;
+                            projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
+                            blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
+                            oOperationType = OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP;
+                        }
+                    }
+                }
+                else if (transactionType == "CCO")
+                    oOperationType = OperationTypeFromIntBank.CurrencyExchange;
+                else if (transactionType == "LFG")
+                {
+                    if (debitCredit == 0)
+                        oOperationType = OperationTypeFromIntBank.OtherExpenses;
+                    else if (debitCredit == 1)
+                        oOperationType = OperationTypeFromIntBank.OtherIncomes;
+                    else
+                        oOperationType = OperationTypeFromIntBank.None;
+                }
+                else if (transactionType == "PMC" || transactionType == "LND")
+                {
+                    if (debitCredit == 0)
+                        oOperationType = OperationTypeFromIntBank.OtherExpenses;
+                    else if (debitCredit == 1)
+                        oOperationType = OperationTypeFromIntBank.OtherIncomes;
+                    else
+                        oOperationType = OperationTypeFromIntBank.None;
+                }
+                else if (string.IsNullOrEmpty(partnerAccountNumber) == false && string.IsNullOrEmpty(partnerCurrency) == false)
+                {
+                    if (debitCredit == 0)
+                        oOperationType = OperationTypeFromIntBank.TransferToBP;
+                    else
+                        oOperationType = OperationTypeFromIntBank.TransferFromBP;
+
+                    oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, cardType);
+
+                    if (oRecordSet != null)
                     {
                         GLAccountCodeBP = oRecordSet.Fields.Item("DebPayAcct").Value;
                         projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
                         blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
-                        oOperationType = OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP;
+                        if (oRecordSet.Fields.Item("U_treasury").Value == "Y" && oOperationType == OperationTypeFromIntBank.TransferToBP)
+                        {
+                            oOperationType = OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP;
+                        }
                     }
-                }
-            }
-            else if (transactionType == "CCO")
-                oOperationType = OperationTypeFromIntBank.CurrencyExchange;
-            else if (transactionType == "LFG")
-            {
-                if (debitCredit == 0)
-                    oOperationType = OperationTypeFromIntBank.OtherExpenses;
-                else if (debitCredit == 1)
-                    oOperationType = OperationTypeFromIntBank.OtherIncomes;
-                else
-                    oOperationType = OperationTypeFromIntBank.None;
-            }
-            else if (transactionType == "PMC" || transactionType == "LND")
-            {
-                if (debitCredit == 0)
-                    oOperationType = OperationTypeFromIntBank.OtherExpenses;
-                else if (debitCredit == 1)
-                    oOperationType = OperationTypeFromIntBank.OtherIncomes;
-                else
-                    oOperationType = OperationTypeFromIntBank.None;
-            }
-            else if (string.IsNullOrEmpty(partnerAccountNumber) == false && string.IsNullOrEmpty(partnerCurrency) == false)
-            {
-                if (debitCredit == 0)
-                    oOperationType = OperationTypeFromIntBank.TransferToBP;
-                else
-                    oOperationType = OperationTypeFromIntBank.TransferFromBP;
-
-                oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, cardType);
-
-                if (oRecordSet != null)
-                {
-                    GLAccountCodeBP = oRecordSet.Fields.Item("DebPayAcct").Value;
-                    projectCod = oRecordSet.Fields.Item("ProjectCod").Value;
-                    blnkAgr = oRecordSet.Fields.Item("BlnkAgr").Value;
-                    if (oRecordSet.Fields.Item("U_treasury").Value == "Y" && oOperationType == OperationTypeFromIntBank.TransferToBP)
+                    else if (debitCredit == 0)
                     {
-                        oOperationType = OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP;
+                        oRecordSet = CommonFunctions.getEmployeeInfo(partnerTaxCode);
+
+                        if (oRecordSet != null)
+                        {
+                            oOperationType = OperationTypeFromIntBank.None;
+                        }
                     }
                 }
                 else if (debitCredit == 0)
-                {
-                    oRecordSet = CommonFunctions.getEmployeeInfo(partnerTaxCode);
+                    oOperationType = OperationTypeFromIntBank.OtherExpenses;
+                else if (debitCredit == 1)
+                    oOperationType = OperationTypeFromIntBank.OtherIncomes;
+                else
+                    oOperationType = OperationTypeFromIntBank.None;
 
-                    if (oRecordSet != null)
-                    {
-                        oOperationType = OperationTypeFromIntBank.None;
-                    }
-                }
+                return oOperationType;
             }
-            else if (debitCredit == 0)
-                oOperationType = OperationTypeFromIntBank.OtherExpenses;
-            else if (debitCredit == 1)
-                oOperationType = OperationTypeFromIntBank.OtherIncomes;
-            else
-                oOperationType = OperationTypeFromIntBank.None;
+            catch(Exception ex)
+            {
+                System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace(ex, true);
+                //Get the first stack frame
+                System.Diagnostics.StackFrame frame = st.GetFrame(0);
 
-            return oOperationType;
+                //Get the file name
+                string fileName = frame.GetFileName();
+
+                //Get the method name
+                string methodName = frame.GetMethod().Name;
+
+                //Get the line number from the stack frame
+                int line = frame.GetFileLineNumber();
+
+                //Get the column number
+                int col = frame.GetFileColumnNumber();
+
+                throw new Exception(ex.Message);
+            }
         }
 
         public static void getData(SAPbouiCOM.Form oForm)
@@ -2294,8 +2270,8 @@ namespace BDO_Localisation_AddOn
             oForm.Update();
             oForm.Freeze(false);
         }
+        #endregion
 
-        //----------------------------->Get Data from Bank System<-----------------------------
         public static DataTable create_TableExportMTRForDetail()
         {
             TableExportMTRForDetail = new DataTable();
@@ -3739,6 +3715,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("TransactionCode", SAPbouiCOM.BoFieldsType.ft_Text, 100);
                     oDataTable.Columns.Add("GLAccountCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 15);
                     oDataTable.Columns.Add("Project", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
+                    oDataTable.Columns.Add("UseBlaAgRt", SAPbouiCOM.BoFieldsType.ft_Text, 1);
                     oDataTable.Columns.Add("BlnkAgr", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
                     oDataTable.Columns.Add("CashFlowLineItemID", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 11);
                     oDataTable.Columns.Add("CashFlowLineItemName", SAPbouiCOM.BoFieldsType.ft_Text, 100);
@@ -3789,9 +3766,10 @@ namespace BDO_Localisation_AddOn
                     objectType = "1250000025"; //Blanket Agreement
                     string uniqueID_BlnkAgrCFL = "BlnkAgr_CFL";
                     FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BlnkAgrCFL);
-
+                    int o = 0;
                     foreach (SAPbouiCOM.DataColumn column in oDataTable.Columns)
                     {
+                        o++; 
                         string columnName = column.Name;
 
                         if (columnName == "LineNum")
@@ -3872,30 +3850,46 @@ namespace BDO_Localisation_AddOn
                         }
                         else if (columnName == "GLAccountCode")
                         {
-                            oColumn = oColumns.Add("GLAcctCode", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn = oColumns.Add("GLAcctCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = true;
                             oColumn.DataBind.Bind(UID, columnName);
                             oColumn.ChooseFromListUID = uniqueID_lf_GLAccountCFL;
                             oColumn.ChooseFromListAlias = "AcctCode";
+                            oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = "1";
                         }
                         else if (columnName == "Project")
                         {
-                            oColumn = oColumns.Add("Project", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn = oColumns.Add("Project", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = true;
                             oColumn.DataBind.Bind(UID, columnName);
                             oColumn.ChooseFromListUID = uniqueID_lf_Project;
                             oColumn.ChooseFromListAlias = "PrjCode";
+                            oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = "63";
+                        }
+                        else if (columnName == "UseBlaAgRt")
+                        {
+                            oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("UseBlAgrRt");
+                            oColumn.Editable = false;
+                            oColumn.ValOff = "N";
+                            oColumn.ValOn = "Y";
+                            oColumn.DataBind.Bind(UID, columnName);  
+                            
                         }
                         else if (columnName == "BlnkAgr")
                         {
-                            oColumn = oColumns.Add("BlnkAgr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn = oColumns.Add("BlnkAgr", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = true;
                             oColumn.DataBind.Bind(UID, columnName);
                             oColumn.ChooseFromListUID = uniqueID_BlnkAgrCFL;
                             oColumn.ChooseFromListAlias = "AbsID";
+                            oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = "1250000025";
                         }
                         else if (columnName == "CashFlowLineItemID")
                         {
@@ -4574,296 +4568,363 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            //Xelit DAUREDAQTIREBELI daricxvebi (rasac ar avurchiet invoisebi) unda gadaivsos "Automatic paymentis" mixedvit (Payment on account da ADD DP amt)
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
-                SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
-
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false & (pVal.ItemUID == "exportMTR" || pVal.ItemUID == "importMTR"))
+                try
                 {
-                    int row = pVal.Row;
+                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                    oForm.Freeze(true);
-
-                    SAPbouiCOM.Matrix oMatrixGoods = (SAPbouiCOM.Matrix)oForm.Items.Item(pVal.ItemUID).Specific;
-
-                    if (oMatrixGoods.RowCount > 0)
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                     {
-                        oForm.Freeze(false);
-
-                        if (row <= oMatrixGoods.RowCount && row >= 1)
+                        if ((pVal.ItemUID == "autoPay") && !pVal.BeforeAction)
                         {
-                            if (pVal.ColUID != "CheckBox")
+                            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("exportMTR").Specific;
+                            int headRow = oMatrix.GetNextSelectedRow();
+
+                            oForm.Freeze(true);
+
+                            SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("exportMTR");
+                            bool automaticPaymentInternetBanking = (oForm.DataSources.UserDataSources.Item("autoPay").ValueEx == "Y");
+
+                            for (int i = 0; i < oDataTable.Rows.Count; i++)
                             {
-                                oMatrixGoods.SelectRow(row, true, false);
+                                string transactionType = oDataTable.GetValue("TransactionType", i);
+
+                                bool selected = oDataTable.GetValue("CheckBox", i) == "Y" ? true : false;
+
+                                if (selected == true && transactionType == OperationTypeFromIntBank.TransferFromBP.ToString())
+                                {
+                                    int rowNum = i + 1;
+                                    string expression = "LineNumExportMTR = '" + rowNum + "'";
+                                    DataRow[] foundRows;
+                                    foundRows = TableExportMTRForDetail.Select(expression);
+
+                                    if (foundRows.Length == 0)
+                                    {
+                                        decimal amount = Convert.ToDecimal(oDataTable.GetValue("Amount", i));
+
+                                        if (automaticPaymentInternetBanking)
+                                        {
+                                            oDataTable.SetValue("AddDownPaymentAmount", i, Convert.ToDouble(amount));
+                                            oDataTable.SetValue("PaymentOnAccount", i, 0);
+                                        }
+                                        else
+                                        {
+                                            oDataTable.SetValue("AddDownPaymentAmount", i, 0);
+                                            oDataTable.SetValue("PaymentOnAccount", i, Convert.ToDouble(amount));
+                                        }
+                                    }
+                                }
+                            }
+                            oMatrix.LoadFromDataSource();
+                            oForm.Update();
+
+                            if (headRow >= 1)
+                            {
+                                oMatrix.SelectRow(headRow, true, false);
+                            }
+                            oForm.Freeze(false);
+                        }
+
+                        else if (!pVal.BeforeAction && (pVal.ItemUID == "exportMTR" || pVal.ItemUID == "importMTR"))
+                        {
+                            int row = pVal.Row;
+
+                            oForm.Freeze(true);
+
+                            SAPbouiCOM.Matrix oMatrixGoods = (SAPbouiCOM.Matrix)oForm.Items.Item(pVal.ItemUID).Specific;
+
+                            if (oMatrixGoods.RowCount > 0)
+                            {
+                                oForm.Freeze(false);
+
+                                if (row <= oMatrixGoods.RowCount && row >= 1)
+                                {
+                                    if (pVal.ColUID != "CheckBox")
+                                    {
+                                        oMatrixGoods.SelectRow(row, true, false);
+                                    }
+                                }
+                                oForm.Freeze(true);
+                            }
+
+                            oForm.Freeze(false);
+                        }
+
+                        else if (pVal.ItemUID == "FolderImp")
+                        {
+                            if (pVal.BeforeAction)
+                            {
+                                oForm.PaneLevel = 1;
+                                setVisibleFormItemsImport(oForm, out errorText);
                             }
                         }
-                        /*for (int i = 1; i <= oMatrixGoods.RowCount; i++)
-                        {                            
-                            oMatrixGoods.CommonSetting.SetRowBackColor(i, -1);
-                        }
 
-                        try
+                        else if (pVal.ItemUID == "FolderExp")
                         {
-                            oMatrixGoods.CommonSetting.SetRowBackColor(row, FormsB1.getLongIntRGB(255, 255, 153));
-
-                        }
-                        catch
-                        {
-                        }*/
-                        oForm.Freeze(true);
-                    }
-
-                    oForm.Freeze(false);
-                }
-
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
-                {
-                    if ((pVal.ItemUID == "autoPay") && pVal.BeforeAction == false)
-                    {
-
-                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("exportMTR").Specific;
-                        int headRow = oMatrix.GetNextSelectedRow();
-
-                        oForm.Freeze(true);
-
-                        SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("exportMTR");
-                        bool automaticPaymentInternetBanking = (oForm.DataSources.UserDataSources.Item("autoPay").ValueEx == "Y");
-
-                        for (int i = 0; i < oDataTable.Rows.Count; i++)
-                        {
-                            string transactionType = oDataTable.GetValue("TransactionType", i);
-
-                            bool selected = oDataTable.GetValue("CheckBox", i) == "Y" ? true : false;
-
-                            if (selected == true && transactionType == OperationTypeFromIntBank.TransferFromBP.ToString())
+                            if (pVal.Before_Action)
                             {
-                                int rowNum = i + 1;
-                                string expression = "LineNumExportMTR = '" + rowNum + "'";
-                                DataRow[] foundRows;
-                                foundRows = TableExportMTRForDetail.Select(expression);
+                                oForm.PaneLevel = 2;
+                            }
+                            else
+                            {
+                                Dictionary<string, string> CompanyInfo = CommonFunctions.getCompanyInfo();
 
-                                if (foundRows.Length == 0)
+                                if (oForm.Items.Item("TBCOB").Specific.Selected == false && oForm.Items.Item("BOGOB").Specific.Selected == false)
                                 {
-                                    decimal amount = Convert.ToDecimal(oDataTable.GetValue("Amount", i));
-
-                                    if (automaticPaymentInternetBanking)
-                                    {
-                                        oDataTable.SetValue("AddDownPaymentAmount", i, Convert.ToDouble(amount));
-                                        oDataTable.SetValue("PaymentOnAccount", i, 0);
-                                    }
+                                    if (CompanyInfo["DflBnkCode"] == "TBCBGE22")
+                                        oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                                    else if (CompanyInfo["DflBnkCode"] == "BAGAGE22")
+                                        oForm.Items.Item("BOGOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                                     else
-                                    {
-                                        oDataTable.SetValue("AddDownPaymentAmount", i, 0);
-                                        oDataTable.SetValue("PaymentOnAccount", i, Convert.ToDouble(amount));
-                                    }
-
+                                        oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                                 }
                             }
-
                         }
 
-                        //SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("exportMTR").Specific));
-                        //oMatrix.Columns.Item("AddDPAmt").Visible = automaticPaymentInternetBanking;
-
-                        oMatrix.LoadFromDataSource();
-                        oForm.Update();
-
-                        if (headRow >= 1)
+                        else if (pVal.ItemUID == "importMTR")
                         {
-                            oMatrix.SelectRow(headRow, true, false);
-                        }
-
-                        oForm.Freeze(false);
-                    }
-                }
-
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
-                {
-                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
-                    oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
-                    if (pVal.ItemUID == "accountE")
-                    {
-                        chooseFromListImport(oForm, oCFLEvento, pVal, out errorText);
-                    }
-                    else if (pVal.ItemUID == "accountE2" || pVal.ItemUID == "exportMTR" || pVal.ItemUID == "BDOSDefCfE")
-                    {
-                        chooseFromListExport(oForm, oCFLEvento, pVal, out errorText);
-                    }
-                }
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
-                {
-                    if (pVal.ItemUID == "fillB" & pVal.BeforeAction == false)
-                    {
-                        fillImportMTR(oForm, out errorText);
-                    }
-                    if ((pVal.ItemUID == "checkB" || pVal.ItemUID == "unCheckB") && pVal.BeforeAction == false)
-                    {
-                        checkUncheckMTRImport(oForm, pVal.ItemUID, out errorText);
-                    }
-                    if (pVal.ItemUID == "getDataB" & pVal.BeforeAction == false)
-                    {
-                        getData(oForm);
-                    }
-                    if ((pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2") && pVal.BeforeAction == false)
-                    {
-                        checkUncheckMTRExport(oForm, pVal.ItemUID, out errorText);
-                    }
-                    if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "CheckBox" && pVal.BeforeAction == false && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
-                    {
-                        OnCheckImportDocuments(oForm, pVal.Row, pVal.ColUID);
-                    }
-                    if (pVal.ItemUID == "createDocB" && pVal.BeforeAction == false)
-                    {
-                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CreatePaymentDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-
-                        if (answer == 1)
-                        {
-                            List<string> infoList = createDocuments(oForm);
-                            for (int i = 0; i < infoList.Count; i++)
+                            if (pVal.Before_Action)
                             {
-                                if (String.IsNullOrEmpty(infoList[i]) == false)
+                                oForm.PaneLevel = 2;
+                            }
+                            else
+                            {
+                                Dictionary<string, string> CompanyInfo = CommonFunctions.getCompanyInfo();
+
+                                if (oForm.Items.Item("TBCOB").Specific.Selected == false && oForm.Items.Item("BOGOB").Specific.Selected == false)
                                 {
-                                    Program.uiApp.SetStatusBarMessage(infoList[i], SAPbouiCOM.BoMessageTime.bmt_Short, false);
+                                    if (CompanyInfo["DflBnkCode"] == "TBCBGE22")
+                                        oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                                    else if (CompanyInfo["DflBnkCode"] == "BAGAGE22")
+                                        oForm.Items.Item("BOGOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                                    else
+                                        oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                                 }
                             }
                         }
-                        return;
-                    }
-                    if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "InDetail" && pVal.BeforeAction == false)
-                    {
-                        SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("exportMTR");
 
-                        if (string.IsNullOrEmpty(oDataTable.GetValue("InDetail", pVal.Row - 1).ToString()))
+                        else if (pVal.ItemUID == "TBCOB" || pVal.ItemUID == "BOGOB")
                         {
-                            BubbleEvent = false;
-                            return;
-                        }
-
-                        bool selected = oDataTable.GetValue("CheckBox", pVal.Row - 1) == "Y" ? true : false;
-                        if (selected == false)
-                        {
-                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("HighlightTheRowsToPerformAnOperation"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
-                            BubbleEvent = false;
-                            return;
-                        }
-
-                        CurrentRowExportMTRForDetail = pVal.Row;
-                        DateTime docDate = oDataTable.GetValue("DocumentDate", pVal.Row - 1);
-
-                        decimal amount = Convert.ToDecimal(oDataTable.GetValue("Amount", pVal.Row - 1));
-                        string currency = Convert.ToString(oDataTable.GetValue("Currency", pVal.Row - 1));
-                        decimal downPaymentAmount = Convert.ToDecimal(oDataTable.GetValue("DownPaymentAmount", pVal.Row - 1));
-                        decimal invoicesAmount = Convert.ToDecimal(oDataTable.GetValue("InvoicesAmount", pVal.Row - 1));
-                        decimal paymentOnAccount = Convert.ToDecimal(oDataTable.GetValue("PaymentOnAccount", pVal.Row - 1));
-
-                        decimal addDPAmount = Convert.ToDecimal(oDataTable.GetValue("AddDownPaymentAmount", pVal.Row - 1));
-
-                        decimal docRateIN = Convert.ToDecimal(oDataTable.GetValue("DocRateIN", pVal.Row - 1));
-
-                        string transactionType = oDataTable.GetValue("TransactionType", pVal.Row - 1);
-                        string cardType = null;
-                        if (transactionType == OperationTypeFromIntBank.TransferFromBP.ToString())
-                        {
-                            cardType = "C";
-                        }
-                        else if (transactionType == OperationTypeFromIntBank.TransferToBP.ToString() || transactionType == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString())
-                        {
-                            cardType = "S";
-                        }
-                        string partnerAccountNumber = oDataTable.GetValue("PartnerAccountNumber", pVal.Row - 1);
-                        string partnerCurrency = oDataTable.GetValue("PartnerCurrency", pVal.Row - 1);
-                        string partnerTaxCode = oDataTable.GetValue("PartnerTaxCode", pVal.Row - 1);
-                        string blnkAgr = oDataTable.GetValue("BlnkAgr", pVal.Row - 1);
-
-                        SAPbobsCOM.Recordset oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, cardType);
-                        if (oRecordSet == null)
-                        {
-                            errorText = BDOSResources.getTranslate("CouldNotFindBusinessPartner") + "! " + BDOSResources.getTranslate("Account") + " \"" + partnerAccountNumber + partnerCurrency + "\"";
-                            if (string.IsNullOrEmpty(partnerTaxCode) == false)
+                            if (!pVal.BeforeAction)
                             {
-                                errorText = errorText + ", " + BDOSResources.getTranslate("Tin") + " \"" + partnerTaxCode + "\"! ";
+                                setVisibleFormItemsExport(oForm, out errorText);
+                                oForm.DataSources.UserDataSources.Item("accountE2").ValueEx = "";
                             }
-                            else errorText = errorText + "! ";
-
-                            Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, true);
-                            return;
                         }
-
-                        string cardCode = oRecordSet.Fields.Item("CardCode").Value;
-                        string cardName = oRecordSet.Fields.Item("CardName").Value;
-                        string BPCurrency = oRecordSet.Fields.Item("Currency").Value;
-
-                        SAPbouiCOM.Form oFormInternetBankingDocuments;
-
-                        BDOSInternetBankingDocuments.automaticPaymentInternetBanking = (oForm.DataSources.UserDataSources.Item("autoPay").ValueEx == "Y");
-                        BDOSInternetBankingDocuments.createForm(oForm, docDate, cardCode, cardName, BPCurrency, amount, currency, downPaymentAmount, invoicesAmount, paymentOnAccount, addDPAmount, docRateIN, out oFormInternetBankingDocuments, out errorText);
-                        BDOSInternetBankingDocuments.fillInvoicesMTR(oFormInternetBankingDocuments, blnkAgr, out errorText);
                     }
-                    if (pVal.ItemUID == "syncDate" && pVal.BeforeAction == false)
+
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
-                        if (SynchronizePayments(oForm))
+                        SAPbouiCOM.IChooseFromListEvent oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
+                        if (pVal.ItemUID == "accountE")
+                        {
+                            chooseFromListImport(oForm, oCFLEvento, pVal, out errorText);
+                        }
+                        else if (pVal.ItemUID == "accountE2" || pVal.ItemUID == "exportMTR" || pVal.ItemUID == "BDOSDefCfE")
+                        {
+                            chooseFromListExport(oForm, oCFLEvento, pVal);
+                        }
+                    }
+
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    {
+                        if (pVal.ItemUID == "fillB" & pVal.BeforeAction == false)
+                        {
+                            fillImportMTR(oForm, out errorText);
+                        }
+                        if ((pVal.ItemUID == "checkB" || pVal.ItemUID == "unCheckB") && pVal.BeforeAction == false)
+                        {
+                            checkUncheckMTRImport(oForm, pVal.ItemUID, out errorText);
+                        }
+                        if (pVal.ItemUID == "getDataB" & pVal.BeforeAction == false)
                         {
                             getData(oForm);
                         }
-                    }
-                }
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
-                {
-                    oForm.Freeze(true);
-
-                    if (pVal.ItemUID == "listView" && pVal.BeforeAction == false)
-                    {
-                        setVisibleFormItemsMatrixColumns(oForm, out errorText);
-                    }
-
-                    if (pVal.ItemUID == "imptTypeCB" && pVal.BeforeAction == false)
-                    {
-                        setVisibleFormItemsImport(oForm, out errorText);
-                    }
-                    comboSelectImport(oForm, pVal, out errorText);
-                    comboSelectExport(oForm, pVal, out errorText);
-                    oForm.Update();
-                    oForm.Freeze(false);
-                }
-                if (pVal.ItemUID == "importMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
-                {
-                    matrixColumnSetLinkedObjectTypeImport(oForm, pVal, out errorText);
-                }
-                if (pVal.ItemUID == "FolderImp" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.BeforeAction == true)
-                {
-                    oForm.PaneLevel = 1;
-                    setVisibleFormItemsImport(oForm, out errorText);
-                }
-                if (pVal.ItemUID == "FolderExp" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
-                {
-                    if (pVal.Before_Action == true)
-                    {
-                        oForm.PaneLevel = 2;
-                    }
-                    else
-                    {
-                        Dictionary<string, string> CompanyInfo = CommonFunctions.getCompanyInfo();
-
-                        if (oForm.Items.Item("TBCOB").Specific.Selected == false && oForm.Items.Item("BOGOB").Specific.Selected == false)
+                        if ((pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2") && pVal.BeforeAction == false)
                         {
-                            if (CompanyInfo["DflBnkCode"] == "TBCBGE22")
-                                oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                            else if (CompanyInfo["DflBnkCode"] == "BAGAGE22")
-                                oForm.Items.Item("BOGOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                            else
-                                oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                            checkUncheckMTRExport(oForm, pVal.ItemUID, out errorText);
+                        }
+                        if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "CheckBox" && pVal.BeforeAction == false)
+                        {
+                            OnCheckImportDocuments(oForm, pVal.Row, pVal.ColUID);
+                        }
+                        if (pVal.ItemUID == "createDocB" && pVal.BeforeAction == false)
+                        {
+                            int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CreatePaymentDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+
+                            if (answer == 1)
+                            {
+                                List<string> infoList = createDocuments(oForm);
+                                for (int i = 0; i < infoList.Count; i++)
+                                {
+                                    if (string.IsNullOrEmpty(infoList[i]) == false)
+                                    {
+                                        Program.uiApp.SetStatusBarMessage(infoList[i], SAPbouiCOM.BoMessageTime.bmt_Short, false);
+                                    }
+                                }
+                            }
+                            return;
+                        }
+                        if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "InDetail" && pVal.BeforeAction == false)
+                        {
+                            SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("exportMTR");
+
+                            if (string.IsNullOrEmpty(oDataTable.GetValue("InDetail", pVal.Row - 1).ToString()))
+                            {
+                                BubbleEvent = false;
+                                return;
+                            }
+
+                            bool selected = oDataTable.GetValue("CheckBox", pVal.Row - 1) == "Y" ? true : false;
+                            if (selected == false)
+                            {
+                                Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("HighlightTheRowsToPerformAnOperation"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                                BubbleEvent = false;
+                                return;
+                            }
+
+                            CurrentRowExportMTRForDetail = pVal.Row;
+                            DateTime docDate = oDataTable.GetValue("DocumentDate", pVal.Row - 1);
+
+                            decimal amount = Convert.ToDecimal(oDataTable.GetValue("Amount", pVal.Row - 1));
+                            string currency = Convert.ToString(oDataTable.GetValue("Currency", pVal.Row - 1));
+                            decimal downPaymentAmount = Convert.ToDecimal(oDataTable.GetValue("DownPaymentAmount", pVal.Row - 1));
+                            decimal invoicesAmount = Convert.ToDecimal(oDataTable.GetValue("InvoicesAmount", pVal.Row - 1));
+                            decimal paymentOnAccount = Convert.ToDecimal(oDataTable.GetValue("PaymentOnAccount", pVal.Row - 1));
+
+                            decimal addDPAmount = Convert.ToDecimal(oDataTable.GetValue("AddDownPaymentAmount", pVal.Row - 1));
+
+                            decimal docRateIN = Convert.ToDecimal(oDataTable.GetValue("DocRateIN", pVal.Row - 1));
+
+                            string transactionType = oDataTable.GetValue("TransactionType", pVal.Row - 1);
+                            string cardType = null;
+                            if (transactionType == OperationTypeFromIntBank.TransferFromBP.ToString())
+                            {
+                                cardType = "C";
+                            }
+                            else if (transactionType == OperationTypeFromIntBank.TransferToBP.ToString() || transactionType == OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString())
+                            {
+                                cardType = "S";
+                            }
+                            string partnerAccountNumber = oDataTable.GetValue("PartnerAccountNumber", pVal.Row - 1);
+                            string partnerCurrency = oDataTable.GetValue("PartnerCurrency", pVal.Row - 1);
+                            string partnerTaxCode = oDataTable.GetValue("PartnerTaxCode", pVal.Row - 1);
+                            string blnkAgr = oDataTable.GetValue("BlnkAgr", pVal.Row - 1);
+
+                            SAPbobsCOM.Recordset oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, cardType);
+                            if (oRecordSet == null)
+                            {
+                                errorText = BDOSResources.getTranslate("CouldNotFindBusinessPartner") + "! " + BDOSResources.getTranslate("Account") + " \"" + partnerAccountNumber + partnerCurrency + "\"";
+                                if (string.IsNullOrEmpty(partnerTaxCode) == false)
+                                {
+                                    errorText = errorText + ", " + BDOSResources.getTranslate("Tin") + " \"" + partnerTaxCode + "\"! ";
+                                }
+                                else errorText = errorText + "! ";
+
+                                Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                                return;
+                            }
+
+                            string cardCode = oRecordSet.Fields.Item("CardCode").Value;
+                            string cardName = oRecordSet.Fields.Item("CardName").Value;
+                            string BPCurrency = oRecordSet.Fields.Item("Currency").Value;
+
+                            SAPbouiCOM.Form oFormInternetBankingDocuments;
+
+                            BDOSInternetBankingDocuments.automaticPaymentInternetBanking = (oForm.DataSources.UserDataSources.Item("autoPay").ValueEx == "Y");
+                            BDOSInternetBankingDocuments.createForm(oForm, docDate, cardCode, cardName, BPCurrency, amount, currency, downPaymentAmount, invoicesAmount, paymentOnAccount, addDPAmount, docRateIN, out oFormInternetBankingDocuments, out errorText);
+                            BDOSInternetBankingDocuments.fillInvoicesMTR(oFormInternetBankingDocuments, blnkAgr, out errorText);
+                        }
+                        if (pVal.ItemUID == "syncDate" && pVal.BeforeAction == false)
+                        {
+                            if (SynchronizePayments(oForm))
+                            {
+                                getData(oForm);
+                            }
                         }
                     }
+
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
+                    {
+                        oForm.Freeze(true);
+
+                        if (pVal.ItemUID == "listView" && pVal.BeforeAction == false)
+                        {
+                            setVisibleFormItemsMatrixColumns(oForm, out errorText);
+                        }
+
+                        if (pVal.ItemUID == "imptTypeCB" && pVal.BeforeAction == false)
+                        {
+                            setVisibleFormItemsImport(oForm, out errorText);
+                        }
+                        comboSelectImport(oForm, pVal);
+                        comboSelectExport(oForm, pVal);
+                        oForm.Update();
+                        oForm.Freeze(false);
+                    }
+
+                    else if (pVal.ItemUID == "importMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
+                    {
+                        matrixColumnSetLinkedObjectTypeImport(oForm, pVal);
+                    }
+
+                    else if (pVal.ItemUID == "exportMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
+                    {
+                        matrixColumnSetLinkedObjectTypeExport(oForm, pVal);
+                    }
+
+                    else if (pVal.ItemUID == "exportMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)
+                    {
+                        if (!pVal.BeforeAction)
+                        {
+                            if (pVal.ColUID == "BlnkAgr")
+                            {
+                                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item(pVal.ItemUID).Specific;
+                                blnkAgrOld = oMatrix.GetCellSpecific(pVal.ColUID, pVal.Row).Value;
+                            }
+                        }
+                    }
+
+                    else if (pVal.ItemUID == "exportMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_LOST_FOCUS)
+                    {
+                        if (!pVal.BeforeAction)
+                        {
+                            if (pVal.ColUID == "BlnkAgr")
+                            {
+                                oForm.Freeze(true);
+                                try
+                                {
+                                    SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item(pVal.ItemUID).Specific;
+                                    string blnkAgr = oMatrix.GetCellSpecific(pVal.ColUID, pVal.Row).Value;
+                                    if (blnkAgr != blnkAgrOld && !string.IsNullOrEmpty(blnkAgrOld) && string.IsNullOrEmpty(blnkAgr))
+                                    {
+                                        int rowIndex = pVal.Row;
+
+                                        SAPbouiCOM.CheckBox oCheckBox = oMatrix.Columns.Item("UseBlaAgRt").Cells.Item(rowIndex).Specific;
+                                        oCheckBox.Checked = false;
+
+                                        setMTRCellEditableSetting(oForm, pVal.ItemUID, rowIndex);
+                                        blnkAgrOld = null;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    blnkAgrOld = null;
+                                    throw new Exception(ex.Message);
+                                }
+                                finally
+                                {
+                                    oForm.Freeze(false);
+                                }
+                            }
+                        }
+                    }
+
                 }
-                if ((pVal.ItemUID == "TBCOB" || pVal.ItemUID == "BOGOB") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.BeforeAction == false)
+                catch (Exception ex)
                 {
-                    setVisibleFormItemsExport(oForm, out errorText);
-                    oForm.DataSources.UserDataSources.Item("accountE2").ValueEx = "";
-                }
-                if (pVal.ItemUID == "exportMTR" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
-                {
-                    matrixColumnSetLinkedObjectTypeExport(oForm, pVal, out errorText);
+                    Program.uiApp.SetStatusBarMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, true);
                 }
             }
         }

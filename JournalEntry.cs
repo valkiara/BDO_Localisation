@@ -270,6 +270,7 @@ namespace BDO_Localisation_AddOn
                 formItems.Add("Height", height);
                 formItems.Add("UID", itemName);
                 formItems.Add("Enabled", false);
+                formItems.Add("AffectsFormMode", false);
 
                 FormsB1.createFormItem(oForm, formItems, out errorText);
                 if (errorText != null)

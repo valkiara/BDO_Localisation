@@ -447,6 +447,21 @@ namespace BDO_Localisation_AddOn
             return waybill_units_map;
         }
 
+        public string get_waybill_unit_name_by_code(string unit_code)
+        {
+            try
+            {
+                string errorText;
+                Dictionary<string, string> RSUnits = get_waybill_units(out errorText);
+                KeyValuePair<string, string> temp = RSUnits.Where(x => x.Key.Equals(unit_code)).FirstOrDefault(); //Contains
+                return temp.Value;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         /// <summary>ტრანსპორტირების ტიპის გამოტანა</summary>
         /// <param name="errorText"></param>
         /// <returns>Dictionary, ან NULL</returns>
@@ -1159,16 +1174,10 @@ namespace BDO_Localisation_AddOn
                     string START_ADDRESS = (itemNode.SelectSingleNode("START_ADDRESS") == null) ? "" : itemNode.SelectSingleNode("START_ADDRESS").InnerText;
                     string END_ADDRESS = (itemNode.SelectSingleNode("END_ADDRESS") == null) ? "" : itemNode.SelectSingleNode("END_ADDRESS").InnerText;
 
-                    if (StartAddress != "" && StartAddress != START_ADDRESS)
-                    {
-                        continue;
-                    }
-
-
-                    if (EndAddress != "" && EndAddress != END_ADDRESS)
-                    {
-                        continue;
-                    }
+                    if (StartAddress == "blank" && START_ADDRESS != "") continue;                    
+                    if (EndAddress == "blank" && END_ADDRESS != "") continue;
+                    if (StartAddress != "" && StartAddress!="blank" && StartAddress != START_ADDRESS) continue;
+                    if (EndAddress != "" && EndAddress!="blank" && EndAddress != END_ADDRESS) continue;
 
                     waybill_map = new Dictionary<string, string>();
 
