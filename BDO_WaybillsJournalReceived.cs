@@ -136,12 +136,12 @@ namespace BDO_Localisation_AddOn
                         bool NotToCreate = false;
                         SAPbouiCOM.ComboBox ComboboxStatus = (SAPbouiCOM.ComboBox)oMatrix.Columns.Item("TYPE").Cells.Item(row).Specific;
                         string TYPE = ComboboxStatus.Value;
-                        if (TYPE == "2") //2
+                        if (TYPE == "Procurement") //2
                             if (oGdsRcpt == "Y")
                                 APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseDeliveryNotes);
                             else
                                 APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
-                        else if (TYPE == "1") //1
+                        else if (TYPE == "Return") //1
                             APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseCreditNotes);
 
                         SAPbouiCOM.EditText Edtfieldtxt = oMatrix.Columns.Item("WBID").Cells.Item(row).Specific;
@@ -174,6 +174,8 @@ namespace BDO_Localisation_AddOn
                         DateTime WBActDate = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBActDate", row - 1);
                         string WBBlankAgr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBBlankAgr", row - 1);
 
+                        string comment= oForm.DataSources.DataTables.Item("WBTable").GetValue("WBCOMMENT", row - 1);
+
 
                         //SAPbobsCOM.CompanyService oCompanyService;
                         //SAPbobsCOM.BlanketAgreementsService oAcuerdoServicio;
@@ -194,8 +196,7 @@ namespace BDO_Localisation_AddOn
                         string queryPr = @"SELECT ""U_BDOSPrjCod"" FROM ""OWHS"" WHERE ""WhsCode"" = '" + whs + "'";
 
                         oRecordSetWH.DoQuery(queryPr);
-
-                        if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null || oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
+                        if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null && oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
                         {
                             APInv.Project = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
                         }
@@ -203,6 +204,7 @@ namespace BDO_Localisation_AddOn
                         if (PrjCode != "")
                         {
                             APInv.Project = PrjCode;
+
                         }
 
 
@@ -226,7 +228,7 @@ namespace BDO_Localisation_AddOn
                         APInv.DocDate = WBActDate;
                         APInv.VatDate = WBActDate;
                         APInv.TaxDate = WBActDate;
-
+                        APInv.Comments = comment;
                         //APInv.DocCurrency = Program.LocalCurrency;
 
                         APInv.UserFields.Fields.Item("U_BDO_WBNo").Value = WBNo;
@@ -234,6 +236,7 @@ namespace BDO_Localisation_AddOn
                         APInv.UserFields.Fields.Item("U_BDO_WBID").Value = WBID;
 
                         APInv.UserFields.Fields.Item("U_actDate").Value = WBActDate;
+
 
                         Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
                         if (errorText != null)
@@ -397,7 +400,7 @@ namespace BDO_Localisation_AddOn
                             {
                                 APInv.Lines.ProjectCode = WBPrjCode;
                             }
-
+                            
                             if (WBBlankAgr != "")
                             {
                                 APInv.Lines.AgreementNo = Convert.ToInt32(WBBlankAgr);
@@ -488,7 +491,7 @@ namespace BDO_Localisation_AddOn
                             string LinkedDocType = "";
                             int LinkedDocEnrty = 0;
 
-                            if (TYPE == "2")//2
+                            if (TYPE == "Procurement")//2
                             {
                                 if (oGdsRcpt == "Y")
                                 {
@@ -504,7 +507,7 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
 
-                            if (TYPE == "1")//1
+                            if (TYPE == "Return")//1
                             {
                                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("Return") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                                 BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
@@ -1658,6 +1661,21 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
+                    formItems = new Dictionary<string, object>();
+                    itemName = "BDOSPrjLB"; //10 characters
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    formItems.Add("Left", left - 20);
+                    formItems.Add("Top", Top);
+                    formItems.Add("Height", 19);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("LinkTo", "PrjCode");
+                    formItems.Add("LinkedObjectType", objectType);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
 
                     //პროექტი
 
@@ -1855,7 +1873,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     formItems = new Dictionary<string, object>();
-                    itemName = "BDOSPrjLB"; //10 characters
+                    itemName = "BDOSWhsLB"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                     formItems.Add("Left", left - 20);
                     formItems.Add("Top", Top);
@@ -2610,8 +2628,10 @@ namespace BDO_Localisation_AddOn
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string PrjCode = oDataTableSelectedObjects.GetValue("PrjCode", 0);
-
                         LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("PrjCode").Specific.Value = PrjCode);
+                        oForm.Items.Item("Whs").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                        oForm.Items.Item("PrjCode").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+
                     }
 
                     else if (oCFLEvento.ChooseFromListUID == "WBBlankAgr_CFLA")
