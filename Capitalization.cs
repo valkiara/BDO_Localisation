@@ -249,7 +249,7 @@ namespace BDO_Localisation_AddOn
             for (int Row = 1; Row <= oMatrix.RowCount; Row++)
             {
                 string ItemCode = oMatrix.GetCellSpecific("1470000003", Row).Value.ToString();
-                if(ItemCode=="")
+                if (ItemCode == "")
                 {
                     continue;
                 }
@@ -264,7 +264,7 @@ namespace BDO_Localisation_AddOn
 	                         Sum(""Debit"") as ""Debit"",
 	                         Sum(""Credit"") as ""Credit"" 
 	                        from ""JDT1"" 
-                        inner join ""OOCR"" on ""JDT1"".""" + ProfitCode+ @""" = ""OOCR"".""OcrCode""
+                        inner join ""OOCR"" on ""JDT1"".""" + ProfitCode + @""" = ""OOCR"".""OcrCode""
                         inner join ""OPRC"" on ""OPRC"".""PrcCode"" = ""OOCR"".""OcrCode"" and ""OPRC"".""U_BDOSFACode"" = '" + ItemCode + @"'
                             Where ""JDT1"".""TaxDate"" <= '" + DateStr + @"' and (""Account""='" + AcqAccount + @"' 
 		                        or ""ContraAct""='" + AcqAccount + @"')) as ""OJDT""";
@@ -275,19 +275,15 @@ namespace BDO_Localisation_AddOn
                 }
                 oRecordSet.DoQuery(Query);
                 if (!oRecordSet.EoF)
-                 {
+                {
                     decimal Balance = Convert.ToDecimal(oRecordSet.Fields.Item("Balance").Value, CultureInfo.InvariantCulture);
-                    if(Balance>0)
-                    { 
-                    oMatrix.GetCellSpecific("1470000009", Row).String = FormsB1.ConvertDecimalToStringForEditboxStrings(Balance);
+                    if (Balance > 0)
+                    {
+                        oMatrix.GetCellSpecific("1470000009", Row).String = FormsB1.ConvertDecimalToStringForEditboxStrings(Balance);
                     }
                     oMatrix.GetCellSpecific("U_BDOSDimCode", Row).String = FixedAsset.getFADimension(ItemCode);
-
-
-                 }
-
+                }
             }
-
         }
 
  public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, int RowIndex, bool beforeAction, out string errorText)

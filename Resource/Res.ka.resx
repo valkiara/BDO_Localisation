@@ -3319,4 +3319,13 @@
   <data name="OnlyBlank" xml:space="preserve">
     <value>მხოლოდ ცარიელი</value>
   </data>
+  <data name="BPBankAccount" xml:space="preserve">
+    <value>ბპ. ბანკის ანგარიში</value>
+  </data>
+  <data name="WTCode" xml:space="preserve">
+    <value>საშემოსავლოს კოდი</value>
+  </data>
+  <data name="TheTableCanNotBeEmpty" xml:space="preserve">
+    <value>ცხრილი არ შეიძლება იყოს ცარიელი</value>
+  </data>
 </root>

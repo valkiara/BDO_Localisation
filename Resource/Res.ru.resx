@@ -1934,7 +1934,7 @@
     <value>Bank program is not filled</value>
   </data>
   <data name="DocRate" xml:space="preserve">
-    <value>Doc Rate</value>
+    <value>Doc. Rate</value>
   </data>
   <data name="GetTheToken" xml:space="preserve">
     <value>Get the token</value>
@@ -2354,7 +2354,7 @@
     <value>Total Payment</value>
   </data>
   <data name="DocumentRemarks" xml:space="preserve">
-    <value>Doc. Remarks</value>
+    <value>Doc. Remark</value>
   </data>
   <data name="InDetail" xml:space="preserve">
     <value>In Detail</value>
@@ -2492,19 +2492,19 @@
     <value>WTax Amount</value>
   </data>
   <data name="BankAcc" xml:space="preserve">
-    <value>Bank account</value>
+    <value>Bank Account</value>
   </data>
   <data name="ChrgDtls" xml:space="preserve">
     <value>Charge Details</value>
   </data>
   <data name="ControlAccount" xml:space="preserve">
-    <value>Control account</value>
+    <value>Control Account</value>
   </data>
   <data name="DispType" xml:space="preserve">
     <value>Dispatche type</value>
   </data>
   <data name="DocumentPostingDate" xml:space="preserve">
-    <value>Doc Posting Date</value>
+    <value>Doc. Posting Date</value>
   </data>
   <data name="OutgoingPaymentWizard" xml:space="preserve">
     <value>Outgoing payment wizard</value>
@@ -2990,7 +2990,7 @@
     <value>Fuel Group</value>
   </data>
   <data name="FuelType" xml:space="preserve">
-    <value>Fuel Type</value>
+    <value>Consumption Type</value>
   </data>
   <data name="Canceled" xml:space="preserve">
     <value>Canceled</value>
@@ -3179,7 +3179,7 @@
     <value>Warehouse Type (From)</value>
   </data>
   <data name="FuelTypes" xml:space="preserve">
-    <value>Fuel Types</value>
+    <value>Consumption Types</value>
   </data>
   <data name="FuelCode" xml:space="preserve">
     <value>Fuel Code</value>
@@ -3316,7 +3316,13 @@
   <data name="OnlyBlank" xml:space="preserve">
     <value>Only Blank</value>
   </data>
-  <data name="invNumS" xml:space="preserve">
-    <value>Invoice Number</value>
+  <data name="BPBankAccount" xml:space="preserve">
+    <value>BP Bank Account</value>
+  </data>
+  <data name="WTCode" xml:space="preserve">
+    <value>WTax Code</value>
+  </data>
+  <data name="TheTableCanNotBeEmpty" xml:space="preserve">
+    <value>The table can not be empty</value>
   </data>
 </root>
