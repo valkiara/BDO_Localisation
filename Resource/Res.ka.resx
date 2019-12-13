@@ -3328,4 +3328,28 @@
   <data name="TheTableCanNotBeEmpty" xml:space="preserve">
     <value>ცხრილი არ შეიძლება იყოს ცარიელი</value>
   </data>
+  <data name="CreditLineMasterData" xml:space="preserve">
+    <value>საკრედიტო ხაზის ცნობარი</value>
+  </data>
+  <data name="CreditLineAccount" xml:space="preserve">
+    <value>სასესხო ვალდებულების ანგარიში</value>
+  </data>
+  <data name="CreditLineCode" xml:space="preserve">
+    <value>საკრედიტო ხაზის კოდი</value>
+  </data>
+  <data name="InterestPayableAccount" xml:space="preserve">
+    <value>საპროცენტო ვალდებულების ანგარიში</value>
+  </data>
+  <data name="InterestRate" xml:space="preserve">
+    <value>საპროცენტო განაკვეთი</value>
+  </data>
+  <data name="StartingDate" xml:space="preserve">
+    <value>დაწყების თარიღი</value>
+  </data>
+  <data name="Bank" xml:space="preserve">
+    <value>ბანკი</value>
+  </data>
+  <data name="InterestAccrualDocument" xml:space="preserve">
+    <value>პროცენტის დარიცხვის დოკუმენტი</value>
+  </data>
 </root>

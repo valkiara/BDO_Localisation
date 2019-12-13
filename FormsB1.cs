@@ -147,6 +147,8 @@ namespace BDO_Localisation_AddOn
             BDOSDepreciationAccrualDocument.addMenus();
 
             BDOSFuelTransferWizard.addMenus();
+
+            BDOSCreditLine.addMenus();
         }
 
         public static int getLongIntRGB(int R, int G, int B)

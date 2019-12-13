@@ -3325,4 +3325,28 @@
   <data name="TheTableCanNotBeEmpty" xml:space="preserve">
     <value>The table can not be empty</value>
   </data>
+  <data name="CreditLineMasterData" xml:space="preserve">
+    <value>Credit Line Master Data</value>
+  </data>
+  <data name="CreditLineAccount" xml:space="preserve">
+    <value>Credit Line Account</value>
+  </data>
+  <data name="CreditLineCode" xml:space="preserve">
+    <value>Credit Line Code</value>
+  </data>
+  <data name="InterestPayableAccount" xml:space="preserve">
+    <value>Interest Payable Account</value>
+  </data>
+  <data name="InterestRate" xml:space="preserve">
+    <value>Interest Rate</value>
+  </data>
+  <data name="StartingDate" xml:space="preserve">
+    <value>Starting Date</value>
+  </data>
+  <data name="Bank" xml:space="preserve">
+    <value>Bank</value>
+  </data>
+  <data name="InterestAccrualDocument" xml:space="preserve">
+    <value>Interest Accrual Document</value>
+  </data>
 </root>

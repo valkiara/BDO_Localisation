@@ -116,6 +116,12 @@ namespace BDO_Localisation_AddOn
                 BDOSDepreciationAccrualDocument.registerUDO(out errorText);
             }
 
+            BDOSCreditLine.createMasterDataUDO(out errorText);
+            if (!oUserObjectsMD.GetByKey("UDO_F_BDOSCRLN_D"))
+            {
+                BDOSCreditLine.registerUDO();
+            }
+
             //Persona Tables
             BDOSApprovalProcedures.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDOSAPRP_D") == false)

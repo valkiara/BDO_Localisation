@@ -848,6 +848,20 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
+            //----------------------------->Credit Line Master Data<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSCRLN_D")
+                {
+                    errorText = null;
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSCRLN_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
             //----------------------------->Cancel<-----------------------------
             if (pVal.MenuUID == "1284")
             {
@@ -1575,6 +1589,12 @@ namespace BDO_Localisation_AddOn
                 {
                     LandedCostsSetup.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
+
+                //----------------------------->Credit Line Master Data<----------------------------
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSCRLN_D")
+                {
+                    BDOSCreditLine.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
             }
             catch (Exception ex)
             {
@@ -2272,6 +2292,16 @@ namespace BDO_Localisation_AddOn
 
                         if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                             selectItemsToCopyOkClick = true;
+                    }
+                }
+
+                //----------------------------->Credit Line Master Data<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_F_BDOSCRLN_D")
+                {
+                    BDOSCreditLine.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    {
+                        removeRecordRow = 1;
                     }
                 }
             }
