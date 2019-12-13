@@ -71,9 +71,9 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            //წვის ტიპი
+            //Credit Line Master Data
             fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "FuTpCode");
+            fieldskeysMap.Add("Name", "CRLNCode");
             fieldskeysMap.Add("TableName", "BDOSINA1");
             fieldskeysMap.Add("Description", "Fuel Type Code");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
