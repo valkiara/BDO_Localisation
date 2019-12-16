@@ -690,7 +690,7 @@ namespace BDO_Localisation_AddOn
                              ""OITM"".""U_BDOSUsLife"" as ""UseLife"",
 	                         ""OBVL"".""DistNumber"",
                              ""OBTN"".""InDate"",
-	                         ""OBTN"".""CostTotal"" / ""OBTN"".""Quantity"" as ""APCost"",
+	                         round(""OBTN"".""CostTotal"" / ""OBTN"".""Quantity"",2) as ""APCost"",
                              
 	                         ""OBTN"".""CostTotal""/""OBTN"".""Quantity"" * ""OBVL"".""Quantity""*case when ""OBVL"".""TransValue"">0 then 1 else -1 end as ""NtBookVal"",
 	                         ""OBVL"".""Quantity""*case when ""OBVL"".""TransValue"">0 then 1 else -1 end  as ""Quantity"" 
@@ -905,7 +905,7 @@ namespace BDO_Localisation_AddOn
                     continue;
                 }
 
-                decimal CurrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture);
+                decimal CurrDeprAmt = Math.Round(Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture),2);
                 int monthsApart = 12 * (InDateEnd.Year - DeprMonth.Year) + (InDateEnd.Month - DeprMonth.Month) + 1;
 
                 monthsApart = Math.Abs(monthsApart);
@@ -916,7 +916,7 @@ namespace BDO_Localisation_AddOn
                 //AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Quantity;
 
                 
-                AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("AlrDeprAmt").Value) * Quantity;
+                AlrDeprAmt = Math.Round(Convert.ToDecimal(oRecordSet.Fields.Item("AlrDeprAmt").Value) * Quantity, 2);
 
                 AlrDeprAmt -= CurrDeprAmt;
 
@@ -987,7 +987,7 @@ namespace BDO_Localisation_AddOn
 
             try
             {
-                fatherMenuItem = Program.uiApp.Menus.Item("1536");
+                fatherMenuItem = Program.uiApp.Menus.Item("9201");
 
                 // Add a pop-up menu item
                 oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
