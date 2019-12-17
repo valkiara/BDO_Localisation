@@ -25,7 +25,7 @@ namespace BDO_Localisation_AddOn
         public static int USERID;
         public static bool FORM_LOAD_FOR_VISIBLE = false;
         public static bool FORM_LOAD_FOR_ACTIVATE = false;
-        public static bool cancellationDoc = false;
+        //public static bool cancellationDoc = false;
         public static bool cancellationTrans = false;
         public static int canceledDocEntry = 0;
         public static int removeRecordRow = 0;
@@ -947,10 +947,10 @@ namespace BDO_Localisation_AddOn
                 }
                 else if (pVal.BeforeAction == false)
                 {
-                    if (cancellationTrans == false)
-                    {
-                        cancellationDoc = true;
-                    }
+                    //if (cancellationTrans == false)
+                    //{
+                    //    cancellationDoc = true;
+                    //}
                     cancellationTrans = false;
                 }
             }
