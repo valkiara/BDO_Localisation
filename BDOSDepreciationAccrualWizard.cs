@@ -690,7 +690,7 @@ namespace BDO_Localisation_AddOn
                              ""OITM"".""U_BDOSUsLife"" as ""UseLife"",
 	                         ""OBVL"".""DistNumber"",
                              ""OBTN"".""InDate"",
-	                         round(""OBTN"".""CostTotal"" / ""OBTN"".""Quantity"",2) as ""APCost"",
+	                         ""OBTN"".""CostTotal"" / ""OBTN"".""Quantity"" as ""APCost"",
                              
 	                         ""OBTN"".""CostTotal""/""OBTN"".""Quantity"" * ""OBVL"".""Quantity""*case when ""OBVL"".""TransValue"">0 then 1 else -1 end as ""NtBookVal"",
 	                         ""OBVL"".""Quantity""*case when ""OBVL"".""TransValue"">0 then 1 else -1 end  as ""Quantity"" 
@@ -891,6 +891,10 @@ namespace BDO_Localisation_AddOn
                 DateTime InDateStart = oRecordSet.Fields.Item("InDate").Value;
                 DateTime InDateEnd = InDateStart.AddMonths(oRecordSet.Fields.Item("UseLife").Value);
 
+                InDateEnd = new DateTime(InDateEnd.Year, InDateEnd.Month, 1);
+
+                InDateEnd = InDateEnd.AddMonths(1).AddDays(-1);
+
                 DateTime AccrMnth = InDateStart;
 
                 AccrMnth = new DateTime(AccrMnth.Year, AccrMnth.Month, 1);
@@ -905,7 +909,7 @@ namespace BDO_Localisation_AddOn
                     continue;
                 }
 
-                decimal CurrDeprAmt = Math.Round(Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture), 2);
+                decimal CurrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture);
                 int monthsApart = 12 * (InDateEnd.Year - DeprMonth.Year) + (InDateEnd.Month - DeprMonth.Month) + 1;
 
                 monthsApart = Math.Abs(monthsApart);
@@ -916,7 +920,7 @@ namespace BDO_Localisation_AddOn
                 //AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("DeprAmt").Value)  * Quantity;
 
 
-                AlrDeprAmt = Math.Round(Convert.ToDecimal(oRecordSet.Fields.Item("AlrDeprAmt").Value) * Quantity, 2);
+                AlrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("AlrDeprAmt").Value) * Quantity;
 
                 AlrDeprAmt -= CurrDeprAmt;
 
@@ -939,7 +943,14 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue("APCost", rowIndex, oRecordSet.Fields.Item("APCost").Value * Convert.ToDouble(Quantity));
                 oDataTable.SetValue("AlrDeprAmt", rowIndex, Convert.ToDouble(AlrDeprAmt));
                 oDataTable.SetValue("NtBookVal", rowIndex, Convert.ToDouble(NtBookVal));
-                oDataTable.SetValue("DeprAmt", rowIndex, Convert.ToDouble(DeprAmt));
+                if(CurrDeprAmt > 0)
+                {
+                    oDataTable.SetValue("DeprAmt", rowIndex, 0);
+                }
+                else
+                {
+                    oDataTable.SetValue("DeprAmt", rowIndex, Convert.ToDouble(DeprAmt));
+                }
                 oDataTable.SetValue("CurMnthAmt", rowIndex, Convert.ToDouble(CurrDeprAmt));
                 if (isInvoice)
                 {
