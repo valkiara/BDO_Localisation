@@ -1237,8 +1237,9 @@ namespace BDO_Localisation_AddOn
             {
                 oPayment.BlanketAgreement = Convert.ToInt32(blnktAgr);
                 oPayment.UserFields.Fields.Item("U_UseBlaAgRt").Value = useBlaAgRt;
+                string docCur;
                 if (useBlaAgRt == "Y")
-                    docRateByBlnktAgr = Convert.ToDecimal(BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnktAgr), docDate), NumberFormatInfo.InvariantInfo);
+                    docRateByBlnktAgr = Convert.ToDecimal(BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnktAgr), out docCur, docDate), NumberFormatInfo.InvariantInfo);
             }
 
             if (invCurrency == localCurrency)
@@ -2738,9 +2739,9 @@ namespace BDO_Localisation_AddOn
                         string useBlaAgRt = oDataTable.GetValue("UseBlaAgRt", i - 1);
                         string blnktAgr = oDataTable.GetValue("BlnktAgr", i - 1);
                         decimal rateByBlnktAgr = 0;
-
+                        string docCur;
                         if (useBlaAgRt == "Y")
-                            rateByBlnktAgr = BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnktAgr), date);
+                            rateByBlnktAgr = BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnktAgr), out docCur, date);
 
                         decimal rate = useBlaAgRt == "Y" ? rateByBlnktAgr : Convert.ToDecimal(oSBOBob.GetCurrencyRate(currency, date).Fields.Item("CurrencyRate").Value, CultureInfo.InvariantCulture);
 
