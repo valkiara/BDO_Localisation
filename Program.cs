@@ -2006,6 +2006,16 @@ namespace BDO_Localisation_AddOn
                     BDO_Waybills.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
+                //----------------------------->Warehouse Addresses<-----------------------------
+                else if (pVal.FormTypeEx == "11163")
+                {
+                    BDOSWarehouseAddresses.UiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    {
+                        removeRecordRow = 1;
+                    }
+                }
+
                 //----------------------------->A/P Invoice<-----------------------------
                 else if (pVal.FormTypeEx == "141") // || pVal.FormTypeEx == "60504"
                 {

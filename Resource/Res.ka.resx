@@ -211,7 +211,7 @@
     <value>ბპ. სახელი</value>
   </data>
   <data name="BPNotFound" xml:space="preserve">
-    <value>ბიზნესპარტნიორი არ მოიძებნა!</value>
+    <value>ბიზნეს პარტნიორი არ მოიძებნა!</value>
   </data>
   <data name="BPTin" xml:space="preserve">
     <value>ბპ. გსნ</value>
@@ -1609,7 +1609,7 @@
     <value>ვერ მიენიჭა სტატუსი</value>
   </data>
   <data name="CardCode" xml:space="preserve">
-    <value>ბიზნესპარტნიორი</value>
+    <value>ბიზნეს პარტნიორი</value>
   </data>
   <data name="Comments" xml:space="preserve">
     <value>კომენტარი</value>
@@ -3327,5 +3327,8 @@
   </data>
   <data name="TheTableCanNotBeEmpty" xml:space="preserve">
     <value>ცხრილი არ შეიძლება იყოს ცარიელი</value>
+  </data>
+  <data name="WarehouseAddresses" xml:space="preserve">
+    <value>საწყობის მისამართები</value>
   </data>
 </root>
