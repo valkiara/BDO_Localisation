@@ -184,7 +184,7 @@ namespace BDO_Localisation_AddOn
             queryWhsAddress.Append("select max(\"Code\") as \"Code\" \n");
             queryWhsAddress.Append("from \"@BDOSWRHADR\"");
             oRecordSetWhsAddress.DoQuery(queryWhsAddress.ToString());
-            int code = oRecordSetWhsAddress.Fields.Item("Code").Value+1;
+            int code = oRecordSetWhsAddress.Fields.Item("Code").Value + 1;
 
             try
             {
