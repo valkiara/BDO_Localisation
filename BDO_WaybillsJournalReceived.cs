@@ -173,9 +173,16 @@ namespace BDO_Localisation_AddOn
                         //Edtfieldtxt = oMatrix.Columns.Item("WBActDate").Cells.Item(row).Specific;
                         DateTime WBActDate = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBActDate", row - 1);
                         string WBBlankAgr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBBlankAgr", row - 1);
+                        string comment = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBCOMMENT", row - 1);
+                        string wBWhs = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBWhs", row - 1);
+                        string wBEndAdr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBEndAdd", row - 1);
 
-                        string comment= oForm.DataSources.DataTables.Item("WBTable").GetValue("WBCOMMENT", row - 1);
+                        if (!string.IsNullOrEmpty(wBWhs))
+                        {
+                            whs = wBWhs;
+                        }
 
+                        BDOSWarehouseAddresses.AddWhsByAddress(wBEndAdr, whs);
 
                         //SAPbobsCOM.CompanyService oCompanyService;
                         //SAPbobsCOM.BlanketAgreementsService oAcuerdoServicio;
@@ -196,7 +203,7 @@ namespace BDO_Localisation_AddOn
                         string queryPr = @"SELECT ""U_BDOSPrjCod"" FROM ""OWHS"" WHERE ""WhsCode"" = '" + whs + "'";
 
                         oRecordSetWH.DoQuery(queryPr);
-                        if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null && oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
+                        if (!string.IsNullOrEmpty(oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value))
                         {
                             APInv.Project = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
                         }
@@ -380,7 +387,7 @@ namespace BDO_Localisation_AddOn
 
                             APInv.Lines.WarehouseCode = whs;
 
-                            if (oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != null || oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value != "")
+                            if (!string.IsNullOrEmpty(oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value))
                             {
                                 APInv.Lines.ProjectCode = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
                             }
@@ -400,7 +407,7 @@ namespace BDO_Localisation_AddOn
                             {
                                 APInv.Lines.ProjectCode = WBPrjCode;
                             }
-                            
+
                             if (WBBlankAgr != "")
                             {
                                 APInv.Lines.AgreementNo = Convert.ToInt32(WBBlankAgr);
@@ -644,6 +651,16 @@ namespace BDO_Localisation_AddOn
                     oDataTable.SetValue(13, rowIndex, LinkedDocEntryMemo.ToString());
                 }
                 oDataTable.SetValue(16, rowIndex, WBCOM);
+
+                if (!string.IsNullOrEmpty(WBEndAdd))
+                {
+                    string whsCode = BDOSWarehouseAddresses.GetWhsByAddress(WBEndAdd);
+                    if (!string.IsNullOrEmpty(whsCode))
+                    {
+                        oDataTable.SetValue(17, rowIndex, whsCode);
+                    }
+                }
+
 
                 rowCounter++;
                 rowIndex++;
@@ -2100,6 +2117,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("TYPE", SAPbouiCOM.BoFieldsType.ft_Text, 20); //14
                     oDataTable.Columns.Add("WBBlankAgr", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //15
                     oDataTable.Columns.Add("WBCOMMENT", SAPbouiCOM.BoFieldsType.ft_Text, 20); //16
+                    oDataTable.Columns.Add("WBWhs", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //17
 
                     int rowCounter = 1;
                     int rowIndex = 0;
@@ -2152,6 +2170,14 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue(14, rowIndex, TYPE);
                         oDataTable.SetValue(16, rowIndex, WBCOM);
 
+                        if (!string.IsNullOrEmpty(WBEndAdd))
+                        {
+                            string whsCode = BDOSWarehouseAddresses.GetWhsByAddress(WBEndAdd);
+                            if (!string.IsNullOrEmpty(whsCode))
+                            {
+                                oDataTable.SetValue(17, rowIndex, whsCode);
+                            }
+                        }
                         string LinkedDocType = "";
 
                         int LinkedDocEntryInvoice = 0;
@@ -2338,6 +2364,21 @@ namespace BDO_Localisation_AddOn
                     oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
                     oColumn.DisplayDesc = true;
 
+                    //WBWhs
+                    FormsB1.addChooseFromList(oForm, false, "64", "WBWarehouseCFL");
+                    oColumn = oColumns.Add("WBWhs", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("Warehouse");
+                    oColumn.Width = 50;
+                    oColumn.Editable = true;
+                    oColumn.DataBind.Bind("WBTable", "WBWhs");
+
+                    oLink = oColumn.ExtendedObject;
+                    oLink.LinkedObjectType = "64"; //SAPbouiCOM.BoLinkedObject.
+
+                    oColumn.ChooseFromListUID = "WBWarehouseCFL";
+                    oColumn.ChooseFromListAlias = "WhsCode";
+
+                    //-----------
                     oMatrix.Clear();
                     oMatrix.LoadFromDataSource();
                     oMatrix.AutoResizeColumns();
@@ -2708,6 +2749,15 @@ namespace BDO_Localisation_AddOn
                                 wbTempLines.Add(oMatrix.GetCellSpecific("WBNo", 1).Value, array_GOODS);
                             }
                         }
+                    }
+
+                    else if (oCFLEvento.ChooseFromListUID == "WBWarehouseCFL")
+                    {
+                        SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
+                        string WBWhsCode = oDataTableSelectedObjects.GetValue("WhsCode", 0);
+
+                        SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBMatrix").Specific));
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBWhs").Cells.Item(oCFLEvento.Row).Specific.Value = WBWhsCode);
                     }
 
                     //else if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
@@ -3746,7 +3796,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    if (!pVal.BeforeAction && (pVal.ItemUID == "Whs" || pVal.ItemUID == "PrjCode") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                    if (!pVal.BeforeAction && (pVal.ItemUID == "Whs" || pVal.ItemUID == "PrjCode" || (pVal.ItemUID == "WBMatrix" && (pVal.ColUID == "WBBlankAgr" || pVal.ColUID == "WBWhs"))) && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
