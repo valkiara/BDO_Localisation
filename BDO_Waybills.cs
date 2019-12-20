@@ -6556,6 +6556,7 @@ namespace BDO_Localisation_AddOn
                 DateTime BEGIN_DATE = DateTime.TryParse(array_HEADER[25], out BEGIN_DATE) == false ? DateTime.MinValue : BEGIN_DATE;
                 DateTime ACTIVATE_DATE = DateTime.TryParse(array_HEADER[17], out ACTIVATE_DATE) == false ? DateTime.MinValue : ACTIVATE_DATE;
 
+
                 QUANTITY = Convert.ToDouble(array_HEADER[44], CultureInfo.InvariantCulture);
                 AMOUNT = Convert.ToDouble(array_HEADER[45], CultureInfo.InvariantCulture);
 
@@ -6565,6 +6566,8 @@ namespace BDO_Localisation_AddOn
                 oGeneralData.SetProperty("U_begDate", BEGIN_DATE); //BEGIN_DATE
                 //oGeneralData.SetProperty("", array_HEADER[30]); //IS_CONFIRMED
                 oGeneralData.SetProperty("U_actDate", ACTIVATE_DATE); //ACTIVATE_DATE
+                oGeneralData.SetProperty("U_endAddrs", array_HEADER[7]); //end add
+                oGeneralData.SetProperty("U_strAddrs", array_HEADER[6]); //start add
 
                 //თუ ტრანსპორტირებითაა
                 if (oGeneralData.GetProperty("U_type") == "0")
