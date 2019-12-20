@@ -204,6 +204,8 @@ namespace BDO_Localisation_AddOn
                         queryWhsAddress.Append("UPDATE \"@BDOSWRHADR\" \n");
                         queryWhsAddress.Append("SET \"U_WhsCode\" = '" + whsCode + "' \n");
                         queryWhsAddress.Append("WHERE \"U_EndAddress\" = '" + address + "'");
+
+                        oRecordSetWhsAddress.DoQuery(queryWhsAddress.ToString());
                     }
                 }
             }
