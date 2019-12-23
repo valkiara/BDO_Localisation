@@ -29,6 +29,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Currency Code");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 3);
+            fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -38,6 +39,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Bank Code");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 30);
+            fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -47,6 +49,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Credit Line Account Code");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 15);
+            fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -56,6 +59,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Interest Rate");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Percentage);
+            fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -64,6 +68,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("TableName", "BDOSCRLN");
             fieldskeysMap.Add("Description", "Starting Date");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
+            fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -73,6 +78,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Expense Account Code");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 15);
+            fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -82,6 +88,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Interest Payable Account Code");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 15);
+            fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -96,7 +103,7 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.UserObjectMD_EnhancedFormColumns oUDOEnhancedForm = null;
             oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
             Marshal.ReleaseComObject(oUserObjectMD);
-            oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD) as SAPbobsCOM.UserObjectsMD;
+            oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
             oUDOFind = oUserObjectMD.FindColumns;
             oUDOForm = oUserObjectMD.FormColumns;
             oUDOEnhancedForm = oUserObjectMD.EnhancedFormColumns;
@@ -111,7 +118,7 @@ namespace BDO_Localisation_AddOn
                 oUserObjectMD.ObjectType = SAPbobsCOM.BoUDOObjType.boud_MasterData;
                 oUserObjectMD.CanFind = SAPbobsCOM.BoYesNoEnum.tYES;
                 oUserObjectMD.CanDelete = SAPbobsCOM.BoYesNoEnum.tYES;
-                oUserObjectMD.CanCancel = SAPbobsCOM.BoYesNoEnum.tYES;
+                oUserObjectMD.CanCancel = SAPbobsCOM.BoYesNoEnum.tNO;
                 oUserObjectMD.CanClose = SAPbobsCOM.BoYesNoEnum.tNO;
                 oUserObjectMD.CanYearTransfer = SAPbobsCOM.BoYesNoEnum.tNO;
                 oUserObjectMD.CanLog = SAPbobsCOM.BoYesNoEnum.tNO;
@@ -168,12 +175,9 @@ namespace BDO_Localisation_AddOn
                     oUDOEnhancedForm.Add();
                 }
 
-                if (!retval)
+                if (oUserObjectMD.Add() != 0)
                 {
-                    if (oUserObjectMD.Add() != 0)
-                    {
-                        Program.uiApp.MessageBox(Program.oCompany.GetLastErrorDescription());
-                    }
+                    Program.uiApp.MessageBox(Program.oCompany.GetLastErrorDescription());
                 }
             }
             Marshal.ReleaseComObject(oUserObjectMD);
@@ -245,18 +249,17 @@ namespace BDO_Localisation_AddOn
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
-            //if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_DELETE)
-            //{
-            //    if (BusinessObjectInfo.BeforeAction)
-            //    {
-            //        if (checkRemoving(oForm))
-            //        {
-            //            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("RecordIsUsedInDocuments"));
-            //            Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-            //            BubbleEvent = false;
-            //        }
-            //    }
-            //}
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_DELETE)
+            {
+                if (BusinessObjectInfo.BeforeAction)
+                {
+                    if (checkRemoving(oForm))
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("RecordIsUsedInDocuments"));
+                        BubbleEvent = false;
+                    }
+                }
+            }
         }
 
         public static void changeFormItems(SAPbouiCOM.Form oForm)
@@ -266,7 +269,7 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Columns oColumns = oMatrix.Columns;
 
             SAPbouiCOM.Column oColumn = oColumns.Item("Code");
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Code");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("CreditLine");
 
             oColumn = oColumns.Item("Name");
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("CreditLineCode");
@@ -403,15 +406,51 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        //public static bool checkRemoving(SAPbouiCOM.Form oForm)
-        //{
-        //    SAPbouiCOM.DBDataSource DocDBSourceTAXP = oForm.DataSources.DBDataSources.Item(0);
-        //    string code = DocDBSourceTAXP.GetValue("Code", 0).Trim();
+        public static bool checkRemoving(SAPbouiCOM.Form oForm)
+        {
+            SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSCRLN");
+            string code = oDBDataSource.GetValue("Code", 0).Trim();
 
-        //    Dictionary<string, string> listTables = new Dictionary<string, string>();
-        //    listTables.Add("@BDOSFUN1", "U_CrtrCode");
+            Dictionary<string, string> listTables = new Dictionary<string, string>();
+            listTables.Add("@BDOSINA1", "U_CrLnCode");
 
-        //    return CommonFunctions.codeIsUsed(listTables, code);
-        //}
+            return CommonFunctions.codeIsUsed(listTables, code);
+        }
+
+        public static SAPbobsCOM.Recordset getInfo(string code)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            try
+            {
+                if (string.IsNullOrEmpty(code))
+                    return null;
+                string query = @"SELECT
+	               ""Code"",
+                   ""Name"",
+                   ""U_BankCode"",
+	               ""U_CurrCode"",
+                   ""U_CrLnAcct"",
+	               ""U_IntrstRate"",
+                   ""U_StartDate"",
+	               ""U_ExpnsAcct"",
+	               ""U_IntPblAcct""
+                FROM ""@BDOSCRLN""
+                WHERE ""Code"" = '" + code + "'";
+
+                oRecordSet.DoQuery(query);
+
+                if (!oRecordSet.EoF)
+                {
+                    return oRecordSet;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Marshal.ReleaseComObject(oRecordSet);
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

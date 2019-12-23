@@ -3352,4 +3352,40 @@
   <data name="InterestAccrualDocument" xml:space="preserve">
     <value>პროცენტის დარიცხვის დოკუმენტი</value>
   </data>
+  <data name="CreditLineBalanceFC" xml:space="preserve">
+    <value>სესხის ნაშთი (უცხ. ვალუტა)</value>
+  </data>
+  <data name="CreditLineBalanceLC" xml:space="preserve">
+    <value>სესხის ნაშთი (ეროვნ. ვალუტა)</value>
+  </data>
+  <data name="InterestAmountFC" xml:space="preserve">
+    <value>პროცენტის თანხა (უცხ. ვალუტა)</value>
+  </data>
+  <data name="InterestAmountLC" xml:space="preserve">
+    <value>პროცენტის თანხა (ეროვნ. ვალუტა)</value>
+  </data>
+  <data name="ExchangeRate" xml:space="preserve">
+    <value>კურსი</value>
+  </data>
+  <data name="BeforeChoosingCreditLineCodeFillBankFirst" xml:space="preserve">
+    <value>საკრედიტო ხაზის არჩევამდე შეავსეთ ბანკის ველი</value>
+  </data>
+  <data name="InterestAccrualWizard" xml:space="preserve">
+    <value>სესხის პროცენტის დარიცხვის დამხმარე</value>
+  </data>
+  <data name="CloseInterestAccrualWizard" xml:space="preserve">
+    <value>დაიხუროს სესხის პროცენტის დარიცხვის დამხმარე</value>
+  </data>
+  <data name="CreateInterestAccrualDocument" xml:space="preserve">
+    <value>შეიქმნას პროცენტის დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="CreditLine" xml:space="preserve">
+    <value>საკრედიტო ხაზი</value>
+  </data>
+  <data name="AccrualDateStart" xml:space="preserve">
+    <value>დარიცხვის თარიღი (საწყისი)</value>
+  </data>
+  <data name="QuantityOfAccrualDays" xml:space="preserve">
+    <value>დარიცხვის დღეების რაოდენობა</value>
+  </data>
 </root>

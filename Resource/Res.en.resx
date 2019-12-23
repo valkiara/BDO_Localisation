@@ -3379,4 +3379,40 @@
   <data name="InterestAccrualDocument" xml:space="preserve">
     <value>Interest Accrual Document</value>
   </data>
+  <data name="CreditLineBalanceFC" xml:space="preserve">
+    <value>Credit Line Balance (FC)</value>
+  </data>
+  <data name="CreditLineBalanceLC" xml:space="preserve">
+    <value>Credit Line Balance (LC)</value>
+  </data>
+  <data name="InterestAmountFC" xml:space="preserve">
+    <value>Interest Amount (FC)</value>
+  </data>
+  <data name="InterestAmountLC" xml:space="preserve">
+    <value>Interest Amount (LC)</value>
+  </data>
+  <data name="ExchangeRate" xml:space="preserve">
+    <value>Exchange Rate</value>
+  </data>
+  <data name="BeforeChoosingCreditLineCodeFillBankFirst" xml:space="preserve">
+    <value>Before choosing credit line code, fill bank first</value>
+  </data>
+  <data name="InterestAccrualWizard" xml:space="preserve">
+    <value>Interest Accrual Wizard</value>
+  </data>
+  <data name="CloseInterestAccrualWizard" xml:space="preserve">
+    <value>Do you want to close interest accrual wizard</value>
+  </data>
+  <data name="CreateInterestAccrualDocument" xml:space="preserve">
+    <value>Do you want to create Interest Accrual document</value>
+  </data>
+  <data name="CreditLine" xml:space="preserve">
+    <value>Credit Line</value>
+  </data>
+  <data name="AccrualDateStart" xml:space="preserve">
+    <value>Accrual Date (Start)</value>
+  </data>
+  <data name="QuantityOfAccrualDays" xml:space="preserve">
+    <value>Quantity of Accrual Days</value>
+  </data>
 </root>
