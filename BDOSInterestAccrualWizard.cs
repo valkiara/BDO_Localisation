@@ -677,14 +677,15 @@ namespace BDO_Localisation_AddOn
                     decimal dayRate = interestRate / numberOfDaysInYear;
 
                     string creditLineAccountCode = oRecordSet.Fields.Item("U_CrLnAcct").Value;
+                    string currencyForQuery = foreignCurrency ? " = '" + currency + "' " : " IS NULL ";
 
                     StringBuilder queryForBalances = new StringBuilder();
                     queryForBalances.Append("SELECT *, \n");
                     queryForBalances.Append("(SELECT \n");
                     queryForBalances.Append("Sum(\"Credit\") - Sum(\"Debit\") AS \"U_CrLnAmtLC\" \n");
                     queryForBalances.Append("FROM \"JDT1\" \n");
-                    queryForBalances.Append("WHERE \"Account\" = '"+ creditLineAccountCode + "' \n");
-                    queryForBalances.Append("AND \"FCCurrency\" = '"+ currency + "' \n");
+                    queryForBalances.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
+                    queryForBalances.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
                     queryForBalances.Append("AND \"DueDate\" <= T0.\"DueDate\" \n");
                     queryForBalances.Append("GROUP BY \n");
                     queryForBalances.Append("\"Account\", \n");
@@ -693,7 +694,7 @@ namespace BDO_Localisation_AddOn
                     queryForBalances.Append("Sum(\"FCCredit\") - Sum(\"FCDebit\") AS \"U_CrLnAmtFC\" \n");
                     queryForBalances.Append("FROM \"JDT1\" \n");
                     queryForBalances.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
-                    queryForBalances.Append("AND \"FCCurrency\" = '" + currency + "' \n");
+                    queryForBalances.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
                     queryForBalances.Append("AND \"DueDate\" <= T0.\"DueDate\" \n");
                     queryForBalances.Append("GROUP BY \n");
                     queryForBalances.Append("\"Account\", \n");
@@ -705,13 +706,13 @@ namespace BDO_Localisation_AddOn
                     queryForBalances.Append("\"FCCurrency\" \n");
                     queryForBalances.Append("FROM \"JDT1\" \n");
                     queryForBalances.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
-                    queryForBalances.Append("AND \"FCCurrency\" = '" + currency + "' \n");
-                    queryForBalances.Append("AND \"DueDate\" <= '"+ accrualEndDate.ToString("yyyyMMdd") +"' \n");
+                    queryForBalances.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
+                    queryForBalances.Append("AND \"DueDate\" <= '" + accrualEndDate.ToString("yyyyMMdd") + "' \n");
                     queryForBalances.Append("GROUP BY \"DueDate\", \n");
                     queryForBalances.Append("\"Account\", \n");
                     queryForBalances.Append("\"FCCurrency\" \n");
                     queryForBalances.Append("ORDER BY \"DueDate\") AS T0 \n");
-                    queryForBalances.Append("WHERE T0.\"DueDate\" >= '"+ accrualStartDate.ToString("yyyyMMdd") + "' \n");
+                    queryForBalances.Append("WHERE T0.\"DueDate\" >= '" + accrualStartDate.ToString("yyyyMMdd") + "' \n");
                     queryForBalances.Append("ORDER BY T0.\"DueDate\"");
 
                     SAPbobsCOM.Recordset oRecordSetForBalances = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -769,7 +770,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                oForm.Freeze(false);               
+                oForm.Freeze(false);
                 Marshal.ReleaseComObject(oRecordSet);
             }
         }
