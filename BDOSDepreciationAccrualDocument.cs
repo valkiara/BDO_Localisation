@@ -165,9 +165,7 @@ namespace BDO_Localisation_AddOn
             formProperties.Add("CanYearTransfer", SAPbobsCOM.BoYesNoEnum.tYES);
             formProperties.Add("ManageSeries", SAPbobsCOM.BoYesNoEnum.tNO);
             formProperties.Add("CanLog", SAPbobsCOM.BoYesNoEnum.tYES);
-
-            
-
+         
             List<Dictionary<string, object>> listFindColumns = new List<Dictionary<string, object>>();
             List<Dictionary<string, object>> listFormColumns = new List<Dictionary<string, object>>();
             List<Dictionary<string, object>> listChildTables = new List<Dictionary<string, object>>();

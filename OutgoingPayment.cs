@@ -4764,9 +4764,10 @@ namespace BDO_Localisation_AddOn
                 {
                     oPayments.BlanketAgreement = Convert.ToInt32(blnkAgr);
                     oPayments.UserFields.Fields.Item("U_UseBlaAgRt").Value = useBlaAgRt;
+                    string docCur;
                     if (useBlaAgRt == "Y")
                     {
-                        docRateByBlnktAgr = Convert.ToDouble(BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnkAgr), docDate), NumberFormatInfo.InvariantInfo);
+                        docRateByBlnktAgr = Convert.ToDouble(BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnkAgr), out docCur, docDate), NumberFormatInfo.InvariantInfo);
                     }
                 }
 

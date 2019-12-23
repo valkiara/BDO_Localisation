@@ -147,6 +147,12 @@ namespace BDO_Localisation_AddOn
             BDOSDepreciationAccrualDocument.addMenus();
 
             BDOSFuelTransferWizard.addMenus();
+
+            BDOSCreditLine.addMenus();
+
+            BDOSInterestAccrual.addMenus();
+
+            BDOSInterestAccrualWizard.addMenus();
         }
 
         public static int getLongIntRGB(int R, int G, int B)

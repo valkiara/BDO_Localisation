@@ -9,39 +9,39 @@ namespace BDO_Localisation_AddOn
 {
     static partial class UDO
     {
-        public static void allUDOForAddOn(  out string errorText)
+        public static void allUDOForAddOn(out string errorText)
         {
             SAPbobsCOM.UserObjectsMD oUserObjectsMD = null;
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
 
-            BDOSInternetBankingIntegrationServicesRules.createMasterDataUDO( out errorText);
+            BDOSInternetBankingIntegrationServicesRules.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDOSINTR_D") == false)
             {
-                BDOSInternetBankingIntegrationServicesRules.registerUDO( out errorText);
+                BDOSInternetBankingIntegrationServicesRules.registerUDO(out errorText);
             }
-            
-            BDOSItemCategories.createMasterDataUDO( out errorText);
+
+            BDOSItemCategories.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDOSITMCTG_D") == false)
             {
-                BDOSItemCategories.registerUDO( out errorText);
+                BDOSItemCategories.registerUDO(out errorText);
             }
 
-            BDO_ProfitTaxBaseType.createMasterDataUDO( out errorText);
+            BDO_ProfitTaxBaseType.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_PTBT_D") == false)
             {
-                BDO_ProfitTaxBaseType.registerUDO( out errorText);
+                BDO_ProfitTaxBaseType.registerUDO(out errorText);
             }
 
-            BDO_ProfitTaxBase.createMasterDataUDO( out errorText);
+            BDO_ProfitTaxBase.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_PTBS_D") == false)
             {
-                BDO_ProfitTaxBase.registerUDO( out errorText);
+                BDO_ProfitTaxBase.registerUDO(out errorText);
             }
 
-            BDO_Drivers.createMasterDataUDO( out errorText);
+            BDO_Drivers.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_DRVS_D") == false)
             {
-                BDO_Drivers.registerUDO( out errorText);
+                BDO_Drivers.registerUDO(out errorText);
             }
 
             BDOSFuelTypes.createMasterDataUDO(out errorText);
@@ -56,6 +56,12 @@ namespace BDO_Localisation_AddOn
                 BDOSFuelCriteria.registerUDO();
             }
 
+            BDOSWarehouseAddresses.CreateMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSWrhAdr_M") == false)
+            {
+                //BDOSWarehouseAddresses.RegisterUDO(out errorText);
+            }
+
             BDOSFuelNormSpecification.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUNR_D") == false)
             {
@@ -68,40 +74,40 @@ namespace BDO_Localisation_AddOn
                 BDOSFuelConsumptionAct.registerUDO();
             }
 
-            BDO_Vehicles.createMasterDataUDO( out errorText);
+            BDO_Vehicles.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_VECL_D") == false)
             {
-                BDO_Vehicles.registerUDO( out errorText);
+                BDO_Vehicles.registerUDO(out errorText);
             }
 
-            BDO_Waybills.createDocumentUDO( out errorText);
+            BDO_Waybills.createDocumentUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_WBLD_D") == false)
             {
-                BDO_Waybills.registerUDO( out errorText);
+                BDO_Waybills.registerUDO(out errorText);
             }
 
-            BDO_TaxInvoiceReceived.createDocumentUDO( out errorText);
+            BDO_TaxInvoiceReceived.createDocumentUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_TAXR_D") == false)
             {
-                BDO_TaxInvoiceReceived.registerUDO( out errorText);
+                BDO_TaxInvoiceReceived.registerUDO(out errorText);
             }
 
-            BDOSARDownPaymentVATAccrual.createDocumentUDO( out errorText);
+            BDOSARDownPaymentVATAccrual.createDocumentUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_ARDPV_D") == false)
             {
-                BDOSARDownPaymentVATAccrual.registerUDO( out errorText);
+                BDOSARDownPaymentVATAccrual.registerUDO(out errorText);
             }
 
-            BDO_TaxInvoiceSent.createDocumentUDO( out errorText);
+            BDO_TaxInvoiceSent.createDocumentUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_TAXS_D") == false)
             {
-                BDO_TaxInvoiceSent.registerUDO( out errorText);
+                BDO_TaxInvoiceSent.registerUDO(out errorText);
             }
 
-            BDO_ProfitTaxAccrual.createDocumentUDO( out errorText);
+            BDO_ProfitTaxAccrual.createDocumentUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_TAXP_D") == false)
             {
-                BDO_ProfitTaxAccrual.registerUDO( out errorText);
+                BDO_ProfitTaxAccrual.registerUDO(out errorText);
             }
 
             BDOSFixedAssetTransfer.createDocumentUDO(out errorText);
@@ -116,6 +122,18 @@ namespace BDO_Localisation_AddOn
                 BDOSDepreciationAccrualDocument.registerUDO(out errorText);
             }
 
+            BDOSCreditLine.createMasterDataUDO(out errorText);
+            if (!oUserObjectsMD.GetByKey("UDO_F_BDOSCRLN_D"))
+            {
+                BDOSCreditLine.registerUDO();
+            }
+
+            BDOSInterestAccrual.createDocumentUDO(out errorText);
+            if (!oUserObjectsMD.GetByKey("UDO_F_BDOSINAC_D"))
+            {
+                BDOSInterestAccrual.registerUDO();
+            }
+
             //Persona Tables
             BDOSApprovalProcedures.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDOSAPRP_D") == false)
@@ -127,15 +145,15 @@ namespace BDO_Localisation_AddOn
             //Persona Tables 
 
             //მოგების გადასახადის ცხრილი (ბევრი დოკუმენტი გააკეთებს ჩანაწერებს)
-            ProfitTax.createUDO( out errorText);
+            ProfitTax.createUDO(out errorText);
 
-            BDOSVATReconcilationWizard.createUDO( out errorText);
+            BDOSVATReconcilationWizard.createUDO(out errorText);
 
             //მიღებული ფაქტურების ცხრილი (Crystal Report - სთვის)
-            BDOSTaxAnalysisReceived.createUDO( out errorText);
+            BDOSTaxAnalysisReceived.createUDO(out errorText);
 
             //გაცემული ფაქტურების ცხრილი (Crystal Report - სთვის)
-            BDOSTaxAnalysissSent.createUDO( out errorText);
+            BDOSTaxAnalysissSent.createUDO(out errorText);
 
             //----------------------------------------------->ინტერნეტბანკი<-----------------------------------------------
             string tableName = "BDO_INTB";
@@ -143,9 +161,9 @@ namespace BDO_Localisation_AddOn
 
             oUserObjectsMD = null;
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
+            Marshal.ReleaseComObject(oUserObjectsMD);
 
-            int result = UDO.addUserTable( tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObjectAutoIncrement, out errorText);
+            int result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObjectAutoIncrement, out errorText);
 
             if (result != 0)
             {
@@ -165,9 +183,9 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("ValidValues", listValidValuesDict);
             fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            bool resultTmp = addNewValidValuesUserFieldsMD( "@BDO_INTB", "program", "BOG", "BOG (Web-Service)", out errorText);
+            bool resultTmp = addNewValidValuesUserFieldsMD("@BDO_INTB", "program", "BOG", "BOG (Web-Service)", out errorText);
 
             listValidValuesDict = new Dictionary<string, string>();
             listValidValuesDict.Add("test", "test");
@@ -182,7 +200,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("ValidValues", listValidValuesDict);
             fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "WSDL");
@@ -192,7 +210,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 254);
             fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "ID");
@@ -201,7 +219,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "URL");
@@ -210,7 +228,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 254);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "port");
@@ -219,7 +237,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
             fieldskeysMap.Add("EditSize", 11);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             SAPbobsCOM.UserKeysMD oUserKeysMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserKeys);
 
@@ -241,7 +259,7 @@ namespace BDO_Localisation_AddOn
 
                 Program.oCompany.GetLastError(out errCode, out errMsg);
                 errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode;
-                
+
             }
 
             //----------------------------------------------->ედონის ვერსია<-----------------------------------------------
@@ -250,10 +268,10 @@ namespace BDO_Localisation_AddOn
 
             oUserObjectsMD = null;
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
+            Marshal.ReleaseComObject(oUserObjectsMD);
 
-            result = UDO.addUserTable( tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObject, out errorText);
-            
+            result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObject, out errorText);
+
             if (result != 0)
             { }
 
@@ -264,7 +282,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             //ProgressBarForm.Value++;
         }
@@ -350,7 +368,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static int addUserTable( string tableName, string description, SAPbobsCOM.BoUTBTableType type, out string errorText)
+        public static int addUserTable(string tableName, string description, SAPbobsCOM.BoUTBTableType type, out string errorText)
         {
             errorText = null;
 
@@ -359,7 +377,7 @@ namespace BDO_Localisation_AddOn
             {
                 return 0;
             }
-            
+
             SAPbobsCOM.UserTablesMD oUserTablesMD = ((SAPbobsCOM.UserTablesMD)(Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserTables)));
             oUserTablesMD.TableName = tableName;
             oUserTablesMD.TableDescription = description;
@@ -394,7 +412,7 @@ namespace BDO_Localisation_AddOn
             return 0;
         }
 
-        private static bool userTableExist( string tableName)
+        private static bool userTableExist(string tableName)
         {
             SAPbobsCOM.UserTablesMD oUserTablesMD = null;
             bool boolIdent = false;
@@ -406,7 +424,7 @@ namespace BDO_Localisation_AddOn
             return (boolIdent);
         }
 
-        private static bool userTableFieldsExist( string tableName, int fieldID)
+        private static bool userTableFieldsExist(string tableName, int fieldID)
         {
             SAPbobsCOM.UserFieldsMD oUserFieldsMD = null;
             bool boolIdent = false;
@@ -418,10 +436,10 @@ namespace BDO_Localisation_AddOn
             return (boolIdent);
         }
 
-        public static void addUserTableFields( Dictionary<string, object> fieldskeysMap, out string errorText)
+        public static void addUserTableFields(Dictionary<string, object> fieldskeysMap, out string errorText)
         {
             errorText = null;
-           
+
             object propertyValue = null;
 
             string name = "";
@@ -526,8 +544,8 @@ namespace BDO_Localisation_AddOn
                 int returnCode = oUserFieldsMD.Add();
                 if (returnCode != 0)
                 {
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorOfFieldAdd") + BDOSResources.getTranslate("ErrorDescription") + ":" + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "!" + BDOSResources.getTranslate("Table") + ": " + "\"" + tableName + "\", " + BDOSResources.getTranslate("Field") + ": " + "\"" + name + "\"";
+                    Program.oCompany.GetLastError(out errCode, out errMsg);
+                    errorText = BDOSResources.getTranslate("ErrorOfFieldAdd") + BDOSResources.getTranslate("ErrorDescription") + ":" + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "!" + BDOSResources.getTranslate("Table") + ": " + "\"" + tableName + "\", " + BDOSResources.getTranslate("Field") + ": " + "\"" + name + "\"";
                     InsertLogRow(tableName, "", name, errCode, errMsg);
                 }
                 else
@@ -571,7 +589,7 @@ namespace BDO_Localisation_AddOn
 
                 string query = @"INSERT INTO ""@BDOSLOGS"" (""Code"",""Name"",""U_BDOSExID"",""U_BDOSTbNm"",""U_BDOSFdNm"",
                                                                    ""U_BDOSUDO"",""U_BDOSStts"",""U_BDOSPcUsr"",""U_BDOSB1Usr"",""U_BDOSDt"",""U_BDOSStCd"",""U_BDOSDesc"")" +
-                $" VALUES('{Code}','{Code}','{Program.ExecutionDateISO + "-" + Environment.UserName}','{tableName}','{name.Trim()}','{udoName.Trim()}','{(statusCode == 0 ? 'Y' : 'N')}','{Environment.UserName}','{Program.oCompany.UserName}','{dtNow.ToString("yyyy-MM-ddTHH:mm:ss")}',{statusCode},'{description.Replace("'","-").Replace("\"","-")}')";
+                $" VALUES('{Code}','{Code}','{Program.ExecutionDateISO + "-" + Environment.UserName}','{tableName}','{name.Trim()}','{udoName.Trim()}','{(statusCode == 0 ? 'Y' : 'N')}','{Environment.UserName}','{Program.oCompany.UserName}','{dtNow.ToString("yyyy-MM-ddTHH:mm:ss")}',{statusCode},'{description.Replace("'", "-").Replace("\"", "-")}')";
 
                 oRecordSet.DoQuery(query);
 
@@ -587,22 +605,22 @@ namespace BDO_Localisation_AddOn
         }
 
         public static bool UserDefinedFieldExists(string tableName, string fieldName)
-        {        
+        {
             return Program.UserDefinedFieldsCurrentCompany.AsEnumerable().Where(
-                        x => ((string)x["TableName"] == "@" + tableName.ToUpperInvariant() && (string)x["FieldName"] == fieldName && ((string)x["TableName"]).Substring(0,1) == "@")
+                        x => ((string)x["TableName"] == "@" + tableName.ToUpperInvariant() && (string)x["FieldName"] == fieldName && ((string)x["TableName"]).Substring(0, 1) == "@")
                         || ((string)x["TableName"] == tableName.ToUpperInvariant() && (string)x["FieldName"] == fieldName && ((string)x["TableName"]).Substring(0, 1) != "@")).Any();
         }
 
         public static DataTable UserDefinedFieldsCurrentCompany()
         {
-            
+
             var oDataTable = new DataTable();
             oDataTable.Columns.Add("TableName");
             oDataTable.Columns.Add("FieldName");
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-            string query = @"SELECT ""TableID"",""AliasID"",* FROM ""CUFD"" ";                 
+            string query = @"SELECT ""TableID"",""AliasID"",* FROM ""CUFD"" ";
 
             oRecordSet.DoQuery(query);
 
@@ -625,7 +643,7 @@ namespace BDO_Localisation_AddOn
 
         public static DataTable UserDefinedTablesCurrentCompany()
         {
-            
+
             var oDataTable = new DataTable();
             oDataTable.Columns.Add("TableName");
 
@@ -651,7 +669,7 @@ namespace BDO_Localisation_AddOn
             return oDataTable;
         }
 
-        public static bool addUpdateRecordsUserTable( object tableName, string code, string name, object fieldName, string value, out string errorText)
+        public static bool addUpdateRecordsUserTable(object tableName, string code, string name, object fieldName, string value, out string errorText)
         {
             errorText = null;
             SAPbobsCOM.UserTable oUserTable = null;
@@ -699,7 +717,7 @@ namespace BDO_Localisation_AddOn
             return true;
         }
 
-        public static bool removeColumnUserTable( object tableName, object fieldName, out string errorText)
+        public static bool removeColumnUserTable(object tableName, object fieldName, out string errorText)
         {
             errorText = null;
             SAPbobsCOM.UserFieldsMD oUserFieldsMD = null;
@@ -752,18 +770,18 @@ namespace BDO_Localisation_AddOn
         /// <param name="description"></param>
         /// <param name="errorText"></param>
         /// <returns></returns>
-        public static bool addNewValidValuesUserFieldsMD( string tableID, string aliasID, string value, string description, out string errorText)
+        public static bool addNewValidValuesUserFieldsMD(string tableID, string aliasID, string value, string description, out string errorText)
         {
             errorText = null;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oRecordSet);
+            Marshal.ReleaseComObject(oRecordSet);
             oRecordSet = null;
             GC.WaitForPendingFinalizers();
             GC.Collect();
 
             SAPbobsCOM.UserFieldsMD oUserFieldsMD = (SAPbobsCOM.UserFieldsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserFields);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserFieldsMD);
+            Marshal.ReleaseComObject(oUserFieldsMD);
             oUserFieldsMD = null;
             GC.WaitForPendingFinalizers();
             GC.Collect();
@@ -784,7 +802,7 @@ namespace BDO_Localisation_AddOn
 
                     if (oUserFieldsMD.GetByKey(tableID, Convert.ToInt32(oRecordSet.Fields.Item("FieldID").Value.ToString())))
                     {
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(oRecordSet);
+                        Marshal.ReleaseComObject(oRecordSet);
                         oRecordSet = null;
                         GC.WaitForPendingFinalizers();
 
@@ -812,7 +830,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserFieldsMD);
+                Marshal.ReleaseComObject(oUserFieldsMD);
                 oUserFieldsMD = null;
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
@@ -820,7 +838,7 @@ namespace BDO_Localisation_AddOn
             return true;
         }
 
-        private static bool userFormExist( string code)
+        private static bool userFormExist(string code)
         {
             SAPbobsCOM.UserObjectsMD oUserObjectsMD = null;
             bool boolIdent = false;
@@ -832,7 +850,7 @@ namespace BDO_Localisation_AddOn
             return (boolIdent);
         }
 
-        public static int registerUDO( string code, Dictionary<string, object> formProperties, out string errorText)
+        public static int registerUDO(string code, Dictionary<string, object> formProperties, out string errorText)
         {
             errorText = null;
 
@@ -840,7 +858,7 @@ namespace BDO_Localisation_AddOn
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
             bool udoFormExist = false;
 
-            if (userFormExist( code) == true)
+            if (userFormExist(code) == true)
             {
                 udoFormExist = true;
                 oUserObjectsMD.GetByKey(code);
@@ -911,7 +929,7 @@ namespace BDO_Localisation_AddOn
                         {
                             alreadyCont = true;
                             break;
-                    }
+                        }
                     }
 
                     if (alreadyCont == true) continue;
@@ -959,7 +977,7 @@ namespace BDO_Localisation_AddOn
                     {
                         oUserObjectsMD.EnhancedFormColumns.SetCurrentLine(n);
                         if (oUserObjectsMD.EnhancedFormColumns.ColumnAlias.Equals(strPropertykey))
-                    {
+                        {
                             alreadyCont = true;
                             break;
                         }
@@ -1031,7 +1049,7 @@ namespace BDO_Localisation_AddOn
                         {
                             alreadyCont = true;
                             break;
-                    }
+                        }
                     }
 
                     if (alreadyCont == true) continue;
@@ -1072,7 +1090,7 @@ namespace BDO_Localisation_AddOn
                     {
                         oUserObjectsMD.FormColumns.SetCurrentLine(n);
                         if (oUserObjectsMD.FormColumns.FormColumnAlias.Equals(strPropertykey))
-                    {
+                        {
                             alreadyCont = true;
                             break;
                         }
@@ -1211,7 +1229,7 @@ namespace BDO_Localisation_AddOn
             return 0;
         }
 
-        public static void DeleteUDF( string tableID, int fieldID, out string errorText)
+        public static void DeleteUDF(string tableID, int fieldID, out string errorText)
         {
             errorText = null;
 
@@ -1236,7 +1254,7 @@ namespace BDO_Localisation_AddOn
         }
 
         public static dynamic GetUDOFieldValueByParam(string UDO, string propertyFilterParam, dynamic valueFilterParam, string property)
-        {     
+        {
 
             if (String.IsNullOrEmpty(propertyFilterParam) || String.IsNullOrEmpty(valueFilterParam))
             {
@@ -1244,16 +1262,16 @@ namespace BDO_Localisation_AddOn
             }
             else
             {
-            var oGeneralService = Program.oCompany.GetCompanyService().GetGeneralService(UDO);
-            var oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
-            oGeneralParams.SetProperty(propertyFilterParam, valueFilterParam);
-            SAPbobsCOM.GeneralData oGeneralData = oGeneralService.GetByParams(oGeneralParams);
+                var oGeneralService = Program.oCompany.GetCompanyService().GetGeneralService(UDO);
+                var oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
+                oGeneralParams.SetProperty(propertyFilterParam, valueFilterParam);
+                SAPbobsCOM.GeneralData oGeneralData = oGeneralService.GetByParams(oGeneralParams);
 
-            return oGeneralData.GetProperty(property);
-        }
+                return oGeneralData.GetProperty(property);
+            }
         }
 
-        public static int GetFieldID( string sTableID, string sAliasID)
+        public static int GetFieldID(string sTableID, string sAliasID)
         {
             int iRetVal = 0;
             SAPbobsCOM.Recordset sboRec = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -1271,7 +1289,7 @@ namespace BDO_Localisation_AddOn
             return iRetVal;
         }
 
-        public static void AddUserKey( string tableName, string keyName, List<string> oColumnAlias, out string errorText)
+        public static void AddUserKey(string tableName, string keyName, List<string> oColumnAlias, out string errorText)
         {
             errorText = null;
 
@@ -1290,9 +1308,9 @@ namespace BDO_Localisation_AddOn
                     }
                     oUserKeysMD.Elements.ColumnAlias = oColumnAlias[i];
                 }
-   
+
                 oUserKeysMD.Unique = SAPbobsCOM.BoYesNoEnum.tYES;
-                
+
                 int returnCode = oUserKeysMD.Add();
                 if (returnCode != 0)
                 {
@@ -1304,7 +1322,7 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 errorText = ex.Message;
             }

@@ -1130,11 +1130,11 @@ namespace BDO_Localisation_AddOn
             string BlaAgrDocEntryStr = DBDataSourceO.GetValue("AgrNo", 0);
             if (BlaAgrDocEntryStr != "")
             {
-                int BlaAgrDocEntry = Convert.ToInt32(DBDataSourceO.GetValue("AgrNo", 0));
-
+                int BlaAgrDocEntry = Convert.ToInt32(BlaAgrDocEntryStr);
+                string docCurr;
                 if (UseBlaAgRt == "Y")
                 {
-                    DocRate = BlanketAgreement.GetBlAgremeentCurrencyRate(BlaAgrDocEntry, DocDate);
+                    DocRate = BlanketAgreement.GetBlAgremeentCurrencyRate(BlaAgrDocEntry, out docCurr, DocDate);
 
                 }
             }

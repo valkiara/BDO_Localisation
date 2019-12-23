@@ -848,6 +848,48 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
+            //----------------------------->Credit Line Master Data<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSCRLN_D")
+                {
+                    errorText = null;
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSCRLN_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
+            //----------------------------->Interest Accrual Document<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "UDO_F_BDOSINAC_D")
+                {
+                    errorText = null;
+                    uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "UDO_F_BDOSINAC_D", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
+            //----------------------------->Interest Accrual Wizard<-----------------------------
+            try
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "BDOSInterestAccrualWizard")
+                {
+                    errorText = null;
+                    BDOSInterestAccrualWizard.createForm();
+                }
+            }
+            catch (Exception ex)
+            {
+                uiApp.MessageBox(ex.ToString(), 1, "", "");
+            }
+
             //----------------------------->Cancel<-----------------------------
             if (pVal.MenuUID == "1284")
             {
@@ -939,10 +981,17 @@ namespace BDO_Localisation_AddOn
                         cancellationTrans = true;
                         canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
                     }
+                    //----------------------------->A / R Down Payment VAT Accrual<-----------------------------
                     else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                     {
                         cancellationTrans = true;
                         canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSARDV").GetValue("DocEntry", 0));
+                    }
+                    //----------------------------->Interest Accrual Document<-----------------------------
+                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSINAC_D")
+                    {
+                        cancellationTrans = true;
+                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSINAC").GetValue("DocEntry", 0));
                     }
                 }
                 else if (pVal.BeforeAction == false)
@@ -1575,6 +1624,18 @@ namespace BDO_Localisation_AddOn
                 {
                     LandedCostsSetup.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
+
+                //----------------------------->Credit Line Master Data<----------------------------
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSCRLN_D")
+                {
+                    BDOSCreditLine.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
+                //----------------------------->Interest Accrual Document<----------------------------
+                else if (BusinessObjectInfo.Type == "UDO_F_BDOSINAC_D")
+                {
+                    BDOSInterestAccrual.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
             }
             catch (Exception ex)
             {
@@ -1756,10 +1817,10 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Exchange Rate Differences<-----------------------------
-                //else if (pVal.FormTypeEx == "369")
-                //{
-                //    ExchangeRateDiffs.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                //}
+                else if (pVal.FormTypeEx == "369")
+                {
+                    ExchangeRateDiffs.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
 
                 //else if (pVal.FormTypeEx == "370")
                 //{
@@ -2004,6 +2065,16 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDO_WBLD_D")
                 {
                     BDO_Waybills.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->Warehouse Addresses<-----------------------------
+                else if (pVal.FormTypeEx == "11163")
+                {
+                    BDOSWarehouseAddresses.UiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    {
+                        removeRecordRow = 1;
+                    }
                 }
 
                 //----------------------------->A/P Invoice<-----------------------------
@@ -2274,13 +2345,35 @@ namespace BDO_Localisation_AddOn
                             selectItemsToCopyOkClick = true;
                     }
                 }
+
+                //----------------------------->Credit Line Master Data<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_F_BDOSCRLN_D")
+                {
+                    BDOSCreditLine.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                    {
+                        removeRecordRow = 1;
+                    }
+                }
+                
+                //----------------------------->Interest Accrual Document<-----------------------------
+                else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSINAC_D")
+                {
+                    BDOSInterestAccrual.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->Interest Accrual Wizard<-----------------------------
+                else if (pVal.FormUID == "BDOSInterestAccrualWizard")
+                {
+                    BDOSInterestAccrualWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
             }
             catch (Exception ex)
             {
                 errorText = ex.Message;
                 try
                 {
-                    uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                    uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
                 }
                 catch
                 {
