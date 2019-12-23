@@ -645,7 +645,6 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
         public static void SetInvDocsMatrixRowBackColor( SAPbouiCOM.Form oForm,  int row, out string errorText)
         {
             errorText = null;
@@ -1252,7 +1251,11 @@ namespace BDO_Localisation_AddOn
                     CardCode = oRecordSet.Fields.Item("CardCode").Value;
                     CardName = oRecordSet.Fields.Item("CardName").Value;
                     LicTradNum = oRecordSet.Fields.Item("LicTradNum").Value;
-               
+
+                    if (Math.Abs(DocTotal) <= allowableDeviation)
+                    {
+                        DocTotal = 0;
+                    }
                     if (Math.Abs(AlRcnSum - ReconSum) <= allowableDeviation)
                     {
                         AlRcnSum = ReconSum;
