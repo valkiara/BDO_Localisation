@@ -56,6 +56,12 @@ namespace BDO_Localisation_AddOn
                 BDOSFuelCriteria.registerUDO();
             }
 
+            BDOSWarehouseAddresses.CreateMasterDataUDO(out errorText);
+            if (oUserObjectsMD.GetByKey("UDO_F_BDOSWrhAdr_M") == false)
+            {
+                //BDOSWarehouseAddresses.RegisterUDO(out errorText);
+            }
+
             BDOSFuelNormSpecification.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDOSFUNR_D") == false)
             {
