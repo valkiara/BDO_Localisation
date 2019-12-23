@@ -582,7 +582,6 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("LoanMTR");
             oDataTable.Rows.Clear();
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            SAPbobsCOM.Recordset oRecordSetForBalances = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             string bankCode = oForm.DataSources.UserDataSources.Item("BankCodeE").ValueEx;
             string docDateStr = oForm.DataSources.UserDataSources.Item("DocDateE").ValueEx;
@@ -662,10 +661,10 @@ namespace BDO_Localisation_AddOn
                     DateTime accrualEndDate;
                     int accrualDays;
 
-                    if (creditLineEndDate.ToString("yyyyMMdd") != "18991230" && creditLineEndDate < docDate)
+                    if (creditLineEndDate.ToString("yyyyMMdd") != "18991230" && creditLineEndDate <= docDate)
                         accrualEndDate = creditLineEndDate;
                     else
-                        accrualEndDate = docDate;
+                        accrualEndDate = docDate.AddDays(1);
 
                     if (lastInterestAccrualDocDate.ToString("yyyyMMdd") != "18991230")
                         accrualStartDate = lastInterestAccrualDocDate.AddDays(1);
@@ -715,6 +714,7 @@ namespace BDO_Localisation_AddOn
                     queryForBalances.Append("WHERE T0.\"DueDate\" >= '"+ accrualStartDate.ToString("yyyyMMdd") + "' \n");
                     queryForBalances.Append("ORDER BY T0.\"DueDate\"");
 
+                    SAPbobsCOM.Recordset oRecordSetForBalances = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                     oRecordSetForBalances.DoQuery(queryForBalances.ToString());
 
                     decimal creditLineBalanceFC = decimal.Zero;
@@ -732,6 +732,7 @@ namespace BDO_Localisation_AddOn
 
                         oRecordSetForBalances.MoveNext();
                     }
+                    Marshal.ReleaseComObject(oRecordSetForBalances);
 
                     oDataTable.Rows.Add();
                     oDataTable.SetValue("LineNum", rowIndex, rowIndex + 1);
@@ -768,8 +769,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                oForm.Freeze(false);
-                Marshal.ReleaseComObject(oRecordSetForBalances);
+                oForm.Freeze(false);               
                 Marshal.ReleaseComObject(oRecordSet);
             }
         }

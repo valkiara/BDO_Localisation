@@ -2596,8 +2596,8 @@
   <data name="ChangeDocDate" xml:space="preserve">
     <value>Change document date</value>
   </data>
-  <data name="ReconcilationWizard" xml:space="preserve">
-    <value>Reconcilation wizard</value>
+  <data name="VATReconcilationWizard" xml:space="preserve">
+    <value>VAT Reconcilation Wizard</value>
   </data>
   <data name="ReconSum" xml:space="preserve">
     <value>Reconcilatin sum</value>
@@ -3338,7 +3338,7 @@
     <value>Interest Payable Account</value>
   </data>
   <data name="InterestRate" xml:space="preserve">
-    <value>Interest Rate</value>
+    <value>Interest Rate (%)</value>
   </data>
   <data name="StartingDate" xml:space="preserve">
     <value>Starting Date</value>

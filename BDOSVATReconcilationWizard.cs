@@ -35,7 +35,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
             formProperties.Add("UniqueID", "BDOSReconWizz");
             formProperties.Add("BorderStyle", SAPbouiCOM.BoFormBorderStyle.fbs_Sizable);
-            formProperties.Add("Title", BDOSResources.getTranslate("ReconcilationWizard"));
+            formProperties.Add("Title", BDOSResources.getTranslate("VATReconcilationWizard"));
             formProperties.Add("Left", 558);
             formProperties.Add("ClientWidth", 600);
             formProperties.Add("Top", 335);
@@ -1331,7 +1331,7 @@ namespace BDO_Localisation_AddOn
                 oCreationPackage.Enabled = true;
                 oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
                 oCreationPackage.UniqueID = "BDOSReconWizz";
-                oCreationPackage.String = BDOSResources.getTranslate("ReconcilationWizard");
+                oCreationPackage.String = BDOSResources.getTranslate("VATReconcilationWizard");
                 oCreationPackage.Position = fatherMenuItem.SubMenus.Count - 1;
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
