@@ -3341,7 +3341,7 @@
     <value>საპროცენტო ვალდებულების ანგარიში</value>
   </data>
   <data name="InterestRate" xml:space="preserve">
-    <value>საპროცენტო განაკვეთი (%)</value>
+    <value>საპროცენტო განაკვეთი</value>
   </data>
   <data name="StartingDate" xml:space="preserve">
     <value>დაწყების თარიღი</value>
