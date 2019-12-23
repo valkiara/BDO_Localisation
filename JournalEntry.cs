@@ -874,26 +874,44 @@ namespace BDO_Localisation_AddOn
         public static void cancellation(SAPbouiCOM.Form oForm, int Ref1, string Ref2, out string errorText)
         {
             errorText = null;
-            SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
-
-            int TransId = 0;
+            int transId;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string queryHeader = "SELECT " +
-                            "*  " +
-                            "FROM \"OJDT\"  " +
-                            "WHERE \"Ref1\" = '" + Ref1.ToString() + "' " +
-                            "AND \"Ref2\" = '" + Ref2 + "' ";
-
-            oRecordSet.DoQuery(queryHeader);
-            if (!oRecordSet.EoF)
+            try
             {
-                TransId = oRecordSet.Fields.Item("TransId").Value;
+                string queryHeader = "SELECT " +
+                                "*  " +
+                                "FROM \"OJDT\"  " +
+                                "WHERE \"Ref1\" = '" + Ref1.ToString() + "' " +
+                                "AND \"Ref2\" = '" + Ref2 + "' ";
 
-                SAPbobsCOM.JournalEntries oJournalDoc = (SAPbobsCOM.JournalEntries)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
-                oJournalDoc.GetByKey(TransId);
-                int response = oJournalDoc.Cancel();
+                oRecordSet.DoQuery(queryHeader);
+                if (!oRecordSet.EoF)
+                {
+                    transId = oRecordSet.Fields.Item("TransId").Value;
 
+                    SAPbobsCOM.JournalEntries oJournalDoc = (SAPbobsCOM.JournalEntries)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
+                    oJournalDoc.GetByKey(transId);
+
+                    int response = oJournalDoc.Cancel();
+
+                    if (response != 0)
+                    {
+                        int errCode;
+                        string errMsg;
+
+                        Program.oCompany.GetLastError(out errCode, out errMsg);
+                        errorText = BDOSResources.getTranslate("ErrorDescription") + ": " + errMsg + "! " + BDOSResources.getTranslate("Code") + ": " + errCode + "! ";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorText = BDOSResources.getTranslate("ErrorDescription") + ": " + ex.Message + "! ";
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
             }
         }
 

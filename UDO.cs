@@ -122,6 +122,18 @@ namespace BDO_Localisation_AddOn
                 BDOSDepreciationAccrualDocument.registerUDO(out errorText);
             }
 
+            BDOSCreditLine.createMasterDataUDO(out errorText);
+            if (!oUserObjectsMD.GetByKey("UDO_F_BDOSCRLN_D"))
+            {
+                BDOSCreditLine.registerUDO();
+            }
+
+            BDOSInterestAccrual.createDocumentUDO(out errorText);
+            if (!oUserObjectsMD.GetByKey("UDO_F_BDOSINAC_D"))
+            {
+                BDOSInterestAccrual.registerUDO();
+            }
+
             //Persona Tables
             BDOSApprovalProcedures.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDOSAPRP_D") == false)
@@ -149,7 +161,7 @@ namespace BDO_Localisation_AddOn
 
             oUserObjectsMD = null;
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
+            Marshal.ReleaseComObject(oUserObjectsMD);
 
             int result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObjectAutoIncrement, out errorText);
 
@@ -256,7 +268,7 @@ namespace BDO_Localisation_AddOn
 
             oUserObjectsMD = null;
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
+            Marshal.ReleaseComObject(oUserObjectsMD);
 
             result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObject, out errorText);
 
@@ -763,13 +775,13 @@ namespace BDO_Localisation_AddOn
             errorText = null;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oRecordSet);
+            Marshal.ReleaseComObject(oRecordSet);
             oRecordSet = null;
             GC.WaitForPendingFinalizers();
             GC.Collect();
 
             SAPbobsCOM.UserFieldsMD oUserFieldsMD = (SAPbobsCOM.UserFieldsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserFields);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserFieldsMD);
+            Marshal.ReleaseComObject(oUserFieldsMD);
             oUserFieldsMD = null;
             GC.WaitForPendingFinalizers();
             GC.Collect();
@@ -790,7 +802,7 @@ namespace BDO_Localisation_AddOn
 
                     if (oUserFieldsMD.GetByKey(tableID, Convert.ToInt32(oRecordSet.Fields.Item("FieldID").Value.ToString())))
                     {
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(oRecordSet);
+                        Marshal.ReleaseComObject(oRecordSet);
                         oRecordSet = null;
                         GC.WaitForPendingFinalizers();
 
@@ -818,7 +830,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserFieldsMD);
+                Marshal.ReleaseComObject(oUserFieldsMD);
                 oUserFieldsMD = null;
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
