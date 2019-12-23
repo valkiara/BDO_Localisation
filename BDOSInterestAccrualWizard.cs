@@ -679,61 +679,94 @@ namespace BDO_Localisation_AddOn
                     string creditLineAccountCode = oRecordSet.Fields.Item("U_CrLnAcct").Value;
                     string currencyForQuery = foreignCurrency ? " = '" + currency + "' " : " IS NULL ";
 
-                    StringBuilder queryForBalances = new StringBuilder();
-                    queryForBalances.Append("SELECT *, \n");
-                    queryForBalances.Append("(SELECT \n");
-                    queryForBalances.Append("Sum(\"Credit\") - Sum(\"Debit\") AS \"U_CrLnAmtLC\" \n");
-                    queryForBalances.Append("FROM \"JDT1\" \n");
-                    queryForBalances.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
-                    queryForBalances.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
-                    queryForBalances.Append("AND \"DueDate\" <= T0.\"DueDate\" \n");
-                    queryForBalances.Append("GROUP BY \n");
-                    queryForBalances.Append("\"Account\", \n");
-                    queryForBalances.Append("\"FCCurrency\") AS \"U_CrLnAmtLC\", \n");
-                    queryForBalances.Append("(SELECT \n");
-                    queryForBalances.Append("Sum(\"FCCredit\") - Sum(\"FCDebit\") AS \"U_CrLnAmtFC\" \n");
-                    queryForBalances.Append("FROM \"JDT1\" \n");
-                    queryForBalances.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
-                    queryForBalances.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
-                    queryForBalances.Append("AND \"DueDate\" <= T0.\"DueDate\" \n");
-                    queryForBalances.Append("GROUP BY \n");
-                    queryForBalances.Append("\"Account\", \n");
-                    queryForBalances.Append("\"FCCurrency\") AS \"U_CrLnAmtFC\" \n");
-                    queryForBalances.Append("FROM ( \n");
-                    queryForBalances.Append("SELECT \n");
-                    queryForBalances.Append("\"DueDate\", \n");
-                    queryForBalances.Append("\"Account\", \n");
-                    queryForBalances.Append("\"FCCurrency\" \n");
-                    queryForBalances.Append("FROM \"JDT1\" \n");
-                    queryForBalances.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
-                    queryForBalances.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
-                    queryForBalances.Append("AND \"DueDate\" <= '" + accrualEndDate.ToString("yyyyMMdd") + "' \n");
-                    queryForBalances.Append("GROUP BY \"DueDate\", \n");
-                    queryForBalances.Append("\"Account\", \n");
-                    queryForBalances.Append("\"FCCurrency\" \n");
-                    queryForBalances.Append("ORDER BY \"DueDate\") AS T0 \n");
-                    queryForBalances.Append("WHERE T0.\"DueDate\" >= '" + accrualStartDate.ToString("yyyyMMdd") + "' \n");
-                    queryForBalances.Append("ORDER BY T0.\"DueDate\"");
+                    StringBuilder queryForBalances1 = new StringBuilder();
+                    queryForBalances1.Append("SELECT *, \n");
+                    queryForBalances1.Append("(SELECT \n");
+                    queryForBalances1.Append("Sum(\"Credit\") - Sum(\"Debit\") AS \"U_CrLnAmtLC\" \n");
+                    queryForBalances1.Append("FROM \"JDT1\" \n");
+                    queryForBalances1.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
+                    queryForBalances1.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
+                    queryForBalances1.Append("AND \"DueDate\" <= T0.\"DueDate\" \n");
+                    queryForBalances1.Append("GROUP BY \n");
+                    queryForBalances1.Append("\"Account\", \n");
+                    queryForBalances1.Append("\"FCCurrency\") AS \"U_CrLnAmtLC\", \n");
+                    queryForBalances1.Append("(SELECT \n");
+                    queryForBalances1.Append("Sum(\"FCCredit\") - Sum(\"FCDebit\") AS \"U_CrLnAmtFC\" \n");
+                    queryForBalances1.Append("FROM \"JDT1\" \n");
+                    queryForBalances1.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
+                    queryForBalances1.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
+                    queryForBalances1.Append("AND \"DueDate\" <= T0.\"DueDate\" \n");
+                    queryForBalances1.Append("GROUP BY \n");
+                    queryForBalances1.Append("\"Account\", \n");
+                    queryForBalances1.Append("\"FCCurrency\") AS \"U_CrLnAmtFC\" \n");
+                    queryForBalances1.Append("FROM ( \n");
+                    queryForBalances1.Append("SELECT \n");
+                    queryForBalances1.Append("\"DueDate\", \n");
+                    queryForBalances1.Append("\"Account\", \n");
+                    queryForBalances1.Append("\"FCCurrency\" \n");
+                    queryForBalances1.Append("FROM \"JDT1\" \n");
+                    queryForBalances1.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
+                    queryForBalances1.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
+                    queryForBalances1.Append("AND \"DueDate\" <= '" + accrualEndDate.ToString("yyyyMMdd") + "' \n");
+                    queryForBalances1.Append("GROUP BY \"DueDate\", \n");
+                    queryForBalances1.Append("\"Account\", \n");
+                    queryForBalances1.Append("\"FCCurrency\" \n");
+                    queryForBalances1.Append("ORDER BY \"DueDate\") AS T0 \n");
+                    queryForBalances1.Append("WHERE T0.\"DueDate\" >= '" + accrualStartDate.ToString("yyyyMMdd") + "' \n");
+                    queryForBalances1.Append("ORDER BY T0.\"DueDate\"");
 
-                    SAPbobsCOM.Recordset oRecordSetForBalances = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                    oRecordSetForBalances.DoQuery(queryForBalances.ToString());
+                    SAPbobsCOM.Recordset oRecordSetForBalances1 = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                    oRecordSetForBalances1.DoQuery(queryForBalances1.ToString());
 
                     decimal creditLineBalanceFC = decimal.Zero;
                     decimal creditLineBalanceLC = decimal.Zero;
                     decimal interestAmountFC = decimal.Zero;
                     decimal interestAmountLC = decimal.Zero;
+                    bool query1 = false;
 
-                    while (!oRecordSetForBalances.EoF)
+                    while (!oRecordSetForBalances1.EoF)
                     {
-                        creditLineBalanceFC = foreignCurrency ? Convert.ToDecimal(oRecordSetForBalances.Fields.Item("U_CrLnAmtFC").Value, CultureInfo.InvariantCulture) : decimal.Zero;
-                        creditLineBalanceLC = foreignCurrency ? creditLineBalanceFC * currencyRate : Convert.ToDecimal(oRecordSetForBalances.Fields.Item("U_CrLnAmtLC").Value, CultureInfo.InvariantCulture);
+                        creditLineBalanceFC = foreignCurrency ? Convert.ToDecimal(oRecordSetForBalances1.Fields.Item("U_CrLnAmtFC").Value, CultureInfo.InvariantCulture) : decimal.Zero;
+                        creditLineBalanceLC = foreignCurrency ? creditLineBalanceFC * currencyRate : Convert.ToDecimal(oRecordSetForBalances1.Fields.Item("U_CrLnAmtLC").Value, CultureInfo.InvariantCulture);
 
                         interestAmountFC += creditLineBalanceFC * dayRate;
                         interestAmountLC += creditLineBalanceLC * dayRate;
 
-                        oRecordSetForBalances.MoveNext();
+                        oRecordSetForBalances1.MoveNext();
+                        query1 = true;
                     }
-                    Marshal.ReleaseComObject(oRecordSetForBalances);
+                    Marshal.ReleaseComObject(oRecordSetForBalances1);
+
+                    if(!query1)
+                    {
+                        StringBuilder queryForBalances2 = new StringBuilder();
+                        queryForBalances2.Append("SELECT \n");
+                        queryForBalances2.Append("Sum(\"Credit\") - Sum(\"Debit\") AS \"U_CrLnAmtLC\", \n");
+                        queryForBalances2.Append("Sum(\"FCCredit\") - Sum(\"FCDebit\") AS \"U_CrLnAmtFC\" \n");
+                        queryForBalances2.Append("FROM \"JDT1\" \n");
+                        queryForBalances2.Append("WHERE \"Account\" = '"+ creditLineAccountCode + "' \n");
+                        queryForBalances2.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
+                        queryForBalances2.Append("AND \"DueDate\" <= '" + accrualStartDate.ToString("yyyyMMdd") + "' \n");
+                        queryForBalances2.Append("GROUP BY \n");
+                        queryForBalances2.Append("\"Account\", \n");
+                        queryForBalances2.Append("\"FCCurrency\"");
+
+                        SAPbobsCOM.Recordset oRecordSetForBalances2 = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        oRecordSetForBalances2.DoQuery(queryForBalances2.ToString());
+
+                        if (!oRecordSetForBalances2.EoF)
+                        {
+                            creditLineBalanceFC = foreignCurrency ? Convert.ToDecimal(oRecordSetForBalances2.Fields.Item("U_CrLnAmtFC").Value, CultureInfo.InvariantCulture) : decimal.Zero;
+                            creditLineBalanceLC = foreignCurrency ? creditLineBalanceFC * currencyRate : Convert.ToDecimal(oRecordSetForBalances2.Fields.Item("U_CrLnAmtLC").Value, CultureInfo.InvariantCulture);
+
+                            interestAmountFC += creditLineBalanceFC * dayRate;
+                            interestAmountLC += creditLineBalanceLC * dayRate;
+
+                            oRecordSetForBalances2.MoveNext();
+                            query1 = true;
+                        }
+                        Marshal.ReleaseComObject(oRecordSetForBalances2);
+                    }
 
                     oDataTable.Rows.Add();
                     oDataTable.SetValue("LineNum", rowIndex, rowIndex + 1);
