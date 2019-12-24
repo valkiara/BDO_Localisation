@@ -348,6 +348,9 @@ namespace BDO_Localisation_AddOn
                 {
                     if (oCFLEvento.ChooseFromListUID == "CrLnAcctCFL" || oCFLEvento.ChooseFromListUID == "ExpnsAcctCFL" || oCFLEvento.ChooseFromListUID == "IntPblAcctCFL")
                     {
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("3").Specific;
+                        string currency = oMatrix.Columns.Item("U_CurrCode").Cells.Item(pVal.Row).Specific.Value;
+
                         SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
 
@@ -362,6 +365,22 @@ namespace BDO_Localisation_AddOn
                         oCon.Alias = "FrozenFor"; //Inactive
                         oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                         oCon.CondVal = "N";
+
+                        oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_AND;
+
+                        oCon = oCons.Add();
+                        oCon.Alias = "ActCurr"; //Account Currency
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = string.IsNullOrEmpty(currency) ? "000" : currency;
+                        oCon.BracketOpenNum = 1;
+
+                        oCon.Relationship = SAPbouiCOM.BoConditionRelationship.cr_OR;
+
+                        oCon = oCons.Add();
+                        oCon.Alias = "ActCurr"; //Account Currency
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = string.IsNullOrEmpty(currency) ? "000" : "##";
+                        oCon.BracketCloseNum = 1;
 
                         oCFL.SetConditions(oCons);
                     }
