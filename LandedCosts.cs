@@ -926,7 +926,7 @@ namespace BDO_Localisation_AddOn
                 string docEntrySTR = oForm.DataSources.DBDataSources.Item("OIPF").GetValue("DocEntry", 0).Trim();
                 bool docEntryIsEmpty = string.IsNullOrEmpty(docEntrySTR);
 
-                oForm.Items.Item("BDOSFllAmt").Enabled = docEntryIsEmpty;
+                oForm.Items.Item("68").Enabled = docEntryIsEmpty;
             }
             catch (Exception ex)
             {
@@ -1043,7 +1043,7 @@ namespace BDO_Localisation_AddOn
                 //აწყობილი ანგარიშების მიხედვით ბუღ.თანხებით შევსება
                 if (pVal.ItemUID == "BDOSFllAmt" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
-                    if (oForm.Items.Item("BDOSFllAmt").Enabled)
+                    if (oForm.Items.Item("68").Enabled)
                     {
                         oForm.Freeze(true);
                         FillCostsAmounts(oForm, out errorText);
