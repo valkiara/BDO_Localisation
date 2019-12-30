@@ -699,7 +699,7 @@ namespace BDO_Localisation_AddOn
                         queryForBalances2.Append("FROM \"JDT1\" \n");
                         queryForBalances2.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
                         queryForBalances2.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
-                        queryForBalances2.Append("AND \"DueDate\" <= '" + accrualStartDate.AddDays(k) .ToString("yyyyMMdd") + "' \n");
+                        queryForBalances2.Append("AND \"RefDate\" <= '" + accrualStartDate.AddDays(k).ToString("yyyyMMdd") + "' \n");
                         queryForBalances2.Append("GROUP BY \n");
                         queryForBalances2.Append("\"Account\", \n");
                         queryForBalances2.Append("\"FCCurrency\"");
@@ -794,6 +794,7 @@ namespace BDO_Localisation_AddOn
             string crLnName = null;
             int createdDocEntry;
             List<int> tableRowList = new List<int>();
+            int transId;
 
             for (int i = 0; i < oDataTable.Rows.Count; i++)
             {
@@ -807,8 +808,8 @@ namespace BDO_Localisation_AddOn
                         oGeneralData.SetProperty("U_DocDate", docDate);
                         oGeneralData.SetProperty("U_BankCode", bankCode);
 
-                        createdDocEntry = createInterestAccrualDocument(oGeneralService, oGeneralData, docDate, prevCrLnName);
-                        if (createdDocEntry > 0)
+                        createdDocEntry = createInterestAccrualDocument(oGeneralService, oGeneralData, docDate, prevCrLnName, out transId);
+                        if (createdDocEntry > 0 && transId > 0)
                             for (int j = 0; j < tableRowList.Count; j++)
                                 oDataTable.SetValue("DocEntry", tableRowList[j], createdDocEntry);
 
@@ -844,8 +845,8 @@ namespace BDO_Localisation_AddOn
             oGeneralData.SetProperty("U_DocDate", docDate);
             oGeneralData.SetProperty("U_BankCode", bankCode);
 
-            createdDocEntry = createInterestAccrualDocument(oGeneralService, oGeneralData, docDate, crLnName);
-            if (createdDocEntry > 0)
+            createdDocEntry = createInterestAccrualDocument(oGeneralService, oGeneralData, docDate, crLnName, out transId);
+            if (createdDocEntry > 0 && transId > 0)
                 for (int j = 0; j < tableRowList.Count; j++)
                     oDataTable.SetValue("DocEntry", tableRowList[j], createdDocEntry);
 
@@ -861,10 +862,12 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(false);
         }
 
-        static int createInterestAccrualDocument(SAPbobsCOM.GeneralService oGeneralService, SAPbobsCOM.GeneralData oGeneralData, DateTime docDate, string crLnName)
+        static int createInterestAccrualDocument(SAPbobsCOM.GeneralService oGeneralService, SAPbobsCOM.GeneralData oGeneralData, DateTime docDate, string crLnName, out int transId)
         {
             int docEntry = 0;
             string errorText = null;
+            transId = 0;
+
             try
             {
                 CommonFunctions.StartTransaction();
@@ -875,7 +878,7 @@ namespace BDO_Localisation_AddOn
                 if (docEntry > 0)
                 {
                     DataTable jrnLinesDT = BDOSInterestAccrual.createAdditionalEntries(null, oGeneralData);
-                    int transId = BDOSInterestAccrual.jrnEntry(docEntry.ToString(), docEntry.ToString(), docDate, jrnLinesDT, out errorText);
+                    transId = BDOSInterestAccrual.jrnEntry(docEntry.ToString(), docEntry.ToString(), docDate, jrnLinesDT, out errorText);
 
                     if (errorText != null || transId == 0)
                     {
@@ -921,7 +924,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                if (docEntry > 0)
+                if (docEntry > 0 && transId > 0)
                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + ": " + docEntry + ". " + BDOSResources.getTranslate("CreditLineCode") + ": \"" + crLnName + "\"", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                 else
                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + "! " + BDOSResources.getTranslate("CreditLineCode") + ": \"" + crLnName + "\". " + BDOSResources.getTranslate("ReasonIs") + ": " + errorText, SAPbouiCOM.BoMessageTime.bmt_Short);

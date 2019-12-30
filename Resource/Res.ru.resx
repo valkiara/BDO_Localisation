@@ -2516,10 +2516,10 @@
     <value>Description is the mandatory field</value>
   </data>
   <data name="DocumentCreatedSuccesfully" xml:space="preserve">
-    <value>Document Created Succesfully!</value>
+    <value>Document created succesfully!</value>
   </data>
   <data name="DocumentNotCreated" xml:space="preserve">
-    <value>Document is not Created</value>
+    <value>Document is not created</value>
   </data>
   <data name="FromProject" xml:space="preserve">
     <value>From Project</value>
