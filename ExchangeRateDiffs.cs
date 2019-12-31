@@ -199,7 +199,7 @@ namespace BDO_Localisation_AddOn
 
                                     docRate = oRecordSetDoc.Fields.Item("DocRate").Value;
 
-                                    double amount = oRecordSetDoc.Fields.Item("Amount").Value * 1.18; //დღგ-ს გათვალისწინება
+                                    double amount = oRecordSetDoc.Fields.Item("Amount").Value;// * 1.18; //დღგ-ს გათვალისწინება
 
                                     debit = oRecordSetJDT1.Fields.Item("Debit").Value;
                                     credit = oRecordSetJDT1.Fields.Item("Credit").Value;
@@ -219,7 +219,7 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
                         }
-                        UpdateJournalEntryTable(transId, ref3, baseTrans, revSource, project, agrNo, credit, debit, docCur);
+                        UpdateJournalEntryTable(transId, memo, ref3, baseTrans, revSource, project, agrNo, credit, debit, docCur);
                     }
                 }
                 oRecordSetJDT1.MoveNext();
@@ -229,7 +229,7 @@ namespace BDO_Localisation_AddOn
             Marshal.ReleaseComObject(oRecordSetJDT1);
         }
 
-        private static void UpdateJournalEntryTable(int transId, string ref3, int baseTrans, string revSource, string project, int agrNo, double credit, double debit, string docCur)
+        private static void UpdateJournalEntryTable(int transId, string memo, string ref3, int baseTrans, string revSource, string project, int agrNo, double credit, double debit, string docCur)
         {
             string error;
             SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
@@ -303,44 +303,69 @@ namespace BDO_Localisation_AddOn
             }
             else
             {
+                SAPbobsCOM.Recordset oRecordSetNewTransId = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                 StringBuilder updateString = new StringBuilder();
+
+                StringBuilder queryNewTransId = new StringBuilder();
+                queryNewTransId.Append("select \"TransId\" \n");
+                queryNewTransId.Append("from JDT1 \n");
+                queryNewTransId.Append("where \"LineMemo\" = '" + memo + "'");
+
+                oRecordSetNewTransId.DoQuery(queryNewTransId.ToString());
+
+                int transIdNew = 0;
+
+                while (!oRecordSetNewTransId.EoF)
+                {
+                    transIdNew = oRecordSetNewTransId.Fields.Item("TransId").Value;
+                    if (transId == transIdNew)
+                    {
+                        transIdNew = 0;
+                        oRecordSetNewTransId.MoveNext();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
 
                 try
                 {
                     updateString.Append("UPDATE \"OJDT\" \n");
                     updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "' \n");
-                    updateString.Append("WHERE \"TransId\" = '" + transId + "'; \n \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transIdNew + "'; \n \n");
                     oRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"JDT1\" \n");
                     updateString.Append("SET \"RevSource\" = '" + revSource + "' \n");
-                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
                     oRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"AJDT\" \n");
                     updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "' \n");
-                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
                     oRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"AJD1\" \n");
                     updateString.Append("SET \"RevSource\" = '" + revSource + "' \n");
-                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
                     oRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"OBTF\" \n");
                     updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "' \n");
-                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
                     oRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"BTF1\" \n");
                     updateString.Append("SET \"RevSource\" = '" + revSource + "' \n");
-                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
                     oRecordSet.DoQuery(updateString.ToString());
                 }
                 catch (Exception ex)
