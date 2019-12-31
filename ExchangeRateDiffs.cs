@@ -330,6 +330,8 @@ namespace BDO_Localisation_AddOn
                         break;
                     }
                 }
+                Marshal.ReleaseComObject(oRecordSetNewTransId);
+                Marshal.ReleaseComObject(queryNewTransId);
 
                 try
                 {
