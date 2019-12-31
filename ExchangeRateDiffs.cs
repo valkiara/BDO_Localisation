@@ -33,7 +33,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.ItemUID == "1" && pVal.BeforeAction == false)
                     {
                         SAPbouiCOM.EditText oRemark = oForm.Items.Item("5").Specific;
-                        UpdateJournalEntry(oRemark.Value);
+                        GetDataForUpdate(oRemark.Value);
                     }
                 }
 
@@ -62,7 +62,7 @@ namespace BDO_Localisation_AddOn
         //    }
         //}
 
-        private static void UpdateJournalEntry(string memo)
+        private static void GetDataForUpdate(string memo)
         {
             string docType = "";
             int docNum = 0;
@@ -81,8 +81,8 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSetDoc = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             StringBuilder queryJDT1 = new StringBuilder();
-            queryJDT1.Append("select \"Ref3Line\", \"TransId\", \"Debit\",\"Credit\" \n");
-            queryJDT1.Append("from JDT1 \n");
+            queryJDT1.Append("select OJDT.\"BaseTrans\", OJDT.\"RevSource\", JDT1.\"Ref3Line\", JDT1.\"TransId\", JDT1.\"Debit\", JDT1.\"Credit\" \n");
+            queryJDT1.Append("from JDT1 join OJDT on JDT1.\"TransId\" = OJDT.\"TransId\"\n");
             queryJDT1.Append("where \"LineMemo\" = '" + memo + "'");
 
             oRecordSetJDT1.DoQuery(queryJDT1.ToString());
@@ -91,6 +91,8 @@ namespace BDO_Localisation_AddOn
             {
 
                 string ref3 = oRecordSetJDT1.Fields.Item("Ref3Line").Value;
+                int baseTrans = oRecordSetJDT1.Fields.Item("BaseTrans").Value;
+                string revSource = oRecordSetJDT1.Fields.Item("RevSource").Value;
                 if (ref3 != "")
                 {
                     double debit = 0;
@@ -171,7 +173,7 @@ namespace BDO_Localisation_AddOn
                     queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
                     queryDoc.Append("group by " + docTable + ".\"Project\", " + docTable + ".\"AgrNo\", " + docTable + ".\"DocRate\", " + docTable + ".\"U_UseBlaAgRt\"");
 
-                shortCut:
+                    shortCut:
                     oRecordSetDoc.DoQuery(queryDoc.ToString());
                     if (!oRecordSetDoc.EoF)
                     {
@@ -217,19 +219,21 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
                         }
-                        UpdateJournalEntryTable(transId, ref3, project, agrNo, credit, debit, docCur);
+                        UpdateJournalEntryTable(transId, ref3, baseTrans, revSource, project, agrNo, credit, debit, docCur);
                     }
                 }
                 oRecordSetJDT1.MoveNext();
             }
+
+            Marshal.ReleaseComObject(oRecordSetDoc);
+            Marshal.ReleaseComObject(oRecordSetJDT1);
         }
 
-        private static void UpdateJournalEntryTable(int transId, string ref3, string project, int agrNo, double credit, double debit, string docCur)
+        private static void UpdateJournalEntryTable(int transId, string ref3, int baseTrans, string revSource, string project, int agrNo, double credit, double debit, string docCur)
         {
             string error;
             SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
             oJounalEntry.GetByKey(transId);
-
 
             for (int line = 0; line < oJounalEntry.Lines.Count; line++)
             {
@@ -242,7 +246,6 @@ namespace BDO_Localisation_AddOn
                 if (agrNo != 0)
                 {
                     //oJounalEntry.UserFields.Fields.Item("blanket agreementis columni").Value = agrNo;
-
 
                     if (oJounalEntry.Lines.AdditionalReference == ref3) //for bp
                     {
@@ -281,7 +284,7 @@ namespace BDO_Localisation_AddOn
                 Program.oCompany.GetLastError(out updateCode, out error);
                 Program.uiApp.StatusBar.SetSystemMessage(error, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
             }
-            if(credit == 0 && debit == 0)
+            if (credit == 0 && debit == 0)
             {
                 goto shortcut;
             }
@@ -297,6 +300,59 @@ namespace BDO_Localisation_AddOn
             {
                 Program.oCompany.GetLastError(out updateCode, out error);
                 Program.uiApp.StatusBar.SetSystemMessage(error, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+            }
+            else
+            {
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                StringBuilder updateString = new StringBuilder();
+
+                try
+                {
+                    updateString.Append("UPDATE \"OJDT\" \n");
+                    updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "' \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transId + "'; \n \n");
+                    oRecordSet.DoQuery(updateString.ToString());
+
+                    updateString.Clear();
+                    updateString.Append("UPDATE \"JDT1\" \n");
+                    updateString.Append("SET \"RevSource\" = '" + revSource + "' \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    oRecordSet.DoQuery(updateString.ToString());
+
+                    updateString.Clear();
+                    updateString.Append("UPDATE \"AJDT\" \n");
+                    updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "' \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    oRecordSet.DoQuery(updateString.ToString());
+
+                    updateString.Clear();
+                    updateString.Append("UPDATE \"AJD1\" \n");
+                    updateString.Append("SET \"RevSource\" = '" + revSource + "' \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    oRecordSet.DoQuery(updateString.ToString());
+
+                    updateString.Clear();
+                    updateString.Append("UPDATE \"OBTF\" \n");
+                    updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "' \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    oRecordSet.DoQuery(updateString.ToString());
+
+                    updateString.Clear();
+                    updateString.Append("UPDATE \"BTF1\" \n");
+                    updateString.Append("SET \"RevSource\" = '" + revSource + "' \n");
+                    updateString.Append("WHERE \"TransId\" = '" + transId + "';  \n \n");
+                    oRecordSet.DoQuery(updateString.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                }
+
+                finally
+                {
+                    Marshal.ReleaseComObject(oRecordSet);
+                }
+
             }
 
             Marshal.ReleaseComObject(oJounalEntryNew);
