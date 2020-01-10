@@ -4710,27 +4710,27 @@ namespace BDO_Localisation_AddOn
                             }
                         }
 
-                        else if (pVal.ItemUID == "importMTR")
-                        {
-                            if (pVal.Before_Action)
-                            {
-                                oForm.PaneLevel = 2;
-                            }
-                            else
-                            {
-                                Dictionary<string, string> CompanyInfo = CommonFunctions.getCompanyInfo();
+                        //else if (pVal.ItemUID == "importMTR")
+                        //{
+                        //    if (pVal.Before_Action)
+                        //    {
+                        //        oForm.PaneLevel = 2;
+                        //    }
+                        //    else
+                        //    {
+                        //        Dictionary<string, string> CompanyInfo = CommonFunctions.getCompanyInfo();
 
-                                if (oForm.Items.Item("TBCOB").Specific.Selected == false && oForm.Items.Item("BOGOB").Specific.Selected == false)
-                                {
-                                    if (CompanyInfo["DflBnkCode"] == "TBCBGE22")
-                                        oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                                    else if (CompanyInfo["DflBnkCode"] == "BAGAGE22")
-                                        oForm.Items.Item("BOGOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                                    else
-                                        oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                                }
-                            }
-                        }
+                        //        if (oForm.Items.Item("TBCOB").Specific.Selected == false && oForm.Items.Item("BOGOB").Specific.Selected == false)
+                        //        {
+                        //            if (CompanyInfo["DflBnkCode"] == "TBCBGE22")
+                        //                oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                        //            else if (CompanyInfo["DflBnkCode"] == "BAGAGE22")
+                        //                oForm.Items.Item("BOGOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                        //            else
+                        //                oForm.Items.Item("TBCOB").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                        //        }
+                        //    }
+                        //}
 
                         else if (pVal.ItemUID == "TBCOB" || pVal.ItemUID == "BOGOB")
                         {
@@ -4744,7 +4744,7 @@ namespace BDO_Localisation_AddOn
 
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
-                        SAPbouiCOM.IChooseFromListEvent oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
+                        SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                         if (pVal.ItemUID == "accountE")
                         {
                             chooseFromListImport(oForm, oCFLEvento, pVal, out errorText);
@@ -4763,23 +4763,23 @@ namespace BDO_Localisation_AddOn
                             {
                                 fillImportMTR(oForm, out errorText);
                             }
-                            if (pVal.ItemUID == "checkB" || pVal.ItemUID == "unCheckB")
+                            else if (pVal.ItemUID == "checkB" || pVal.ItemUID == "unCheckB")
                             {
                                 checkUncheckMTRImport(oForm, pVal.ItemUID, out errorText);
                             }
-                            if (pVal.ItemUID == "getDataB")
+                            else if(pVal.ItemUID == "getDataB")
                             {
                                 getData(oForm);
                             }
-                            if (pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2")
+                            else if(pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2")
                             {
                                 checkUncheckMTRExport(oForm, pVal.ItemUID, out errorText);
                             }
-                            if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "CheckBox")
+                            else if(pVal.ItemUID == "exportMTR" && pVal.ColUID == "CheckBox")
                             {
                                 OnCheckImportDocuments(oForm, pVal.Row, pVal.ColUID);
                             }
-                            if (pVal.ItemUID == "createDocB")
+                            else if(pVal.ItemUID == "createDocB")
                             {
                                 int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CreatePaymentDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
 
@@ -4796,7 +4796,7 @@ namespace BDO_Localisation_AddOn
                                 }
                                 return;
                             }
-                            if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "InDetail")
+                            else if(pVal.ItemUID == "exportMTR" && pVal.ColUID == "InDetail")
                             {
                                 SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("exportMTR");
 
@@ -4866,7 +4866,7 @@ namespace BDO_Localisation_AddOn
                                 BDOSInternetBankingDocuments.createForm(oForm, docDate, cardCode, cardName, BPCurrency, amount, currency, downPaymentAmount, invoicesAmount, paymentOnAccount, addDPAmount, docRateIN, out oFormInternetBankingDocuments, out errorText);
                                 BDOSInternetBankingDocuments.fillInvoicesMTR(oFormInternetBankingDocuments, blnkAgr, out errorText);
                             }
-                            if (pVal.ItemUID == "syncDate")
+                            else if(pVal.ItemUID == "syncDate")
                             {
                                 if (SynchronizePayments(oForm))
                                 {
@@ -4884,8 +4884,7 @@ namespace BDO_Localisation_AddOn
                         {
                             setVisibleFormItemsMatrixColumns(oForm, out errorText);
                         }
-
-                        if (pVal.ItemUID == "imptTypeCB" && !pVal.BeforeAction)
+                        else if(pVal.ItemUID == "imptTypeCB" && !pVal.BeforeAction)
                         {
                             setVisibleFormItemsImport(oForm, out errorText);
                         }
@@ -4901,7 +4900,6 @@ namespace BDO_Localisation_AddOn
                         {
                             matrixColumnSetLinkedObjectTypeImport(oForm, pVal);
                         }
-
                         else if (pVal.ItemUID == "exportMTR")
                         {
                             matrixColumnSetLinkedObjectTypeExport(oForm, pVal);
