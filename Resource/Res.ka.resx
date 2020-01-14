@@ -3391,4 +3391,7 @@
   <data name="WarehouseAddresses" xml:space="preserve">
     <value>საწყობის მისამართები</value>
   </data>
+  <data name="SelectValues" xml:space="preserve">
+    <value>აირჩიეთ მნიშვნელობები</value>
+  </data>
 </root>

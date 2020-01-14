@@ -3418,4 +3418,7 @@
   <data name="WarehouseAddresses" xml:space="preserve">
     <value>Warehouse Addresses</value>
   </data>
+  <data name="SelectValues" xml:space="preserve">
+    <value>Select Values</value>
+  </data>
 </root>
