@@ -33,9 +33,9 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            if (formExist == true)
+            if (formExist)
             {
-                if (newForm == true)
+                if (newForm)
                 {
                     Dictionary<string, object> formItems;
 
@@ -584,6 +584,7 @@ namespace BDO_Localisation_AddOn
                 oForm.Select();
             }
         }
+
         public static void updateGrid(SAPbouiCOM.Form oForm)
         {
             try
@@ -602,7 +603,7 @@ namespace BDO_Localisation_AddOn
                 WayBill oWayBill = new WayBill(su, sp, rsSettings["ProtocolType"]);
 
                 bool chek_service_user = oWayBill.chek_service_user(su, sp, out errorText);
-                if (chek_service_user == false)
+                if (!chek_service_user)
                 {
                     errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
                     throw new Exception(errorText);
@@ -730,7 +731,7 @@ namespace BDO_Localisation_AddOn
 
                         Dictionary<string, string> Waybill_Header = map_record.Value;
                         SAPbouiCOM.EditText WBNUM = (SAPbouiCOM.EditText)(oForm.Items.Item("WBNumber").Specific);
-                        if (Waybill_Header["WAYBILL_NUMBER"] == WBNUM.Value || WBNUM.Value=="")
+                        if (Waybill_Header["WAYBILL_NUMBER"] == WBNUM.Value || WBNUM.Value == "")
                         {
                             string SELLER_TIN = Waybill_Header["SELLER_TIN"];
                             string SELLER_NAME = Waybill_Header["SELLER_NAME"];
@@ -971,7 +972,7 @@ namespace BDO_Localisation_AddOn
                         wbCompStat = "6";
                     }
 
-                    if (FilterCompStat != "0" & FilterCompStat != "")
+                    if (FilterCompStat != "0" && FilterCompStat != "")
                     {
                         if (FilterCompStat != wbCompStat)
                         {
@@ -981,7 +982,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     //სტატუსის ფილტრი
-                    if (((Fstatus == "-99" || Fstatus == "") || statuses.IndexOf(RS_STATUS) > 0) == false)
+                    if (!(Fstatus == "-99" || Fstatus == "" || statuses.IndexOf(RS_STATUS) > 0))
                     {
                         oRecordSet.MoveNext();
                         continue;
@@ -1150,7 +1151,7 @@ namespace BDO_Localisation_AddOn
                     oRecordSet.MoveNext();
                 }
 
-                if (RSDataTable.Rows.Count > 0 & (FilterCompStat == "1" || FilterCompStat == "0" || FilterCompStat == ""))
+                if (RSDataTable.Rows.Count > 0 && (FilterCompStat == "1" || FilterCompStat == "0" || FilterCompStat == ""))
                 {
                     DataRow[] RemainingRows;
                     RemainingRows = RSDataTable.Select("RowLinked = 'N'");
@@ -1183,7 +1184,7 @@ namespace BDO_Localisation_AddOn
 
                         RS_st = RemainingRows[i]["STATUS"].ToString();
                         //სტატუსის ფილტრი
-                        if (((Fstatus == "-99" || Fstatus == "") || statuses.IndexOf(RS_st) > 0) == false)
+                        if (!(Fstatus == "-99" || Fstatus == "" || statuses.IndexOf(RS_st) > 0))
                         {
                             continue;
                         }
@@ -1196,7 +1197,7 @@ namespace BDO_Localisation_AddOn
                         cTIN = RemainingRows[i]["TIN"].ToString().Trim();
                         cCode = BusinessPartners.GetCardCodeByTin(cTIN, "S", out cardName);
 
-                        if (string.IsNullOrWhiteSpace(cCode) == false)
+                        if (!string.IsNullOrWhiteSpace(cCode))
                         {
                             Sbuilder.Append("<Cell> <ColumnUid>BaseCard</ColumnUid> <Value>");
                             Sbuilder = CommonFunctions.AppendXML(Sbuilder, cCode);
@@ -1501,12 +1502,13 @@ namespace BDO_Localisation_AddOn
                 oForm.Freeze(false);
             }
         }
-        public static void SetGridColor(SAPbouiCOM.Form oForm, Boolean itemPressed, out string errorText)
+
+        public static void SetGridColor(SAPbouiCOM.Form oForm, bool itemPressed, out string errorText)
         {
             errorText = "";
 
             string oSetGridColor = oForm.DataSources.UserDataSources.Item("StGrColor").ValueEx;
-            if (oSetGridColor != "Y" && itemPressed == false)
+            if (oSetGridColor != "Y" && !itemPressed)
             {
                 return;
             }
@@ -1519,7 +1521,7 @@ namespace BDO_Localisation_AddOn
 
             for (int i = 0; i < oGrid.Rows.Count; i++)
             {
-                if (oSetGridColor != "Y" && itemPressed == true)
+                if (oSetGridColor != "Y" && itemPressed)
                 {
                     oGrid.CommonSetting.SetCellFontColor(i + 1, 2, FormsB1.getLongIntRGB(0, 0, 0));
                 }
@@ -1573,18 +1575,21 @@ namespace BDO_Localisation_AddOn
                 }
             }
         }
+
         public static void collapseGrid(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             SAPbouiCOM.Grid oGrid = ((SAPbouiCOM.Grid)(oForm.Items.Item("WbTable").Specific));
             oGrid.Rows.CollapseAll();
         }
+
         public static void expandGrid(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             SAPbouiCOM.Grid oGrid = ((SAPbouiCOM.Grid)(oForm.Items.Item("WbTable").Specific));
             oGrid.Rows.ExpandAll();
         }
+
         public static void gridColumnSetCfl(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
             errorText = null;
@@ -1593,7 +1598,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (pVal.ColUID == "BaseDoc")
                 {
-                    if ((pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED & pVal.BeforeAction == true) || (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS & pVal.BeforeAction == false))
+                    if ((pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED && pVal.BeforeAction) || (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS && !pVal.BeforeAction))
                     {
                         SAPbouiCOM.Grid oGrid = ((SAPbouiCOM.Grid)(oForm.Items.Item("WbTable").Specific));
 
@@ -1667,9 +1672,10 @@ namespace BDO_Localisation_AddOn
             }
             catch
             {
-               
+
             }
         }
+
         public static string getQueryText(DateTime startDate, DateTime endDate, string cardCode, string itypes, string statuses, string foption)
         {
             string tempQuery = @"
@@ -1875,6 +1881,7 @@ namespace BDO_Localisation_AddOn
 
             return tempQuery;
         }
+
         public static void reArrangeFormItems(SAPbouiCOM.Form oForm)
         {
             SAPbouiCOM.Item oItem;
@@ -1892,10 +1899,11 @@ namespace BDO_Localisation_AddOn
             oItem = oForm.Items.Item("StGrColor");
             oItem.Left = left_e2 + width_e + 20;
             oItem = oForm.Items.Item("WBNumber");
-            oItem.Left = left_e2 + 2*width_e ;
+            oItem.Left = left_e2 + 2 * width_e;
             oItem = oForm.Items.Item("WBNumberS");
             oItem.Left = left_e2 + width_e + 20;
         }
+
         public static void resizeForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
@@ -1909,6 +1917,7 @@ namespace BDO_Localisation_AddOn
                 errorText = ex.Message;
             }
         }
+
         public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
         {
             errorText = null;
@@ -1918,7 +1927,7 @@ namespace BDO_Localisation_AddOn
                 string sCFL_ID = oCFLEvento.ChooseFromListUID;
                 SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
 
-                if (beforeAction == false)
+                if (!beforeAction)
                 {
                     SAPbouiCOM.DataTable oDataTable = null;
                     oDataTable = oCFLEvento.SelectedObjects;
@@ -1938,6 +1947,7 @@ namespace BDO_Localisation_AddOn
             { }
 
         }
+
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
@@ -1947,7 +1957,7 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if ((pVal.ItemUID == "ClientID") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                if ((pVal.ItemUID == "ClientID") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
@@ -1955,7 +1965,7 @@ namespace BDO_Localisation_AddOn
                     chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
                     if (pVal.ItemUID == "WbFillTb")
                     {
@@ -1971,7 +1981,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && !pVal.BeforeAction)
                 {
                     oForm.DataSources.UserDataSources.Item(pVal.ItemUID).ValueEx = oForm.Items.Item(pVal.ItemUID).Specific.Value;
                 }
@@ -1981,12 +1991,12 @@ namespace BDO_Localisation_AddOn
                     gridColumnSetCfl(oForm, pVal, out errorText);
                 }
 
-                if ((pVal.ItemUID == "StGrColor") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
+                if ((pVal.ItemUID == "StGrColor") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && !pVal.BeforeAction)
                 {
                     SetGridColor(oForm, true, out errorText);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
                 {
                     oForm.Freeze(true);
                     resizeForm(oForm, out errorText);
