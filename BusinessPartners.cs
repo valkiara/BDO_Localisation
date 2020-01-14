@@ -15,7 +15,7 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string query = $"SELECT \"CardCode\", \"CardName\", \"Currency\" FROM \"OCRD\" WHERE \"LicTradNum\" = '{tin}' ";
 
-            if (string.IsNullOrEmpty(cardType) == false)
+            if (!string.IsNullOrEmpty(cardType))
             {
                 query = query + $" AND \"CardType\" = '{cardType}'";
             }
@@ -500,7 +500,7 @@ namespace BDO_Localisation_AddOn
             errorText = null;
             try
             {
-                if (before_Action == false)
+                if (!before_Action)
                 {
                     if (itemUID == "40")
                     {
@@ -527,12 +527,12 @@ namespace BDO_Localisation_AddOn
                     {
                         //თუ მოგების გადასახადის ველები არ ჩანს, უნდა გამოირთოს
                         string BDO_TaxType = oForm.DataSources.DBDataSources.Item("OCRD").GetValue("U_BDO_TaxTyp", 0).Trim();
-                        if ((BDO_TaxType == "" || BDO_TaxType == "1" || BDO_TaxType == "3" || BDO_TaxType == "10" || BDO_TaxType == "11") == true)
+                        if (BDO_TaxType == "" || BDO_TaxType == "1" || BDO_TaxType == "3" || BDO_TaxType == "10" || BDO_TaxType == "11")
                         {
                             SAPbouiCOM.CheckBox oBDO_PTExem = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_PTExem").Specific));
                             oBDO_PTExem.Checked = false;
                         }
-                        if ((BDO_TaxType == "10" || BDO_TaxType == "11") == false)
+                        if (!(BDO_TaxType == "10" || BDO_TaxType == "11"))
                         {
                             SAPbouiCOM.CheckBox oBDO_RIOfsh = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_RIOfsh").Specific));
                             oBDO_RIOfsh.Checked = false;
@@ -577,9 +577,6 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                }
-                else if (before_Action == true)
-                {
                 }
             }
             catch (Exception ex)
@@ -626,10 +623,10 @@ namespace BDO_Localisation_AddOn
                 oForm.PaneLevel = panelLevel;
 
                 oForm.Items.Item("128").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                oForm.Items.Item("BDO_PTExem").Visible = ((BDO_TaxType == "" || BDO_TaxType == "1" || BDO_TaxType == "3" || BDO_TaxType == "10" || BDO_TaxType == "11") == false);
-                oForm.Items.Item("BDO_RIOfsh").Visible = (BDO_TaxType == "10" || BDO_TaxType == "11");
-                oForm.Items.Item("BDO_PhysTp").Visible = (BDO_TaxType == "3");
-                oForm.Items.Item("BDO_PhsTpt").Visible = (BDO_TaxType == "3");
+                oForm.Items.Item("BDO_PTExem").Visible = !(BDO_TaxType == "" || BDO_TaxType == "1" || BDO_TaxType == "3" || BDO_TaxType == "10" || BDO_TaxType == "11");
+                oForm.Items.Item("BDO_RIOfsh").Visible = BDO_TaxType == "10" || BDO_TaxType == "11";
+                oForm.Items.Item("BDO_PhysTp").Visible = BDO_TaxType == "3";
+                oForm.Items.Item("BDO_PhsTpt").Visible = BDO_TaxType == "3";
             }
             catch (Exception ex)
             {
@@ -663,7 +660,7 @@ namespace BDO_Localisation_AddOn
             WayBill oWayBill = new WayBill(rsSettings["ProtocolType"]);
 
             bool chek_service_user = oWayBill.chek_service_user(su, sp, out errorText);
-            if (chek_service_user == false)
+            if (!chek_service_user)
             {
                 errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
                 return;
@@ -684,13 +681,13 @@ namespace BDO_Localisation_AddOn
 
                 if (cardType == "S") //თუ მომწოდებელია
                 {
-                    if (isVatPayer == true & vatStatus != "Y") //Liable
+                    if (isVatPayer && vatStatus != "Y") //Liable
                     {
                         oForm.PaneLevel = 10;
                         SAPbouiCOM.ComboBox oVatStatus = ((SAPbouiCOM.ComboBox)(oForm.Items.Item("76").Specific));
                         oVatStatus.Select("Liable", SAPbouiCOM.BoSearchKey.psk_ByDescription);
                     }
-                    else if (isVatPayer == false & vatStatus != "N") //Exempt
+                    else if (!isVatPayer && vatStatus != "N") //Exempt
                     {
                         oForm.PaneLevel = 10;
                         SAPbouiCOM.ComboBox oVatStatus = ((SAPbouiCOM.ComboBox)(oForm.Items.Item("76").Specific));
@@ -699,13 +696,13 @@ namespace BDO_Localisation_AddOn
                 }
                 //if (cardType == "C" || cardType == "L") //თუ მყიდველია ან პოტენციური კლიენტი
                 //{
-                if (isVatPayer == true & BDO_NotInv != "N")
+                if (isVatPayer && BDO_NotInv != "N")
                 {
                     oForm.PaneLevel = 10;
                     SAPbouiCOM.CheckBox oBDO_NotInv = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_NotInv").Specific));
                     oBDO_NotInv.Checked = false;
                 }
-                else if (isVatPayer == false & BDO_NotInv != "Y")
+                else if (!isVatPayer && BDO_NotInv != "Y")
                 {
                     oForm.PaneLevel = 10;
                     SAPbouiCOM.CheckBox oBDO_NotInv = ((SAPbouiCOM.CheckBox)(oForm.Items.Item("BDO_NotInv").Specific));
@@ -905,7 +902,7 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            if (getInitFromTIN == true)
+            if (getInitFromTIN)
             {
                 string name = BDO_Waybills.getInitFromTIN(tin, out errorText);
 
@@ -944,15 +941,15 @@ namespace BDO_Localisation_AddOn
 
             if (oForm.TypeEx == "134")
             {
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
+                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
                 {
-                    BusinessPartners.setVisibleFormItems(oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
 
                 //გსნ-თი და ბპ ტიპით უნიკალურობის კონტროლი
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
                 {
-                    if (BusinessObjectInfo.BeforeAction == true)
+                    if (BusinessObjectInfo.BeforeAction)
                     {
                         string CardType = oForm.DataSources.DBDataSources.Item(0).GetValue("CardType", 0).Trim();
 
@@ -1002,20 +999,20 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
-                    BusinessPartners.createFormItems(oForm, out errorText);
-                    BusinessPartners.setVisibleFormItems(oForm, out errorText);
+                    createFormItems(oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
 
                 if (pVal.ItemUID == "BDO_TinBtn")
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                     {
                         SAPbouiCOM.Button oButton = (SAPbouiCOM.Button)oForm.Items.Item("BDO_TinBtn").Specific;
                         oButton.Image = "15886_MENU_CHECKED";
                         oForm.Freeze(true);
-                        BusinessPartners.BDO_TinBtn_OnClick(oForm, out errorText);
+                        BDO_TinBtn_OnClick(oForm, out errorText);
                         oForm.Freeze(false);
                         oButton.Image = "15886_MENU";
                         if (errorText != null)
@@ -1026,7 +1023,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && !pVal.BeforeAction)
                 {
                     oForm.Freeze(true);
                     comboSelect(oForm, pVal.ItemUID, pVal.BeforeAction, out errorText);
@@ -1034,12 +1031,12 @@ namespace BDO_Localisation_AddOn
                     oForm.Freeze(false);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && !pVal.BeforeAction)
                 {
                     if (pVal.ItemUID == "262")
                     {
                         oForm.Freeze(true);
-                        BusinessPartners.setVisibleFormItems(oForm, out errorText);
+                        setVisibleFormItems(oForm, out errorText);
                         oForm.Freeze(false);
                     }
                 }
