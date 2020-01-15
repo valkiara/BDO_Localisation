@@ -12,13 +12,13 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_Waybills
     {
-        public static void createDocumentUDO( out string errorText)
+        public static void createDocumentUDO(out string errorText)
         {
             errorText = null;
             string tableName = "BDO_WBLD";
             string description = "Waybill";
 
-            int result = UDO.addUserTable( tableName, description, SAPbobsCOM.BoUTBTableType.bott_Document, out errorText);
+            int result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_Document, out errorText);
 
             if (result != 0)
             {
@@ -35,7 +35,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "number");
@@ -44,7 +44,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             listValidValues = new List<string>();
@@ -58,7 +58,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             listValidValues = new List<string>();
@@ -77,7 +77,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //გააქტიურების თარიღი
             fieldskeysMap.Add("Name", "actDate");
@@ -85,7 +85,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Activate Date");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ტრანსპორტირების დაწყების თარიღი
             fieldskeysMap.Add("Name", "begDate");
@@ -93,7 +93,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Begin Date");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //ტრანსპორტირების დაწყების თარიღი (საათები/წუთები)
             fieldskeysMap.Add("Name", "beginTime");
@@ -102,7 +102,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Time);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "strAddrs");
@@ -111,7 +111,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "endAddrs");
@@ -120,7 +120,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //გამშვები  //ჩამბარებელი თანამშრომელი
             fieldskeysMap.Add("Name", "recpInfo");
@@ -129,7 +129,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //გამშვები  //ჩამბარებელი თანამშრომელი
             fieldskeysMap.Add("Name", "recpInfN");
@@ -138,7 +138,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //მიმღები //საკონტაქტო პირი
             fieldskeysMap.Add("Name", "recvInfo");
@@ -147,7 +147,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //მიმღები //საკონტაქტო პირი
             fieldskeysMap.Add("Name", "recvInfN");
@@ -156,7 +156,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "comment");
@@ -165,7 +165,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 254);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); //მიწოდების თარიღი
             fieldskeysMap.Add("Name", "delvDate");
@@ -173,7 +173,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Delivery Date");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             listValidValues = new List<string>();
@@ -192,7 +192,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "vehicle");
@@ -201,7 +201,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("LinkedTable", "BDO_VECL");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "vehicNum");
@@ -210,7 +210,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "trailNum");
@@ -219,7 +219,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "drvCode");
@@ -228,7 +228,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "drivTin");
@@ -237,7 +237,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 11);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "notRsdnt");
@@ -247,7 +247,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "N");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "tporter");
@@ -256,7 +256,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 15);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "tporterN");
@@ -265,7 +265,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "tporterT");
@@ -274,7 +274,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 32);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "trnsExpn");
@@ -283,7 +283,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             listValidValues = new List<string>();
@@ -299,7 +299,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 10);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "baseDoc");
@@ -308,7 +308,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
             fieldskeysMap.Add("EditSize", 11);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "baseDTxt");
@@ -317,7 +317,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 11);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "baseDocT");
@@ -326,7 +326,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "cardCode");
@@ -335,10 +335,10 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 15);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
         }
 
-        public static void registerUDO( out string errorText)
+        public static void registerUDO(out string errorText)
         {
             errorText = null;
             string code = "UDO_F_BDO_WBLD_D"; //20 characters (must include at least one alphabetical character).
@@ -442,7 +442,7 @@ namespace BDO_Localisation_AddOn
 
             formProperties.Add("FormColumns", listFormColumns);
 
-            UDO.registerUDO( code, formProperties, out errorText);
+            UDO.registerUDO(code, formProperties, out errorText);
 
             GC.Collect();
         }
@@ -469,18 +469,18 @@ namespace BDO_Localisation_AddOn
             }
             catch
             {
-                
+
             }
         }
 
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             Dictionary<string, object> formItems;
 
             string addonName = "BDOS Localisation AddOn";
             string addonFormType = "UDO_FT_UDO_F_BDO_WBLD_D";
-            oForm.ReportType = CrystalReports.getReportTypeCode( addonName, addonFormType, out errorText);
+            oForm.ReportType = CrystalReports.getReportTypeCode(addonName, addonFormType, out errorText);
 
             string itemName = "";
 
@@ -988,13 +988,13 @@ namespace BDO_Localisation_AddOn
             bool multiSelection = false;
             string objectType = "13"; //A/R Invoice
             string uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
             objectType = "15"; //A/R Credit Memo
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
             objectType = "67"; //Inventory Transfer
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
 
             objectType = "UDO_F_BDOSFASTRD_D"; //Inventory Transfer
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
@@ -1002,10 +1002,10 @@ namespace BDO_Localisation_AddOn
 
             objectType = "14"; //A/R Credit Memo
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
             objectType = "60"; //Goods Issue
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
             //<----
 
             formItems = new Dictionary<string, object>();
@@ -1203,7 +1203,7 @@ namespace BDO_Localisation_AddOn
             multiSelection = false;
             objectType = "171"; //SAPbouiCOM.BoLinkedObject.lf_Employee 
             string uniqueID_lf_EmployeeCFL = "Employee_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_EmployeeCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_EmployeeCFL);
 
             formItems = new Dictionary<string, object>(); //გამშვები  //ჩამბარებელი თანამშრომელი
             itemName = "17_U_S"; //10 characters
@@ -1331,7 +1331,7 @@ namespace BDO_Localisation_AddOn
             multiSelection = false;
             objectType = "11";
             string uniqueID_lf_ContactCFL = "Contact_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_ContactCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_ContactCFL);
 
             formItems = new Dictionary<string, object>(); //მიმღები //საკონტაქტო პირი
             itemName = "20_U_S"; //10 characters
@@ -1534,7 +1534,7 @@ namespace BDO_Localisation_AddOn
             multiSelection = false;
             objectType = "UDO_F_BDO_VECL_D";
             string uniqueID_VehicleCodeCFL = "VehicleCode_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_VehicleCodeCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_VehicleCodeCFL);
 
             formItems = new Dictionary<string, object>();
             itemName = "24_U_E"; //10 characters
@@ -1643,7 +1643,7 @@ namespace BDO_Localisation_AddOn
             multiSelection = false;
             objectType = "UDO_F_BDO_DRVS_D";
             string uniqueID_DriverCodeCFL = "DriverCode_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_DriverCodeCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_DriverCodeCFL);
 
             formItems = new Dictionary<string, object>();
             itemName = "26_U_S"; //10 characters
@@ -1876,7 +1876,7 @@ namespace BDO_Localisation_AddOn
             multiSelection = false;
             objectType = "2"; //SAPbouiCOM.BoLinkedObject.lf_BusinessPartner, Business Partner object 
             string uniqueID_lf_BusinessPartnerCFL = "BusinessPartner_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_BusinessPartnerCFL);
 
             //პირობის დადება ბიზნესპარტნიორის არჩევის სიაზე
             SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(uniqueID_lf_BusinessPartnerCFL);
@@ -2152,7 +2152,7 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void fillNewDocument( SAPbouiCOM.Form oForm, out string errorText)
+        public static void fillNewDocument(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -2163,7 +2163,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -2178,7 +2178,7 @@ namespace BDO_Localisation_AddOn
             oForm.DataSources.DBDataSources.Item("@BDO_WBLD").SetValue("U_begDate", 0, DateTime.Today.ToString("yyyyMMdd"));
         }
 
-        public static void createDocument( string objectType, int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        public static void createDocument(string objectType, int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -2214,8 +2214,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
-        private static void createDocumentARInvoiceType( int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentARInvoiceType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -2271,7 +2270,7 @@ namespace BDO_Localisation_AddOn
 
                     string empID;
                     string empName;
-                    Users.getUserEmployee( out empID, out empName, out errorText);
+                    Users.getUserEmployee(out empID, out empName, out errorText);
 
                     string cntctCode = oRecordSet.Fields.Item("CntctCode").Value.ToString();
 
@@ -2341,7 +2340,7 @@ namespace BDO_Localisation_AddOn
                     string waybillType = null;
                     if (trnsType == null)
                     {
-                        Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+                        Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
 
                         if (errorText == null)
                         {
@@ -2583,7 +2582,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void createDocumentInventoryTransferType( int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentInventoryTransferType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -2662,8 +2661,8 @@ namespace BDO_Localisation_AddOn
 
                     string empID;
                     string empName;
-                    Users.getUserEmployee( out empID, out empName, out errorText);
-                    
+                    Users.getUserEmployee(out empID, out empName, out errorText);
+
                     string cntctCode = oRecordSet.Fields.Item("CntctCode").Value.ToString();
 
                     oGeneralData.SetProperty("U_endAddrs", endAddrs);
@@ -2678,7 +2677,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_baseDocT", oRecordSet.Fields.Item("ObjType").Value.ToString());
                     oGeneralData.SetProperty("U_strAddrs", strAddrs);
                     oGeneralData.SetProperty("U_begDate", DateTime.Today);  //DateTime.Today.ToString("yyyyMMdd"));
-                    oGeneralData.SetProperty("U_beginTime", DateTime.Now); 
+                    oGeneralData.SetProperty("U_beginTime", DateTime.Now);
 
                     if (vehicleCode != null)
                     {
@@ -2748,7 +2747,7 @@ namespace BDO_Localisation_AddOn
 
                         Program.oCompany.GetLastError(out errCode, out errMsg);
                         errorText = ex.Message;
-                        errorText = BDOSResources.getTranslate("ErrorOfDocumentAdd") + " " + BDOSResources.getTranslate("ErrorDescription") + " " + errMsg + "! "+BDOSResources.getTranslate("Code") +" : " + errCode + "! " + errorText;
+                        errorText = BDOSResources.getTranslate("ErrorOfDocumentAdd") + " " + BDOSResources.getTranslate("ErrorDescription") + " " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + errorText;
                     }
 
                     oRecordSet.MoveNext();
@@ -2785,8 +2784,8 @@ namespace BDO_Localisation_AddOn
                            " INNER JOIN \"OLCT\" AS \"OLCT\"" +
                            " ON \"FASTRD\".\"U_FLocCode\" = \"OLCT\".\"Code\"" +
                            " WHERE \"FASTRD\".\"DocEntry\" = '" + baseDocEntry + "'";
-            
-        
+
+
             try
             {
                 oRecordSet.DoQuery(queryStrAddrs);
@@ -2842,7 +2841,7 @@ namespace BDO_Localisation_AddOn
                     string empID;
                     string empName;
                     Users.getUserEmployee(out empID, out empName, out errorText);
-                    
+
 
                     string cntctCode = oRecordSet.Fields.Item("U_TEmplID").Value.ToString();
 
@@ -2946,7 +2945,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void createDocumentInvoiceCreditMemoType( int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentInvoiceCreditMemoType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -3002,7 +3001,7 @@ namespace BDO_Localisation_AddOn
 
                     string empID;
                     string empName;
-                    Users.getUserEmployee( out empID, out empName, out errorText);
+                    Users.getUserEmployee(out empID, out empName, out errorText);
 
                     string cntctCode = oRecordSet.Fields.Item("CntctCode").Value.ToString();
 
@@ -3018,7 +3017,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_baseDocT", oRecordSet.Fields.Item("ObjType").Value.ToString());
                     oGeneralData.SetProperty("U_endAddrs", strAddrs); //U_strAddrs
                     oGeneralData.SetProperty("U_begDate", DateTime.Today);  //DateTime.Today.ToString("yyyyMMdd"));
-                    oGeneralData.SetProperty("U_beginTime", DateTime.Now); 
+                    oGeneralData.SetProperty("U_beginTime", DateTime.Now);
 
                     if (vehicleCode != null)
                     {
@@ -3088,7 +3087,7 @@ namespace BDO_Localisation_AddOn
 
                         Program.oCompany.GetLastError(out errCode, out errMsg);
                         errorText = ex.Message;
-                        errorText = BDOSResources.getTranslate("ErrorOfDocumentAdd") + " " + BDOSResources.getTranslate("ErrorDescription") + " " + errMsg + "! "+BDOSResources.getTranslate("Code") +" : " + errCode + "! " + errorText;
+                        errorText = BDOSResources.getTranslate("ErrorOfDocumentAdd") + " " + BDOSResources.getTranslate("ErrorDescription") + " " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + errorText;
                     }
 
                     oRecordSet.MoveNext();
@@ -3106,7 +3105,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void createDocumentGoodsIssueType( int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentGoodsIssueType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -3186,7 +3185,7 @@ namespace BDO_Localisation_AddOn
 
                     string empID;
                     string empName;
-                    Users.getUserEmployee( out empID, out empName, out errorText);
+                    Users.getUserEmployee(out empID, out empName, out errorText);
 
                     oGeneralData.SetProperty("U_endAddrs", endAddrs);
                     oGeneralData.SetProperty("U_delvDate", oRecordSet.Fields.Item("DocDate").Value.ToString());
@@ -3525,7 +3524,7 @@ namespace BDO_Localisation_AddOn
             oItem.Top = oForm.ClientHeight - 25;
         }
 
-        public static void setSizeForm( SAPbouiCOM.Form oForm, out string errorText)
+        public static void setSizeForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             try
@@ -3545,7 +3544,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void resizeForm( SAPbouiCOM.Form oForm, out string errorText)
+        public static void resizeForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -3559,7 +3558,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void chooseFromList( SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
+        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
         {
             errorText = null;
             try
@@ -3587,18 +3586,23 @@ namespace BDO_Localisation_AddOn
                         string tableName = "OINV";
                         switch (oCFL.ObjectType)
                         {
-                            case "13": tableName = "OINV";
+                            case "13":
+                                tableName = "OINV";
                                 break;
-                            case "15": tableName = "ODLN";
+                            case "15":
+                                tableName = "ODLN";
                                 break;
-                            case "67": tableName = "OWTR";
+                            case "67":
+                                tableName = "OWTR";
                                 break;
                             case "UDO_F_BDOSFASTRD_D":
                                 tableName = "@BDOSFASTRD";
                                 break;
-                            case "14": tableName = "ORIN";
+                            case "14":
+                                tableName = "ORIN";
                                 break;
-                            case "60": tableName = "OIGE";
+                            case "60":
+                                tableName = "OIGE";
                                 break;
                         }
 
@@ -3762,7 +3766,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void setVisibleFormItems( SAPbouiCOM.Form oForm, out string errorText)
+        public static void setVisibleFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             SAPbouiCOM.Item oItem = null;
@@ -4182,7 +4186,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void formDataLoad(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -4194,18 +4198,23 @@ namespace BDO_Localisation_AddOn
 
                 switch (baseDocType)
                 {
-                    case "13": caption = BDOSResources.getTranslate("ARInvoice"); //"A/R Invoice";
+                    case "13":
+                        caption = BDOSResources.getTranslate("ARInvoice"); //"A/R Invoice";
                         break;
-                    case "15": caption = BDOSResources.getTranslate("Delivery"); //"Delivery";
+                    case "15":
+                        caption = BDOSResources.getTranslate("Delivery"); //"Delivery";
                         break;
-                    case "67": caption = BDOSResources.getTranslate("StockTransfer"); //"Inventory Transfer";
+                    case "67":
+                        caption = BDOSResources.getTranslate("StockTransfer"); //"Inventory Transfer";
                         break;
                     case "UDO_F_BDOSFASTRD_D":
                         caption = BDOSResources.getTranslate("FixedAssetTransferDocument"); //"Fixed AssetTransfer";
                         break;
-                    case "14": caption = BDOSResources.getTranslate("ARCreditMemo"); //"A/R Credit Memo";
+                    case "14":
+                        caption = BDOSResources.getTranslate("ARCreditMemo"); //"A/R Credit Memo";
                         break;
-                    case "60": caption = BDOSResources.getTranslate("GoodsIssue"); //"Goods Issue";
+                    case "60":
+                        caption = BDOSResources.getTranslate("GoodsIssue"); //"Goods Issue";
                         break;
                 }
 
@@ -4241,7 +4250,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void comboSelect(  SAPbouiCOM.Form oForm, string itemUID, bool before_Action, out string errorText)
+        public static void comboSelect(SAPbouiCOM.Form oForm, string itemUID, bool before_Action, out string errorText)
         {
             errorText = null;
 
@@ -4354,7 +4363,7 @@ namespace BDO_Localisation_AddOn
                             int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
                             int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
                             //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
-                            saveWaybill( docEntry, baseDocEntry, operationRS, out errorText);
+                            saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -4370,7 +4379,7 @@ namespace BDO_Localisation_AddOn
                             int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
                             int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
                             //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
-                            saveWaybill( docEntry, baseDocEntry, operationRS, out errorText);
+                            saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -4385,7 +4394,7 @@ namespace BDO_Localisation_AddOn
                             int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
                             int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
                             //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
-                            saveWaybill( docEntry, baseDocEntry, operationRS, out errorText);
+                            saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -4400,7 +4409,7 @@ namespace BDO_Localisation_AddOn
                             int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
                             int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
                             //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
-                            saveWaybill( docEntry, baseDocEntry, operationRS, out errorText);
+                            saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -4414,7 +4423,7 @@ namespace BDO_Localisation_AddOn
                         {
                             int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
                             int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            closeWaybill( docEntry, baseDocEntry, out errorText);
+                            closeWaybill(docEntry, baseDocEntry, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -4428,7 +4437,7 @@ namespace BDO_Localisation_AddOn
                         {
                             int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
                             int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            refWaybill( docEntry, baseDocEntry, out errorText);
+                            refWaybill(docEntry, baseDocEntry, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -4442,7 +4451,7 @@ namespace BDO_Localisation_AddOn
                         {
                             int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
                             int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            getWaybill( docEntry, baseDocEntry, out errorText);
+                            getWaybill(docEntry, baseDocEntry, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -4476,7 +4485,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static Dictionary<string, string> getWaybillDocumentInfo( int docEntry, string baseDocType, out string errorText)
+        public static Dictionary<string, string> getWaybillDocumentInfo(int docEntry, string baseDocType, out string errorText)
         {
             errorText = null;
 
@@ -4526,7 +4535,7 @@ namespace BDO_Localisation_AddOn
             return wblDocInfo;
         }
 
-        public static void cancellation( int docEntry, string operation, out string errorText)
+        public static void cancellation(int docEntry, string operation, out string errorText)
         {
             errorText = null;
 
@@ -4643,7 +4652,7 @@ namespace BDO_Localisation_AddOn
             return trnsTypeString;
         }
 
-        public static bool printUDO(  string strDocNum)
+        public static bool printUDO(string strDocNum)
         {
             // get menu UID of report
             SAPbobsCOM.Recordset oRS = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -4665,7 +4674,7 @@ namespace BDO_Localisation_AddOn
             return true;
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -4681,8 +4690,8 @@ namespace BDO_Localisation_AddOn
             {
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
                 {
-                    formDataLoad( oForm, out errorText);
-                    setVisibleFormItems( oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD & BusinessObjectInfo.BeforeAction == true)
                 {
@@ -4695,7 +4704,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -4706,7 +4715,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    createFormItems( oForm, out errorText);
+                    createFormItems(oForm, out errorText);
                     Program.FORM_LOAD_FOR_VISIBLE = true;
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
@@ -4716,26 +4725,26 @@ namespace BDO_Localisation_AddOn
                     oForm.Freeze(true);
                     if (Program.FORM_LOAD_FOR_VISIBLE == true)
                     {
-                        setSizeForm( oForm, out errorText);
+                        setSizeForm(oForm, out errorText);
                         oForm.Title = BDOSResources.getTranslate("Waybill");
                         Program.FORM_LOAD_FOR_VISIBLE = false;
                     }
-                    setVisibleFormItems( oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                     oForm.Freeze(false);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
                 {
                     oForm.Freeze(true);
-                    resizeForm( oForm, out errorText);
+                    resizeForm(oForm, out errorText);
                     oForm.Freeze(false);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
                 {
                     oForm.Freeze(true);
-                    comboSelect( oForm, pVal.ItemUID, pVal.BeforeAction, out errorText);
-                    setVisibleFormItems( oForm, out errorText);
+                    comboSelect(oForm, pVal.ItemUID, pVal.BeforeAction, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                     oForm.Freeze(false);
                     oForm.Update();
                 }
@@ -4746,8 +4755,8 @@ namespace BDO_Localisation_AddOn
                     {
                         //fillNewDocument( oForm, out errorText);
                         oForm.Freeze(true);
-                        setVisibleFormItems( oForm, out errorText);
-                        formDataLoad( oForm, out errorText);
+                        setVisibleFormItems(oForm, out errorText);
+                        formDataLoad(oForm, out errorText);
                         oForm.Freeze(false);
                         oForm.Update();
                         Program.FORM_LOAD_FOR_ACTIVATE = false;
@@ -4759,17 +4768,17 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
 
-                    chooseFromList( oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
+                    chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                 }
             }
         }
 
-        //--------------------------------------------RS.GE-------------------------------------------->
-        public static void saveWaybill( int docEntry, int baseDocEntry, string operationRS, out string errorText)
+        #region RS.GE
+        public static void saveWaybill(int docEntry, int baseDocEntry, string operationRS, out string errorText)
         {
             errorText = null;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -4848,17 +4857,23 @@ namespace BDO_Localisation_AddOn
                     string TYPE = oRecordSet.Fields.Item("U_type").Value.ToString(); //TYPE - ზედნადების ტიპი
                     switch (U_baseDocT)
                     {
-                        case "13": TYPE = TYPE == "0" ? "2" : "3"; //ტრანსპორტირებით = 2 //ტრანსპორტირების გარეშე = 3 //A/R Invoice
+                        case "13":
+                            TYPE = TYPE == "0" ? "2" : "3"; //ტრანსპორტირებით = 2 //ტრანსპორტირების გარეშე = 3 //A/R Invoice
                             break;
-                        case "15": TYPE = TYPE == "0" ? "2" : "3"; //ტრანსპორტირებით = 2 //ტრანსპორტირების გარეშე = 3 //Delivery
+                        case "15":
+                            TYPE = TYPE == "0" ? "2" : "3"; //ტრანსპორტირებით = 2 //ტრანსპორტირების გარეშე = 3 //Delivery
                             break;
-                        case "67": TYPE = "1"; //შიდა გადაზიდვა  //Inventory Transfer
+                        case "67":
+                            TYPE = "1"; //შიდა გადაზიდვა  //Inventory Transfer
                             break;
-                        case "UDO_F_BDOSFASTRD_D": TYPE = "1"; //შიდა გადაზიდვა  //Fixed Asset Transfer
+                        case "UDO_F_BDOSFASTRD_D":
+                            TYPE = "1"; //შიდა გადაზიდვა  //Fixed Asset Transfer
                             break;
-                        case "14": TYPE = "5"; //უკან დაბრუნება  //A/R Credit Memo
+                        case "14":
+                            TYPE = "5"; //უკან დაბრუნება  //A/R Credit Memo
                             break;
-                        case "60": TYPE = "1"; //შიდა გადაზიდვა  //Goods Issue
+                        case "60":
+                            TYPE = "1"; //შიდა გადაზიდვა  //Goods Issue
                             break;
                     }
                     string BUYER_TIN = (U_baseDocT == "67" || U_baseDocT == "60" || U_baseDocT == "UDO_F_BDOSFASTRD_D") ? "" : oRecordSet.Fields.Item("LicTradNum").Value.ToString(); //BUYER_TIN - მყიდველის პირადი ან საიდენტიფიკაციო ნომერი
@@ -4880,31 +4895,31 @@ namespace BDO_Localisation_AddOn
                     string RECEIVER_INFO = oRecordSet.Fields.Item("U_recvInfN").Value.ToString(); //RECEIVER_INFO - მიმღების ინფორმაცია               
                     DateTime DELIVERY_DATE = DateTime.MinValue; //DELIVERY_DATE - მიწოდების თარიღი გადასცემთ უკვე აქტიურს დახურვის წინ               
                     string STATUS_DOC = oRecordSet.Fields.Item("U_status").Value.ToString(); //STATUS - ზედნადების სტატუსი: 0-შენახული 1-აქტივირებული 2 დახურული
-                    
+
                     //switch (operationRS)
                     //{
-                        if(operationRS == BDOSResources.getTranslate("RSCreate")) 
-                        {
-                            STATUS = "0";
-                           
-                        }
-                        else if(operationRS ==  BDOSResources.getTranslate("RSActivation"))
-                        { 
-                            STATUS = "1";
-                            
-                        }
-                        else if(operationRS ==   BDOSResources.getTranslate("RSSendToTransporter")) 
-                        {
-                            STATUS = "8";
-                        }
-                            
-                        else if(operationRS ==  BDOSResources.getTranslate("RSCorrection"))
-                        {
-                            if (STATUS_DOC == "2") { STATUS = "1"; } //"აქტიური"
-                            if (STATUS_DOC == "6") { STATUS = "5"; } //"გადამზიდავთან გადაგზავნილი"
-                            if (STATUS_DOC == "3") { STATUS = "2"; } //"დასრულებული"                       
-                            
-                        }
+                    if (operationRS == BDOSResources.getTranslate("RSCreate"))
+                    {
+                        STATUS = "0";
+
+                    }
+                    else if (operationRS == BDOSResources.getTranslate("RSActivation"))
+                    {
+                        STATUS = "1";
+
+                    }
+                    else if (operationRS == BDOSResources.getTranslate("RSSendToTransporter"))
+                    {
+                        STATUS = "8";
+                    }
+
+                    else if (operationRS == BDOSResources.getTranslate("RSCorrection"))
+                    {
+                        if (STATUS_DOC == "2") { STATUS = "1"; } //"აქტიური"
+                        if (STATUS_DOC == "6") { STATUS = "5"; } //"გადამზიდავთან გადაგზავნილი"
+                        if (STATUS_DOC == "3") { STATUS = "2"; } //"დასრულებული"                       
+
+                    }
                     //}
                     string SELER_UN_ID = oWayBill.un_id.ToString(); //SELER_UN_ID - გამყიდველის უნიკალური ნომერი. გიბრუნებთ chek_service_user
                     string PAR_ID = "0"; //PAR_ID - მშობელი ზედნადების ID ქვე ზედნადების დროს TYPE = 6
@@ -4912,7 +4927,7 @@ namespace BDO_Localisation_AddOn
                     string CAR_NUMBER = oRecordSet.Fields.Item("U_vehicNum").Value.ToString(); //CAR_NUMBER - მანქანის ნომერი
                     string WAYBILL_NUMBER = oRecordSet.Fields.Item("U_number").Value.ToString();//WAYBILL_NUMBER
                     string S_USER_ID = oWayBill.un_user_id.ToString(); //S_USER_ID
-                                        
+
                     BEGIN_DATE = DateTime.TryParse(oRecordSet.Fields.Item("U_begDate").Value.ToString("yyyyMMdd") == "18991230" ? "" : oRecordSet.Fields.Item("U_begDate").Value.ToString(), out BEGIN_DATE) == false ? DateTime.MinValue : BEGIN_DATE;  //BEGIN_DATE - ტრანსპორტირების დაწყების თარიღი
                     BEGIN_DATE = BEGIN_DATE == DateTime.MinValue || BEGIN_DATE < DateTime.Today ? DateTime.Now : BEGIN_DATE;
 
@@ -4920,8 +4935,8 @@ namespace BDO_Localisation_AddOn
                     decimal U_beginTime = Convert.ToDecimal(oRecordSet.Fields.Item("U_beginTime").Value);
                     int Hour = Convert.ToInt32(Math.Round(U_beginTime / 100));
                     int Min = Convert.ToInt32(U_beginTime - Hour * 100);
-                    BEGIN_DATE = new DateTime(BEGIN_DATE.Year, BEGIN_DATE.Month, BEGIN_DATE.Day, Hour, Min,0);
-                    
+                    BEGIN_DATE = new DateTime(BEGIN_DATE.Year, BEGIN_DATE.Month, BEGIN_DATE.Day, Hour, Min, 0);
+
                     string TRAN_COST_PAYER = oRecordSet.Fields.Item("U_payForTr").Value.ToString(); //TRAN_COST_PAYER- ტრანსპორტირების ღირებულებას თუ იხდის მყიდველი - 1; გამყიდველი - 2;
                     TRAN_COST_PAYER = TRAN_COST_PAYER == "-1" ? "0" : TRAN_COST_PAYER;
                     string TRANS_ID = oRecordSet.Fields.Item("U_trnsType").Value.ToString(); //TRANS_ID - ტრანსპორტის ტიპის id
@@ -4943,17 +4958,23 @@ namespace BDO_Localisation_AddOn
                     {
                         switch (TRANS_ID)
                         {
-                            case "1": TRANS_ID = "1"; TRANS_TXT = oRecordSet.Fields.Item("U_trailNum").Value.ToString();  //საავტომობილო
+                            case "1":
+                                TRANS_ID = "1"; TRANS_TXT = oRecordSet.Fields.Item("U_trailNum").Value.ToString();  //საავტომობილო
                                 break;
-                            case "2": TRANS_ID = "2"; //სარკინიგზო
+                            case "2":
+                                TRANS_ID = "2"; //სარკინიგზო
                                 break;
-                            case "3": TRANS_ID = "3"; //საავიაციო
+                            case "3":
+                                TRANS_ID = "3"; //საავიაციო
                                 break;
-                            case "4": TRANS_ID = "4"; TRANS_TXT = oRecordSet.Fields.Item("U_vehicNum").Value.ToString(); //სხვა
+                            case "4":
+                                TRANS_ID = "4"; TRANS_TXT = oRecordSet.Fields.Item("U_vehicNum").Value.ToString(); //სხვა
                                 break;
-                            case "5": TRANS_ID = "6"; TRANS_TXT = oRecordSet.Fields.Item("U_trailNum").Value.ToString(); //საავტომობილო - უცხო ქვეყნის
+                            case "5":
+                                TRANS_ID = "6"; TRANS_TXT = oRecordSet.Fields.Item("U_trailNum").Value.ToString(); //საავტომობილო - უცხო ქვეყნის
                                 break;
-                            case "6": TRANS_ID = "7"; TRANS_TXT = oRecordSet.Fields.Item("U_trailNum").Value.ToString(); //გადამზიდი საავტომობილო
+                            case "6":
+                                TRANS_ID = "7"; TRANS_TXT = oRecordSet.Fields.Item("U_trailNum").Value.ToString(); //გადამზიდი საავტომობილო
                                 break;
                         }
                     }
@@ -5007,7 +5028,7 @@ namespace BDO_Localisation_AddOn
 
                 if (U_baseDocT == "13") //A/R Invoice
                 {
-                    getArrayGoodsARInvoiceType( oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
+                    getArrayGoodsARInvoiceType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
                 }
 
                 else if (U_baseDocT == "15") //Delivery
@@ -5016,7 +5037,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else if (U_baseDocT == "67") //Inventory Transfer
                 {
-                    getArrayGoodsInventoryTransferType( oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
+                    getArrayGoodsInventoryTransferType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
                 }
 
                 else if (U_baseDocT == "UDO_F_BDOSFASTRD_D") //Fixed Asset Transfer
@@ -5026,11 +5047,11 @@ namespace BDO_Localisation_AddOn
 
                 else if (U_baseDocT == "14") //A/R Credit Memo
                 {
-                    getArrayGoodsInvoiceCreditMemoType( oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
+                    getArrayGoodsInvoiceCreditMemoType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
                 }
                 else if (U_baseDocT == "60") //Goods Issue
                 {
-                    getArrayGoodsGoodsIssueType( oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
+                    getArrayGoodsGoodsIssueType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
                 }
                 if (errorText != null)
                 {
@@ -5074,17 +5095,23 @@ namespace BDO_Localisation_AddOn
 
                 switch (STATUS)
                 {
-                    case "0": STATUS = "1"; //"შენახული"
+                    case "0":
+                        STATUS = "1"; //"შენახული"
                         break;
-                    case "1": STATUS = "2";  //"აქტიური"
+                    case "1":
+                        STATUS = "2";  //"აქტიური"
                         break;
-                    case "2": STATUS = "3";  //"დასრულებული"
+                    case "2":
+                        STATUS = "3";  //"დასრულებული"
                         break;
-                    case "-1": STATUS = "4";  //"წაშლილი"
+                    case "-1":
+                        STATUS = "4";  //"წაშლილი"
                         break;
-                    case "-2": STATUS = "5";  //"გაუქმებული"
+                    case "-2":
+                        STATUS = "5";  //"გაუქმებული"
                         break;
-                    case "8": STATUS = "6";  //"გადამზიდავთან გადაგზავნილი"
+                    case "8":
+                        STATUS = "6";  //"გადამზიდავთან გადაგზავნილი"
                         break;
                 }
 
@@ -5124,14 +5151,14 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void getArrayGoodsARInvoiceType( WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out double AMOUNTRS, out string errorText)
+        private static void getArrayGoodsARInvoiceType(WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out double AMOUNTRS, out string errorText)
         {
             errorText = null;
             array_GOODS = null;
             QUANTITYRS = 0;
             AMOUNTRS = 0;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -5280,18 +5307,21 @@ namespace BDO_Localisation_AddOn
                     array_GOODS[i][2] = oRecordSet.Fields.Item("UNIT_ID").Value.ToString(); //UNIT_ID 1
                     //array_GOODS[i][2] = array_GOODS[i][2] == null ? "99" : array_GOODS[i][2];
                     string UNIT_TXT = oRecordSet.Fields.Item("UNIT_TXT").Value.ToString();
-                    array_GOODS[i][3] = array_GOODS[i][2] == "99" ? (UNIT_TXT==""?"სხვა":UNIT_TXT) : "";//ერთეულის სახელი აუცილებელია როდესაც UNIT_ID=99 („სხვა“)UNIT_TXT
+                    array_GOODS[i][3] = array_GOODS[i][2] == "99" ? (UNIT_TXT == "" ? "სხვა" : UNIT_TXT) : "";//ერთეულის სახელი აუცილებელია როდესაც UNIT_ID=99 („სხვა“)UNIT_TXT
                     array_GOODS[i][4] = oRecordSet.Fields.Item("QUANTITY").Value.ToString(Nfi); //QUANTITY
                     array_GOODS[i][5] = oRecordSet.Fields.Item("PRICE").Value.ToString(Nfi); //PRICE
                     array_GOODS[i][6] = "1"; //STATUS 1 ან -1 თუ გადაეცით -1 შესაბამისი საქონელი წაიშლება
                     array_GOODS[i][7] = oRecordSet.Fields.Item("AMOUNT").Value.ToString(Nfi); //AMOUNT
                     switch (itemCode)
                     {
-                        case "0": array_GOODS[i][8] = oRecordSet.Fields.Item("ItemCode").Value.ToString(); //პროგრამის კოდი //BAR_CODE
+                        case "0":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("ItemCode").Value.ToString(); //პროგრამის კოდი //BAR_CODE
                             break;
-                        case "1": array_GOODS[i][8] = oRecordSet.Fields.Item("AdditionalIdentifier").Value.ToString(); //არტიკული       //BAR_CODE  
+                        case "1":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("AdditionalIdentifier").Value.ToString(); //არტიკული       //BAR_CODE  
                             break;
-                        case "2": array_GOODS[i][8] = oRecordSet.Fields.Item("CodeBars").Value.ToString(); //ძირითადი შტრიხკოდი  //BAR_CODE
+                        case "2":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("CodeBars").Value.ToString(); //ძირითადი შტრიხკოდი  //BAR_CODE
                             break;
                     }
                     array_GOODS[i][9] = oRecordSet.Fields.Item("A_ID").Value.ToString(); //A_ID თუ აქციზური არ არის გადაეცით 0.
@@ -5302,11 +5332,14 @@ namespace BDO_Localisation_AddOn
                     {
                         //case "18": VAT_TYPE = "0"; //ჩეულებრივი 18%
                         //    break;
-                        case "0": VAT_TYPE = "1"; //ნულოვანი 0%
+                        case "0":
+                            VAT_TYPE = "1"; //ნულოვანი 0%
                             break;
-                        case "": VAT_TYPE = "2"; //დაუბეგრავი
+                        case "":
+                            VAT_TYPE = "2"; //დაუბეგრავი
                             break;
-                        default: VAT_TYPE = "0"; //ჩეულებრივი 18%
+                        default:
+                            VAT_TYPE = "0"; //ჩეულებრივი 18%
                             break;
                     }
                     array_GOODS[i][10] = VAT_TYPE; //VAT_TYPE 0 - ჩეულებრივი; 1 - ნულოვალი; 2 - დაუბეგრავი
@@ -5536,14 +5569,14 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void getArrayGoodsInvoiceCreditMemoType( WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out double AMOUNTRS, out string errorText)
+        private static void getArrayGoodsInvoiceCreditMemoType(WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out double AMOUNTRS, out string errorText)
         {
             errorText = null;
             array_GOODS = null;
             QUANTITYRS = 0;
             AMOUNTRS = 0;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -5678,11 +5711,14 @@ namespace BDO_Localisation_AddOn
                     array_GOODS[i][7] = oRecordSet.Fields.Item("AMOUNT").Value.ToString(Nfi); //AMOUNT
                     switch (itemCode)
                     {
-                        case "0": array_GOODS[i][8] = oRecordSet.Fields.Item("ItemCode").Value.ToString(); //პროგრამის კოდი //BAR_CODE
+                        case "0":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("ItemCode").Value.ToString(); //პროგრამის კოდი //BAR_CODE
                             break;
-                        case "1": array_GOODS[i][8] = oRecordSet.Fields.Item("AdditionalIdentifier").Value.ToString(); //არტიკული       //BAR_CODE  
+                        case "1":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("AdditionalIdentifier").Value.ToString(); //არტიკული       //BAR_CODE  
                             break;
-                        case "2": array_GOODS[i][8] = oRecordSet.Fields.Item("CodeBars").Value.ToString(); //ძირითადი შტრიხკოდი  //BAR_CODE
+                        case "2":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("CodeBars").Value.ToString(); //ძირითადი შტრიხკოდი  //BAR_CODE
                             break;
                     }
                     array_GOODS[i][9] = oRecordSet.Fields.Item("A_ID").Value.ToString(); //A_ID თუ აქციზური არ არის გადაეცით 0.
@@ -5693,11 +5729,14 @@ namespace BDO_Localisation_AddOn
                     {
                         //case "18": VAT_TYPE = "0"; //ჩვეულებრივი 18%
                         //    break;
-                        case "0": VAT_TYPE = "1"; //ნულოვანი 0%
+                        case "0":
+                            VAT_TYPE = "1"; //ნულოვანი 0%
                             break;
-                        case "": VAT_TYPE = "2"; //დაუბეგრავი
+                        case "":
+                            VAT_TYPE = "2"; //დაუბეგრავი
                             break;
-                        default: VAT_TYPE = "0"; //ჩეულებრივი 18%
+                        default:
+                            VAT_TYPE = "0"; //ჩეულებრივი 18%
                             break;
                     }
                     array_GOODS[i][10] = VAT_TYPE; //VAT_TYPE 0 - ჩეულებრივი; 1 - ნულოვალი; 2 - დაუბეგრავი
@@ -5718,13 +5757,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void getArrayGoodsInventoryTransferType( WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out string errorText)
+        private static void getArrayGoodsInventoryTransferType(WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out string errorText)
         {
             errorText = null;
             array_GOODS = null;
             QUANTITYRS = 0;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -5825,11 +5864,14 @@ namespace BDO_Localisation_AddOn
                     array_GOODS[i][7] = oRecordSet.Fields.Item("AMOUNT").Value.ToString(Nfi); //AMOUNT
                     switch (itemCode)
                     {
-                        case "0": array_GOODS[i][8] = oRecordSet.Fields.Item("ItemCode").Value.ToString(); //პროგრამის კოდი //BAR_CODE
+                        case "0":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("ItemCode").Value.ToString(); //პროგრამის კოდი //BAR_CODE
                             break;
-                        case "1": array_GOODS[i][8] = oRecordSet.Fields.Item("AdditionalIdentifier").Value.ToString(); //არტიკული       //BAR_CODE  
+                        case "1":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("AdditionalIdentifier").Value.ToString(); //არტიკული       //BAR_CODE  
                             break;
-                        case "2": array_GOODS[i][8] = oRecordSet.Fields.Item("CodeBars").Value.ToString(); //ძირითადი შტრიხკოდი  //BAR_CODE
+                        case "2":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("CodeBars").Value.ToString(); //ძირითადი შტრიხკოდი  //BAR_CODE
                             break;
                     }
                     array_GOODS[i][9] = oRecordSet.Fields.Item("A_ID").Value.ToString(); //A_ID თუ აქციზური არ არის გადაეცით 0.
@@ -5840,11 +5882,14 @@ namespace BDO_Localisation_AddOn
                     {
                         //case "18": VAT_TYPE = "0"; //ჩეულებრივი 18%
                         //    break;
-                        case "0": VAT_TYPE = "1"; //ნულოვანი 0%
+                        case "0":
+                            VAT_TYPE = "1"; //ნულოვანი 0%
                             break;
-                        case "": VAT_TYPE = "2"; //დაუბეგრავი
+                        case "":
+                            VAT_TYPE = "2"; //დაუბეგრავი
                             break;
-                        default: VAT_TYPE = "0"; //ჩეულებრივი 18%
+                        default:
+                            VAT_TYPE = "0"; //ჩეულებრივი 18%
                             break;
                     }
                     array_GOODS[i][10] = VAT_TYPE; //VAT_TYPE 0 - ჩეულებრივი; 1 - ნულოვალი; 2 - დაუბეგრავი
@@ -5864,7 +5909,6 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
-
 
         private static void getArrayGoodsFixedAssetTransferType(WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out string errorText)
         {
@@ -6019,13 +6063,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void getArrayGoodsGoodsIssueType( WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out string errorText)
+        private static void getArrayGoodsGoodsIssueType(WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out string errorText)
         {
             errorText = null;
             array_GOODS = null;
             QUANTITYRS = 0;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -6126,11 +6170,14 @@ namespace BDO_Localisation_AddOn
                     array_GOODS[i][7] = oRecordSet.Fields.Item("AMOUNT").Value.ToString(Nfi); //AMOUNT
                     switch (itemCode)
                     {
-                        case "0": array_GOODS[i][8] = oRecordSet.Fields.Item("ItemCode").Value.ToString(); //პროგრამის კოდი //BAR_CODE
+                        case "0":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("ItemCode").Value.ToString(); //პროგრამის კოდი //BAR_CODE
                             break;
-                        case "1": array_GOODS[i][8] = oRecordSet.Fields.Item("AdditionalIdentifier").Value.ToString(); //არტიკული       //BAR_CODE  
+                        case "1":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("AdditionalIdentifier").Value.ToString(); //არტიკული       //BAR_CODE  
                             break;
-                        case "2": array_GOODS[i][8] = oRecordSet.Fields.Item("CodeBars").Value.ToString(); //ძირითადი შტრიხკოდი  //BAR_CODE
+                        case "2":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("CodeBars").Value.ToString(); //ძირითადი შტრიხკოდი  //BAR_CODE
                             break;
                     }
                     array_GOODS[i][9] = oRecordSet.Fields.Item("A_ID").Value.ToString(); //A_ID თუ აქციზური არ არის გადაეცით 0.
@@ -6141,11 +6188,14 @@ namespace BDO_Localisation_AddOn
                     {
                         //case "18": VAT_TYPE = "0"; //ჩეულებრივი 18%
                         //    break;
-                        case "0": VAT_TYPE = "1"; //ნულოვანი 0%
+                        case "0":
+                            VAT_TYPE = "1"; //ნულოვანი 0%
                             break;
-                        case "": VAT_TYPE = "2"; //დაუბეგრავი
+                        case "":
+                            VAT_TYPE = "2"; //დაუბეგრავი
                             break;
-                        default: VAT_TYPE = "0"; //ჩეულებრივი 18%
+                        default:
+                            VAT_TYPE = "0"; //ჩეულებრივი 18%
                             break;
                     }
                     array_GOODS[i][10] = VAT_TYPE; //VAT_TYPE 0 - ჩეულებრივი; 1 - ნულოვალი; 2 - დაუბეგრავი
@@ -6166,7 +6216,6 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
         /// <summary>
         /// 
         /// </summary>
@@ -6177,7 +6226,7 @@ namespace BDO_Localisation_AddOn
         /// <param name="ID"></param>
         /// <param name="errorText"></param>
         /// <returns>1 - თუ ყველაფერი კარგადაა,  0 თუ სინქრონიზაცია დარღვეულია</returns>
-        private static int checkSync( WayBill oWayBill, int baseDocEntry, string baseDocType, string ID, out string errorText)
+        private static int checkSync(WayBill oWayBill, int baseDocEntry, string baseDocType, string ID, out string errorText)
         {
             errorText = null;
 
@@ -6189,7 +6238,7 @@ namespace BDO_Localisation_AddOn
 
                 if (baseDocType == "13") //A/R Invoice
                 {
-                    getArrayGoodsARInvoiceType( oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
+                    getArrayGoodsARInvoiceType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
                     if (array_GOODS != null)
                     {
                         double QUANTITY = 0;
@@ -6235,7 +6284,7 @@ namespace BDO_Localisation_AddOn
 
                 else if (baseDocType == "67") //Inventory Transfer
                 {
-                    getArrayGoodsInventoryTransferType( oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
+                    getArrayGoodsInventoryTransferType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
                     if (array_GOODS != null)
                     {
                         double QUANTITY = 0;
@@ -6253,8 +6302,8 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-                
-                    else if (baseDocType == "UDO_F_BDOSFASTRD_D") //Fixed Asset Transfer
+
+                else if (baseDocType == "UDO_F_BDOSFASTRD_D") //Fixed Asset Transfer
                 {
                     getArrayGoodsFixedAssetTransferType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
                     if (array_GOODS != null)
@@ -6276,7 +6325,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else if (baseDocType == "14") //A/R Credit Memo
                 {
-                    getArrayGoodsInvoiceCreditMemoType( oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
+                    getArrayGoodsInvoiceCreditMemoType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
                     if (array_GOODS != null)
                     {
                         double QUANTITY = 0;
@@ -6298,7 +6347,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else if (baseDocType == "60") //Goods Issue
                 {
-                    getArrayGoodsGoodsIssueType( oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
+                    getArrayGoodsGoodsIssueType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
                     if (array_GOODS != null)
                     {
                         double QUANTITY = 0;
@@ -6320,11 +6369,11 @@ namespace BDO_Localisation_AddOn
             return 1;
         }
 
-        public static void closeWaybill( int docEntry, int baseDocEntry, out string errorText)
+        public static void closeWaybill(int docEntry, int baseDocEntry, out string errorText)
         {
             errorText = null;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -6382,22 +6431,22 @@ namespace BDO_Localisation_AddOn
                     BEGIN_DATE = BEGIN_DATE == DateTime.MinValue || BEGIN_DATE < DateTime.Today ? DateTime.Now : BEGIN_DATE;
 
                     BEGIN_DATE = new DateTime(BEGIN_DATE.Year, BEGIN_DATE.Month, BEGIN_DATE.Day, Hour, Min, 0);
-                    DELIVERY_DATE = DELIVERY_DATE< BEGIN_DATE? BEGIN_DATE.AddMinutes(1): DELIVERY_DATE;
+                    DELIVERY_DATE = DELIVERY_DATE < BEGIN_DATE ? BEGIN_DATE.AddMinutes(1) : DELIVERY_DATE;
                     /////////////////
-                    
+
                     oRecordSet.MoveNext();
                     break;
                 }
 
                 //სინქრონიზაციის შემოწმება --->
-                if (checkSync( oWayBill, baseDocEntry, baseDocType, ID.ToString(), out errorText) == 0)
+                if (checkSync(oWayBill, baseDocEntry, baseDocType, ID.ToString(), out errorText) == 0)
                 {
                     errorText = BDOSResources.getTranslate("SynchronisationViolatedCorrectWaybill");
                     return;
                 }
                 //<--- სინქრონიზაციის შემოწმება
 
-                int close_waybill_result_int = oWayBill.close_waybill( ID, out errorText);
+                int close_waybill_result_int = oWayBill.close_waybill(ID, out errorText);
                 if (close_waybill_result_int != 1)
                 {
                     return;
@@ -6433,12 +6482,11 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
-        public static string getInitFromTIN( string tin,  out string errorText)
+        public static string getInitFromTIN(string tin, out string errorText)
         {
             errorText = null;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return "";
@@ -6448,24 +6496,24 @@ namespace BDO_Localisation_AddOn
 
             string su = rsSettings["SU"];
             string sp = rsSettings["SP"];
-           
+
             bool chek_service_user = oWayBill.chek_service_user(su, sp, out errorText);
             if (chek_service_user == false)
             {
                 errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
                 return "";
             }
-            
+
             string result = oWayBill.get_name_from_tin(tin, out errorText);
 
             return result;
         }
 
-        public static void getWaybill( int docEntry, int baseDocEntry, out string errorText)
+        public static void getWaybill(int docEntry, int baseDocEntry, out string errorText)
         {
             errorText = null;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -6524,17 +6572,23 @@ namespace BDO_Localisation_AddOn
                 string STATUS_RS = null;
                 switch (array_HEADER[15]) //STATUS
                 {
-                    case "0": STATUS_RS = "1"; //"შენახული"
+                    case "0":
+                        STATUS_RS = "1"; //"შენახული"
                         break;
-                    case "1": STATUS_RS = "2";  //"აქტიური"
+                    case "1":
+                        STATUS_RS = "2";  //"აქტიური"
                         break;
-                    case "2": STATUS_RS = "3";  //"დასრულებული"
+                    case "2":
+                        STATUS_RS = "3";  //"დასრულებული"
                         break;
-                    case "-1": STATUS_RS = "4";  //"წაშლილი"
+                    case "-1":
+                        STATUS_RS = "4";  //"წაშლილი"
                         break;
-                    case "-2": STATUS_RS = "5";  //"გაუქმებული"
+                    case "-2":
+                        STATUS_RS = "5";  //"გაუქმებული"
                         break;
-                    case "8": STATUS_RS = "6";  //"გადამზიდავთან გადაგზავნილი"
+                    case "8":
+                        STATUS_RS = "6";  //"გადამზიდავთან გადაგზავნილი"
                         break;
                 }
 
@@ -6595,7 +6649,7 @@ namespace BDO_Localisation_AddOn
                 oGeneralService.Update(oGeneralData);
 
                 //სინქრონიზაციის შემოწმება --->
-                if (checkSync( oWayBill, baseDocEntry, baseDocType, ID.ToString(), out errorText) == 0)
+                if (checkSync(oWayBill, baseDocEntry, baseDocType, ID.ToString(), out errorText) == 0)
                 {
                     errorText = BDOSResources.getTranslate("SynchronisationViolatedCorrectWaybill");
                     return;
@@ -6613,11 +6667,11 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void refWaybill( int docEntry, int baseDocEntry, out string errorText)
+        public static void refWaybill(int docEntry, int baseDocEntry, out string errorText)
         {
             errorText = null;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
@@ -6696,6 +6750,7 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
+        #endregion
 
         public static bool canCreateDocument(int docEntry, string objectType)
         {
@@ -6727,7 +6782,5 @@ namespace BDO_Localisation_AddOn
             }
             return true;
         }
-    }
-
-    //<--------------------------------------------RS.GE--------------------------------------------
+    }    
 }
