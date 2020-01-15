@@ -3388,4 +3388,7 @@
   <data name="WarehouseAddresses" xml:space="preserve">
     <value>Warehouse Addresses</value>
   </data>
+  <data name="WaybillAlreadyExistsForThisDocument" xml:space="preserve">
+    <value>Waybill Already Exists For This Document</value>
+  </data>
 </root>
