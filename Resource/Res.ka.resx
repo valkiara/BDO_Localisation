@@ -3394,4 +3394,7 @@
   <data name="WaybillAlreadyExistsForThisDocument" xml:space="preserve">
     <value>მოცემულ დოკუმენტზე ზედნადები უკვე არსებობს</value>
   </data>
+  <data name="SelectValues" xml:space="preserve">
+    <value>აირჩიეთ მნიშვნელობები</value>
+  </data>
 </root>

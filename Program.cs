@@ -1784,10 +1784,10 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Waybills Analysis Received<-----------------------------
-                else if (pVal.FormUID == "BDOSWBRAn")
+                else if (pVal.FormUID == "BDOSWBRAn" || pVal.FormUID == "BDOSSelectValues")
                 {
                     BDOSWaybillsAnalysisReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
+                } 
 
                 //----------------------------->Waybills Analysis Sent<-----------------------------
                 else if (pVal.FormUID == "BDOSWBSAn")

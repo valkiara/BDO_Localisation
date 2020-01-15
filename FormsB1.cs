@@ -377,7 +377,17 @@ namespace BDO_Localisation_AddOn
                         }
                         if (propertyValue.ToString() == "UserDataSources")
                         {
-                            SAPbouiCOM.UserDataSource oUserDataSource = oForm.DataSources.UserDataSources.Add(UID, (SAPbouiCOM.BoDataType)formItems["DataType"], Convert.ToInt32(formItems["Length"]));
+                            SAPbouiCOM.UserDataSource oUserDataSource;
+
+                            if ((SAPbouiCOM.BoDataType)formItems["DataType"]== SAPbouiCOM.BoDataType.dt_SHORT_TEXT)
+                            {
+                                oUserDataSource = oForm.DataSources.UserDataSources.Add(UID, (SAPbouiCOM.BoDataType)formItems["DataType"], Convert.ToInt32(formItems["Length"]));
+                            }
+                            else
+                            {
+                                oUserDataSource = oForm.DataSources.UserDataSources.Add(UID, (SAPbouiCOM.BoDataType)formItems["DataType"]);
+                            }
+
                             if (formItems.TryGetValue("Value", out propertyValue) == true)
                             {
                                 oUserDataSource.Value = propertyValue.ToString();
