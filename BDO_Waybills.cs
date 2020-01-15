@@ -2182,35 +2182,38 @@ namespace BDO_Localisation_AddOn
         {
             errorText = null;
             newDocEntry = 0;
+            if (canCreateDocument(baseDocEntry, objectType))
+            {
+                if (objectType == "13")  //A/R Invoice
+                {
+                    createDocumentARInvoiceType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                }
+                if (objectType == "15")  //Delivery
+                {
+                    createDocumentDeliveryType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                }
 
-            if (objectType == "13")  //A/R Invoice
-            {
-                createDocumentARInvoiceType( baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
-            }
-            if (objectType == "15")  //Delivery
-            {
-                createDocumentDeliveryType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
-            }
-            
-            else if (objectType == "67") //Inventory Transfer
-            {
-                createDocumentInventoryTransferType( baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
-            }
+                else if (objectType == "67") //Inventory Transfer
+                {
+                    createDocumentInventoryTransferType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                }
 
-            else if (objectType == "UDO_F_BDOSFASTRD_D") //Fixed Asset Transfer
-            {
-                createDocumentFixedAssetTransferType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
-            }
+                else if (objectType == "UDO_F_BDOSFASTRD_D") //Fixed Asset Transfer
+                {
+                    createDocumentFixedAssetTransferType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                }
 
-            else if (objectType == "14") //A/R Credit Memo 
-            {
-                createDocumentInvoiceCreditMemoType( baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
-            }
-            else if (objectType == "60")  //Goods Issue
-            {
-                createDocumentGoodsIssueType( baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                else if (objectType == "14") //A/R Credit Memo 
+                {
+                    createDocumentInvoiceCreditMemoType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                }
+                else if (objectType == "60")  //Goods Issue
+                {
+                    createDocumentGoodsIssueType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                }
             }
         }
+
 
         private static void createDocumentARInvoiceType( int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
@@ -6694,6 +6697,37 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        //<--------------------------------------------RS.GE--------------------------------------------
+        public static bool canCreateDocument(int docEntry, string objectType)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            StringBuilder query = new StringBuilder();
+            query.Append("select \"U_baseDoc\" from \"@BDO_WBLD\" \n");
+            query.Append("where \"Canceled\" = 'N' and \"U_baseDocT\" = '" + objectType + "' and \"U_baseDoc\" = '" + docEntry + "'");
+
+            try
+            {
+                oRecordSet.DoQuery(query.ToString());
+
+                if (!oRecordSet.EoF)
+                {
+                    Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("WaybillAlreadyExistsForThisDocument"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+                oRecordSet = null;
+                GC.Collect();
+            }
+            return true;
+        }
     }
+
+    //<--------------------------------------------RS.GE--------------------------------------------
 }

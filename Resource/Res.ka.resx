@@ -3391,4 +3391,7 @@
   <data name="WarehouseAddresses" xml:space="preserve">
     <value>საწყობის მისამართები</value>
   </data>
+  <data name="WaybillAlreadyExistsForThisDocument" xml:space="preserve">
+    <value>მოცემულ დოკუმენტზე ზედნადები უკვე არსებობს</value>
+  </data>
 </root>
