@@ -17,30 +17,45 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DRAW && pVal.BeforeAction == false && Program.openPaymentMeansByPostDateChange)
+                if(oForm.TypeEx == "196")
                 {
-                    try
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DRAW && pVal.BeforeAction == false && Program.openPaymentMeansByPostDateChange)
                     {
-                        oForm.Items.Item("44").Specific.Value = Program.newPostDateStr;
-                        oForm.Items.Item("12").Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(Program.overallAmount);
-                        oForm.Items.Item("34").Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(Program.transferSumFC);
+                        try
+                        {
+                            oForm.Items.Item("44").Specific.Value = Program.newPostDateStr;
+                            oForm.Items.Item("12").Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(Program.overallAmount);
+                            oForm.Items.Item("34").Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(Program.transferSumFC);
+                        }
+                        catch (Exception ex)
+                        {
+                            errorText = ex.Message;
+                        }
+                        finally
+                        {
+                            Program.transferSumFC = 0;
+                            Program.overallAmount = 0;
+                            Program.newPostDateStr = null;
+                        }
                     }
-                    catch (Exception ex)
+
+                    if (pVal.ItemChanged == true && pVal.ItemUID == "34" && pVal.BeforeAction == false && Program.openPaymentMeansByPostDateChange)
                     {
-                        errorText = ex.Message;
+                        //Program.openPaymentMeansByCurrRateChange = false;
+                        oForm.Items.Item("1").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                     }
-                    finally
+
+                    if (pVal.ItemChanged == true && pVal.ItemUID == "8" && pVal.BeforeAction == false)
                     {
-                        Program.transferSumFC = 0;
-                        Program.overallAmount = 0;
-                        Program.newPostDateStr = null;
+                        CommonFunctions.fillDocRate(oForm, "OVPM", "OVPM");
                     }
                 }
-
-                if (pVal.ItemChanged == true && pVal.ItemUID == "34" && pVal.BeforeAction == false && Program.openPaymentMeansByPostDateChange)
+                else
                 {
-                    //Program.openPaymentMeansByCurrRateChange = false;
-                    oForm.Items.Item("1").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                    if (pVal.ItemChanged == true && pVal.ItemUID == "8" && pVal.BeforeAction == false)
+                    {
+                        CommonFunctions.fillDocRate(oForm, "ORCT", "ORCT");
+                    }
                 }
             }
 

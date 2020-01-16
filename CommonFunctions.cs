@@ -1194,13 +1194,18 @@ namespace BDO_Localisation_AddOn
 
                     }
                 }
+
+                else if ((documentTable == "OVPM" || documentTable == "ORCT") && (oForm.TypeEx == "196" || oForm.TypeEx == "146"))
+                {
+                    if (oForm.Items.Item("95").Enabled && oForm.Items.Item("95").Visible)
+                    {
+                        oForm.Items.Item("95").Specific.Value = FormsB1.ConvertDecimalToString(DocRate);
+                    }
+                }
+
                 else
                 {
-                    if (oForm.Items.Item("21").Enabled)
-                    {
-                        oForm.Items.Item("21").Specific.Value = FormsB1.ConvertDecimalToString(DocRate);
-                    }
-                    else
+                    if (oForm.Items.Item("21").Enabled && oForm.Items.Item("21").Visible)
                     {
                         oForm.Items.Item("21").Specific.Value = FormsB1.ConvertDecimalToString(DocRate);
                     }

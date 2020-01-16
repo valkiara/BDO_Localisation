@@ -3619,7 +3619,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.ItemUID == "UsBlaAgRtS" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                     {
                         SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
-                        if (oCheckBox.Checked == true)
+                        if (oCheckBox.Checked == true && pVal.BeforeAction == false)
                         {
                             CommonFunctions.fillDocRate(oForm, "OVPM", "OVPM");
                         }
