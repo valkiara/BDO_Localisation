@@ -716,9 +716,12 @@ namespace BDO_Localisation_AddOn
                     if (endDateParam > EndDateForWS)
                         endDateParam = EndDateForWS;
 
-                    for (int i = 0; i < buyerTinsList.Count; i++)
+                    bool isBpFilter = buyerTinsList.Count > 0;
+                    int countBpFilter = isBpFilter ? buyerTinsList.Count : 1;
+
+                    for (int i = 0; i < countBpFilter; i++)
                     {
-                        string seller_id = buyerTinsList[i];
+                        string seller_id = isBpFilter ? buyerTinsList[i] : "";
                         Dictionary<string, Dictionary<string, string>> waybills_map_part = oWayBill.get_buyer_waybills(string.Join(",", selectedTypesList), seller_id, ",,1,2,-1,-2,7,", car_number, startDateParam, endDateParam, startDateParam, endDateParam, driver_tin, startDateParam, endDateParam, full_amount, waybill_number, startDateParam, endDateParam, s_user_id, comment, StartAddress, EndAddress, out errorText);
                         foreach (KeyValuePair<string, Dictionary<string, string>> map_record in waybills_map_part)
                         {
@@ -953,7 +956,7 @@ namespace BDO_Localisation_AddOn
                         wbCompStat = "6";
                     }
 
-                    if (selectedCompareStatusesList.Count > 0) 
+                    if (selectedCompareStatusesList.Count > 0)
                     {
                         if (!selectedCompareStatusesList.Contains(wbCompStat))
                         {
@@ -962,7 +965,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    if (selectedStatusesList.Count > 0) 
+                    if (selectedStatusesList.Count > 0)
                     {
                         if (!selectedStatusesList.Contains(RS_STATUS))
                         {
@@ -1805,7 +1808,7 @@ namespace BDO_Localisation_AddOn
               ((!string.IsNullOrEmpty(cardCodes)) ? @" AND ""BASEDOCGDS"".""BaseCard"" IN (" + cardCodes + ") " : " ") +
               ((!string.IsNullOrEmpty(types)) ? @" AND ""BASEDOCGDS"".""Type"" IN (" + types + ") " : " ") +
 
-              //((types == "2" || types == "3" || types == "5") ? @" AND ""BASEDOCGDS"".""Type"" ='" + ((types == "5") ? "5" : "2") + "' " : " ") +
+    //((types == "2" || types == "3" || types == "5") ? @" AND ""BASEDOCGDS"".""Type"" ='" + ((types == "5") ? "5" : "2") + "' " : " ") +
 
     //   ((statuses != "" && statuses != "-99") ? @"AND (CASE WHEN ""U_BDO_WBSt"" = '1' 
     //	    THEN '0' WHEN ""U_BDO_WBSt""= '2' 
@@ -1908,6 +1911,11 @@ namespace BDO_Localisation_AddOn
                             }
                             oForm.DataSources.UserDataSources.Item("ClientID").Value = string.Join(",", cardCodes);
                         }
+                    }
+                    else
+                    {
+                        selectedBusinessPartners = new Hashtable();
+                        oForm.DataSources.UserDataSources.Item("ClientID").Value = "";
                     }
                 }
             }
@@ -2038,8 +2046,8 @@ namespace BDO_Localisation_AddOn
         static void createModalForm()
         {
             string errorText;
-            int formHeight = Program.uiApp.Desktop.Height / 5;
-            int formWidth = Program.uiApp.Desktop.Width / 5;
+            int formHeight = 208; //Program.uiApp.Desktop.Height / 5;
+            int formWidth = 384; //Program.uiApp.Desktop.Width / 5;
 
             //ფორმის აუცილებელი თვისებები
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
@@ -2205,6 +2213,7 @@ namespace BDO_Localisation_AddOn
                     oColumn = oColumns.Add("Key", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("Key");
                     oColumn.Editable = false;
+                    oColumn.Visible = false;
                     oColumn.DataBind.Bind(UID, "Key");
 
                     oColumn = oColumns.Add("Value", SAPbouiCOM.BoFormItemTypes.it_EDIT);
