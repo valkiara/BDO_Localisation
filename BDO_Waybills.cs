@@ -5176,7 +5176,7 @@ namespace BDO_Localisation_AddOn
             "\"OITM\".\"SWW\" AS \"AdditionalIdentifier\", " +
             "\"MNTB\".\"Dscription\" AS \"W_NAME\", " +
             "CASE WHEN \"BDO_RSUOM\".\"U_RSCode\" is null THEN '99' ELSE \"BDO_RSUOM\".\"U_RSCode\" END AS \"UNIT_ID\", " +
-            "CASE WHEN \"OITM\".\"InvntryUom\"='' THEN 'სხვა' ELSE \"OITM\".\"InvntryUom\" END  AS \"UNIT_TXT\", " +
+            "CASE WHEN \"MNTB\".\"unitMsr\"='' THEN 'სხვა' ELSE \"MNTB\".\"unitMsr\" END  AS \"UNIT_TXT\", " +
             "\"MNTB\".\"VatPrcnt\" AS \"VAT_TYPE\", " +
             "\"MNTB\".\"VatGroup\"AS \"VatGroup\", " +
             "'0' AS \"A_ID\", " +
@@ -5192,6 +5192,7 @@ namespace BDO_Localisation_AddOn
             "\"INV1\".\"LineNum\", " +
             "\"INV1\".\"ItemCode\", " +
             "\"INV1\".\"Dscription\", " +
+            "\"INV1\".\"unitMsr\", " +
             "\"INV1\".\"Quantity\" * \"INV1\".\"NumPerMsr\" AS \"Quantity\", " +
             "\"INV1\".\"GTotal\", " +
             "\"INV1\".\"VatPrcnt\", " +
@@ -5212,6 +5213,7 @@ namespace BDO_Localisation_AddOn
             "\"RIN1\".\"BaseLine\", " +
             "\"RIN1\".\"ItemCode\", " +
             "\"RIN1\".\"Dscription\", " +
+            "\"RIN1\".\"unitMsr\", " +
             "\"RIN1\".\"Quantity\" * (-1) * (CASE WHEN \"RIN1\".\"NoInvtryMv\" = 'Y' THEN 0 ELSE 1 END) * \"RIN1\".\"NumPerMsr\", " +
             "\"RIN1\".\"GTotal\" * (-1), " +
             "\"RIN1\".\"VatPrcnt\", " +
@@ -5232,7 +5234,7 @@ namespace BDO_Localisation_AddOn
             "ON \"MNTB\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
 
             "LEFT JOIN \"OUOM\" AS \"OUOM\" " +
-            "ON \"OITM\".\"InvntryUom\" = \"OUOM\".\"UomName\" " +
+            "ON \"MNTB\".\"unitMsr\" = \"OUOM\".\"UomName\" " +
 
             "LEFT JOIN \"@BDO_RSUOM\" AS \"BDO_RSUOM\" " +
             "ON \"OUOM\".\"UomEntry\" = \"BDO_RSUOM\".\"U_UomEntry\" " +
@@ -5245,7 +5247,7 @@ namespace BDO_Localisation_AddOn
             "\"OITM\".\"CodeBars\", " +
             "\"OITM\".\"SWW\", " +
             "\"BDO_RSUOM\".\"U_RSCode\", " +
-            "\"OITM\".\"InvntryUom\", " +
+            "\"MNTB\".\"unitMsr\", " +
             "\"MNTB\".\"VatPrcnt\", " +
             "\"MNTB\".\"VatGroup\" " +
             "HAVING SUM(\"MNTB\".\"Quantity\") > 0 ";
@@ -5385,7 +5387,7 @@ namespace BDO_Localisation_AddOn
             "\"OITM\".\"SWW\" AS \"AdditionalIdentifier\", " +
             "\"MNTB\".\"Dscription\" AS \"W_NAME\", " +
             "CASE WHEN \"BDO_RSUOM\".\"U_RSCode\" is null THEN '99' ELSE \"BDO_RSUOM\".\"U_RSCode\" END AS \"UNIT_ID\", " +
-            "CASE WHEN \"OITM\".\"InvntryUom\"='' THEN 'სხვა' ELSE \"OITM\".\"InvntryUom\" END  AS \"UNIT_TXT\", " +
+            "CASE WHEN \"MNTB\".\"unitMsr\"='' THEN 'სხვა' ELSE \"MNTB\".\"unitMsr\" END  AS \"UNIT_TXT\", " +
             "\"MNTB\".\"VatPrcnt\" AS \"VAT_TYPE\", " +
             "\"MNTB\".\"VatGroup\"AS \"VatGroup\", " +
             "'0' AS \"A_ID\", " +
@@ -5401,6 +5403,7 @@ namespace BDO_Localisation_AddOn
             "\"DLN1\".\"LineNum\", " +
             "\"DLN1\".\"ItemCode\", " +
             "\"DLN1\".\"Dscription\", " +
+            "\"DLN1\".\"unitMsr\", " +
             "\"DLN1\".\"Quantity\" * \"DLN1\".\"NumPerMsr\" AS \"Quantity\", " +
             "\"DLN1\".\"GTotal\", " +
             "\"DLN1\".\"VatPrcnt\", " +
@@ -5421,6 +5424,7 @@ namespace BDO_Localisation_AddOn
             "\"RIN1\".\"ActBaseLn\", " +
             "\"RIN1\".\"ItemCode\", " +
             "\"RIN1\".\"Dscription\", " +
+            "\"RIN1\".\"unitMsr\", " +
             "\"RIN1\".\"Quantity\" * (-1) * (CASE WHEN \"RIN1\".\"NoInvtryMv\" = 'Y' THEN 0 ELSE 1 END) * \"RIN1\".\"NumPerMsr\", " +
             "\"RIN1\".\"GTotal\" * (-1), " +
             "\"RIN1\".\"VatPrcnt\", " +
@@ -5441,7 +5445,7 @@ namespace BDO_Localisation_AddOn
             "ON \"MNTB\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
 
             "LEFT JOIN \"OUOM\" AS \"OUOM\" " +
-            "ON \"OITM\".\"InvntryUom\" = \"OUOM\".\"UomName\" " +
+            "ON \"MNTB\".\"unitMsr\" = \"OUOM\".\"UomName\" " +
 
             "LEFT JOIN \"@BDO_RSUOM\" AS \"BDO_RSUOM\" " +
             "ON \"OUOM\".\"UomEntry\" = \"BDO_RSUOM\".\"U_UomEntry\" " +
@@ -5454,7 +5458,7 @@ namespace BDO_Localisation_AddOn
             "\"OITM\".\"CodeBars\", " +
             "\"OITM\".\"SWW\", " +
             "\"BDO_RSUOM\".\"U_RSCode\", " +
-            "\"OITM\".\"InvntryUom\", " +
+            "\"MNTB\".\"unitMsr\", " +
             "\"MNTB\".\"VatPrcnt\", " +
             "\"MNTB\".\"VatGroup\" " +
             "HAVING SUM(\"MNTB\".\"Quantity\") > 0 ";
@@ -5594,7 +5598,7 @@ namespace BDO_Localisation_AddOn
             "\"OITM\".\"SWW\" AS \"AdditionalIdentifier\", " +
             "\"MNTB\".\"Dscription\" AS \"W_NAME\", " +
             "CASE WHEN \"BDO_RSUOM\".\"U_RSCode\" is null THEN '99' ELSE \"BDO_RSUOM\".\"U_RSCode\" END AS \"UNIT_ID\", " +
-            "CASE WHEN \"OITM\".\"InvntryUom\"='' THEN 'სხვა' ELSE \"OITM\".\"InvntryUom\" END  AS \"UNIT_TXT\", " +
+            "CASE WHEN \"MNTB\".\"unitMsr\"='' THEN 'სხვა' ELSE \"MNTB\".\"unitMsr\" END  AS \"UNIT_TXT\", " +
             "\"MNTB\".\"VatPrcnt\" AS \"VAT_TYPE\", " +
             "\"MNTB\".\"VatGroup\"AS \"VatGroup\", " +
             "'0' AS \"A_ID\", " +
@@ -5610,6 +5614,7 @@ namespace BDO_Localisation_AddOn
             "\"RIN1\".\"LineNum\", " +
             "\"RIN1\".\"ItemCode\", " +
             "\"RIN1\".\"Dscription\", " +
+            "\"RIN1\".\"unitMsr\", " +
             "\"RIN1\".\"Quantity\" * (CASE WHEN \"RIN1\".\"NoInvtryMv\" = 'Y' THEN 0 ELSE 1 END) * \"RIN1\".\"NumPerMsr\" AS \"Quantity\", " +
             "\"RIN1\".\"GTotal\" , " +
             "\"RIN1\".\"VatPrcnt\", " +
@@ -5630,7 +5635,7 @@ namespace BDO_Localisation_AddOn
             "ON \"MNTB\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
 
             "LEFT JOIN \"OUOM\" AS \"OUOM\" " +
-            "ON \"OITM\".\"InvntryUom\" = \"OUOM\".\"UomName\" " +
+            "ON \"MNTB\".\"unitMsr\" = \"OUOM\".\"UomName\" " +
 
             "LEFT JOIN \"@BDO_RSUOM\" AS \"BDO_RSUOM\" " +
             "ON \"OUOM\".\"UomEntry\" = \"BDO_RSUOM\".\"U_UomEntry\" " +
@@ -5643,7 +5648,7 @@ namespace BDO_Localisation_AddOn
             "\"OITM\".\"CodeBars\", " +
             "\"OITM\".\"SWW\", " +
             "\"BDO_RSUOM\".\"U_RSCode\", " +
-            "\"OITM\".\"InvntryUom\", " +
+            "\"MNTB\".\"unitMsr\", " +
             "\"MNTB\".\"VatPrcnt\", " +
             "\"MNTB\".\"VatGroup\" " +
             "HAVING SUM(\"MNTB\".\"Quantity\") > 0 ";
@@ -5781,7 +5786,7 @@ namespace BDO_Localisation_AddOn
             "\"OITM\".\"SWW\" AS \"AdditionalIdentifier\", " +
             "\"WTR1\".\"Dscription\" AS \"W_NAME\", " +
             "CASE WHEN \"BDO_RSUOM\".\"U_RSCode\" is null THEN '99' ELSE \"BDO_RSUOM\".\"U_RSCode\" END AS \"UNIT_ID\", " +
-            "CASE WHEN \"OITM\".\"InvntryUom\"='' THEN 'სხვა' ELSE \"OITM\".\"InvntryUom\" END  AS \"UNIT_TXT\", " +
+            "CASE WHEN \"WTR1\".\"unitMsr\"='' THEN 'სხვა' ELSE \"WTR1\".\"unitMsr\" END  AS \"UNIT_TXT\", " +
             "\"WTR1\".\"VatPrcnt\" AS \"VAT_TYPE\", " +
             "\"WTR1\".\"VatGroup\"AS \"VatGroup\", " +
             "'0' AS \"A_ID\", " +
@@ -5795,7 +5800,7 @@ namespace BDO_Localisation_AddOn
             "ON \"WTR1\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
 
             "LEFT JOIN \"OUOM\" AS \"OUOM\" " +
-            "ON \"OITM\".\"InvntryUom\" = \"OUOM\".\"UomName\" " +
+            "ON \"WTR1\".\"unitMsr\" = \"OUOM\".\"UomName\" " +
 
             "LEFT JOIN \"@BDO_RSUOM\" AS \"BDO_RSUOM\" " +
             "ON \"OUOM\".\"UomEntry\" = \"BDO_RSUOM\".\"U_UomEntry\" " +
@@ -6087,7 +6092,7 @@ namespace BDO_Localisation_AddOn
             "\"OITM\".\"SWW\" AS \"AdditionalIdentifier\", " +
             "\"IGE1\".\"Dscription\" AS \"W_NAME\", " +
             "CASE WHEN \"BDO_RSUOM\".\"U_RSCode\" is null THEN '99' ELSE \"BDO_RSUOM\".\"U_RSCode\" END AS \"UNIT_ID\", " +
-            "CASE WHEN \"OITM\".\"InvntryUom\"='' THEN 'სხვა' ELSE \"OITM\".\"InvntryUom\" END  AS \"UNIT_TXT\", " +
+            "CASE WHEN \"IGE1\".\"unitMsr\"='' THEN 'სხვა' ELSE \"IGE1\".\"unitMsr\" END  AS \"UNIT_TXT\", " +
             "\"IGE1\".\"VatPrcnt\" AS \"VAT_TYPE\", " +
             "\"IGE1\".\"VatGroup\"AS \"VatGroup\", " +
             "'0' AS \"A_ID\", " +
@@ -6101,7 +6106,7 @@ namespace BDO_Localisation_AddOn
             "ON \"IGE1\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
 
             "LEFT JOIN \"OUOM\" AS \"OUOM\" " +
-            "ON \"OITM\".\"InvntryUom\" = \"OUOM\".\"UomName\" " +
+            "ON \"IGE1\".\"unitMsr\" = \"OUOM\".\"UomName\" " +
 
             "LEFT JOIN \"@BDO_RSUOM\" AS \"BDO_RSUOM\" " +
             "ON \"OUOM\".\"UomEntry\" = \"BDO_RSUOM\".\"U_UomEntry\" " +
