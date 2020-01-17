@@ -19,6 +19,12 @@ namespace BDO_Localisation_AddOn
 
         public static void createForm(out string errorText)
         {
+            selectedBusinessPartners = new Hashtable();
+            selectedTypes = new Hashtable();
+            selectedStatuses = new Hashtable();
+            selectedCompareStatuses = new Hashtable();
+            buttonType = null;
+
             errorText = null;
             int formHeight = Program.uiApp.Desktop.Height;
             int formWidth = Program.uiApp.Desktop.Width;
@@ -1999,7 +2005,15 @@ namespace BDO_Localisation_AddOn
                 {
                     SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE && pVal.BeforeAction)
+                    {
+                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CloseReceivedWaybillsAnalysis") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+
+                        if (answer != 1)
+                            BubbleEvent = false;
+                    }
+
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                         chooseFromList(oForm, pVal, oCFLEvento);
