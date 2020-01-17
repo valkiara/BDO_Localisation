@@ -484,7 +484,7 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch 
+            catch
             {
 
             }
@@ -5629,7 +5629,7 @@ namespace BDO_Localisation_AddOn
 	                         ""OITM"".""SWW"" AS ""AdditionalIdentifier"",
 	                         ""MNTB"".""Dscription"" AS ""W_NAME"",
                              CASE WHEN ""BDO_RSUOM"".""U_RSCode"" is null THEN '99' ELSE ""BDO_RSUOM"".""U_RSCode"" END AS ""UNIT_ID"", 
-                             CASE WHEN ""OITM"".""InvntryUom"" = '' or ""MNTB"".""U_BDOSSrvDsc"" <> '' THEN 'სხვა' ELSE ""OITM"".""InvntryUom"" END  AS ""UNIT_TXT"",
+                             CASE WHEN ""MNTB"".""unitMsr"" = '' or ""MNTB"".""U_BDOSSrvDsc"" <> '' THEN 'სხვა' ELSE ""MNTB"".""unitMsr"" END  AS ""UNIT_TXT"",
 	                         ""MNTB"".""VatPrcnt"" AS ""VAT_TYPE"",
 	                         ""MNTB"".""VatGroup""AS ""VatGroup"",
 	                         '0' AS ""A_ID"",
@@ -5657,7 +5657,8 @@ namespace BDO_Localisation_AddOn
 	                        		THEN ""RIN1"".""Dscription"" 
 	                        		ELSE ""ORIN"".""U_BDOSSrvDsc"" 
 	                        		END)  AS ""Dscription"",
-	                         ""RIN1"".""Quantity"" * (-1) * (CASE WHEN ""RIN1"".""NoInvtryMv"" = 'Y' 
+                             ""RIN1"".""unitMsr"",
+                             ""RIN1"".""Quantity"" * (-1) * (CASE WHEN ""RIN1"".""NoInvtryMv"" = 'Y' 
 	                        		THEN 0 
 	                        		ELSE 1 
 	                        		END) * ""RIN1"".""NumPerMsr"" AS ""Quantity"",
@@ -5676,7 +5677,7 @@ namespace BDO_Localisation_AddOn
 		                        AND ""RIN1"".""BaseEntry"" IN (" + string.Join(",", docEntryARInvoiceList) + @") 
 		                        AND ""RIN1"".""TargetType"" < 0 ) AS ""MNTB"" 
 	                        LEFT JOIN ""OITM"" AS ""OITM"" ON ""MNTB"".""ItemCode"" = ""OITM"".""ItemCode"" 
-	                        LEFT JOIN ""OUOM"" AS ""OUOM"" ON ""OITM"".""InvntryUom"" = ""OUOM"".""UomName"" 
+	                        LEFT JOIN ""OUOM"" AS ""OUOM"" ON ""MNTB"".""unitMsr"" = ""OUOM"".""UomName"" 
 	                        LEFT JOIN ""@BDO_RSUOM"" AS ""BDO_RSUOM"" ON ""OUOM"".""UomEntry"" = ""BDO_RSUOM"".""U_UomEntry"" 
 	                        GROUP BY ""MNTB"".""U_BDOSSrvDsc"",
 	                         ""MNTB"".""DocEntry"",
@@ -5686,7 +5687,7 @@ namespace BDO_Localisation_AddOn
 	                         ""OITM"".""CodeBars"",
 	                         ""OITM"".""SWW"",
 	                         ""BDO_RSUOM"".""U_RSCode"",
-	                         ""OITM"".""InvntryUom"",
+	                         ""MNTB"".""unitMsr"",
 	                         ""MNTB"".""VatPrcnt"",
 	                         ""MNTB"".""VatGroup"",
 	                         ""MNTB"".""ItemType"",
@@ -5700,7 +5701,7 @@ namespace BDO_Localisation_AddOn
 	                         ""OITM"".""SWW"" AS ""AdditionalIdentifier"",
 	                         ""MNTB"".""Dscription"" AS ""W_NAME"",
                              CASE WHEN ""BDO_RSUOM"".""U_RSCode"" is null THEN '99' ELSE ""BDO_RSUOM"".""U_RSCode"" END AS ""UNIT_ID"", 
-                             CASE WHEN ""OITM"".""InvntryUom"" = '' or ""MNTB"".""U_BDOSSrvDsc"" <> '' THEN 'სხვა' ELSE ""OITM"".""InvntryUom"" END  AS ""UNIT_TXT"",
+                             CASE WHEN ""MNTB"".""unitMsr"" = '' or ""MNTB"".""U_BDOSSrvDsc"" <> '' THEN 'სხვა' ELSE ""MNTB"".""unitMsr"" END  AS ""UNIT_TXT"",
 	                         ""MNTB"".""VatPrcnt"" AS ""VAT_TYPE"",
 	                         ""MNTB"".""VatGroup""AS ""VatGroup"",
 	                         '0' AS ""A_ID"",
@@ -5727,6 +5728,7 @@ namespace BDO_Localisation_AddOn
 	                        		THEN ""INV1"".""Dscription"" 
 	                        		ELSE ""OINV"".""U_BDOSSrvDsc"" 
 	                        		END)  AS ""Dscription"",
+                             ""INV1"".""unitMsr"",
                         	 (CASE WHEN ""INV1"".""ItemCode"" is null 
                         			THEN 1 
                         			ELSE ""INV1"".""Quantity"" 
@@ -5747,7 +5749,7 @@ namespace BDO_Localisation_AddOn
 	                        	LEFT JOIN ""OITM"" AS ""OITM"" ON ""INV1"".""ItemCode"" = ""OITM"".""ItemCode"" 
 	                        	WHERE ""INV1"".""DocEntry"" IN (" + string.Join(",", docEntryARInvoiceList) + @") ) AS ""MNTB"" 
 	                        LEFT JOIN ""OITM"" AS ""OITM"" ON ""MNTB"".""ItemCode"" = ""OITM"".""ItemCode"" 
-	                        LEFT JOIN ""OUOM"" AS ""OUOM"" ON ""OITM"".""InvntryUom"" = ""OUOM"".""UomName"" 
+	                        LEFT JOIN ""OUOM"" AS ""OUOM"" ON ""MNTB"".""unitMsr"" = ""OUOM"".""UomName"" 
 	                        LEFT JOIN ""@BDO_RSUOM"" AS ""BDO_RSUOM"" ON ""OUOM"".""UomEntry"" = ""BDO_RSUOM"".""U_UomEntry"" 
 	                        GROUP BY ""MNTB"".""U_BDOSSrvDsc"",
 	                         ""MNTB"".""DocEntry"",
@@ -5757,7 +5759,7 @@ namespace BDO_Localisation_AddOn
 	                         ""OITM"".""CodeBars"",
 	                         ""OITM"".""SWW"",
 	                         ""BDO_RSUOM"".""U_RSCode"",
-	                         ""OITM"".""InvntryUom"",
+	                         ""MNTB"".""unitMsr"",
 	                         ""MNTB"".""VatPrcnt"",
 	                         ""MNTB"".""VatGroup"",
 	                         ""MNTB"".""ItemType"",
