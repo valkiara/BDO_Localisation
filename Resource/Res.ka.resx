@@ -3397,4 +3397,7 @@
   <data name="SelectValues" xml:space="preserve">
     <value>აირჩიეთ მნიშვნელობები</value>
   </data>
+  <data name="CloseReceivedWaybillsAnalysis" xml:space="preserve">
+    <value>დაიხუროს მიღებული ზედნადებების ანალიზი</value>
+  </data>
 </root>
