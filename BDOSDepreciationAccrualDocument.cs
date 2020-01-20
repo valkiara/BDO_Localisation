@@ -295,14 +295,22 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == true)
+                if( BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE && BusinessObjectInfo.BeforeAction)
                 {
-                    if (Program.cancellationTrans == true & Program.canceledDocEntry != 0)
+                    int answer = 0;
+                    answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouReallyWantCancelDoc") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                    if (answer == 1 && Program.cancellationTrans & Program.canceledDocEntry != 0)
                     {
+
                         cancellation(oForm, Program.canceledDocEntry, out errorText);
                         Program.canceledDocEntry = 0;
                     }
+                    else
+                    {
+                        BubbleEvent = false;
+                        
+                    }
+
                 }
 
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
