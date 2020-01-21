@@ -1811,7 +1811,6 @@ namespace BDO_Localisation_AddOn
                     SAPbobsCOM.VatGroups oVatCode;
                     oVatCode = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVatGroups);
                     oVatCode.GetByKey(U_BDOSVatCod);
-                    string a= oVatCode.ToString();
                     string CreditAccount = oVatCode.TaxAccount;
 
                     decimal Price = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "Price", i).ToString());
