@@ -104,68 +104,57 @@ namespace BDO_Localisation_AddOn
                     docNum = Convert.ToInt32(ref3.Substring(ref3.LastIndexOf('/') + 1));
                     transId = oRecordSetJDT1.Fields.Item("TransId").Value;
 
-                    if (docType == "PU")
+                    switch (docType)
                     {
-                        docTable = "OPCH";
-                        docChildTable = "PCH1";
-                    }
-                    else if (docType == "IN")
-                    {
-                        docTable = "OINV";
-                        docChildTable = "INV1";
-                    }
-                    else if (docType == "PC")
-                    {
-                        docTable = "ORPC";
-                        docChildTable = "RPC1";
-                    }
-                    else if (docType == "CN")
-                    {
-                        docTable = "ORIN";
-                        docChildTable = "RIN1";
-                    }
-                    else if (docType == "CP")
-                    {
-                        docTable = "OCPI";
-                        docChildTable = "CPI1";
-                    }
-                    else if (docType == "CS")
-                    {
-                        docTable = "OCSI";
-                        docChildTable = "CSI1";
-                    }
-                    else if (docType == "JE")
-                    {
-                        docTable = "OJDT";
-                        queryDoc.Append("select " + docTable + ".\"Project\", \"AgrNo\" \n");
-                        queryDoc.Append("from " + docTable + " \n");
-                        queryDoc.Append("where \"Number\"  = '" + docNum + "'");
-                        goto shortCut;
-                    }
-                    else if (docType == "PS")
-                    {
-                        docTable = "OVPM";
+                        case "PU":
+                            docTable = "OPCH";
+                            docChildTable = "PCH1";
+                            break;
+                        case "IN":
+                            docTable = "OINV";
+                            docChildTable = "INV1";
+                            break;
+                        case "PC":
+                            docTable = "ORPC";
+                            docChildTable = "RPC1";
+                            break;
+                        case "CN":
+                            docTable = "ORIN";
+                            docChildTable = "RIN1";
+                            break;
+                        case "CP":
+                            docTable = "OCPI";
+                            docChildTable = "CPI1";
+                            break;
+                        case "CS":
+                            docTable = "OCSI";
+                            docChildTable = "CSI1";
+                            break;
+                        case "JE":
+                            docTable = "OJDT";
+                            queryDoc.Append("select " + docTable + ".\"Project\", \"AgrNo\" \n");
+                            queryDoc.Append("from " + docTable + " \n");
+                            queryDoc.Append("where \"Number\"  = '" + docNum + "'");
+                            goto shortCut;
+                        case "PS":
+                            docTable = "OVPM";
 
-                        queryDoc.Append("select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
-                        queryDoc.Append("from " + docTable + " \n");
-                        queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
-                        queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\",\"U_UseBlaAgRt\"");
-                        goto shortCut;
-                    }
-                    else if (docType == "RC")
-                    {
-                        docTable = "ORCT";
+                            queryDoc.Append("select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                            queryDoc.Append("from " + docTable + " \n");
+                            queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
+                            queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\",\"U_UseBlaAgRt\"");
+                            goto shortCut;
+                        case "RC":
+                            docTable = "ORCT";
 
-                        queryDoc.Append("select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
-                        queryDoc.Append("from " + docTable + " \n");
-                        queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
-                        queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\", \"U_UseBlaAgRt\"");
-                        goto shortCut;
-                    }
-                    else
-                    {
-                        Program.uiApp.StatusBar.SetSystemMessage("Document with type - " + docType + " not supported", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-                        continue;
+                            queryDoc.Append("select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                            queryDoc.Append("from " + docTable + " \n");
+                            queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
+                            queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\", \"U_UseBlaAgRt\"");
+                            goto shortCut;
+                        default:
+                            Program.uiApp.StatusBar.SetSystemMessage("Document with type - " + docType + " not supported", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            continue;
                     }
 
                     queryDoc.Append("select " + docTable + ".\"Project\", " + docTable + ".\"DocRate\", " + docTable + ".\"AgrNo\", " + docTable + ".\"U_UseBlaAgRt\", sum(" + docChildTable + ".\"OpenSumFC\") as \"Amount\" \n");
@@ -231,7 +220,10 @@ namespace BDO_Localisation_AddOn
 
         private static void UpdateJournalEntryTable(int transId, string memo, string ref3, int baseTrans, string revSource, string project, int agrNo, double credit, double debit, string docCur)
         {
+            //ვიღებთ საპის მიერ შექმნილ გატარებას, ვუცვლით თანხებს, გადაგვყავს ექსემელში და ამის მიხედვით ვქმნით ახალს
             string error;
+            double oldDebit = 0;
+            double oldCredit = 0;
             SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
             oJounalEntry.GetByKey(transId);
 
@@ -245,17 +237,20 @@ namespace BDO_Localisation_AddOn
                 }
                 if (agrNo != 0)
                 {
+                    
                     //oJounalEntry.UserFields.Fields.Item("blanket agreementis columni").Value = agrNo;
 
                     if (oJounalEntry.Lines.AdditionalReference == ref3) //for bp
                     {
                         if (credit != 0)
                         {
-                            oJounalEntry.Lines.Credit = credit;
+                            oldCredit = oJounalEntry.Lines.Credit;
+                            oJounalEntry.Lines.Credit = credit-oldCredit;
                         }
                         else if (debit != 0)
                         {
-                            oJounalEntry.Lines.Debit = debit;
+                            oldDebit = oJounalEntry.Lines.Debit;
+                            oJounalEntry.Lines.Debit = debit-oldDebit;
                         }
                     }
                     else if (oJounalEntry.Lines.AdditionalReference != ref3)  //for second account
@@ -263,11 +258,13 @@ namespace BDO_Localisation_AddOn
                         oJounalEntry.Lines.FCCurrency = docCur;
                         if (credit != 0)
                         {
-                            oJounalEntry.Lines.Debit = credit;
+                            oldDebit = oJounalEntry.Lines.Debit;
+                            oJounalEntry.Lines.Debit = credit-oldDebit;
                         }
                         else if (debit != 0)
                         {
-                            oJounalEntry.Lines.Credit = debit;
+                            oldCredit = oJounalEntry.Lines.Credit;
+                            oJounalEntry.Lines.Credit = debit-oldCredit;
                         }
                     }
                 }
@@ -277,17 +274,18 @@ namespace BDO_Localisation_AddOn
             Program.oCompany.XmlExportType = SAPbobsCOM.BoXmlExportTypes.xet_ExportImportMode;
 
             string xml = oJounalEntry.GetAsXML();
-
-            int updateCode = oJounalEntry.Cancel();
-            if (updateCode != 0)
-            {
-                Program.oCompany.GetLastError(out updateCode, out error);
-                Program.uiApp.StatusBar.SetSystemMessage(error, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-            }
+            int updateCode;
+            //int updateCode = oJounalEntry.Cancel();
+            //if (updateCode != 0)
+            //{
+            //    Program.oCompany.GetLastError(out updateCode, out error);
+            //    Program.uiApp.StatusBar.SetSystemMessage(error, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+            //}
             if (credit == 0 && debit == 0)
             {
                 goto shortcut;
             }
+            //ვშლით ისეთ ველებს რომლებიც არ შეიძლება რომ იყოს
             xml = Regex.Replace(xml, @"<\?.*?\?>|<DebitSys>.*?</DebitSys>|<CreditSys>.*?</CreditSys>|<JdtNum>.*?</JdtNum>|<SystemBaseAmount>.*?</SystemBaseAmount>|<VatAmount>.*?</VatAmount>|<SystemVatAmount>.*?</SystemVatAmount>|<GrossValue>.*?</GrossValue>", "");
 
             SAPbobsCOM.JournalEntries oJounalEntryNew = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
@@ -331,7 +329,6 @@ namespace BDO_Localisation_AddOn
                     }
                 }
                 Marshal.ReleaseComObject(oRecordSetNewTransId);
-                Marshal.ReleaseComObject(queryNewTransId);
 
                 try
                 {
