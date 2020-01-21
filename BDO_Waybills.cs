@@ -5923,11 +5923,11 @@ namespace BDO_Localisation_AddOn
                     VAT_TYPE = VatGroup == "X0" ? "" : VAT_TYPE;
                     switch (VAT_TYPE)
                     {
-                        //case "18": VAT_TYPE = "0"; //ჩეულებრივი 18%
-                        //    break;
-                        case "0":
-                            VAT_TYPE = "1"; //ნულოვანი 0%
-                            break;
+                       // case "18": VAT_TYPE = "0"; //ჩეულებრივი 18%
+                       //     break;
+                       // case "0":
+                       //     VAT_TYPE = "1"; //ნულოვანი 0%
+                       //     break;
                         case "":
                             VAT_TYPE = "2"; //დაუბეგრავი
                             break;
