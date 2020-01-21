@@ -1784,10 +1784,10 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Waybills Analysis Received<-----------------------------
-                else if (pVal.FormUID == "BDOSWBRAn")
+                else if (pVal.FormUID == "BDOSWBRAn" || pVal.FormUID == "BDOSSelectValues")
                 {
                     BDOSWaybillsAnalysisReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
+                } 
 
                 //----------------------------->Waybills Analysis Sent<-----------------------------
                 else if (pVal.FormUID == "BDOSWBSAn")
@@ -2268,8 +2268,14 @@ namespace BDO_Localisation_AddOn
                     BDOSInternetBankingDocuments.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Payment Means<-----------------------------
+                //----------------------------->Payment Means from Outgoing Payments<-----------------------------
                 else if (pVal.FormTypeEx == "196")
+                {
+                    PaymentMeans.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->Payment Means from Incoming Payments<-----------------------------
+                else if (pVal.FormTypeEx == "146")
                 {
                     PaymentMeans.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
