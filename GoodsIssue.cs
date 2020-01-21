@@ -1622,6 +1622,7 @@ namespace BDO_Localisation_AddOn
                     string ListNum = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("GroupNum", 0);
 
                     SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        
                     string isGrossPrc = "N";
                     string query = @"SELECT ""IsGrossPrc"" FROM ""OPLN"" WHERE ""OPLN"".""ListNum""='" + ListNum.Replace("'", "''") + "'";
                     oRecordSet.DoQuery(query);
@@ -1810,7 +1811,6 @@ namespace BDO_Localisation_AddOn
                     SAPbobsCOM.VatGroups oVatCode;
                     oVatCode = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVatGroups);
                     oVatCode.GetByKey(U_BDOSVatCod);
-
                     string CreditAccount = oVatCode.TaxAccount;
 
                     decimal Price = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "Price", i).ToString());
