@@ -37,6 +37,12 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE && pVal.BeforeAction == true)
+                {
+                    SAPbouiCOM.EditText oRemark = oForm.Items.Item("5").Specific;
+                    GetDataForUpdate(oRemark.Value);
+                }
+
             }
         }
 
