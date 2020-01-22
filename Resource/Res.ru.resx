@@ -3400,4 +3400,7 @@
   <data name="DoYouReallyWantCancelDoc" xml:space="preserve">
     <value>Do you really want to cancel document</value>
   </data>
+  <data name="saveWhs" xml:space="preserve">
+    <value>Save Whs</value>
+  </data>
 </root>
