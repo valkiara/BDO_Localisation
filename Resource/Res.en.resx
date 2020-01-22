@@ -3016,9 +3016,6 @@
   <data name="Uom" xml:space="preserve">
     <value>Unit</value>
   </data>
-  <data name="Item Code" xml:space="preserve">
-    <value />
-  </data>
   <data name="FuelMng" xml:space="preserve">
     <value>Fuel Management</value>
   </data>
@@ -3426,5 +3423,8 @@
   </data>
   <data name="CloseReceivedWaybillsAnalysis" xml:space="preserve">
     <value>Do you want to close received waybills analysis</value>
+  </data>
+  <data name="YouCantCancelJournalEntry" xml:space="preserve">
+    <value>You can't cancel journal entry</value>
   </data>
 </root>

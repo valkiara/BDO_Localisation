@@ -212,7 +212,7 @@ namespace BDO_Localisation_AddOn
         public static void createFormItems(SAPbouiCOM.Form oForm)
         {
             string errorText;
-
+            
             SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("76").Specific;
             SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("U_BDOSEmpID");
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("EmployeeNo");
@@ -964,6 +964,22 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.LinkedButton oLink = oAccount.ExtendedObject;
                         oLink.LinkedObjectType = "1";
                     }
+                }
+            }
+        }
+
+        public static void uiApp_MenuEvent(ref SAPbouiCOM.MenuEvent pVal, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+
+            SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+
+            if (pVal.BeforeAction && pVal.MenuUID == "1284")
+            {
+                if (oForm.DataSources.DBDataSources.Item("OJDT").GetValue("DataSource", 0) == "O")
+                {
+                    BubbleEvent = false;
+                    throw new Exception(BDOSResources.getTranslate("YouCantCancelJournalEntry") + "!");
                 }
             }
         }

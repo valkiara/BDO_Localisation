@@ -3400,4 +3400,7 @@
   <data name="CloseReceivedWaybillsAnalysis" xml:space="preserve">
     <value>დაიხუროს მიღებული ზედნადებების ანალიზი</value>
   </data>
+  <data name="YouCantCancelJournalEntry" xml:space="preserve">
+    <value>გატარებების ჯურნალს ვერ გააუქმებთ</value>
+  </data>
 </root>

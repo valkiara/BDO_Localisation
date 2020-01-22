@@ -3397,4 +3397,7 @@
   <data name="CloseReceivedWaybillsAnalysis" xml:space="preserve">
     <value>Do you want to close received waybills analysis</value>
   </data>
+  <data name="YouCantCancelJournalEntry" xml:space="preserve">
+    <value>You can't cancel journal entry</value>
+  </data>
 </root>
