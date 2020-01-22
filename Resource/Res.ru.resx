@@ -3403,4 +3403,7 @@
   <data name="YouCantCancelJournalEntry" xml:space="preserve">
     <value>You can't cancel journal entry</value>
   </data>
+  <data name="saveWhs" xml:space="preserve">
+    <value>Save Whs</value>
+  </data>
 </root>

@@ -123,6 +123,8 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.CheckBox Edtfield = oMatrix.Columns.Item("WBCheckbox").Cells.Item(row).Specific;
                 bool checkedLine = (Edtfield.Checked);
 
+                bool saveWhs = oMatrix.Columns.Item("WBCheckb").Cells.Item(row).Specific.Checked;
+
                 if (checkedLine)
                 {
                     SAPbouiCOM.ComboBox statusOfInvoice = (SAPbouiCOM.ComboBox)oMatrix.Columns.Item("WBStat").Cells.Item(row).Specific;
@@ -164,6 +166,7 @@ namespace BDO_Localisation_AddOn
 
                         string cardName;
                         string CardCode = BusinessPartners.GetCardCodeByTin(TIN, "S", out cardName);
+
                         if (CardCode == null)
                         {
                             oForm.Freeze(false);
@@ -177,12 +180,9 @@ namespace BDO_Localisation_AddOn
                         string wBWhs = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBWhs", row - 1);
                         string wBEndAdr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBEndAdd", row - 1);
 
-                        if (!string.IsNullOrEmpty(wBWhs))
-                        {
-                            whs = wBWhs;
-                        }
+                        if (!string.IsNullOrEmpty(wBWhs)) whs = wBWhs;
 
-                        BDOSWarehouseAddresses.AddWhsByAddress(wBEndAdr, whs);
+                        if(saveWhs) BDOSWarehouseAddresses.AddWhsByAddress(wBEndAdr, whs);
 
                         //SAPbobsCOM.CompanyService oCompanyService;
                         //SAPbobsCOM.BlanketAgreementsService oAcuerdoServicio;
@@ -657,7 +657,7 @@ namespace BDO_Localisation_AddOn
                     string whsCode = BDOSWarehouseAddresses.GetWhsByAddress(WBEndAdd);
                     if (!string.IsNullOrEmpty(whsCode))
                     {
-                        oDataTable.SetValue(17, rowIndex, whsCode);
+                        oDataTable.SetValue(18, rowIndex, whsCode);
                     }
                 }
 
@@ -2117,7 +2117,9 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("TYPE", SAPbouiCOM.BoFieldsType.ft_Text, 20); //14
                     oDataTable.Columns.Add("WBBlankAgr", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //15
                     oDataTable.Columns.Add("WBCOMMENT", SAPbouiCOM.BoFieldsType.ft_Text, 20); //16
-                    oDataTable.Columns.Add("WBWhs", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //17
+                    oDataTable.Columns.Add("WBCheckb", SAPbouiCOM.BoFieldsType.ft_Text, 20);
+                    oDataTable.Columns.Add("WBWhs", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //18
+                    
 
                     int rowCounter = 1;
                     int rowIndex = 0;
@@ -2175,7 +2177,7 @@ namespace BDO_Localisation_AddOn
                             string whsCode = BDOSWarehouseAddresses.GetWhsByAddress(WBEndAdd);
                             if (!string.IsNullOrEmpty(whsCode))
                             {
-                                oDataTable.SetValue(17, rowIndex, whsCode);
+                                oDataTable.SetValue(18, rowIndex, whsCode);
                             }
                         }
                         string LinkedDocType = "";
@@ -2364,6 +2366,13 @@ namespace BDO_Localisation_AddOn
                     oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
                     oColumn.DisplayDesc = true;
 
+                    oColumn = oColumns.Add("WBCheckb", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("saveWhs");
+                    oColumn.Width = 100;
+                    oColumn.Editable = true;
+                    oColumn.DataBind.Bind("WBTable", "WBCheckb");
+                    
+
                     //WBWhs
                     FormsB1.addChooseFromList(oForm, false, "64", "WBWarehouseCFL");
                     oColumn = oColumns.Add("WBWhs", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
@@ -2377,6 +2386,8 @@ namespace BDO_Localisation_AddOn
 
                     oColumn.ChooseFromListUID = "WBWarehouseCFL";
                     oColumn.ChooseFromListAlias = "WhsCode";
+
+                    
 
                     //-----------
                     oMatrix.Clear();

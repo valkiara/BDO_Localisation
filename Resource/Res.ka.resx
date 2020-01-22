@@ -3406,4 +3406,7 @@
   <data name="YouCantCancelJournalEntry" xml:space="preserve">
     <value>გატარებების ჯურნალს ვერ გააუქმებთ</value>
   </data>
+  <data name="saveWhs" xml:space="preserve">
+    <value>შეინახე საწყობი</value>
+  </data>
 </root>
