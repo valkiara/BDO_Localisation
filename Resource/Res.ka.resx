@@ -3403,6 +3403,9 @@
   <data name="DoYouReallyWantCancelDoc" xml:space="preserve">
     <value>ნამდვილად გსურთ დოკუმენტის გაუქმება</value>
   </data>
+  <data name="YouCantCancelJournalEntry" xml:space="preserve">
+    <value>გატარებების ჯურნალს ვერ გააუქმებთ</value>
+  </data>
   <data name="saveWhs" xml:space="preserve">
     <value>შეინახე საწყობი</value>
   </data>
