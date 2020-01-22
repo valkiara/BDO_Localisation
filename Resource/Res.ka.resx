@@ -3400,6 +3400,9 @@
   <data name="CloseReceivedWaybillsAnalysis" xml:space="preserve">
     <value>დაიხუროს მიღებული ზედნადებების ანალიზი</value>
   </data>
+  <data name="DoYouReallyWantCancelDoc" xml:space="preserve">
+    <value>ნამდვილად გსურთ დოკუმენტის გაუქმება</value>
+  </data>
   <data name="YouCantCancelJournalEntry" xml:space="preserve">
     <value>გატარებების ჯურნალს ვერ გააუქმებთ</value>
   </data>
