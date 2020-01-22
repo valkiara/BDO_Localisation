@@ -2366,14 +2366,12 @@ namespace BDO_Localisation_AddOn
                     oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
                     oColumn.DisplayDesc = true;
 
-                    if (oDocForm == null)
-                    {
-                        oColumn = oColumns.Add("WBCheckb", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
-                        oColumn.TitleObject.Caption = BDOSResources.getTranslate("saveWhs");
-                        oColumn.Width = 100;
-                        oColumn.Editable = true;
-                        oColumn.DataBind.Bind("WBTable", "WBCheckb");
-                    }
+                    oColumn = oColumns.Add("WBCheckb", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("saveWhs");
+                    oColumn.Width = 100;
+                    oColumn.Editable = true;
+                    oColumn.DataBind.Bind("WBTable", "WBCheckb");
+                    
 
                     //WBWhs
                     FormsB1.addChooseFromList(oForm, false, "64", "WBWarehouseCFL");
