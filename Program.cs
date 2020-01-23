@@ -1155,10 +1155,10 @@ namespace BDO_Localisation_AddOn
                     }
 
                     //----------------------------->A/R Down Payment Request<-----------------------------
-                    else if (oForm.TypeEx == "65308")
-                    {
-                        ARDownPaymentRequest.formDataLoad(oForm, out errorText);
-                    }
+                    //else if (oForm.TypeEx == "65308")
+                    //{
+                    //    ARDownPaymentRequest.formDataLoad(oForm, out errorText);
+                    //}
                     //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                     else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                     {
@@ -1300,10 +1300,10 @@ namespace BDO_Localisation_AddOn
                     }
 
                     //----------------------------->A/R Down Payment Request<-----------------------------
-                    else if (oForm.TypeEx == "65308")
-                    {
-                        ARDownPaymentRequest.formDataLoad(oForm, out errorText);
-                    }
+                    //else if (oForm.TypeEx == "65308")
+                    //{
+                    //    ARDownPaymentRequest.formDataLoad(oForm, out errorText);
+                    //}
                     //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                     else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                     {

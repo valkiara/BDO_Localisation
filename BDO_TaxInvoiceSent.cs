@@ -2898,7 +2898,7 @@ namespace BDO_Localisation_AddOn
                             }
                             exclList.Add("0");
 
-                            DataTable baseDocs = getListBaseDoc(oGeneralData, wbNumber, null, baseDocType, docEntry, exclList, out errorText);
+                            DataTable baseDocs = getListBaseDoc(oGeneralData, wbNumber, null, baseDocType, docEntry, exclList);
 
                             int docCount = baseDocs.Rows.Count;
                             SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
@@ -2977,11 +2977,11 @@ namespace BDO_Localisation_AddOn
                             }
                             else if (sCFL_ID == "DownPaymentInvoice_CFL")
                             {
-                                ARDownPaymentRequest.getAmount(docEntry, out amount, out amountTX, out errorText);
+                                ARDownPaymentRequest.getAmount(docEntry, out amount, out amountTX);
                             }
                             else if (sCFL_ID == "ARDownPaymentVAT_CFL")
                             {
-                                BDOSARDownPaymentVATAccrual.getAmount(docEntry, out amount, out amountTX, out errorText);
+                                BDOSARDownPaymentVATAccrual.getAmount(docEntry, out amount, out amountTX);
                             }
 
                             LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_baseDTxt").Cells.Item(cellPos.rowIndex).Specific.Value = docEntry.ToString());
@@ -3159,9 +3159,8 @@ namespace BDO_Localisation_AddOn
             return taxDocInfo;
         }
 
-        public static void getPrimaryBaseDoc(int docEntry, string cardCode, out List<int> baseDocList, out string errorText)
+        public static void getPrimaryBaseDoc(int docEntry, string cardCode, out List<int> baseDocList)
         {
-            errorText = null;
             int corrDoc = 0;
             string corrInv = null;
             baseDocList = new List<int>();
@@ -3206,13 +3205,13 @@ namespace BDO_Localisation_AddOn
                     }
                     if (corrInv == "Y" && corrDoc != 0)
                     {
-                        getPrimaryBaseDoc(corrDoc, cardCode, out baseDocList, out errorText);
+                        getPrimaryBaseDoc(corrDoc, cardCode, out baseDocList);
                     }
                 }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -3222,10 +3221,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static DataTable getListBaseDoc(SAPbobsCOM.GeneralData oGeneralData, string overhead_no, string overhead_dt_str, string baseDocType, int docEntryTaxInv, List<string> exclList, out string errorText)
+        public static DataTable getListBaseDoc(SAPbobsCOM.GeneralData oGeneralData, string overhead_no, string overhead_dt_str, string baseDocType, int docEntryTaxInv, List<string> exclList)
         {
-            errorText = null;
-
             DataTable baseDocs = new DataTable();
             baseDocs.Columns.Add("DocEntry", typeof(int));
             baseDocs.Columns.Add("DocDate", typeof(DateTime));
@@ -3286,15 +3283,15 @@ namespace BDO_Localisation_AddOn
             List<int> connectedDocList = new List<int>();
             if (corrInv)
             {
-                getPrimaryBaseDoc(corrDoc, cardCode, out primaryBaseDocList, out errorText);
+                getPrimaryBaseDoc(corrDoc, cardCode, out primaryBaseDocList);
 
                 if (downPaymnt)
                 {
-                    connectedDocList = ARDownPaymentRequest.getAllConnectedDoc(primaryBaseDocList, out errorText);
+                    connectedDocList = ARDownPaymentRequest.getAllConnectedDoc(primaryBaseDocList);
                 }
                 else
                 {
-                    connectedDocList = ARCreditNote.getAllConnectedDoc(primaryBaseDocList, "13", out errorText);
+                    connectedDocList = ARCreditNote.getAllConnectedDoc(primaryBaseDocList, "13");
                 }
             }
 
@@ -3380,8 +3377,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
-                return baseDocs;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -3389,7 +3385,6 @@ namespace BDO_Localisation_AddOn
                 oRecordSet = null;
                 GC.Collect();
             }
-
             return baseDocs;
         }
 

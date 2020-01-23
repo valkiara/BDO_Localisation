@@ -13,7 +13,7 @@ namespace BDO_Localisation_AddOn
     {
         public static bool ReserveInvoiceAsService = false;
 
-        public static void createUserFields( out string errorText)
+        public static void createUserFields(out string errorText)
         {
             errorText = null;
             List<string> listValidValues;
@@ -30,7 +30,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             //მომსახურების აღწერა
             fieldskeysMap = new Dictionary<string, object>();
@@ -40,12 +40,12 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             GC.Collect();
         }
 
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             Dictionary<string, object> formItems = null;
@@ -132,7 +132,7 @@ namespace BDO_Localisation_AddOn
             bool multiSelection = false;
             string objectType = "UDO_F_BDO_WBLD_D"; //Waybill document
             string uniqueID_WaybillCFL = "Waybill_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_WaybillCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_WaybillCFL);
 
             formItems = new Dictionary<string, object>();
             itemName = "BDO_WblDoc"; //10 characters
@@ -207,7 +207,7 @@ namespace BDO_Localisation_AddOn
             multiSelection = false;
             objectType = "UDO_F_BDO_TAXS_D"; //Tax invoice sent document
             string uniqueID_TaxInvoiceSentCFL = "TaxInvoiceSent_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_TaxInvoiceSentCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_TaxInvoiceSentCFL);
 
             formItems = new Dictionary<string, object>();
             itemName = "BDO_TaxDoc"; //10 characters
@@ -259,7 +259,7 @@ namespace BDO_Localisation_AddOn
             oForm.DataSources.UserDataSources.Add("BDO_TaxDat", SAPbouiCOM.BoDataType.dt_DATE, 20);
             //<-------------------------------------------ანგარიშ-ფაქტურა-----------------------------------
 
-            ReserveInvoiceAsService = (CommonFunctions.getOADM( "U_BDOSResSrv").ToString() == "Y");
+            ReserveInvoiceAsService = (CommonFunctions.getOADM("U_BDOSResSrv").ToString() == "Y");
 
             if (ReserveInvoiceAsService)
             {
@@ -328,7 +328,7 @@ namespace BDO_Localisation_AddOn
 
                 if (baseType == "203") //A/R Down Payment Invoice-ის საფუძველზეა გაფორმებული
                 {
-                    oItem = oForm.Items.Item("BDO_WblTxt"); 
+                    oItem = oForm.Items.Item("BDO_WblTxt");
                     oItem.Visible = false;
                     oItem = oForm.Items.Item("BDO_WblDoc");
                     oItem.Visible = false;
@@ -347,7 +347,7 @@ namespace BDO_Localisation_AddOn
                     oItem.Visible = true;
                     oItem = oForm.Items.Item("BDO_TaxDoc");
                     oItem.Visible = true;
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -359,7 +359,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void formDataLoad( SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -374,7 +374,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORIN").GetValue("DocEntry", 0).Trim());
-                
+
                 int oBaseDocEntry = 0;
 
                 //-------------------------------------------სასაქონლო ზედნადები----------------------------------->
@@ -389,7 +389,7 @@ namespace BDO_Localisation_AddOn
 
                 if (oCNTp == "0")
                 {
-                    getBaseDoc( docEntry, "13", out oBaseDocEntry);
+                    getBaseDoc(docEntry, "13", out oBaseDocEntry);
                     if (oBaseDocEntry == 0)
                     {
                         return;
@@ -405,7 +405,7 @@ namespace BDO_Localisation_AddOn
 
                 if (docEntry != 0)
                 {
-                    Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( docEntry, objType, out errorText);
+                    Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(docEntry, objType, out errorText);
                     wblDocEntry = Convert.ToInt32(wblDocInfo["DocEntry"]);
                     wblID = wblDocInfo["wblID"];
                     wblNum = wblDocInfo["number"];
@@ -413,7 +413,7 @@ namespace BDO_Localisation_AddOn
 
                     if (wblDocEntry != 0)
                     {
-                        caption = BDOSResources.getTranslate("Wb")+": " + wblSts + " " + wblID + (wblNum != "" ? " № " + wblNum : "");
+                        caption = BDOSResources.getTranslate("Wb") + ": " + wblSts + " " + wblID + (wblNum != "" ? " № " + wblNum : "");
                     }
                 }
                 else
@@ -444,7 +444,7 @@ namespace BDO_Localisation_AddOn
 
                 if (docEntry != 0)
                 {
-                    Dictionary<string, object> taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo( docEntry, "ARCreditNote", cardCode, out errorText);
+                    Dictionary<string, object> taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo(docEntry, "ARCreditNote", cardCode, out errorText);
                     if (taxDocInfo != null)
                     {
                         taxDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]);
@@ -463,7 +463,7 @@ namespace BDO_Localisation_AddOn
                             }
                             else
                             {
-                                caption = BDOSResources.getTranslate("TaxInvoiceSeries") + " " + taxSeries + " № " + taxNumber + " "+BDOSResources.getTranslate("Data")+ " " + taxCreateDateDT;
+                                caption = BDOSResources.getTranslate("TaxInvoiceSeries") + " " + taxSeries + " № " + taxNumber + " " + BDOSResources.getTranslate("Data") + " " + taxCreateDateDT;
                             }
                         }
                     }
@@ -509,7 +509,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void getBaseDoc( int docEntry, string baseType, out int baseEntry)
+        public static void getBaseDoc(int docEntry, string baseType, out int baseEntry)
         {
             baseEntry = 0;
 
@@ -545,7 +545,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void cancellation(  SAPbouiCOM.Form oForm, int docEntry, out string errorText)
+        public static void cancellation(SAPbouiCOM.Form oForm, int docEntry, out string errorText)
         {
             errorText = null;
 
@@ -555,16 +555,16 @@ namespace BDO_Localisation_AddOn
                 SAPbobsCOM.Documents oCreditNotes = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oCreditNotes);
                 if (oCreditNotes.GetByKey(docEntry) && oCreditNotes.UserFields.Fields.Item("U_BDO_CNTp").Value == "1")
                 {
-                    Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( docEntry, "14", out errorText);
+                    Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(docEntry, "14", out errorText);
                     int wblDocEntry = Convert.ToInt32(wblDocInfo["DocEntry"]);
 
-                if (wblDocEntry != 0)
-                {
-                    int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentLinkedToWaybillCancel"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                    if (wblDocEntry != 0)
+                    {
+                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentLinkedToWaybillCancel"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                         string operation = answer == 1 ? "Update" : "Cancel";
-                    BDO_Waybills.cancellation( wblDocEntry, operation, out errorText);
+                        BDO_Waybills.cancellation(wblDocEntry, operation, out errorText);
+                    }
                 }
-            }
             }
             catch (Exception ex)
             {
@@ -573,7 +573,7 @@ namespace BDO_Localisation_AddOn
 
             try
             {
-                JournalEntry.cancellation( oForm, docEntry, "13", out errorText); //საკითხავია
+                JournalEntry.cancellation(oForm, docEntry, "13", out errorText); //საკითხავია
             }
             catch (Exception ex)
             {
@@ -586,7 +586,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void itemPressed(  SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out int newDocEntry, out string bstrUDOObjectType, out string errorText)
+        public static void itemPressed(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out int newDocEntry, out string bstrUDOObjectType, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -609,11 +609,11 @@ namespace BDO_Localisation_AddOn
                 {
                     if (wblDoc == "" && cancelled == "N" && docType == "I" && cNTp == "1")
                     {
-                        BDO_Waybills.createDocument( objectType, docEntry, null, null, null, null, out newDocEntry, out errorText);
+                        BDO_Waybills.createDocument(objectType, docEntry, null, null, null, null, out newDocEntry, out errorText);
                         if (errorText == null & newDocEntry != 0)
                         {
                             oForm.DataSources.UserDataSources.Item("BDO_WblDoc").ValueEx = newDocEntry.ToString();
-                            formDataLoad( oForm, out errorText);
+                            formDataLoad(oForm, out errorText);
                             return;
                         }
                     }
@@ -644,11 +644,11 @@ namespace BDO_Localisation_AddOn
                 {
                     if (taxDoc == "" && cancelled == "N") // && cNTp == "1"
                     {
-                        BDO_TaxInvoiceSent.createDocument( objectType, docEntry, "", true, 0, null, false, null, out newDocEntry, out errorText);
+                        BDO_TaxInvoiceSent.createDocument(objectType, docEntry, "", true, 0, null, false, null, out newDocEntry, out errorText);
                         if (string.IsNullOrEmpty(errorText) && newDocEntry != 0)
                         {
                             oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = newDocEntry.ToString();
-                            formDataLoad( oForm, out errorText);
+                            formDataLoad(oForm, out errorText);
                             return;
                         }
                     }
@@ -664,7 +664,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string getGoodsQueryForTaxInvoiceSent( int docEntry)
+        public static string getGoodsQueryForTaxInvoiceSent(int docEntry)
         {
             string ID = "0";
             string query = "SELECT " +
@@ -733,7 +733,7 @@ namespace BDO_Localisation_AddOn
             return query;
         }
 
-        public static void getAmount( int docEntry, out double gTotal, out double lineVat, out string errorText)
+        public static void getAmount(int docEntry, out double gTotal, out double lineVat, out string errorText)
         {
             errorText = null;
             gTotal = 0;
@@ -793,7 +793,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void canUpdateDocument(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void canUpdateDocument(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -828,7 +828,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -839,7 +839,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
                 {
-                    formDataLoad( oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
                     setVisibleFormItems(oForm, out errorText);
                 }
 
@@ -847,7 +847,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (BusinessObjectInfo.BeforeAction == true)
                     {
-                        canUpdateDocument( oForm, out errorText);
+                        canUpdateDocument(oForm, out errorText);
 
                         if (string.IsNullOrEmpty(errorText) == false)
                         {
@@ -859,7 +859,7 @@ namespace BDO_Localisation_AddOn
                     {
                         if (Program.canceledDocEntry != 0)
                         {
-                            cancellation( oForm, Program.canceledDocEntry, out errorText);
+                            cancellation(oForm, Program.canceledDocEntry, out errorText);
                             Program.canceledDocEntry = 0;
                         }
                     }
@@ -867,7 +867,7 @@ namespace BDO_Localisation_AddOn
 
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == true)
                 {
-                    canUpdateDocument( oForm, out errorText);
+                    canUpdateDocument(oForm, out errorText);
 
                     if (errorText != null)
                     {
@@ -876,28 +876,28 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-            //if (BusinessObjectInfo.ActionSuccess & BusinessObjectInfo.BeforeAction == false)
-            //{
-            //    //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
-            //    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+                //if (BusinessObjectInfo.ActionSuccess & BusinessObjectInfo.BeforeAction == false)
+                //{
+                //    //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
+                //    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
 
-            //    string DocEntry = DocDBSource.GetValue("DocEntry", 0);
-            //    string DocNum = DocDBSource.GetValue("DocNum", 0);
-            //    string DocCurr = DocDBSource.GetValue("DocCur", 0);
-            //    decimal DocRate = FormsB1.cleanStringOfNonDigits( DocDBSource.GetValue("DocRate", 0));
-            //    DateTime DocDate = DateTime.ParseExact(DocDBSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
-            //    JrnEntry( DocEntry, DocNum, DocDate, DocRate, DocCurr, out errorText);
-            //    if (errorText != null)
-            //    {
-            //        Program.uiApp.MessageBox(errorText);
-            //        BubbleEvent = false;
+                //    string DocEntry = DocDBSource.GetValue("DocEntry", 0);
+                //    string DocNum = DocDBSource.GetValue("DocNum", 0);
+                //    string DocCurr = DocDBSource.GetValue("DocCur", 0);
+                //    decimal DocRate = FormsB1.cleanStringOfNonDigits( DocDBSource.GetValue("DocRate", 0));
+                //    DateTime DocDate = DateTime.ParseExact(DocDBSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
+                //    JrnEntry( DocEntry, DocNum, DocDate, DocRate, DocCurr, out errorText);
+                //    if (errorText != null)
+                //    {
+                //        Program.uiApp.MessageBox(errorText);
+                //        BubbleEvent = false;
 
-            //    }
-            //}
+                //    }
+                //}
             }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -908,8 +908,8 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    createFormItems( oForm, out errorText);
-                    formDataLoad( oForm, out errorText);
+                    createFormItems(oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
                     setVisibleFormItems(oForm, out errorText);
                 }
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == false)
@@ -926,44 +926,44 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.ItemUID == "BDO_CNTp" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.BeforeAction == false)
                 {
-                    formDataLoad( oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
                 {
                     if (pVal.ItemUID == "BDO_WblTxt" || pVal.ItemUID == "BDO_TaxTxt")
-                {
-                    oForm.Freeze(true);
-                    int newDocEntry = 0;
-                    string bstrUDOObjectType = null;
-
-                    itemPressed( oForm, pVal, out newDocEntry, out bstrUDOObjectType, out errorText);
-
-                    if (errorText != null)
                     {
-                        Program.uiApp.MessageBox(errorText);
-                    }
+                        oForm.Freeze(true);
+                        int newDocEntry = 0;
+                        string bstrUDOObjectType = null;
 
-                    oForm.Freeze(false);
-                    oForm.Update();
+                        itemPressed(oForm, pVal, out newDocEntry, out bstrUDOObjectType, out errorText);
 
-                    if (newDocEntry != 0 && bstrUDOObjectType != null)
-                    {
-                        Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, bstrUDOObjectType, newDocEntry.ToString());
+                        if (errorText != null)
+                        {
+                            Program.uiApp.MessageBox(errorText);
+                        }
+
+                        oForm.Freeze(false);
+                        oForm.Update();
+
+                        if (newDocEntry != 0 && bstrUDOObjectType != null)
+                        {
+                            Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, bstrUDOObjectType, newDocEntry.ToString());
+                        }
                     }
                 }
             }
         }
-        }
 
-        public static void JrnEntry( string DocEntry, string DocNum, DateTime DocDate, Decimal rate, string currency, out string errorText)
+        public static void JrnEntry(string DocEntry, string DocNum, DateTime DocDate, Decimal rate, string currency, out string errorText)
         {
             errorText = null;
 
             try
             {
                 DataTable jeLines = JournalEntry.JournalEntryTable();
-                                
+
             }
             catch (Exception ex)
             {
@@ -971,9 +971,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static List<int> getAllConnectedDoc( List<int> docEntry, string baseType, out string errorText)
+        public static List<int> getAllConnectedDoc(List<int> docEntry, string baseType)
         {
-            errorText = null;
             List<int> connectedDocList = new List<int>();
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -999,8 +998,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
-                return connectedDocList;
+                throw new Exception(ex.Message);
             }
             finally
             {
