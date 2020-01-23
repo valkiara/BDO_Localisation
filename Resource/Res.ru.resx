@@ -2582,7 +2582,7 @@
     <value>After date changing form will close and reopen</value>
   </data>
   <data name="ARDownPaymentVATAccrual" xml:space="preserve">
-    <value>AR Down payment VAT accrual</value>
+    <value>A/R Down Payment VAT Accrual</value>
   </data>
   <data name="ARVATAccrualWizard" xml:space="preserve">
     <value>AR VATA Accrual Wizard</value>

@@ -11,8 +11,6 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDOSARDownPaymentVATAccrual
     {
-        public static bool openFormEvent = false;
-
         public static void createDocumentUDO(out string errorText)
         {
             errorText = null;
@@ -235,15 +233,11 @@ namespace BDO_Localisation_AddOn
 
         public static void addMenus()
         {
-            SAPbouiCOM.MenuItem menuItem;
-            SAPbouiCOM.MenuItem fatherMenuItem;
-            SAPbouiCOM.MenuCreationParams oCreationPackage;
-
             try
             {
-                fatherMenuItem = Program.uiApp.Menus.Item("2048");
+                SAPbouiCOM.MenuItem fatherMenuItem = Program.uiApp.Menus.Item("2048");
                 // Add a pop-up menu item
-                oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
+                SAPbouiCOM.MenuCreationParams oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
                 oCreationPackage.Checked = false;
                 oCreationPackage.Enabled = true;
                 oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
@@ -251,7 +245,7 @@ namespace BDO_Localisation_AddOn
                 oCreationPackage.String = BDOSResources.getTranslate("ARDownPaymentVATAccrual");
                 oCreationPackage.Position = fatherMenuItem.SubMenus.Count - 1;
 
-                menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
+                SAPbouiCOM.MenuItem menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
             catch
             {
@@ -266,35 +260,39 @@ namespace BDO_Localisation_AddOn
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
-            {
-                if (oForm.DataSources.DBDataSources.Item("@BDOSARDV").GetValue("U_docDate", 0) == "")
-                {
-                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PostingDate") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
-                    Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                    BubbleEvent = false;
-                }
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
+                formDataLoad(oForm);
 
-                formDataLoad(oForm, out errorText);
-                setVisibleFormItems(oForm, out errorText);
-            }
-
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == true)
+            else if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
             {
-                if (Program.cancellationTrans == true & Program.canceledDocEntry != 0)
+                if (Program.cancellationTrans && Program.canceledDocEntry != 0)
                 {
-                    cancellation(oForm, Program.canceledDocEntry, out errorText);
+                    cancellation(oForm, Program.canceledDocEntry);
                     Program.canceledDocEntry = 0;
+
+                    oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = "";
+                    oForm.Items.Item("BDOSJrnEnt").Specific.Value = "";
+                    oForm.Items.Item("BDO_TaxTxt").Specific.Caption = BDOSResources.getTranslate("CreateTaxInvoice");
                 }
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
+            else if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
             {
-                SAPbouiCOM.DBDataSource DocDBSourceOCRD = oForm.DataSources.DBDataSources.Item(0);
+                if (BusinessObjectInfo.BeforeAction)
+                {
+                    if (oForm.DataSources.DBDataSources.Item("@BDOSARDV").GetValue("U_docDate", 0) == "")
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PostingDate") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
+                        BubbleEvent = false;
+                        return;
+                    }
+                }
+
+                SAPbouiCOM.DBDataSource DocDBSourceOCRD = oForm.DataSources.DBDataSources.Item("@BDOSARDV");
                 if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction && BubbleEvent)
                 {
                     //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
-                    SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item(0);
+                    SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item("@BDOSARDV");
 
                     if (DocDBSourcePAYR.GetValue("CANCELED", 0) == "N")
                     {
@@ -318,23 +316,17 @@ namespace BDO_Localisation_AddOn
                         }
                         else
                         {
-                            if (BusinessObjectInfo.ActionSuccess == false)
-                            {
+                            if (!BusinessObjectInfo.ActionSuccess)
                                 Program.JrnLinesGlobal = JrnLinesDT;
-                            }
                         }
 
                         if (Program.oCompany.InTransaction)
                         {
                             //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
-                            if (BusinessObjectInfo.ActionSuccess == true & BusinessObjectInfo.BeforeAction == false)
-                            {
+                            if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction)
                                 CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                            }
                             else
-                            {
                                 CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                            }
                         }
                         else
                         {
@@ -344,44 +336,32 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             }
-
         }
 
-        public static void uiApp_MenuEvent(ref SAPbouiCOM.MenuEvent pVal, out bool BubbleEvent, out string errorText)
+        public static void uiApp_MenuEvent(ref SAPbouiCOM.MenuEvent pVal, out bool BubbleEvent)
         {
-            errorText = null;
             BubbleEvent = true;
 
-            //----------------------------->Preview <-----------------------------
-            try
+            if (pVal.BeforeAction && pVal.MenuUID == "PreviewUDOJrE")
             {
-                if (pVal.BeforeAction && pVal.MenuUID == "PreviewUDOJrE")
+                SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
+
+                if (oDocForm.Items.Item("DocDate").Specific.Value == "")
                 {
+                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PostingDate") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
+                    Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                    BubbleEvent = false;
+                }
 
+                else
+                {
+                    JournalEntryTransaction(oDocForm, false, true, out BubbleEvent);
 
-                    SAPbouiCOM.Form oDocForm = Program.uiApp.Forms.ActiveForm;
-
-                    if (oDocForm.Items.Item("DocDate").Specific.Value == "")
+                    if (BubbleEvent)
                     {
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PostingDate") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
-                        Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                        BubbleEvent = false;
-                    }
-
-                    else
-                    {
-                        JournalEntryTransaction(oDocForm, false, true, out BubbleEvent, out errorText);
-
-                        if (BubbleEvent)
-                        {
-                            SAPbouiCOM.Form oJournalForm = Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_JournalPosting, "", "");
-                        }
+                        SAPbouiCOM.Form oJournalForm = Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_JournalPosting, "", "");
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Program.uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
         }
 
@@ -394,158 +374,142 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
                     createFormItems(oForm, out errorText);
                     Program.FORM_LOAD_FOR_VISIBLE = true;
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
-                    formDataLoad(oForm, out errorText);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & pVal.BeforeAction == false)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
                 {
-                    if (Program.FORM_LOAD_FOR_VISIBLE == true)
+                    if (Program.FORM_LOAD_FOR_VISIBLE)
                     {
-                        setSizeForm(oForm, out errorText);
-                        oForm.Title = BDOSResources.getTranslate("ARDownPaymentVAT");
+                        setSizeForm(oForm);
+                        oForm.Freeze(true);
+                        oForm.Title = BDOSResources.getTranslate("ARDownPaymentVATAccrual");
+                        oForm.Freeze(false);
                         Program.FORM_LOAD_FOR_VISIBLE = false;
                     }
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
                 {
-                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
-                    oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
-
-                    chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
+                    resizeForm(oForm);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
                 {
-                    oForm.Freeze(true);
-                    reArrangeFormItems(oForm);
-                    oForm.Freeze(false);
-                }
-                if (pVal.ItemUID == "addMTRB" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
-                {
-                    addMatrixRow(oForm, out errorText);
-                }
-
-                if (pVal.ItemUID == "delMTRB" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
-                {
-                    delMatrixRow(oForm, out errorText);
-                }
-
-                if (pVal.ItemUID == "ItemsMTR" & pVal.ItemChanged & pVal.BeforeAction == false)
-                {
-                    fillTotalAmounts(oForm, out errorText);
-                }
-
-                if (pVal.ItemUID == "BDO_TaxTxt" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
-                {
-                    string taxDoc = oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx;
-                    int newDocEntry = 0;
-
-                    SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item(0);
-                    int docEntry = Convert.ToInt32(DocDBSourcePAYR.GetValue("DocEntry", 0));
-                    string cancelled = DocDBSourcePAYR.GetValue("CANCELED", 0).Trim();
-                    string objectType = "UDO_F_BDO_ARDPV_D";
-
-
-                    if (docEntry != 0 & (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE || oForm.Mode == SAPbouiCOM.BoFormMode.fm_VIEW_MODE))
+                    if (Program.FORM_LOAD_FOR_ACTIVATE)
                     {
-                        if (taxDoc == "" && cancelled == "N")
+                        oForm.Freeze(true);
+                        try
                         {
-                            BDO_TaxInvoiceSent.createDocument(objectType, docEntry, "", true, 0, null, false, null, out newDocEntry, out errorText);
+                            SAPbouiCOM.StaticText staticText = oForm.Items.Item("0_U_S").Specific;
+                            staticText.Caption = BDOSResources.getTranslate("DocEntry");
 
-                            if (string.IsNullOrEmpty(errorText) && newDocEntry != 0)
-                            {
-                                oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = newDocEntry.ToString();
-                                formDataLoad(oForm, out errorText);
-                                return;
-                            }
+                            Program.FORM_LOAD_FOR_ACTIVATE = false;
                         }
-                        else if (cancelled != "N")
+                        catch (Exception ex)
                         {
-                            errorText = BDOSResources.getTranslate("DocumentMustNotBeCancelledOrCancellation");
+                            throw new Exception(ex.Message);
                         }
+                        finally
+                        {
+                            oForm.Freeze(false);
+                        }
+                    }
+                }
+
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                {
+                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
+                    chooseFromList(oForm, pVal, oCFLEvento, ref BubbleEvent);
+                }
+
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
+                {
+                    if (pVal.BeforeAction)
+                    {
                     }
                     else
                     {
-                        errorText = BDOSResources.getTranslate("ToCreateTaxInvoiceWriteDocument");
+                        if (pVal.FormMode == 3)
+                        {
+                            if (pVal.ItemUID == "addMTRB")
+                                addMatrixRow(oForm);
+                            else if (pVal.ItemUID == "delMTRB")
+                                deleteMatrixRow(oForm);
+                        }
+                        if (pVal.ItemUID == "BDO_TaxTxt")
+                        {
+                            string taxDoc = oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx;
+                            int newDocEntry = 0;
+
+                            SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSARDV");
+                            string cancelled = oDBDataSource.GetValue("CANCELED", 0).Trim();
+                            string objectType = "UDO_F_BDO_ARDPV_D";
+
+                            if (!string.IsNullOrEmpty(oDBDataSource.GetValue("DocEntry", 0)) && (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE || oForm.Mode == SAPbouiCOM.BoFormMode.fm_VIEW_MODE))
+                            {
+                                int docEntry = Convert.ToInt32(oDBDataSource.GetValue("DocEntry", 0));
+                                if (taxDoc == "" && cancelled == "N")
+                                {
+                                    BDO_TaxInvoiceSent.createDocument(objectType, docEntry, "", true, 0, null, false, null, out newDocEntry, out errorText);
+
+                                    if (string.IsNullOrEmpty(errorText) && newDocEntry != 0)
+                                    {
+                                        oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = newDocEntry.ToString();
+                                        formDataLoad(oForm);
+                                        return;
+                                    }
+                                }
+                                else if (cancelled != "N")
+                                    errorText = BDOSResources.getTranslate("DocumentMustNotBeCancelledOrCancellation");
+                            }
+                            else
+                                errorText = BDOSResources.getTranslate("ToCreateTaxInvoiceWriteDocument");
+                        }
                     }
                 }
 
-                if (pVal.ItemUID == "ItemsMTR" && (pVal.ColUID == "U_GrsAmnt" || pVal.ColUID == "U_VatGrp") & pVal.ItemChanged & pVal.BeforeAction == false)
+                else if (pVal.ItemChanged)
                 {
-                    oForm.Freeze(true);
+                    if (!pVal.BeforeAction)
+                    {
+                        if (pVal.ItemUID == "ItemsMTR")
+                            fillTotalAmounts(oForm);
+                        else if (pVal.ItemUID == "ItemsMTR" && (pVal.ColUID == "U_GrsAmnt" || pVal.ColUID == "U_VatGrp"))
+                        {
+                            oForm.Freeze(true);
 
-                    SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
-                    string VAtGroup = oMatrix.Columns.Item("U_VatGrp").Cells.Item(pVal.Row).Specific.Value;
-                    decimal GrossAmnt = (FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("U_GrsAmnt").Cells.Item(pVal.Row).Specific.Value));
-                    decimal VatAmount = 0;
-                    int row = pVal.Row;
-                    decimal VatRate = CommonFunctions.GetVatGroupRate(VAtGroup, "");
+                            SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
+                            string VAtGroup = oMatrix.Columns.Item("U_VatGrp").Cells.Item(pVal.Row).Specific.Value;
+                            decimal GrossAmnt = (FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("U_GrsAmnt").Cells.Item(pVal.Row).Specific.Value));
+                            decimal VatAmount = 0;
+                            int row = pVal.Row;
+                            decimal VatRate = CommonFunctions.GetVatGroupRate(VAtGroup, "");
 
-                    VatAmount = CommonFunctions.roundAmountByGeneralSettings(GrossAmnt * VatRate / (100 + VatRate), "Sum");
-                    oMatrix.Columns.Item("U_VatAmnt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(VatAmount);
+                            VatAmount = CommonFunctions.roundAmountByGeneralSettings(GrossAmnt * VatRate / (100 + VatRate), "Sum");
+                            oMatrix.Columns.Item("U_VatAmnt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(VatAmount);
 
-                    oForm.Freeze(false);
-                }
-
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS && oForm.Visible == true && oForm.VisibleEx == true && openFormEvent == false)
-                {
-                    oForm.Freeze(true);
-                    formDataLoad(oForm, out errorText);
-                    oForm.Freeze(false);
-                    openFormEvent = true;
-
-                    setVisibleFormItems(oForm, out errorText);
-
+                            oForm.Freeze(false);
+                        }
+                    }
                 }
             }
         }
 
-        public static void cancellation(SAPbouiCOM.Form oForm, int docEntry, out string errorText)
+        public static void cancellation(SAPbouiCOM.Form oForm, int docEntry)
         {
-            errorText = null;
-
-            try
+            string errorText;
+            JournalEntry.cancellation(oForm, docEntry, "UDO_F_BDO_ARDPV_D", out errorText);
+            Program.canceledDocEntry = 0;
+            if (!string.IsNullOrEmpty(errorText))
             {
-                JournalEntry.cancellation(oForm, docEntry, "UDO_F_BDO_ARDPV_D", out errorText);
-            }
-            catch (Exception ex)
-            {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
-            }
-            finally
-            {
-                GC.Collect();
+                throw new Exception(errorText);
             }
         }
-
-        public static void setVisibleFormItems(SAPbouiCOM.Form oForm, out string errorText)
-        {
-            errorText = null;
-
-            try
-            {
-                oForm.Items.Item("StatusC").Enabled = false;
-            }
-            catch (Exception ex)
-            {
-                errorText = ex.Message;
-            }
-            finally
-            {
-                GC.Collect();
-            }
-        }
-
 
         public static void getAmount(int docEntry, out double gTotal, out double lineVat)
         {
@@ -584,29 +548,41 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void fillTotalAmounts(SAPbouiCOM.Form oForm, out string errorText)
+        private static void fillTotalAmounts(SAPbouiCOM.Form oForm)
         {
-            errorText = "";
-
-            SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
-            decimal U_GrsAmnt = 0;
-            decimal U_VatAmount = 0;
-            for (int i = 1; i <= oMatrix.RowCount; i++)
+            try
             {
-                U_GrsAmnt = U_GrsAmnt + Convert.ToDecimal(oMatrix.GetCellSpecific("U_GrsAmnt", i).Value, CultureInfo.InvariantCulture);
-                U_VatAmount = U_VatAmount + Convert.ToDecimal(oMatrix.GetCellSpecific("U_VatAmnt", i).Value, CultureInfo.InvariantCulture);
+                oForm.Freeze(true);
+
+                SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
+                oMatrix.FlushToDataSource();
+
+                decimal U_GrsAmnt = 0;
+                decimal U_VatAmount = 0;
+
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSRDV1");
+
+                int rowCount = oDBDataSourceMTR.Size;
+
+                for (int i = 0; i < rowCount; i++)
+                {
+                    U_GrsAmnt += Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_GrsAmnt", i), CultureInfo.InvariantCulture);
+                    U_VatAmount += Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_VatAmnt", i), CultureInfo.InvariantCulture);
+                }
+                string U_GrsAmnts = U_GrsAmnt.ToString(CultureInfo.InvariantCulture);
+                string U_VatAmounts = U_VatAmount.ToString(CultureInfo.InvariantCulture);
+
+                oForm.DataSources.DBDataSources.Item("@BDOSARDV").SetValue("U_GrsAmnt", 0, U_GrsAmnts);
+                oForm.DataSources.DBDataSources.Item("@BDOSARDV").SetValue("U_VatAmount", 0, U_VatAmounts);
             }
-            string U_GrsAmnts = U_GrsAmnt.ToString(CultureInfo.InvariantCulture);
-            string U_VatAmounts = U_VatAmount.ToString(CultureInfo.InvariantCulture);
-
-            /* oForm.Items.Item("U_GrsAmnt").Specific.Value = U_GrsAmnts;
-             oForm.Items.Item("U_GrsAmnt").Specific.Value = U_VatAmounts;*/
-
-
-            oForm.DataSources.DBDataSources.Item("@BDOSARDV").SetValue("U_GrsAmnt", 0, U_GrsAmnts);
-            oForm.DataSources.DBDataSources.Item("@BDOSARDV").SetValue("U_VatAmount", 0, U_VatAmounts);
-
-
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
         }
 
         public static bool checkDocumentForTaxInvoice(int docEntry, DateTime docDate, DateTime docDateForMonth, out bool primary, out DataTable confirmedInvoices, out string errorText)
@@ -759,50 +735,40 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
-        private static void addMatrixRow(SAPbouiCOM.Form oForm, out string errorText)
+        private static void addMatrixRow(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
             oForm.Freeze(true);
-
             try
             {
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("ItemsMTR").Specific));
-                int index = 0;
-                if (oMatrix.RowCount == 0)
-                {
-                    index = 1;
-                }
-                else
-                {
-                    index = Convert.ToInt32(oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value) + 1;
-                }
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("ItemsMTR").Specific;
+                oMatrix.FlushToDataSource();
 
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSRDV1");
+                if (!string.IsNullOrEmpty(oDBDataSourceMTR.GetValue("U_ItemCode", oDBDataSourceMTR.Size - 1)))
+                    oDBDataSourceMTR.InsertRecord(oDBDataSourceMTR.Size);
+                oDBDataSourceMTR.SetValue("LineId", oDBDataSourceMTR.Size - 1, oDBDataSourceMTR.Size.ToString());
 
-                oMatrix.AddRow(1, -1);
-                oMatrix.AutoResizeColumns();
-                oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value = index;
+                oMatrix.LoadFromDataSource();
 
+                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
+                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
-                GC.Collect();
                 oForm.Freeze(false);
             }
         }
 
-        public static void delMatrixRow(SAPbouiCOM.Form oForm, out string errorText)
+        public static void deleteMatrixRow(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
             oForm.Freeze(true);
-
             try
             {
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("ItemsMTR").Specific));
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("ItemsMTR").Specific;
                 oMatrix.FlushToDataSource();
                 int firstRow = 0;
                 int row = 0;
@@ -819,15 +785,23 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                oMatrix.LoadFromDataSource();
-                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE && deletedRowCount > 0)
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSRDV1");
+                int rowCount = oDBDataSourceMTR.Size;
+
+                for (int i = 1; i <= rowCount; i++)
                 {
-                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+                    string itemCode = oDBDataSourceMTR.GetValue("U_ItemCode", i - 1);
+                    if (!string.IsNullOrEmpty(itemCode))
+                        oDBDataSourceMTR.SetValue("LineId", i - 1, i.ToString());
                 }
+                oMatrix.LoadFromDataSource();
+
+                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE && deletedRowCount > 0)
+                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -836,21 +810,17 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
-        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
+        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.IChooseFromListEvent oCFLEvento, ref bool bubbleEvent)
         {
-            errorText = null;
-
             try
             {
-                string sCFL_ID = oCFLEvento.ChooseFromListUID;
-                SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
+                oForm.Freeze(true);
 
-                if (beforeAction == true)
+                if (pVal.BeforeAction)
                 {
-                    if (sCFL_ID == "BaseDoc_CFL")
+                    if (oCFLEvento.ChooseFromListUID == "BaseDoc_CFL")
                     {
-                        oCFL = oForm.ChooseFromLists.Item("BaseDoc_CFL");
+                        SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
 
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
                         SAPbouiCOM.Condition oCon = oCons.Add();
@@ -867,97 +837,113 @@ namespace BDO_Localisation_AddOn
 
                         oCFL.SetConditions(oCons);
                     }
-
                 }
                 else
                 {
-                    SAPbouiCOM.DataTable oDataTable = null;
-                    oDataTable = oCFLEvento.SelectedObjects;
+                    SAPbouiCOM.DataTable oDataTable = oCFLEvento.SelectedObjects;
 
                     if (oDataTable != null)
                     {
-
-                        if (sCFL_ID == "BusinessPartner_CFL")
+                        if (oCFLEvento.ChooseFromListUID == "BusinessPartner_CFL")
                         {
                             string businessPartnerCode = Convert.ToString(oDataTable.GetValue("CardCode", 0));
                             string businessPartnerName = Convert.ToString(oDataTable.GetValue("CardName", 0));
 
                             oForm.DataSources.DBDataSources.Item("@BDOSARDV").SetValue("U_cardCode", 0, businessPartnerCode);
                             oForm.DataSources.DBDataSources.Item("@BDOSARDV").SetValue("U_cardCodeN", 0, businessPartnerName);
-
-                            if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
-                            {
-                                oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
-                            }
                         }
 
-                        if (sCFL_ID == "BaseDoc_CFL")
+                        else if (oCFLEvento.ChooseFromListUID == "BaseDoc_CFL")
                         {
                             string docEntry = Convert.ToString(oDataTable.GetValue("DocEntry", 0));
-
                             oForm.DataSources.DBDataSources.Item("@BDOSARDV").SetValue("U_baseDoc", 0, docEntry);
-
-
-                            if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
-                            {
-                                oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
-                            }
                         }
 
-                        if (sCFL_ID == "Item_CFL")
+                        else if (oCFLEvento.ChooseFromListUID == "Item_CFL")
                         {
                             SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("ItemsMTR").Specific));
                             string ItemCode = Convert.ToString(oDataTable.GetValue("ItemCode", 0));
                             string ItemName = Convert.ToString(oDataTable.GetValue("ItemName", 0));
 
-
                             oMatrix.SetCellWithoutValidation(oCFLEvento.Row, "U_ItemCode", ItemCode);
                             oMatrix.SetCellWithoutValidation(oCFLEvento.Row, "U_dscptn", ItemName);
-
-
                         }
+
+                        if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
+                            oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                     }
-
-
-
                 }
             }
             catch (Exception ex)
             {
-                string exsd = ex.Message;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
-        public static void reArrangeFormItems(SAPbouiCOM.Form oForm)
+        public static void resizeForm(SAPbouiCOM.Form oForm)
         {
-            SAPbouiCOM.Item oItem = null;
-            int height = 15;
-            int top = 6;
-            top = top + height + 1;
+            try
+            {
+                oForm.Freeze(true);
 
+                int height = 15;
+                int top = 5;
+                top += height + 1;
 
-            //ღილაკები
-            oItem = oForm.Items.Item("1");
-            oItem.Top = oForm.ClientHeight - 25;
+                int width_e = 130;
+                int width_s = 125;
+                int left_s = 6;
+                int left_e = left_s + width_s + 20;
+                oForm.Items.Item("0_U_E").Left = left_e;
+                oForm.Items.Item("0_U_E").Width = width_e;
 
-            oItem = oForm.Items.Item("2");
-            oItem.Top = oForm.ClientHeight - 25;
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("ItemsMTR").Specific;
+                int mtrWidth = oForm.ClientWidth;
+                oForm.Items.Item("ItemsMTR").Width = mtrWidth;
+                oForm.Items.Item("ItemsMTR").Height = oForm.ClientHeight / 2;
+                int columnsCount = oMatrix.Columns.Count - 1;
+                oMatrix.Columns.Item("LineID").Width = 19;
+                mtrWidth -= 19;
+                mtrWidth /= columnsCount;
+                foreach (SAPbouiCOM.Column column in oMatrix.Columns)
+                {
+                    if (column.UniqueID == "LineID")
+                        continue;
+                    column.Width = mtrWidth;
+                }
 
-            oForm.Items.Item("ItemsMTR").Height = oForm.Height - 240;
+                oForm.Items.Item("CreatorS").Top = oForm.Items.Item("ItemsMTR").Top + oForm.Items.Item("ItemsMTR").Height + 10;
+                oForm.Items.Item("CreatorE").Top = oForm.Items.Item("ItemsMTR").Top + oForm.Items.Item("ItemsMTR").Height + 10;
 
-            oForm.Items.Item("CreatorS").Top = oForm.Items.Item("ItemsMTR").Top + oForm.Items.Item("ItemsMTR").Height + 5;
-            oForm.Items.Item("CreatorE").Top = oForm.Items.Item("ItemsMTR").Top + oForm.Items.Item("ItemsMTR").Height + 5;
+                oForm.Items.Item("RemarksS").Top = oForm.Items.Item("CreatorS").Top + oForm.Items.Item("CreatorS").Height + 1;
+                oForm.Items.Item("RemarksE").Top = oForm.Items.Item("CreatorS").Top + oForm.Items.Item("CreatorS").Height + 1;
 
-            oForm.Items.Item("RemarksS").Top = oForm.Items.Item("CreatorS").Top + oForm.Items.Item("CreatorS").Height + 5;
-            oForm.Items.Item("RemarksE").Top = oForm.Items.Item("CreatorS").Top + oForm.Items.Item("CreatorS").Height + 5;
+                oForm.Items.Item("AmountS").Top = oForm.Items.Item("CreatorS").Top;
+                oForm.Items.Item("AmountE").Top = oForm.Items.Item("CreatorS").Top;
+                oForm.Items.Item("VatAmountS").Top = oForm.Items.Item("RemarksS").Top;
+                oForm.Items.Item("VatAmount").Top = oForm.Items.Item("RemarksS").Top;
 
-            oForm.Items.Item("AmountS").Top = oForm.Items.Item("CreatorS").Top;
-            oForm.Items.Item("AmountE").Top = oForm.Items.Item("CreatorS").Top;
-            oForm.Items.Item("AmountE").Enabled = false;
-            oForm.Items.Item("VatAmountS").Top = oForm.Items.Item("RemarksS").Top;
-            oForm.Items.Item("VatAmount").Top = oForm.Items.Item("RemarksS").Top;
-            oForm.Items.Item("VatAmount").Enabled = false;
+                //ღილაკები
+                int topTemp1 = oForm.Items.Item("RemarksE").Top + height * 2 + 1;
+                int topTemp2 = oForm.ClientHeight - 25;
+                //ღილაკები
+                top = topTemp2 > topTemp1 ? topTemp2 : topTemp1;
 
+                oForm.Items.Item("1").Top = top;
+                oForm.Items.Item("2").Top = top;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
         }
 
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
@@ -966,24 +952,21 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formItems;
             string itemName = "";
 
-            int left_s = 6;
-            int left_e = 127;
             int height = 15;
-            int top = 6;
-            int width_s = 121;
-            int width_e = 148;
-            int fontSize = 10;
+            int top = 5;
+            int width_s = 125;
+            int width_e = 130;
+            int left_s = 6;
+            int left_e = left_s + width_s + 20;
+            int left_s2 = 300;
+            int left_e2 = left_s2 + width_s + 20;
 
-
-            left_s = 295;
-            left_e = left_s + 121;
             oForm.AutoManaged = true;
-            oForm.Title = BDOSResources.getTranslate("ARDownPaymentVATAccrual");
 
             formItems = new Dictionary<string, object>();
             itemName = "DocDateS"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", left_s);
+            formItems.Add("Left", left_s2);
             formItems.Add("Width", width_s);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
@@ -994,7 +977,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -1006,26 +989,21 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Bound", true);
             formItems.Add("Size", 20);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left_e);
+            formItems.Add("Left", left_e2);
             formItems.Add("Width", width_e);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
-
-
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
-            left_s = 6;
-            left_e = 127;
-
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "cardCodeS"; //10 characters
@@ -1037,12 +1015,11 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("CustomerCode"));
             formItems.Add("LinkTo", "cardCodeE");
-            formItems.Add("FontSize", fontSize);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             bool multiSelection = false;
@@ -1054,7 +1031,6 @@ namespace BDO_Localisation_AddOn
             string objectTypeCardCode = "2";
             string uniqueID_lf_BusinessPartnerCFL = "BusinessPartner_CFL";
             FormsB1.addChooseFromList(oForm, multiSelection, objectTypeCardCode, uniqueID_lf_BusinessPartnerCFL);
-
 
             string objectTypeItem = "4"; //SAPbouiCOM.BoLinkedObject.lf_Invoice
             string uniqueID_lf_ItemCFL = "Item_CFL";
@@ -1082,17 +1058,16 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
             formItems.Add("ChooseFromListUID", uniqueID_lf_BusinessPartnerCFL);
             formItems.Add("ChooseFromListAlias", "CardCode");
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             formItems = new Dictionary<string, object>();
             itemName = "cardCodeNE"; //10 characters
@@ -1107,15 +1082,14 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             formItems = new Dictionary<string, object>();
             itemName = "cardCodeLB"; //10 characters
@@ -1130,16 +1104,12 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
-
-            //top = top + height + 1;
-            left_s = 295;
-            left_e = left_s + 121;
 
             Dictionary<string, string> listValidValues = new Dictionary<string, string>(); //კორექტირების მიზეზები
 
-            listValidValues.Add("203", "DownPayment");
+            listValidValues.Add("203", BDOSResources.getTranslate("ARDownPaymentRequest"));
 
             formItems = new Dictionary<string, object>();
             itemName = "baseDocS"; //10 characters
@@ -1149,25 +1119,23 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_baseDocT");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
-            formItems.Add("Left", left_s);
-            formItems.Add("Width", width_s - 30);
+            formItems.Add("Left", left_s2);
+            formItems.Add("Width", width_s);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("baseDoc"));
             formItems.Add("LinkTo", "baseDocE");
-            formItems.Add("FontSize", fontSize);
             formItems.Add("DisplayDesc", true);
-            formItems.Add("Visible", true);
-            formItems.Add("Enabled", false);
             formItems.Add("ValidValues", listValidValues);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
-
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             formItems = new Dictionary<string, object>();
             itemName = "baseDocE"; //10 characters
@@ -1177,28 +1145,26 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_baseDoc");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left_e);
+            formItems.Add("Left", left_e2);
             formItems.Add("Width", width_e);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
             formItems.Add("ChooseFromListUID", uniqueID_lf_BaseDocCFL);
             formItems.Add("ChooseFromListAlias", "DocEntry");
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
-
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             formItems = new Dictionary<string, object>();
             itemName = "baseDocLB"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-            formItems.Add("Left", left_e - 20);
+            formItems.Add("Left", left_e2 - 20);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
@@ -1208,16 +1174,15 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
-            top = top + height + 1;
-
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "StatusS"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", left_s);
+            formItems.Add("Left", left_s2);
             formItems.Add("Width", width_s);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
@@ -1228,7 +1193,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -1239,95 +1204,21 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "Canceled");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
-            formItems.Add("Left", left_e);
+            formItems.Add("Left", left_e2);
             formItems.Add("Width", width_e);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
             formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
-
-            top = top + height + 1;
-
-            //-------------------------------------------ანგარიშ-ფაქტურა----------------------------------->
-
-            formItems = new Dictionary<string, object>();
-            itemName = "BDO_TaxTxt"; //10 characters
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", left_s);
-            formItems.Add("Width", width_e * 1.5 - 10);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("CreateTaxInvoice"));
-            formItems.Add("TextStyle", 4);
-            formItems.Add("FontSize", 10);
-            formItems.Add("Enabled", true);
-
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
-
-            multiSelection = false;
-            string objectType = "UDO_F_BDO_TAXS_D"; //Tax invoice sent document
-            string uniqueID_TaxInvoiceSentCFL = "TaxInvoiceSent_CFL";
-            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_TaxInvoiceSentCFL);
-
-            formItems = new Dictionary<string, object>();
-            itemName = "BDO_TaxDoc"; //10 characters
-            formItems.Add("isDataSource", true);
-            formItems.Add("DataSource", "UserDataSources");
-            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-            formItems.Add("Length", 11);
-            formItems.Add("TableName", "");
-            formItems.Add("Alias", itemName);
-            formItems.Add("Bound", true);
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left_e + width_e - 40);
-            formItems.Add("Width", 40);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("AffectsFormMode", false);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", false);
-            formItems.Add("ChooseFromListUID", uniqueID_TaxInvoiceSentCFL);
-            formItems.Add("ChooseFromListAlias", "DocEntry");
-
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
-
-            formItems = new Dictionary<string, object>();
-            itemName = "BDO_TaxLB"; //10 characters
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-            formItems.Add("Left", left_e + width_e - 40 - 20);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("LinkTo", "BDO_TaxDoc");
-            formItems.Add("LinkedObjectType", objectType);
-
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
-
-            left_s = 6;
-            left_e = 127;
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             formItems = new Dictionary<string, object>();
             itemName = "BDOSJrnEnS"; //10 characters
@@ -1343,7 +1234,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -1361,15 +1252,15 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Enabled", false);
             formItems.Add("AffectsFormMode", false);
-
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             formItems = new Dictionary<string, object>();
             itemName = "BDOSJEntLB";
@@ -1383,10 +1274,80 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
-            top = top + height + 10;
+            top += height + 1;
+
+            //-------------------------------------------ანგარიშ-ფაქტურა----------------------------------->
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDO_TaxTxt"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s2);
+            formItems.Add("Width", width_e * 1.5 - 10);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("CreateTaxInvoice"));
+            formItems.Add("TextStyle", 4);
+            formItems.Add("FontSize", 10);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            multiSelection = false;
+            string objectType = "UDO_F_BDO_TAXS_D"; //Tax invoice sent document
+            string uniqueID_TaxInvoiceSentCFL = "TaxInvoiceSent_CFL";
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_TaxInvoiceSentCFL);
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDO_TaxDoc"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "UserDataSources");
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 11);
+            formItems.Add("TableName", "");
+            formItems.Add("Alias", itemName);
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e2 + width_e - 40);
+            formItems.Add("Width", 40);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("AffectsFormMode", false);
+            formItems.Add("ChooseFromListUID", uniqueID_TaxInvoiceSentCFL);
+            formItems.Add("ChooseFromListAlias", "DocEntry");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDO_TaxLB"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            formItems.Add("Left", left_e2 + width_e - 40 - 20);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("LinkTo", "BDO_TaxDoc");
+            formItems.Add("LinkedObjectType", objectType);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            top += height + 10;
 
             formItems = new Dictionary<string, object>();
             itemName = "addMTRB"; //10 characters
@@ -1397,14 +1358,15 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Add"));
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
+            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             formItems = new Dictionary<string, object>();
             itemName = "delMTRB"; //10 characters
@@ -1415,141 +1377,94 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Delete"));
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
+            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
-            top = top + height + 5;
-
-            int wblMTRWidth = oForm.Width;
+            top += height + 5;
 
             formItems = new Dictionary<string, object>();
             itemName = "ItemsMTR"; //10 characters
             formItems.Add("isDataSource", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
             formItems.Add("Left", left_s);
-            formItems.Add("Width", wblMTRWidth + 80);
+            formItems.Add("Height", 150);
             formItems.Add("Top", top);
-            formItems.Add("Height", oForm.Height - 240);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("AffectsFormMode", false);
-            formItems.Add("Enabled", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
-            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("ItemsMTR").Specific));
+            oForm.DataSources.DBDataSources.Add("@BDOSRDV1");
+
+            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("ItemsMTR").Specific;
             oMatrix.SelectionMode = SAPbouiCOM.BoMatrixSelect.ms_Auto;
             SAPbouiCOM.Columns oColumns = oMatrix.Columns;
             SAPbouiCOM.Column oColumn;
 
-
-
-
             oColumn = oColumns.Add("LineID", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "  ";
-            oColumn.Width = 20 - 1;
+            oColumn.TitleObject.Caption = "#";
             oColumn.Editable = false;
-            oColumn.Visible = true;
+            oColumn.DataBind.SetBound(true, "@BDOSRDV1", "LineId");
 
             oColumn = oColumns.Add("U_ItemCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-            oColumn.TitleObject.Caption = "ItemCode";
-            oColumn.Width = 20 - 1;
-            oColumn.Editable = true;
-            oColumn.Visible = true;
-
-            oColumn = oColumns.Add("U_dscptn", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "Dscptn";
-            oColumn.Width = 20 - 1;
-            oColumn.Editable = true;
-            oColumn.Visible = true;
-
-
-
-            oColumn = oColumns.Add("U_Qnty", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "Qnty";
-            oColumn.Width = 20 - 1;
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("ItemCode");
             oColumn.Editable = false;
-            oColumn.Visible = true;
-
-            oColumn = oColumns.Add("U_GrsAmnt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "GrsAmnt";
-            oColumn.Width = 20 - 1;
-            oColumn.Editable = false;
-            oColumn.Visible = true;
-
-
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string query = "select * " +
-            "FROM  \"OVTG\" " +
-            "WHERE \"Category\"='O'";
-
-            oRecordSet.DoQuery(query);
-            oColumn = oColumns.Add("U_VatGrp", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
-            oColumn.TitleObject.Caption = "VatGrp";
-            while (!oRecordSet.EoF)
-            {
-                oColumn.ValidValues.Add(oRecordSet.Fields.Item("Code").Value, oRecordSet.Fields.Item("Code").Value);
-                oRecordSet.MoveNext();
-            }
-            oColumn.Width = 20 - 1;
-            oColumn.Editable = false;
-            oColumn.Visible = true;
-
-            oColumn = oColumns.Add("U_VatAmnt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "VatAmount";
-            oColumn.Width = 20 - 1;
-            oColumn.Editable = false;
-            oColumn.Visible = true;
-
-            SAPbouiCOM.DBDataSource oDBDataSource;
-            oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDOSRDV1");
-
-            oColumn = oColumns.Item("LineID");
-            oColumn.DataBind.SetBound(true, "@BDOSRDV1", "LineID");
-
-            oColumn = oColumns.Item("U_ItemCode");
             oColumn.DataBind.SetBound(true, "@BDOSRDV1", "U_ItemCode");
             oColumn.ChooseFromListUID = "Item_CFL";
             oColumn.ChooseFromListAlias = "ItemCode";
             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
             oLink.LinkedObjectType = "4";
 
-
-            oColumn = oColumns.Item("U_dscptn");
+            oColumn = oColumns.Add("U_dscptn", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Description");
+            oColumn.Editable = false;
             oColumn.DataBind.SetBound(true, "@BDOSRDV1", "U_Dscptn");
 
-            oColumn = oColumns.Item("U_GrsAmnt");
-            oColumn.DataBind.SetBound(true, "@BDOSRDV1", "U_GrsAmnt");
-
-            oColumn = oColumns.Item("U_Qnty");
+            oColumn = oColumns.Add("U_Qnty", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Quantity");
+            oColumn.Editable = false;
             oColumn.DataBind.SetBound(true, "@BDOSRDV1", "U_Qnty");
 
-            oColumn = oColumns.Item("U_VatGrp");
+            oColumn = oColumns.Add("U_GrsAmnt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("GrossAmount");
+            oColumn.Editable = false;
+            oColumn.DataBind.SetBound(true, "@BDOSRDV1", "U_GrsAmnt");
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            string query = "select \"Code\" " +
+            "FROM  \"OVTG\" " +
+            "WHERE \"Category\"='O'";
+
+            oRecordSet.DoQuery(query);
+            oColumn = oColumns.Add("U_VatGrp", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatGroup");
+            while (!oRecordSet.EoF)
+            {
+                oColumn.ValidValues.Add(oRecordSet.Fields.Item("Code").Value, oRecordSet.Fields.Item("Code").Value);
+                oRecordSet.MoveNext();
+            }
+            oColumn.Editable = false;
             oColumn.DataBind.SetBound(true, "@BDOSRDV1", "U_VatGrp");
 
-            oColumn = oColumns.Item("U_VatAmnt");
+            oColumn = oColumns.Add("U_VatAmnt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatAmount");
+            oColumn.Editable = false;
             oColumn.DataBind.SetBound(true, "@BDOSRDV1", "U_VatAmount");
 
-
-            oMatrix.Clear();
-            oDBDataSource.Query();
-            oMatrix.LoadFromDataSource();
-            oMatrix.AutoResizeColumns();
-
             //სარდაფი
-            left_s = 6;
-            left_e = 127;
-            top = top + oForm.Items.Item("ItemsMTR").Height + 40;
+            top += oForm.Items.Item("ItemsMTR").Height + 40;
 
             formItems = new Dictionary<string, object>();
             itemName = "CreatorS"; //10 characters
@@ -1565,7 +1480,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -1581,17 +1496,16 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "RemarksS"; //10 characters
@@ -1607,7 +1521,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -1623,38 +1537,31 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", 3 * height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
             formItems.Add("ScrollBars", SAPbouiCOM.BoScrollBars.sb_Vertical);
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
-
-            left_s = 295;
-            left_e = left_s + 121;
-            top = top + oForm.Items.Item("ItemsMTR").Height + 40;
+            top += oForm.Items.Item("ItemsMTR").Height + 40;
 
             formItems = new Dictionary<string, object>();
             itemName = "AmountS"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", left_s);
-            formItems.Add("Width", width_s);
+            formItems.Add("Left", left_s2);
+            formItems.Add("Width", width_s + 5);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("AmountWithVat"));
             formItems.Add("LinkTo", "AmountE");
-            formItems.Add("FontSize", fontSize);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -1665,39 +1572,37 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_GrsAmnt");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left_e);
+            formItems.Add("Left", left_e2);
             formItems.Add("Width", width_e);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "VatAmountS"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", left_s);
+            formItems.Add("Left", left_s2);
             formItems.Add("Width", width_s);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("VatAmount"));
             formItems.Add("LinkTo", "VatAmount");
-            formItems.Add("FontSize", fontSize);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -1708,39 +1613,32 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_VatAmount");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left_e);
+            formItems.Add("Left", left_e2);
             formItems.Add("Width", width_e);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", false);
-            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
-
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True); //Find mode
 
             GC.Collect();
         }
 
-        public static void JournalEntryTransaction(SAPbouiCOM.Form oForm, bool ActionSuccess, bool BeforeAction, out bool BubbleEvent, out string errorText)
+        public static void JournalEntryTransaction(SAPbouiCOM.Form oForm, bool ActionSuccess, bool BeforeAction, out bool BubbleEvent)
         {
-            errorText = null;
             BubbleEvent = true;
-
 
             if (ActionSuccess != BeforeAction)
             {
-
-
-
                 //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
                 oForm.Refresh();
-                SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item(0);
+                SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item("@BDOSARDV");
 
                 if (DocDBSourcePAYR.GetValue("CANCELED", 0) == "N")
                 {
@@ -1753,8 +1651,9 @@ namespace BDO_Localisation_AddOn
                     CommonFunctions.StartTransaction();
 
                     Program.JrnLinesGlobal = new DataTable();
-
                     DataTable JrnLinesDT = createAdditionalEntries(oForm, null, null, DocCurrency, DocRate);
+
+                    string errorText;
 
                     JrnEntry(DocEntry, DocNum, DocDate, JrnLinesDT, out errorText);
                     if (errorText != null)
@@ -1764,33 +1663,24 @@ namespace BDO_Localisation_AddOn
                     }
                     else
                     {
-                        if (ActionSuccess == false)
-                        {
+                        if (!ActionSuccess)
                             Program.JrnLinesGlobal = JrnLinesDT;
-                        }
                     }
 
                     if (Program.oCompany.InTransaction)
                     {
                         //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
-                        if (ActionSuccess == true & BeforeAction == false)
-                        {
+                        if (ActionSuccess && !BeforeAction)
                             CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                        }
                         else
-                        {
                             CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                        }
                     }
                     else
                     {
                         Program.uiApp.MessageBox("ტრანზაქციის დასრულებს შეცდომა");
                         BubbleEvent = false;
-
                     }
                 }
-
-
             }
         }
 
@@ -1814,26 +1704,22 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataLoad(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-            openFormEvent = false;
-
             SAPbouiCOM.StaticText oStaticText = null;
             oForm.Freeze(true);
             try
             {
-
-                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item(0).GetValue("DocEntry", 0));
+                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSARDV").GetValue("DocEntry", 0));
 
                 // გატარებები
-                SAPbouiCOM.DBDataSource DocDBSourceTAXP = oForm.DataSources.DBDataSources.Item(0);
+                SAPbouiCOM.DBDataSource DocDBSourceTAXP = oForm.DataSources.DBDataSources.Item("@BDOSARDV");
                 string Ref1 = docEntry.ToString();
                 string Ref2 = "UDO_F_BDO_ARDPV_D";
 
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                 string query = "SELECT " +
-                                "*  " +
+                                "\"TransId\" " +
                                 "FROM \"OJDT\"  " +
                                 "WHERE \"StornoToTr\" IS NULL " +
                                 "AND \"Ref1\" = '" + Ref1 + "' " +
@@ -1841,17 +1727,12 @@ namespace BDO_Localisation_AddOn
                 oRecordSet.DoQuery(query);
 
                 if (!oRecordSet.EoF)
-                {
                     oForm.DataSources.UserDataSources.Item("BDOSJrnEnt").ValueEx = oRecordSet.Fields.Item("TransId").Value.ToString();
-                }
                 else
-                {
                     oForm.DataSources.UserDataSources.Item("BDOSJrnEnt").ValueEx = "";
-                }
-
 
                 //-------------------------------------------ანგარიშ-ფაქტურა----------------------------------->
-                string cardCode = oForm.DataSources.DBDataSources.Item(0).GetValue("U_cardCode", 0).Trim();
+                string cardCode = oForm.DataSources.DBDataSources.Item("@BDOSARDV").GetValue("U_cardCode", 0).Trim();
                 string caption = BDOSResources.getTranslate("CreateTaxInvoice");
                 int taxDocEntry = 0;
                 string taxID = "";
@@ -1862,7 +1743,7 @@ namespace BDO_Localisation_AddOn
 
                 if (docEntry != 0)
                 {
-                    Dictionary<string, object> taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo(docEntry, "ARDownPaymentVAT", cardCode, out errorText);
+                    Dictionary<string, object> taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo(docEntry, "ARDownPaymentVAT", cardCode);
                     if (taxDocInfo != null)
                     {
                         taxDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]);
@@ -1876,38 +1757,26 @@ namespace BDO_Localisation_AddOn
                         {
                             DateTime taxCreateDateDT = DateTime.ParseExact(taxCreateDate, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
                             if (taxSeries == "")
-                            {
                                 caption = BDOSResources.getTranslate("TaxInvoiceDate") + " " + taxCreateDateDT;
-                            }
                             else
-                            {
                                 caption = BDOSResources.getTranslate("TaxInvoiceSeries") + " " + taxSeries + " № " + taxNumber + " " + BDOSResources.getTranslate("Data") + " " + taxCreateDateDT;
-                            }
                         }
                     }
                 }
                 else
-                {
                     taxDocEntry = 0;
-                }
 
                 oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = taxDocEntry == 0 ? "" : taxDocEntry.ToString();
-                oForm.Items.Item("BDO_TaxDoc").Enabled = false;
-                oForm.Items.Item("BDOSJrnEnt").Enabled = false;
 
                 oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("BDO_TaxTxt").Specific;
                 oStaticText.Caption = caption;
             }
-            catch (Exception ex)
+            catch
             {
                 oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = "";
                 oForm.Items.Item("BDOSJrnEnt").Specific.Value = "";
-
-
                 oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("BDO_TaxTxt").Specific;
                 oStaticText.Caption = BDOSResources.getTranslate("CreateTaxInvoice");
-
-                errorText = ex.Message;
             }
             finally
             {
@@ -1916,14 +1785,11 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
         public static DataTable createAdditionalEntries(SAPbouiCOM.Form oForm, SAPbobsCOM.GeneralData oGeneralData, DataTable DTSource, string DocCurrency, decimal DocRate)
         {
-
             DataTable jeLines = JournalEntry.JournalEntryTable();
             DataTable AccountTable = CommonFunctions.GetOACTTable();
             SAPbobsCOM.GeneralDataCollection oChild = null;
-
 
             SAPbouiCOM.DBDataSource DBDataSourceTable = null;
             int JEcount = 0;
@@ -1945,15 +1811,10 @@ namespace BDO_Localisation_AddOn
                 DocDate = DateTime.ParseExact(oForm.DataSources.DBDataSources.Item("@BDOSARDV").GetValue("U_DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
             }
 
-
             string year = DocDate.Year.ToString();
-
             string CreditAccount = "";
             string DebitAccount = CommonFunctions.getPeriodsCategory("SaleVatOff", year);
-
             DocCurrency = DocCurrency == CommonFunctions.getLocalCurrency() ? "" : DocCurrency;
-
-
 
             for (int i = 0; i < JEcount; i++)
             {
@@ -1961,9 +1822,7 @@ namespace BDO_Localisation_AddOn
                 decimal vatAmountFC = DocCurrency == "" ? 0 : vatAmount / DocRate;
 
                 if (vatAmount == 0)
-                {
                     continue;
-                }
 
                 string VatRate = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, oChild, null, "U_VatGrp", i).ToString();
                 SAPbobsCOM.VatGroups oVatCode;
@@ -1978,20 +1837,22 @@ namespace BDO_Localisation_AddOn
             return jeLines;
         }
 
-        public static void setSizeForm(SAPbouiCOM.Form oForm, out string errorText)
+        public static void setSizeForm(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
+            oForm.Freeze(true);
             try
             {
-                int formHeight = Program.uiApp.Desktop.Width;
-                int formWidth = Program.uiApp.Desktop.Width;
-
-                oForm.ClientHeight = formHeight;
-                oForm.Height = formWidth;
+                oForm.ClientHeight = Program.uiApp.Desktop.Height / 2;
+                oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
+                oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 3;
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
     }

@@ -1236,10 +1236,11 @@ namespace BDO_Localisation_AddOn
         }
 
         public static void resizeForm(SAPbouiCOM.Form oForm)
-        {
-            oForm.Freeze(true);
+       {    
             try
             {
+                oForm.Freeze(true);
+
                 int left_e = 160;
                 oForm.Items.Item("0_U_E").Left = left_e;
                 oForm.Items.Item("0_U_E").Width = 140;

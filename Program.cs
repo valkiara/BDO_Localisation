@@ -343,7 +343,7 @@ namespace BDO_Localisation_AddOn
 
                 if (oDocForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                 {
-                    BDOSARDownPaymentVATAccrual.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
+                    BDOSARDownPaymentVATAccrual.uiApp_MenuEvent(ref pVal, out BubbleEvent);
                 }
             }
 
@@ -1162,7 +1162,7 @@ namespace BDO_Localisation_AddOn
                     //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                     else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                     {
-                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm, out errorText);
+                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
                     }
 
                     //----------------------------->Retirement<-----------------------------
@@ -1307,7 +1307,7 @@ namespace BDO_Localisation_AddOn
                     //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                     else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                     {
-                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm, out errorText);
+                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
                     }
 
                     //----------------------------->Retirement<-----------------------------
@@ -1325,12 +1325,17 @@ namespace BDO_Localisation_AddOn
             }
 
             //----------------------------->Find<-----------------------------
-            if (pVal.MenuUID == "1281" & !pVal.BeforeAction)
+            if (pVal.MenuUID == "1281")
             {
                 SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
-                if (oForm.TypeEx == "")
-                {
 
+                if (!pVal.BeforeAction)
+                {
+                    //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
+                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
+                    {
+                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
+                    }
                 }
             }
 
@@ -1565,7 +1570,7 @@ namespace BDO_Localisation_AddOn
                     ARDownPaymentRequest.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->A/R Down Payment VAT<-----------------------------
+                //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                 else if (BusinessObjectInfo.Type == "UDO_F_BDO_ARDPV_D")
                 {
                     BDOSARDownPaymentVATAccrual.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
@@ -2172,19 +2177,19 @@ namespace BDO_Localisation_AddOn
                     BDO_TaxInvoiceReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Tax Invoice Sent <-----------------------------
+                //----------------------------->Tax Invoice Sent<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDO_TAXS_D")
                 {
                     BDO_TaxInvoiceSent.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->A/R Down Payment VAT Accrual <-----------------------------
+                //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                 {
                     BDOSARDownPaymentVATAccrual.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Profit Tax Accural <-----------------------------
+                //----------------------------->Profit Tax Accural<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                 {
                     BDO_ProfitTaxAccrual.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
