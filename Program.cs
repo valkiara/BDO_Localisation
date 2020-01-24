@@ -723,7 +723,7 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->Outgoing payment wizzard<-----------------------------
+            //----------------------------->Outgoing Payments wizzard<-----------------------------
             try
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "BDOSSOPWizzForm")
@@ -938,11 +938,17 @@ namespace BDO_Localisation_AddOn
                             cancellationTrans = true;
                             canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSFASTRD").GetValue("DocEntry", 0));
                         }
-                        //----------------------------->Outgoing Payment<-----------------------------
+                        //----------------------------->Outgoing Payments<-----------------------------
                         else if (oForm.TypeEx == "426")
                         {
                             cancellationTrans = true;
                             canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Incoming Paymentss<-----------------------------
+                        else if (oForm.TypeEx == "170")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORCT").GetValue("DocEntry", 0));
                         }
                         //----------------------------->A/P Invoice<-----------------------------
                         if (oForm.TypeEx == "141")
@@ -980,7 +986,7 @@ namespace BDO_Localisation_AddOn
                             cancellationTrans = true;
                             canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
                         }
-                        //----------------------------->A / R Down Payment VAT Accrual<-----------------------------
+                        //----------------------------->AR Down Payment VAT Accrual<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                         {
                             cancellationTrans = true;
@@ -1003,10 +1009,8 @@ namespace BDO_Localisation_AddOn
                     }
                     else
                     {
-                        if (cancellationTrans == false)
-                        {
+                        if (!cancellationTrans)
                             cancellationDoc = true;
-                        }
                         cancellationTrans = false;
                     }
                 }
@@ -1118,7 +1122,7 @@ namespace BDO_Localisation_AddOn
                         APCreditMemo.setVisibleFormItems(oForm, out errorText);
                     }
 
-                    //----------------------------->Outgoing Payment<-----------------------------
+                    //----------------------------->Outgoing Payments<-----------------------------
                     else if (oForm.TypeEx == "426")
                     {
                         OutgoingPayment.formDataLoad(oForm, out errorText);
@@ -1269,7 +1273,7 @@ namespace BDO_Localisation_AddOn
                         BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
                     }
 
-                    //----------------------------->Outgoing Payment<-----------------------------
+                    //----------------------------->Outgoing Payments<-----------------------------
                     else if (oForm.TypeEx == "426")
                     {
                         OutgoingPayment.formDataLoad(oForm, out errorText);
@@ -1372,13 +1376,13 @@ namespace BDO_Localisation_AddOn
                     ChartOfAccounts.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Outgoing Payment<-----------------------------
+                //----------------------------->Outgoing Payments<-----------------------------
                 else if (BusinessObjectInfo.Type == "46")
                 {
                     OutgoingPayment.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Incoming Payment<-----------------------------
+                //----------------------------->Incoming Payments<-----------------------------
                 else if (BusinessObjectInfo.Type == "24")
                 {
                     IncomingPayment.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
@@ -2219,13 +2223,13 @@ namespace BDO_Localisation_AddOn
                     HouseBankAccounts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Outgoing Payments<-----------------------------
+                //----------------------------->Outgoing Paymentss<-----------------------------
                 else if (pVal.FormTypeEx == "426" || pVal.FormUID == "OutgoingPaymentNewDate")
                 {
                     OutgoingPayment.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Incoming Payments<-----------------------------
+                //----------------------------->Incoming Paymentss<-----------------------------
                 else if (pVal.FormTypeEx == "170")
                 {
                     IncomingPayment.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
@@ -2285,13 +2289,13 @@ namespace BDO_Localisation_AddOn
                     BDOSInternetBankingDocuments.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Payment Means from Outgoing Payments<-----------------------------
+                //----------------------------->Payment Means from Outgoing Paymentss<-----------------------------
                 else if (pVal.FormTypeEx == "196")
                 {
                     PaymentMeans.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Payment Means from Incoming Payments<-----------------------------
+                //----------------------------->Payment Means from Incoming Paymentss<-----------------------------
                 else if (pVal.FormTypeEx == "146")
                 {
                     PaymentMeans.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);

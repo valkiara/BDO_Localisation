@@ -13,7 +13,7 @@ namespace BDO_Localisation_AddOn
         static DataTable ItemsDT = null;
         static string DocEntryAdd = "";
 
-        public static void createForm(  out string errorText)
+        public static void createForm(out string errorText)
         {
             errorText = null;
             Dictionary<string, object> formItems;
@@ -22,13 +22,13 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Column oColumn;
 
             SAPbouiCOM.DataTable oDataTable;
-            
+
             bool multiSelection;
-            
+
 
             int left_s = 5;
             int left_s1 = 330;
-            
+
             int top = 10;
             int height = 15;
 
@@ -44,7 +44,7 @@ namespace BDO_Localisation_AddOn
 
             SAPbouiCOM.Form oForm;
             bool newForm;
-            bool formExist = FormsB1.createForm( formProperties, out oForm, out newForm, out errorText);
+            bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
 
             if (formExist == true)
             {
@@ -53,8 +53,8 @@ namespace BDO_Localisation_AddOn
                     multiSelection = false;
                     string objectTypeCardCode = "2"; //SAPbouiCOM.BoLinkedObject.lf_BusinessPartner, Business Partner object 
                     string uniqueID_lf_BusinessPartnerCFL = "BusinessPartner_CFL";
-                    FormsB1.addChooseFromList( oForm, multiSelection, objectTypeCardCode, uniqueID_lf_BusinessPartnerCFL);
-                    
+                    FormsB1.addChooseFromList(oForm, multiSelection, objectTypeCardCode, uniqueID_lf_BusinessPartnerCFL);
+
                     //პირობის დადება ბიზნესპარტნიორის არჩევის სიაზე
                     SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(uniqueID_lf_BusinessPartnerCFL);
                     SAPbouiCOM.Conditions oCons = oCFL.GetConditions();
@@ -217,8 +217,8 @@ namespace BDO_Localisation_AddOn
                     formItems = new Dictionary<string, object>();
                     itemName = "BPCodeS"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left_s );
-                    formItems.Add("Width", 100-20);
+                    formItems.Add("Left", left_s);
+                    formItems.Add("Width", 100 - 20);
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
@@ -232,7 +232,7 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                   
+
 
                     formItems = new Dictionary<string, object>();
                     itemName = "BPCode"; //10 characters
@@ -245,7 +245,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Alias", "BPCode");
                     formItems.Add("Bound", true);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                    formItems.Add("Left", left_s+ 5 +100);
+                    formItems.Add("Left", left_s + 5 + 100);
                     formItems.Add("Width", 150);
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
@@ -324,7 +324,7 @@ namespace BDO_Localisation_AddOn
                     }
                     oForm.Items.Item("Descrpt").Specific.Value = "Service";
 
-                    top = top + 2*height + 1;
+                    top = top + 2 * height + 1;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "InCheck";
@@ -388,7 +388,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Caption", BDOSResources.getTranslate("CreateDocuments"));
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
-                    formItems.Add("Left", left_s + 20 + 1 + 20 + 1+150+1);
+                    formItems.Add("Left", left_s + 20 + 1 + 20 + 1 + 150 + 1);
                     formItems.Add("Width", 150);
                     formItems.Add("Top", top);
                     formItems.Add("Height", 19);
@@ -428,7 +428,7 @@ namespace BDO_Localisation_AddOn
 
                     SAPbouiCOM.LinkedButton oLink;
                     oDataTable = oForm.DataSources.DataTables.Add("InvoiceMTR");
-                    
+
                     oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50); //ინდექსი 
                     oDataTable.Columns.Add("CheckBox", SAPbouiCOM.BoFieldsType.ft_Text, 1); // 
                     oDataTable.Columns.Add("DocEntry", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
@@ -440,17 +440,17 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("LicTradNum", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
                     oDataTable.Columns.Add("Total", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
                     oDataTable.Columns.Add("DocEntVT", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
-                    
+
                     oDataTable.Columns.Add("DocTotal", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
                     oDataTable.Columns.Add("DocVtTotal", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
                     oDataTable.Columns.Add("InDetail", SAPbouiCOM.BoFieldsType.ft_Text, 20);
                     oDataTable.Columns.Add("Error", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
-                   
 
 
-                   
 
-                    
+
+
+
                     foreach (SAPbouiCOM.DataColumn column in oDataTable.Columns)
                     {
                         string columnName = column.Name;
@@ -474,18 +474,18 @@ namespace BDO_Localisation_AddOn
                             oColumn.AffectsFormMode = false;
                         }
 
-                       
+
                         else if (columnName == "DocEntry")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = false;
                             oLink = oColumn.ExtendedObject;
-                            oLink.LinkedObjectType = "203"; 
+                            oLink.LinkedObjectType = "203";
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
                             oColumn.AffectsFormMode = false;
                         }
-                        
+
                         else if (columnName == "DocEntVT")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
@@ -513,7 +513,7 @@ namespace BDO_Localisation_AddOn
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
                         }
-                        else if(columnName == "CardName")
+                        else if (columnName == "CardName")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("BPName");
@@ -549,7 +549,7 @@ namespace BDO_Localisation_AddOn
                             oColumn.AffectsFormMode = false;
 
                         }
-                        
+
                         else
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
@@ -557,7 +557,7 @@ namespace BDO_Localisation_AddOn
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
                             oColumn.AffectsFormMode = false;
-                            
+
                         }
                     }
                     oMatrix.Clear();
@@ -571,26 +571,26 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static int createPaymentDocument(  SAPbouiCOM.Form oForm, DataRow headerLine)
+        private static int createPaymentDocument(SAPbouiCOM.Form oForm, DataRow headerLine)
         {
             string errorText = null;
-                       
+
             SAPbobsCOM.SBObob vObj;
             vObj = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-            
+
             SAPbobsCOM.CompanyService oCompanyService = null;
             SAPbobsCOM.GeneralService oGeneralService = null;
             SAPbobsCOM.GeneralData oGeneralData = null;
             oCompanyService = Program.oCompany.GetCompanyService();
             oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_ARDPV_D");
             oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
-            
+
             DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(headerLine["DocDate"].ToString(), "yyyyMMdd", CultureInfo.InvariantCulture));
 
             oGeneralData.SetProperty("U_DocDate", DocDate);
             oGeneralData.SetProperty("U_cardCode", headerLine["CardCode"].ToString());
             oGeneralData.SetProperty("U_cardCodeN", headerLine["CardName"].ToString());
-            oGeneralData.SetProperty("U_baseDoc",headerLine["DocEntry"].ToString());
+            oGeneralData.SetProperty("U_baseDoc", headerLine["DocEntry"].ToString());
             oGeneralData.SetProperty("U_baseDocT", "203");
             oGeneralData.SetProperty("U_GrsAmnt", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture));
             oGeneralData.SetProperty("U_VatAmount", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture) * 18 / 118);
@@ -620,28 +620,28 @@ namespace BDO_Localisation_AddOn
             try
             {
                 CommonFunctions.StartTransaction();
-                
+
                 var response = oGeneralService.Add(oGeneralData);
                 docEntry = response.GetProperty("DocEntry");
 
                 if (docEntry > 0)
                 {
-                    DataTable JrnLinesDT = BDOSARDownPaymentVATAccrual.createAdditionalEntries( null, oGeneralData, null, "",0);
-                    BDOSARDownPaymentVATAccrual.JrnEntry( docEntry.ToString(), docEntry.ToString(), DocDate, JrnLinesDT, out errorText);
+                    DataTable JrnLinesDT = BDOSARDownPaymentVATAccrual.createAdditionalEntries(null, oGeneralData, null, "", 0);
+                    BDOSARDownPaymentVATAccrual.JrnEntry(docEntry.ToString(), docEntry.ToString(), DocDate, JrnLinesDT, out errorText);
                     if (errorText != null)
                     {
-                        CommonFunctions.EndTransaction( SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                }
+                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                    }
                     else
                     {
-                CommonFunctions.EndTransaction( SAPbobsCOM.BoWfTransOpt.wf_Commit);
-            }
+                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                    }
                 }
-                
+
             }
             catch
             {
-                CommonFunctions.EndTransaction( SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
             }
 
 
@@ -650,7 +650,7 @@ namespace BDO_Localisation_AddOn
 
         }
 
-        private static bool GetAccountCashFlowRelevant( string GLAccount)
+        private static bool GetAccountCashFlowRelevant(string GLAccount)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
@@ -669,8 +669,8 @@ namespace BDO_Localisation_AddOn
 
             return false;
         }
-        
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -684,7 +684,7 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
 
-                    chooseFromList( oForm, pVal.BeforeAction, oCFLEvento, out errorText);
+                    chooseFromList(oForm, pVal.BeforeAction, oCFLEvento, out errorText);
 
                 }
 
@@ -700,11 +700,11 @@ namespace BDO_Localisation_AddOn
                     EndDateOp = new DateTime(EndDateOp.Year, EndDateOp.Month, 1).AddMonths(1).AddDays(-1);
                     oEditText.Value = EndDateOp.ToString("yyyyMMdd");
 
-                    fillMTRInvoice( oForm);
+                    fillMTRInvoice(oForm);
                 }
                 if (pVal.ItemUID == "Fill" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                 {
-                    fillMTRInvoice( oForm);
+                    fillMTRInvoice(oForm);
                 }
 
 
@@ -721,7 +721,7 @@ namespace BDO_Localisation_AddOn
                         int row = pVal.Row;
 
                         oForm.Freeze(true);
-                        SetInvDocsMatrixRowBackColor( oForm, row, out errorText);
+                        SetInvDocsMatrixRowBackColor(oForm, row, out errorText);
                         oForm.Freeze(false);
                     }
 
@@ -729,20 +729,20 @@ namespace BDO_Localisation_AddOn
                     {
                         if (oForm.DataSources.DataTables.Item("InvoiceMTR").GetValue("InDetail", pVal.Row - 1) != "")
                         {
-                            openDetails( oForm, pVal.Row);
+                            openDetails(oForm, pVal.Row);
                         }
                     }
 
                 }
                 if (pVal.ItemUID == "CreatDocmt" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                 {
-                    createPaymentDocuments( oForm);
+                    createPaymentDocuments(oForm);
 
                 }
             }
         }
-        
-        public static void uiApp_ItemEventAddForm(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+
+        public static void uiApp_ItemEventAddForm(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -758,15 +758,15 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
 
-                    chooseFromListAddForm( oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
+                    chooseFromListAddForm(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                 }
 
                 if (pVal.ItemUID == "3" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
-                    SAPbouiCOM.DataTable ItemsMTR =  OkAddForm( oForm, out errorText);
+                    SAPbouiCOM.DataTable ItemsMTR = OkAddForm(oForm, out errorText);
 
-                    if (ItemsMTR!=null)
-                    {                        
+                    if (ItemsMTR != null)
+                    {
                         int row = 0;
 
                         while (row < ItemsDT.Rows.Count)
@@ -780,41 +780,41 @@ namespace BDO_Localisation_AddOn
                                 row++;
                             }
                         }
-                        
+
                         int count = ItemsMTR.Rows.Count;
                         row = 0;
 
                         while (row < count)
                         {
-                           DataRow newDTRow = ItemsDT.Rows.Add();
-                           newDTRow["DocEntry"] = ItemsMTR.GetValue("DocEntry", row);
-                           newDTRow["ItemCode"] = ItemsMTR.GetValue("ItemCode", row);
-                           newDTRow["Dscptn"] = ItemsMTR.GetValue("Dscptn", row);
-                           //newDTRow["Qnty"] = ItemsMTR.GetValue("Qnty", row).ToString(CultureInfo.InvariantCulture);
-                           newDTRow["GrsAmnt"] = ItemsMTR.GetValue("GrsAmnt", row).ToString(CultureInfo.InvariantCulture);
-                           newDTRow["VatGrp"] = ItemsMTR.GetValue("VatGrp", row);
-                           newDTRow["VatAmnt"] = ItemsMTR.GetValue("VatAmnt", row).ToString(CultureInfo.InvariantCulture);
+                            DataRow newDTRow = ItemsDT.Rows.Add();
+                            newDTRow["DocEntry"] = ItemsMTR.GetValue("DocEntry", row);
+                            newDTRow["ItemCode"] = ItemsMTR.GetValue("ItemCode", row);
+                            newDTRow["Dscptn"] = ItemsMTR.GetValue("Dscptn", row);
+                            //newDTRow["Qnty"] = ItemsMTR.GetValue("Qnty", row).ToString(CultureInfo.InvariantCulture);
+                            newDTRow["GrsAmnt"] = ItemsMTR.GetValue("GrsAmnt", row).ToString(CultureInfo.InvariantCulture);
+                            newDTRow["VatGrp"] = ItemsMTR.GetValue("VatGrp", row);
+                            newDTRow["VatAmnt"] = ItemsMTR.GetValue("VatAmnt", row).ToString(CultureInfo.InvariantCulture);
 
-                           row++;
+                            row++;
                         }
-                        
+
                         oForm.Close();
                     }
                 }
-                
+
                 if (pVal.ItemUID == "addMTRB" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
-                    addMatrixRowAddForm( oForm, out errorText);
+                    addMatrixRowAddForm(oForm, out errorText);
                 }
 
                 if (pVal.ItemUID == "delMTRB" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
-                    delMatrixRowAddForm( oForm, out errorText);
+                    delMatrixRowAddForm(oForm, out errorText);
                 }
 
                 if (pVal.ItemUID == "ItemsMTR" & pVal.ItemChanged & pVal.BeforeAction == false)
                 {
-                    fillTotalAmountsAddForm( oForm, out errorText);
+                    fillTotalAmountsAddForm(oForm, out errorText);
                 }
 
                 if (pVal.ItemUID == "ItemsMTR" && (pVal.ColUID == "GrsAmnt" || pVal.ColUID == "VatGrp") & pVal.ItemChanged & pVal.BeforeAction == false)
@@ -823,23 +823,22 @@ namespace BDO_Localisation_AddOn
 
                     SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
                     string VAtGroup = oMatrix.Columns.Item("VatGrp").Cells.Item(pVal.Row).Specific.Value;
-                    decimal GrossAmnt = (FormsB1.cleanStringOfNonDigits( oMatrix.Columns.Item("GrsAmnt").Cells.Item(pVal.Row).Specific.Value));
+                    decimal GrossAmnt = (FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("GrsAmnt").Cells.Item(pVal.Row).Specific.Value));
                     decimal VatAmount = 0;
                     int row = pVal.Row;
-                    decimal VatRate = CommonFunctions.GetVatGroupRate( VAtGroup, "");
+                    decimal VatRate = CommonFunctions.GetVatGroupRate(VAtGroup, "");
 
-                    VatAmount = CommonFunctions.roundAmountByGeneralSettings( GrossAmnt * VatRate / (100 + VatRate), "Sum");
-                    oMatrix.Columns.Item("VatAmnt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings( VatAmount);
+                    VatAmount = CommonFunctions.roundAmountByGeneralSettings(GrossAmnt * VatRate / (100 + VatRate), "Sum");
+                    oMatrix.Columns.Item("VatAmnt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(VatAmount);
 
                     oForm.Freeze(false);
                 }
             }
 
-            
+
         }
-        
-        
-        public static void SetInvDocsMatrixRowBackColor( SAPbouiCOM.Form oForm,  int row, out string errorText)
+
+        public static void SetInvDocsMatrixRowBackColor(SAPbouiCOM.Form oForm, int row, out string errorText)
         {
             errorText = null;
 
@@ -873,8 +872,8 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
-       
-        public static void SetInvDocsMatrixRowCellColor( SAPbouiCOM.Form oForm, out string errorText)
+
+        public static void SetInvDocsMatrixRowCellColor(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -893,24 +892,23 @@ namespace BDO_Localisation_AddOn
                             oMatrix.CommonSetting.SetRowFontColor(i, FormsB1.getLongIntRGB(255, 0, 0));
                         }
                         else
-                        { 
-                            oMatrix.CommonSetting.SetRowFontColor(i, FormsB1.getLongIntRGB(0, 0, 0)); 
+                        {
+                            oMatrix.CommonSetting.SetRowFontColor(i, FormsB1.getLongIntRGB(0, 0, 0));
                         }
                     }
-                    
+
                     oForm.Freeze(true);
                 }
 
             }
             catch
-            {               
+            {
             }
             finally
             {
                 GC.Collect();
             }
         }
-
 
         private static void checkUncheck(SAPbouiCOM.Form oForm, string CheckOperation, string type, out string errorText)
         {
@@ -931,7 +929,6 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Freeze(false);
         }
-
 
         public static void matrixColumnSetLinkedObjectTypeInvoicesMTR(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
@@ -968,7 +965,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = docType; //ARCreditNote
                         }
-                        
+
                     }
                 }
                 else
@@ -986,7 +983,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void createPaymentDocuments(  SAPbouiCOM.Form oForm)
+        private static void createPaymentDocuments(SAPbouiCOM.Form oForm)
         {
             int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CreateVATAccrualDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
 
@@ -1009,21 +1006,21 @@ namespace BDO_Localisation_AddOn
             AccountHeader.Columns.Add("DocDate");
             AccountHeader.Columns.Add("CardName");
             AccountHeader.Columns.Add("Total");
-            
+
 
             for (int row = 1; row <= oMatrix.RowCount; row++)
             {
-                
+
                 bool checkedLine = oMatrix.GetCellSpecific("CheckBox", row).Checked;
                 string DocEntVT = oMatrix.GetCellSpecific("DocEntVT", row).Value;
 
-                if (checkedLine && DocEntVT=="")
+                if (checkedLine && DocEntVT == "")
                 {
-                    string InvDocEntry = oMatrix.GetCellSpecific("DocEntry",row).Value;
+                    string InvDocEntry = oMatrix.GetCellSpecific("DocEntry", row).Value;
                     string CardCode = oMatrix.GetCellSpecific("CardCode", row).Value;
                     string CardName = oMatrix.GetCellSpecific("CardName", row).Value;
                     string Total = oMatrix.GetCellSpecific("Total", row).Value;
-                    
+
 
                     headerLine["DocEntry"] = InvDocEntry;
                     headerLine["CardCode"] = CardCode;
@@ -1031,18 +1028,18 @@ namespace BDO_Localisation_AddOn
                     headerLine["Total"] = Total;
                     headerLine["DocDate"] = DocDateS;
 
-                    createPaymentDocument( oForm, headerLine);
+                    createPaymentDocument(oForm, headerLine);
 
                 }
             }
 
 
 
-            fillMTRInvoice( oForm);
+            fillMTRInvoice(oForm);
 
         }
 
-        private static void chooseFromList( SAPbouiCOM.Form oForm, bool BeforeAction, SAPbouiCOM.IChooseFromListEvent oCFLEvento, out string errorText)
+        private static void chooseFromList(SAPbouiCOM.Form oForm, bool BeforeAction, SAPbouiCOM.IChooseFromListEvent oCFLEvento, out string errorText)
         {
             errorText = null;
 
@@ -1064,22 +1061,22 @@ namespace BDO_Localisation_AddOn
 
                             SAPbouiCOM.EditText oBPCode = oForm.Items.Item("BPCode").Specific;
                             oBPCode.Value = CardCode;
-                            fillMTRInvoice( oForm);                    
+                            fillMTRInvoice(oForm);
                         }
-                        
 
-                        
+
+
                     }
-                    catch 
+                    catch
                     {
-                        fillMTRInvoice( oForm);                    
+                        fillMTRInvoice(oForm);
                     }
 
                 }
             }
         }
 
-        public static void fillMTRInvoice( SAPbouiCOM.Form oForm)
+        public static void fillMTRInvoice(SAPbouiCOM.Form oForm)
         {
 
             SAPbouiCOM.EditText oEditTextDocDate = (SAPbouiCOM.EditText)oForm.Items.Item("DocPstDt").Specific;
@@ -1096,7 +1093,7 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string errorText = "";
-                      
+
 
             string query = @"select 
                     ""ODPI"".""DocEntry"",
@@ -1130,7 +1127,7 @@ namespace BDO_Localisation_AddOn
                      ""ITR1"".""ReconSum"" 
 		                from ""ITR1"" 
 		                inner join ""OITR"" on ""ITR1"".""ReconNum"" = ""OITR"".""ReconNum"" 
-		                and ""OITR"".""ReconDate""<='" + dateEE+@"' 
+		                and ""OITR"".""ReconDate""<='" + dateEE + @"' 
 		                and ""OITR"".""Canceled"" = 'N' 
 		                and ""OITR"".""ReconType""<>'3') as ""ITR1"" on ""RCT2"".""InvoiceId"" = ""ITR1"".""LineSeq"" 
 	                and ""RCT2"".""DocNum"" = ""ITR1"".""SrcObjAbs"" 
@@ -1156,7 +1153,7 @@ namespace BDO_Localisation_AddOn
                 string DocEntry;
                 string DocNum;
                 string DocDate;
-                
+
                 string DocEntVT;
                 string CardCode;
                 string CardName;
@@ -1184,7 +1181,7 @@ namespace BDO_Localisation_AddOn
                     DocNum = oRecordSet.Fields.Item("DocNum").Value == 0 ? "" : oRecordSet.Fields.Item("DocNum").Value.ToString();
                     DocDate = oRecordSet.Fields.Item("DocDate").Value.ToString("yyyyMMdd");
                     DocEntVT = oRecordSet.Fields.Item("DocEntVT").Value == 0 ? "" : oRecordSet.Fields.Item("DocEntVT").Value.ToString();
-                
+
                     TotalPayment = Convert.ToDecimal(oRecordSet.Fields.Item("Total").Value, CultureInfo.InvariantCulture);
                     DocTotal = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value, CultureInfo.InvariantCulture);
                     DocVatTotal = Convert.ToDecimal(oRecordSet.Fields.Item("DocVatTotal").Value, CultureInfo.InvariantCulture);
@@ -1220,7 +1217,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.SetValue("DocVtTotal", rowIndex, Convert.ToDouble(DocVatTotal));
 
                     string VatGrp = oForm.Items.Item("VatGrp").Specific.Value;
-                    decimal VatRate = CommonFunctions.GetVatGroupRate( VatGrp, "");
+                    decimal VatRate = CommonFunctions.GetVatGroupRate(VatGrp, "");
 
                     DataRow ItemsDTRow = ItemsDT.Rows.Add();
                     ItemsDTRow["DocEntry"] = DocEntry;
@@ -1229,7 +1226,7 @@ namespace BDO_Localisation_AddOn
                     //ItemsDTRow["Qnty"] = 1;
                     ItemsDTRow["GrsAmnt"] = TotalPayment.ToString(CultureInfo.InvariantCulture);
                     ItemsDTRow["VatGrp"] = VatGrp;
-                    ItemsDTRow["VatAmnt"] = CommonFunctions.roundAmountByGeneralSettings( Convert.ToDecimal(TotalPayment * VatRate / (100 + VatRate), CultureInfo.InvariantCulture), "Sum").ToString(CultureInfo.InvariantCulture);
+                    ItemsDTRow["VatAmnt"] = CommonFunctions.roundAmountByGeneralSettings(Convert.ToDecimal(TotalPayment * VatRate / (100 + VatRate), CultureInfo.InvariantCulture), "Sum").ToString(CultureInfo.InvariantCulture);
 
 
                     oRecordSet.MoveNext();
@@ -1259,7 +1256,7 @@ namespace BDO_Localisation_AddOn
 
 
         }
-        
+
         public static void addMenus()
         {
             SAPbouiCOM.MenuItem menuItem;
@@ -1283,11 +1280,10 @@ namespace BDO_Localisation_AddOn
             }
             catch
             {
-               
+
             }
         }
 
-     
         /// <summary>
         /// Additional items form
         /// </summary>
@@ -1298,7 +1294,7 @@ namespace BDO_Localisation_AddOn
         /// <param name="beforeAction"></param>
         /// <param name="errorText"></param>
 
-        public static void chooseFromListAddForm( SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
+        public static void chooseFromListAddForm(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out string errorText)
         {
             errorText = null;
 
@@ -1348,7 +1344,7 @@ namespace BDO_Localisation_AddOn
                                 oMatrix.GetCellSpecific("Dscptn", oCFLEvento.Row).Value = ItemName;
                             }
                             catch { }
-                           
+
                             try
                             {
                                 oMatrix.GetCellSpecific("ItemCode", oCFLEvento.Row).Value = ItemCode;
@@ -1364,14 +1360,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-
-        private static SAPbouiCOM.DataTable OkAddForm(  SAPbouiCOM.Form oForm, out string errorText)
+        private static SAPbouiCOM.DataTable OkAddForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
-            
+
             SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("ItemsMTR").Specific));
-            decimal SumValue = FormsB1.cleanStringOfNonDigits( oMatrix.Columns.Item("GrsAmnt").ColumnSetting.SumValue);
-            decimal Total = FormsB1.cleanStringOfNonDigits( oForm.Items.Item("Total").Specific.Value);
+            decimal SumValue = FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("GrsAmnt").ColumnSetting.SumValue);
+            decimal Total = FormsB1.cleanStringOfNonDigits(oForm.Items.Item("Total").Specific.Value);
             if (SumValue != Total)
             {
                 return null;
@@ -1383,14 +1378,14 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void addMatrixRowAddForm( SAPbouiCOM.Form oForm, out string errorText)
+        private static void addMatrixRowAddForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             oForm.Freeze(true);
 
             try
             {
-                
+
                 SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("ItemsMTR").Specific));
                 int index = 0;
                 if (oMatrix.RowCount == 0)
@@ -1407,7 +1402,7 @@ namespace BDO_Localisation_AddOn
                 oMatrix.AutoResizeColumns();
                 //oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value = index;
                 oMatrix.GetCellSpecific("LineID", oMatrix.RowCount).Value = index;
-                
+
 
 
             }
@@ -1422,7 +1417,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void delMatrixRowAddForm( SAPbouiCOM.Form oForm, out string errorText)
+        public static void delMatrixRowAddForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             oForm.Freeze(true);
@@ -1442,7 +1437,7 @@ namespace BDO_Localisation_AddOn
                     {
                         deletedRowCount++;
                         oMatrix.DeleteRow(row);
-                        
+
                         firstRow = row;
                     }
                 }
@@ -1464,7 +1459,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void fillTotalAmountsAddForm(  SAPbouiCOM.Form oForm, out string errorText)
+        private static void fillTotalAmountsAddForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = "";
 
@@ -1478,14 +1473,14 @@ namespace BDO_Localisation_AddOn
             }
             string U_GrsAmnts = U_GrsAmnt.ToString(CultureInfo.InvariantCulture);
             string U_VatAmounts = U_VatAmount.ToString(CultureInfo.InvariantCulture);
-            
+
             //oForm.Items.Item("GrsAmnt").Specific.Value = U_GrsAmnts;
             //oForm.Items.Item("VatAmount").Specific.Value = U_VatAmounts;
 
 
         }
 
-        public static void openDetails( SAPbouiCOM.Form oFormDoc, int rowMatrix )
+        public static void openDetails(SAPbouiCOM.Form oFormDoc, int rowMatrix)
         {
             int formHeight = Program.uiApp.Desktop.Width;
             int formWidth = Program.uiApp.Desktop.Width;
@@ -1503,7 +1498,7 @@ namespace BDO_Localisation_AddOn
             formProperties.Add("Height", formHeight);
 
             bool newForm;
-            bool formExist = FormsB1.createForm( formProperties, out oForm, out newForm, out errorText);
+            bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
 
             if (errorText != null)
             {
@@ -1527,17 +1522,17 @@ namespace BDO_Localisation_AddOn
                     int width = oForm.ClientWidth;
 
                     int left_s = 6;
-                    
+
 
                     bool multiSelection = false;
 
                     string objectTypeItem = "4"; //SAPbouiCOM.BoLinkedObject.lf_Invoice
                     string uniqueID_lf_ItemCFL = "Item_CFL";
-                    FormsB1.addChooseFromList( oForm, multiSelection, objectTypeItem, uniqueID_lf_ItemCFL);
+                    FormsB1.addChooseFromList(oForm, multiSelection, objectTypeItem, uniqueID_lf_ItemCFL);
 
                     string objectTypeCardCode = "2"; //SAPbouiCOM.BoLinkedObject.lf_BusinessPartner, Business Partner object 
                     string uniqueID_lf_BusinessPartnerCFL = "BusinessPartner_CFL";
-                    FormsB1.addChooseFromList( oForm, multiSelection, objectTypeCardCode, uniqueID_lf_BusinessPartnerCFL);
+                    FormsB1.addChooseFromList(oForm, multiSelection, objectTypeCardCode, uniqueID_lf_BusinessPartnerCFL);
 
                     //პირობის დადება ბიზნესპარტნიორის არჩევის სიაზე
                     SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(uniqueID_lf_BusinessPartnerCFL);
@@ -1587,7 +1582,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("ChooseFromListAlias", "CardCode");
                     formItems.Add("FromPane", 0);
                     formItems.Add("ToPane", 0);
-                    
+
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -1646,7 +1641,7 @@ namespace BDO_Localisation_AddOn
 
                     oForm.Items.Item("Total").Specific.Value = oFormDoc.DataSources.DataTables.Item("InvoiceMTR").GetValue("Total", rowMatrix - 1).ToString(CultureInfo.InvariantCulture);
 
-                    
+
                     top = top + height_e + 5;
 
                     formItems = new Dictionary<string, object>();
@@ -1701,10 +1696,10 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    
+
 
                     SAPbouiCOM.DataTable oDataTableItems;
-                    
+
                     oDataTableItems = oForm.DataSources.DataTables.Add("ItemsMTR");
 
                     oDataTableItems.Columns.Add("LineID", SAPbouiCOM.BoFieldsType.ft_Integer, 50);
@@ -1717,21 +1712,21 @@ namespace BDO_Localisation_AddOn
                     oDataTableItems.Columns.Add("VatAmnt", SAPbouiCOM.BoFieldsType.ft_Sum, 50);
                     oDataTableItems.Columns.Add("Error", SAPbouiCOM.BoFieldsType.ft_Text, 50);
 
-                    
-                    string DocEntryDoc = oFormDoc.DataSources.DataTables.Item("InvoiceMTR").GetValue("DocEntry", rowMatrix-1);
+
+                    string DocEntryDoc = oFormDoc.DataSources.DataTables.Item("InvoiceMTR").GetValue("DocEntry", rowMatrix - 1);
                     DocEntryAdd = DocEntryDoc;
 
                     int count = ItemsDT.Rows.Count;
-                    int  rowIndex = 0;
-                    for (int row = 0; row < count; row++ )
+                    int rowIndex = 0;
+                    for (int row = 0; row < count; row++)
                     {
                         string DocEntry = ItemsDT.Rows[row]["DocEntry"].ToString();
-                        
 
-                        if(DocEntry==DocEntryDoc)
+
+                        if (DocEntry == DocEntryDoc)
                         {
                             oDataTableItems.Rows.Add();
-                            oDataTableItems.SetValue("LineID", rowIndex, rowIndex+1);
+                            oDataTableItems.SetValue("LineID", rowIndex, rowIndex + 1);
                             oDataTableItems.SetValue("DocEntry", rowIndex, DocEntry);
                             oDataTableItems.SetValue("ItemCode", rowIndex, ItemsDT.Rows[row]["ItemCode"].ToString());
                             oDataTableItems.SetValue("Dscptn", rowIndex, ItemsDT.Rows[row]["Dscptn"].ToString());
@@ -1742,9 +1737,9 @@ namespace BDO_Localisation_AddOn
 
                             rowIndex++;
                         }
-                        
+
                     }
-                    
+
 
 
                     SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("ItemsMTR").Specific));
@@ -1791,7 +1786,7 @@ namespace BDO_Localisation_AddOn
                             oLink.LinkedObjectType = "4";
 
                         }
-                           
+
                         else if (columnName == "DocEntry")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
@@ -1808,7 +1803,7 @@ namespace BDO_Localisation_AddOn
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind(UID, columnName);
                             oColumn.AffectsFormMode = false;
-                            
+
                         }
                         else if (columnName == "GrsAmnt")
                         {
@@ -1819,8 +1814,8 @@ namespace BDO_Localisation_AddOn
                             oColumn.AffectsFormMode = false;
                             oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
                         }
-                        
-                            else if (columnName == "VatAmnt")
+
+                        else if (columnName == "VatAmnt")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatAmount");
@@ -1851,7 +1846,7 @@ namespace BDO_Localisation_AddOn
                     oMatrix.Clear();
                     oMatrix.LoadFromDataSource();
                     oMatrix.AutoResizeColumns();
-                    
+
                     top = top + height + 5;
 
                     itemName = "3";
@@ -1895,12 +1890,12 @@ namespace BDO_Localisation_AddOn
         public static void setVisibleFormItemsAddForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
-            
+
             try
             {
                 oForm.Items.Item("BPCode").Enabled = false;
                 oForm.Items.Item("Total").Enabled = false;
-                
+
 
             }
             catch (Exception ex)
@@ -1912,10 +1907,5 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
-
-
-
-
-        
     }
 }

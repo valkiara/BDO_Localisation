@@ -746,8 +746,6 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-
-
             GC.Collect();
         }
 
@@ -1489,8 +1487,23 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
+            else if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
             {
+                if (BusinessObjectInfo.BeforeAction)
+                {
+                    if (Program.cancellationTrans && Program.canceledDocEntry != 0)
+                    {
+                        SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("ORCT");
+                        string docEntry = oDBDataSource.GetValue("DocEntry", 0).Trim();
+                        if (isARDownPaymentVATAccrual(Convert.ToInt32(docEntry)))
+                        {
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("YouCantCancelDocumentBecauseOfARDownPaymentVATAccrual"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                            BubbleEvent = false;
+                            return;
+                        }
+                    }
+                }
+
                 if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction)
                 {
                     if (changeU_OutDoc)
@@ -1544,9 +1557,10 @@ namespace BDO_Localisation_AddOn
             //    }
             //}
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
+            else if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
-                setVisibleFormItems(oForm);
+                if (BusinessObjectInfo.FormTypeEx == "170")
+                    setVisibleFormItems(oForm);
                 changeU_OutDoc = false;
             }
         }
@@ -1605,7 +1619,8 @@ namespace BDO_Localisation_AddOn
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
                 {
-                    if (!pVal.BeforeAction) {
+                    if (!pVal.BeforeAction)
+                    {
                         if (pVal.ItemUID == "opTypeCB" || pVal.ItemUID == "18" || pVal.ItemUID == "107")
                         {
                             if (pVal.ItemUID == "107" && oForm.DataSources.DBDataSources.Item("ORCT").GetValue("IsPaytoBnk", 0).Trim() != "Y")
@@ -1640,16 +1655,16 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE)
-                {
-                    if (!pVal.BeforeAction)
-                    {
-                        if (pVal.ItemUID == "5")
-                            setVisibleFormItems(oForm);
-                        else if (pVal.ItemUID == "234000005")
-                            setVisibleFormItems(oForm);
-                    }
-                }
+                //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE)
+                //{
+                //    if (!pVal.BeforeAction)
+                //    {
+                //        if (pVal.ItemUID == "5")
+                //            setVisibleFormItems(oForm);
+                //        else if (pVal.ItemUID == "234000005")
+                //            setVisibleFormItems(oForm);
+                //    }
+                //}
             }
         }
 
@@ -2921,6 +2936,44 @@ namespace BDO_Localisation_AddOn
                 oPaymentsNew = null;
                 Marshal.FinalReleaseComObject(oSBOBob);
                 oSBOBob = null;
+            }
+        }
+
+        public static bool isARDownPaymentVATAccrual(int docEntry)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                String query = "";
+                query = query + "SELECT \"DocEntry\"  AS \"ARDownPaymentVATAccrual\", " + "\n";
+                query = query + "       \"U_baseDoc\" AS \"ARDownPayment\" " + "\n";
+                query = query + "FROM  (SELECT \"RCT2\".\"DocNum\"    AS \"IncomingPayment\", " + "\n";
+                query = query + "              \"RCT2\".\"DocEntry\"  AS \"ARDownPayment\", " + "\n";
+                query = query + "              \"ODPI\".\"DocStatus\" AS \"ARDownPaymentStatus\" " + "\n";
+                query = query + "       FROM   \"RCT2\" " + "\n";
+                query = query + "              INNER JOIN \"ODPI\" " + "\n";
+                query = query + "                      ON \"RCT2\".\"DocEntry\" = \"ODPI\".\"DocEntry\" " + "\n";
+                query = query + "       WHERE  \"RCT2\".\"DocNum\" = '" + docEntry + "' " + "\n";
+                query = query + "              AND \"RCT2\".\"InvType\" = '203' " + "\n";
+                query = query + "              AND \"ODPI\".\"DocStatus\" = 'C' " + "\n";
+                query = query + "              AND \"ODPI\".\"CANCELED\" = 'N') AS \"T1\" " + "\n";
+                query = query + "      INNER JOIN \"@BDOSARDV\" " + "\n";
+                query = query + "              ON \"T1\".\"ARDownPayment\" = \"@BDOSARDV\".\"U_baseDoc\" " + "\n";
+                query = query + "WHERE  \"Canceled\" = 'N' ";
+                query = query + "       AND \"U_baseDocT\" = '203' " + "\n";
+
+                oRecordSet.DoQuery(query.ToString());
+                if (!oRecordSet.EoF)
+                    return true;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
             }
         }
     }

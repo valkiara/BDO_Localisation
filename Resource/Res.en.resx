@@ -2359,9 +2359,6 @@
   <data name="Selected" xml:space="preserve">
     <value>Selected</value>
   </data>
-  <data name="Above" xml:space="preserve">
-    <value>Above</value>
-  </data>
   <data name="AmountFromBank" xml:space="preserve">
     <value>Amount from Bank</value>
   </data>
@@ -3432,5 +3429,11 @@
   </data>
   <data name="saveWhs" xml:space="preserve">
     <value>Save Whs</value>
+  </data>
+  <data name="Above" xml:space="preserve">
+    <value>Above</value>
+  </data>
+  <data name="YouCantCancelDocumentBecauseOfARDownPaymentVATAccrual" xml:space="preserve">
+    <value>You can't cancel document because of AR Down Payment VAT Accrual</value>
   </data>
 </root>
