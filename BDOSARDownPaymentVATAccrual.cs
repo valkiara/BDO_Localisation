@@ -473,29 +473,26 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                else if (pVal.ItemChanged)
+                if (pVal.ItemChanged && !pVal.BeforeAction)
                 {
-                    if (!pVal.BeforeAction)
+                    if (pVal.ItemUID == "ItemsMTR")
+                        fillTotalAmounts(oForm);
+                    else if (pVal.ItemUID == "ItemsMTR" && (pVal.ColUID == "U_GrsAmnt" || pVal.ColUID == "U_VatGrp"))
                     {
-                        if (pVal.ItemUID == "ItemsMTR")
-                            fillTotalAmounts(oForm);
-                        else if (pVal.ItemUID == "ItemsMTR" && (pVal.ColUID == "U_GrsAmnt" || pVal.ColUID == "U_VatGrp"))
-                        {
-                            oForm.Freeze(true);
+                        oForm.Freeze(true);
 
-                            SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
-                            string VAtGroup = oMatrix.Columns.Item("U_VatGrp").Cells.Item(pVal.Row).Specific.Value;
-                            decimal GrossAmnt = (FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("U_GrsAmnt").Cells.Item(pVal.Row).Specific.Value));
-                            decimal VatAmount = 0;
-                            int row = pVal.Row;
-                            decimal VatRate = CommonFunctions.GetVatGroupRate(VAtGroup, "");
+                        SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
+                        string VAtGroup = oMatrix.Columns.Item("U_VatGrp").Cells.Item(pVal.Row).Specific.Value;
+                        decimal GrossAmnt = (FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("U_GrsAmnt").Cells.Item(pVal.Row).Specific.Value));
+                        decimal VatAmount = 0;
+                        int row = pVal.Row;
+                        decimal VatRate = CommonFunctions.GetVatGroupRate(VAtGroup, "");
 
-                            VatAmount = CommonFunctions.roundAmountByGeneralSettings(GrossAmnt * VatRate / (100 + VatRate), "Sum");
-                            oMatrix.Columns.Item("U_VatAmnt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(VatAmount);
+                        VatAmount = CommonFunctions.roundAmountByGeneralSettings(GrossAmnt * VatRate / (100 + VatRate), "Sum");
+                        oMatrix.Columns.Item("U_VatAmnt").Cells.Item(row).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(VatAmount);
 
-                            oForm.Freeze(false);
-                        }
-                    }
+                        oForm.Freeze(false);
+                    }                    
                 }
             }
         }

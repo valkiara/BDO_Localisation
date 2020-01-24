@@ -2602,8 +2602,8 @@
   <data name="ARDownPaymentVATAccrual" xml:space="preserve">
     <value>AR Down Payment VAT Accrual</value>
   </data>
-  <data name="ARVATAccrualWizard" xml:space="preserve">
-    <value>AR VAT Accrual Wizard</value>
+  <data name="ARDownPaymentVATAccrualWizard" xml:space="preserve">
+    <value>AR Down Payment VAT Accrual Wizard</value>
   </data>
   <data name="DocEntVT" xml:space="preserve">
     <value>VAT accrual doc entry</value>
@@ -2623,8 +2623,8 @@
   <data name="NewDate" xml:space="preserve">
     <value>New date</value>
   </data>
-  <data name="CreateVATAccrualDocuments" xml:space="preserve">
-    <value>Create VAT accrual documents</value>
+  <data name="CreateARDownPaymentVATAccrualDocuments" xml:space="preserve">
+    <value>Do you want to create AR Down Payment VAT Accrual documents</value>
   </data>
   <data name="AlRcnSum" xml:space="preserve">
     <value>Already reconciled amount</value>
@@ -3435,5 +3435,8 @@
   </data>
   <data name="YouCantCancelDocumentBecauseOfARDownPaymentVATAccrual" xml:space="preserve">
     <value>You can't cancel document because of AR Down Payment VAT Accrual</value>
+  </data>
+  <data name="CloseARDownPaymentVATAccrualWizard" xml:space="preserve">
+    <value>Do you want to close ar down payment vat accrual wizard</value>
   </data>
 </root>

@@ -422,9 +422,9 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                else if (pVal.ItemChanged)
+                if (pVal.ItemChanged && !pVal.BeforeAction)
                 {
-                    if (pVal.ItemUID == "DocDateE" && !pVal.BeforeAction)
+                    if (pVal.ItemUID == "DocDateE")
                         updateExchangeRateRow(oForm);
                 }
             }

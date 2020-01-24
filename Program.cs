@@ -765,13 +765,12 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->VAT accrual wizzard<-----------------------------
+            //----------------------------->AR Down Payment VAT Accrual Wizard<-----------------------------
             try
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "BDOSVAWizzForm")
                 {
-                    errorText = null;
-                    BDOSVATAccrualWizard.createForm(out errorText);
+                    BDOSVATAccrualWizard.createForm();
                 }
             }
             catch (Exception ex)
@@ -1932,7 +1931,7 @@ namespace BDO_Localisation_AddOn
                     BDOSDepreciationAccrualWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->VAT Accrual Wizzard<-----------------------------
+                //----------------------------->AR Down Payment VAT Accrual Wizard<-----------------------------
                 else if (pVal.FormUID == "BDOSVAWizzForm")
                 {
                     BDOSVATAccrualWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
