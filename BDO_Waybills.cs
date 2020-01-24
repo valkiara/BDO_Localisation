@@ -4245,7 +4245,7 @@ namespace BDO_Localisation_AddOn
 
                 SAPbouiCOM.LinkedButton oLinkedButton = (SAPbouiCOM.LinkedButton)oForm.Items.Item("14_U_LB").Specific;
                 oLinkedButton.LinkedObjectType = baseDocType;
-
+                
                 oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("20_U_E").Specific;
                 if (baseDocType == "13" || baseDocType == "14" || oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_cardCode", 0).Trim() != "")
                 {
@@ -4870,6 +4870,7 @@ namespace BDO_Localisation_AddOn
             "\"BDO_WBLD\".\"U_cardCode\", " +
             "\"OCRD\".\"CardName\", " +
             "\"OCRD\".\"LicTradNum\", " +
+            "\"OCRD\".\"U_BDO_TaxTyp\", " +
             "\"OCRD\".\"Country\" " +
             "FROM \"@BDO_WBLD\" AS \"BDO_WBLD\" " +
             "LEFT JOIN \"OCRD\" AS \"OCRD\" " +
@@ -4922,7 +4923,9 @@ namespace BDO_Localisation_AddOn
                     string END_ADDRESS = oRecordSet.Fields.Item("U_endAddrs").Value.ToString(); //END_ADDRESS - ტრანსპორტირების დასრულების ადგილი
                     string DRIVER_TIN = oRecordSet.Fields.Item("U_drivTin").Value.ToString(); //DRIVER_TIN - მძღოლის პირადი ნომერი
                     string CHEK_DRIVER_TIN = oRecordSet.Fields.Item("U_notRsdnt").Value.ToString(); //CHEK_DRIVER_TIN – თუ უცხოელია 0 თუ საქართველოს მოქალაქე 1
+                    string IS_NON_RESIDENT = oRecordSet.Fields.Item("U_BDO_TaxTyp").Value.ToString(); //IS_NON_RESIDENT - თუ უცხოელია 10
                     CHEK_DRIVER_TIN = (CHEK_DRIVER_TIN == "N" || string.IsNullOrEmpty(CHEK_DRIVER_TIN)) ? "1" : "0";
+                    if (IS_NON_RESIDENT == "10") CHEK_DRIVER_TIN = "0";
                     if (string.IsNullOrEmpty(DRIVER_TIN))
                     {
                         CHEK_DRIVER_TIN = "";
