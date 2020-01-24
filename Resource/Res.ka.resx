@@ -2605,7 +2605,7 @@
   <data name="ARDownPaymentVATAccrual" xml:space="preserve">
     <value>ავანსის დღგ-ის დარიცხვის დოკუმენტი</value>
   </data>
-  <data name="ARVATAccrualWizard" xml:space="preserve">
+  <data name="ARDownPaymentVATAccrualWizard" xml:space="preserve">
     <value>ავანსის დღგ-ის დარიცხვის დამხმარე</value>
   </data>
   <data name="DocEntVT" xml:space="preserve">
@@ -2626,8 +2626,8 @@
   <data name="NewDate" xml:space="preserve">
     <value>ახალი თარიღი</value>
   </data>
-  <data name="CreateVATAccrualDocuments" xml:space="preserve">
-    <value>შეიქმნას დღგ-ის დარიცხვის დოკუმენტი</value>
+  <data name="CreateARDownPaymentVATAccrualDocuments" xml:space="preserve">
+    <value>შეიქმნას ავანსის დღგ-ის დარიცხვის დოკუმენტები</value>
   </data>
   <data name="AlRcnSum" xml:space="preserve">
     <value>გატარებული თანხა</value>
@@ -3408,5 +3408,11 @@
   </data>
   <data name="saveWhs" xml:space="preserve">
     <value>შეინახე საწყობი</value>
+  </data>
+  <data name="YouCantCancelDocumentBecauseOfARDownPaymentVATAccrual" xml:space="preserve">
+    <value>დოკუმენტს ვერ გააუქმებთ! მასზე არსებობს ავანსის დღგ-ის დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="CloseARDownPaymentVATAccrualWizard" xml:space="preserve">
+    <value>დაიხუროს ავანსის დღგ-ის დარიცხვის დამხმარე</value>
   </data>
 </root>

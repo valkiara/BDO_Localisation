@@ -3289,246 +3289,6 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void reArrangeFormItems(SAPbouiCOM.Form oForm)
-        {
-            SAPbouiCOM.Item oItem = null;
-            int height = 15;
-
-            int top = 6;
-
-            oItem = oForm.Items.Item("0_U_E");
-            oItem.Left = 160;
-            oItem.Width = 140;
-
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("1_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("1_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("beginTimeS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("beginTimeE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("2_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("2_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("3_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("3_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("4_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("4_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("5_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("5_U_C");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("6_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("6_U_C");
-            oItem.Top = top;
-
-            top = 6;
-
-            oItem = oForm.Items.Item("7_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("8_U_C");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("9_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("10_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("10_U_C");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("11_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("11_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("12_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("12_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            //oItem = oForm.Items.Item("13_U_E");
-            //oItem.Top = top;
-            oItem = oForm.Items.Item("13_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("14_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("14_U_LB");
-            oItem.Top = top;
-
-            //Address section ---->
-            top = 150;
-
-            oItem = oForm.Items.Item("15_U_S");
-            oItem.Top = top;
-            top = top + 25;
-
-            oItem = oForm.Items.Item("16_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("16_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("34_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("17_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("17_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("17_U_E1");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("17_U_LB");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            top = 150;
-            top = top + 25;
-
-            oItem = oForm.Items.Item("19_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("19_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("20_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("20_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("20_U_E1");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("21_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("21_U_E");
-            oItem.Top = top;
-
-            //Transport section ---->
-            top = 255;
-
-            oItem = oForm.Items.Item("22_U_S");
-            oItem.Top = top;
-            top = top + 25;
-
-            oItem = oForm.Items.Item("23_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("23_U_C");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("24_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("24_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("24_U_E1");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("25_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("25_U_E");
-            oItem.Top = top;
-            top = 255 + 25;
-
-            oItem = oForm.Items.Item("26_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("26_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("26_U_LB");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("26_U_B");
-            oItem.Top = top - 2;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("27_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("27_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("28_U_CH");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("29_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("29_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("29_U_C");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("30_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("30_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("30_U_E1");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("30_U_LB");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("31_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("31_U_E");
-            oItem.Top = top;
-
-            //სარდაფი
-            top = top + 25;
-
-            oItem = oForm.Items.Item("32_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("32_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("33_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("33_U_E");
-            oItem.Top = top;
-            top = top + 3 * height + 1;
-
-            oItem = oForm.Items.Item("18_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("18_U_E");
-            oItem.Top = top;
-
-            //ღილაკები
-            oItem = oForm.Items.Item("1");
-            oItem.Top = oForm.ClientHeight - 25;
-
-            oItem = oForm.Items.Item("2");
-            oItem.Top = oForm.ClientHeight - 25;
-
-            oItem = oForm.Items.Item("33_U_BC");
-            oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
-            oItem.Top = oForm.ClientHeight - 25;
-        }
-
         public static void setSizeForm(SAPbouiCOM.Form oForm)
         {
             oForm.Freeze(true);
@@ -3546,35 +3306,259 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 oForm.Freeze(false);
-            }
-            //try
-            //{
-            //    oForm.ClientHeight = Program.uiApp.Desktop.Width / 3;
-            //    //oForm.ClientWidth = Program.uiApp.Desktop.Width / 3;
-
-            //    oForm.Height = Program.uiApp.Desktop.Width / 2;
-            //    //oForm.ClientWidth = Program.uiApp.Desktop.Width / 2;
-
-            //    oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
-            //    oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 2;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception(ex.Message);
-            //}
+            }            
         }
 
-        public static void resizeForm(SAPbouiCOM.Form oForm, out string errorText)
+        public static void resizeForm(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
             try
             {
-                reArrangeFormItems(oForm);
+                oForm.Freeze(true);
+
+                SAPbouiCOM.Item oItem = null;
+                int height = 15;
+
+                int top = 6;
+
+                oItem = oForm.Items.Item("0_U_E");
+                oItem.Left = 160;
+                oItem.Width = 140;
+
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("1_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("1_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("beginTimeS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("beginTimeE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("2_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("2_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("3_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("3_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("4_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("4_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("5_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("5_U_C");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("6_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("6_U_C");
+                oItem.Top = top;
+
+                top = 6;
+
+                oItem = oForm.Items.Item("7_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("8_U_C");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("9_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("10_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("10_U_C");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("11_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("11_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("12_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("12_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                //oItem = oForm.Items.Item("13_U_E");
+                //oItem.Top = top;
+                oItem = oForm.Items.Item("13_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("14_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("14_U_LB");
+                oItem.Top = top;
+
+                //Address section ---->
+                top = 150;
+
+                oItem = oForm.Items.Item("15_U_S");
+                oItem.Top = top;
+                top = top + 25;
+
+                oItem = oForm.Items.Item("16_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("16_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("34_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("17_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("17_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("17_U_E1");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("17_U_LB");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                top = 150;
+                top = top + 25;
+
+                oItem = oForm.Items.Item("19_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("19_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("20_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("20_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("20_U_E1");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("21_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("21_U_E");
+                oItem.Top = top;
+
+                //Transport section ---->
+                top = 255;
+
+                oItem = oForm.Items.Item("22_U_S");
+                oItem.Top = top;
+                top = top + 25;
+
+                oItem = oForm.Items.Item("23_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("23_U_C");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("24_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("24_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("24_U_E1");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("25_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("25_U_E");
+                oItem.Top = top;
+                top = 255 + 25;
+
+                oItem = oForm.Items.Item("26_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("26_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("26_U_LB");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("26_U_B");
+                oItem.Top = top - 2;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("27_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("27_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("28_U_CH");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("29_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("29_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("29_U_C");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("30_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("30_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("30_U_E1");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("30_U_LB");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("31_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("31_U_E");
+                oItem.Top = top;
+
+                //სარდაფი
+                top = top + 25;
+
+                oItem = oForm.Items.Item("32_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("32_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("33_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("33_U_E");
+                oItem.Top = top;
+                top = top + 3 * height + 1;
+
+                oItem = oForm.Items.Item("18_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("18_U_E");
+                oItem.Top = top;
+
+                //ღილაკები
+                oItem = oForm.Items.Item("1");
+                oItem.Top = oForm.ClientHeight - 25;
+
+                oItem = oForm.Items.Item("2");
+                oItem.Top = oForm.ClientHeight - 25;
+
+                oItem = oForm.Items.Item("33_U_BC");
+                oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
+                oItem.Top = oForm.ClientHeight - 25;
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
@@ -4694,8 +4678,6 @@ namespace BDO_Localisation_AddOn
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
-
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
             //if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_WBLD_D")
@@ -4747,9 +4729,7 @@ namespace BDO_Localisation_AddOn
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
                 {
-                    oForm.Freeze(true);
-                    resizeForm(oForm, out errorText);
-                    oForm.Freeze(false);
+                    resizeForm(oForm);
                 }
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)

@@ -163,10 +163,10 @@
     <value>April</value>
   </data>
   <data name="ARCreditMemo" xml:space="preserve">
-    <value>A/R Credit Memo</value>
+    <value>AR Credit Memo</value>
   </data>
   <data name="ARInvoice" xml:space="preserve">
-    <value>A/R Invoice</value>
+    <value>AR Invoice</value>
   </data>
   <data name="Article" xml:space="preserve">
     <value>Article</value>
@@ -343,7 +343,7 @@
     <value>Correction Denied</value>
   </data>
   <data name="CorrectionDocument" xml:space="preserve">
-    <value>A/R Credit Note Document</value>
+    <value>AR Credit Note Document</value>
   </data>
   <data name="CorrectionDocumentID" xml:space="preserve">
     <value>Correction Document ID</value>
@@ -490,7 +490,7 @@
     <value>Update documents in database</value>
   </data>
   <data name="DoYouWantTaxInvoiceWithReturn" xml:space="preserve">
-    <value>Do you want to create united tax invoices that include A/R credit notes based on A/R invoice?</value>
+    <value>Do you want to create united tax invoices that include AR credit notes based on AR invoice?</value>
   </data>
   <data name="Driver" xml:space="preserve">
     <value>Driver</value>
@@ -631,7 +631,7 @@
     <value>Inventory Transfer</value>
   </data>
   <data name="TaxInvoiceIsAlreadyCreatedBasedOnARCreditNote" xml:space="preserve">
-    <value>Tax invoice is already created based on A/R credit note</value>
+    <value>Tax invoice is already created based on AR credit note</value>
   </data>
   <data name="InvoiceNumber" xml:space="preserve">
     <value>Invoice Number</value>
@@ -715,7 +715,7 @@
     <value>No </value>
   </data>
   <data name="BaseARInvoiceCouldNotFound" xml:space="preserve">
-    <value>Base A/R Invoice could not found</value>
+    <value>Base AR Invoice could not found</value>
   </data>
   <data name="NoBaseSaleFoundTaxInvoiceUnion" xml:space="preserve">
     <value>Base document for correction/return can not be found in united Tax Invoice </value>
@@ -760,10 +760,10 @@
     <value>October</value>
   </data>
   <data name="OnTheBaseARInvoice" xml:space="preserve">
-    <value>on the base A/R Invoice</value>
+    <value>on the base AR Invoice</value>
   </data>
   <data name="OnThePreviousARCreditNote" xml:space="preserve">
-    <value>on the previous A/R Credit Note</value>
+    <value>on the previous AR Credit Note</value>
   </data>
   <data name="Operation" xml:space="preserve">
     <value>Operation</value>
@@ -1399,7 +1399,7 @@
     <value>Correction Amount</value>
   </data>
   <data name="ARCreditNote" xml:space="preserve">
-    <value>A/R Credit Note</value>
+    <value>AR Credit Note</value>
   </data>
   <data name="TransBeginTime" xml:space="preserve">
     <value>Transportation Begin Time</value>
@@ -1429,10 +1429,10 @@
     <value>Tax Type</value>
   </data>
   <data name="APCreditNote" xml:space="preserve">
-    <value>A/P Credit Note</value>
+    <value>AP Credit Note</value>
   </data>
   <data name="APInvoice" xml:space="preserve">
-    <value>A/P Invoice</value>
+    <value>AP Invoice</value>
   </data>
   <data name="CustomerCode" xml:space="preserve">
     <value>Customer Code</value>
@@ -1997,7 +1997,7 @@
     <value>Down Payment Invoice</value>
   </data>
   <data name="ARDownPaymentInvoice" xml:space="preserve">
-    <value>A/R Down Payment Invoice</value>
+    <value>AR Down Payment Invoice</value>
   </data>
   <data name="ExpenseAccount" xml:space="preserve">
     <value>Expense Account</value>
@@ -2012,7 +2012,7 @@
     <value>Document Type</value>
   </data>
   <data name="ARDownPaymentRequest" xml:space="preserve">
-    <value>A/R Down Payment Request</value>
+    <value>AR Down Payment Request</value>
   </data>
   <data name="DocumentSNumberIs" xml:space="preserve">
     <value>document's number is</value>
@@ -2024,13 +2024,13 @@
     <value>Invoice</value>
   </data>
   <data name="ARCDocumentsOnARIDoYouWantToCreateUnitedTaxInvoiceIncludingTheseDocuments" xml:space="preserve">
-    <value>There are A/R Credit Note documents on A/R Invoice (without Tax Invoice). Do you want to create united Tax Invoice including these documents</value>
+    <value>There are AR Credit Note documents on AR Invoice (without Tax Invoice). Do you want to create united Tax Invoice including these documents</value>
   </data>
   <data name="CannotBeCreated" xml:space="preserve">
     <value>cannot be created</value>
   </data>
   <data name="OnARDownPaymentRequestThereIsAnotherARDownPaymentInvoiceWithTaxInvoiceSentTheStatusOfWhichShouldBeFromThisList" xml:space="preserve">
-    <value>On A/R Down Payment Request there is another A/R Down Payment Invoice with Tax Invoice Sent, the status of which should be from this list</value>
+    <value>On AR Down Payment Request there is another AR Down Payment Invoice with Tax Invoice Sent, the status of which should be from this list</value>
   </data>
   <data name="UnitedTaxInvoiceCanNotContainDocumentWithType" xml:space="preserve">
     <value>United Tax Invoice can not contain document with type</value>
@@ -2267,10 +2267,10 @@
     <value>Primary form Item</value>
   </data>
   <data name="APDownPaymentInvoice" xml:space="preserve">
-    <value>A/P  Down Payment Invoice</value>
+    <value>AP  Down Payment Invoice</value>
   </data>
   <data name="APDownPaymentRequest" xml:space="preserve">
-    <value>A/P  Down Payment Invoice</value>
+    <value>AP  Down Payment Invoice</value>
   </data>
   <data name="FailedToAttachInvoiceDocument" xml:space="preserve">
     <value>Failed to attach tax invoice document</value>
@@ -2312,10 +2312,10 @@
     <value>United Tax Invoice created succesfully</value>
   </data>
   <data name="BaseARInvoiceCouldNotFoundInTheMarkedDocumentsSList" xml:space="preserve">
-    <value>Base A/R Invoice could not found in the marked documents's list</value>
+    <value>Base AR Invoice could not found in the marked documents's list</value>
   </data>
   <data name="BaseARInvoice" xml:space="preserve">
-    <value>Base A/R Invoice</value>
+    <value>Base AR Invoice</value>
   </data>
   <data name="WaybillIsConfirmed" xml:space="preserve">
     <value>Waybill is confirmed</value>
@@ -2358,9 +2358,6 @@
   </data>
   <data name="Selected" xml:space="preserve">
     <value>Selected</value>
-  </data>
-  <data name="Above" xml:space="preserve">
-    <value>Above</value>
   </data>
   <data name="AmountFromBank" xml:space="preserve">
     <value>Amount from Bank</value>
@@ -2603,10 +2600,10 @@
     <value>After date changing form will close and reopen</value>
   </data>
   <data name="ARDownPaymentVATAccrual" xml:space="preserve">
-    <value>AR Down payment VAT accrual</value>
+    <value>AR Down Payment VAT Accrual</value>
   </data>
-  <data name="ARVATAccrualWizard" xml:space="preserve">
-    <value>AR VAT Accrual Wizard</value>
+  <data name="ARDownPaymentVATAccrualWizard" xml:space="preserve">
+    <value>AR Down Payment VAT Accrual Wizard</value>
   </data>
   <data name="DocEntVT" xml:space="preserve">
     <value>VAT accrual doc entry</value>
@@ -2626,8 +2623,8 @@
   <data name="NewDate" xml:space="preserve">
     <value>New date</value>
   </data>
-  <data name="CreateVATAccrualDocuments" xml:space="preserve">
-    <value>Create VAT accrual documents</value>
+  <data name="CreateARDownPaymentVATAccrualDocuments" xml:space="preserve">
+    <value>Do you want to create AR Down Payment VAT Accrual documents</value>
   </data>
   <data name="AlRcnSum" xml:space="preserve">
     <value>Already reconciled amount</value>
@@ -3116,7 +3113,7 @@
     <value>You Must Enter Posting Date After Ending Date</value>
   </data>
   <data name="LinkToAPDocuments" xml:space="preserve">
-    <value>Link To A/P Documents</value>
+    <value>Link To AP Documents</value>
   </data>
   <data name="Treasury" xml:space="preserve">
     <value>Treasury</value>
@@ -3432,5 +3429,14 @@
   </data>
   <data name="saveWhs" xml:space="preserve">
     <value>Save Whs</value>
+  </data>
+  <data name="Above" xml:space="preserve">
+    <value>Above</value>
+  </data>
+  <data name="YouCantCancelDocumentBecauseOfARDownPaymentVATAccrual" xml:space="preserve">
+    <value>You can't cancel document because of AR Down Payment VAT Accrual</value>
+  </data>
+  <data name="CloseARDownPaymentVATAccrualWizard" xml:space="preserve">
+    <value>Do you want to close ar down payment vat accrual wizard</value>
   </data>
 </root>

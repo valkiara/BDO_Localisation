@@ -291,7 +291,7 @@ namespace BDO_Localisation_AddOn
 
                 if (docEntry != 0)
                 {
-                    Dictionary<string, object> taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo(docEntry, "ARInvoice", cardCode, out errorText);
+                    Dictionary<string, object> taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo(docEntry, "ARInvoice", cardCode);
                     if (taxDocInfo != null)
                     {
                         taxDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]);
