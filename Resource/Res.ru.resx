@@ -2597,10 +2597,10 @@
     <value>Change document date</value>
   </data>
   <data name="VATReconcilationWizard" xml:space="preserve">
-    <value>VAT Reconcilation Wizard</value>
+    <value>VAT Reconciliation Wizard</value>
   </data>
   <data name="ReconSum" xml:space="preserve">
-    <value>Reconcilatin sum</value>
+    <value>Reconciliation Sum</value>
   </data>
   <data name="NewDate" xml:space="preserve">
     <value>New date</value>
@@ -2609,10 +2609,10 @@
     <value>Do you want to create AR Down Payment VAT Accrual documents</value>
   </data>
   <data name="AlRcnSum" xml:space="preserve">
-    <value>Already reconcilation amount</value>
+    <value>Already Reconciled Amount</value>
   </data>
   <data name="AlRcnVat" xml:space="preserve">
-    <value>Already reconcilation vat</value>
+    <value>Already Reconciled VAT</value>
   </data>
   <data name="DefaultValues" xml:space="preserve">
     <value>Default values</value>
@@ -2702,7 +2702,7 @@
     <value>Insufficient stock balance on posting date</value>
   </data>
   <data name="CloseFormIntBank" xml:space="preserve">
-    <value>Are you sure you want to close the internet banking wizard ?</value>
+    <value>Are you sure you want to close the internet banking wizard</value>
   </data>
   <data name="IntBanking" xml:space="preserve">
     <value>Int. Banking</value>
@@ -3411,5 +3411,8 @@
   </data>
   <data name="CloseARDownPaymentVATAccrualWizard" xml:space="preserve">
     <value>Do you want to close ar down payment vat accrual wizard</value>
+  </data>
+  <data name="CloseVATReconcilationWizard" xml:space="preserve">
+    <value>Do you want to close vat reconciliation wizard</value>
   </data>
 </root>

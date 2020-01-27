@@ -807,7 +807,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void SetInvDocsMatrixRowCellColor(SAPbouiCOM.Form oForm)
+        public static void setInvDocsMatrixRowCellColor(SAPbouiCOM.Form oForm)
         {
             try
             {
@@ -1153,7 +1153,7 @@ namespace BDO_Localisation_AddOn
                 oMatrix.LoadFromDataSource();
                 oForm.Update();
 
-                SetInvDocsMatrixRowCellColor(oForm);
+                setInvDocsMatrixRowCellColor(oForm);
             }
             catch (Exception ex)
             {

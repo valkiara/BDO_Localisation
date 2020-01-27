@@ -791,13 +791,12 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->Reconcilation wizzard<-----------------------------
+            //----------------------------->VAT Reconcilation Wizard<-----------------------------
             try
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "BDOSReconWizz")
                 {
-                    errorText = null;
-                    BDOSVATReconcilationWizard.createForm(out errorText);
+                    BDOSVATReconcilationWizard.createForm();
                 }
             }
             catch (Exception ex)
@@ -1937,21 +1936,21 @@ namespace BDO_Localisation_AddOn
                     BDOSVATAccrualWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
+                else if (pVal.FormUID == "BDOSVATADD")
+                {
+                    BDOSVATAccrualWizard.uiApp_ItemEventAddForm(FormUID, ref pVal, out BubbleEvent);
+                }
+
                 //----------------------------->Fuel Write-Off Wizard<-----------------------------
                 else if (pVal.FormUID == "BDOSFuelWOForm")
                 {
                     BDOSFuelWriteOffWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Reconcilation Wizzard<-----------------------------
+                //----------------------------->VAT Reconcilation Wizard<-----------------------------
                 else if (pVal.FormUID == "BDOSReconWizz")
                 {
                     BDOSVATReconcilationWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-
-                else if (pVal.FormUID == "BDOSVATADD")
-                {
-                    BDOSVATAccrualWizard.uiApp_ItemEventAddForm(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Business Partner Master Data<-----------------------------
