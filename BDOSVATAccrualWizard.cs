@@ -613,17 +613,17 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
-                {
-                    if (pVal.ItemUID == "InvoiceMTR" && pVal.ColUID == "DocEntry")
-                        matrixColumnSetLinkedObjectTypeInvoicesMTR(oForm, pVal);
-                }
+                //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
+                //{
+                //    if (pVal.ItemUID == "InvoiceMTR" && pVal.ColUID == "DocEntry")
+                //        matrixColumnSetLinkedObjectTypeInvoicesMTR(oForm, pVal);
+                //}
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                 {
                     if (!pVal.BeforeAction)
                     {
-                        if (pVal.ItemUID == "InvoiceMTR")
+                        if (pVal.ItemUID == "InvoiceMTR" && pVal.Row > 0)
                         {
                             SetInvDocsMatrixRowBackColor(oForm, pVal.Row);
                         }
@@ -856,50 +856,50 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void matrixColumnSetLinkedObjectTypeInvoicesMTR(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
-        {
-            try
-            {
-                oForm.Freeze(true);
+        //public static void matrixColumnSetLinkedObjectTypeInvoicesMTR(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
+        //{
+        //    try
+        //    {
+        //        oForm.Freeze(true);
 
-                if (pVal.BeforeAction)
-                {
-                    SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
+        //        if (pVal.BeforeAction)
+        //        {
+        //            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
 
-                    SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
-                    string docType = oDataTable.GetValue("DocType", pVal.Row - 1);
+        //            SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
+        //            string docType = oDataTable.GetValue("DocType", pVal.Row - 1);
 
-                    SAPbouiCOM.Column oColumn;
+        //            SAPbouiCOM.Column oColumn;
 
-                    if (docType == "18")
-                    {
-                        oColumn = oMatrix.Columns.Item(pVal.ColUID);
-                        SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
-                        oLink.LinkedObjectType = docType; //ARInvoice
-                    }
-                    if (docType == "204")
-                    {
-                        oColumn = oMatrix.Columns.Item(pVal.ColUID);
-                        SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
-                        oLink.LinkedObjectType = docType; //ARInvoice
-                    }
-                    else if (docType == "163")
-                    {
-                        oColumn = oMatrix.Columns.Item(pVal.ColUID);
-                        SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
-                        oLink.LinkedObjectType = docType; //ARCreditNote
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                oForm.Freeze(false);
-            }
-        }
+        //            if (docType == "18")
+        //            {
+        //                oColumn = oMatrix.Columns.Item(pVal.ColUID);
+        //                SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+        //                oLink.LinkedObjectType = docType; //ARInvoice
+        //            }
+        //            if (docType == "204")
+        //            {
+        //                oColumn = oMatrix.Columns.Item(pVal.ColUID);
+        //                SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+        //                oLink.LinkedObjectType = docType; //ARInvoice
+        //            }
+        //            else if (docType == "163")
+        //            {
+        //                oColumn = oMatrix.Columns.Item(pVal.ColUID);
+        //                SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+        //                oLink.LinkedObjectType = docType; //ARCreditNote
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        oForm.Freeze(false);
+        //    }
+        //}
 
         private static void createPaymentDocuments(SAPbouiCOM.Form oForm)
         {
