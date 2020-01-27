@@ -2615,10 +2615,10 @@
     <value>Change Date</value>
   </data>
   <data name="VATReconcilationWizard" xml:space="preserve">
-    <value>VAT Reconcilation Wizard</value>
+    <value>VAT Reconciliation Wizard</value>
   </data>
   <data name="ReconSum" xml:space="preserve">
-    <value>Reconciliation sum</value>
+    <value>Reconciliation Sum</value>
   </data>
   <data name="NewDate" xml:space="preserve">
     <value>New date</value>
@@ -2627,10 +2627,10 @@
     <value>Do you want to create AR Down Payment VAT Accrual documents</value>
   </data>
   <data name="AlRcnSum" xml:space="preserve">
-    <value>Already reconciled amount</value>
+    <value>Already Reconciled Amount</value>
   </data>
   <data name="AlRcnVat" xml:space="preserve">
-    <value>Already reconciled vat</value>
+    <value>Already Reconciled VAT</value>
   </data>
   <data name="DefaultValues" xml:space="preserve">
     <value>Default values</value>
@@ -3438,5 +3438,8 @@
   </data>
   <data name="CloseARDownPaymentVATAccrualWizard" xml:space="preserve">
     <value>Do you want to close ar down payment vat accrual wizard</value>
+  </data>
+  <data name="CloseVATReconcilationWizard" xml:space="preserve">
+    <value>Do you want to close vat reconciliation wizard</value>
   </data>
 </root>

@@ -2618,7 +2618,7 @@
     <value>თარიღის შეცვლა</value>
   </data>
   <data name="VATReconcilationWizard" xml:space="preserve">
-    <value>დღგ-ს რეკონსილაციის დამხმარე</value>
+    <value>დღგ-ის რეკონსილაციის დამხმარე</value>
   </data>
   <data name="ReconSum" xml:space="preserve">
     <value>რეკონსილაციის თანხა</value>
@@ -3414,5 +3414,8 @@
   </data>
   <data name="CloseARDownPaymentVATAccrualWizard" xml:space="preserve">
     <value>დაიხუროს ავანსის დღგ-ის დარიცხვის დამხმარე</value>
+  </data>
+  <data name="CloseVATReconcilationWizard" xml:space="preserve">
+    <value>დაიხუროს ავანსის დღგ-ის რეკონსილაციის დამხმარე</value>
   </data>
 </root>
