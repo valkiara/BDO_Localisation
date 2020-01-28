@@ -978,11 +978,11 @@ namespace BDO_Localisation_AddOn
                     string absID = oMatrix.GetCellSpecific("BlnkAgr", i).Value;
                     if (!string.IsNullOrEmpty(absID) && BlanketAgreement.UsesCurrencyExchangeRates(Convert.ToInt32(absID)))
                     {
-                        oMatrix.CommonSetting.SetCellEditable(i, 30, true);
+                        oMatrix.CommonSetting.SetCellEditable(i, 31, true);
                     }
                     else
                     {
-                        oMatrix.CommonSetting.SetCellEditable(i, 30, false);
+                        oMatrix.CommonSetting.SetCellEditable(i, 31, false);
                     }
                 }
             }
