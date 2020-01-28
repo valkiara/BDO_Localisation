@@ -212,7 +212,7 @@ namespace BDO_Localisation_AddOn
         public static void createFormItems(SAPbouiCOM.Form oForm)
         {
             string errorText;
-            
+
             SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("76").Specific;
             SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("U_BDOSEmpID");
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("EmployeeNo");
@@ -827,7 +827,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 string queryHeader = "SELECT " +
-                                "*  " +
+                                "\"TransId\" " +
                                 "FROM \"OJDT\"  " +
                                 "WHERE \"Ref1\" = '" + Ref1.ToString() + "' " +
                                 "AND \"Ref2\" = '" + Ref2 + "' ";
@@ -976,7 +976,7 @@ namespace BDO_Localisation_AddOn
 
             if (pVal.BeforeAction && pVal.MenuUID == "1284")
             {
-                if (oForm.DataSources.DBDataSources.Item("OJDT").GetValue("DataSource", 0) == "O")
+                if (oForm.DataSources.DBDataSources.Item("OJDT").GetValue("DataSource", 0) == "O" && oForm.DataSources.DBDataSources.Item("OJDT").GetValue("Ref2", 0) != "Reconcilation")
                 {
                     BubbleEvent = false;
                     throw new Exception(BDOSResources.getTranslate("YouCantCancelJournalEntry") + "!");
