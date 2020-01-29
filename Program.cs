@@ -756,8 +756,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "BDOSDepAccrForm")
                 {
-                    errorText = null;
-                    BDOSDepreciationAccrualWizard.createForm(out errorText);
+                    BDOSDepreciationAccrualWizard.createForm();
                 }
             }
             catch (Exception ex)

@@ -3418,4 +3418,7 @@
   <data name="CloseVATReconcilationWizard" xml:space="preserve">
     <value>დაიხუროს ავანსის დღგ-ის რეკონსილაციის დამხმარე</value>
   </data>
+  <data name="CloseDepreciationAccruingWizard" xml:space="preserve">
+    <value>დაიხუროს ცვეთის დარიცხვის დამხმარე - რაოდენობრივი აღრიცხვა</value>
+  </data>
 </root>
