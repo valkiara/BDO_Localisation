@@ -1658,7 +1658,7 @@ namespace BDO_Localisation_AddOn
                 //----------------------------->A/R Correction Invoice<-----------------------------
                 else if (BusinessObjectInfo.Type == "165" && BusinessObjectInfo.FormTypeEx == "70008")
                 {
-                    ArCorrectionInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                    ArCorrectionInvoice.UiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
             }
             catch (Exception ex)
@@ -2401,7 +2401,7 @@ namespace BDO_Localisation_AddOn
                 //----------------------------->A/R Correction Invoice<-----------------------------
                 else if (pVal.FormTypeEx == "70008")
                 {
-                    ArCorrectionInvoice.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    ArCorrectionInvoice.UiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
             }
             catch (Exception ex)
