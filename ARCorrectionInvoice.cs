@@ -35,7 +35,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void UiApp_ItemEvent(string formUid, ref ItemEvent pVal, out bool bubbleEvent)
+        public static void UiApp_ItemEvent(ref ItemEvent pVal, out bool bubbleEvent)
         {
             bubbleEvent = true;
 

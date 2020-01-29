@@ -2401,7 +2401,7 @@ namespace BDO_Localisation_AddOn
                 //----------------------------->A/R Correction Invoice<-----------------------------
                 else if (pVal.FormTypeEx == "70008")
                 {
-                    ArCorrectionInvoice.UiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    ArCorrectionInvoice.UiApp_ItemEvent(ref pVal, out BubbleEvent);
                 }
             }
             catch (Exception ex)
