@@ -80,22 +80,26 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("DocNum", SAPbouiCOM.BoFieldsType.ft_Text, 50);//19
                     oDataTable.Columns.Add("BaseDoc", SAPbouiCOM.BoFieldsType.ft_Text, 50);//20
                     oDataTable.Columns.Add("Whs", SAPbouiCOM.BoFieldsType.ft_Text, 50);//21
-                    oDataTable.Columns.Add("WhsFrom", SAPbouiCOM.BoFieldsType.ft_Text, 50);//22               
+                    oDataTable.Columns.Add("PrjCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);// 22############################# roca detaluria
+                    oDataTable.Columns.Add("PrjName", SAPbouiCOM.BoFieldsType.ft_Text, 100);//23 !!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    oDataTable.Columns.Add("WhsFrom", SAPbouiCOM.BoFieldsType.ft_Text, 50);//24
 
-                    oDataTable.Columns.Add("RS_Status", SAPbouiCOM.BoFieldsType.ft_Text, 50);//23 
-                    oDataTable.Columns.Add("RSAmount", SAPbouiCOM.BoFieldsType.ft_Sum, 50);//24
-                    oDataTable.Columns.Add("Gtotal", SAPbouiCOM.BoFieldsType.ft_Sum, 50);//25
+                    oDataTable.Columns.Add("RS_Status", SAPbouiCOM.BoFieldsType.ft_Text, 50);//25
+                    oDataTable.Columns.Add("RSAmount", SAPbouiCOM.BoFieldsType.ft_Sum, 50);//26
+                    oDataTable.Columns.Add("Gtotal", SAPbouiCOM.BoFieldsType.ft_Sum, 50);//27
 
                     //დეტალური როცა არის
-                    oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_Text, 50);//26
-                    oDataTable.Columns.Add("InvntryUom", SAPbouiCOM.BoFieldsType.ft_Text, 50);//27
-                    oDataTable.Columns.Add("BarCode", SAPbouiCOM.BoFieldsType.ft_Text, 50);//28
-                    oDataTable.Columns.Add("Quantity", SAPbouiCOM.BoFieldsType.ft_Quantity, 50);//29
-                    oDataTable.Columns.Add("RSQuantity", SAPbouiCOM.BoFieldsType.ft_Quantity, 50);//30
-                    oDataTable.Columns.Add("RSName", SAPbouiCOM.BoFieldsType.ft_Text, 50);//31
+                    oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_Text, 50);//28
+                    oDataTable.Columns.Add("ItemName", SAPbouiCOM.BoFieldsType.ft_Text, 100); //29
+                    oDataTable.Columns.Add("InvntryUom", SAPbouiCOM.BoFieldsType.ft_Text, 50);//30
+                    oDataTable.Columns.Add("BarCode", SAPbouiCOM.BoFieldsType.ft_Text, 50);//31
+                    oDataTable.Columns.Add("Quantity", SAPbouiCOM.BoFieldsType.ft_Quantity, 50);//32
+                    oDataTable.Columns.Add("RSUom", SAPbouiCOM.BoFieldsType.ft_Text, 50);//33
+                    oDataTable.Columns.Add("RSQuantity", SAPbouiCOM.BoFieldsType.ft_Quantity, 50);//34
+                    oDataTable.Columns.Add("RSName", SAPbouiCOM.BoFieldsType.ft_Text, 50);//35
                     //დეტალური როცა არის
-                    oDataTable.Columns.Add("BaseDType", SAPbouiCOM.BoFieldsType.ft_Text, 50);//32----
-
+                    oDataTable.Columns.Add("BaseDType", SAPbouiCOM.BoFieldsType.ft_Text, 50);//36----
+                    
                     string itemName;
 
                     int left_s = 6;
@@ -688,10 +692,14 @@ namespace BDO_Localisation_AddOn
                 RSDataTable.Columns.Add("DRIVER_TIN", typeof(string));
                 RSDataTable.Columns.Add("TRANSPORT_COAST", typeof(string));
                 RSDataTable.Columns.Add("ItemCode", typeof(string));
+                RSDataTable.Columns.Add("ItemName", typeof(string));
                 RSDataTable.Columns.Add("W_NAME", typeof(string));
                 RSDataTable.Columns.Add("BAR_CODE", typeof(string));
                 RSDataTable.Columns.Add("AMOUNT", typeof(string));
                 RSDataTable.Columns.Add("Quantity", typeof(string));
+                RSDataTable.Columns.Add("RSUom", typeof(string));
+                RSDataTable.Columns.Add("PrjCode", typeof(string));
+                RSDataTable.Columns.Add("PrjName", typeof(string));
 
                 string car_number = "";
                 DateTime begin_date_s = startDate;
@@ -707,6 +715,11 @@ namespace BDO_Localisation_AddOn
                 DateTime close_date_e = endDate;
                 string s_user_id = "";
                 string comment = null;
+                string WBGUntCode = "";
+                string PrjCode = "";
+                string PrjName = "";
+                string ItmCode = "";
+                string ItemName = "";
 
                 string StartAddress = "";
                 string EndAddress = "";
@@ -774,18 +787,70 @@ namespace BDO_Localisation_AddOn
                                         string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
                                         string WBItmName = goodsRow[1];
 
-                                        string ItmCode = "";
+                                        
                                         string cardName;
                                         string Cardcode = BusinessPartners.GetCardCodeByTin(SELLER_TIN, "S", out cardName);
                                         if (Cardcode != null)
                                         {
-                                            ItmCode = BDO_WaybillsJournalReceived.findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out errorText);
+                                            ItmCode = BDO_WaybillsJournalReceived.findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out ItemName);
 
                                             SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
 
                                             if (CatalogEntry != null)
+                                            {
+                                                WBGUntCode = CatalogEntry.Fields.Item("U_BDO_UoMCod").Value;
                                                 ItmCode = CatalogEntry.Fields.Item("ItemCode").Value;
+                                            }
                                         }
+
+
+                                        SAPbobsCOM.Recordset oRecordsetbyRSCODE = BDO_RSUoM.getUomByRSCode(ItmCode, goodsRow[2], out errorText);
+
+                                        if (oRecordsetbyRSCODE != null)
+                                        {
+                                            if (WBGUntCode == "")
+                                            {
+                                                WBGUntCode = oRecordsetbyRSCODE.Fields.Item("UomCode").Value;
+                                            }
+                                        }
+                                        string WbUntNmRS = string.IsNullOrEmpty(goodsRow[13]) ? oWayBill.get_waybill_unit_name_by_code(goodsRow[2]) : goodsRow[13];
+
+
+
+                                        
+
+                                        string q = "select \"Project\" from \"OPCH\" " + "\n"+ "where \"U_BDO_WBNo\" = '" + Waybill_Header["WAYBILL_NUMBER"] + "'";
+
+                                        //string q = "select \"OPCH\".\"Project\" from \"OPCH\" " + "\n"+ 
+                                          //  "join \"OINV\" on \"OINV\".\"DocEntry\" = \"OPCH\".\"DocEntry\" " + "\n" + 
+                                            //"where \"OINV\".\"U_BDO_WBID\" = '" + WBID + "'";
+
+                                        SAPbobsCOM.Recordset oRecordSetq = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                                        oRecordSetq.DoQuery(q);
+                                        if (!oRecordSetq.EoF)
+                                        {
+                                            PrjCode = oRecordSetq.Fields.Item("Project").Value;
+                                            PrjName = getPrjName(PrjCode);
+                                        }
+                                        
+
+                                        /*
+                                        SAPbobsCOM.Documents APInv = null;
+                                        SAPbobsCOM.Recordset oRecordSetWH = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                                        string queryPr = @"SELECT ""U_BDOSPrjCod"" FROM ""OWHS"" WHERE ""WhsCode"" = '" + 01 + "'";
+
+                                        oRecordSetWH.DoQuery(queryPr);
+                                        if (!string.IsNullOrEmpty(oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value))
+                                        {
+                                            APInv.Project = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
+                                        }
+
+                                        if (PrjCode != "")
+                                        {
+                                            APInv.Project = PrjCode;
+
+                                        }
+                                        */
 
                                         DataRow taxDataRow = RSDataTable.Rows.Add();
                                         taxDataRow["RowLinked"] = "N";
@@ -809,6 +874,11 @@ namespace BDO_Localisation_AddOn
                                         taxDataRow["BAR_CODE"] = WBBarcode;
                                         taxDataRow["AMOUNT"] = goodsRow[5];
                                         taxDataRow["Quantity"] = goodsRow[3];
+                                        taxDataRow["ItemName"] = ItemName;
+                                        taxDataRow["RSUom"]= WbUntNmRS;
+                                        taxDataRow["PrjCode"] = PrjCode;
+                                        taxDataRow["PrjName"] = PrjName;
+                                        //getPrjName("Ana");
 
                                         rowCounter++;
                                         rowIndex++;
@@ -817,7 +887,7 @@ namespace BDO_Localisation_AddOn
                             }
                         }
                     }
-                    startDateParam = endDateParam;
+                     startDateParam = endDateParam;
                 }
 
                 int count = 0;
@@ -879,9 +949,11 @@ namespace BDO_Localisation_AddOn
                     WBNum = WBNum.Trim();
 
                     ItemCode = "";
+                    ItemName = "";
                     if (FOption != "1")
                     {
                         ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
+                        ItemName = itemName(ItemCode);
                     }
 
                     Amount = Convert.ToDecimal(oRecordSet.Fields.Item("Gtotal").Value, CultureInfo.InvariantCulture);
@@ -1047,7 +1119,7 @@ namespace BDO_Localisation_AddOn
                         Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DateTime.TryParse(strACTIVATE_DATE, out ActivateDate) == false ? DateTime.MinValue : ActivateDate).ToString("yyyyMMdd"));
                         Sbuilder.Append("</Value></Cell>");
                     }
-
+                    
                     Sbuilder.Append("<Cell> <ColumnUid>WB_vehicNum</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, CAR_NUMBER);
                     Sbuilder.Append("</Value></Cell>");
@@ -1110,6 +1182,18 @@ namespace BDO_Localisation_AddOn
                         Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("ItemCode").Value);
                         Sbuilder.Append("</Value></Cell>");
 
+                        Sbuilder.Append("<Cell> <ColumnUid>RSUom</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, WBGUntCode);
+                        Sbuilder.Append("</Value></Cell>");
+
+                        //Sbuilder.Append("<Cell> <ColumnUid>ItemName</ColumnUid> <Value>");
+                        //Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("ItemName").Value);
+                        //Sbuilder.Append("</Value></Cell>");
+
+                        Sbuilder.Append("<Cell> <ColumnUid>ItemName</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, ItemName);
+                        Sbuilder.Append("</Value></Cell>");
+
                         Sbuilder.Append("<Cell> <ColumnUid>InvntryUom</ColumnUid> <Value>");
                         Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("InvntryUom").Value);
                         Sbuilder.Append("</Value></Cell>");
@@ -1125,6 +1209,15 @@ namespace BDO_Localisation_AddOn
                         Sbuilder.Append("<Cell> <ColumnUid>RSName</ColumnUid> <Value>");
                         Sbuilder = CommonFunctions.AppendXML(Sbuilder, RS_W_NAME);
                         Sbuilder.Append("</Value></Cell>");
+
+                        Sbuilder.Append("<Cell> <ColumnUid>PrjCode</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, PrjCode);
+                        Sbuilder.Append("</Value></Cell>");
+
+                        Sbuilder.Append("<Cell> <ColumnUid>PrjName</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, PrjName);
+                        Sbuilder.Append("</Value></Cell>");
+
                     }
                     else
                     {
@@ -1167,6 +1260,7 @@ namespace BDO_Localisation_AddOn
                         transportCoast = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["TRANSPORT_COAST"].ToString());
                         amount = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["AMOUNT"].ToString());
                         quantity = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["Quantity"].ToString());
+                        //quantity = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["PrjCode"].ToString());
                         WAYBILL_NUMBER = RemainingRows[i]["WAYBILL_NUMBER"].ToString();
 
                         if (rsType == "5") //დაბრუნება
@@ -1285,12 +1379,28 @@ namespace BDO_Localisation_AddOn
                             Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["BAR_CODE"].ToString());
                             Sbuilder.Append("</Value></Cell>");
 
+                            Sbuilder.Append("<Cell> <ColumnUid>PrjCode</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["PrjCode"].ToString());
+                            Sbuilder.Append("</Value></Cell>");
+
+                            Sbuilder.Append("<Cell> <ColumnUid>RSUom</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["RSUom"].ToString());
+                            Sbuilder.Append("</Value></Cell>");
+
+                            Sbuilder.Append("<Cell> <ColumnUid>ItemName</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["ItemName"].ToString());
+                            Sbuilder.Append("</Value></Cell>");
+
                             Sbuilder.Append("<Cell> <ColumnUid>RSQuantity</ColumnUid> <Value>");
                             Sbuilder = CommonFunctions.AppendXML(Sbuilder, FormsB1.ConvertDecimalToString(quantity));
                             Sbuilder.Append("</Value></Cell>");
 
                             Sbuilder.Append("<Cell> <ColumnUid>RSName</ColumnUid> <Value>");
                             Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["W_NAME"].ToString());
+                            Sbuilder.Append("</Value></Cell>");
+
+                            Sbuilder.Append("<Cell> <ColumnUid>PrjName</ColumnUid> <Value>");
+                            Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["PrjName"].ToString());
                             Sbuilder.Append("</Value></Cell>");
                         }
                         else
@@ -1342,6 +1452,8 @@ namespace BDO_Localisation_AddOn
                 oGrid.Columns.Item("DocNum").TitleObject.Caption = BDOSResources.getTranslate("DocNum");
                 oGrid.Columns.Item("BaseDoc").TitleObject.Caption = BDOSResources.getTranslate("BaseDocument");
                 oGrid.Columns.Item("Whs").TitleObject.Caption = BDOSResources.getTranslate("Warehouse");
+                oGrid.Columns.Item("PrjCode").TitleObject.Caption = BDOSResources.getTranslate("PrjCode");
+                oGrid.Columns.Item("PrjName").TitleObject.Caption = BDOSResources.getTranslate("PrjName");
                 oGrid.Columns.Item("WhsFrom").TitleObject.Caption = BDOSResources.getTranslate("FromWarehouse");
 
                 oGrid.Columns.Item("RS_Status").TitleObject.Caption = BDOSResources.getTranslate("Status") + " RS";
@@ -1349,21 +1461,23 @@ namespace BDO_Localisation_AddOn
                 oGrid.Columns.Item("Gtotal").TitleObject.Caption = BDOSResources.getTranslate("Amount") + " " + BDOSResources.getTranslate("Document");
 
                 oGrid.Columns.Item("ItemCode").TitleObject.Caption = BDOSResources.getTranslate("ItemCode");
+                oGrid.Columns.Item("ItemName").TitleObject.Caption = BDOSResources.getTranslate("ItemName");
                 oGrid.Columns.Item("InvntryUom").TitleObject.Caption = BDOSResources.getTranslate("UomEntry");
                 oGrid.Columns.Item("BarCode").TitleObject.Caption = BDOSResources.getTranslate("Code");
                 oGrid.Columns.Item("Quantity").TitleObject.Caption = BDOSResources.getTranslate("Quantity");
+                oGrid.Columns.Item("RSUom").TitleObject.Caption = BDOSResources.getTranslate("UoM") + " RS";
                 oGrid.Columns.Item("RSQuantity").TitleObject.Caption = BDOSResources.getTranslate("Quantity") + " RS";
                 oGrid.Columns.Item("RSName").TitleObject.Caption = BDOSResources.getTranslate("Name") + " RS";
 
                 //GTotal                 
-                SAPbouiCOM.GridColumn oGC = oGrid.Columns.Item(25);
+                SAPbouiCOM.GridColumn oGC = oGrid.Columns.Item(27);
                 oGC.Type = SAPbouiCOM.BoGridColumnType.gct_EditText;
                 SAPbouiCOM.EditTextColumn oEditGC = (SAPbouiCOM.EditTextColumn)oGC;
                 SAPbouiCOM.BoColumnSumType oST = oEditGC.ColumnSetting.SumType;
                 oEditGC.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
 
                 //RSAmount                 
-                SAPbouiCOM.GridColumn oAC = oGrid.Columns.Item(24);
+                SAPbouiCOM.GridColumn oAC = oGrid.Columns.Item(26);
                 oGC.Type = SAPbouiCOM.BoGridColumnType.gct_EditText;
                 SAPbouiCOM.EditTextColumn oEditAC = (SAPbouiCOM.EditTextColumn)oAC;
                 SAPbouiCOM.BoColumnSumType oAST = oEditGC.ColumnSetting.SumType;
@@ -1408,9 +1522,9 @@ namespace BDO_Localisation_AddOn
                 oWB_Status.ValidValues.Add("8", BDOSResources.getTranslate("SentToTransporter"));
 
                 //RS_Status
-                oGrid.Columns.Item(23).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
+                oGrid.Columns.Item(25).Type = SAPbouiCOM.BoGridColumnType.gct_ComboBox;
 
-                SAPbouiCOM.ComboBoxColumn oRS_Status = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(23);
+                SAPbouiCOM.ComboBoxColumn oRS_Status = (SAPbouiCOM.ComboBoxColumn)oGrid.Columns.Item(25);
                 oRS_Status.DisplayType = SAPbouiCOM.BoComboDisplayType.cdt_Description;
                 oRS_Status.ValidValues.Add("-2", BDOSResources.getTranslate("Canceled"));
                 oRS_Status.ValidValues.Add("-1", BDOSResources.getTranslate("deleted"));
@@ -1456,17 +1570,21 @@ namespace BDO_Localisation_AddOn
                 oColumns.Item(3).Visible = false;
                 oColumns.Item(8).Visible = false;
                 oColumns.Item(17).Visible = false;
-                oColumns.Item(22).Visible = false;
-                oColumns.Item(28).Visible = false;
-                oColumns.Item(32).Visible = false;
+                oColumns.Item(24).Visible = false;
+                oColumns.Item(31).Visible = false;
+                oColumns.Item(36).Visible = false;
                 if (FOption == "1")
                 {
-                    oColumns.Item(26).Visible = false;
-                    oColumns.Item(27).Visible = false;
+                    oColumns.Item(22).Visible = false;
+                    oColumns.Item(23).Visible = false;
                     oColumns.Item(28).Visible = false;
                     oColumns.Item(29).Visible = false;
                     oColumns.Item(30).Visible = false;
                     oColumns.Item(31).Visible = false;
+                    oColumns.Item(32).Visible = false;
+                    oColumns.Item(33).Visible = false;
+                    oColumns.Item(34).Visible = false;
+                    oColumns.Item(35).Visible = false;
                 }
 
                 if (FOption == "1")
@@ -2268,5 +2386,39 @@ namespace BDO_Localisation_AddOn
                 oForm.Visible = true;
             }
         }
+
+        public static string getPrjName(string projectCode)
+        {
+            string prjName = "";
+            string query =  "select \"PrjName\" from \"OPRJ\" " + "\n" + "where \"PrjCode\" = '" + projectCode + "'";
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            oRecordSet.DoQuery(query);
+            if (!oRecordSet.EoF)
+            {
+                prjName = oRecordSet.Fields.Item("PrjName").Value;
+            }
+                return prjName;
+        }
+        
+        public static string itemName(string itemCode)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            string query;
+
+            query = @"SELECT ""ItemName"" FROM ""OITM"" WHERE ""ItemCode"" = '" + itemCode + "'";
+            
+            oRecordSet.DoQuery(query);
+
+            if (!oRecordSet.EoF)
+            {
+                return oRecordSet.Fields.Item("ItemName").Value;
+            }
+            else
+            {
+                return "";
+            }
+        }
+        
     }
 }
