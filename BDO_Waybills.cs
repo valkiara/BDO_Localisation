@@ -20,7 +20,7 @@ namespace BDO_Localisation_AddOn
             string tableName = "BDO_WBLD";
             string description = "Waybill";
 
-            int result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_Document, out errorText);
+            int result = UDO.addUserTable(tableName, description, BoUTBTableType.bott_Document, out errorText);
 
             if (result != 0)
             {
@@ -34,7 +34,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "wblID");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Waybill ID");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -43,7 +43,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "number");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Waybill Number");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -56,7 +56,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "type");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Waybill Type");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
@@ -75,7 +75,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "status");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Waybill Status");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
@@ -85,7 +85,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "actDate");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Activate Date");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Date);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -93,7 +93,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "begDate");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Begin Date");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Date);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -101,8 +101,8 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "beginTime");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "BeginTime");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
-            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Time);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Date);
+            fieldskeysMap.Add("SubType", BoFldSubTypes.st_Time);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -110,7 +110,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "strAddrs");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Start Address");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -119,7 +119,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "endAddrs");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "End Address");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -128,7 +128,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "recpInfo");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Reception Info");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -137,7 +137,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "recpInfN");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Reception Info Name");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -146,7 +146,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "recvInfo");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Receiver Info");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -155,7 +155,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "recvInfN");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Receiver Info Name");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -164,7 +164,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "comment");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Comment");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 254);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -173,7 +173,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "delvDate");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Delivery Date");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Date);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -190,7 +190,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "trnsType");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Transport Type");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
@@ -200,7 +200,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "vehicle");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Vehicle");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("LinkedTable", "BDO_VECL");
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -209,7 +209,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "vehicNum");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Vehicle Number");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -218,7 +218,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "trailNum");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Trailer Number");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 20);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -227,7 +227,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "drvCode");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Driver Code");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -236,7 +236,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "drivTin");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Driver TIN");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 11);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -245,7 +245,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "notRsdnt");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Driver Not Resident");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "N");
 
@@ -255,7 +255,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "tporter");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Transporter");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 15);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -264,7 +264,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "tporterN");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Transporter Name");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -273,7 +273,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "tporterT");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Transporter TIN");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 32);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -282,8 +282,8 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "trnsExpn");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Transportation Expense");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
-            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", BoFldSubTypes.st_Sum);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -297,7 +297,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "payForTr");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Payment For Transportation");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 10);
             fieldskeysMap.Add("ValidValues", listValidValues);
 
@@ -307,7 +307,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "baseDoc");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Base Document");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Numeric);
             fieldskeysMap.Add("EditSize", 11);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -316,7 +316,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "baseDTxt");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Base Document");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 11);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -325,7 +325,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "baseDocT");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Base Document Type");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -334,7 +334,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "cardCode");
             fieldskeysMap.Add("TableName", "BDO_WBLD");
             fieldskeysMap.Add("Description", "Customer Code");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 15);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -349,14 +349,14 @@ namespace BDO_Localisation_AddOn
             formProperties = new Dictionary<string, object>();
             formProperties.Add("Name", "Waybill"); //100 characters
             formProperties.Add("TableName", "BDO_WBLD");
-            formProperties.Add("ObjectType", SAPbobsCOM.BoUDOObjType.boud_Document);
-            formProperties.Add("CanCancel", SAPbobsCOM.BoYesNoEnum.tYES);
-            formProperties.Add("CanClose", SAPbobsCOM.BoYesNoEnum.tYES);
-            formProperties.Add("CanCreateDefaultForm", SAPbobsCOM.BoYesNoEnum.tYES);
-            formProperties.Add("CanDelete", SAPbobsCOM.BoYesNoEnum.tNO);
-            formProperties.Add("CanFind", SAPbobsCOM.BoYesNoEnum.tYES);
-            formProperties.Add("CanYearTransfer", SAPbobsCOM.BoYesNoEnum.tYES);
-            formProperties.Add("ManageSeries", SAPbobsCOM.BoYesNoEnum.tYES);
+            formProperties.Add("ObjectType", BoUDOObjType.boud_Document);
+            formProperties.Add("CanCancel", BoYesNoEnum.tYES);
+            formProperties.Add("CanClose", BoYesNoEnum.tYES);
+            formProperties.Add("CanCreateDefaultForm", BoYesNoEnum.tYES);
+            formProperties.Add("CanDelete", BoYesNoEnum.tNO);
+            formProperties.Add("CanFind", BoYesNoEnum.tYES);
+            formProperties.Add("CanYearTransfer", BoYesNoEnum.tYES);
+            formProperties.Add("ManageSeries", BoYesNoEnum.tYES);
 
             List<Dictionary<string, object>> listFindColumns = new List<Dictionary<string, object>>();
             List<Dictionary<string, object>> listFormColumns = new List<Dictionary<string, object>>();
@@ -990,19 +990,12 @@ namespace BDO_Localisation_AddOn
 
             //საფუძველი დოკუმენტის ტიპის მიხედვით CFL- ის დამატება ---->           
             bool multiSelection = false;
-
             string objectType = "13"; //A/R Invoice
             string uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
-
             objectType = "15"; //A/R Credit Memo
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
-
-            objectType = "165"; //A/R Correction Invoice
-            uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
-            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
-
             objectType = "67"; //Inventory Transfer
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
@@ -1014,7 +1007,6 @@ namespace BDO_Localisation_AddOn
             objectType = "14"; //A/R Credit Memo
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
-
             objectType = "60"; //Goods Issue
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
@@ -2198,32 +2190,31 @@ namespace BDO_Localisation_AddOn
             {
                 if (objectType == "13")  //A/R Invoice
                 {
-                    CreateDocumentARInvoiceType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                    createDocumentARInvoiceType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
                 }
-                else if (objectType == "15")  //Delivery
+                if (objectType == "15")  //Delivery
                 {
-                    CreateDocumentDeliveryType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                    createDocumentDeliveryType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
                 }
 
                 else if (objectType == "67") //Inventory Transfer
                 {
-                    CreateDocumentInventoryTransferType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                    createDocumentInventoryTransferType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
                 }
 
                 else if (objectType == "UDO_F_BDOSFASTRD_D") //Fixed Asset Transfer
                 {
-                    CreateDocumentFixedAssetTransferType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                    createDocumentFixedAssetTransferType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
                 }
 
                 else if (objectType == "14") //A/R Credit Memo 
                 {
-                    CreateDocumentInvoiceCreditMemoType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                    createDocumentInvoiceCreditMemoType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
                 }
                 else if (objectType == "60")  //Goods Issue
                 {
-                    CreateDocumentGoodsIssueType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
+                    createDocumentGoodsIssueType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
                 }
-
                 else if (objectType == "165")  //A/R Correction Invoice
                 {
                     CreateDocumentArCorrectionInvoiceType(baseDocEntry, vehicleCode, driverCode, trnsType, trnsprter, out newDocEntry, out errorText);
@@ -2231,12 +2222,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void CreateDocumentARInvoiceType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentARInvoiceType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT \"OINV\".\"DocEntry\", \"OINV\".\"ObjType\", \"OINV\".\"CardCode\", \"OINV\".\"Address2\", \"OINV\".\"DocDate\", \"OINV\".\"CntctCode\" , \"OCPR\".\"Name\"" +
                                " FROM \"OINV\" AS \"OINV\"" +
@@ -2278,12 +2269,12 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
-                    SAPbobsCOM.CompanyService oCompanyService = null;
-                    SAPbobsCOM.GeneralService oGeneralService = null;
-                    SAPbobsCOM.GeneralData oGeneralData = null;
+                    CompanyService oCompanyService = null;
+                    GeneralService oGeneralService = null;
+                    GeneralData oGeneralData = null;
                     oCompanyService = oCompany.GetCompanyService();
                     oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                    oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                    oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                     string empID;
                     string empName;
@@ -2314,7 +2305,7 @@ namespace BDO_Localisation_AddOn
                         else
                         {
                             //-->სატრანსპორტო საშუალება
-                            SAPbobsCOM.UserTable oUserTable = null;
+                            UserTable oUserTable = null;
                             oUserTable = oCompany.UserTables.Item("BDO_VECL");
                             oUserTable.GetByKey(vehicleCode);
                             oGeneralData.SetProperty("U_vehicle", vehicleCode);
@@ -2342,7 +2333,7 @@ namespace BDO_Localisation_AddOn
 
                     if (trnsprter != null)
                     {
-                        SAPbobsCOM.Recordset oRecordSetBP = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        Recordset oRecordSetBP = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                         string queryBP = "SELECT \"OCRD\".\"CardName\" AS \"CardName\", \"OCRD\".\"LicTradNum\" AS \"LicTradNum\" FROM \"OCRD\" WHERE \"CardCode\" = N'" + trnsprter + "'";
                         oRecordSetBP.DoQuery(queryBP);
 
@@ -2415,12 +2406,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void CreateDocumentDeliveryType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentDeliveryType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT \"ODLN\".\"DocEntry\", \"ODLN\".\"ObjType\", \"ODLN\".\"CardCode\", \"ODLN\".\"Address2\", \"ODLN\".\"DocDate\", \"ODLN\".\"CntctCode\" , \"OCPR\".\"Name\"" +
                                " FROM \"ODLN\" AS \"ODLN\"" +
@@ -2462,12 +2453,12 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
-                    SAPbobsCOM.CompanyService oCompanyService = null;
-                    SAPbobsCOM.GeneralService oGeneralService = null;
-                    SAPbobsCOM.GeneralData oGeneralData = null;
+                    CompanyService oCompanyService = null;
+                    GeneralService oGeneralService = null;
+                    GeneralData oGeneralData = null;
                     oCompanyService = oCompany.GetCompanyService();
                     oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                    oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                    oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                     string empID;
                     string empName;
@@ -2498,7 +2489,7 @@ namespace BDO_Localisation_AddOn
                         else
                         {
                             //-->სატრანსპორტო საშუალება
-                            SAPbobsCOM.UserTable oUserTable = null;
+                            UserTable oUserTable = null;
                             oUserTable = oCompany.UserTables.Item("BDO_VECL");
                             oUserTable.GetByKey(vehicleCode);
                             oGeneralData.SetProperty("U_vehicle", vehicleCode);
@@ -2526,7 +2517,7 @@ namespace BDO_Localisation_AddOn
 
                     if (trnsprter != null)
                     {
-                        SAPbobsCOM.Recordset oRecordSetBP = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        Recordset oRecordSetBP = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                         string queryBP = "SELECT \"OCRD\".\"CardName\" AS \"CardName\", \"OCRD\".\"LicTradNum\" AS \"LicTradNum\" FROM \"OCRD\" WHERE \"CardCode\" = N'" + trnsprter + "'";
                         oRecordSetBP.DoQuery(queryBP);
 
@@ -2599,12 +2590,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void CreateDocumentInventoryTransferType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentInventoryTransferType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT \"OWTR\".\"DocEntry\", \"OWTR\".\"ObjType\", \"OWTR\".\"CardCode\", \"OWTR\".\"Address\", \"OWTR\".\"DocDate\", \"OWTR\".\"CntctCode\" , \"OCPR\".\"Name\"" +
                                " FROM \"OWTR\" AS \"OWTR\"" +
@@ -2669,12 +2660,12 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
-                    SAPbobsCOM.CompanyService oCompanyService = null;
-                    SAPbobsCOM.GeneralService oGeneralService = null;
-                    SAPbobsCOM.GeneralData oGeneralData = null;
+                    CompanyService oCompanyService = null;
+                    GeneralService oGeneralService = null;
+                    GeneralData oGeneralData = null;
                     oCompanyService = oCompany.GetCompanyService();
                     oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                    oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                    oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                     string empID;
                     string empName;
@@ -2705,7 +2696,7 @@ namespace BDO_Localisation_AddOn
                         else
                         {
                             //-->სატრანსპორტო საშუალება
-                            SAPbobsCOM.UserTable oUserTable = null;
+                            UserTable oUserTable = null;
                             oUserTable = oCompany.UserTables.Item("BDO_VECL");
                             oUserTable.GetByKey(vehicleCode);
                             oGeneralData.SetProperty("U_vehicle", vehicleCode);
@@ -2733,7 +2724,7 @@ namespace BDO_Localisation_AddOn
 
                     if (trnsprter != null)
                     {
-                        SAPbobsCOM.Recordset oRecordSetBP = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        Recordset oRecordSetBP = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                         string queryBP = "SELECT " + "\"OCRD\".\"CardName\" AS \"CardName\", \"OCRD\".\"LicTradNum\" AS \"LicTradNum\" " + " FROM \"OCRD\"" + " WHERE " + "\"CardCode\"" + " = N'" + trnsprter + "'";
                         oRecordSetBP.DoQuery(queryBP);
 
@@ -2782,12 +2773,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void CreateDocumentFixedAssetTransferType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentFixedAssetTransferType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT \"FASTRD\".\"DocEntry\", \"FASTRD\".\"Object\", \"FASTRD\".\"U_CardCode\", \"FASTRD\".\"U_DocDate\", \"FASTRD\".\"U_TEmplID\" , \"OCPR\".\"Name\"" +
                                " FROM \"@BDOSFASTRD\" AS \"FASTRD\"" +
@@ -2848,12 +2839,12 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
-                    SAPbobsCOM.CompanyService oCompanyService = null;
-                    SAPbobsCOM.GeneralService oGeneralService = null;
-                    SAPbobsCOM.GeneralData oGeneralData = null;
+                    CompanyService oCompanyService = null;
+                    GeneralService oGeneralService = null;
+                    GeneralData oGeneralData = null;
                     oCompanyService = oCompany.GetCompanyService();
                     oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                    oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                    oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                     string empID;
                     string empName;
@@ -2885,7 +2876,7 @@ namespace BDO_Localisation_AddOn
                         else
                         {
                             //-->სატრანსპორტო საშუალება
-                            SAPbobsCOM.UserTable oUserTable = null;
+                            UserTable oUserTable = null;
                             oUserTable = oCompany.UserTables.Item("BDO_VECL");
                             oUserTable.GetByKey(vehicleCode);
                             oGeneralData.SetProperty("U_vehicle", vehicleCode);
@@ -2913,7 +2904,7 @@ namespace BDO_Localisation_AddOn
 
                     if (trnsprter != null)
                     {
-                        SAPbobsCOM.Recordset oRecordSetBP = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        Recordset oRecordSetBP = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                         string queryBP = "SELECT " + "\"OCRD\".\"CardName\" AS \"CardName\", \"OCRD\".\"LicTradNum\" AS \"LicTradNum\" " + " FROM \"OCRD\"" + " WHERE " + "\"CardCode\"" + " = N'" + trnsprter + "'";
                         oRecordSetBP.DoQuery(queryBP);
 
@@ -2962,12 +2953,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void CreateDocumentInvoiceCreditMemoType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentInvoiceCreditMemoType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT \"ORIN\".\"DocEntry\", \"ORIN\".\"ObjType\", \"ORIN\".\"CardCode\", \"ORIN\".\"Address2\", \"ORIN\".\"DocDate\", \"ORIN\".\"CntctCode\" , \"OCPR\".\"Name\"" +
                                " FROM \"ORIN\" AS \"ORIN\"" +
@@ -3009,12 +3000,12 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
-                    SAPbobsCOM.CompanyService oCompanyService = null;
-                    SAPbobsCOM.GeneralService oGeneralService = null;
-                    SAPbobsCOM.GeneralData oGeneralData = null;
+                    CompanyService oCompanyService = null;
+                    GeneralService oGeneralService = null;
+                    GeneralData oGeneralData = null;
                     oCompanyService = oCompany.GetCompanyService();
                     oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                    oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                    oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                     string empID;
                     string empName;
@@ -3045,7 +3036,7 @@ namespace BDO_Localisation_AddOn
                         else
                         {
                             //-->სატრანსპორტო საშუალება
-                            SAPbobsCOM.UserTable oUserTable = null;
+                            UserTable oUserTable = null;
                             oUserTable = oCompany.UserTables.Item("BDO_VECL");
                             oUserTable.GetByKey(vehicleCode);
                             oGeneralData.SetProperty("U_vehicle", vehicleCode);
@@ -3073,7 +3064,7 @@ namespace BDO_Localisation_AddOn
 
                     if (trnsprter != null)
                     {
-                        SAPbobsCOM.Recordset oRecordSetBP = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        Recordset oRecordSetBP = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                         string queryBP = "SELECT " + "\"OCRD\".\"CardName\" AS \"CardName\", \"OCRD\".\"LicTradNum\" AS \"LicTradNum\" " + " FROM \"OCRD\"" + " WHERE " + "\"CardCode\"" + " = N'" + trnsprter + "'";
                         oRecordSetBP.DoQuery(queryBP);
 
@@ -3122,26 +3113,23 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void CreateDocumentGoodsIssueType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
+        private static void createDocumentGoodsIssueType(int baseDocEntry, string vehicleCode, string driverCode, string trnsType, string trnsprter, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
 
-            SAPbobsCOM.Recordset oRecordSet =
-                (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
-            string query =
-                "SELECT \"OIGE\".\"DocEntry\", \"OIGE\".\"ObjType\", \"OIGE\".\"Address\", \"OIGE\".\"DocDate\"" +
-                " FROM \"OIGE\" AS \"OIGE\"" +
-                " WHERE \"DocEntry\" = '" + baseDocEntry + "'";
+            string query = "SELECT \"OIGE\".\"DocEntry\", \"OIGE\".\"ObjType\", \"OIGE\".\"Address\", \"OIGE\".\"DocDate\"" +
+                               " FROM \"OIGE\" AS \"OIGE\"" +
+                                " WHERE \"DocEntry\" = '" + baseDocEntry + "'";
 
             string strAddrs = "";
-            string queryWhs =
-                "SELECT DISTINCT \"IGE1\".\"WhsCode\", \"OWHS\".\"Street\", \"OWHS\".\"ZipCode\", \"OWHS\".\"City\", \"OWHS\".\"County\"" +
-                " FROM \"IGE1\" AS \"IGE1\"" +
-                " INNER JOIN \"OWHS\" AS \"OWHS\"" +
-                " ON \"IGE1\".\"WhsCode\" = \"OWHS\".\"WhsCode\"" +
-                " WHERE \"IGE1\".\"DocEntry\" = '" + baseDocEntry + "'";
+            string queryWhs = "SELECT DISTINCT \"IGE1\".\"WhsCode\", \"OWHS\".\"Street\", \"OWHS\".\"ZipCode\", \"OWHS\".\"City\", \"OWHS\".\"County\"" +
+                           " FROM \"IGE1\" AS \"IGE1\"" +
+                           " INNER JOIN \"OWHS\" AS \"OWHS\"" +
+                           " ON \"IGE1\".\"WhsCode\" = \"OWHS\".\"WhsCode\"" +
+                           " WHERE \"IGE1\".\"DocEntry\" = '" + baseDocEntry + "'";
             try
             {
                 oRecordSet.DoQuery(queryWhs);
@@ -3150,9 +3138,9 @@ namespace BDO_Localisation_AddOn
                     while (!oRecordSet.EoF)
                     {
                         strAddrs = strAddrs + oRecordSet.Fields.Item("Street").Value.ToString() + '\n' +
-                                   oRecordSet.Fields.Item("ZipCode").Value.ToString() + " " +
-                                   oRecordSet.Fields.Item("City").Value.ToString() + '\n' +
-                                   oRecordSet.Fields.Item("County").Value.ToString();
+                            oRecordSet.Fields.Item("ZipCode").Value.ToString() + " " +
+                            oRecordSet.Fields.Item("City").Value.ToString() + '\n' +
+                            oRecordSet.Fields.Item("County").Value.ToString();
                         oRecordSet.MoveNext();
                         break;
                     }
@@ -3165,21 +3153,20 @@ namespace BDO_Localisation_AddOn
             }
 
             string endAddrs = "";
-            string queryEndAddrs =
-                "SELECT \"OIGE\".\"ToWhsCode\", \"OWHS\".\"Street\", \"OWHS\".\"ZipCode\", \"OWHS\".\"City\", \"OWHS\".\"County\"" +
-                " FROM \"OIGE\" AS \"OIGE\"" +
-                " INNER JOIN \"OWHS\" AS \"OWHS\"" +
-                " ON \"OIGE\".\"ToWhsCode\" = \"OWHS\".\"WhsCode\"" +
-                " WHERE \"OIGE\".\"DocEntry\" = '" + baseDocEntry + "'";
+            string queryEndAddrs = "SELECT \"OIGE\".\"ToWhsCode\", \"OWHS\".\"Street\", \"OWHS\".\"ZipCode\", \"OWHS\".\"City\", \"OWHS\".\"County\"" +
+                           " FROM \"OIGE\" AS \"OIGE\"" +
+                           " INNER JOIN \"OWHS\" AS \"OWHS\"" +
+                           " ON \"OIGE\".\"ToWhsCode\" = \"OWHS\".\"WhsCode\"" +
+                           " WHERE \"OIGE\".\"DocEntry\" = '" + baseDocEntry + "'";
             try
             {
                 oRecordSet.DoQuery(queryEndAddrs);
                 while (!oRecordSet.EoF)
                 {
                     endAddrs = endAddrs + oRecordSet.Fields.Item("Street").Value.ToString() + '\n' +
-                               oRecordSet.Fields.Item("ZipCode").Value.ToString() + " " +
-                               oRecordSet.Fields.Item("City").Value.ToString() + '\n' +
-                               oRecordSet.Fields.Item("County").Value.ToString();
+                        oRecordSet.Fields.Item("ZipCode").Value.ToString() + " " +
+                        oRecordSet.Fields.Item("City").Value.ToString() + '\n' +
+                        oRecordSet.Fields.Item("County").Value.ToString();
                     oRecordSet.MoveNext();
                     break;
                 }
@@ -3197,14 +3184,12 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
-                    SAPbobsCOM.CompanyService oCompanyService = null;
-                    SAPbobsCOM.GeneralService oGeneralService = null;
-                    SAPbobsCOM.GeneralData oGeneralData = null;
+                    CompanyService oCompanyService = null;
+                    GeneralService oGeneralService = null;
+                    GeneralData oGeneralData = null;
                     oCompanyService = oCompany.GetCompanyService();
                     oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                    oGeneralData =
-                        ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM
-                            .GeneralServiceDataInterfaces.gsGeneralData)));
+                    oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                     string empID;
                     string empName;
@@ -3221,7 +3206,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_baseDTxt", oRecordSet.Fields.Item("DocEntry").Value.ToString());
                     oGeneralData.SetProperty("U_baseDocT", oRecordSet.Fields.Item("ObjType").Value.ToString());
                     oGeneralData.SetProperty("U_strAddrs", strAddrs);
-                    oGeneralData.SetProperty("U_begDate", DateTime.Today); //DateTime.Today.ToString("yyyyMMdd"));
+                    oGeneralData.SetProperty("U_begDate", DateTime.Today);  //DateTime.Today.ToString("yyyyMMdd"));
                     oGeneralData.SetProperty("U_beginTime", DateTime.Now);
 
                     if (vehicleCode != null)
@@ -3233,7 +3218,7 @@ namespace BDO_Localisation_AddOn
                         else
                         {
                             //-->სატრანსპორტო საშუალება
-                            SAPbobsCOM.UserTable oUserTable = null;
+                            UserTable oUserTable = null;
                             oUserTable = oCompany.UserTables.Item("BDO_VECL");
                             oUserTable.GetByKey(vehicleCode);
                             oGeneralData.SetProperty("U_vehicle", vehicleCode);
@@ -3248,7 +3233,6 @@ namespace BDO_Localisation_AddOn
                             {
                                 driverCode = oUserTable.UserFields.Fields.Item("U_drvCode").Value;
                             }
-
                             oUserTable = oCompany.UserTables.Item("BDO_DRVS");
                             oUserTable.GetByKey(driverCode);
                             string driverTin = oUserTable.UserFields.Fields.Item("U_tin").Value;
@@ -3262,13 +3246,8 @@ namespace BDO_Localisation_AddOn
 
                     if (trnsprter != null)
                     {
-                        SAPbobsCOM.Recordset oRecordSetBP =
-                            (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes
-                                .BoRecordset);
-                        string queryBP =
-                            "SELECT " +
-                            "\"OCRD\".\"CardName\" AS \"CardName\", \"OCRD\".\"LicTradNum\" AS \"LicTradNum\" " +
-                            " FROM \"OCRD\"" + " WHERE " + "\"CardCode\"" + " = N'" + trnsprter + "'";
+                        Recordset oRecordSetBP = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+                        string queryBP = "SELECT " + "\"OCRD\".\"CardName\" AS \"CardName\", \"OCRD\".\"LicTradNum\" AS \"LicTradNum\" " + " FROM \"OCRD\"" + " WHERE " + "\"CardCode\"" + " = N'" + trnsprter + "'";
                         oRecordSetBP.DoQuery(queryBP);
 
                         if (!oRecordSetBP.EoF)
@@ -3298,9 +3277,7 @@ namespace BDO_Localisation_AddOn
 
                         oCompany.GetLastError(out errCode, out errMsg);
                         errorText = ex.Message;
-                        errorText = BDOSResources.getTranslate("ErrorOfDocumentAdd") + " " +
-                                    BDOSResources.getTranslate("ErrorDescription") + " " + errMsg + "! " +
-                                    BDOSResources.getTranslate("Code") + " : " + errCode + "! " + errorText;
+                        errorText = BDOSResources.getTranslate("ErrorOfDocumentAdd") + " " + BDOSResources.getTranslate("ErrorDescription") + " " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + errorText;
                     }
 
                     oRecordSet.MoveNext();
@@ -3323,7 +3300,7 @@ namespace BDO_Localisation_AddOn
             errorText = null;
             newDocEntry = 0;
 
-            var oRecordSet = (Recordset) oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+            var oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             var query =
                 "SELECT \"OCSI\".\"DocEntry\", \"OCSI\".\"ObjType\", \"OCSI\".\"CardCode\", \"OCSI\".\"Address2\", \"OCSI\".\"DocDate\", \"OCSI\".\"CntctCode\" , \"OCPR\".\"Name\"" +
@@ -3371,7 +3348,7 @@ namespace BDO_Localisation_AddOn
                     oCompanyService = oCompany.GetCompanyService();
                     oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
                     oGeneralData =
-                        (GeneralData) oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData);
+                        (GeneralData)oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData);
 
                     Users.getUserEmployee(out var empId, out var empName, out errorText);
 
@@ -3426,7 +3403,7 @@ namespace BDO_Localisation_AddOn
 
                     if (trnsprter != null)
                     {
-                        var oRecordSetBP = (Recordset) oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+                        var oRecordSetBP = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                         var queryBP =
                             "SELECT " +
                             "\"OCRD\".\"CardName\" AS \"CardName\", \"OCRD\".\"LicTradNum\" AS \"LicTradNum\" " +
@@ -3475,247 +3452,6 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
-
-        public static void reArrangeFormItems(SAPbouiCOM.Form oForm)
-        {
-            SAPbouiCOM.Item oItem = null;
-            int height = 15;
-
-            int top = 6;
-
-            oItem = oForm.Items.Item("0_U_E");
-            oItem.Left = 160;
-            oItem.Width = 140;
-
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("1_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("1_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("beginTimeS");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("beginTimeE");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("2_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("2_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("3_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("3_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("4_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("4_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("5_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("5_U_C");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("6_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("6_U_C");
-            oItem.Top = top;
-
-            top = 6;
-
-            oItem = oForm.Items.Item("7_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("8_U_C");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("9_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("10_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("10_U_C");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("11_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("11_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("12_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("12_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            //oItem = oForm.Items.Item("13_U_E");
-            //oItem.Top = top;
-            oItem = oForm.Items.Item("13_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("14_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("14_U_LB");
-            oItem.Top = top;
-
-            //Address section ---->
-            top = 150;
-
-            oItem = oForm.Items.Item("15_U_S");
-            oItem.Top = top;
-            top = top + 25;
-
-            oItem = oForm.Items.Item("16_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("16_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("34_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("17_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("17_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("17_U_E1");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("17_U_LB");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            top = 150;
-            top = top + 25;
-
-            oItem = oForm.Items.Item("19_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("19_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("20_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("20_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("20_U_E1");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("21_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("21_U_E");
-            oItem.Top = top;
-
-            //Transport section ---->
-            top = 255;
-
-            oItem = oForm.Items.Item("22_U_S");
-            oItem.Top = top;
-            top = top + 25;
-
-            oItem = oForm.Items.Item("23_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("23_U_C");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("24_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("24_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("24_U_E1");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("25_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("25_U_E");
-            oItem.Top = top;
-            top = 255 + 25;
-
-            oItem = oForm.Items.Item("26_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("26_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("26_U_LB");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("26_U_B");
-            oItem.Top = top - 2;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("27_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("27_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("28_U_CH");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("29_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("29_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("29_U_C");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("30_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("30_U_E");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("30_U_E1");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("30_U_LB");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("31_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("31_U_E");
-            oItem.Top = top;
-
-            //სარდაფი
-            top = top + 25;
-
-            oItem = oForm.Items.Item("32_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("32_U_E");
-            oItem.Top = top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("33_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("33_U_E");
-            oItem.Top = top;
-            top = top + 3 * height + 1;
-
-            oItem = oForm.Items.Item("18_U_S");
-            oItem.Top = top;
-            oItem = oForm.Items.Item("18_U_E");
-            oItem.Top = top;
-
-            //ღილაკები
-            oItem = oForm.Items.Item("1");
-            oItem.Top = oForm.ClientHeight - 25;
-
-            oItem = oForm.Items.Item("2");
-            oItem.Top = oForm.ClientHeight - 25;
-
-            oItem = oForm.Items.Item("33_U_BC");
-            oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
-            oItem.Top = oForm.ClientHeight - 25;
-        }
-
         public static void setSizeForm(SAPbouiCOM.Form oForm)
         {
             oForm.Freeze(true);
@@ -3734,34 +3470,258 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(false);
             }
-            //try
-            //{
-            //    oForm.ClientHeight = Program.uiApp.Desktop.Width / 3;
-            //    //oForm.ClientWidth = Program.uiApp.Desktop.Width / 3;
-
-            //    oForm.Height = Program.uiApp.Desktop.Width / 2;
-            //    //oForm.ClientWidth = Program.uiApp.Desktop.Width / 2;
-
-            //    oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
-            //    oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 2;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception(ex.Message);
-            //}
         }
 
-        public static void resizeForm(SAPbouiCOM.Form oForm, out string errorText)
+        public static void resizeForm(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
             try
             {
-                reArrangeFormItems(oForm);
+                oForm.Freeze(true);
+
+                SAPbouiCOM.Item oItem = null;
+                int height = 15;
+
+                int top = 6;
+
+                oItem = oForm.Items.Item("0_U_E");
+                oItem.Left = 160;
+                oItem.Width = 140;
+
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("1_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("1_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("beginTimeS");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("beginTimeE");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("2_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("2_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("3_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("3_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("4_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("4_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("5_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("5_U_C");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("6_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("6_U_C");
+                oItem.Top = top;
+
+                top = 6;
+
+                oItem = oForm.Items.Item("7_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("8_U_C");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("9_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("10_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("10_U_C");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("11_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("11_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("12_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("12_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                //oItem = oForm.Items.Item("13_U_E");
+                //oItem.Top = top;
+                oItem = oForm.Items.Item("13_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("14_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("14_U_LB");
+                oItem.Top = top;
+
+                //Address section ---->
+                top = 150;
+
+                oItem = oForm.Items.Item("15_U_S");
+                oItem.Top = top;
+                top = top + 25;
+
+                oItem = oForm.Items.Item("16_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("16_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("34_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("17_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("17_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("17_U_E1");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("17_U_LB");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                top = 150;
+                top = top + 25;
+
+                oItem = oForm.Items.Item("19_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("19_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("20_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("20_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("20_U_E1");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("21_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("21_U_E");
+                oItem.Top = top;
+
+                //Transport section ---->
+                top = 255;
+
+                oItem = oForm.Items.Item("22_U_S");
+                oItem.Top = top;
+                top = top + 25;
+
+                oItem = oForm.Items.Item("23_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("23_U_C");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("24_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("24_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("24_U_E1");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("25_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("25_U_E");
+                oItem.Top = top;
+                top = 255 + 25;
+
+                oItem = oForm.Items.Item("26_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("26_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("26_U_LB");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("26_U_B");
+                oItem.Top = top - 2;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("27_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("27_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("28_U_CH");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("29_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("29_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("29_U_C");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("30_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("30_U_E");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("30_U_E1");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("30_U_LB");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("31_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("31_U_E");
+                oItem.Top = top;
+
+                //სარდაფი
+                top = top + 25;
+
+                oItem = oForm.Items.Item("32_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("32_U_E");
+                oItem.Top = top;
+                top = top + height + 1;
+
+                oItem = oForm.Items.Item("33_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("33_U_E");
+                oItem.Top = top;
+                top = top + 3 * height + 1;
+
+                oItem = oForm.Items.Item("18_U_S");
+                oItem.Top = top;
+                oItem = oForm.Items.Item("18_U_E");
+                oItem.Top = top;
+
+                //ღილაკები
+                oItem = oForm.Items.Item("1");
+                oItem.Top = oForm.ClientHeight - 25;
+
+                oItem = oForm.Items.Item("2");
+                oItem.Top = oForm.ClientHeight - 25;
+
+                oItem = oForm.Items.Item("33_U_BC");
+                oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
+                oItem.Top = oForm.ClientHeight - 25;
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
@@ -3798,9 +3758,6 @@ namespace BDO_Localisation_AddOn
                             case "15":
                                 tableName = "ODLN";
                                 break;
-                            case "165":
-                                tableName = "OCSI";
-                                break;
                             case "67":
                                 tableName = "OWTR";
                                 break;
@@ -3815,7 +3772,7 @@ namespace BDO_Localisation_AddOn
                                 break;
                         }
 
-                        SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                         string query = "SELECT \"DOC\".\"DocEntry\" " +
                         "FROM \"" + tableName + "\" AS \"DOC\" " +
                         "WHERE \"DOC\".\"CardCode\" = N'" + cardCode + "' AND \"DOC\".\"DocStatus\" = 'O' AND \"DOC\".\"DocEntry\" " +
@@ -3864,7 +3821,7 @@ namespace BDO_Localisation_AddOn
                             string vehicleNumber = Convert.ToString(oDataTable.GetValue("U_number", 0));
                             string vehicleTrailNum = Convert.ToString(oDataTable.GetValue("U_trailNum", 0));
 
-                            SAPbobsCOM.UserTable oUserTable = null;
+                            UserTable oUserTable = null;
                             oUserTable = oCompany.UserTables.Item("BDO_VECL");
                             oUserTable.GetByKey(vehicleCode);
                             string driverCode = oUserTable.UserFields.Fields.Item("U_drvCode").Value;
@@ -4412,9 +4369,6 @@ namespace BDO_Localisation_AddOn
                     case "15":
                         caption = BDOSResources.getTranslate("Delivery"); //"Delivery";
                         break;
-                    case "165":
-                        caption = "AR Correction Invoice"; //"AR Correction Invoice";
-                        break;
                     case "67":
                         caption = BDOSResources.getTranslate("StockTransfer"); //"Inventory Transfer";
                         break;
@@ -4708,7 +4662,7 @@ namespace BDO_Localisation_AddOn
             wblDocInfo.Add("actDate", new DateTime().ToString());
             wblDocInfo.Add("CreateDate", new DateTime().ToString());
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
             string query = "SELECT " +
                 "\"DocEntry\", \"U_wblID\", \"U_status\", \"U_number\", \"U_actDate\", \"CreateDate\"" +
                 "FROM \"@BDO_WBLD\" " +
@@ -4749,18 +4703,18 @@ namespace BDO_Localisation_AddOn
         {
             errorText = null;
 
-            SAPbobsCOM.CompanyService oCompanyService = null;
-            SAPbobsCOM.GeneralService oGeneralService = null;
-            SAPbobsCOM.GeneralData oGeneralData = null;
-            SAPbobsCOM.GeneralDataParams oGeneralParams = null;
+            CompanyService oCompanyService = null;
+            GeneralService oGeneralService = null;
+            GeneralData oGeneralData = null;
+            GeneralDataParams oGeneralParams = null;
             oCompanyService = oCompany.GetCompanyService();
             oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-            oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+            oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
             try
             {
                 //Get UDO record
-                oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
+                oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
                 oGeneralParams.SetProperty("DocEntry", docEntry);
                 oGeneralData = oGeneralService.GetByParams(oGeneralParams);
 
@@ -4865,7 +4819,7 @@ namespace BDO_Localisation_AddOn
         public static bool printUDO(string strDocNum)
         {
             // get menu UID of report
-            SAPbobsCOM.Recordset oRS = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRS = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
             oRS.DoQuery("SELECT \"MenuUID\" FROM \"OCMN\" WHERE \"Name\" = 'INV_WBLD - NEW' AND \"Type\" = 'C'");
 
             if (oRS.RecordCount == 0)
@@ -4887,8 +4841,6 @@ namespace BDO_Localisation_AddOn
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
-
             SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, currentFormCount);
 
             //if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_WBLD_D")
@@ -4940,9 +4892,7 @@ namespace BDO_Localisation_AddOn
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
                 {
-                    oForm.Freeze(true);
-                    resizeForm(oForm, out errorText);
-                    oForm.Freeze(false);
+                    resizeForm(oForm);
                 }
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
@@ -5027,7 +4977,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "\"BDO_WBLD\".\"DocEntry\", " +
@@ -5063,6 +5013,7 @@ namespace BDO_Localisation_AddOn
             "\"BDO_WBLD\".\"U_cardCode\", " +
             "\"OCRD\".\"CardName\", " +
             "\"OCRD\".\"LicTradNum\", " +
+            "\"OCRD\".\"U_BDO_TaxTyp\", " +
             "\"OCRD\".\"Country\" " +
             "FROM \"@BDO_WBLD\" AS \"BDO_WBLD\" " +
             "LEFT JOIN \"OCRD\" AS \"OCRD\" " +
@@ -5115,7 +5066,9 @@ namespace BDO_Localisation_AddOn
                     string END_ADDRESS = oRecordSet.Fields.Item("U_endAddrs").Value.ToString(); //END_ADDRESS - ტრანსპორტირების დასრულების ადგილი
                     string DRIVER_TIN = oRecordSet.Fields.Item("U_drivTin").Value.ToString(); //DRIVER_TIN - მძღოლის პირადი ნომერი
                     string CHEK_DRIVER_TIN = oRecordSet.Fields.Item("U_notRsdnt").Value.ToString(); //CHEK_DRIVER_TIN – თუ უცხოელია 0 თუ საქართველოს მოქალაქე 1
+                    string IS_NON_RESIDENT = oRecordSet.Fields.Item("U_BDO_TaxTyp").Value.ToString(); //IS_NON_RESIDENT - თუ უცხოელია 10
                     CHEK_DRIVER_TIN = (CHEK_DRIVER_TIN == "N" || string.IsNullOrEmpty(CHEK_DRIVER_TIN)) ? "1" : "0";
+                    if (IS_NON_RESIDENT == "10") CHEK_DRIVER_TIN = "0";
                     if (string.IsNullOrEmpty(DRIVER_TIN))
                     {
                         CHEK_DRIVER_TIN = "";
@@ -5346,16 +5299,16 @@ namespace BDO_Localisation_AddOn
                         break;
                 }
 
-                SAPbobsCOM.CompanyService oCompanyService = null;
-                SAPbobsCOM.GeneralService oGeneralService = null;
-                SAPbobsCOM.GeneralData oGeneralData = null;
-                SAPbobsCOM.GeneralDataParams oGeneralParams = null;
+                CompanyService oCompanyService = null;
+                GeneralService oGeneralService = null;
+                GeneralData oGeneralData = null;
+                GeneralDataParams oGeneralParams = null;
                 oCompanyService = oCompany.GetCompanyService();
                 oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                 //Get UDO record
-                oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
+                oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
                 oGeneralParams.SetProperty("DocEntry", docEntry);
                 oGeneralData = oGeneralService.GetByParams(oGeneralParams);
 
@@ -5396,7 +5349,7 @@ namespace BDO_Localisation_AddOn
             }
             string itemCode = rsSettings["ItemCode"];
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "'" + ID + "'" + " AS \"ID\", " +
@@ -5607,7 +5560,7 @@ namespace BDO_Localisation_AddOn
             }
             string itemCode = rsSettings["ItemCode"];
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "'" + ID + "'" + " AS \"ID\", " +
@@ -5818,7 +5771,7 @@ namespace BDO_Localisation_AddOn
             }
             string itemCode = rsSettings["ItemCode"];
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "'" + ID + "'" + " AS \"ID\", " +
@@ -6006,7 +5959,7 @@ namespace BDO_Localisation_AddOn
             }
             string itemCode = rsSettings["ItemCode"];
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "\"WTR1\".\"LineNum\", " +
@@ -6116,11 +6069,11 @@ namespace BDO_Localisation_AddOn
                     VAT_TYPE = VatGroup == "X0" ? "" : VAT_TYPE;
                     switch (VAT_TYPE)
                     {
-                        //case "18": VAT_TYPE = "0"; //ჩეულებრივი 18%
-                        //    break;
-                        case "0":
-                            VAT_TYPE = "1"; //ნულოვანი 0%
-                            break;
+                        // case "18": VAT_TYPE = "0"; //ჩეულებრივი 18%
+                        //     break;
+                        // case "0":
+                        //     VAT_TYPE = "1"; //ნულოვანი 0%
+                        //     break;
                         case "":
                             VAT_TYPE = "2"; //დაუბეგრავი
                             break;
@@ -6159,7 +6112,7 @@ namespace BDO_Localisation_AddOn
             }
             string itemCode = rsSettings["ItemCode"];
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "\"@BDOSFASTR1\".\"LineId\", " +
@@ -6312,7 +6265,7 @@ namespace BDO_Localisation_AddOn
             }
             string itemCode = rsSettings["ItemCode"];
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "\"IGE1\".\"LineNum\", " +
@@ -6627,7 +6580,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "\"BDO_WBLD\".\"U_wblID\", " +
@@ -6688,16 +6641,16 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                SAPbobsCOM.CompanyService oCompanyService = null;
-                SAPbobsCOM.GeneralService oGeneralService = null;
-                SAPbobsCOM.GeneralData oGeneralData = null;
-                SAPbobsCOM.GeneralDataParams oGeneralParams = null;
+                CompanyService oCompanyService = null;
+                GeneralService oGeneralService = null;
+                GeneralData oGeneralData = null;
+                GeneralDataParams oGeneralParams = null;
                 oCompanyService = oCompany.GetCompanyService();
                 oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                 //Get UDO record
-                oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
+                oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
                 oGeneralParams.SetProperty("DocEntry", docEntry);
                 oGeneralData = oGeneralService.GetByParams(oGeneralParams);
 
@@ -6767,7 +6720,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "\"BDO_WBLD\".\"U_wblID\", " +
@@ -6828,16 +6781,16 @@ namespace BDO_Localisation_AddOn
                         break;
                 }
 
-                SAPbobsCOM.CompanyService oCompanyService = null;
-                SAPbobsCOM.GeneralService oGeneralService = null;
-                SAPbobsCOM.GeneralData oGeneralData = null;
-                SAPbobsCOM.GeneralDataParams oGeneralParams = null;
+                CompanyService oCompanyService = null;
+                GeneralService oGeneralService = null;
+                GeneralData oGeneralData = null;
+                GeneralDataParams oGeneralParams = null;
                 oCompanyService = oCompany.GetCompanyService();
                 oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                 //Get UDO record
-                oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
+                oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
                 oGeneralParams.SetProperty("DocEntry", docEntry);
                 oGeneralData = oGeneralService.GetByParams(oGeneralParams);
 
@@ -6925,7 +6878,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             string query = "SELECT " +
             "\"BDO_WBLD\".\"U_wblID\", " +
@@ -6952,16 +6905,16 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                SAPbobsCOM.CompanyService oCompanyService = null;
-                SAPbobsCOM.GeneralService oGeneralService = null;
-                SAPbobsCOM.GeneralData oGeneralData = null;
-                SAPbobsCOM.GeneralDataParams oGeneralParams = null;
+                CompanyService oCompanyService = null;
+                GeneralService oGeneralService = null;
+                GeneralData oGeneralData = null;
+                GeneralDataParams oGeneralParams = null;
                 oCompanyService = oCompany.GetCompanyService();
                 oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_WBLD_D");
-                oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
 
                 //Get UDO record
-                oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
+                oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
                 oGeneralParams.SetProperty("DocEntry", docEntry);
                 oGeneralData = oGeneralService.GetByParams(oGeneralParams);
 
@@ -6990,7 +6943,7 @@ namespace BDO_Localisation_AddOn
 
         public static bool canCreateDocument(int docEntry, string objectType)
         {
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             StringBuilder query = new StringBuilder();
             query.Append("select \"U_baseDoc\" from \"@BDO_WBLD\" \n");
