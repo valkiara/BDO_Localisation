@@ -387,7 +387,7 @@ namespace BDO_Localisation_AddOn
                     if (!pVal.BeforeAction)
                     {
                         if (pVal.ItemUID == "StckDepr" || pVal.ItemUID == "InvDepr")
-                            setVisibility(oForm);
+                            setVisibleFormItems(oForm);
                     }
                 }
 
@@ -932,7 +932,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void setVisibility(SAPbouiCOM.Form oForm)
+        public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
         {
             try
             {
