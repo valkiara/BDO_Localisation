@@ -4895,21 +4895,18 @@ namespace BDO_Localisation_AddOn
                             TYPE = "1"; //შიდა გადაზიდვა  //Goods Issue
                             break;
                     }
+
+                    string IS_NON_RESIDENT = oRecordSet.Fields.Item("U_BDO_TaxTyp").Value.ToString(); //IS_NON_RESIDENT - თუ უცხოელია 10
                     string BUYER_TIN = (U_baseDocT == "67" || U_baseDocT == "60" || U_baseDocT == "UDO_F_BDOSFASTRD_D") ? "" : oRecordSet.Fields.Item("LicTradNum").Value.ToString(); //BUYER_TIN - მყიდველის პირადი ან საიდენტიფიკაციო ნომერი
                     string CHEK_BUYER_TIN = (U_baseDocT == "67" || U_baseDocT == "60" || U_baseDocT == "UDO_F_BDOSFASTRD_D") ? "GE" : oRecordSet.Fields.Item("Country").Value.ToString(); //CHEK_BUYER_TIN – თუ უცხოელია 0 თუ საქართველოს მოქალაქე 1
                     CHEK_BUYER_TIN = CHEK_BUYER_TIN == "GE" ? "1" : "0";
+                    if (IS_NON_RESIDENT == "10") CHEK_BUYER_TIN = "0";
                     string BUYER_NAME = (U_baseDocT == "67" || U_baseDocT == "60" || U_baseDocT == "UDO_F_BDOSFASTRD_D") ? "" : oRecordSet.Fields.Item("CardName").Value.ToString(); //BUYER_NAME - მყიდველის სახელი
                     string START_ADDRESS = oRecordSet.Fields.Item("U_strAddrs").Value.ToString(); //START_ADDRESS - ტრანსპორტირების დაწყების ადგილი
                     string END_ADDRESS = oRecordSet.Fields.Item("U_endAddrs").Value.ToString(); //END_ADDRESS - ტრანსპორტირების დასრულების ადგილი
                     string DRIVER_TIN = oRecordSet.Fields.Item("U_drivTin").Value.ToString(); //DRIVER_TIN - მძღოლის პირადი ნომერი
                     string CHEK_DRIVER_TIN = oRecordSet.Fields.Item("U_notRsdnt").Value.ToString(); //CHEK_DRIVER_TIN – თუ უცხოელია 0 თუ საქართველოს მოქალაქე 1
-                    string IS_NON_RESIDENT = oRecordSet.Fields.Item("U_BDO_TaxTyp").Value.ToString(); //IS_NON_RESIDENT - თუ უცხოელია 10
                     CHEK_DRIVER_TIN = (CHEK_DRIVER_TIN == "N" || string.IsNullOrEmpty(CHEK_DRIVER_TIN)) ? "1" : "0";
-                    if (IS_NON_RESIDENT == "10") CHEK_DRIVER_TIN = "0";
-                    if (string.IsNullOrEmpty(DRIVER_TIN))
-                    {
-                        CHEK_DRIVER_TIN = "";
-                    }
                     string DRIVER_NAME = oRecordSet.Fields.Item("U_drvCode").Value.ToString(); //DRIVER_NAME -მძღოლის სახელი
                     string TRANSPORT_COAST = oRecordSet.Fields.Item("U_trnsExpn").Value.ToString(); //TRANSPORT_COAST -ტრანსპორტირების ღირებულება
                     string RECEPTION_INFO = oRecordSet.Fields.Item("U_recpInfN").Value.ToString(); //RECEPTION_INFO - მიმწოდებლის ინფორმაცია
