@@ -3409,4 +3409,7 @@
   <data name="PrjName" xml:space="preserve">
     <value>Project Name</value>
   </data>
+  <data name="PrjCode" xml:space="preserve">
+    <value>Project Code</value>
+  </data>
 </root>

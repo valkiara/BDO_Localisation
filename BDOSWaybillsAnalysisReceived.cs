@@ -915,12 +915,13 @@ namespace BDO_Localisation_AddOn
                     if (FOption != "1")
                     {
                         ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
-                        ItemName = getItemName(ItemCode);
+                        ItemName = oRecordSet.Fields.Item("ItemDesc").Value;
                     }
 
                     BaseDType = (string)oRecordSet.Fields.Item("BaseDType").Value;
+
                     PrjCode = (string)oRecordSet.Fields.Item("PrjCode").Value;
-                    PrjName = getPrjName(PrjCode, BaseDType);
+                    PrjName = (string)oRecordSet.Fields.Item("PrjName").Value;
 
                     Amount = Convert.ToDecimal(oRecordSet.Fields.Item("Gtotal").Value, CultureInfo.InvariantCulture);
                     Amount_Full = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value, CultureInfo.InvariantCulture);
@@ -1412,7 +1413,7 @@ namespace BDO_Localisation_AddOn
                 oGrid.Columns.Item("DocNum").TitleObject.Caption = BDOSResources.getTranslate("DocNum");
                 oGrid.Columns.Item("BaseDoc").TitleObject.Caption = BDOSResources.getTranslate("BaseDocument");
                 oGrid.Columns.Item("Whs").TitleObject.Caption = BDOSResources.getTranslate("Warehouse");
-                oGrid.Columns.Item("PrjCode").TitleObject.Caption = BDOSResources.getTranslate("Project");
+                oGrid.Columns.Item("PrjCode").TitleObject.Caption = BDOSResources.getTranslate("PrjCode");
                 oGrid.Columns.Item("PrjName").TitleObject.Caption = BDOSResources.getTranslate("PrjName");
                 oGrid.Columns.Item("WhsFrom").TitleObject.Caption = BDOSResources.getTranslate("FromWarehouse");
 
@@ -1736,7 +1737,8 @@ namespace BDO_Localisation_AddOn
 	         ""BASEDOCGDS"".""ItemCode"",
 	         ""OITM"".""SWW"",
 	         ""OITM"".""InvntryUom"",
-	         ""OITM"".""CodeBars"", " : " ") + @"
+	         ""OITM"".""CodeBars"",
+             ""OPRJ"".""PrjName""," : " ") + @"
 	         ""BASEDOCGDS"".""BaseCard"",
 	         ""BASEDOCGDS"".""BaseDType"",
 	         ""BASEDOCGDS"".""DocEntry"",
@@ -1894,6 +1896,7 @@ namespace BDO_Localisation_AddOn
 ) AS ""BASEDOCGDS""   
 	        LEFT JOIN ""OCRD"" AS ""OCRD"" ON ""BASEDOCGDS"".""BaseCard"" = ""OCRD"".""CardCode"" 
 	        LEFT JOIN ""OITM"" ON ""BASEDOCGDS"".""ItemCode"" = ""OITM"".""ItemCode"" 
+            LEFT JOIN ""OPRJ"" ON ""BASEDOCGDS"".""Project"" = ""OPRJ"".""PrjCode"" 
 	        WHERE ((""OITM"".""ItemType"" = 'I' 
 	        AND ""OITM"".""InvntItem"" = 'Y') OR ""OITM"".""ItemType"" = 'F') AND ""BASEDOCGDS"".""CANCELED"" = 'N' " +
 
@@ -1928,7 +1931,8 @@ namespace BDO_Localisation_AddOn
 	         ""BASEDOCGDS"".""ItemCode"",
 	         ""OITM"".""SWW"",
 	         ""OITM"".""InvntryUom"",
-	         ""OITM"".""CodeBars""," : " ") + @"  
+	         ""OITM"".""CodeBars"",
+             ""OPRJ"".""PrjName""," : " ") + @"  
 	         ""BASEDOCGDS"".""DocDate"",
 	         ""BASEDOCGDS"".""Project"",
 	         ""BASEDOCGDS"".""U_BDO_WBID"",
@@ -2359,41 +2363,5 @@ namespace BDO_Localisation_AddOn
                 oForm.Visible = true;
             }
         }
-
-        public static string getPrjName(string projectCode, string baseDocType)
-        {
-            string projectName = "";
-            string query = "select \"PrjName\" from \"OPRJ\" " + "\n" + "where \"PrjCode\" = '" + projectCode + "'";
-
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            oRecordSet.DoQuery(query);
-            if (!oRecordSet.EoF)
-            {
-                projectName = oRecordSet.Fields.Item("PrjName").Value;
-            }
-            
-            return projectName;
-        }
-        
-        public static string getItemName(string itemCode)
-        {
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
-            string query;
-
-            query = @"SELECT ""ItemName"" FROM ""OITM"" WHERE ""ItemCode"" = '" + itemCode + "'";
-            
-            oRecordSet.DoQuery(query);
-
-            if (!oRecordSet.EoF)
-            {
-                return oRecordSet.Fields.Item("ItemName").Value;
-            }
-            else
-            {
-                return "";
-            }
-        }
-        
     }
 }
