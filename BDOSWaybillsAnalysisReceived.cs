@@ -80,8 +80,8 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("DocNum", SAPbouiCOM.BoFieldsType.ft_Text, 50);//19
                     oDataTable.Columns.Add("BaseDoc", SAPbouiCOM.BoFieldsType.ft_Text, 50);//20
                     oDataTable.Columns.Add("Whs", SAPbouiCOM.BoFieldsType.ft_Text, 50);//21
-                    oDataTable.Columns.Add("PrjCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);// 22############################# roca detaluria
-                    oDataTable.Columns.Add("PrjName", SAPbouiCOM.BoFieldsType.ft_Text, 100);//23 !!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    oDataTable.Columns.Add("PrjCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);//22 როცა დეტალურია
+                    oDataTable.Columns.Add("PrjName", SAPbouiCOM.BoFieldsType.ft_Text, 100);//23 როცა დეტალურია
                     oDataTable.Columns.Add("WhsFrom", SAPbouiCOM.BoFieldsType.ft_Text, 50);//24
 
                     oDataTable.Columns.Add("RS_Status", SAPbouiCOM.BoFieldsType.ft_Text, 50);//25
@@ -814,44 +814,7 @@ namespace BDO_Localisation_AddOn
                                             }
                                         }
                                         string WbUntNmRS = string.IsNullOrEmpty(goodsRow[13]) ? oWayBill.get_waybill_unit_name_by_code(goodsRow[2]) : goodsRow[13];
-
-
-
                                         
-
-                                        string q = "select \"Project\" from \"OPCH\" " + "\n"+ "where \"U_BDO_WBNo\" = '" + Waybill_Header["WAYBILL_NUMBER"] + "'";
-
-                                        //string q = "select \"OPCH\".\"Project\" from \"OPCH\" " + "\n"+ 
-                                          //  "join \"OINV\" on \"OINV\".\"DocEntry\" = \"OPCH\".\"DocEntry\" " + "\n" + 
-                                            //"where \"OINV\".\"U_BDO_WBID\" = '" + WBID + "'";
-
-                                        SAPbobsCOM.Recordset oRecordSetq = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                                        oRecordSetq.DoQuery(q);
-                                        if (!oRecordSetq.EoF)
-                                        {
-                                            PrjCode = oRecordSetq.Fields.Item("Project").Value;
-                                            PrjName = getPrjName(PrjCode);
-                                        }
-                                        
-
-                                        /*
-                                        SAPbobsCOM.Documents APInv = null;
-                                        SAPbobsCOM.Recordset oRecordSetWH = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                                        string queryPr = @"SELECT ""U_BDOSPrjCod"" FROM ""OWHS"" WHERE ""WhsCode"" = '" + 01 + "'";
-
-                                        oRecordSetWH.DoQuery(queryPr);
-                                        if (!string.IsNullOrEmpty(oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value))
-                                        {
-                                            APInv.Project = oRecordSetWH.Fields.Item("U_BDOSPrjCod").Value;
-                                        }
-
-                                        if (PrjCode != "")
-                                        {
-                                            APInv.Project = PrjCode;
-
-                                        }
-                                        */
-
                                         DataRow taxDataRow = RSDataTable.Rows.Add();
                                         taxDataRow["RowLinked"] = "N";
                                         taxDataRow["ID"] = Waybill_Header["ID"];
@@ -878,7 +841,6 @@ namespace BDO_Localisation_AddOn
                                         taxDataRow["RSUom"]= WbUntNmRS;
                                         taxDataRow["PrjCode"] = PrjCode;
                                         taxDataRow["PrjName"] = PrjName;
-                                        //getPrjName("Ana");
 
                                         rowCounter++;
                                         rowIndex++;
@@ -887,7 +849,7 @@ namespace BDO_Localisation_AddOn
                             }
                         }
                     }
-                     startDateParam = endDateParam;
+                    startDateParam = endDateParam;
                 }
 
                 int count = 0;
@@ -953,8 +915,12 @@ namespace BDO_Localisation_AddOn
                     if (FOption != "1")
                     {
                         ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
-                        ItemName = itemName(ItemCode);
+                        ItemName = getItemName(ItemCode);
                     }
+
+                    BaseDType = (string)oRecordSet.Fields.Item("BaseDType").Value;
+                    PrjCode = (string)oRecordSet.Fields.Item("PrjCode").Value;
+                    PrjName = getPrjName(PrjCode, BaseDType);
 
                     Amount = Convert.ToDecimal(oRecordSet.Fields.Item("Gtotal").Value, CultureInfo.InvariantCulture);
                     Amount_Full = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value, CultureInfo.InvariantCulture);
@@ -1140,8 +1106,7 @@ namespace BDO_Localisation_AddOn
                     Sbuilder.Append("<Cell> <ColumnUid>DocNum</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, (BaseDocNum == 0 ? "" : BaseDocNum.ToString()));
                     Sbuilder.Append("</Value></Cell>");
-
-                    BaseDType = (string)oRecordSet.Fields.Item("BaseDType").Value;
+                    
                     Sbuilder.Append("<Cell> <ColumnUid>BaseDType</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, (BaseDType == "" ? "" : BaseDType.ToString()));
                     Sbuilder.Append("</Value></Cell>");
@@ -1185,11 +1150,7 @@ namespace BDO_Localisation_AddOn
                         Sbuilder.Append("<Cell> <ColumnUid>RSUom</ColumnUid> <Value>");
                         Sbuilder = CommonFunctions.AppendXML(Sbuilder, WBGUntCode);
                         Sbuilder.Append("</Value></Cell>");
-
-                        //Sbuilder.Append("<Cell> <ColumnUid>ItemName</ColumnUid> <Value>");
-                        //Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("ItemName").Value);
-                        //Sbuilder.Append("</Value></Cell>");
-
+                        
                         Sbuilder.Append("<Cell> <ColumnUid>ItemName</ColumnUid> <Value>");
                         Sbuilder = CommonFunctions.AppendXML(Sbuilder, ItemName);
                         Sbuilder.Append("</Value></Cell>");
@@ -1260,7 +1221,6 @@ namespace BDO_Localisation_AddOn
                         transportCoast = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["TRANSPORT_COAST"].ToString());
                         amount = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["AMOUNT"].ToString());
                         quantity = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["Quantity"].ToString());
-                        //quantity = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["PrjCode"].ToString());
                         WAYBILL_NUMBER = RemainingRows[i]["WAYBILL_NUMBER"].ToString();
 
                         if (rsType == "5") //დაბრუნება
@@ -1452,7 +1412,7 @@ namespace BDO_Localisation_AddOn
                 oGrid.Columns.Item("DocNum").TitleObject.Caption = BDOSResources.getTranslate("DocNum");
                 oGrid.Columns.Item("BaseDoc").TitleObject.Caption = BDOSResources.getTranslate("BaseDocument");
                 oGrid.Columns.Item("Whs").TitleObject.Caption = BDOSResources.getTranslate("Warehouse");
-                oGrid.Columns.Item("PrjCode").TitleObject.Caption = BDOSResources.getTranslate("PrjCode");
+                oGrid.Columns.Item("PrjCode").TitleObject.Caption = BDOSResources.getTranslate("Project");
                 oGrid.Columns.Item("PrjName").TitleObject.Caption = BDOSResources.getTranslate("PrjName");
                 oGrid.Columns.Item("WhsFrom").TitleObject.Caption = BDOSResources.getTranslate("FromWarehouse");
 
@@ -1561,6 +1521,10 @@ namespace BDO_Localisation_AddOn
                 //ItemCode
                 SAPbouiCOM.EditTextColumn oItemCode = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("ItemCode");
                 oItemCode.LinkedObjectType = "4";
+
+                //ProjectCode
+                SAPbouiCOM.EditTextColumn oPrjCode = (SAPbouiCOM.EditTextColumn)oGrid.Columns.Item("PrjCode");
+                oPrjCode.LinkedObjectType = "63";
 
                 for (int i = 0; i < oColumns.Count; i++)
                 {
@@ -1779,6 +1743,7 @@ namespace BDO_Localisation_AddOn
 	         ""BASEDOCGDS"".""Whs"",
 	         ""BASEDOCGDS"".""DocNum"" AS BaseDocNum,
 	         ""BASEDOCGDS"".""DocDate"" AS BaseDocDate,
+             ""BASEDOCGDS"".""Project"" AS PrjCode,
 	         ""BASEDOCGDS"".""U_BDO_WBID"" AS WBID,
 	         ""BASEDOCGDS"".""U_BDO_WBNo"" AS WBNo,
 	         ""BASEDOCGDS"".""U_BDO_WBSt"" AS WBSt,
@@ -1799,6 +1764,7 @@ namespace BDO_Localisation_AddOn
 	         ""PCH"".""Whs"",
 	         ""OPCH"".""DocNum"",
 	         ""OPCH"".""DocDate"",
+             ""OPCH"".""Project"",
 	         ""OPCH"".""U_BDO_WBID"",
 	         ""OPCH"".""U_BDO_WBNo"",
 	         ""OPCH"".""U_BDO_WBSt"",
@@ -1812,6 +1778,7 @@ namespace BDO_Localisation_AddOn
 	         ""PCH1"".""Dscription"",
 	         ""PCH1"".""ItemCode"",
 	         ""PCH1"".""BaseCard"",
+             ""OPCH"".""Project"",
 	         ""OPCH"".""U_BDO_WBID"",
 	         ""PCH1"".""DocEntry"",
 	         ""PCH1"".""WhsCode"" AS ""Whs""
@@ -1828,6 +1795,7 @@ namespace BDO_Localisation_AddOn
 	         ""RPC1"".""Dscription"",
 	         ""RPC1"".""ItemCode"",
 	         ""RPC1"".""BaseCard"",
+             ""ORPC"".""Project"",
 	         ""ORPC"".""U_BDO_WBID"",
 	         ""RPC1"".""BaseEntry"",
 	         ""RPC1"".""WhsCode"" AS ""Whs""
@@ -1853,6 +1821,7 @@ namespace BDO_Localisation_AddOn
 	         ""PDN"".""Whs"",
 	         ""OPDN"".""DocNum"",
 	         ""OPDN"".""DocDate"",
+             ""OPDN"".""Project"",
 	         ""OPDN"".""U_BDO_WBID"",
 	         ""OPDN"".""U_BDO_WBNo"",
 	         ""OPDN"".""U_BDO_WBSt"",
@@ -1866,6 +1835,7 @@ namespace BDO_Localisation_AddOn
 	         ""PDN1"".""Dscription"",
 	         ""PDN1"".""ItemCode"",
 	         ""PDN1"".""BaseCard"",
+             ""OPDN"".""Project"",
 	         ""OPDN"".""U_BDO_WBID"",
 	         ""PDN1"".""DocEntry"",
 	         ""PDN1"".""WhsCode"" AS ""Whs""
@@ -1881,6 +1851,7 @@ namespace BDO_Localisation_AddOn
 	         ""RPC1"".""Dscription"",
 	         ""RPC1"".""ItemCode"",
 	         ""RPC1"".""BaseCard"",
+	         ""ORPC"".""Project"",
 	         ""ORPC"".""U_BDO_WBID"",
 	         ""RPC1"".""BaseEntry"",
 	         ""RPC1"".""WhsCode"" AS ""Whs""
@@ -1908,6 +1879,7 @@ namespace BDO_Localisation_AddOn
 	         ""RPC1"".""WhsCode"" AS ""Whs"",
 	         ""ORPC"".""DocNum"",
 	         ""ORPC"".""DocDate"",
+	         ""ORPC"".""Project"",
 	         ""ORPC"".""U_BDO_WBID"",
 	         ""ORPC"".""U_BDO_WBNo"",
 	         ""ORPC"".""U_BDO_WBSt"",
@@ -1958,6 +1930,7 @@ namespace BDO_Localisation_AddOn
 	         ""OITM"".""InvntryUom"",
 	         ""OITM"".""CodeBars""," : " ") + @"  
 	         ""BASEDOCGDS"".""DocDate"",
+	         ""BASEDOCGDS"".""Project"",
 	         ""BASEDOCGDS"".""U_BDO_WBID"",
 	         ""BASEDOCGDS"".""U_BDO_WBNo"",
 	         ""BASEDOCGDS"".""U_BDO_WBSt"",
@@ -2387,20 +2360,22 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string getPrjName(string projectCode)
+        public static string getPrjName(string projectCode, string baseDocType)
         {
-            string prjName = "";
-            string query =  "select \"PrjName\" from \"OPRJ\" " + "\n" + "where \"PrjCode\" = '" + projectCode + "'";
+            string projectName = "";
+            string query = "select \"PrjName\" from \"OPRJ\" " + "\n" + "where \"PrjCode\" = '" + projectCode + "'";
+
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             oRecordSet.DoQuery(query);
             if (!oRecordSet.EoF)
             {
-                prjName = oRecordSet.Fields.Item("PrjName").Value;
+                projectName = oRecordSet.Fields.Item("PrjName").Value;
             }
-                return prjName;
+            
+            return projectName;
         }
         
-        public static string itemName(string itemCode)
+        public static string getItemName(string itemCode)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 

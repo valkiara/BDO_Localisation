@@ -3409,4 +3409,7 @@
   <data name="saveWhs" xml:space="preserve">
     <value>შეინახე საწყობი</value>
   </data>
+  <data name="PrjName" xml:space="preserve">
+    <value>პროექტის დასახელება</value>
+  </data>
 </root>

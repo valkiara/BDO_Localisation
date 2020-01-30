@@ -3433,4 +3433,7 @@
   <data name="saveWhs" xml:space="preserve">
     <value>Save Whs</value>
   </data>
+  <data name="PrjName" xml:space="preserve">
+    <value>Project Name</value>
+  </data>
 </root>
