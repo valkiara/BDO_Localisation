@@ -457,7 +457,12 @@ namespace BDO_Localisation_AddOn
                     oLink = oColumn.ExtendedObject;
                     oLink.LinkedObject = BoLinkedObject.lf_BusinessPartner;
 
-                    oColumn = oColumns.Add("VATno", BoFormItemTypes.it_EDIT);
+                    oColumn = oColumns.Add("CardName", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("BPName");
+                    oColumn.Width = 100;
+                    oColumn.Editable = false;
+
+                    oColumn = oColumns.Add("VATno", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("BPTin");
                     oColumn.Width = 100;
                     oColumn.Editable = false;
@@ -529,6 +534,20 @@ namespace BDO_Localisation_AddOn
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("WaybillNumber");
                     oColumn.Width = 100;
                     oColumn.Editable = false;
+                     
+                    oColumn = oColumns.Add("FromWhs", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("FromWarehouse");
+                    oColumn.Width = 100;
+                    oColumn.Editable = false;
+                    oLink = oColumn.ExtendedObject;
+                    oLink.LinkedObjectType = "64";
+
+                    oColumn = oColumns.Add("ToWhs", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("ToWarehouse");
+                    oColumn.Width = 100;
+                    oColumn.Editable = false;
+                    oLink = oColumn.ExtendedObject;
+                    oLink.LinkedObjectType = "64";
 
                     oMatrix.Clear();
                     oMatrix.LoadFromDataSource();
@@ -840,7 +859,7 @@ namespace BDO_Localisation_AddOn
                 {
                     oDataTable = oForm.DataSources.DataTables.Add("WBMatrix");
                 }
-
+                
                 string queryStr = "";
 
                 ComboBox oEditTextWBDocTp = (ComboBox)oForm.Items.Item("WBDocTp").Specific;
@@ -869,6 +888,7 @@ namespace BDO_Localisation_AddOn
                                 "\"OINV\".\"DocDate\" AS \"DocDate\", " +
                                 "\"OINV\".\"CardCode\" AS \"CardCode\", " +
                                 "\"OCRD\".\"LicTradNum\" AS \"VATno\", " +
+                                "\"OCRD\".\"CardName\" AS \"CardName\", " +
                                 "\"BDO_WBLD\".\"U_tporter\" as \"Trnsprter\", " +
                                 "\"BDO_WBLD\".\"U_status\" AS \"WBStatus\", " +
                                 "\"BDO_WBLD\".\"U_vehicle\" AS \"Vehicle\", " +
@@ -877,7 +897,10 @@ namespace BDO_Localisation_AddOn
                                 "\"BDO_WBLD\".\"U_number\" AS \"WbNo\", " +
                                 "\"BDO_WBLD\".\"U_wblID\" AS \"WbID\", " +
                                 "\"BDO_WBLD\".\"DocEntry\" AS \"WbDoc\", " +
-                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\" " +
+                                "'' AS \"VAT Number\", " +
+                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\"," +
+                                "'' AS \"FromWhs\", " +
+                                "'' AS \"ToWhs\" " +
 
                                 "FROM " +
 
@@ -938,6 +961,7 @@ namespace BDO_Localisation_AddOn
                                 "\"OWTR\".\"DocDate\" AS \"DocDate\", " +
                                 "'' AS \"CardCode\", " +
                                 "'' AS \"VATno\", " +
+                                "'' AS \"CardName\", " +                          
                                 "\"BDO_WBLD\".\"U_tporter\" as \"Trnsprter\", " +
                                 "\"BDO_WBLD\".\"U_status\" AS \"WBStatus\", " +
                                 "\"BDO_WBLD\".\"U_vehicle\" AS \"Vehicle\", " +
@@ -946,7 +970,10 @@ namespace BDO_Localisation_AddOn
                                 "\"BDO_WBLD\".\"U_number\" AS \"WbNo\", " +
                                 "\"BDO_WBLD\".\"U_wblID\" AS \"WbID\", " +
                                 "\"BDO_WBLD\".\"DocEntry\" AS \"WbDoc\", " +
-                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\" " +
+                                "'' AS \"VAT Number\"," +
+                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\"," +
+                                "\"OWTR\".\"Filler\" AS \"FromWhs\", " +
+                                "\"OWTR\".\"ToWhsCode\" AS \"ToWhs\" " +
 
                                 "FROM " +
 
@@ -981,6 +1008,7 @@ namespace BDO_Localisation_AddOn
                                 "\"ORIN\".\"DocDate\" AS \"DocDate\", " +
                                 "\"ORIN\".\"CardCode\" AS \"CardCode\", " +
                                 "\"OCRD\".\"LicTradNum\" AS \"VATno\", " +
+                                "\"OCRD\".\"CardName\" AS \"CardName\", " +
                                 "\"BDO_WBLD\".\"U_tporter\" as \"Trnsprter\", " +
                                 "\"BDO_WBLD\".\"U_status\" AS \"WBStatus\", " +
                                 "\"BDO_WBLD\".\"U_vehicle\" AS \"Vehicle\", " +
@@ -989,8 +1017,10 @@ namespace BDO_Localisation_AddOn
                                 "\"BDO_WBLD\".\"U_number\" AS \"WbNo\", " +
                                 "\"BDO_WBLD\".\"U_wblID\" AS \"WbID\", " +
                                 "\"BDO_WBLD\".\"DocEntry\" AS \"WbDoc\", " +
-                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\" " +
-
+                                "'' AS \"VAT Number\", " +
+                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\"," +
+                                "'' AS \"FromWhs\", " +
+                                "'' AS \"ToWhs\" " +
                                 "FROM " +
 
                                 "(SELECT " +
@@ -1031,6 +1061,7 @@ namespace BDO_Localisation_AddOn
                                 "\"OIGE\".\"DocDate\" AS \"DocDate\", " +
                                 "'' AS \"CardCode\", " +
                                 "'' AS \"VATno\", " +
+                                "'' AS \"CardName\", " +
                                 "\"BDO_WBLD\".\"U_tporter\" as \"Trnsprter\", " +
                                 "\"BDO_WBLD\".\"U_status\" AS \"WBStatus\", " +
                                 "\"BDO_WBLD\".\"U_vehicle\" AS \"Vehicle\", " +
@@ -1039,7 +1070,10 @@ namespace BDO_Localisation_AddOn
                                 "\"BDO_WBLD\".\"U_number\" AS \"WbNo\", " +
                                 "\"BDO_WBLD\".\"U_wblID\" AS \"WbID\", " +
                                 "\"BDO_WBLD\".\"DocEntry\" AS \"WbDoc\", " +
-                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\" " +
+                                "'' AS \"VAT Number\", " +
+                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\"," +
+                                "'' AS \"FromWhs\", " +
+                                "'' AS \"ToWhs\" " +
 
                                 "FROM " +
 
@@ -1074,6 +1108,7 @@ namespace BDO_Localisation_AddOn
                                 "\"ODLN\".\"DocDate\" AS \"DocDate\", " +
                                 "\"ODLN\".\"CardCode\" AS \"CardCode\", " +
                                 "\"OCRD\".\"LicTradNum\" AS \"VATno\", " +
+                                "\"OCRD\".\"CardName\" AS \"CardName\", " +
                                 "\"BDO_WBLD\".\"U_tporter\" as \"Trnsprter\", " +
                                 "\"BDO_WBLD\".\"U_status\" AS \"WBStatus\", " +
                                 "\"BDO_WBLD\".\"U_vehicle\" AS \"Vehicle\", " +
@@ -1082,7 +1117,10 @@ namespace BDO_Localisation_AddOn
                                 "\"BDO_WBLD\".\"U_number\" AS \"WbNo\", " +
                                 "\"BDO_WBLD\".\"U_wblID\" AS \"WbID\", " +
                                 "\"BDO_WBLD\".\"DocEntry\" AS \"WbDoc\", " +
-                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\" " +
+                                "'' AS \"VAT Number\", " +
+                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\"," +
+                                "'' AS \"FromWhs\", " +
+                                "'' AS \"ToWhs\" " +
 
                                 "FROM " +
 
@@ -1143,6 +1181,7 @@ namespace BDO_Localisation_AddOn
                                 "\"@BDOSFASTRD\".\"U_DocDate\" AS \"DocDate\", " +
                                 "'' AS \"CardCode\", " +
                                 "'' AS \"VATno\", " +
+                                "'' AS \"CardName\", " +
                                 "\"BDO_WBLD\".\"U_tporter\" as \"Trnsprter\", " +
                                 "\"BDO_WBLD\".\"U_status\" AS \"WBStatus\", " +
                                 "\"BDO_WBLD\".\"U_vehicle\" AS \"Vehicle\", " +
@@ -1151,8 +1190,10 @@ namespace BDO_Localisation_AddOn
                                 "\"BDO_WBLD\".\"U_number\" AS \"WbNo\", " +
                                 "\"BDO_WBLD\".\"U_wblID\" AS \"WbID\", " +
                                 "\"BDO_WBLD\".\"DocEntry\" AS \"WbDoc\", " +
-                                "\"OCRD\".\"LicTradNum\" AS \"VAT Number\", " +
-                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\" " +
+                                "\"OCRD\".\"LicTradNum\" AS \"VAT Number\", " + 
+                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\"," +
+                                "'' AS \"FromWhs\", " +
+                                "'' AS \"ToWhs\" " +
 
                                 "FROM " +
 
@@ -1210,17 +1251,17 @@ namespace BDO_Localisation_AddOn
 
                 if (WBDocTp == "0")
                 {
-                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"OINV\".\"DocDate\",\"OINV\".\"CardCode\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
+                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"OINV\".\"DocDate\",\"OINV\".\"CardCode\",\"OCRD\".\"CardName\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
                 }
 
                 if (WBDocTp == "1")
                 {
-                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"OWTR\".\"DocDate\",\"CardCode\",\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
+                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"OWTR\".\"DocDate\",\"CardCode\",\"CardName\",\"LicTradNum\",\"Filler\",\"ToWhsCode\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
                 }
 
                 if (WBDocTp == "2")
                 {
-                    queryStr = queryStr + " GROUP BY \"ORIN\".\"ObjType\",\"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"ORIN\".\"DocDate\",\"ORIN\".\"CardCode\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" " +
+                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"ORIN\".\"DocDate\",\"ORIN\".\"CardCode\",\"OCRD\".\"CardName\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" " +
 
                                "UNION SELECT " +
                                 "'000000' AS \"LineNum\", " +
@@ -1231,6 +1272,7 @@ namespace BDO_Localisation_AddOn
                                 "\"OCSI\".\"DocDate\" AS \"DocDate\", " +
                                 "\"OCSI\".\"CardCode\" AS \"CardCode\", " +
                                 "\"OCRD\".\"LicTradNum\" AS \"VATno\", " +
+                               "\"OCRD\".\"CardName\" AS \"CardName\", " +
                                 "\"BDO_WBLD\".\"U_tporter\" as \"Trnsprter\", " +
                                 "\"BDO_WBLD\".\"U_status\" AS \"WBStatus\", " +
                                 "\"BDO_WBLD\".\"U_vehicle\" AS \"Vehicle\", " +
@@ -1239,7 +1281,10 @@ namespace BDO_Localisation_AddOn
                                 "\"BDO_WBLD\".\"U_number\" AS \"WbNo\", " +
                                 "\"BDO_WBLD\".\"U_wblID\" AS \"WbID\", " +
                                 "\"BDO_WBLD\".\"DocEntry\" AS \"WbDoc\", " +
-                                "SUM(\"MNTB\".\"GTotal\") AS \"Sum\" " +
+                               "'' AS \"VAT Number\", " +
+                               "SUM(\"MNTB\".\"GTotal\") AS \"Sum\"," +
+                               "'' AS \"FromWhs\", " +
+                               "'' AS \"ToWhs\" " +
 
                                 "FROM " +
 
@@ -1269,20 +1314,20 @@ namespace BDO_Localisation_AddOn
 
                                 "ON \"OCSI\".\"DocEntry\" = \"BDO_WBLD\".\"U_baseDoc\" AND \"BDO_WBLD\".\"U_baseDocT\" = '165' " +
 
-                                "GROUP BY \"OCSI\".\"ObjType\",\"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"OCSI\".\"DocDate\",\"OCSI\".\"CardCode\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\"";
+                                "GROUP BY \"OCSI\".\"ObjType\",\"BDO_WBLD\".\"U_tporter\",\"OCRD\".\"CardName\",\"MNTB\".\"DocEntry\", \"OCSI\".\"DocDate\",\"OCSI\".\"CardCode\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\"";
                 }
 
                 if (WBDocTp == "3")
                 {
-                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"OIGE\".\"DocDate\",\"CardCode\",\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
+                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"OIGE\".\"DocDate\",\"CardCode\",\"CardName\",\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
                 }
                 if (WBDocTp == "4")
                 {
-                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"ODLN\".\"DocDate\",\"ODLN\".\"CardCode\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
+                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"ODLN\".\"DocDate\",\"ODLN\".\"CardCode\",\"OCRD\".\"CardName\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
                 }
                 if (WBDocTp == "5")
                 {
-                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"@BDOSFASTRD\".\"U_DocDate\",\"U_CardCode\", \"OCRD\".\"LicTradNum\", \"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
+                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"@BDOSFASTRD\".\"U_DocDate\",\"U_CardCode\",\"OCRD\".\"CardName\", \"OCRD\".\"LicTradNum\", \"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" ";
                 }
 
                 //სორტირება თარიღის მიხედვით
@@ -1362,6 +1407,9 @@ namespace BDO_Localisation_AddOn
                 oColumn = oColumns.Item("CardCode");
                 oColumn.DataBind.Bind("WBMatrix", "CardCode");
 
+                oColumn = oColumns.Item("CardName");
+                oColumn.DataBind.Bind("WBMatrix", "CardName");
+
                 oColumn = oColumns.Item("VATno");
                 oColumn.DataBind.Bind("WBMatrix", "VATno");
 
@@ -1389,6 +1437,14 @@ namespace BDO_Localisation_AddOn
                 oColumn = oColumns.Item("WbID");
                 oColumn.DataBind.Bind("WBMatrix", "WbID");
 
+                oColumn = oColumns.Item("FromWhs");
+                oColumn.DataBind.Bind("WBMatrix", "FromWhs");
+                oColumn.Visible = WBDocTp == "1";
+
+                oColumn = oColumns.Item("ToWhs");
+                oColumn.DataBind.Bind("WBMatrix", "ToWhs");
+                oColumn.Visible = WBDocTp == "1";
+                
                 oMatrix.Clear();
                 oMatrix.LoadFromDataSource();
                 oMatrix.AutoResizeColumns();

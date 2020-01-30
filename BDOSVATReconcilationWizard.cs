@@ -12,50 +12,48 @@ namespace BDO_Localisation_AddOn
     class BDOSVATReconcilationWizard
     {
         static DataTable ItemsDT = null;
-        
 
-        public static void createForm(  out string errorText)
+        public static void createForm()
         {
-            errorText = null;
-            Dictionary<string, object> formItems;
-            string itemName;
-            SAPbouiCOM.Columns oColumns;
-            SAPbouiCOM.Column oColumn;
-
-            SAPbouiCOM.DataTable oDataTable;
-
-            bool multiSelection;
-
-            int left_s = 5;
-            
-            int top = 10;
-            int height = 15;
+            string errorText;
+            int formHeight = Program.uiApp.Desktop.Height;
+            int formWidth = Program.uiApp.Desktop.Width;
 
             //ფორმის აუცილებელი თვისებები
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
             formProperties.Add("UniqueID", "BDOSReconWizz");
             formProperties.Add("BorderStyle", SAPbouiCOM.BoFormBorderStyle.fbs_Sizable);
             formProperties.Add("Title", BDOSResources.getTranslate("VATReconcilationWizard"));
-            formProperties.Add("Left", 558);
-            formProperties.Add("ClientWidth", 600);
-            formProperties.Add("Top", 335);
-            formProperties.Add("ClientHeight", 600);
+            formProperties.Add("ClientWidth", formWidth);
+            formProperties.Add("ClientHeight", formHeight);
 
             SAPbouiCOM.Form oForm;
             bool newForm;
-            bool formExist = FormsB1.createForm( formProperties, out oForm, out newForm, out errorText);
+            bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
 
-            if (formExist == true)
+            if (errorText != null)
+            {
+                return;
+            }
+
+            if (formExist)
             {
                 if (newForm)
                 {
-                    multiSelection = false;
-                    string objectTypeCardCode = "2"; //SAPbouiCOM.BoLinkedObject.lf_BusinessPartner, Business Partner object 
-                    string uniqueID_lf_BusinessPartnerCFL = "BusinessPartner_CFL";
-                    FormsB1.addChooseFromList( oForm, multiSelection, objectTypeCardCode, uniqueID_lf_BusinessPartnerCFL);
+                    Dictionary<string, object> formItems;
+                    string itemName;
+
+                    int width_s = 130;
+                    int width_e = 130;
+                    int left_s = 6;
+                    int left_e = left_s + width_s + 20;
+                    int height = 15;
+                    int top = 10;
+
+                    FormsB1.addChooseFromList(oForm, false, "2", "BusinessPartner_CFL");
 
                     //პირობის დადება ბიზნესპარტნიორის არჩევის სიაზე
-                    SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(uniqueID_lf_BusinessPartnerCFL);
+                    SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item("BusinessPartner_CFL");
                     SAPbouiCOM.Conditions oCons = oCFL.GetConditions();
                     SAPbouiCOM.Condition oCon = oCons.Add();
                     oCon.Alias = "CardType";
@@ -63,61 +61,15 @@ namespace BDO_Localisation_AddOn
                     oCon.CondVal = "C"; //მყიდველი
                     oCFL.SetConditions(oCons);
 
-
-
-                    formItems = new Dictionary<string, object>();
-                    itemName = "FilterSt";
-                    formItems.Add("Size", 20);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left_s);
-                    formItems.Add("Width", 130);
-                    formItems.Add("Top", top);
-                    formItems.Add("Caption", BDOSResources.getTranslate("Filter"));
-                    formItems.Add("UID", itemName);
-                    formItems.Add("TextStyle", 4);
-                    formItems.Add("FontSize", 10);
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
-
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
-
-                    //formItems = new Dictionary<string, object>();
-                    //itemName = "ValuesSt";
-                    //formItems.Add("Size", 20);
-                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    //formItems.Add("Left", left_s1);
-                    //formItems.Add("Width", 130);
-                    //formItems.Add("Top", top);
-                    //formItems.Add("Caption", BDOSResources.getTranslate("DefaultValues"));
-                    //formItems.Add("UID", itemName);
-                    //formItems.Add("TextStyle", 4);
-                    //formItems.Add("FontSize", 10);
-                    //formItems.Add("FromPane", 0);
-                    //formItems.Add("ToPane", 0);
-
-                    //FormsB1.createFormItem(oForm, formItems, out errorText);
-                    //if (errorText != null)
-                    //{
-                    //    return;
-                    //}
-
-                    top = top + height + 1;
-
                     formItems = new Dictionary<string, object>();
                     itemName = "DocPsDtS"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
                     formItems.Add("Left", left_s);
-                    formItems.Add("Width", 100);
+                    formItems.Add("Width", width_s);
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("Caption", BDOSResources.getTranslate("DocumentPostingDate"));
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -130,86 +82,22 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("isDataSource", true);
                     formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_DATE);
                     formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("Length", 1);
-                    formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     formItems.Add("TableName", "");
                     formItems.Add("Alias", itemName);
                     formItems.Add("Bound", true);
-                    formItems.Add("Left", left_s + 5 + 100);
-                    formItems.Add("Width", 150);
+                    formItems.Add("Left", left_e);
+                    formItems.Add("Width", width_e);
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("ValueEx", new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddDays(-1).ToString("yyyyMMdd"));
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
                         return;
                     }
-
-                    //formItems = new Dictionary<string, object>();
-                    //itemName = "VatGrpS"; //10 characters
-                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    //formItems.Add("Left", left_s1);
-                    //formItems.Add("Width", 100);
-                    //formItems.Add("Top", top);
-                    //formItems.Add("Height", height);
-                    //formItems.Add("UID", itemName);
-                    //formItems.Add("Caption", BDOSResources.getTranslate("VatGroup"));
-                    //formItems.Add("FromPane", 0);
-                    //formItems.Add("ToPane", 0);
-
-                    //FormsB1.createFormItem(oForm, formItems, out errorText);
-                    //if (errorText != null)
-                    //{
-                    //    return;
-                    //}
-
-                    //formItems = new Dictionary<string, object>();
-                    //itemName = "VatGrp"; //10 characters
-                    //formItems.Add("isDataSource", true);
-                    //formItems.Add("DataSource", "UserDataSources");
-                    //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    //formItems.Add("TableName", "");
-                    //formItems.Add("Length", 20);
-                    //formItems.Add("Size", 20);
-                    //formItems.Add("Alias", "VatGrp");
-                    //formItems.Add("Bound", true);
-                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
-                    //formItems.Add("Left", left_s1 + 5 + 100);
-                    //formItems.Add("Width", 150);
-                    //formItems.Add("Top", top);
-                    //formItems.Add("Height", height);
-                    //formItems.Add("UID", itemName);
-                    //formItems.Add("DisplayDesc", true);
-                    //formItems.Add("FromPane", 0);
-                    //formItems.Add("ToPane", 0);
-
-                    //FormsB1.createFormItem(oForm, formItems, out errorText);
-                    //if (errorText != null)
-                    //{
-                    //    return;
-                    //}
-
-                    //SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                    //string query = "select * " +
-                    //"FROM  \"OVTG\" " +
-                    //"WHERE \"Category\"='O'";
-                    //oRecordSet.DoQuery(query);
-
-                    //while (!oRecordSet.EoF)
-                    //{
-                    //    oForm.Items.Item("VatGrp").Specific.ValidValues.Add(oRecordSet.Fields.Item("Code").Value, oRecordSet.Fields.Item("Code").Value);
-                    //    oRecordSet.MoveNext();
-                    //}
-
-                    //oForm.Items.Item("VatGrp").Specific.Select(CommonFunctions.getOADM( "DfSVatItem"));
-
-
 
                     top = top + height + 1;
 
@@ -217,21 +105,17 @@ namespace BDO_Localisation_AddOn
                     itemName = "BPCodeS"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
                     formItems.Add("Left", left_s);
-                    formItems.Add("Width", 100 - 20);
+                    formItems.Add("Width", width_s);
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("BPCardCode"));
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
+                    formItems.Add("Caption", BDOSResources.getTranslate("CardCode"));
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
                         return;
                     }
-
-
 
                     formItems = new Dictionary<string, object>();
                     itemName = "BPCode"; //10 characters
@@ -240,20 +124,16 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
                     formItems.Add("TableName", "");
                     formItems.Add("Length", 20);
-                    formItems.Add("Size", 20);
                     formItems.Add("Alias", "BPCode");
                     formItems.Add("Bound", true);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                    formItems.Add("Left", left_s + 5 + 100);
-                    formItems.Add("Width", 150);
+                    formItems.Add("Left", left_e);
+                    formItems.Add("Width", width_e);
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("DisplayDesc", true);
-                    formItems.Add("ChooseFromListUID", uniqueID_lf_BusinessPartnerCFL);
+                    formItems.Add("ChooseFromListUID", "BusinessPartner_CFL");
                     formItems.Add("ChooseFromListAlias", "CardCode");
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -264,14 +144,12 @@ namespace BDO_Localisation_AddOn
                     formItems = new Dictionary<string, object>();
                     itemName = "BPCodeLB"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                    formItems.Add("Left", left_s + 5 + 80);
+                    formItems.Add("Left", left_e - 20);
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("LinkTo", "BPCode");
-                    formItems.Add("LinkedObjectType", objectTypeCardCode);
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
+                    formItems.Add("LinkedObjectType", "2"); //Business Partner
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -279,64 +157,18 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    //formItems = new Dictionary<string, object>();
-                    //itemName = "DescrptS"; //10 characters
-                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    //formItems.Add("Left", left_s1);
-                    //formItems.Add("Width", 100);
-                    //formItems.Add("Top", top);
-                    //formItems.Add("Height", height);
-                    //formItems.Add("UID", itemName);
-                    //formItems.Add("Caption", BDOSResources.getTranslate("Description"));
-                    //formItems.Add("FromPane", 0);
-                    //formItems.Add("ToPane", 0);
+                    top += 2 * height + 1;
 
-                    //FormsB1.createFormItem(oForm, formItems, out errorText);
-                    //if (errorText != null)
-                    //{
-                    //    return;
-                    //}
-
-                    //formItems = new Dictionary<string, object>();
-                    //itemName = "Descrpt";
-                    //formItems.Add("isDataSource", true);
-                    //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    //formItems.Add("DataSource", "UserDataSources");
-                    //formItems.Add("Length", 20);
-                    //formItems.Add("Size", 20);
-                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                    //formItems.Add("TableName", "");
-                    //formItems.Add("Alias", itemName);
-                    //formItems.Add("Bound", true);
-                    //formItems.Add("Left", left_s1 + 5 + 100);
-                    //formItems.Add("Width", 150);
-                    //formItems.Add("Top", top);
-                    //formItems.Add("Height", height);
-                    //formItems.Add("UID", itemName);
-                    //formItems.Add("FromPane", 0);
-                    //formItems.Add("ToPane", 0);
-
-                    //FormsB1.createFormItem(oForm, formItems, out errorText);
-                    //if (errorText != null)
-                    //{
-                    //    return;
-                    //}
-                    //oForm.Items.Item("Descrpt").Specific.Value = "Service";
-
-                    top = top + 2 * height + 1;
-
+                    itemName = "checkB";
                     formItems = new Dictionary<string, object>();
-                    itemName = "InCheck";
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
                     formItems.Add("Left", left_s);
                     formItems.Add("Width", 19);
                     formItems.Add("Top", top);
-                    formItems.Add("Height", 19);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("Image", "HANA_CHECKBOX_CH");
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -344,18 +176,18 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
+                    left_s = left_s + 20;
+
+                    itemName = "unCheckB";
                     formItems = new Dictionary<string, object>();
-                    itemName = "InUncheck";
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
-                    formItems.Add("Left", left_s + 20 + 1);
+                    formItems.Add("Left", left_s);
                     formItems.Add("Width", 19);
                     formItems.Add("Top", top);
-                    formItems.Add("Height", 19);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("Image", "HANA_CHECKBOX_UH");
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -363,70 +195,64 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
+                    left_s = left_s + 20;
+
+                    itemName = "fillB";
                     formItems = new Dictionary<string, object>();
-                    itemName = "Fill";
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+                    formItems.Add("Left", left_s);
+                    formItems.Add("Width", 65);
+                    formItems.Add("Top", top);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
                     formItems.Add("Caption", BDOSResources.getTranslate("Fill"));
-                    formItems.Add("Size", 20);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
-                    formItems.Add("Left", left_s + 20 + 1 + 20 + 1);
-                    formItems.Add("Width", 150);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", 19);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
+                    itemName = "createDocB";
                     formItems = new Dictionary<string, object>();
-                    itemName = "CreatDocmt";
-                    formItems.Add("Caption", BDOSResources.getTranslate("CreateDocuments"));
-                    formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
-                    formItems.Add("Left", left_s + 20 + 1 + 20 + 1 + 150 + 1);
-                    formItems.Add("Width", 150);
+                    formItems.Add("Left", left_s + 65 + 2);
+                    formItems.Add("Width", 65 * 2);
                     formItems.Add("Top", top);
-                    formItems.Add("Height", 19);
+                    formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
-                    formItems.Add("FromPane", 0);
-                    formItems.Add("ToPane", 0);
+                    formItems.Add("Caption", BDOSResources.getTranslate("CreateDocuments"));
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
 
-
-
-                    top = top + height + 5;
+                    top = top + height + 1;
+                    left_s = 6;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "InvoiceMTR"; //10 characters
                     formItems.Add("isDataSource", true);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
                     formItems.Add("Left", left_s);
-                    formItems.Add("Width", 600);
+                    formItems.Add("Height", 150);
                     formItems.Add("Top", top);
-                    formItems.Add("Height", 550);
                     formItems.Add("UID", itemName);
-                    formItems.Add("DisplayDesc", true);
-                    formItems.Add("AffectsFormMode", false);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
-                        return;
+                        throw new Exception(errorText);
                     }
-                    SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("InvoiceMTR").Specific;
-                    oColumns = oMatrix.Columns;
 
-                    SAPbouiCOM.LinkedButton oLink;
-                    oDataTable = oForm.DataSources.DataTables.Add("InvoiceMTR");
+                    SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
+                    oMatrix.SelectionMode = SAPbouiCOM.BoMatrixSelect.ms_Auto;
+                    SAPbouiCOM.Columns oColumns = oMatrix.Columns;
+                    SAPbouiCOM.Column oColumn;
+
+                    SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Add("InvoiceMTR");
 
                     oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50); //ინდექსი 
                     oDataTable.Columns.Add("CheckBox", SAPbouiCOM.BoFieldsType.ft_Text, 1); // 
@@ -441,15 +267,12 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("AlRcnSum", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
                     oDataTable.Columns.Add("AlRcnVat", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
                     oDataTable.Columns.Add("DocEntVT", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
-                    
                     oDataTable.Columns.Add("DocTotal", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
                     oDataTable.Columns.Add("DocVtTotal", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
                     oDataTable.Columns.Add("Error", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
 
-
-
-
-
+                    string UID = "InvoiceMTR";
+                    SAPbouiCOM.LinkedButton oLink;
 
                     foreach (SAPbouiCOM.DataColumn column in oDataTable.Columns)
                     {
@@ -460,51 +283,49 @@ namespace BDO_Localisation_AddOn
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = "#";
                             oColumn.Editable = false;
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else if (columnName == "CheckBox")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
                             oColumn.TitleObject.Caption = "";
-                            oColumn.Editable = true;
                             oColumn.ValOff = "N";
                             oColumn.ValOn = "Y";
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
-
-
                         else if (columnName == "DocEntry")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                            oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("ARDownPaymentRequest") + " (" + BDOSResources.getTranslate(columnName) + ")";
                             oColumn.Editable = false;
                             oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = "203";
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
-
+                        else if (columnName == "DocNum")
+                        {
+                            oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("ARDownPaymentRequest") + " (" + BDOSResources.getTranslate(columnName) + ")";
+                            oColumn.Editable = false;
+                            oColumn.DataBind.Bind(UID, columnName);
+                        }
                         else if (columnName == "DocEntVT")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                            oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("ARDownPaymentVATAccrual");
                             oColumn.Editable = false;
                             oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = "UDO_F_BDO_ARDPV_D";
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else if (columnName == "CardCode")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("BPCardCode");
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("CardCode") + " (" + BDOSResources.getTranslate("Code") + ")";
                             oColumn.Editable = false;
                             oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = "2";
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else if (columnName == "TransId")
                         {
@@ -513,341 +334,316 @@ namespace BDO_Localisation_AddOn
                             oColumn.Editable = false;
                             oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = "30";
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else if (columnName == "CardName")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("BPName");
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("CardCode") + " (" + BDOSResources.getTranslate("Name") + ")";
                             oColumn.Editable = false;
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
-
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else if (columnName == "LicTradNum")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("BPTin");
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Tin");
                             oColumn.Editable = false;
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
-
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else if (columnName == "DocTotal")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Total");
                             oColumn.Editable = false;
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
-
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else if (columnName == "DocVtTotal")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatAmount");
                             oColumn.Editable = false;
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
-
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
-
                         else if (columnName == "InDetail")
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_PICTURE);
-                            oColumn.Width = 15;
                             oColumn.Editable = false;
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = false;
-                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
-                            oColumn.AffectsFormMode = false;
-
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                     }
-                    oMatrix.Clear();
-                    oMatrix.LoadFromDataSource();
-                    oMatrix.AutoResizeColumns();
                 }
-
-
                 oForm.Visible = true;
                 oForm.Select();
             }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE && pVal.BeforeAction)
                 {
-                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
-                    oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
+                    int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CloseVATReconcilationWizard") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
 
-                    ChooseFromList( oForm, pVal.BeforeAction, oCFLEvento, out errorText);
-
+                    if (answer != 1)
+                        BubbleEvent = false;
                 }
 
-                if ((pVal.ItemUID == "InCheck" || pVal.ItemUID == "InUncheck") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
                 {
-                    CheckUncheck(oForm, pVal.ItemUID, "", out errorText);
+                    resizeForm(oForm);
                 }
 
-                if (pVal.ItemUID == "DocPstDt" && pVal.ItemChanged && pVal.BeforeAction == false)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
-                    SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("DocPstDt").Specific;
-                    DateTime EndDateOp = DateTime.ParseExact(oEditText.Value, "yyyyMMdd", null);
-                    EndDateOp = new DateTime(EndDateOp.Year, EndDateOp.Month, 1).AddMonths(1).AddDays(-1);
-                    oEditText.Value = EndDateOp.ToString("yyyyMMdd");
-
-                    FillMTRInvoice( oForm);
-                }
-                if (pVal.ItemUID == "Fill" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
-                {
-                    FillMTRInvoice( oForm);
+                    SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
+                    chooseFromList(oForm, pVal, oCFLEvento);
                 }
 
-
-
-                if (pVal.ItemUID == "InvoiceMTR")
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
+                    if (!pVal.BeforeAction)
                     {
-                        matrixColumnSetLinkedObjectTypeInvoicesMTR(oForm, pVal, out errorText);
+                        if (pVal.ItemUID == "checkB" || pVal.ItemUID == "unCheckB")
+                            checkUncheck(oForm, pVal.ItemUID);
+                        else if (pVal.ItemUID == "fillB")
+                            fillMTRInvoice(oForm);
+                        else if (pVal.ItemUID == "createDocB")
+                            createPaymentDocuments(oForm);
                     }
-
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.BeforeAction == false)
-                    {
-                        int row = pVal.Row;
-
-                        oForm.Freeze(true);
-                        SetInvDocsMatrixRowBackColor( oForm, row, out errorText);
-                        oForm.Freeze(false);
-                    }
-
                 }
-                if (pVal.ItemUID == "CreatDocmt" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
-                {
-                    CreatePaymentDocuments( oForm);
 
+                //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
+                //{
+                //    if (pVal.ItemUID == "InvoiceMTR" && pVal.ColUID == "DocEntry")
+                //        matrixColumnSetLinkedObjectTypeInvoicesMTR(oForm, pVal);
+                //}
+
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
+                {
+                    if (!pVal.BeforeAction)
+                    {
+                        if (pVal.ItemUID == "InvoiceMTR" && pVal.Row > 0)
+                        {
+                            setInvDocsMatrixRowBackColor(oForm, pVal.Row);
+                        }
+                    }
+                }
+
+                if (pVal.ItemChanged && !pVal.BeforeAction)
+                {
+                    if (pVal.ItemUID == "DocPstDt")
+                    {
+                        string docDateStr = oForm.DataSources.UserDataSources.Item("DocPstDt").ValueEx;
+                        if (!string.IsNullOrEmpty(docDateStr))
+                        {
+                            DateTime endDateOp = DateTime.ParseExact(docDateStr, "yyyyMMdd", null);
+                            endDateOp = new DateTime(endDateOp.Year, endDateOp.Month, 1).AddMonths(1).AddDays(-1);
+                            oForm.DataSources.UserDataSources.Item("DocPstDt").ValueEx = endDateOp.ToString("yyyyMMdd");
+                        }
+
+                        fillMTRInvoice(oForm);
+                    }
                 }
             }
         }
 
-        public static void SetInvDocsMatrixRowBackColor( SAPbouiCOM.Form oForm,  int row, out string errorText)
+        public static void setInvDocsMatrixRowBackColor(SAPbouiCOM.Form oForm, int row)
         {
-            errorText = null;
-
             try
             {
+                oForm.Freeze(true);
+
                 SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
 
                 if (oMatrix.RowCount > 0)
                 {
-                    oForm.Freeze(false);
                     for (int i = 1; i <= oMatrix.RowCount; i++)
                     {
                         oMatrix.CommonSetting.SetRowBackColor(i, FormsB1.getLongIntRGB(231, 231, 231));
                     }
-
                     oMatrix.CommonSetting.SetRowBackColor(row, FormsB1.getLongIntRGB(255, 255, 153));
-                    oForm.Freeze(true);
                 }
-
             }
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
-                GC.Collect();
+                oForm.Freeze(false);
             }
         }
 
-        public static void SetInvDocsMatrixRowCellColor(SAPbouiCOM.Form oForm, out string errorText)
+        public static void setInvDocsMatrixRowCellColor(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
             try
             {
                 SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
 
                 if (oMatrix.RowCount > 0)
                 {
-                    oForm.Freeze(false);
-
                     for (int i = 1; i <= oMatrix.RowCount; i++)
                     {
                         if (oMatrix.GetCellSpecific("ReconSum", i).Value != oMatrix.GetCellSpecific("AlRcnSum", i).Value)
-                        {
                             oMatrix.CommonSetting.SetRowFontColor(i, FormsB1.getLongIntRGB(255, 0, 0));
-                        }
                         else
-                        {
                             oMatrix.CommonSetting.SetRowFontColor(i, FormsB1.getLongIntRGB(0, 0, 0));
-                        }
                     }
-
-                    oForm.Freeze(true);
-                }
-
-            }
-            catch 
-            {
-            }
-            finally
-            {
-                GC.Collect();
-            }
-        }
-
-        private static void CheckUncheck(SAPbouiCOM.Form oForm, string CheckOperation, string type, out string errorText)
-        {
-            errorText = null;
-
-            oForm.Freeze(true);
-
-            SAPbouiCOM.CheckBox oCheckBox;
-            SAPbouiCOM.Matrix oMatrix;
-
-            oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("InvoiceMTR").Specific));
-
-            int rowCount = oMatrix.RowCount;
-            for (int j = 1; j <= rowCount; j++)
-            {
-                oCheckBox = oMatrix.Columns.Item("CheckBox").Cells.Item(j).Specific;
-                oCheckBox.Checked = (CheckOperation == "InCheck");
-            }
-            oForm.Freeze(false);
-        }
-
-        public static void matrixColumnSetLinkedObjectTypeInvoicesMTR(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
-        {
-            errorText = null;
-
-            try
-            {
-                if (pVal.ColUID == "DocEntry")
-                {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED & pVal.BeforeAction == true)
-                    {
-                        SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("InvoiceMTR").Specific));
-
-                        SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
-                        string docType = oDataTable.GetValue("DocType", pVal.Row - 1);
-
-                        SAPbouiCOM.Column oColumn;
-
-                        if (docType == "18")
-                        {
-                            oColumn = oMatrix.Columns.Item(pVal.ColUID);
-                            SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
-                            oLink.LinkedObjectType = docType; //ARInvoice
-                        }
-                        if (docType == "204")
-                        {
-                            oColumn = oMatrix.Columns.Item(pVal.ColUID);
-                            SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
-                            oLink.LinkedObjectType = docType; //ARInvoice
-                        }
-                        else if (docType == "163")
-                        {
-                            oColumn = oMatrix.Columns.Item(pVal.ColUID);
-                            SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
-                            oLink.LinkedObjectType = docType; //ARCreditNote
-                        }
-
-                    }
-                }
-                else
-                {
-
                 }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
-            }
-            finally
-            {
-                GC.Collect();
+                throw new Exception(ex.Message);
             }
         }
 
-        private static void CreatePaymentDocuments(  SAPbouiCOM.Form oForm)
+        private static void checkUncheck(SAPbouiCOM.Form oForm, string checkOperation)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                SAPbouiCOM.CheckBox oCheckBox;
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
+
+                for (int j = 1; j <= oMatrix.RowCount; j++)
+                {
+                    oCheckBox = oMatrix.Columns.Item("CheckBox").Cells.Item(j).Specific;
+
+                    oCheckBox.Checked = (checkOperation == "checkB");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
+        }
+
+        //public static void matrixColumnSetLinkedObjectTypeInvoicesMTR(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
+        //{
+        //    try
+        //    {
+        //        oForm.Freeze(true);
+
+        //        if (pVal.ColUID == "DocEntry")
+        //        {
+        //            if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED && pVal.BeforeAction)
+        //            {
+        //                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
+
+        //                SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
+        //                string docType = oDataTable.GetValue("DocType", pVal.Row - 1);
+
+        //                SAPbouiCOM.Column oColumn;
+
+        //                if (docType == "18")
+        //                {
+        //                    oColumn = oMatrix.Columns.Item(pVal.ColUID);
+        //                    SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+        //                    oLink.LinkedObjectType = docType; //ARInvoice
+        //                }
+        //                if (docType == "204")
+        //                {
+        //                    oColumn = oMatrix.Columns.Item(pVal.ColUID);
+        //                    SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+        //                    oLink.LinkedObjectType = docType; //ARInvoice
+        //                }
+        //                else if (docType == "163")
+        //                {
+        //                    oColumn = oMatrix.Columns.Item(pVal.ColUID);
+        //                    SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+        //                    oLink.LinkedObjectType = docType; //ARCreditNote
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        oForm.Freeze(false);
+        //    }
+        //}
+
+        private static void createPaymentDocuments(SAPbouiCOM.Form oForm)
         {
             int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CreatePaymentDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
 
             if (answer == 2)
-            {
                 return;
-            }
-
-            DataTable AccountTable = CommonFunctions.GetOACTTable();
 
             SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
 
-            SAPbouiCOM.EditText oEditTextDocDate = (SAPbouiCOM.EditText)oForm.Items.Item("DocPstDt").Specific;
-            String DocDateS = oEditTextDocDate.Value;
-            DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(DocDateS, "yyyyMMdd", CultureInfo.InvariantCulture));
+            string docDateStr = oForm.DataSources.UserDataSources.Item("DocPstDt").ValueEx;
+            if (string.IsNullOrEmpty(docDateStr))
+            {
+                string errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") +
+                    " : \"" + oForm.Items.Item("DocPsDtS").Specific.caption + "\"";
+
+                Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
+                return;
+            }
+            DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture));
             DateTime DocDateEE = (new DateTime(DocDate.Year, DocDate.Month, DateTime.DaysInMonth(DocDate.Year, DocDate.Month)));
 
-           
+            DataTable AccountTable = CommonFunctions.GetOACTTable();
 
             DataTable reLines = new DataTable();
             reLines.Columns.Add("month");
             reLines.Columns.Add("vatAccrl");
             reLines.Columns.Add("reconSum");
             reLines.Columns.Add("vatSum");
-            
+
             DataTable jeLines = JournalEntry.JournalEntryTable();
 
             for (int row = 1; row <= oMatrix.RowCount; row++)
             {
-
                 bool checkedLine = oMatrix.GetCellSpecific("CheckBox", row).Checked;
-
-
                 if (checkedLine)
                 {
                     jeLines.Rows.Clear();
                     reLines.Rows.Clear();
 
                     string DocEntVT = oMatrix.GetCellSpecific("DocEntVT", row).Value;
-                    
-                    Dictionary<string, string> listAccounts = GetVatAcrualJornalEntry( DocEntVT);
+
+                    Dictionary<string, string> listAccounts = GetVatAcrualJornalEntry(DocEntVT);
                     string VatGrp = listAccounts["VatGroup"].ToString();
 
-                    decimal VatRate = CommonFunctions.GetVatGroupRate( VatGrp, "");
+                    decimal VatRate = CommonFunctions.GetVatGroupRate(VatGrp, "");
 
                     string TransId = oMatrix.GetCellSpecific("TransId", row).Value;
-                    if(TransId != "")
+                    if (TransId != "")
                     {
                         Program.uiApp.SetStatusBarMessage("დღგ უკვე გატარებულია", SAPbouiCOM.BoMessageTime.bmt_Short, true);
                         continue;
                     }
 
-                    
                     string InvDocEntry = oMatrix.GetCellSpecific("DocEntry", row).Value;
                     decimal DocVtTotal = Convert.ToDecimal(oMatrix.GetCellSpecific("DocVtTotal", row).Value, CultureInfo.InvariantCulture);
                     decimal ReconSum = Convert.ToDecimal(oMatrix.GetCellSpecific("ReconSum", row).Value, CultureInfo.InvariantCulture);
-                    decimal ReconSumVAT = CommonFunctions.roundAmountByGeneralSettings( ReconSum * VatRate / (100 + VatRate),"Sum");
+                    decimal ReconSumVAT = CommonFunctions.roundAmountByGeneralSettings(ReconSum * VatRate / (100 + VatRate), "Sum");
 
                     DocVtTotal = Math.Min(DocVtTotal, ReconSumVAT);
 
@@ -865,36 +661,28 @@ namespace BDO_Localisation_AddOn
 
                     try
                     {
-                        JournalEntry.JrnEntry( DocEntVT, "Reconcilation", "Reconcilation ", DocDate, jeLines, out errorText);
-                        AddRecord( reLines,  out errorText);
+                        JournalEntry.JrnEntry(DocEntVT, "Reconcilation", "Reconcilation ", DocDate, jeLines, out errorText);
+                        addRecord(reLines, out errorText);
 
                         if (errorText != null)
-                        {
                             return;
-                        }
-
                     }
                     catch (Exception ex)
                     {
                         errorText = ex.Message;
                     }
-
                 }
             }
-
-
-
-            FillMTRInvoice( oForm);
-
+            fillMTRInvoice(oForm);
         }
 
-        private static Dictionary<string, string> GetVatAcrualJornalEntry( string DocEntry)
+        private static Dictionary<string, string> GetVatAcrualJornalEntry(string DocEntry)
         {
             Dictionary<string, string> listValidValuesDict = new Dictionary<string, string>();
 
             string query = @"select  top 2 * 
             from ""JDT1""
-            inner join ""OJDT"" on ""JDT1"".""TransId"" = ""OJDT"".""TransId"" and ""OJDT"".""Ref1"" = '"+ DocEntry+ @"'
+            inner join ""OJDT"" on ""JDT1"".""TransId"" = ""OJDT"".""TransId"" and ""OJDT"".""Ref1"" = '" + DocEntry + @"'
                 and ""OJDT"".""Ref2""  = 'UDO_F_BDO_ARDPV_D' 
             where ""OJDT"".""TransId"" not in 
             (select ""StornoToTr"" from ""OJDT"" where ""StornoToTr"" is not null)
@@ -908,7 +696,7 @@ namespace BDO_Localisation_AddOn
                 decimal debit = Convert.ToDecimal(oRecordSet.Fields.Item("Debit").Value, CultureInfo.InvariantCulture);
                 string VatGroup = oRecordSet.Fields.Item("VatGroup").Value.ToString();
 
-                if (VatGroup!="")
+                if (VatGroup != "")
                 {
                     listValidValuesDict.Add("VatGroup", VatGroup);
                 }
@@ -928,55 +716,56 @@ namespace BDO_Localisation_AddOn
             return listValidValuesDict;
         }
 
-        private static void ChooseFromList( SAPbouiCOM.Form oForm, bool BeforeAction, SAPbouiCOM.IChooseFromListEvent oCFLEvento, out string errorText)
+        private static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.IChooseFromListEvent oCFLEvento)
         {
-            errorText = null;
-
-            string sCFL_ID = oCFLEvento.ChooseFromListUID;
-            SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
-
-            SAPbouiCOM.DataTable oDataTable = null;
-            oDataTable = oCFLEvento.SelectedObjects;
-
-            if (BeforeAction == false)
+            try
             {
-                if (oDataTable != null)
+                oForm.Freeze(true);
+
+                if (pVal.BeforeAction)
                 {
-                    try
-                    {
-                        if (sCFL_ID == "BusinessPartner_CFL")
-                        {
-                            string CardCode = Convert.ToString(oDataTable.GetValue("CardCode", 0));
-
-                            SAPbouiCOM.EditText oBPCode = oForm.Items.Item("BPCode").Specific;
-                            oBPCode.Value = CardCode;
-                            FillMTRInvoice( oForm);
-                        }
-
-
-
-                    }
-                    catch
-                    {
-                        FillMTRInvoice( oForm);
-                    }
 
                 }
+                else
+                {
+                    SAPbouiCOM.DataTable oDataTable = oCFLEvento.SelectedObjects;
+
+                    if (oDataTable != null)
+                    {
+                        if (oCFLEvento.ChooseFromListUID == "BusinessPartner_CFL")
+                        {
+                            string CardCode = oDataTable.GetValue("CardCode", 0);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("BPCode").Specific.Value = CardCode);
+
+                            fillMTRInvoice(oForm);
+                        }
+                    }
+                    else
+                        fillMTRInvoice(oForm);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
-        public static void createUDO( out string errorText)
+        public static void createUDO(out string errorText)
         {
             errorText = null;
 
             string tableName = "BDOSRECWIZ";
-            string description = "Reconcilation wizard history";
+            string description = "Reconcilation Wizard History";
 
             SAPbobsCOM.UserObjectsMD oUserObjectsMD = null;
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
+            Marshal.ReleaseComObject(oUserObjectsMD);
 
-            int result = UDO.addUserTable( tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObjectAutoIncrement, out errorText);
+            int result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObjectAutoIncrement, out errorText);
 
             if (result != 0)
             {
@@ -990,9 +779,8 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Month");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            
             fieldskeysMap = new Dictionary<string, object>(); // docType
             fieldskeysMap.Add("Name", "vatAccrl");
             fieldskeysMap.Add("TableName", "BDOSRECWIZ");
@@ -1000,7 +788,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // docType
             fieldskeysMap.Add("Name", "reconSum");
@@ -1009,7 +797,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // docType
             fieldskeysMap.Add("Name", "vatSum");
@@ -1018,39 +806,29 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
-
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
         }
 
-        public static void AddRecord( DataTable reLines, out string errorText)
+        public static void addRecord(DataTable reLines, out string errorText)
         {
             errorText = null;
             int returnCode;
 
             SAPbobsCOM.UserTable oUserTable = Program.oCompany.UserTables.Item("BDOSRECWIZ");
-            DataRow reLine;
-
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            
-
-
+            DataRow reLine;
             try
             {
                 for (int i = 0; i < reLines.Rows.Count; i++)
                 {
                     reLine = reLines.Rows[i];
-
                     string queryOPDF = @"delete from ""@BDOSRECWIZ""
-                                    where ""U_month"" = '" + reLine["month"]+ @"' and ""U_vatAccrl"" = " + reLine["vatAccrl"].ToString();
+                                    where ""U_month"" = '" + reLine["month"] + @"' and ""U_vatAccrl"" = " + reLine["vatAccrl"].ToString();
                     oRecordSet.DoQuery(queryOPDF);
-                    
                     oUserTable.UserFields.Fields.Item("U_month").Value = DateTime.ParseExact(reLine["month"].ToString(), "yyyyMMdd", CultureInfo.InvariantCulture);
                     oUserTable.UserFields.Fields.Item("U_vatAccrl").Value = reLine["vatAccrl"].ToString();
-                    
-                    oUserTable.UserFields.Fields.Item("U_reconSum").Value = Convert.ToDouble(reLine["reconSum"],CultureInfo.InvariantCulture);
+                    oUserTable.UserFields.Fields.Item("U_reconSum").Value = Convert.ToDouble(reLine["reconSum"], CultureInfo.InvariantCulture);
                     oUserTable.UserFields.Fields.Item("U_vatSum").Value = Convert.ToDouble(reLine["vatSum"], CultureInfo.InvariantCulture);
-
-
                     returnCode = oUserTable.Add();
 
                     if (returnCode != 0)
@@ -1066,151 +844,206 @@ namespace BDO_Localisation_AddOn
             catch (Exception ex)
             {
                 errorText = ex.Message;
-
             }
             finally
             {
                 Marshal.ReleaseComObject(oUserTable);
-                oUserTable = null;
+                Marshal.ReleaseComObject(oRecordSet);
             }
         }
 
-
-        public static void FillMTRInvoice( SAPbouiCOM.Form oForm)
+        public static void fillMTRInvoice(SAPbouiCOM.Form oForm)
         {
+            string docDateStr = oForm.DataSources.UserDataSources.Item("DocPstDt").ValueEx;
+            if (string.IsNullOrEmpty(docDateStr))
+            {
+                string errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") +
+                    " : \"" + oForm.Items.Item("DocPsDtS").Specific.caption + "\"";
 
-            SAPbouiCOM.EditText oEditTextDocDate = (SAPbouiCOM.EditText)oForm.Items.Item("DocPstDt").Specific;
-            String DocDateS = oEditTextDocDate.Value;
-            DateTime date = Convert.ToDateTime(DateTime.ParseExact(DocDateS, "yyyyMMdd", CultureInfo.InvariantCulture));
+                Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
+                return;
+            }
+
+            DateTime date = Convert.ToDateTime(DateTime.ParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture));
             DateTime prevDate = date.AddMonths(-1);
 
-            string dateES = (new DateTime(date.Year, date.Month, 1)).ToString("yyyyMMdd");
-            string dateEE = (new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month))).ToString("yyyyMMdd");
+            string dateES = new DateTime(date.Year, date.Month, 1).ToString("yyyyMMdd");
+            string dateEE = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)).ToString("yyyyMMdd");
 
-            string prevdateES = (new DateTime(prevDate.Year, prevDate.Month, 1)).ToString("yyyyMMdd");
-            string prevdateEE = (new DateTime(prevDate.Year, prevDate.Month, DateTime.DaysInMonth(prevDate.Year, prevDate.Month))).ToString("yyyyMMdd");
+            string prevdateES = new DateTime(prevDate.Year, prevDate.Month, 1).ToString("yyyyMMdd");
+            string prevdateEE = new DateTime(prevDate.Year, prevDate.Month, DateTime.DaysInMonth(prevDate.Year, prevDate.Month)).ToString("yyyyMMdd");
 
-            string cardCodeE = oForm.Items.Item("BPCode").Specific.Value;
-            cardCodeE = cardCodeE == "" ? "1=1" : @" ""ODPI"".""CardCode"" = '" + cardCodeE + "'";
+            string cardCode = oForm.DataSources.UserDataSources.Item("BPCode").ValueEx;
 
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
-
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string errorText = "";
 
+            StringBuilder query = new StringBuilder();
+            query.Append("SELECT \"ODPI\".\"DocEntry\", \n");
+            query.Append("       \"ODPI\".\"DocNum\", \n");
+            query.Append("       \"ODPI\".\"DocDate\", \n");
+            query.Append("       \"ODPI\".\"CardCode\", \n");
+            query.Append("       \"ODPI\".\"CardName\", \n");
+            query.Append("       \"ITR1\".\"ReconSum\", \n");
+            query.Append("       IFNULL(\"OJDT1\".\"Debit\", 0)                            AS \"AlRcnVat\", \n");
+            query.Append("       IFNULL(\"OJDT1\".\"TransId\", 0)                          AS \"TransId\", \n");
+            query.Append("       IFNULL(\"OCRD\".\"LicTradNum\", '')                       AS \"LicTradNum\", \n");
+            query.Append("       IFNULL(\"OJDT1\".\"BaseSum\", 0)                          AS \"U_reconSum\", \n");
+            query.Append("       \"@BDOSARDV\".\"U_GrsAmnt\" - IFNULL(\"OJDT\".\"BaseSum\", 0) AS \"DocTotal\", \n");
+            query.Append("       \"@BDOSARDV\".\"U_VatAmount\" - IFNULL(\"OJDT\".\"Debit\", 0) AS \"DocVAtTotal\", \n");
+            query.Append("       IFNULL(\"@BDOSARDV\".\"DocEntry\", 0)                     AS \"DocEntVT\", \n");
+            query.Append("       IFNULL(\"@BDOSARDV\".\"DocNum\", 0)                       AS \"DocNumVT\" \n");
+            query.Append("FROM   (SELECT \"IncomingPayment\".\"DownPmntEntry\"        AS \"DocEntry\", \n");
+            query.Append("               Sum(\"InternalReconciliation\".\"ReconSum\") AS \"ReconSum\" \n");
+            query.Append("        FROM   (SELECT \"SrcObjAbs\"            AS \"IncPmntEntry\", \n");
+            query.Append("                       Sum(\"ITR1\".\"ReconSum\") AS \"ReconSum\" \n");
+            query.Append("                FROM   \"ITR1\" \n");
+            query.Append("                       INNER JOIN \"OITR\" \n");
+            query.Append("                               ON \"ITR1\".\"ReconNum\" = \"OITR\".\"ReconNum\" \n");
+            query.Append("                                  AND \"OITR\".\"ReconDate\" >= '" + dateES + "' \n");
+            query.Append("                                  AND \"OITR\".\"ReconDate\" <= '" + dateEE + "' \n");
+            query.Append("                                  AND \"OITR\".\"Canceled\" <> 'C' \n");
+            query.Append("                WHERE  \"ITR1\".\"SrcObjTyp\" = 24 \n");
+            if (!string.IsNullOrEmpty(cardCode))
+                query.Append("                       AND \"ITR1\".\"ShortName\" = '" + cardCode + "' \n");
+            query.Append("                GROUP  BY \"SrcObjAbs\") AS \"InternalReconciliation\" \n");
+            query.Append("               INNER JOIN (SELECT \"RCT2\".\"DocNum\"   AS \"IncPmntEntry\", \n");
+            query.Append("                                  \"RCT2\".\"DocEntry\" AS \"DownPmntEntry\" \n");
+            query.Append("                           FROM   \"RCT2\" \n");
+            query.Append("                                  INNER JOIN \"ORCT\" \n");
+            query.Append("                                          ON \"ORCT\".\"DocEntry\" = \"RCT2\".\"DocNum\" \n");
+            query.Append("                                             AND \"ORCT\".\"Canceled\" = 'N' \n");
+            if (!string.IsNullOrEmpty(cardCode))
+                query.Append("                                             AND \"ORCT\".\"CardCode\" = '" + cardCode + "' \n");
+            query.Append("                                             AND \"RCT2\".\"InvType\" = 203) AS \n");
+            query.Append("                          \"IncomingPayment\" \n");
+            query.Append("                       ON \"InternalReconciliation\".\"IncPmntEntry\" = \n");
+            query.Append("                          \"IncomingPayment\".\"IncPmntEntry\" \n");
+            query.Append("        GROUP  BY \"IncomingPayment\".\"DownPmntEntry\") AS \"ITR1\" \n");
+            query.Append("       INNER JOIN \"ODPI\" \n");
+            query.Append("               ON \"ITR1\".\"DocEntry\" = \"ODPI\".\"DocEntry\" \n");
+            query.Append("                  AND \"DocStatus\" = 'C' \n");
+            if (!string.IsNullOrEmpty(cardCode))
+                query.Append("                  AND \"ODPI\".\"CardCode\" = '" + cardCode + "' \n");
+            query.Append("       INNER JOIN \"@BDOSARDV\" \n");
+            query.Append("               ON \"ODPI\".\"DocEntry\" = \"@BDOSARDV\".\"U_baseDoc\" \n");
+            query.Append("                  AND \"@BDOSARDV\".\"U_baseDocT\" = 203 \n");
+            query.Append("                  AND \"@BDOSARDV\".\"Canceled\" = 'N' \n");
+            query.Append("                  AND \"@BDOSARDV\".\"U_DocDate\" <= '" + dateEE + "' \n");
+            query.Append("       INNER JOIN \"OCRD\" \n");
+            query.Append("               ON \"ODPI\".\"CardCode\" = \"OCRD\".\"CardCode\" \n");
+            query.Append("       left JOIN (SELECT \"OJDT\".\"Ref1\", \n");
+            query.Append("                         Sum(\"OJDT\".\"BaseSum\") AS \"BaseSum\", \n");
+            query.Append("                         Sum(\"OJDT\".\"Debit\")   AS \"Debit\" \n");
+            query.Append("                  FROM   (SELECT \"OJDT\".\"TransId\"                       AS \n");
+            query.Append("                                 \"TransId\", \n");
+            query.Append("                                 \"OJDT\".\"Ref1\", \n");
+            query.Append("                                 Sum(\"JDT1\".\"BaseSum\" + \"JDT1\".\"Debit\") AS \n");
+            query.Append("                                 \"BaseSum\", \n");
+            query.Append("                                 Sum(\"JDT1\".\"Debit\")                    AS \n");
+            query.Append("                                 \"Debit\" \n");
+            query.Append("                          FROM   \"JDT1\" \n");
+            query.Append("                                 INNER JOIN \"OJDT\" \n");
+            query.Append("                                         ON \"JDT1\".\"TransId\" = \"OJDT\".\"TransId\" \n");
+            query.Append("                                            AND \"OJDT\".\"TaxDate\" <= '" + dateEE + "' \n");
+            query.Append("                                            AND \"OJDT\".\"Ref2\" = 'Reconcilation' \n");
+            query.Append("                                            AND \"JDT1\".\"VatGroup\" <> '' \n");
+            query.Append("                                            AND \"OJDT\".\"StornoToTr\" IS NULL \n");
+            query.Append("                          GROUP  BY \"OJDT\".\"Ref1\", \n");
+            query.Append("                                    \"OJDT\".\"TransId\" \n");
+            query.Append("                          UNION ALL \n");
+            query.Append("                          SELECT \"OJDT\".\"StornoToTr\"     AS \"TransId\", \n");
+            query.Append("                                 \"OJDT\".\"Ref1\", \n");
+            query.Append("                                 Sum(\"JDT1\".\"BaseSum\" + CASE WHEN \n");
+            query.Append("                                     \"JDT1\".\"Credit\">0 \n");
+            query.Append("                                     THEN \n");
+            query.Append("                                     -\"JDT1\".\"Credit\" \n");
+            query.Append("                                     ELSE \n");
+            query.Append("                                     \"JDT1\".\"Debit\" END) AS \"BaseSum\", \n");
+            query.Append("                                 Sum(CASE \n");
+            query.Append("                                       WHEN \"JDT1\".\"Credit\" > 0 THEN \n");
+            query.Append("                                       -\"JDT1\".\"Credit\" \n");
+            query.Append("                                       ELSE \"JDT1\".\"Debit\" \n");
+            query.Append("                                     END)                AS \"Credit\" \n");
+            query.Append("                          FROM   \"JDT1\" \n");
+            query.Append("                                 INNER JOIN \"OJDT\" \n");
+            query.Append("                                         ON \"JDT1\".\"TransId\" = \"OJDT\".\"TransId\" \n");
+            query.Append("                                            AND \"OJDT\".\"TaxDate\" <= '" + dateEE + "' \n");
+            query.Append("                                            AND \"OJDT\".\"Ref2\" = 'Reconcilation' \n");
+            query.Append("                                            AND \"JDT1\".\"VatGroup\" <> '' \n");
+            query.Append("                                            AND not \"OJDT\".\"StornoToTr\" IS NULL \n");
+            query.Append("                          GROUP  BY \"OJDT\".\"Ref1\", \n");
+            query.Append("                                    \"OJDT\".\"StornoToTr\") AS \"OJDT\" \n");
+            query.Append("                  GROUP  BY \"OJDT\".\"Ref1\" \n");
+            query.Append("                  Having Sum(\"OJDT\".\"Debit\") > 0) AS \"OJDT\" \n");
+            query.Append("              ON \"@BDOSARDV\".\"DocEntry\" = \"OJDT\".\"Ref1\" \n");
+            query.Append("       left JOIN (SELECT \"OJDT\".\"TransId\"      AS \"TransId\", \n");
+            query.Append("                         \"OJDT\".\"Ref1\", \n");
+            query.Append("                         Sum(\"OJDT\".\"BaseSum\") AS \"BaseSum\", \n");
+            query.Append("                         Sum(\"OJDT\".\"Debit\")   AS \"Debit\" \n");
+            query.Append("                  FROM   (SELECT \"OJDT\".\"TransId\"        AS \"TransId\", \n");
+            query.Append("                                 \"OJDT\".\"Ref1\", \n");
+            query.Append("                                 Sum(\"JDT1\".\"BaseSum\" + CASE WHEN \n");
+            query.Append("                                     \"JDT1\".\"Credit\">0 \n");
+            query.Append("                                     THEN \n");
+            query.Append("                                     -\"JDT1\".\"Credit\" \n");
+            query.Append("                                     ELSE \n");
+            query.Append("                                     \"JDT1\".\"Debit\" END) AS \"BaseSum\", \n");
+            query.Append("                                 Sum(\"JDT1\".\"Debit\")     AS \"Debit\" \n");
+            query.Append("                          FROM   \"JDT1\" \n");
+            query.Append("                                 INNER JOIN \"OJDT\" \n");
+            query.Append("                                         ON \"JDT1\".\"TransId\" = \"OJDT\".\"TransId\" \n");
+            query.Append("                                            AND \"OJDT\".\"TaxDate\" >= '" + dateES + "' \n");
+            query.Append("                                            AND \"OJDT\".\"TaxDate\" <= '" + dateEE + "' \n");
+            query.Append("                                            AND \"OJDT\".\"Ref2\" = 'Reconcilation' \n");
+            query.Append("                                            AND \"JDT1\".\"VatGroup\" <> '' \n");
+            query.Append("                                            AND \"OJDT\".\"StornoToTr\" IS NULL \n");
+            query.Append("                          GROUP  BY \"OJDT\".\"Ref1\", \n");
+            query.Append("                                    \"OJDT\".\"TransId\" \n");
+            query.Append("                          UNION ALL \n");
+            query.Append("                          SELECT \"OJDT\".\"StornoToTr\"     AS \"TransId\", \n");
+            query.Append("                                 \"OJDT\".\"Ref1\", \n");
+            query.Append("                                 Sum(\"JDT1\".\"BaseSum\" + CASE WHEN \n");
+            query.Append("                                     \"JDT1\".\"Credit\">0 \n");
+            query.Append("                                     THEN \n");
+            query.Append("                                     -\"JDT1\".\"Credit\" \n");
+            query.Append("                                     ELSE \n");
+            query.Append("                                     \"JDT1\".\"Debit\" END) AS \"BaseSum\", \n");
+            query.Append("                                 Sum(CASE \n");
+            query.Append("                                       WHEN \"JDT1\".\"Credit\" > 0 THEN \n");
+            query.Append("                                       -\"JDT1\".\"Credit\" \n");
+            query.Append("                                       ELSE \"JDT1\".\"Debit\" \n");
+            query.Append("                                     END)                AS \"Credit\" \n");
+            query.Append("                          FROM   \"JDT1\" \n");
+            query.Append("                                 INNER JOIN \"OJDT\" \n");
+            query.Append("                                         ON \"JDT1\".\"TransId\" = \"OJDT\".\"TransId\" \n");
+            query.Append("                                            AND \"OJDT\".\"TaxDate\" >= '" + dateES + "' \n");
+            query.Append("                                            AND \"OJDT\".\"TaxDate\" <= '" + dateEE + "' \n");
+            query.Append("                                            AND \"OJDT\".\"Ref2\" = 'Reconcilation' \n");
+            query.Append("                                            AND \"JDT1\".\"VatGroup\" <> '' \n");
+            query.Append("                                            AND not \"OJDT\".\"StornoToTr\" IS NULL \n");
+            query.Append("                          GROUP  BY \"OJDT\".\"Ref1\", \n");
+            query.Append("                                    \"OJDT\".\"StornoToTr\") AS \"OJDT\" \n");
+            query.Append("                  GROUP  BY \"OJDT\".\"TransId\", \n");
+            query.Append("                            \"OJDT\".\"Ref1\" \n");
+            query.Append("                  Having Sum(\"OJDT\".\"Debit\") > 0) AS \"OJDT1\" \n");
+            query.Append("              ON \"@BDOSARDV\".\"DocEntry\" = \"OJDT1\".\"Ref1\" \n");
+            query.Append("ORDER  BY \"ODPI\".\"DocDate\" ASC");
 
-
-            string query = @"select 
-                    ""ODPI"".""DocEntry"",
-                    ""ODPI"".""DocNum"",
-                    ""ODPI"".""DocDate"",
-                    ""ODPI"".""CardCode"",
-                    ""ODPI"".""CardName"",
-                    ""ITR1"".""ReconSum"",
-                    IFNULL(""OJDT1"".""Debit"",0)as ""AlRcnVat"",
-                    IFNULL(""OJDT1"".""TransId"",0)as ""TransId"",
-					IFNULL(""OCRD"".""LicTradNum"",'') as ""LicTradNum"",
-                    IFNULL(""OJDT1"".""BaseSum"",0) as ""U_reconSum"",
-                    ""@BDOSARDV"".""U_GrsAmnt""- IFNULL(""OJDT"".""BaseSum"",0) as ""DocTotal"",                    
-                    ""@BDOSARDV"".""U_VatAmount""- IFNULL(""OJDT"".""Debit"",0) as ""DocVAtTotal"",                    
-                    IFNULL(""@BDOSARDV"".""DocEntry"",0) as ""DocEntVT"",
-                    IFNULL(""@BDOSARDV"".""DocNum"",0) as ""DocNumVT""
-
-                    from (select 
-					""RCT2"".""DocEntry"",
-                    SUM(""ITR1"".""ReconSum"") as ""ReconSum""
-					from ""RCT2""
-                    inner join ""ORCT"" on ""ORCT"".""DocEntry"" = ""RCT2"".""DocNum"" and ""ORCT"".""Canceled"" = 'N'
-					inner join ""ITR1"" on  ""RCT2"".""InvoiceId"" = ""ITR1"".""LineSeq"" and ""RCT2"".""DocNum"" = ""ITR1"".""SrcObjAbs"" and ""ITR1"".""SrcObjTyp"" = 24 and ""RCT2"".""InvType"" = 203
-					inner join ""OITR"" on  ""ITR1"".""ReconNum"" = ""OITR"".""ReconNum"" and ""OITR"".""ReconDate"">='" + dateES + @"' and ""OITR"".""ReconDate""<='" + dateEE + @"' and ""OITR"".""Canceled""<>'C'
-					group by ""RCT2"".""DocEntry"",""OITR"".""Canceled"") as ""ITR1""
-                    inner join  ""ODPI"" on  ""ITR1"".""DocEntry"" = ""ODPI"".""DocEntry"" and ""DocStatus""='C'  and " + cardCodeE + @"                                      
-                    inner join ""@BDOSARDV"" on ""ODPI"".""DocEntry""= ""@BDOSARDV"".""U_baseDoc"" and ""@BDOSARDV"".""U_baseDocT""=203 and ""@BDOSARDV"".""Canceled""='N' and ""@BDOSARDV"".""U_DocDate""<='" + dateES + @"'
-                    inner join ""OCRD"" on ""ODPI"".""CardCode""= ""OCRD"".""CardCode""
-                    left join (select
-	                    
-	                     ""OJDT"".""Ref1"",
-                        sum(""OJDT"".""BaseSum"") as ""BaseSum"", 	                     
-                        sum(""OJDT"".""Debit"") as ""Debit"" 
-                    from( select
-	                     ""OJDT"".""TransId"" as ""TransId"",
-	                     ""OJDT"".""Ref1"",
-	                     SUM(""JDT1"".""BaseSum"" + ""JDT1"".""Debit"") as ""BaseSum"",
-	                     SUM(""JDT1"".""Debit"") as ""Debit"" 
-	                    from ""JDT1"" 
-	                    inner join ""OJDT"" on ""JDT1"".""TransId"" = ""OJDT"".""TransId"" and ""OJDT"".""TaxDate""<='" + dateEE + @"' 
-	                    and ""OJDT"".""Ref2"" = 'Reconcilation' 
-	                    and ""JDT1"".""VatGroup""<>'' 
-	                    and ""OJDT"".""StornoToTr"" is null 
-	                    group by ""OJDT"".""Ref1"",
-	                     ""OJDT"".""TransId"" 
-	                    union all select
-	                     ""OJDT"".""StornoToTr"" as ""TransId"",
-	                     ""OJDT"".""Ref1"",
-                             SUM(""JDT1"".""BaseSum"" + Case when ""JDT1"".""Credit"">0 then -""JDT1"".""Credit"" else  ""JDT1"".""Debit"" End) as ""BaseSum"",
-	                     SUM(Case when ""JDT1"".""Credit"">0 then -""JDT1"".""Credit"" else  ""JDT1"".""Debit"" End) as ""Credit"" 
-	                    from ""JDT1"" 
-	                    inner join ""OJDT"" on ""JDT1"".""TransId"" = ""OJDT"".""TransId"" and ""OJDT"".""TaxDate""<='" + dateEE + @"' 
-	                    and ""OJDT"".""Ref2"" = 'Reconcilation' 
-	                    and ""JDT1"".""VatGroup""<>'' 
-	                    and not ""OJDT"".""StornoToTr"" is null 
-	                    group by ""OJDT"".""Ref1"",
-	                     ""OJDT"".""StornoToTr"" ) as ""OJDT"" 
-                    group by 
-	                     ""OJDT"".""Ref1"" Having sum(""OJDT"".""Debit"")>0 ) as ""OJDT"" on ""@BDOSARDV"".""DocEntry""=""OJDT"".""Ref1""
-
-                    left join (
-                               select
-	                     ""OJDT"".""TransId"" as ""TransId"",
-	                     ""OJDT"".""Ref1"",
-                        sum(""OJDT"".""BaseSum"") as ""BaseSum"", 
-	                     sum(""OJDT"".""Debit"") as ""Debit"" 
-                    from( select
-	                     ""OJDT"".""TransId"" as ""TransId"",
-	                     ""OJDT"".""Ref1"",
-                        SUM(""JDT1"".""BaseSum"" + Case when ""JDT1"".""Credit"">0 then -""JDT1"".""Credit"" else  ""JDT1"".""Debit"" End) as ""BaseSum"",
-	                     SUM(""JDT1"".""Debit"") as ""Debit"" 
-	                    from ""JDT1"" 
-	                    inner join ""OJDT"" on ""JDT1"".""TransId"" = ""OJDT"".""TransId"" and ""OJDT"".""TaxDate"">='" + dateES + @"' and ""OJDT"".""TaxDate""<='" + dateEE + @"' 
-	                    and ""OJDT"".""Ref2"" = 'Reconcilation' 
-	                    and ""JDT1"".""VatGroup""<>'' 
-	                    and ""OJDT"".""StornoToTr"" is null 
-	                    group by ""OJDT"".""Ref1"",
-	                     ""OJDT"".""TransId"" 
-	                    union all select
-	                     ""OJDT"".""StornoToTr"" as ""TransId"",
-	                     ""OJDT"".""Ref1"",
-                        SUM(""JDT1"".""BaseSum"" + Case when ""JDT1"".""Credit"">0 then -""JDT1"".""Credit"" else  ""JDT1"".""Debit"" End) as ""BaseSum"",
-	                    SUM(Case when ""JDT1"".""Credit"">0 then -""JDT1"".""Credit"" else  ""JDT1"".""Debit"" End ) as ""Credit"" 
-	                    from ""JDT1"" 
-	                    inner join ""OJDT"" on ""JDT1"".""TransId"" = ""OJDT"".""TransId"" and ""OJDT"".""TaxDate"">='" + dateES + @"' and ""OJDT"".""TaxDate""<='" + dateEE + @"' 
-	                    and ""OJDT"".""Ref2"" = 'Reconcilation' 
-	                    and ""JDT1"".""VatGroup""<>'' 
-	                    and not ""OJDT"".""StornoToTr"" is null 
-	                    group by ""OJDT"".""Ref1"",
-	                     ""OJDT"".""StornoToTr"" ) as ""OJDT"" 
-                    group by ""OJDT"".""TransId"",
-	                     ""OJDT"".""Ref1"" Having sum(""OJDT"".""Debit"")>0 ) as ""OJDT1"" on ""@BDOSARDV"".""DocEntry""=""OJDT1"".""Ref1""
-
-                
-
-                    order by  ""ODPI"".""DocDate"" asc";
             if (Program.oCompany.DbServerType != SAPbobsCOM.BoDataServerTypes.dst_HANADB)
             {
                 query = query.Replace("IFNULL", "ISNULL");
             }
 
-            oRecordSet.DoQuery(query);
+            oRecordSet.DoQuery(query.ToString());
 
             oDataTable.Rows.Clear();
-
             try
             {
                 int rowIndex = 0;
                 string DocEntry;
                 string DocNum;
                 string DocDate;
-                
                 string DocEntVT;
                 string CardCode;
                 string CardName;
@@ -1222,9 +1055,7 @@ namespace BDO_Localisation_AddOn
                 decimal AlRcnSum = 0;
                 decimal AlRcnVat = 0;
 
-
                 ItemsDT = new DataTable();
-
                 ItemsDT.Columns.Add("DocEntry");
                 ItemsDT.Columns.Add("ItemCode");
                 ItemsDT.Columns.Add("Dscptn");
@@ -1232,17 +1063,14 @@ namespace BDO_Localisation_AddOn
                 ItemsDT.Columns.Add("VatGrp");
                 ItemsDT.Columns.Add("VatAmnt");
 
-
                 while (!oRecordSet.EoF)
                 {
                     DocEntry = oRecordSet.Fields.Item("DocEntry").Value == 0 ? "" : oRecordSet.Fields.Item("DocEntry").Value.ToString();
                     DocNum = oRecordSet.Fields.Item("DocNum").Value == 0 ? "" : oRecordSet.Fields.Item("DocNum").Value.ToString();
                     DocDate = oRecordSet.Fields.Item("DocDate").Value.ToString("yyyyMMdd");
                     DocEntVT = oRecordSet.Fields.Item("DocEntVT").Value == 0 ? "" : oRecordSet.Fields.Item("DocEntVT").Value.ToString();
-                   
                     decimal allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString(), CultureInfo.InvariantCulture);
                     TransId = oRecordSet.Fields.Item("TransId").Value == 0 ? "" : oRecordSet.Fields.Item("TransId").Value.ToString();
-                    
                     DocTotal = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value, CultureInfo.InvariantCulture);
                     DocVatTotal = Convert.ToDecimal(oRecordSet.Fields.Item("DocVatTotal").Value, CultureInfo.InvariantCulture);
                     AlRcnVat = Convert.ToDecimal(oRecordSet.Fields.Item("AlRcnVat").Value, CultureInfo.InvariantCulture);
@@ -1253,15 +1081,11 @@ namespace BDO_Localisation_AddOn
                     LicTradNum = oRecordSet.Fields.Item("LicTradNum").Value;
 
                     if (Math.Abs(DocTotal) <= allowableDeviation)
-                    {
                         DocTotal = 0;
-                    }
                     if (Math.Abs(AlRcnSum - ReconSum) <= allowableDeviation)
-                    {
                         AlRcnSum = ReconSum;
-                    }
-                    
-                    if (TransId=="" && ReconSum==0)
+
+                    if (TransId == "" && ReconSum == 0)
                     {
                         oRecordSet.MoveNext();
                         continue;
@@ -1273,60 +1097,48 @@ namespace BDO_Localisation_AddOn
                     oDataTable.SetValue("DocEntry", rowIndex, DocEntry);
                     oDataTable.SetValue("DocNum", rowIndex, DocNum);
                     oDataTable.SetValue("DocEntVT", rowIndex, DocEntVT);
-                    
                     oDataTable.SetValue("DocDate", rowIndex, DocDate);
                     oDataTable.SetValue("CardCode", rowIndex, CardCode);
                     oDataTable.SetValue("CardName", rowIndex, CardName);
                     oDataTable.SetValue("LicTradNum", rowIndex, LicTradNum);
                     oDataTable.SetValue("TransId", rowIndex, TransId);
-                    
-                    oDataTable.SetValue("DocTotal", rowIndex, Convert.ToDouble(DocTotal,CultureInfo.InvariantCulture));
+                    oDataTable.SetValue("DocTotal", rowIndex, Convert.ToDouble(DocTotal, CultureInfo.InvariantCulture));
                     oDataTable.SetValue("DocVtTotal", rowIndex, Convert.ToDouble(DocVatTotal, CultureInfo.InvariantCulture));
                     oDataTable.SetValue("ReconSum", rowIndex, Convert.ToDouble(ReconSum, CultureInfo.InvariantCulture));
                     oDataTable.SetValue("AlRcnVat", rowIndex, Convert.ToDouble(AlRcnVat, CultureInfo.InvariantCulture));
                     oDataTable.SetValue("AlRcnSum", rowIndex, Convert.ToDouble(AlRcnSum, CultureInfo.InvariantCulture));
-                    
-
-
 
                     oRecordSet.MoveNext();
                     rowIndex++;
                 }
 
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("InvoiceMTR").Specific));
                 oForm.Freeze(true);
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
                 oMatrix.Clear();
                 oMatrix.LoadFromDataSource();
-                oMatrix.AutoResizeColumns();
                 oForm.Update();
-                oForm.Freeze(false);
 
-                SetInvDocsMatrixRowCellColor(oForm, out errorText);
-
+                setInvDocsMatrixRowCellColor(oForm);
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
                 oForm.Freeze(false);
-                oRecordSet = null;
+                Marshal.ReleaseComObject(oRecordSet);
             }
         }
 
         public static void addMenus()
         {
-            SAPbouiCOM.MenuItem menuItem;
-            SAPbouiCOM.MenuItem fatherMenuItem;
-            SAPbouiCOM.MenuCreationParams oCreationPackage;
-
             try
             {
-                fatherMenuItem = Program.uiApp.Menus.Item("2048");
+                SAPbouiCOM.MenuItem fatherMenuItem = Program.uiApp.Menus.Item("2048");
 
                 // Add a pop-up menu item
-                oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
+                SAPbouiCOM.MenuCreationParams oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
                 oCreationPackage.Checked = false;
                 oCreationPackage.Enabled = true;
                 oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
@@ -1334,15 +1146,47 @@ namespace BDO_Localisation_AddOn
                 oCreationPackage.String = BDOSResources.getTranslate("VATReconcilationWizard");
                 oCreationPackage.Position = fatherMenuItem.SubMenus.Count - 1;
 
-                menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
+                SAPbouiCOM.MenuItem menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch 
+            catch
             {
-               
+
+            }
+        }
+
+        public static void resizeForm(SAPbouiCOM.Form oForm)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
+                int mtrWidth = oForm.ClientWidth;
+                oForm.Items.Item("InvoiceMTR").Width = mtrWidth;
+                oForm.Items.Item("InvoiceMTR").Height = oForm.ClientHeight - 25;
+                int columnsCount = oMatrix.Columns.Count - 2;
+                oMatrix.Columns.Item("LineNum").Width = 19;
+                oMatrix.Columns.Item("CheckBox").Width = 19;
+                mtrWidth -= 38;
+                mtrWidth /= columnsCount;
+
+                foreach (SAPbouiCOM.Column column in oMatrix.Columns)
+                {
+                    if (column.UniqueID == "LineNum" || column.UniqueID == "CheckBox")
+                        continue;
+                    column.Width = mtrWidth;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
     }
 }
 
-     
-      
+

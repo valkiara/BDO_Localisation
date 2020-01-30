@@ -35,7 +35,6 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-
         }
 
         public static void JrnEntry(string jeReference, string jeReference2, string remark, DateTime jeDate, DataTable jeLines, out string errorText)
@@ -210,9 +209,9 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
+            string errorText;
 
             SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("76").Specific;
             SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("U_BDOSEmpID");
@@ -224,8 +223,6 @@ namespace BDO_Localisation_AddOn
             int top = oItem.Top + oItem.Height + 5;
             int left = oItem.Left;
             int width = oItem.Width;
-
-            //////////////////////
 
             Dictionary<string, object> formItems = new Dictionary<string, object>();
             string itemName = "BDOSJrnEnS";
@@ -248,11 +245,9 @@ namespace BDO_Localisation_AddOn
                 FormsB1.createFormItem(oForm, formItems, out errorText);
                 if (errorText != null)
                 {
-                    return;
+                    throw new Exception(errorText);
                 }
             }
-
-            //////////////////////
 
             formItems = new Dictionary<string, object>();
             itemName = "BDOSJrnEnt";
@@ -275,11 +270,9 @@ namespace BDO_Localisation_AddOn
                 FormsB1.createFormItem(oForm, formItems, out errorText);
                 if (errorText != null)
                 {
-                    return;
+                    throw new Exception(errorText);
                 }
             }
-
-            //////////////////////
 
             formItems = new Dictionary<string, object>();
             itemName = "BDOSJEntLB";
@@ -299,11 +292,10 @@ namespace BDO_Localisation_AddOn
                 FormsB1.createFormItem(oForm, formItems, out errorText);
                 if (errorText != null)
                 {
-                    return;
+                    throw new Exception(errorText);
                 }
             }
 
-            //AC Number
             oItem = oForm.Items.Item("7");
             left = oItem.Left;
             width = oItem.Width;
@@ -322,7 +314,7 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
 
             formItems = new Dictionary<string, object>();
@@ -344,9 +336,8 @@ namespace BDO_Localisation_AddOn
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
-                return;
+                throw new Exception(errorText);
             }
-            //AC Number
 
             formItems = new Dictionary<string, object>();
             itemName = "BDOSAddEnt";
@@ -368,7 +359,6 @@ namespace BDO_Localisation_AddOn
                 formItems.Add("Left", oForm.Items.Item("37").Left - oForm.Items.Item("37").Width - 20);
                 formItems.Add("Top", oForm.Items.Item("37").Top);
                 formItems.Add("Caption", BDOSResources.getTranslate("DisplayAE"));
-
                 formItems.Add("AffectsFormMode", false);
                 formItems.Add("UID", itemName);
                 formItems.Add("Enabled", true);
@@ -378,234 +368,207 @@ namespace BDO_Localisation_AddOn
                 FormsB1.createFormItem(oForm, formItems, out errorText);
                 if (errorText != null)
                 {
-                    return;
+                    throw new Exception(errorText);
                 }
             }
-
-            ShowAdditionalEntries(oForm, out errorText);
-
-        }
-
-        private static void ShowAdditionalEntries(SAPbouiCOM.Form oForm, out string errorText)
-        {
-            errorText = null;
+            //ShowAdditionalEntries(oForm);
 
             SAPbouiCOM.DBDataSource JDT1 = oForm.DataSources.DBDataSources.Item("JDT1");
             SAPbouiCOM.DBDataSource OJDT = oForm.DataSources.DBDataSources.Item("OJDT");
             SAPbouiCOM.Item MatrixItem = oForm.Items.Item("76");
-            SAPbouiCOM.Matrix oMatrix = MatrixItem.Specific;
+            oMatrix = MatrixItem.Specific;
 
             SAPbouiCOM.Columns oColumns = null;
-            SAPbouiCOM.Column oColumn;
 
-            SAPbobsCOM.SBObob vObj;
-            vObj = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+            SAPbouiCOM.DataTable JDT1_BDO = oForm.DataSources.DataTables.Add("JDT1_BDO");
 
-            if (oForm.Items.Item("BDOSAddEnt").Specific.Checked == false)
+            for (int i = 0; i < JDT1.Fields.Count; i++)
             {
-                MatrixItem.Visible = true;
-                //oForm.Items.Item("32").Visible = true;
-                //oForm.Items.Item("34").Visible = true;
-                try
-                {
-                    oForm.Items.Item("JDT1BDOS").Visible = false;
-                }
-                catch
-                { }
-
-                return;
-
+                JDT1_BDO.Columns.Add(JDT1.Fields.Item(i).Name, JDT1.Fields.Item(i).Type, JDT1.Fields.Item(i).Size);
             }
-            //oForm.Items.Item("32").Visible = false;
-            //oForm.Items.Item("34").Visible = false;
+
+            JDT1_BDO.Columns.Add("AcctName", SAPbouiCOM.BoFieldsType.ft_Text, 100);
+            JDT1_BDO.Columns.Add("prFrmItm", SAPbouiCOM.BoFieldsType.ft_Text, 100);
+
+            formItems = new Dictionary<string, object>();
+            itemName = "JDT1BDOS";
+            formItems = new Dictionary<string, object>();
+            formItems.Add("isDataSource", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
+            formItems.Add("Left", MatrixItem.Left);
+            formItems.Add("Width", MatrixItem.Width);
+            formItems.Add("Top", MatrixItem.Top);
+            formItems.Add("Height", MatrixItem.Height);
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", MatrixItem.FromPane);
+            formItems.Add("ToPane", MatrixItem.ToPane);
+            formItems.Add("Visible", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            SAPbouiCOM.Matrix MatrixJDT1BDOS = oForm.Items.Item("JDT1BDOS").Specific;
+            oColumns = MatrixJDT1BDOS.Columns;
+
+            //სტანდარტული ველების ხელოვნურად გამოჩენა (ანგარიში, თანხები, ვალუტა...)
+            oColumn = oColumns.Add("Account", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("1").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+            oLink.LinkedObjectType = "1";
+            oColumn.DataBind.Bind("JDT1_BDO", "ShortName");
+
+            oColumn = oColumns.Add("2", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("2").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2").DataBind.Alias);
+
+            oColumn = oColumns.Add("ContrlAct", oMatrix.Columns.Item("37").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("37").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oLink = oColumn.ExtendedObject;
+            oLink.LinkedObjectType = "1";
+            oColumn.DataBind.Bind("JDT1_BDO", "Account");
+
+            //Deb Cr FCAmounts
+            oColumn = oColumns.Add("FCCurrency", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("FCCurrency");
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", "FCCurrency");
+
+            oColumn = oColumns.Add("FCDebit", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("FCDebit");
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", "FCDebit");
+            oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
+            oColumn = oColumns.Add("FCCredit", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("FCCredit");
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", "FCCredit");
+            oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
+            //Deb Cr Amounts
+            oColumn = oColumns.Add("Debit", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Debit");
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", "Debit");
+            oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
+            oColumn = oColumns.Add("Credit", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Credit");
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", "Credit");
+            oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
+            //Deb Cr Amounts
+            oColumn = oColumns.Add("SYSDeb", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("SCDebit");
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", "SYSDeb");
+            oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
+            oColumn = oColumns.Add("SYSCred", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("SCCredit");
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", "SYSCred");
+            oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
+            oColumn = oColumns.Add("9", oMatrix.Columns.Item("9").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("9").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("9").DataBind.Alias);
+
+            oColumn = oColumns.Add("17", oMatrix.Columns.Item("17").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("17").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("17").DataBind.Alias);
+
+            //oColumn = oColumns.Add("480002020", oMatrix.Columns.Item("480002020").Type);
+            //oColumn.TitleObject.Caption = oMatrix.Columns.Item("480002020").TitleObject.Caption;
+            //oColumn.Width = 10;
+            //oColumn.Editable = false;
+            //oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("480002020").DataBind.Alias);
+
+            oColumn = oColumns.Add("2006", oMatrix.Columns.Item("2006").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("2006").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2006").DataBind.Alias);
+
+            oColumn = oColumns.Add("2001", oMatrix.Columns.Item("2001").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("2001").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2001").DataBind.Alias);
+
+            oColumn = oColumns.Add("2003", oMatrix.Columns.Item("2003").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("2003").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2003").DataBind.Alias);
+
+            oColumn = oColumns.Add("2004", oMatrix.Columns.Item("2004").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("2004").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2004").DataBind.Alias);
+
+            oColumn = oColumns.Add("2005", oMatrix.Columns.Item("2005").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("2005").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2005").DataBind.Alias);
+
+            oColumn = oColumns.Add("16", oMatrix.Columns.Item("16").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("16").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("16").DataBind.Alias);
+
+            oColumn = oColumns.Add("prFrmItm", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("prFormItem");
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", "prFrmItm");
+
+            oColumn = oColumns.Add("BDOSEmpID", oMatrix.Columns.Item("U_BDOSEmpID").Type);
+            oColumn.TitleObject.Caption = oMatrix.Columns.Item("U_BDOSEmpID").TitleObject.Caption;
+            oColumn.Width = 10;
+            oColumn.Editable = false;
+            oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_BDOSEmpID").DataBind.Alias);
+        }
+
+        private static void ShowAdditionalEntries(SAPbouiCOM.Form oForm)
+        {
             oForm.Freeze(true);
-
-
-
             try
             {
-                SAPbouiCOM.DataTable JDT1_BDO = oForm.DataSources.DataTables.Add("JDT1_BDO");
-
-                for (int i = 0; i < JDT1.Fields.Count; i++)
-                {
-                    JDT1_BDO.Columns.Add(JDT1.Fields.Item(i).Name, JDT1.Fields.Item(i).Type, JDT1.Fields.Item(i).Size);
-                }
-
-                JDT1_BDO.Columns.Add("AcctName", SAPbouiCOM.BoFieldsType.ft_Text, 100);
-                JDT1_BDO.Columns.Add("prFrmItm", SAPbouiCOM.BoFieldsType.ft_Text, 100);
-
-
-
-                Dictionary<string, object> formItems = new Dictionary<string, object>();
-                string itemName = "";
-
-
-                itemName = "JDT1BDOS";
-                formItems = new Dictionary<string, object>();
-                formItems.Add("isDataSource", true);
-                formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
-                //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_GRID);
-                formItems.Add("Left", MatrixItem.Left);
-                formItems.Add("Width", MatrixItem.Width);
-                formItems.Add("Top", MatrixItem.Top);
-                formItems.Add("Height", MatrixItem.Height);
-                formItems.Add("UID", itemName);
-                formItems.Add("FromPane", MatrixItem.FromPane);
-                formItems.Add("ToPane", MatrixItem.ToPane);
-
-                FormsB1.createFormItem(oForm, formItems, out errorText);
-
-                SAPbouiCOM.Matrix MatrixJDT1BDOS = oForm.Items.Item("JDT1BDOS").Specific;
-
-                oColumns = MatrixJDT1BDOS.Columns;
-
-                oForm.Items.Item("BDOSAddEnt").Enabled = true;
-
-                //სტანდარტული ველების ხელოვნურად გამოჩენა (ანგარიში, თანხები, ვალუტა...)
-                oColumn = oColumns.Add("Account", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("1").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
-                oLink.LinkedObjectType = "1";
-                oColumn.DataBind.Bind("JDT1_BDO", "ShortName");
-
-                oColumn = oColumns.Add("2", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("2").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2").DataBind.Alias);
-
-                oColumn = oColumns.Add("ContrlAct", oMatrix.Columns.Item("37").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("37").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oLink = oColumn.ExtendedObject;
-                oLink.LinkedObjectType = "1";
-                oColumn.DataBind.Bind("JDT1_BDO", "Account");
-
-                //Deb Cr FCAmounts
-                oColumn = oColumns.Add("FCCurrency", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                oColumn.TitleObject.Caption = BDOSResources.getTranslate("FCCurrency");
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", "FCCurrency");
-
-                oColumn = oColumns.Add("FCDebit", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                oColumn.TitleObject.Caption = BDOSResources.getTranslate("FCDebit");
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", "FCDebit");
-                oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
-
-                oColumn = oColumns.Add("FCCredit", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                oColumn.TitleObject.Caption = BDOSResources.getTranslate("FCCredit");
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", "FCCredit");
-                oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
-
-                //Deb Cr Amounts
-                oColumn = oColumns.Add("Debit", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                oColumn.TitleObject.Caption = BDOSResources.getTranslate("Debit");
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", "Debit");
-                oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
-
-                oColumn = oColumns.Add("Credit", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                oColumn.TitleObject.Caption = BDOSResources.getTranslate("Credit");
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", "Credit");
-                oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
-
-
-                //Deb Cr Amounts
-                oColumn = oColumns.Add("SYSDeb", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                oColumn.TitleObject.Caption = BDOSResources.getTranslate("SCDebit");
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", "SYSDeb");
-                oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
-
-                oColumn = oColumns.Add("SYSCred", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                oColumn.TitleObject.Caption = BDOSResources.getTranslate("SCCredit");
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", "SYSCred");
-                oColumn.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
-
-                oColumn = oColumns.Add("9", oMatrix.Columns.Item("9").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("9").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("9").DataBind.Alias);
-
-                oColumn = oColumns.Add("17", oMatrix.Columns.Item("17").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("17").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("17").DataBind.Alias);
-
-                //oColumn = oColumns.Add("480002020", oMatrix.Columns.Item("480002020").Type);
-                //oColumn.TitleObject.Caption = oMatrix.Columns.Item("480002020").TitleObject.Caption;
-                //oColumn.Width = 10;
-                //oColumn.Editable = false;
-                //oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("480002020").DataBind.Alias);
-
-                oColumn = oColumns.Add("2006", oMatrix.Columns.Item("2006").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("2006").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2006").DataBind.Alias);
-
-                oColumn = oColumns.Add("2001", oMatrix.Columns.Item("2001").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("2001").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2001").DataBind.Alias);
-
-                oColumn = oColumns.Add("2003", oMatrix.Columns.Item("2003").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("2003").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2003").DataBind.Alias);
-
-                oColumn = oColumns.Add("2004", oMatrix.Columns.Item("2004").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("2004").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2004").DataBind.Alias);
-
-                oColumn = oColumns.Add("2005", oMatrix.Columns.Item("2005").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("2005").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("2005").DataBind.Alias);
-
-                oColumn = oColumns.Add("16", oMatrix.Columns.Item("16").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("16").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("16").DataBind.Alias);
-
-
-                oColumn = oColumns.Add("prFrmItm", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                oColumn.TitleObject.Caption = BDOSResources.getTranslate("prFormItem");
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", "prFrmItm");
-
-                oColumn = oColumns.Add("BDOSEmpID", oMatrix.Columns.Item("U_BDOSEmpID").Type);
-                oColumn.TitleObject.Caption = oMatrix.Columns.Item("U_BDOSEmpID").TitleObject.Caption;
-                oColumn.Width = 10;
-                oColumn.Editable = false;
-                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_BDOSEmpID").DataBind.Alias);
+                SAPbouiCOM.DBDataSource JDT1 = oForm.DataSources.DBDataSources.Item("JDT1");
+                SAPbouiCOM.DBDataSource OJDT = oForm.DataSources.DBDataSources.Item("OJDT");
+                SAPbouiCOM.Item MatrixItem = oForm.Items.Item("76");
+                SAPbouiCOM.Matrix oMatrix = MatrixItem.Specific;
 
                 //ჩვენი ცხრილის შევსება
                 //ძირითადი გატარება
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                SAPbouiCOM.DataTable JDT1_BDO = oForm.DataSources.DataTables.Item("JDT1_BDO");
                 JDT1_BDO.Rows.Clear();
 
                 for (int i = 0; i < JDT1.Size; i++)
@@ -625,16 +588,14 @@ namespace BDO_Localisation_AddOn
                         }
 
                     }
-
                     JDT1_BDO.SetValue("AcctName", i, oMatrix.Columns.Item("2").Cells.Item(i + 1).Specific.Value);
                     JDT1_BDO.SetValue("prFrmItm", i, getCashFlow(JDT1_BDO.GetValue("TransId", i).ToString(), JDT1_BDO.GetValue("Line_ID", i).ToString()));
-
                 }
 
                 int count = JDT1_BDO.Rows.Count;
+                SAPbobsCOM.SBObob vObj = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
 
                 //დამატებითი გატარება
-
                 if (Program.JrnLinesGlobal.Rows.Count > 0)
                 {
                     oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -672,22 +633,18 @@ namespace BDO_Localisation_AddOn
 
                         DataRow dtRow = Program.JrnLinesGlobal.Rows[i];
 
-
                         JDT1_BDO.SetValue("ShortName", GlCount, dtRow["AccountCode"]);
                         JDT1_BDO.SetValue("Account", GlCount, dtRow["AccountCode"]);
                         JDT1_BDO.SetValue("AcctName", GlCount, dtRow["ShortName"]);
                         JDT1_BDO.SetValue("ContraAct", GlCount, dtRow["ContraAccount"]);
                         JDT1_BDO.SetValue("Credit", GlCount, dtRow["Credit"]);
                         JDT1_BDO.SetValue("Debit", GlCount, dtRow["Debit"]);
-
                         JDT1_BDO.SetValue("SYSCred", GlCount, SYSRate > 0 ? Convert.ToDouble(dtRow["Credit"]) / SYSRate : 0);
                         JDT1_BDO.SetValue("SYSDeb", GlCount, SYSRate > 0 ? Convert.ToDouble(dtRow["Debit"]) / SYSRate : 0);
-
                         JDT1_BDO.SetValue("FCCredit", GlCount, dtRow["FCCredit"]);
                         JDT1_BDO.SetValue("FCDebit", GlCount, dtRow["FCDebit"]);
                         JDT1_BDO.SetValue("FCCurrency", GlCount, dtRow["FCCurrency"]);
                         JDT1_BDO.SetValue("AcctName", GlCount, getAcctName(JDT1_BDO.GetValue("Account", GlCount)));
-
                         JDT1_BDO.SetValue("ProfitCode", GlCount, dtRow["CostingCode"].ToString());
                         JDT1_BDO.SetValue("OcrCode2", GlCount, dtRow["CostingCode2"].ToString());
                         JDT1_BDO.SetValue("OcrCode3", GlCount, dtRow["CostingCode3"].ToString());
@@ -696,19 +653,16 @@ namespace BDO_Localisation_AddOn
                         JDT1_BDO.SetValue("Project", GlCount, dtRow["ProjectCode"].ToString());
                         JDT1_BDO.SetValue("VatGroup", GlCount, dtRow["VatGroup"].ToString());
                         JDT1_BDO.SetValue("U_BDOSEmpID", GlCount, dtRow["U_BDOSEmpID"].ToString());
-
                     }
 
                     Program.JrnLinesGlobal = new DataTable();
-
                 }
                 else
                 {
-                    string TransId = OJDT.GetValue("TransId", 0);
+                    string transId = OJDT.GetValue("TransId", 0);
 
-                    if (TransId != "")
+                    if (transId != "")
                     {
-
                         string TransType = OJDT.GetValue("TransType", 0).Trim();
                         string CreatedBy = OJDT.GetValue("CreatedBy", 0).Trim();
 
@@ -720,10 +674,7 @@ namespace BDO_Localisation_AddOn
                                         WHERE ""OJDT"".""Ref1"" = '" + CreatedBy + @"' 
                                         AND ""OJDT"".""Ref2"" = '" + TransType + "' ";
 
-
-
                         oRecordSet.DoQuery(query);
-
 
                         int GlCount = count;
 
@@ -753,33 +704,21 @@ namespace BDO_Localisation_AddOn
                             GlCount++;
                             oRecordSet.MoveNext();
                         }
-
                     }
                 }
-
-                MatrixJDT1BDOS = oForm.Items.Item("JDT1BDOS").Specific;
+                SAPbouiCOM.Matrix MatrixJDT1BDOS = oForm.Items.Item("JDT1BDOS").Specific;
                 MatrixJDT1BDOS.Clear();
                 MatrixJDT1BDOS.LoadFromDataSource();
                 MatrixJDT1BDOS.AutoResizeColumns();
-
-
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
-                //Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-
+                throw new Exception(ex.Message);
             }
-
-
-            SAPbouiCOM.Item MatrixItemJDT1BDOS = oForm.Items.Item("JDT1BDOS");
-
-            MatrixItem.Visible = false;
-            MatrixItemJDT1BDOS.Visible = true;
-            setVisibility(oForm, out errorText);
-
-            oForm.Freeze(false);
-
+            finally
+            {
+                oForm.Freeze(false);
+            }
         }
 
         public static string getAcctName(string Account)
@@ -817,57 +756,65 @@ namespace BDO_Localisation_AddOn
             return "";
         }
 
-        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataLoad(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
-            string TransType = oForm.DataSources.DBDataSources.Item("OJDT").GetValue("TransType", 0).Trim();
-            string CreatedBy = oForm.DataSources.DBDataSources.Item("OJDT").GetValue("CreatedBy", 0).Trim();
-            string StornoToTr = oForm.DataSources.DBDataSources.Item("OJDT").GetValue("StornoToTr", 0).Trim();
-
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string query = "";
-            if (StornoToTr == "")
+            try
             {
-                query = @"SELECT 
+                string TransType = oForm.DataSources.DBDataSources.Item("OJDT").GetValue("TransType", 0).Trim();
+                string CreatedBy = oForm.DataSources.DBDataSources.Item("OJDT").GetValue("CreatedBy", 0).Trim();
+                string StornoToTr = oForm.DataSources.DBDataSources.Item("OJDT").GetValue("StornoToTr", 0).Trim();
+
+                string query;
+                if (string.IsNullOrEmpty(StornoToTr))
+                {
+                    query = @"SELECT 
                             *  
                             FROM ""OJDT"" 
                             WHERE ""StornoToTr"" IS NULL   
                             AND ""Ref1"" = '" + CreatedBy + @"'  
                             AND ""Ref2"" = '" + TransType + "' ";
-            }
-            else
-            {
-                query = @"SELECT 
+                }
+                else
+                {
+                    query = @"SELECT 
                             *  
                             FROM ""OJDT"" 
                             WHERE ""StornoToTr"" IS NOT NULL   
                             AND ""Ref1"" = '" + CreatedBy + @"'
                             AND ""Ref2"" = '" + TransType + "' ";
-            }
+                }
 
-            oRecordSet.DoQuery(query);
+                oRecordSet.DoQuery(query);
 
-            if (!oRecordSet.EoF)
-            {
-                oForm.Items.Item("BDOSJrnEnt").Specific.Value = oRecordSet.Fields.Item("TransId").Value;
+                if (!oRecordSet.EoF)
+                    oForm.Items.Item("BDOSJrnEnt").Specific.Value = oRecordSet.Fields.Item("TransId").Value;
+                else
+                    oForm.Items.Item("BDOSJrnEnt").Specific.Value = "";
             }
-            else
+            catch (Exception ex)
             {
-                oForm.Items.Item("BDOSJrnEnt").Specific.Value = "";
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
             }
         }
 
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
-            if (oForm.TypeEx == "392" & BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
-                JournalEntry.formDataLoad(oForm, out errorText);
+                if (oForm.TypeEx == "392")
+                {
+                    formDataLoad(oForm);
+                    oForm.Items.Item("BDOSAddEnt").Enabled = true;
+                }
             }
         }
 
@@ -880,7 +827,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 string queryHeader = "SELECT " +
-                                "*  " +
+                                "\"TransId\" " +
                                 "FROM \"OJDT\"  " +
                                 "WHERE \"Ref1\" = '" + Ref1.ToString() + "' " +
                                 "AND \"Ref2\" = '" + Ref2 + "' ";
@@ -915,83 +862,93 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void setVisibility(SAPbouiCOM.Form oForm, out string errorText)
+        public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
             oForm.Freeze(true);
-
-            SAPbouiCOM.CheckBox oCheckBoxFC = (SAPbouiCOM.CheckBox)oForm.Items.Item("37").Specific;
-            SAPbouiCOM.CheckBox oCheckBoxLC = (SAPbouiCOM.CheckBox)oForm.Items.Item("36").Specific;
-
-            bool visibleFC = oCheckBoxFC.Checked;
-            bool visibleLC = oCheckBoxLC.Checked;
-
             try
             {
-                SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("JDT1BDOS").Specific;
-                oMatrix.Columns.Item("FCDebit").Visible = visibleFC;
-                oMatrix.Columns.Item("FCCredit").Visible = visibleFC;
-                oMatrix.Columns.Item("FCCurrency").Visible = visibleFC;
+                SAPbouiCOM.CheckBox oCheckBoxFC = (SAPbouiCOM.CheckBox)oForm.Items.Item("37").Specific;
+                SAPbouiCOM.CheckBox oCheckBoxLC = (SAPbouiCOM.CheckBox)oForm.Items.Item("36").Specific;
 
-                oMatrix.Columns.Item("SYSCred").Visible = visibleLC;
-                oMatrix.Columns.Item("SYSDeb").Visible = visibleLC;
+                bool visibleFC = oCheckBoxFC.Checked;
+                bool visibleLC = oCheckBoxLC.Checked;
 
-                oMatrix.AutoResizeColumns();
+                bool additionalEntry = oForm.Items.Item("BDOSAddEnt").Specific.Checked;
+                oForm.Items.Item("76").Visible = !additionalEntry;
+                oForm.Items.Item("JDT1BDOS").Visible = additionalEntry;
+
+                if (additionalEntry)
+                {
+                    SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("JDT1BDOS").Specific;
+                    oMatrix.Columns.Item("FCDebit").Visible = visibleFC;
+                    oMatrix.Columns.Item("FCCredit").Visible = visibleFC;
+                    oMatrix.Columns.Item("FCCurrency").Visible = visibleFC;
+                    oMatrix.Columns.Item("SYSCred").Visible = visibleLC;
+                    oMatrix.Columns.Item("SYSDeb").Visible = visibleLC;
+
+                    oMatrix.AutoResizeColumns();
+                }
             }
-            catch
-            { }
-
-
-
-            oForm.Freeze(false);
-
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
         }
 
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
-                    JournalEntry.createFormItems(oForm, out errorText);
+                    createFormItems(oForm);
+                    Program.FORM_LOAD_FOR_VISIBLE = true;
+                    Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & pVal.BeforeAction == false)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
                 {
-                    JournalEntry.formDataLoad(oForm, out errorText);
-                    setVisibility(oForm, out errorText);
-                }
-
-                if (pVal.ItemUID == "BDOSAddEnt")
-                {
-                    if (pVal.ItemUID == "BDOSAddEnt" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.InnerEvent == false && pVal.BeforeAction == false)
+                    if (Program.FORM_LOAD_FOR_VISIBLE)
                     {
-
-                        ShowAdditionalEntries(oForm, out errorText);
+                        Program.FORM_LOAD_FOR_VISIBLE = false;
+                        setVisibleFormItems(oForm);
                     }
                 }
 
-                try
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
                 {
-                    oForm.Items.Item("BDOSAddEnt").Enabled = true;
-                }
-                catch
-                { }
-
-
-                //Display in და da Display in SYSC
-                if ((pVal.ItemUID == "36" || pVal.ItemUID == "37") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.BeforeAction == false)
-                {
-                    setVisibility(oForm, out errorText);
+                    if (Program.FORM_LOAD_FOR_ACTIVATE)
+                    {
+                        oForm.Items.Item("BDOSAddEnt").Enabled = true;
+                        Program.FORM_LOAD_FOR_ACTIVATE = false;
+                    }
                 }
 
-                if (pVal.ItemUID == "JDT1BDOS" & pVal.ColUID == "Account" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED && pVal.BeforeAction == true)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && !pVal.BeforeAction)
+                {
+                    if (pVal.ItemUID == "BDOSAddEnt")
+                    {
+                        if (!pVal.InnerEvent)
+                        {
+                            ShowAdditionalEntries(oForm);
+                            setVisibleFormItems(oForm);
+                        }
+                    }
+                    else if (pVal.ItemUID == "36" || pVal.ItemUID == "37") //Display in და da Display in SYSC
+                    {
+                        setVisibleFormItems(oForm);
+                    }
+                }
+
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED && pVal.BeforeAction)
                 {
                     SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("JDT1BDOS").Specific;
                     SAPbouiCOM.Column oAccount = oMatrix.Columns.Item("Account");
@@ -1007,7 +964,22 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.LinkedButton oLink = oAccount.ExtendedObject;
                         oLink.LinkedObjectType = "1";
                     }
+                }
+            }
+        }
 
+        public static void uiApp_MenuEvent(ref SAPbouiCOM.MenuEvent pVal, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+
+            SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+
+            if (pVal.BeforeAction && pVal.MenuUID == "1284")
+            {
+                if (oForm.DataSources.DBDataSources.Item("OJDT").GetValue("DataSource", 0) == "O" && oForm.DataSources.DBDataSources.Item("OJDT").GetValue("Ref2", 0) != "Reconcilation")
+                {
+                    BubbleEvent = false;
+                    throw new Exception(BDOSResources.getTranslate("YouCantCancelJournalEntry") + "!");
                 }
             }
         }

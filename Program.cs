@@ -84,7 +84,7 @@ namespace BDO_Localisation_AddOn
             string errorText;
 
             bool connectResult = ConnectB1.connectShared(out errorText);
-            if (connectResult )
+            if (connectResult)
             {
                 //SAPbouiCOM.ProgressBar ProgressBarForm;
                 //ProgressBarForm = uiApp.StatusBar.CreateProgressBar("", 20, true);
@@ -251,7 +251,7 @@ namespace BDO_Localisation_AddOn
                     break;
                 case SAPbouiCOM.BoAppEventTypes.aet_CompanyChanged:
                     {
-                        if (runAddOn() == true)
+                        if (runAddOn())
                         {
                             uiApp.ItemEvent += new SAPbouiCOM._IApplicationEvents_ItemEventEventHandler(uiApp_ItemEvent);
                             uiApp.MenuEvent += new SAPbouiCOM._IApplicationEvents_MenuEventEventHandler(uiApp_MenuEvent);
@@ -281,7 +281,7 @@ namespace BDO_Localisation_AddOn
             string formUID = eventInfo.FormUID;
 
             //----------------------------->Waybill document<-----------------------------
-            if (eventInfo.BeforeAction == true && formUID.Contains("UDO_F_UDO_F_BDO_WBLD_D"))
+            if (eventInfo.BeforeAction && formUID.Contains("UDO_F_UDO_F_BDO_WBLD_D"))
             {
                 if (eventInfo.EventType == SAPbouiCOM.BoEventTypes.et_PRINT_LAYOUT_KEY)
                     eventInfo.LayoutKey = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0).Trim();
@@ -343,7 +343,7 @@ namespace BDO_Localisation_AddOn
 
                 if (oDocForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                 {
-                    BDOSARDownPaymentVATAccrual.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
+                    BDOSARDownPaymentVATAccrual.uiApp_MenuEvent(ref pVal, out BubbleEvent);
                 }
             }
 
@@ -698,7 +698,7 @@ namespace BDO_Localisation_AddOn
             //----------------------------->Internet Banking<-----------------------------
             try
             {
-                if (pVal.BeforeAction == false && pVal.MenuUID == "BDOSInternetBankingForm")
+                if (!pVal.BeforeAction && pVal.MenuUID == "BDOSInternetBankingForm")
                 {
                     errorText = null;
                     BDOSInternetBanking.createForm(out errorText);
@@ -712,7 +712,7 @@ namespace BDO_Localisation_AddOn
             //----------------------------->Delete UDF<-----------------------------
             try
             {
-                if (pVal.BeforeAction == false && pVal.MenuUID == "BDOSDeleteUDFForm")
+                if (!pVal.BeforeAction && pVal.MenuUID == "BDOSDeleteUDFForm")
                 {
                     errorText = null;
                     BDOSDeleteUDF.createForm(out errorText);
@@ -723,7 +723,7 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->Outgoing payment wizzard<-----------------------------
+            //----------------------------->Outgoing Payments wizzard<-----------------------------
             try
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "BDOSSOPWizzForm")
@@ -765,13 +765,12 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->VAT accrual wizzard<-----------------------------
+            //----------------------------->AR Down Payment VAT Accrual Wizard<-----------------------------
             try
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "BDOSVAWizzForm")
                 {
-                    errorText = null;
-                    BDOSVATAccrualWizard.createForm(out errorText);
+                    BDOSVATAccrualWizard.createForm();
                 }
             }
             catch (Exception ex)
@@ -792,13 +791,12 @@ namespace BDO_Localisation_AddOn
                 uiApp.MessageBox(ex.ToString(), 1, "", "");
             }
 
-            //----------------------------->Reconcilation wizzard<-----------------------------
+            //----------------------------->VAT Reconcilation Wizard<-----------------------------
             try
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "BDOSReconWizz")
                 {
-                    errorText = null;
-                    BDOSVATReconcilationWizard.createForm(out errorText);
+                    BDOSVATReconcilationWizard.createForm();
                 }
             }
             catch (Exception ex)
@@ -893,127 +891,144 @@ namespace BDO_Localisation_AddOn
             //----------------------------->Cancel<-----------------------------
             if (pVal.MenuUID == "1284")
             {
-                if (pVal.BeforeAction == true)
+                try
                 {
-                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
+                    if (pVal.BeforeAction)
+                    {
+                        SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
 
-                    //----------------------------->A/R Invoice<-----------------------------
-                    if (oForm.TypeEx == "133")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OINV").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->Inventory Transfer<-----------------------------
-                    else if (oForm.TypeEx == "940")
-                    {
+                        //----------------------------->A/R Invoice<-----------------------------
+                        if (oForm.TypeEx == "133")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OINV").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Inventory Transfer<-----------------------------
+                        else if (oForm.TypeEx == "940")
+                        {
 
-                        StockTransfer.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
+                            StockTransfer.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
 
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OWTR").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->A/R Credit Note<-----------------------------
-                    else if (oForm.TypeEx == "179")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORIN").GetValue("DocEntry", 0));
-                    }
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OWTR").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->A/R Credit Note<-----------------------------
+                        else if (oForm.TypeEx == "179")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORIN").GetValue("DocEntry", 0));
+                        }
 
-                    //----------------------------->A/R Correction Invoice<-----------------------------
-                    else if (oForm.TypeEx == "70008")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OCSI").GetValue("DocEntry", 0));
-                    }
+                        //----------------------------->A/R Correction Invoice<-----------------------------
+                        else if (oForm.TypeEx == "70008")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OCSI").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Depreciation<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSDEPACR").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Profit Tax Accrual<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXP").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Fixes Asset Transfer<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSFASTRD_D")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSFASTRD").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Outgoing Payments<-----------------------------
+                        else if (oForm.TypeEx == "426")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Incoming Paymentss<-----------------------------
+                        else if (oForm.TypeEx == "170")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORCT").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->A/P Invoice<-----------------------------
+                        if (oForm.TypeEx == "141")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->A/P Reserve Invoice<-----------------------------
+                        if (oForm.TypeEx == "60092")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Retirement<-----------------------------
+                        if (oForm.TypeEx == "1470000014")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORTI").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->A/P Credit Memo<-----------------------------
+                        if (oForm.TypeEx == "181")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORPC").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Tax Invoice Received<-----------------------------
+                        if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXR_D")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Tax Invoice Sent<-----------------------------
+                        if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXS_D")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->AR Down Payment VAT Accrual<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSARDV").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->Interest Accrual Document<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSINAC_D")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSINAC").GetValue("DocEntry", 0));
+                        }
+                        //----------------------------->>Journal Entry<<-----------------------------
+                        else if (oForm.TypeEx == "392")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OJDT").GetValue("TransId", 0));
 
-                    //----------------------------->Depreciation<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSDEPACR").GetValue("DocEntry", 0));
+                            JournalEntry.uiApp_MenuEvent(ref pVal, out BubbleEvent);
+                        }
                     }
-
-                    //----------------------------->Profit Tax Accrual<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
+                    else
                     {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXP").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->Fixes Asset Transfer<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSFASTRD_D")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSFASTRD").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->Outgoing Payment<-----------------------------
-                    else if (oForm.TypeEx == "426")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->A/P Invoice<-----------------------------
-                    if (oForm.TypeEx == "141")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->A/P Reserve Invoice<-----------------------------
-                    if (oForm.TypeEx == "60092")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->Retirement<-----------------------------
-                    if (oForm.TypeEx == "1470000014")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORTI").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->A/P Credit Memo<-----------------------------
-                    if (oForm.TypeEx == "181")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORPC").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->Tax Invoice Received<-----------------------------
-                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXR_D")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->Tax Invoice Sent<-----------------------------
-                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXS_D")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXS").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->A / R Down Payment VAT Accrual<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSARDV").GetValue("DocEntry", 0));
-                    }
-                    //----------------------------->Interest Accrual Document<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSINAC_D")
-                    {
-                        cancellationTrans = true;
-                        canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDOSINAC").GetValue("DocEntry", 0));
+                        if (!cancellationTrans)
+                            cancellationDoc = true;
+                        cancellationTrans = false;
                     }
                 }
-                else if (pVal.BeforeAction == false)
+                catch (Exception ex)
                 {
-                    if (cancellationTrans == false)
-                    {
-                        cancellationDoc = true;
-                    }
-                    cancellationTrans = false;
+                    uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
                 }
             }
 
             //----------------------------->Remove<-----------------------------
             if (pVal.MenuUID == "1283")
             {
-                if (pVal.BeforeAction == true)
+                if (pVal.BeforeAction)
                 {
                     SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
 
@@ -1041,7 +1056,7 @@ namespace BDO_Localisation_AddOn
             }
 
             //----------------------------->Remove Line<-----------------------------
-            if (pVal.MenuUID == "UDO_F_BDO_TAXP_D_Remove_Line" & pVal.BeforeAction == false)
+            if (pVal.MenuUID == "UDO_F_BDO_TAXP_D_Remove_Line" & !pVal.BeforeAction)
             {
                 removeLineTrans = true;
             }
@@ -1053,7 +1068,7 @@ namespace BDO_Localisation_AddOn
                 {
                     SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
                 }
-                else if (!pVal.BeforeAction)
+                else
                 {
                     SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
                     //----------------------------->A/R Invoice<-----------------------------
@@ -1118,7 +1133,7 @@ namespace BDO_Localisation_AddOn
                         APCreditMemo.setVisibleFormItems(oForm, out errorText);
                     }
 
-                    //----------------------------->Outgoing Payment<-----------------------------
+                    //----------------------------->Outgoing Payments<-----------------------------
                     else if (oForm.TypeEx == "426")
                     {
                         OutgoingPayment.formDataLoad(oForm, out errorText);
@@ -1155,14 +1170,14 @@ namespace BDO_Localisation_AddOn
                     }
 
                     //----------------------------->A/R Down Payment Request<-----------------------------
-                    else if (oForm.TypeEx == "65308")
-                    {
-                        ARDownPaymentRequest.formDataLoad(oForm, out errorText);
-                    }
+                    //else if (oForm.TypeEx == "65308")
+                    //{
+                    //    ARDownPaymentRequest.formDataLoad(oForm, out errorText);
+                    //}
                     //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                     else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                     {
-                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm, out errorText);
+                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
                     }
 
                     //----------------------------->Retirement<-----------------------------
@@ -1194,7 +1209,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                else if (!pVal.BeforeAction)
+                else
                 {
                     SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
 
@@ -1275,7 +1290,7 @@ namespace BDO_Localisation_AddOn
                         BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
                     }
 
-                    //----------------------------->Outgoing Payment<-----------------------------
+                    //----------------------------->Outgoing Payments<-----------------------------
                     else if (oForm.TypeEx == "426")
                     {
                         OutgoingPayment.formDataLoad(oForm, out errorText);
@@ -1306,14 +1321,14 @@ namespace BDO_Localisation_AddOn
                     }
 
                     //----------------------------->A/R Down Payment Request<-----------------------------
-                    else if (oForm.TypeEx == "65308")
-                    {
-                        ARDownPaymentRequest.formDataLoad(oForm, out errorText);
-                    }
+                    //else if (oForm.TypeEx == "65308")
+                    //{
+                    //    ARDownPaymentRequest.formDataLoad(oForm, out errorText);
+                    //}
                     //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                     else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                     {
-                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm, out errorText);
+                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
                     }
 
                     //----------------------------->Retirement<-----------------------------
@@ -1331,18 +1346,23 @@ namespace BDO_Localisation_AddOn
             }
 
             //----------------------------->Find<-----------------------------
-            if (pVal.MenuUID == "1281" & pVal.BeforeAction == false)
+            if (pVal.MenuUID == "1281")
             {
                 SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
-                if (oForm.TypeEx == "")
-                {
 
+                if (!pVal.BeforeAction)
+                {
+                    //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
+                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
+                    {
+                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
+                    }
                 }
             }
 
             try
             {
-                if (pVal.BeforeAction == false && pVal.MenuUID == "BDO_WBS")
+                if (!pVal.BeforeAction && pVal.MenuUID == "BDO_WBS")
                 {
                     BDO_WaybillsJournalSent.createForm(out errorText);
                 }
@@ -1373,13 +1393,13 @@ namespace BDO_Localisation_AddOn
                     ChartOfAccounts.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Outgoing Payment<-----------------------------
+                //----------------------------->Outgoing Payments<-----------------------------
                 else if (BusinessObjectInfo.Type == "46")
                 {
                     OutgoingPayment.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->Incoming Payment<-----------------------------
+                //----------------------------->Incoming Payments<-----------------------------
                 else if (BusinessObjectInfo.Type == "24")
                 {
                     IncomingPayment.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
@@ -1571,7 +1591,7 @@ namespace BDO_Localisation_AddOn
                     ARDownPaymentRequest.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //----------------------------->A/R Down Payment VAT<-----------------------------
+                //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                 else if (BusinessObjectInfo.Type == "UDO_F_BDO_ARDPV_D")
                 {
                     BDOSARDownPaymentVATAccrual.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
@@ -1669,54 +1689,54 @@ namespace BDO_Localisation_AddOn
 
         public static void translateFormTitle(ref SAPbouiCOM.ItemEvent pVal)
         {
-            if ((pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & FORM_LOAD_FOR_VISIBLE == true || pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD) & pVal.BeforeAction == false)
+            if ((pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & FORM_LOAD_FOR_VISIBLE || pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD) & !pVal.BeforeAction)
             {
                 SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 string title = oForm.Title;
-                int substringLength = (title.Contains("სია") == true ? 4 : 5);
+                int substringLength = (title.Contains("სია") ? 4 : 5);
 
-                if (title.Contains("Item Categories") == true)
+                if (title.Contains("Item Categories"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("ItemCategories");
                 }
-                else if (title.Contains("Drivers") == true)
+                else if (title.Contains("Drivers"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("Drivers");
                 }
-                else if (title.Contains("Profit Tax Base") == true)
+                else if (title.Contains("Profit Tax Base"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("ProfitTaxBase");
                 }
-                else if (title.Contains("Profit Tax Base Type") == true)
+                else if (title.Contains("Profit Tax Base Type"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("ProfitTaxBaseType");
                 }
-                else if (title.Contains("Vehicles") == true)
+                else if (title.Contains("Vehicles"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("Vehicles");
                 }
-                else if (title.Contains("Profit Tax Accrual") == true)
+                else if (title.Contains("Profit Tax Accrual"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("ProfitTaxAccrual");
                 }
-                else if (title.Contains("Tax Invoice Received") == true)
+                else if (title.Contains("Tax Invoice Received"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("TaxInvoiceReceived");
                 }
-                else if (title.Contains("Banking Integration Rules") == true)
+                else if (title.Contains("Banking Integration Rules"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("BankingIntegrationRules");
                 }
-                else if (title.Contains("Tax Invoice Sent") == true)
+                else if (title.Contains("Tax Invoice Sent"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("TaxInvoiceSent");
                 }
-                else if (title.Contains("Waybill") == true)
+                else if (title.Contains("Waybill"))
                 {
                     oForm.Title = title.Substring(0, substringLength) + BDOSResources.getTranslate("Waybill");
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & FORM_LOAD_FOR_VISIBLE == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & FORM_LOAD_FOR_VISIBLE)
                 {
                     FORM_LOAD_FOR_VISIBLE = false;
                 }
@@ -1733,7 +1753,7 @@ namespace BDO_Localisation_AddOn
             string errorText = null;
 
             //----------------------------->ლიცენზირების ფორმა<-----------------------------
-            if (pVal.FormUID == "BDOSLocLicForm" && pVal.ItemUID == "3" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
+            if (pVal.FormUID == "BDOSLocLicForm" && pVal.ItemUID == "3" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
             {
                 SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 updateProgramLicense(oForm, out errorText);
@@ -1811,7 +1831,7 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormUID == "BDOSWBRAn" || pVal.FormUID == "BDOSSelectValues")
                 {
                     BDOSWaybillsAnalysisReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                } 
+                }
 
                 //----------------------------->Waybills Analysis Sent<-----------------------------
                 else if (pVal.FormUID == "BDOSWBSAn")
@@ -1888,7 +1908,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->შესაბამისობის კატალოგი<-----------------------------
-                else if (pVal.FormTypeEx == "993" & pVal.BeforeAction == false)
+                else if (pVal.FormTypeEx == "993" & !pVal.BeforeAction)
                 {
                     BDO_BPCatalog.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
@@ -1900,13 +1920,13 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Exchange Rates And Indexes<-----------------------------
-                else if (pVal.FormTypeEx == "866" & pVal.BeforeAction == false)
+                else if (pVal.FormTypeEx == "866" & !pVal.BeforeAction)
                 {
                     ExchangeFormRatesAndIndexes.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Import Rate<-----------------------------
-                else if (pVal.FormUID == "BDO_ImportRateForm" & pVal.BeforeAction == false) //60004
+                else if (pVal.FormUID == "BDO_ImportRateForm" & !pVal.BeforeAction) //60004
                 {
                     BDO_ImportRateForm.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
@@ -1935,10 +1955,15 @@ namespace BDO_Localisation_AddOn
                     BDOSDepreciationAccrualWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->VAT Accrual Wizzard<-----------------------------
+                //----------------------------->AR Down Payment VAT Accrual Wizard<-----------------------------
                 else if (pVal.FormUID == "BDOSVAWizzForm")
                 {
                     BDOSVATAccrualWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                else if (pVal.FormUID == "BDOSVATADD")
+                {
+                    BDOSVATAccrualWizard.uiApp_ItemEventAddForm(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Fuel Write-Off Wizard<-----------------------------
@@ -1947,15 +1972,10 @@ namespace BDO_Localisation_AddOn
                     BDOSFuelWriteOffWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Reconcilation Wizzard<-----------------------------
+                //----------------------------->VAT Reconcilation Wizard<-----------------------------
                 else if (pVal.FormUID == "BDOSReconWizz")
                 {
                     BDOSVATReconcilationWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
-
-                else if (pVal.FormUID == "BDOSVATADD")
-                {
-                    BDOSVATAccrualWizard.uiApp_ItemEventAddForm(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Business Partner Master Data<-----------------------------
@@ -2000,7 +2020,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
                     {
                         SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
-                        if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == false)
+                        if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & !pVal.BeforeAction)
                         {
                             SAPbouiCOM.Item oItem;
                             SAPbouiCOM.EditText oEditText;
@@ -2184,19 +2204,19 @@ namespace BDO_Localisation_AddOn
                     BDO_TaxInvoiceReceived.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Tax Invoice Sent <-----------------------------
+                //----------------------------->Tax Invoice Sent<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDO_TAXS_D")
                 {
                     BDO_TaxInvoiceSent.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->A/R Down Payment VAT Accrual <-----------------------------
+                //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
                 {
                     BDOSARDownPaymentVATAccrual.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Profit Tax Accural <-----------------------------
+                //----------------------------->Profit Tax Accural<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                 {
                     BDO_ProfitTaxAccrual.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
@@ -2226,13 +2246,13 @@ namespace BDO_Localisation_AddOn
                     HouseBankAccounts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Outgoing Payments<-----------------------------
+                //----------------------------->Outgoing Paymentss<-----------------------------
                 else if (pVal.FormTypeEx == "426" || pVal.FormUID == "OutgoingPaymentNewDate")
                 {
                     OutgoingPayment.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Incoming Payments<-----------------------------
+                //----------------------------->Incoming Paymentss<-----------------------------
                 else if (pVal.FormTypeEx == "170")
                 {
                     IncomingPayment.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
@@ -2292,13 +2312,13 @@ namespace BDO_Localisation_AddOn
                     BDOSInternetBankingDocuments.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Payment Means from Outgoing Payments<-----------------------------
+                //----------------------------->Payment Means from Outgoing Paymentss<-----------------------------
                 else if (pVal.FormTypeEx == "196")
                 {
                     PaymentMeans.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Payment Means from Incoming Payments<-----------------------------
+                //----------------------------->Payment Means from Incoming Paymentss<-----------------------------
                 else if (pVal.FormTypeEx == "146")
                 {
                     PaymentMeans.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
@@ -2385,7 +2405,7 @@ namespace BDO_Localisation_AddOn
                         removeRecordRow = 1;
                     }
                 }
-                
+
                 //----------------------------->Interest Accrual Document<-----------------------------
                 else if (pVal.FormTypeEx == "UDO_FT_UDO_F_BDOSINAC_D")
                 {
@@ -2441,6 +2461,7 @@ namespace BDO_Localisation_AddOn
                 {
                     BDOSDepreciationAccrualDocument.uiApp_RightClickEvent(oForm, eventInfo, out BubbleEvent);
                 }
+
                 else
                 {
                     try
@@ -2455,8 +2476,10 @@ namespace BDO_Localisation_AddOn
                     catch { }
                 }
             }
-            catch
-            { }
+            catch (Exception ex)
+            {
+                uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
 
             if (oForm == null)
             {
@@ -2477,9 +2500,9 @@ namespace BDO_Localisation_AddOn
             {
             }
 
-            if (eventInfo.BeforeAction == true)
+            if (eventInfo.BeforeAction)
             {
-                if (uiApp.Menus.Exists("6005") == false && oItem != null && DocEntry == "")
+                if (!uiApp.Menus.Exists("6005") && oItem != null && DocEntry == "")
                 {
                     SAPbouiCOM.MenuItem oMenuItem;
                     SAPbouiCOM.Menus oMenus;
@@ -2515,7 +2538,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //აღდგენის (restore) წაშლა მარჯვენა-კლიკის კონტექსტური მენიუდან
-                if ((uiApp.Menus.Exists("1285") == true))
+                if (uiApp.Menus.Exists("1285"))
                 {
                     try
                     {

@@ -4392,7 +4392,7 @@ namespace BDO_Localisation_AddOn
 
                 SAPbouiCOM.LinkedButton oLinkedButton = (SAPbouiCOM.LinkedButton)oForm.Items.Item("14_U_LB").Specific;
                 oLinkedButton.LinkedObjectType = baseDocType;
-
+                
                 oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("20_U_E").Specific;
                 if (baseDocType == "13" || baseDocType == "14" || oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_cardCode", 0).Trim() != "")
                 {

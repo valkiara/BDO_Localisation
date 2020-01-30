@@ -428,21 +428,19 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE && pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE && pVal.BeforeAction)
                 {
                     int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CloseInterestAccrualWizard") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
 
                     if (answer != 1)
-                    {
                         BubbleEvent = false;
-                    }
                 }
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
                 {
                     if (!pVal.BeforeAction)
                     {
-                        if ((pVal.ItemUID == "checkB" || pVal.ItemUID == "unCheckB"))
+                        if (pVal.ItemUID == "checkB" || pVal.ItemUID == "unCheckB")
                         {
                             checkUncheckMTR(oForm, pVal.ItemUID);
                         }

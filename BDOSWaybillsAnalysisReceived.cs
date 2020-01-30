@@ -19,6 +19,12 @@ namespace BDO_Localisation_AddOn
 
         public static void createForm(out string errorText)
         {
+            selectedBusinessPartners = new Hashtable();
+            selectedTypes = new Hashtable();
+            selectedStatuses = new Hashtable();
+            selectedCompareStatuses = new Hashtable();
+            buttonType = null;
+
             errorText = null;
             int formHeight = Program.uiApp.Desktop.Height;
             int formWidth = Program.uiApp.Desktop.Width;
@@ -716,9 +722,12 @@ namespace BDO_Localisation_AddOn
                     if (endDateParam > EndDateForWS)
                         endDateParam = EndDateForWS;
 
-                    for (int i = 0; i < buyerTinsList.Count; i++)
+                    bool isBpFilter = buyerTinsList.Count > 0;
+                    int countBpFilter = isBpFilter ? buyerTinsList.Count : 1;
+
+                    for (int i = 0; i < countBpFilter; i++)
                     {
-                        string seller_id = buyerTinsList[i];
+                        string seller_id = isBpFilter ? buyerTinsList[i] : "";
                         Dictionary<string, Dictionary<string, string>> waybills_map_part = oWayBill.get_buyer_waybills(string.Join(",", selectedTypesList), seller_id, ",,1,2,-1,-2,7,", car_number, startDateParam, endDateParam, startDateParam, endDateParam, driver_tin, startDateParam, endDateParam, full_amount, waybill_number, startDateParam, endDateParam, s_user_id, comment, StartAddress, EndAddress, out errorText);
                         foreach (KeyValuePair<string, Dictionary<string, string>> map_record in waybills_map_part)
                         {
@@ -953,7 +962,7 @@ namespace BDO_Localisation_AddOn
                         wbCompStat = "6";
                     }
 
-                    if (selectedCompareStatusesList.Count > 0) 
+                    if (selectedCompareStatusesList.Count > 0)
                     {
                         if (!selectedCompareStatusesList.Contains(wbCompStat))
                         {
@@ -962,7 +971,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    if (selectedStatusesList.Count > 0) 
+                    if (selectedStatusesList.Count > 0)
                     {
                         if (!selectedStatusesList.Contains(RS_STATUS))
                         {
@@ -1805,7 +1814,7 @@ namespace BDO_Localisation_AddOn
               ((!string.IsNullOrEmpty(cardCodes)) ? @" AND ""BASEDOCGDS"".""BaseCard"" IN (" + cardCodes + ") " : " ") +
               ((!string.IsNullOrEmpty(types)) ? @" AND ""BASEDOCGDS"".""Type"" IN (" + types + ") " : " ") +
 
-              //((types == "2" || types == "3" || types == "5") ? @" AND ""BASEDOCGDS"".""Type"" ='" + ((types == "5") ? "5" : "2") + "' " : " ") +
+    //((types == "2" || types == "3" || types == "5") ? @" AND ""BASEDOCGDS"".""Type"" ='" + ((types == "5") ? "5" : "2") + "' " : " ") +
 
     //   ((statuses != "" && statuses != "-99") ? @"AND (CASE WHEN ""U_BDO_WBSt"" = '1' 
     //	    THEN '0' WHEN ""U_BDO_WBSt""= '2' 
@@ -1909,6 +1918,11 @@ namespace BDO_Localisation_AddOn
                             oForm.DataSources.UserDataSources.Item("ClientID").Value = string.Join(",", cardCodes);
                         }
                     }
+                    else
+                    {
+                        selectedBusinessPartners = new Hashtable();
+                        oForm.DataSources.UserDataSources.Item("ClientID").Value = "";
+                    }
                 }
             }
             catch (Exception ex)
@@ -1991,7 +2005,15 @@ namespace BDO_Localisation_AddOn
                 {
                     SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE && pVal.BeforeAction)
+                    {
+                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CloseReceivedWaybillsAnalysis") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+
+                        if (answer != 1)
+                            BubbleEvent = false;
+                    }
+
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                         chooseFromList(oForm, pVal, oCFLEvento);
@@ -2038,8 +2060,8 @@ namespace BDO_Localisation_AddOn
         static void createModalForm()
         {
             string errorText;
-            int formHeight = Program.uiApp.Desktop.Height / 5;
-            int formWidth = Program.uiApp.Desktop.Width / 5;
+            int formHeight = 208; //Program.uiApp.Desktop.Height / 5;
+            int formWidth = 384; //Program.uiApp.Desktop.Width / 5;
 
             //ფორმის აუცილებელი თვისებები
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
@@ -2101,32 +2123,32 @@ namespace BDO_Localisation_AddOn
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("InternalShipment"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedTypes.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("ARInvoice") + " " + BDOSResources.getTranslate("WithTransport"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedTypes.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("ARInvoice") + " " + BDOSResources.getTranslate("WithoutTransport"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedTypes.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("Distribution"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedTypes.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("Return"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedTypes.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("SubWaybill"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedTypes.ContainsKey(i + 1) ? "Y" : "N");
                     }
                     else if (buttonType == "STChooseB")
                     {
@@ -2134,32 +2156,32 @@ namespace BDO_Localisation_AddOn
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, -2);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("Canceled"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedStatuses.ContainsKey(-2) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, -1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("deleted"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedStatuses.ContainsKey(-1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, 0);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("Saved"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedStatuses.ContainsKey(0) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("Active"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedStatuses.ContainsKey(1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, 2);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("finished"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedStatuses.ContainsKey(2) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, 7);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("SentToTransporter"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedStatuses.ContainsKey(7) ? "Y" : "N");
                     }
                     else if (buttonType == "CSTChooseB")
                     {
@@ -2167,37 +2189,37 @@ namespace BDO_Localisation_AddOn
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("OnlyOnSite"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedCompareStatuses.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("OnlyOnProgram"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedCompareStatuses.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("AmountsNotEqual"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedCompareStatuses.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("EqualAmounts"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedCompareStatuses.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("Linked") + " " + BDOSResources.getTranslate("Document") + " " + BDOSResources.getTranslate("NotPosted"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedCompareStatuses.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("SavedStatus"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedCompareStatuses.ContainsKey(i + 1) ? "Y" : "N");
                         i++;
                         oDataTable.Rows.Add();
                         oDataTable.SetValue("Key", i, i + 1);
                         oDataTable.SetValue("Value", i, BDOSResources.getTranslate("NotFoundOnSiteOnThisPeriod"));
-                        oDataTable.SetValue("CheckBox", i, "N");
+                        oDataTable.SetValue("CheckBox", i, selectedCompareStatuses.ContainsKey(i + 1) ? "Y" : "N");
                     }
 
                     string UID = "ValueMTR";
@@ -2205,6 +2227,7 @@ namespace BDO_Localisation_AddOn
                     oColumn = oColumns.Add("Key", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("Key");
                     oColumn.Editable = false;
+                    oColumn.Visible = false;
                     oColumn.DataBind.Bind(UID, "Key");
 
                     oColumn = oColumns.Add("Value", SAPbouiCOM.BoFormItemTypes.it_EDIT);

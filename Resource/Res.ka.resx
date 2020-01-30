@@ -2605,7 +2605,7 @@
   <data name="ARDownPaymentVATAccrual" xml:space="preserve">
     <value>ავანსის დღგ-ის დარიცხვის დოკუმენტი</value>
   </data>
-  <data name="ARVATAccrualWizard" xml:space="preserve">
+  <data name="ARDownPaymentVATAccrualWizard" xml:space="preserve">
     <value>ავანსის დღგ-ის დარიცხვის დამხმარე</value>
   </data>
   <data name="DocEntVT" xml:space="preserve">
@@ -2618,7 +2618,7 @@
     <value>თარიღის შეცვლა</value>
   </data>
   <data name="VATReconcilationWizard" xml:space="preserve">
-    <value>დღგ-ს რეკონსილაციის დამხმარე</value>
+    <value>დღგ-ის რეკონსილაციის დამხმარე</value>
   </data>
   <data name="ReconSum" xml:space="preserve">
     <value>რეკონსილაციის თანხა</value>
@@ -2626,8 +2626,8 @@
   <data name="NewDate" xml:space="preserve">
     <value>ახალი თარიღი</value>
   </data>
-  <data name="CreateVATAccrualDocuments" xml:space="preserve">
-    <value>შეიქმნას დღგ-ის დარიცხვის დოკუმენტი</value>
+  <data name="CreateARDownPaymentVATAccrualDocuments" xml:space="preserve">
+    <value>შეიქმნას ავანსის დღგ-ის დარიცხვის დოკუმენტები</value>
   </data>
   <data name="AlRcnSum" xml:space="preserve">
     <value>გატარებული თანხა</value>
@@ -3396,5 +3396,26 @@
   </data>
   <data name="SelectValues" xml:space="preserve">
     <value>აირჩიეთ მნიშვნელობები</value>
+  </data>
+  <data name="CloseReceivedWaybillsAnalysis" xml:space="preserve">
+    <value>დაიხუროს მიღებული ზედნადებების ანალიზი</value>
+  </data>
+  <data name="DoYouReallyWantCancelDoc" xml:space="preserve">
+    <value>ნამდვილად გსურთ დოკუმენტის გაუქმება</value>
+  </data>
+  <data name="YouCantCancelJournalEntry" xml:space="preserve">
+    <value>გატარებების ჯურნალს ვერ გააუქმებთ</value>
+  </data>
+  <data name="saveWhs" xml:space="preserve">
+    <value>შეინახე საწყობი</value>
+  </data>
+  <data name="YouCantCancelDocumentBecauseOfARDownPaymentVATAccrual" xml:space="preserve">
+    <value>დოკუმენტს ვერ გააუქმებთ! მასზე არსებობს ავანსის დღგ-ის დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="CloseARDownPaymentVATAccrualWizard" xml:space="preserve">
+    <value>დაიხუროს ავანსის დღგ-ის დარიცხვის დამხმარე</value>
+  </data>
+  <data name="CloseVATReconcilationWizard" xml:space="preserve">
+    <value>დაიხუროს ავანსის დღგ-ის რეკონსილაციის დამხმარე</value>
   </data>
 </root>
