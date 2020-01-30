@@ -466,15 +466,11 @@ namespace BDO_Localisation_AddOn
 
         public static void addMenus()
         {
-            SAPbouiCOM.MenuItem menuItem;
-            SAPbouiCOM.MenuItem fatherMenuItem;
-            SAPbouiCOM.MenuCreationParams oCreationPackage;
-
             try
             {
-                fatherMenuItem = Program.uiApp.Menus.Item("2048");
+                SAPbouiCOM.MenuItem fatherMenuItem = Program.uiApp.Menus.Item("2048");
                 // Add a pop-up menu item
-                oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
+                SAPbouiCOM.MenuCreationParams oCreationPackage = (SAPbouiCOM.MenuCreationParams)Program.uiApp.CreateObject(SAPbouiCOM.BoCreatableObjectType.cot_MenuCreationParams);
                 oCreationPackage.Checked = false;
                 oCreationPackage.Enabled = true;
                 oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
@@ -482,7 +478,7 @@ namespace BDO_Localisation_AddOn
                 oCreationPackage.String = BDOSResources.getTranslate("TaxInvoiceSent");
                 oCreationPackage.Position = fatherMenuItem.SubMenus.Count - 1;
 
-                menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
+                SAPbouiCOM.MenuItem menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
             catch
             {
@@ -2898,7 +2894,7 @@ namespace BDO_Localisation_AddOn
                             }
                             exclList.Add("0");
 
-                            DataTable baseDocs = getListBaseDoc(oGeneralData, wbNumber, null, baseDocType, docEntry, exclList, out errorText);
+                            DataTable baseDocs = getListBaseDoc(oGeneralData, wbNumber, null, baseDocType, docEntry, exclList);
 
                             int docCount = baseDocs.Rows.Count;
                             SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
@@ -2977,11 +2973,11 @@ namespace BDO_Localisation_AddOn
                             }
                             else if (sCFL_ID == "DownPaymentInvoice_CFL")
                             {
-                                ARDownPaymentRequest.getAmount(docEntry, out amount, out amountTX, out errorText);
+                                ARDownPaymentRequest.getAmount(docEntry, out amount, out amountTX);
                             }
                             else if (sCFL_ID == "ARDownPaymentVAT_CFL")
                             {
-                                BDOSARDownPaymentVATAccrual.getAmount(docEntry, out amount, out amountTX, out errorText);
+                                BDOSARDownPaymentVATAccrual.getAmount(docEntry, out amount, out amountTX);
                             }
 
                             LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_baseDTxt").Cells.Item(cellPos.rowIndex).Specific.Value = docEntry.ToString());
@@ -3100,10 +3096,8 @@ namespace BDO_Localisation_AddOn
                 return "empty";
         }
 
-        public static Dictionary<string, object> getTaxInvoiceSentDocumentInfo(int docEntry, string baseDocType, string cardCode, out string errorText)
+        public static Dictionary<string, object> getTaxInvoiceSentDocumentInfo(int docEntry, string baseDocType, string cardCode)
         {
-            errorText = null;
-
             Dictionary<string, object> taxDocInfo = null;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -3147,21 +3141,18 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
-                return taxDocInfo;
+                throw new Exception(ex.Message);
             }
             finally
             {
                 Marshal.FinalReleaseComObject(oRecordSet);
                 GC.Collect();
             }
-
             return taxDocInfo;
         }
 
-        public static void getPrimaryBaseDoc(int docEntry, string cardCode, out List<int> baseDocList, out string errorText)
+        public static void getPrimaryBaseDoc(int docEntry, string cardCode, out List<int> baseDocList)
         {
-            errorText = null;
             int corrDoc = 0;
             string corrInv = null;
             baseDocList = new List<int>();
@@ -3206,13 +3197,13 @@ namespace BDO_Localisation_AddOn
                     }
                     if (corrInv == "Y" && corrDoc != 0)
                     {
-                        getPrimaryBaseDoc(corrDoc, cardCode, out baseDocList, out errorText);
+                        getPrimaryBaseDoc(corrDoc, cardCode, out baseDocList);
                     }
                 }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -3222,10 +3213,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static DataTable getListBaseDoc(SAPbobsCOM.GeneralData oGeneralData, string overhead_no, string overhead_dt_str, string baseDocType, int docEntryTaxInv, List<string> exclList, out string errorText)
+        public static DataTable getListBaseDoc(SAPbobsCOM.GeneralData oGeneralData, string overhead_no, string overhead_dt_str, string baseDocType, int docEntryTaxInv, List<string> exclList)
         {
-            errorText = null;
-
             DataTable baseDocs = new DataTable();
             baseDocs.Columns.Add("DocEntry", typeof(int));
             baseDocs.Columns.Add("DocDate", typeof(DateTime));
@@ -3286,15 +3275,15 @@ namespace BDO_Localisation_AddOn
             List<int> connectedDocList = new List<int>();
             if (corrInv)
             {
-                getPrimaryBaseDoc(corrDoc, cardCode, out primaryBaseDocList, out errorText);
+                getPrimaryBaseDoc(corrDoc, cardCode, out primaryBaseDocList);
 
                 if (downPaymnt)
                 {
-                    connectedDocList = ARDownPaymentRequest.getAllConnectedDoc(primaryBaseDocList, out errorText);
+                    connectedDocList = ARDownPaymentRequest.getAllConnectedDoc(primaryBaseDocList);
                 }
                 else
                 {
-                    connectedDocList = ARCreditNote.getAllConnectedDoc(primaryBaseDocList, "13", out errorText);
+                    connectedDocList = ARCreditNote.getAllConnectedDoc(primaryBaseDocList, "13");
                 }
             }
 
@@ -3380,8 +3369,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
-                return baseDocs;
+                throw new Exception(ex.Message);
             }
             finally
             {
@@ -3389,7 +3377,6 @@ namespace BDO_Localisation_AddOn
                 oRecordSet = null;
                 GC.Collect();
             }
-
             return baseDocs;
         }
 
@@ -3724,7 +3711,7 @@ namespace BDO_Localisation_AddOn
 
                                 BDO_CNTp = CommonFunctions.getValue("ORIN", "U_BDO_CNTp", "DocEntry", creditNoteDocEntry.ToString()).ToString(); //0=კორექტირება, 1=დაბრუნება
 
-                                Dictionary<string, object> taxDocInfo = getTaxInvoiceSentDocumentInfo(creditNoteDocEntry, "ARCreditNote", cardCode, out errorText);
+                                Dictionary<string, object> taxDocInfo = getTaxInvoiceSentDocumentInfo(creditNoteDocEntry, "ARCreditNote", cardCode);
                                 if (taxDocInfo != null)
                                 {
                                     corrDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]); //კორექტირების ა/ფ-ის Entry //წესით არ უნდა იყოს შევსებული
@@ -4182,7 +4169,7 @@ namespace BDO_Localisation_AddOn
                         string corrARStatus = null;
                         string text;
 
-                        taxDocInfo = getTaxInvoiceSentDocumentInfo(ARInvoiceDocEntry, "ARInvoice", cardCode, out errorText);
+                        taxDocInfo = getTaxInvoiceSentDocumentInfo(ARInvoiceDocEntry, "ARInvoice", cardCode);
                         if (taxDocInfo != null)
                         {
                             corrARDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]); //კორექტირების ა/ფ-ის Entry
@@ -4192,7 +4179,7 @@ namespace BDO_Localisation_AddOn
 
                         text = BDOSResources.getTranslate("OnTheBaseARInvoice");
 
-                        if (String.IsNullOrEmpty(corrARInvID) && corrARDocEntry == 0)
+                        if (string.IsNullOrEmpty(corrARInvID) && corrARDocEntry == 0)
                         {
                             errorText = BDOSResources.getTranslate("NoTaxInvoiceSaved") + " " + text + "! " + BDOSResources.getTranslate("Document") + " : " + ARInvoiceDocEntry;
                             return;
@@ -4242,7 +4229,7 @@ namespace BDO_Localisation_AddOn
                                 //{
                                 BDO_CNTp = CommonFunctions.getValue("ORIN", "U_BDO_CNTp", "DocEntry", creditNoteDocEntry.ToString()).ToString(); //0=კორექტირება, 1=დაბრუნება
 
-                                taxDocInfo = getTaxInvoiceSentDocumentInfo(creditNoteDocEntry, "ARCreditNote", cardCode, out errorText);
+                                taxDocInfo = getTaxInvoiceSentDocumentInfo(creditNoteDocEntry, "ARCreditNote", cardCode);
                                 if (taxDocInfo != null)
                                 {
                                     corrDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]); //კორექტირების ა/ფ-ის Entry
@@ -4254,7 +4241,7 @@ namespace BDO_Localisation_AddOn
                                     continue;
                                 }
 
-                                if (String.IsNullOrEmpty(corrInvID) && corrDocEntry == 0)
+                                if (string.IsNullOrEmpty(corrInvID) && corrDocEntry == 0)
                                 {
                                     if (fromDoc)
                                     {
@@ -4894,7 +4881,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (corrInv == false)
                 {
-                    if (String.IsNullOrEmpty(status) || status == "empty")
+                    if (string.IsNullOrEmpty(status) || status == "empty")
                     {
                         save_invoice(oTaxInvoice, oGeneralData, out errorText, out errorTextWb, out errorTextGoods);
                     }
@@ -4906,7 +4893,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                    if (String.IsNullOrEmpty(status) || status == "empty")
+                    if (string.IsNullOrEmpty(status) || status == "empty")
                     {
                         k_invoice(oTaxInvoice, oGeneralData, oGeneralDataCorr, out errorText, out errorTextWb, out errorTextGoods);
                     }
@@ -4919,7 +4906,7 @@ namespace BDO_Localisation_AddOn
             }
             else if (operation == "send") //გადაგზავნა
             {
-                if (String.IsNullOrEmpty(status) || status == "empty")
+                if (string.IsNullOrEmpty(status) || status == "empty")
                 {
                     if (corrInv == false)
                     {
@@ -5069,7 +5056,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string invID_st = oGeneralData.GetProperty("U_invID");
-                int inv_ID = Convert.ToInt32((String.IsNullOrEmpty(invID_st) ? "0" : invID_st));
+                int inv_ID = Convert.ToInt32((string.IsNullOrEmpty(invID_st) ? "0" : invID_st));
                 DateTime operation_date = oGeneralData.GetProperty("U_opDate");
                 bool corrInv = oGeneralData.GetProperty("U_corrInv") == "N" ? false : true;
                 string overhead_no = "";
@@ -5147,7 +5134,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string k_invID_st = oGeneralDataCorr.GetProperty("U_invID");
-                int k_inv_ID = Convert.ToInt32((String.IsNullOrEmpty(k_invID_st) ? "0" : k_invID_st));
+                int k_inv_ID = Convert.ToInt32((string.IsNullOrEmpty(k_invID_st) ? "0" : k_invID_st));
                 DateTime operation_date = oGeneralData.GetProperty("U_opDate");
                 bool corrInv = oGeneralData.GetProperty("U_corrInv") == "N" ? false : true;
                 string corrType = oGeneralData.GetProperty("U_corrType");
@@ -5279,7 +5266,7 @@ namespace BDO_Localisation_AddOn
                     baseDocT = InvoiceRow.GetProperty("U_baseDocT");
                     wbNumber = InvoiceRow.GetProperty("U_wbNumber");
 
-                    if (baseDoc == 0 || String.IsNullOrEmpty(baseDocT) || String.IsNullOrEmpty(wbNumber) || wbNumberList.Contains(wbNumber))
+                    if (baseDoc == 0 || string.IsNullOrEmpty(baseDocT) || string.IsNullOrEmpty(wbNumber) || wbNumberList.Contains(wbNumber))
                     {
                         continue;
                     }
@@ -5388,7 +5375,7 @@ namespace BDO_Localisation_AddOn
                             baseDoc = InvoiceRow.GetProperty("U_baseDoc");
                             baseDocT = InvoiceRow.GetProperty("U_baseDocT");
 
-                            if (baseDoc == 0 || String.IsNullOrEmpty(baseDocT))
+                            if (baseDoc == 0 || string.IsNullOrEmpty(baseDocT))
                             {
                                 continue;
                             }
@@ -5425,7 +5412,7 @@ namespace BDO_Localisation_AddOn
                             baseDoc = InvoiceRow.GetProperty("U_baseDoc");
                             baseDocT = InvoiceRow.GetProperty("U_baseDocT");
 
-                            if (baseDoc == 0 || String.IsNullOrEmpty(baseDocT))
+                            if (baseDoc == 0 || string.IsNullOrEmpty(baseDocT))
                             {
                                 continue;
                             }
@@ -5512,7 +5499,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 string invID = oGeneralData.GetProperty("U_invID");
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;
@@ -5582,7 +5569,7 @@ namespace BDO_Localisation_AddOn
 
                     //if (operation != "send" && operation != "save" && operation != "remove" && operation != "cancel") // როცა ვქმნით, ვაგზავნით, ვშლით ან ვაუქმებთ აქ არ უნდა შემოვიდეს ა/ფ-ის ნომერი ახალი მინიჭებული აქვს ან არ აქვს და არ არის საჭიროება აქ შევიდეს.
                     //{
-                    //    if (String.IsNullOrEmpty(invoice_no) == false && opDate != new DateTime())
+                    //    if (string.IsNullOrEmpty(invoice_no) == false && opDate != new DateTime())
                     //    {
                     //        get_seller_invoices( oTaxInvoice, oGeneralData, null, out errorText);
                     //    }
@@ -5978,7 +5965,7 @@ namespace BDO_Localisation_AddOn
                 string invID = oGeneralData.GetProperty("U_invID");
                 bool corrInv = oGeneralData.GetProperty("U_corrInv") == "N" ? false : true;
 
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;
@@ -6026,7 +6013,7 @@ namespace BDO_Localisation_AddOn
                 string invID = oGeneralData.GetProperty("U_invID");
                 bool corrInv = oGeneralData.GetProperty("U_corrInv") == "N" ? false : true;
 
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;
@@ -6068,7 +6055,7 @@ namespace BDO_Localisation_AddOn
                 string status = oGeneralData.GetProperty("U_status");
                 bool corrInv = oGeneralData.GetProperty("U_corrInv") == "N" ? false : true;
 
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;
@@ -6116,7 +6103,7 @@ namespace BDO_Localisation_AddOn
                 string invID = oGeneralData.GetProperty("U_invID");
                 string status = oGeneralData.GetProperty("U_status");
 
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;
@@ -6278,7 +6265,7 @@ namespace BDO_Localisation_AddOn
                 bool corrInv = oGeneralData.GetProperty("U_corrInv") == "N" ? false : true;
                 string status = oGeneralData.GetProperty("U_status");
 
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;

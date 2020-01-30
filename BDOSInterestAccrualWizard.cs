@@ -440,7 +440,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (!pVal.BeforeAction)
                     {
-                        if ((pVal.ItemUID == "checkB" || pVal.ItemUID == "unCheckB"))
+                        if (pVal.ItemUID == "checkB" || pVal.ItemUID == "unCheckB")
                         {
                             checkUncheckMTR(oForm, pVal.ItemUID);
                         }

@@ -297,24 +297,21 @@ namespace BDO_Localisation_AddOn
                 }
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE && BusinessObjectInfo.BeforeAction)
                 {
-                    int answer = 0;
-                    answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouReallyWantCancelDoc") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-                    if (answer == 1 && Program.cancellationTrans & Program.canceledDocEntry != 0)
+                    if (Program.cancellationTrans && Program.canceledDocEntry != 0)
                     {
-                        cancellation(oForm, Program.canceledDocEntry, out errorText);
                         Program.canceledDocEntry = 0;
-                    }
-                    else
-                    {
-                        BubbleEvent = false;                      
+                        int answer = 0;
+                        answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouReallyWantCancelDoc") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        if (answer == 1)
+                            cancellation(oForm, Program.canceledDocEntry, out errorText);
+                        else
+                            BubbleEvent = false;
                     }
                 }
-
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
                 {
                     formDataLoad(oForm, out errorText);
                 }
-
             }
         }
 
