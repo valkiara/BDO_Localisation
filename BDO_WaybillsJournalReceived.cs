@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Data;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 
 namespace BDO_Localisation_AddOn
 {
@@ -296,8 +297,8 @@ namespace BDO_Localisation_AddOn
                                 return;
                             }
                             string ItemCode = "";
-
-                            ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out errorText);
+                            string ItemName = "";
+                            ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out ItemName);
 
                             SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
 
@@ -3173,26 +3174,13 @@ namespace BDO_Localisation_AddOn
                     string ItemCode = "";
                     string ItemName = "";
 
-                    ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode);
+                    ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out ItemName);
                     CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
 
                     if (CatalogEntry != null)
                     {
                         ItemCode = CatalogEntry.Fields.Item("ItemCode").Value;
                         WBGUntCode = CatalogEntry.Fields.Item("U_BDO_UoMCod").Value;
-                    }
-
-                    string query = "";
-                    if (String.IsNullOrEmpty(ItemCode) == false)
-                    {
-                        query = @"SELECT * FROM ""OITM""WHERE ""ItemCode"" = N'" + ItemCode + "'";
-
-                        oRecordSet.DoQuery(query);
-
-                        if (!oRecordSet.EoF)
-                        {
-                            ItemName = oRecordSet.Fields.Item("ItemName").Value;
-                        }
                     }
 
                     oRecordsetbyRSCODE = BDO_RSUoM.getUomByRSCode(ItemCode, WBUntCdRS, out errorText);
@@ -3204,6 +3192,7 @@ namespace BDO_Localisation_AddOn
                             WBGUntCode = oRecordsetbyRSCODE.Fields.Item("UomCode").Value;
                         }
                     }
+                    string query;
 
                     query = @"SELECT * FROM ""OUOM""WHERE ""UomCode"" = N'" + WBGUntCode + "'";
 
@@ -3399,40 +3388,42 @@ namespace BDO_Localisation_AddOn
                 return "";
             }
         }
-        public static string findItemByNameOITM(string WBItmName, string RSBarCode, string CardCode, out string errorText)
-        {
-            errorText = null;
-
-            SAPbobsCOM.BusinessPartners oBP;
-            oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
-            oBP.GetByKey(CardCode);
-
-            string searchingParam = oBP.UserFields.Fields.Item("U_BDO_ItmPrm").Value;
-
+        public static string findItemByNameOITM(string WBItmName, string RSBarCode, string CardCode, out string itemName)
+        {         
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-            string query;
+            try
+            {
+                SAPbobsCOM.BusinessPartners oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
+                oBP.GetByKey(CardCode);
+                string query;
+                string searchingParam = oBP.UserFields.Fields.Item("U_BDO_ItmPrm").Value;
+                itemName = null;
+                if (searchingParam == "1") //დასახელებით
+                    query = @"SELECT ""ItemCode"", ""ItemName"" FROM ""OITM"" WHERE ""ItemName"" = N'" + WBItmName.Replace("'", "''") + "'";
+                else //კოდით
+                    query = @"SELECT ""ItemCode"", ""ItemName""  FROM ""OITM"" WHERE ""ItemCode"" = '" + RSBarCode + "'";
 
-            if (searchingParam == "1") //დასახელებით
-            {
-                query = @"SELECT * FROM ""OITM"" WHERE ""ItemName"" = N'" + WBItmName.Replace("'", "''") + "'";
-            }
-            else //კოდით
-            {
-                query = @"SELECT * FROM ""OITM"" WHERE ""ItemCode"" = '" + RSBarCode + "'";
-            }
+                oRecordSet.DoQuery(query);
 
-            oRecordSet.DoQuery(query);
-
-            if (!oRecordSet.EoF)
-            {
-                return oRecordSet.Fields.Item("ItemCode").Value;
-            }
-            else
-            {
+                if (!oRecordSet.EoF)
+                {
+                    itemName = oRecordSet.Fields.Item("ItemName").Value;
+                    return oRecordSet.Fields.Item("ItemCode").Value;
+                }
                 return "";
             }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
+            }
         }
+        
+        /*
         public static string findItemByNameOITM(string WBItmName, string RSBarCode, string CardCode)
         {
             SAPbobsCOM.BusinessPartners oBP;
@@ -3452,11 +3443,11 @@ namespace BDO_Localisation_AddOn
 
             if (searchingParam == "1") //დასახელებით
             {
-                query = @"SELECT * FROM ""OITM"" WHERE ""ItemName"" = N'" + WBItmName.Replace("'", "''") + "'";
+                query = @"SELECT ""ItemCode"" FROM ""OITM"" WHERE ""ItemName"" = N'" + WBItmName.Replace("'", "''") + "'";
             }
             else //კოდით
             {
-                query = @"SELECT * FROM ""OITM"" WHERE ""ItemCode"" = '" + RSBarCode + "'";
+                query = @"SELECT ""ItemCode"" FROM ""OITM"" WHERE ""ItemCode"" = '" + RSBarCode + "'";
             }
 
             oRecordSet.DoQuery(query);
@@ -3470,6 +3461,7 @@ namespace BDO_Localisation_AddOn
                 return "";
             }
         }
+        */
         public static void updateBPCatalog(SAPbouiCOM.Form oForm, int row, out string errorText)
         {
             errorText = null;

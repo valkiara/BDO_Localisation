@@ -3415,4 +3415,10 @@
   <data name="CloseVATReconcilationWizard" xml:space="preserve">
     <value>Do you want to close vat reconciliation wizard</value>
   </data>
+  <data name="PrjName" xml:space="preserve">
+    <value>Project Name</value>
+  </data>
+  <data name="PrjCode" xml:space="preserve">
+    <value>Project Code</value>
+  </data>
 </root>
