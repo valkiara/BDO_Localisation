@@ -3451,4 +3451,7 @@
   <data name="DoYouWantToContinueOperation" xml:space="preserve">
     <value>Do you want to continue operation</value>
   </data>
+  <data name="DoYouWantToContinue" xml:space="preserve">
+    <value>Do you want to continue</value>
+  </data>
 </root>

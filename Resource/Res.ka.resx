@@ -3427,4 +3427,7 @@
   <data name="DoYouWantToContinueOperation" xml:space="preserve">
     <value>გსურთ ოპერაციის გაგრძელება</value>
   </data>
+  <data name="DoYouWantToContinue" xml:space="preserve">
+    <value>გსურთ გააგრძელოთ</value>
+  </data>
 </root>
