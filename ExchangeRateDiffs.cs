@@ -34,6 +34,7 @@ namespace BDO_Localisation_AddOn
                     {
                         SAPbouiCOM.EditText oRemark = oForm.Items.Item("5").Specific;
                         GetDataForUpdate(oRemark.Value);
+                        oRemark.Value = "";
                     }
                 }
 
@@ -45,7 +46,6 @@ namespace BDO_Localisation_AddOn
 
             }
         }
-
 
         //private static void UpdateRTM1Table(SAPbouiCOM.Form oForm)
         //{
@@ -70,6 +70,8 @@ namespace BDO_Localisation_AddOn
 
         private static void GetDataForUpdate(string memo)
         {
+            if(memo == "") return;
+
             string docType = "";
             int docNum = 0;
             string docTable = "";
@@ -168,7 +170,7 @@ namespace BDO_Localisation_AddOn
                     queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
                     queryDoc.Append("group by " + docTable + ".\"Project\", " + docTable + ".\"AgrNo\", " + docTable + ".\"DocRate\", " + docTable + ".\"U_UseBlaAgRt\"");
 
-                    shortCut:
+                shortCut:
                     oRecordSetDoc.DoQuery(queryDoc.ToString());
                     if (!oRecordSetDoc.EoF)
                     {
@@ -227,50 +229,63 @@ namespace BDO_Localisation_AddOn
         private static void UpdateJournalEntryTable(int transId, string memo, string ref3, int baseTrans, string revSource, string project, int agrNo, double credit, double debit, string docCur)
         {
             //ვიღებთ საპის მიერ შექმნილ გატარებას, ვუცვლით თანხებს, გადაგვყავს ექსემელში და ამის მიხედვით ვქმნით ახალს
-            string error;
             double oldDebit = 0;
             double oldCredit = 0;
-            SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
-            oJounalEntry.GetByKey(transId);
+            SAPbobsCOM.JournalEntries oJournalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
+            oJournalEntry.GetByKey(transId);
 
-            for (int line = 0; line < oJounalEntry.Lines.Count; line++)
+            SAPbobsCOM.Recordset oRecordSetTransType = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            StringBuilder queryTransType = new StringBuilder();
+            queryTransType.Append("select \"TransType\" \n");
+            queryTransType.Append("from OJDT \n");
+            queryTransType.Append("where \"TransId\" = '" + transId + "'");
+
+            oRecordSetTransType.DoQuery(queryTransType.ToString());
+            if (!oRecordSetTransType.EoF)
             {
-                oJounalEntry.Lines.SetCurrentLine(line);
+                oJournalEntry.Reference2 = oRecordSetTransType.Fields.Item("TransType").Value;
+            }
+            oJournalEntry.Reference = oJournalEntry.Original.ToString();
+
+            for (int line = 0; line < oJournalEntry.Lines.Count; line++)
+            {
+                oJournalEntry.Lines.SetCurrentLine(line);
 
                 if (!string.IsNullOrEmpty(project))
                 {
-                    oJounalEntry.Lines.ProjectCode = project;
+                    oJournalEntry.Lines.ProjectCode = project;
                 }
                 if (agrNo != 0)
                 {
-                    
+
                     //oJounalEntry.UserFields.Fields.Item("blanket agreementis columni").Value = agrNo;
 
-                    if (oJounalEntry.Lines.AdditionalReference == ref3) //for bp
+                    if (oJournalEntry.Lines.AdditionalReference == ref3) //for bp
                     {
                         if (credit != 0)
                         {
-                            oldCredit = oJounalEntry.Lines.Credit;
-                            oJounalEntry.Lines.Credit = credit-oldCredit;
+                            oldCredit = oJournalEntry.Lines.Credit;
+                            oJournalEntry.Lines.Credit = credit - oldCredit;
                         }
                         else if (debit != 0)
                         {
-                            oldDebit = oJounalEntry.Lines.Debit;
-                            oJounalEntry.Lines.Debit = debit-oldDebit;
+                            oldDebit = oJournalEntry.Lines.Debit;
+                            oJournalEntry.Lines.Debit = debit - oldDebit;
                         }
                     }
-                    else if (oJounalEntry.Lines.AdditionalReference != ref3)  //for second account
+                    else if (oJournalEntry.Lines.AdditionalReference != ref3)  //for second account
                     {
-                        oJounalEntry.Lines.FCCurrency = docCur;
+                        oJournalEntry.Lines.FCCurrency = docCur;
                         if (credit != 0)
                         {
-                            oldDebit = oJounalEntry.Lines.Debit;
-                            oJounalEntry.Lines.Debit = credit-oldDebit;
+                            oldDebit = oJournalEntry.Lines.Debit;
+                            oJournalEntry.Lines.Debit = credit - oldDebit;
                         }
                         else if (debit != 0)
                         {
-                            oldCredit = oJounalEntry.Lines.Credit;
-                            oJounalEntry.Lines.Credit = debit-oldCredit;
+                            oldCredit = oJournalEntry.Lines.Credit;
+                            oJournalEntry.Lines.Credit = debit - oldCredit;
                         }
                     }
                 }
@@ -279,7 +294,7 @@ namespace BDO_Localisation_AddOn
             Program.oCompany.XMLAsString = true;
             Program.oCompany.XmlExportType = SAPbobsCOM.BoXmlExportTypes.xet_ExportImportMode;
 
-            string xml = oJounalEntry.GetAsXML();
+            string xml = oJournalEntry.GetAsXML();
             int updateCode;
             //int updateCode = oJounalEntry.Cancel();
             //if (updateCode != 0)
@@ -302,7 +317,7 @@ namespace BDO_Localisation_AddOn
 
             if (updateCode != 0)
             {
-                Program.oCompany.GetLastError(out updateCode, out error);
+                Program.oCompany.GetLastError(out updateCode, out var error);
                 Program.uiApp.StatusBar.SetSystemMessage(error, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
             }
             else
@@ -386,8 +401,8 @@ namespace BDO_Localisation_AddOn
             }
 
             Marshal.ReleaseComObject(oJounalEntryNew);
-            shortcut:
-            Marshal.ReleaseComObject(oJounalEntry);
+        shortcut:
+            Marshal.ReleaseComObject(oJournalEntry);
         }
     }
 
