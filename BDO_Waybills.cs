@@ -4521,113 +4521,117 @@ namespace BDO_Localisation_AddOn
 
                         //printUDO( oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
                         //return;
+                        int answer = 0;
+                        answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantToContinue") + " " + BDOSResources.getTranslate(operationRS) + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        if (answer == 1)
+                        {
+                            if (operationRS == BDOSResources.getTranslate("RSCreate"))
+                            {
+                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
+                                int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
+                                //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
+                                saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
+                                if (errorText != null)
+                                {
+                                    uiApp.MessageBox(errorText);
+                                }
+                                else
+                                {
+                                    uiApp.MessageBox(BDOSResources.getTranslate("WaybillCreatedSuccesfully"));
+                                }
 
-                        if (operationRS == BDOSResources.getTranslate("RSCreate"))
-                        {
-                            int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
-                            int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
-                            saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
-                            if (errorText != null)
-                            {
-                                uiApp.MessageBox(errorText);
                             }
-                            else
+                            else if (operationRS == BDOSResources.getTranslate("RSActivation"))
                             {
-                                uiApp.MessageBox(BDOSResources.getTranslate("WaybillCreatedSuccesfully"));
+                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
+                                int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
+                                //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
+                                saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
+                                if (errorText != null)
+                                {
+                                    uiApp.MessageBox(errorText);
+                                }
+                                else
+                                {
+                                    uiApp.MessageBox(BDOSResources.getTranslate("WaybillActivateSuccesfully"));
+                                }
                             }
-
-                        }
-                        else if (operationRS == BDOSResources.getTranslate("RSActivation"))
-                        {
-                            int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
-                            int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
-                            saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
-                            if (errorText != null)
+                            else if (operationRS == BDOSResources.getTranslate("RSSendToTransporter"))
                             {
-                                uiApp.MessageBox(errorText);
+                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
+                                int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
+                                //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
+                                saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
+                                if (errorText != null)
+                                {
+                                    uiApp.MessageBox(errorText);
+                                }
+                                else
+                                {
+                                    uiApp.MessageBox(BDOSResources.getTranslate("WaybillSentToTransporterSuccesfully"));
+                                }
                             }
-                            else
+                            else if (operationRS == BDOSResources.getTranslate("RSCorrection"))
                             {
-                                uiApp.MessageBox(BDOSResources.getTranslate("WaybillActivateSuccesfully"));
+                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
+                                int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
+                                //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
+                                saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
+                                if (errorText != null)
+                                {
+                                    uiApp.MessageBox(errorText);
+                                }
+                                else
+                                {
+                                    uiApp.MessageBox(BDOSResources.getTranslate("WaybillCorrectedSuccesfully"));
+                                }
                             }
-                        }
-                        else if (operationRS == BDOSResources.getTranslate("RSSendToTransporter"))
-                        {
-                            int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
-                            int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
-                            saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
-                            if (errorText != null)
+                            else if (operationRS == BDOSResources.getTranslate("RSFinish"))
                             {
-                                uiApp.MessageBox(errorText);
+                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
+                                int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
+                                closeWaybill(docEntry, baseDocEntry, out errorText);
+                                if (errorText != null)
+                                {
+                                    uiApp.MessageBox(errorText);
+                                }
+                                else
+                                {
+                                    uiApp.MessageBox(BDOSResources.getTranslate("WaybillFinishedSuccesfully"));
+                                }
                             }
-                            else
+                            else if (operationRS == BDOSResources.getTranslate("RSCancel"))
                             {
-                                uiApp.MessageBox(BDOSResources.getTranslate("WaybillSentToTransporterSuccesfully"));
+                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
+                                int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
+                                refWaybill(docEntry, baseDocEntry, out errorText);
+                                if (errorText != null)
+                                {
+                                    uiApp.MessageBox(errorText);
+                                }
+                                else
+                                {
+                                    uiApp.MessageBox(BDOSResources.getTranslate("WaybillCanceledSuccesfully"));
+                                }
                             }
-                        }
-                        else if (operationRS == BDOSResources.getTranslate("RSCorrection"))
-                        {
-                            int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
-                            int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            //string baseDocType = oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDocT", 0).Trim();
-                            saveWaybill(docEntry, baseDocEntry, operationRS, out errorText);
-                            if (errorText != null)
+                            else if (operationRS == BDOSResources.getTranslate("RSUpdateStatus"))
                             {
-                                uiApp.MessageBox(errorText);
+                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
+                                int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
+                                getWaybill(docEntry, baseDocEntry, out errorText);
+                                if (errorText != null)
+                                {
+                                    uiApp.MessageBox(errorText);
+                                }
+                                else
+                                {
+                                    uiApp.MessageBox(BDOSResources.getTranslate("WaybillUpdatedStatusSuccesfully"));
+                                }
                             }
-                            else
+                            if (operationRS != null)
                             {
-                                uiApp.MessageBox(BDOSResources.getTranslate("WaybillCorrectedSuccesfully"));
+                                FormsB1.SimulateRefresh();
                             }
-                        }
-                        else if (operationRS == BDOSResources.getTranslate("RSFinish"))
-                        {
-                            int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
-                            int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            closeWaybill(docEntry, baseDocEntry, out errorText);
-                            if (errorText != null)
-                            {
-                                uiApp.MessageBox(errorText);
-                            }
-                            else
-                            {
-                                uiApp.MessageBox(BDOSResources.getTranslate("WaybillFinishedSuccesfully"));
-                            }
-                        }
-                        else if (operationRS == BDOSResources.getTranslate("RSCancel"))
-                        {
-                            int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
-                            int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            refWaybill(docEntry, baseDocEntry, out errorText);
-                            if (errorText != null)
-                            {
-                                uiApp.MessageBox(errorText);
-                            }
-                            else
-                            {
-                                uiApp.MessageBox(BDOSResources.getTranslate("WaybillCanceledSuccesfully"));
-                            }
-                        }
-                        else if (operationRS == BDOSResources.getTranslate("RSUpdateStatus"))
-                        {
-                            int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("DocEntry", 0));
-                            int baseDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_baseDoc", 0));
-                            getWaybill(docEntry, baseDocEntry, out errorText);
-                            if (errorText != null)
-                            {
-                                uiApp.MessageBox(errorText);
-                            }
-                            else
-                            {
-                                uiApp.MessageBox(BDOSResources.getTranslate("WaybillUpdatedStatusSuccesfully"));
-                            }
-                        }
-                        if (operationRS != null)
-                        {
-                            FormsB1.SimulateRefresh();
                         }
                     }
                 }
