@@ -993,9 +993,15 @@ namespace BDO_Localisation_AddOn
             string objectType = "13"; //A/R Invoice
             string uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
+
             objectType = "15"; //A/R Credit Memo
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
+
+            objectType = "165"; //A/R Correction Invoice
+            uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
+
             objectType = "67"; //Inventory Transfer
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
@@ -1007,6 +1013,7 @@ namespace BDO_Localisation_AddOn
             objectType = "14"; //A/R Credit Memo
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
+
             objectType = "60"; //Goods Issue
             uniqueID_BaseDocCFL = "BaseDoc_CFL" + objectType;
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_BaseDocCFL);
@@ -3757,6 +3764,9 @@ namespace BDO_Localisation_AddOn
                                 break;
                             case "15":
                                 tableName = "ODLN";
+                                break;
+                            case "165":
+                                tableName = "OCSI";
                                 break;
                             case "67":
                                 tableName = "OWTR";
