@@ -1658,118 +1658,59 @@ namespace BDO_Localisation_AddOn
                 objectType = "14";
             }
 
-            if (oOperation == 0) //შექმნა
+            int answer = 0;
+            answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantToContinueOperation") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+
+            if (answer == 1)
             {
-                Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
-
-                for (int row = 1; row <= oMatrix.RowCount; row++)
+                if (oOperation == 0) //შექმნა
                 {
-                    CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
-                    bool checkedLine = (Edtfield.Checked);
-                    string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
+                    Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
 
-                    if (checkedLine)
+                    for (int row = 1; row <= oMatrix.RowCount; row++)
                     {
-                        string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
+                        CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
+                        bool checkedLine = (Edtfield.Checked);
+                        string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
 
-                        if (WbStatus != "-1" & WbStatus != "" & WbStatus != "4" & WbStatus != "5")
+                        if (checkedLine)
                         {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
+                            string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
 
-                        string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
-
-                        if (WbDoc == "")
-                        {
-                            int newDocEntry = 0;
-                            string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
-                            string oDriver = oMatrix.GetCellSpecific("Driver", row).Value;
-                            string TrnsType = oMatrix.GetCellSpecific("TrnsType", row).Value;
-                            string Trnsprter = oMatrix.GetCellSpecific("Trnsprter", row).Value;
-
-                            if (oVehicle == "")
-                            {
-                                oVehicle = null;
-                            }
-
-                            if ((TrnsType == "1" || TrnsType == "5") & oVehicle == "")
+                            if (WbStatus != "-1" & WbStatus != "" & WbStatus != "4" & WbStatus != "5")
                             {
                                 OpSuccess = false;
-                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + "აუცილებელია სატრანსპორტო საშუალების მითითება", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
                                 continue;
                             }
 
-                            //დოკუმენტის შექმნა პროგრამაში
-                            BDO_Waybills.createDocument(objectType, Convert.ToInt32(oBaseDocEntry), oVehicle, oDriver, TrnsType, Trnsprter, out newDocEntry, out errorText);
-                            oMatrix.Columns.Item("WbDoc").Cells.Item(row).Specific.Value = newDocEntry;
-                            WbDoc = newDocEntry.ToString();
-                        }
+                            string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
 
-                        if (errorText != null)
-                        {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
+                            if (WbDoc == "")
+                            {
+                                int newDocEntry = 0;
+                                string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
+                                string oDriver = oMatrix.GetCellSpecific("Driver", row).Value;
+                                string TrnsType = oMatrix.GetCellSpecific("TrnsType", row).Value;
+                                string Trnsprter = oMatrix.GetCellSpecific("Trnsprter", row).Value;
 
-                        //დოკუმენტის შექმნა
-                        BDO_Waybills.saveWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), BDOSResources.getTranslate("RSCreate"), out errorText);
+                                if (oVehicle == "")
+                                {
+                                    oVehicle = null;
+                                }
 
-                        if (errorText != null)
-                        {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
+                                if ((TrnsType == "1" || TrnsType == "5") & oVehicle == "")
+                                {
+                                    OpSuccess = false;
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + "აუცილებელია სატრანსპორტო საშუალების მითითება", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                    continue;
+                                }
 
-                        //სტატუსების შევსება
-                        Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
-                        oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
-                        oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
-                        ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
-                        oCombo.Select(wblDocInfo["statusN"]);
-                    }
-                }
-            }
-
-            if (oOperation == 1) //აქტივაცია
-            {
-                Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
-
-                for (int row = 1; row <= oMatrix.RowCount; row++)
-                {
-                    CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
-                    bool checkedLine = (Edtfield.Checked);
-
-                    if (checkedLine)
-                    {
-                        string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
-
-                        if (WbStatus != "-1" & WbStatus != "" & WbStatus != "1" & WbStatus != "4" & WbStatus != "5")
-                        {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
-
-                        string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
-                        string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
-                        string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
-                        string oDriver = oMatrix.GetCellSpecific("Driver", row).Value;
-                        string TrnsType = oMatrix.GetCellSpecific("TrnsType", row).Value;
-                        string Trnsprter = oMatrix.GetCellSpecific("Trnsprter", row).Value;
-                        int newDocEntry = 0;
-
-                        if (oVehicle == "")
-                        {
-                            oVehicle = null;
-                        }
-
-                        if (WbDoc == "")
-                        {
-                            BDO_Waybills.createDocument(objectType, Convert.ToInt32(oBaseDocEntry), oVehicle, oDriver, TrnsType, Trnsprter, out newDocEntry, out errorText);
+                                //დოკუმენტის შექმნა პროგრამაში
+                                BDO_Waybills.createDocument(objectType, Convert.ToInt32(oBaseDocEntry), oVehicle, oDriver, TrnsType, Trnsprter, out newDocEntry, out errorText);
+                                oMatrix.Columns.Item("WbDoc").Cells.Item(row).Specific.Value = newDocEntry;
+                                WbDoc = newDocEntry.ToString();
+                            }
 
                             if (errorText != null)
                             {
@@ -1778,247 +1719,311 @@ namespace BDO_Localisation_AddOn
                                 continue;
                             }
 
-                            oMatrix.Columns.Item("WbDoc").Cells.Item(row).Specific.Value = newDocEntry;
-                            WbDoc = newDocEntry.ToString();
+                            //დოკუმენტის შექმნა
+                            BDO_Waybills.saveWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), BDOSResources.getTranslate("RSCreate"), out errorText);
+
+                            if (errorText != null)
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            //სტატუსების შევსება
+                            Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
+                            oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
+                            oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
+                            ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
+                            oCombo.Select(wblDocInfo["statusN"]);
                         }
-
-                        //დოკუმენტის შექმნა
-                        BDO_Waybills.saveWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), BDOSResources.getTranslate("RSActivation"), out errorText);
-
-                        if (errorText != null)
-                        {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
-
-                        //სტატუსების შევსება
-                        Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
-                        oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
-                        oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
-                        ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
-                        oCombo.Select(wblDocInfo["statusN"]);
                     }
                 }
-            }
 
-            if (oOperation == 2) //გადამზიდავთან გადაგზავნა
-            {
-                Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
-
-                for (int row = 1; row <= oMatrix.RowCount; row++)
+                if (oOperation == 1) //აქტივაცია
                 {
-                    CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
-                    bool checkedLine = (Edtfield.Checked);
+                    Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
 
-                    if (checkedLine)
+                    for (int row = 1; row <= oMatrix.RowCount; row++)
                     {
-                        string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
+                        CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
+                        bool checkedLine = (Edtfield.Checked);
 
-                        if (WbStatus != "-1" & WbStatus != "" & WbStatus != "1" & WbStatus != "4" & WbStatus != "5")
+                        if (checkedLine)
                         {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
+                            string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
+
+                            if (WbStatus != "-1" & WbStatus != "" & WbStatus != "1" & WbStatus != "4" & WbStatus != "5")
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
+                            string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
+                            string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
+                            string oDriver = oMatrix.GetCellSpecific("Driver", row).Value;
+                            string TrnsType = oMatrix.GetCellSpecific("TrnsType", row).Value;
+                            string Trnsprter = oMatrix.GetCellSpecific("Trnsprter", row).Value;
+                            int newDocEntry = 0;
+
+                            if (oVehicle == "")
+                            {
+                                oVehicle = null;
+                            }
+
+                            if (WbDoc == "")
+                            {
+                                BDO_Waybills.createDocument(objectType, Convert.ToInt32(oBaseDocEntry), oVehicle, oDriver, TrnsType, Trnsprter, out newDocEntry, out errorText);
+
+                                if (errorText != null)
+                                {
+                                    OpSuccess = false;
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                    continue;
+                                }
+
+                                oMatrix.Columns.Item("WbDoc").Cells.Item(row).Specific.Value = newDocEntry;
+                                WbDoc = newDocEntry.ToString();
+                            }
+
+                            //დოკუმენტის შექმნა
+                            BDO_Waybills.saveWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), BDOSResources.getTranslate("RSActivation"), out errorText);
+
+                            if (errorText != null)
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            //სტატუსების შევსება
+                            Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
+                            oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
+                            oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
+                            ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
+                            oCombo.Select(wblDocInfo["statusN"]);
                         }
-
-                        string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
-                        string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
-                        string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
-
-                        //დოკუმენტის შექმნა
-                        BDO_Waybills.saveWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), BDOSResources.getTranslate("RSSendToTransporter"), out errorText);
-
-                        if (errorText != null)
-                        {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
-
-                        //სტატუსების შევსება
-                        Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
-                        oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
-                        oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
-                        ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
-                        oCombo.Select(wblDocInfo["statusN"]);
                     }
                 }
-            }
 
-            if (oOperation == 3) //კორექტირება
-            {
-                Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
-
-                for (int row = 1; row <= oMatrix.RowCount; row++)
+                if (oOperation == 2) //გადამზიდავთან გადაგზავნა
                 {
-                    CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
-                    bool checkedLine = (Edtfield.Checked);
+                    Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
 
-                    if (checkedLine)
+                    for (int row = 1; row <= oMatrix.RowCount; row++)
                     {
-                        string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
+                        CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
+                        bool checkedLine = (Edtfield.Checked);
 
-                        if (WbStatus != "2" & WbStatus != "3")
+                        if (checkedLine)
                         {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
+                            string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
+
+                            if (WbStatus != "-1" & WbStatus != "" & WbStatus != "1" & WbStatus != "4" & WbStatus != "5")
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
+                            string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
+                            string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
+
+                            //დოკუმენტის შექმნა
+                            BDO_Waybills.saveWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), BDOSResources.getTranslate("RSSendToTransporter"), out errorText);
+
+                            if (errorText != null)
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            //სტატუსების შევსება
+                            Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
+                            oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
+                            oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
+                            ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
+                            oCombo.Select(wblDocInfo["statusN"]);
                         }
-
-                        string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
-                        string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
-                        string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
-
-                        //დოკუმენტის შექმნა
-                        BDO_Waybills.saveWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), BDOSResources.getTranslate("RSCorrection"), out errorText);
-
-                        if (errorText != null)
-                        {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
-
-                        //სტატუსების შევსება
-                        Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
-                        oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
-                        oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
-                        ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
-                        oCombo.Select(wblDocInfo["statusN"]);
                     }
                 }
-            }
 
-            if (oOperation == 4)//დასრულება
-            {
-                Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
-
-                for (int row = 1; row <= oMatrix.RowCount; row++)
+                if (oOperation == 3) //კორექტირება
                 {
-                    CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
-                    bool checkedLine = (Edtfield.Checked);
+                    Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
 
-                    if (checkedLine)
+                    for (int row = 1; row <= oMatrix.RowCount; row++)
                     {
-                        string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
+                        CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
+                        bool checkedLine = (Edtfield.Checked);
 
-                        if (WbStatus != "2" & WbStatus != "6")
+                        if (checkedLine)
                         {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
+                            string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
+
+                            if (WbStatus != "2" & WbStatus != "3")
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
+                            string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
+                            string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
+
+                            //დოკუმენტის შექმნა
+                            BDO_Waybills.saveWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), BDOSResources.getTranslate("RSCorrection"), out errorText);
+
+                            if (errorText != null)
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            //სტატუსების შევსება
+                            Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
+                            oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
+                            oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
+                            ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
+                            oCombo.Select(wblDocInfo["statusN"]);
                         }
-
-                        string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
-                        string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
-                        string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
-
-                        //დოკუმენტის შექმნა
-                        BDO_Waybills.closeWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), out errorText);
-
-                        if (errorText != null)
-                        {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
-
-                        //სტატუსების შევსება
-                        Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
-                        oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
-                        oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
-                        ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
-                        oCombo.Select(wblDocInfo["statusN"]);
-
                     }
                 }
-            }
 
-            if (oOperation == 5)//გაუქმება
-            {
-                Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
-
-                for (int row = 1; row <= oMatrix.RowCount; row++)
+                if (oOperation == 4)//დასრულება
                 {
-                    CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
-                    bool checkedLine = (Edtfield.Checked);
+                    Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
 
-                    if (checkedLine)
+                    for (int row = 1; row <= oMatrix.RowCount; row++)
                     {
-                        string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
+                        CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
+                        bool checkedLine = (Edtfield.Checked);
 
-                        if (WbStatus != "2" & WbStatus != "3")
+                        if (checkedLine)
                         {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
+                            string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
+
+                            if (WbStatus != "2" & WbStatus != "6")
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
+                            string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
+                            string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
+
+                            //დოკუმენტის შექმნა
+                            BDO_Waybills.closeWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), out errorText);
+
+                            if (errorText != null)
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            //სტატუსების შევსება
+                            Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
+                            oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
+                            oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
+                            ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
+                            oCombo.Select(wblDocInfo["statusN"]);
+
                         }
-
-                        string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
-                        string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
-                        string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
-
-                        //დოკუმენტის შექმნა
-                        BDO_Waybills.refWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), out errorText);
-
-                        if (errorText != null)
-                        {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
-
-                        //სტატუსების შევსება
-                        Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
-                        oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
-                        oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
-                        ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
-                        oCombo.Select(wblDocInfo["statusN"]);
                     }
                 }
-            }
 
-            if (oOperation == 6)//სტატუსების განახლება
-            {
-                Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
-
-                for (int row = 1; row <= oMatrix.RowCount; row++)
+                if (oOperation == 5)//გაუქმება
                 {
-                    CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
-                    bool checkedLine = (Edtfield.Checked);
+                    Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
 
-                    if (checkedLine)
+                    for (int row = 1; row <= oMatrix.RowCount; row++)
                     {
-                        string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
-                        string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
-                        string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
+                        CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
+                        bool checkedLine = (Edtfield.Checked);
 
-                        //დოკუმენტის შექმნა
-                        BDO_Waybills.getWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), out errorText);
-
-                        if (errorText != null)
+                        if (checkedLine)
                         {
-                            OpSuccess = false;
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
-                            continue;
-                        }
+                            string WbStatus = oMatrix.GetCellSpecific("WbStatus", row).Value;
 
-                        //სტატუსების შევსება
-                        Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
-                        oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
-                        oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
-                        ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
-                        oCombo.Select(wblDocInfo["statusN"]);
+                            if (WbStatus != "2" & WbStatus != "3")
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + " " + BDOSResources.getTranslate("UnableOperationForThisStatus") + " ", BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
+                            string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
+                            string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
+
+                            //დოკუმენტის შექმნა
+                            BDO_Waybills.refWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), out errorText);
+
+                            if (errorText != null)
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            //სტატუსების შევსება
+                            Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
+                            oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
+                            oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
+                            ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
+                            oCombo.Select(wblDocInfo["statusN"]);
+                        }
                     }
                 }
-            }
 
-            if (OpSuccess == false)
-            {
-                Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("EndsWithErrorCheckMessageLog"));
-            }
+                if (oOperation == 6)//სტატუსების განახლება
+                {
+                    Matrix oMatrix = ((Matrix)(oForm.Items.Item("WBMatrix").Specific));
 
+                    for (int row = 1; row <= oMatrix.RowCount; row++)
+                    {
+                        CheckBox Edtfield = oMatrix.Columns.Item("WbChkBx").Cells.Item(row).Specific;
+                        bool checkedLine = (Edtfield.Checked);
+
+                        if (checkedLine)
+                        {
+                            string WbDoc = oMatrix.GetCellSpecific("WbDoc", row).Value;
+                            string oBaseDocEntry = oMatrix.GetCellSpecific("Document", row).Value;
+                            string oVehicle = oMatrix.GetCellSpecific("Vehicle", row).Value;
+
+                            //დოკუმენტის შექმნა
+                            BDO_Waybills.getWaybill(Convert.ToInt32(WbDoc), Convert.ToInt32(oBaseDocEntry), out errorText);
+
+                            if (errorText != null)
+                            {
+                                OpSuccess = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TableRow") + row.ToString() + ": " + errorText, BoMessageTime.bmt_Short, BoStatusBarMessageType.smt_Error);
+                                continue;
+                            }
+
+                            //სტატუსების შევსება
+                            Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Convert.ToInt32(oBaseDocEntry), objectType, out errorText);
+                            oMatrix.Columns.Item("WbID").Cells.Item(row).Specific.Value = wblDocInfo["wblID"];
+                            oMatrix.Columns.Item("WbNo").Cells.Item(row).Specific.Value = wblDocInfo["number"];
+                            ComboBox oCombo = (ComboBox)oMatrix.Columns.Item("WbStatus").Cells.Item(row).Specific;
+                            oCombo.Select(wblDocInfo["statusN"]);
+                        }
+                    }
+                }
+
+                if (OpSuccess == false)
+                {
+                    Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("EndsWithErrorCheckMessageLog"));
+                }
+            }
             oForm.Freeze(false);
         }
 

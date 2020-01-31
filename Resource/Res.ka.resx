@@ -3424,4 +3424,7 @@
   <data name="PrjCode" xml:space="preserve">
     <value>პროექტის კოდი</value>
   </data>
+  <data name="DoYouWantToContinueOperation" xml:space="preserve">
+    <value>გსურთ ოპერაციის გაგრძელება</value>
+  </data>
 </root>

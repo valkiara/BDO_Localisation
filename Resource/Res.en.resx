@@ -3448,4 +3448,7 @@
   <data name="PrjCode" xml:space="preserve">
     <value>Project Code</value>
   </data>
+  <data name="DoYouWantToContinueOperation" xml:space="preserve">
+    <value>Do you want to continue operation</value>
+  </data>
 </root>
