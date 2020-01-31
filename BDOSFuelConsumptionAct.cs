@@ -830,9 +830,6 @@ namespace BDO_Localisation_AddOn
                 throw new Exception(errorText);
             }
 
-            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //OK mode
-            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 8, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //View mode
-
             formItems = new Dictionary<string, object>();
             itemName = "DocNumE"; //10 characters
             formItems.Add("isDataSource", true);
@@ -1693,7 +1690,7 @@ namespace BDO_Localisation_AddOn
                     oDBDataSourceMTR.SetValue("U_ItemName", i, oRecordSet.Fields.Item("ItemName").Value);
                     oDBDataSourceMTR.SetValue("U_FuTpCode", i, oRecordSet.Fields.Item("Code").Value);
                     oDBDataSourceMTR.SetValue("U_FuelCode", i, oRecordSet.Fields.Item("U_ItemCode").Value);
-                    oDBDataSourceMTR.SetValue("U_FuUomEntry", i, FormsB1.ConvertDecimalToString(oRecordSet.Fields.Item("U_UomEntry").Value));
+                    oDBDataSourceMTR.SetValue("U_FuUomEntry", i, FormsB1.ConvertDecimalToString(Convert.ToDecimal(oRecordSet.Fields.Item("U_UomEntry").Value, CultureInfo.InvariantCulture)));
                     oDBDataSourceMTR.SetValue("U_FuUomCode", i, oRecordSet.Fields.Item("U_UomCode").Value);
 
                     Marshal.ReleaseComObject(oRecordSet);

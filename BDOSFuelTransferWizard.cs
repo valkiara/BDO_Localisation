@@ -1204,7 +1204,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
 
-                        if (oForm.DataSources.UserDataSources.Item("ReturnCH").ValueEx == "N")
+                        if (oForm.DataSources.UserDataSources.Item("ReturnCH").ValueEx == "N" || string.IsNullOrEmpty(oForm.DataSources.UserDataSources.Item("ReturnCH").ValueEx))
                         {
                             SAPbouiCOM.Condition oCon = oCons.Add();
                             oCon.Alias = "U_BDOSWhType";

@@ -11,16 +11,14 @@ namespace BDO_Localisation_AddOn
     {
         public static bool ReserveInvoiceAsService = false;
 
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             Dictionary<string, object> formItems = new Dictionary<string, object>();
-
             string itemName = "";
-
             SAPbouiCOM.Item oItem = oForm.Items.Item("31");
             int height = oItem.Height;
-            int top = oForm.Items.Item("18").Top-7;
+            int top = oForm.Items.Item("18").Top - 7;
             int left_s = oForm.Items.Item("33").Left;
             int left_e = oItem.Left;
             int width = oItem.Width;
@@ -47,7 +45,7 @@ namespace BDO_Localisation_AddOn
             bool multiSelection = false;
             string objectType = "UDO_F_BDO_WBLD_D"; //Waybill document
             string uniqueID_WaybillCFL = "Waybill_CFL";
-            FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_WaybillCFL);
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_WaybillCFL);
 
             formItems = new Dictionary<string, object>();
             itemName = "BDO_WblDoc"; //10 characters
@@ -187,7 +185,7 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
-                       
+
             formItems = new Dictionary<string, object>();
             itemName = "PrjCodeE"; //10 characters
             formItems.Add("isDataSource", true);
@@ -229,6 +227,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
+
             GC.Collect();
         }
 
@@ -246,9 +245,19 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "CANCELED");
+            fieldskeysMap.Add("TableName", "OWTR");
+            fieldskeysMap.Add("Description", "Cancelled");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
         }
 
-        public static void formDataLoad( SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -263,7 +272,7 @@ namespace BDO_Localisation_AddOn
 
                 if (docEntry != 0)
                 {
-                    Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( docEntry, "67", out errorText);
+                    Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(docEntry, "67", out errorText);
                     wblDocEntry = Convert.ToInt32(wblDocInfo["DocEntry"]);
                     wblID = wblDocInfo["wblID"];
                     wblNum = wblDocInfo["number"];
@@ -290,7 +299,7 @@ namespace BDO_Localisation_AddOn
                 oStaticText.Caption = wblSts != "" ? BDOSResources.getTranslate("Status") + " : " + wblSts : "";
 
 
-                oForm.Items.Item("BDO_WblDoc").Enabled = (oForm.DataSources.DBDataSources.Item(0).GetValue("CANCELED",0)=="N");
+                oForm.Items.Item("BDO_WblDoc").Enabled = (oForm.DataSources.DBDataSources.Item(0).GetValue("CANCELED", 0) == "N");
             }
             catch (Exception ex)
             {
@@ -306,30 +315,70 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void cancellation(  int docEntry, out string errorText)
+        public static void cancellation()
         {
-            errorText = null;
+            string errorText;
 
             try
             {
-                Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo( docEntry, "67", out errorText);
+                Dictionary<string, string> wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(Program.canceledDocEntry, "67", out errorText);
                 int wblDocEntry = Convert.ToInt32(wblDocInfo["DocEntry"]);
 
                 if (wblDocEntry != 0)
                 {
                     int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentLinkedToWaybillCancel"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                     string operation = answer == 1 ? "Update" : "Cancel";
-                    BDO_Waybills.cancellation( wblDocEntry, operation, out errorText);
+                    BDO_Waybills.cancellation(wblDocEntry, operation, out errorText);
                 }
 
+                SAPbobsCOM.StockTransfer oStockTransfer = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oStockTransfer);
+                if (oStockTransfer.GetByKey(Program.canceledDocEntry))
+                {
+                    oStockTransfer.UserFields.Fields.Item("U_CANCELED").Value = "Y";
+                }
+
+                int resultCode = oStockTransfer.Update();
+                if (resultCode == 0)
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.Append("SELECT TOP 1 \"DocEntry\", \"DocNum\", \"Comments\" \n");
+                    query.Append("FROM OWTR \n");
+                    query.Append("WHERE CONTAINS(\"Comments\", '*" + oStockTransfer.DocNum + "*') ORDER BY \"DocEntry\" DESC");
+
+                    Marshal.ReleaseComObject(oStockTransfer);
+
+                    SAPbobsCOM.Recordset oRecordset = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                    oRecordset.DoQuery(query.ToString());
+                    if (!oRecordset.EoF)
+                    {
+                        int docEntry = oRecordset.Fields.Item("DocEntry").Value;
+
+                        oStockTransfer = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oStockTransfer);
+                        if (oStockTransfer.GetByKey(docEntry))
+                            oStockTransfer.UserFields.Fields.Item("U_CANCELED").Value = "Y";
+                        resultCode = oStockTransfer.Update();
+
+                        if (resultCode != 0)
+                        {
+                            int errCode;
+                            string errMsg;
+                            Program.oCompany.GetLastError(out errCode, out errMsg);
+                            Program.uiApp.StatusBar.SetSystemMessage(errMsg, SAPbouiCOM.BoMessageTime.bmt_Short);
+                        }
+                        Marshal.ReleaseComObject(oStockTransfer);
+                    }
+                }
+                else
+                {
+                    int errCode;
+                    string errMsg;
+                    Program.oCompany.GetLastError(out errCode, out errMsg);
+                    Program.uiApp.StatusBar.SetSystemMessage(errMsg, SAPbouiCOM.BoMessageTime.bmt_Short);
+                }
             }
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
             finally
             {
@@ -337,7 +386,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void setVisibleFormItems( SAPbouiCOM.Form oForm, out string errorText)
+        public static void setVisibleFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             SAPbouiCOM.Item oItem = null;
@@ -366,7 +415,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -375,20 +424,18 @@ namespace BDO_Localisation_AddOn
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
             {
-                if (BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == false)
+                if (!BusinessObjectInfo.BeforeAction && !BusinessObjectInfo.ActionSuccess)
                 {
                     BubbleEvent = false;
                 }
 
-                if(BusinessObjectInfo.BeforeAction == true)
+                if (BusinessObjectInfo.BeforeAction)
                 {
                     //ძირითადი საშუალებების შემოწმება
                     bool rejectionAsset = false;
                     CommonFunctions.blockAssetInvoice(oForm, "OWTR", "WTR1", "", out rejectionAsset);
                     if (rejectionAsset)
-                    {
                         BubbleEvent = false;
-                    }
                 }
 
                 if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction)
@@ -411,48 +458,38 @@ namespace BDO_Localisation_AddOn
                         }
 
                         //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
-                        if (BusinessObjectInfo.ActionSuccess == true & BusinessObjectInfo.BeforeAction == false)
-                        {
+                        if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction)
                             CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                        }
                         else
-                        {
                             CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                        }
                     }
                 }
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & !BusinessObjectInfo.BeforeAction)
             {
                 setVisibleFormItems(oForm, out errorText);
             }
 
-
             if (oForm.TypeEx == "940")
             {
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
+                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
                 {
-                    formDataLoad( oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
                     //setVisibleFormItems( oForm, out errorText);
                 }
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == true)
+                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
                 {
-                    if (Program.cancellationTrans == true & Program.canceledDocEntry != 0)
+                    if (Program.cancellationTrans && Program.canceledDocEntry != 0)
                     {
-
-                        cancellation( Program.canceledDocEntry, out errorText);
-                        //Program.cancellationTrans = false; //უნდა იყოს დაკომენტარებული!!!
+                        cancellation();
                         Program.canceledDocEntry = 0;
                     }
-
-                    
                 }
-
 
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
                 {
-                    if (BusinessObjectInfo.BeforeAction == true)
+                    if (BusinessObjectInfo.BeforeAction)
                     {
                         SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
                         if (DocDBSource.GetValue("CANCELED", 0) == "N")
@@ -468,7 +505,6 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-
             }
         }
 
@@ -490,11 +526,10 @@ namespace BDO_Localisation_AddOn
                     BubbleEvent = false;
                 }
             }
-           
+
         }
 
-
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -529,7 +564,7 @@ namespace BDO_Localisation_AddOn
                     chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.Row, pVal.BeforeAction, out errorText);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST )
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 //& oCFLEvento.ChooseFromListUID == "Waybill_CFL" & pVal.BeforeAction == true)
                 {
                     if (pVal.BeforeAction == true)
@@ -565,6 +600,7 @@ namespace BDO_Localisation_AddOn
                             oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
                             //oCon.CondVal = "";
 
+
                             oCFL.SetConditions(oCons);
                         }
                     }
@@ -577,21 +613,22 @@ namespace BDO_Localisation_AddOn
                         {
                             SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
 
-                            if(oDataTableSelectedObjects==null)
+                            if (oDataTableSelectedObjects == null)
                             {
                                 return;
                             }
 
                             int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("LinkWaybillToDocument"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-                            if(answer == 2)
+                            if (answer == 2)
                             {
                                 return;
                             }
 
                             oForm.Freeze(true);
-                            
+
                             int newDocEntry = oDataTableSelectedObjects.GetValue("DocEntry", 0);
                             int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OWTR").GetValue("DocEntry", 0));
+
 
                             //არჩეულ ზედნადებში უნდა ჩავწეროთ ამ დოკუმენტის ნომრები
                             SAPbobsCOM.CompanyService oCompanyService = null;
@@ -611,7 +648,7 @@ namespace BDO_Localisation_AddOn
                             oGeneralService.Update(oGeneralData);
 
                             oForm.DataSources.UserDataSources.Item("BDO_WblDoc").ValueEx = newDocEntry.ToString();
-                            formDataLoad( oForm, out errorText);
+                            formDataLoad(oForm, out errorText);
 
                             BubbleEvent = true;
                             oForm.Freeze(false);
@@ -636,12 +673,12 @@ namespace BDO_Localisation_AddOn
                         {
 
                             string objectType = "67";
-                            BDO_Waybills.createDocument( objectType, docEntry, null, null, null, null, out newDocEntry, out errorText);
+                            BDO_Waybills.createDocument(objectType, docEntry, null, null, null, null, out newDocEntry, out errorText);
                             oForm.DataSources.UserDataSources.Item("BDO_WblDoc").ValueEx = newDocEntry.ToString();
                             if (errorText == null & newDocEntry != 0)
                             {
                                 Program.uiApp.MessageBox(BDOSResources.getTranslate("WaybillCreatedSuccesfully") + " DocEntry : " + newDocEntry);
-                                formDataLoad( oForm, out errorText);
+                                formDataLoad(oForm, out errorText);
                             }
                             else
                             {
@@ -790,6 +827,6 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
             }
-        }
+        }      
     }
 }

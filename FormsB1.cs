@@ -8,67 +8,67 @@ using System.Text;
 namespace BDO_Localisation_AddOn
 {
     static partial class FormsB1
-    {      
-        public static void allUserFieldsForAddOn(  out string errorText)
-        {           
-            BusinessPartners.createUserFields( out errorText);
+    {
+        public static void allUserFieldsForAddOn(out string errorText)
+        {
+            BusinessPartners.createUserFields(out errorText);
 
-            FixedAsset.createUserFields( out errorText);
+            FixedAsset.createUserFields(out errorText);
 
-            Items.createUserFields( out errorText);
+            Items.createUserFields(out errorText);
 
             ItemGroup.createUserFields(out errorText);
 
-            BDO_BPCatalog.createUserFields( out errorText);           
+            BDO_BPCatalog.createUserFields(out errorText);
 
-            Users.createUserFields( out errorText);
+            Users.createUserFields(out errorText);
 
-            BDO_RSUoM.createUserFields( out errorText);
+            BDO_RSUoM.createUserFields(out errorText);
 
-            ARCreditNote.createUserFields( out errorText);
+            ARCreditNote.createUserFields(out errorText);
 
-            BlanketAgreement.createUserFields( out errorText);
+            BlanketAgreement.createUserFields(out errorText);
 
             ARInvoice.createUserFields(out errorText);
 
             Capitalization.createUserFields(out errorText);
 
-            Delivery.createUserFields( out errorText);
+            Delivery.createUserFields(out errorText);
 
-            APCreditMemo.createUserFields( out errorText);
+            APCreditMemo.createUserFields(out errorText);
 
-            VatGroup.createUserFields( out errorText);
+            VatGroup.createUserFields(out errorText);
 
-            WithholdingTax.createUserFields( out errorText);
+            WithholdingTax.createUserFields(out errorText);
 
-            LandedCosts.createUserFields( out errorText);
+            LandedCosts.createUserFields(out errorText);
 
-            HouseBankAccounts.createUserFields( out errorText);
+            HouseBankAccounts.createUserFields(out errorText);
 
-            OutgoingPayment.createUserFields( out errorText);
+            OutgoingPayment.createUserFields(out errorText);
 
-            GoodsIssue.createUserFields( out errorText);
+            GoodsIssue.createUserFields(out errorText);
 
-            APInvoice.createUserFields( out errorText);
+            APInvoice.createUserFields(out errorText);
 
-            StockTransfer.createUserFields( out errorText);
+            StockTransfer.createUserFields(out errorText);
 
             StockTransferRequest.createUserFields(out errorText);
 
-            GoodsReceiptPO.createUserFields( out errorText);
+            GoodsReceiptPO.createUserFields(out errorText);
 
-            APDownPayment.createUserFields( out errorText);
+            APDownPayment.createUserFields(out errorText);
 
-            Retirement.createUserFields( out errorText);
+            Retirement.createUserFields(out errorText);
 
-            IncomingPayment.createUserFields( out errorText);
+            IncomingPayment.createUserFields(out errorText);
 
-            ChartOfAccounts.createUserFields( out errorText);
+            ChartOfAccounts.createUserFields(out errorText);
 
-            JournalEntry.createUserFields( out errorText);
+            JournalEntry.createUserFields(out errorText);
 
-            ARDownPaymentRequest.createUserFields( out errorText);
-            
+            ARDownPaymentRequest.createUserFields(out errorText);
+
             GeneralSettings.createUserFields(out errorText);
 
             DocumentSettings.createUserFields(out errorText);
@@ -82,6 +82,8 @@ namespace BDO_Localisation_AddOn
             AssetClass.createUserFields(out errorText);
 
             Projects.createUserFields(out errorText);
+
+            ArCorrectionInvoice.CreateUserFields(out errorText);
         }
 
         public static void addMenusForAddOn()
@@ -147,6 +149,12 @@ namespace BDO_Localisation_AddOn
             BDOSDepreciationAccrualDocument.addMenus();
 
             BDOSFuelTransferWizard.addMenus();
+
+            BDOSCreditLine.addMenus();
+
+            BDOSInterestAccrual.addMenus();
+
+            BDOSInterestAccrualWizard.addMenus();
         }
 
         public static int getLongIntRGB(int R, int G, int B)
@@ -155,7 +163,7 @@ namespace BDO_Localisation_AddOn
             return intValue;
         }
 
-        public static bool createForm( Dictionary<string, object> formProperties, out SAPbouiCOM.Form oForm, out bool newForm, out string errorText)
+        public static bool createForm(Dictionary<string, object> formProperties, out SAPbouiCOM.Form oForm, out bool newForm, out string errorText)
         {
             errorText = null;
             object propertyValue = null;
@@ -164,7 +172,7 @@ namespace BDO_Localisation_AddOn
 
             if (formProperties.TryGetValue("UniqueID", out propertyValue) == true)
             {
-                if (formExistByIndex( propertyValue, out oForm) == true)
+                if (formExistByIndex(propertyValue, out oForm) == true)
                 {
                     return true;
                 }
@@ -371,7 +379,17 @@ namespace BDO_Localisation_AddOn
                         }
                         if (propertyValue.ToString() == "UserDataSources")
                         {
-                            SAPbouiCOM.UserDataSource oUserDataSource = oForm.DataSources.UserDataSources.Add(UID, (SAPbouiCOM.BoDataType)formItems["DataType"], Convert.ToInt32(formItems["Length"]));
+                            SAPbouiCOM.UserDataSource oUserDataSource;
+
+                            if ((SAPbouiCOM.BoDataType)formItems["DataType"] == SAPbouiCOM.BoDataType.dt_SHORT_TEXT)
+                            {
+                                oUserDataSource = oForm.DataSources.UserDataSources.Add(UID, (SAPbouiCOM.BoDataType)formItems["DataType"], Convert.ToInt32(formItems["Length"]));
+                            }
+                            else
+                            {
+                                oUserDataSource = oForm.DataSources.UserDataSources.Add(UID, (SAPbouiCOM.BoDataType)formItems["DataType"]);
+                            }
+
                             if (formItems.TryGetValue("Value", out propertyValue) == true)
                             {
                                 oUserDataSource.Value = propertyValue.ToString();
@@ -851,7 +869,7 @@ namespace BDO_Localisation_AddOn
                 if (formItems.TryGetValue("GroupWith", out propertyValue) == true)
                 {
                     oOptionBtn.GroupWith(propertyValue.ToString());
-                }              
+                }
             }
 
             if (Type == SAPbouiCOM.BoFormItemTypes.it_PANE_COMBO_BOX)
@@ -908,7 +926,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static bool formExistByUniqueID( string uniqueID, out SAPbouiCOM.Form oForm)
+        public static bool formExistByUniqueID(string uniqueID, out SAPbouiCOM.Form oForm)
         {
             bool result = false;
             oForm = null;
@@ -925,7 +943,7 @@ namespace BDO_Localisation_AddOn
             return result;
         }
 
-        public static bool formExistByIndex( object index, out SAPbouiCOM.Form oForm)
+        public static bool formExistByIndex(object index, out SAPbouiCOM.Form oForm)
         {
             bool result = false;
             oForm = null;
@@ -941,7 +959,7 @@ namespace BDO_Localisation_AddOn
             return result;
         }
 
-        public static void addChooseFromList( SAPbouiCOM.Form oForm, bool multiSelection, string objectType, string uniqueID)
+        public static void addChooseFromList(SAPbouiCOM.Form oForm, bool multiSelection, string objectType, string uniqueID)
         {
             SAPbouiCOM.ChooseFromListCollection oCFLs = null;
             oCFLs = oForm.ChooseFromLists;
@@ -957,7 +975,7 @@ namespace BDO_Localisation_AddOn
 
         public static string ConvertDecimalToString(decimal d)
         {
-            NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator, NumberGroupSeparator = CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator};
+            NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator, NumberGroupSeparator = CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator };
             return d.ToString(Nfi);
         }
 
@@ -1041,7 +1059,6 @@ namespace BDO_Localisation_AddOn
             else
             {
                 return new DateTime();
-
             }
         }
 
@@ -1054,33 +1071,32 @@ namespace BDO_Localisation_AddOn
         {
             try
             {
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item(matrixName).Specific));
-                int visibleColumn = 0;
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item(matrixName).Specific;
+                oMatrix.Columns.Item(firstColumnUniqueID).Width = 19;
+                int columnsCount = 0;
+                var oColumns = oMatrix.Columns;
 
-                foreach (SAPbouiCOM.Column oColumn in oMatrix.Columns)
+                foreach (SAPbouiCOM.Column oColumn in oColumns)
                 {
-                    if (oColumn.Visible == true)
-                    {
-                        visibleColumn++;
-                    }
+                    if (oColumn.Visible)
+                        columnsCount++;
                 }
 
-                visibleColumn = visibleColumn - 1;
+                columnsCount -= 1;
+                wblMTRWidth -= 19;
 
-                foreach (SAPbouiCOM.Column oColumn in oMatrix.Columns)
+                foreach (SAPbouiCOM.Column oColumn in oColumns)
                 {
                     if (oColumn.UniqueID == firstColumnUniqueID)
-                    {
-                        oColumn.Width = 20 - 1;
-                        wblMTRWidth = wblMTRWidth - 20 - 1;
-                    }
+                        continue;
                     else
-                    {
-                        oColumn.Width = wblMTRWidth / visibleColumn;
-                    }
+                        oColumn.Width = wblMTRWidth / columnsCount;
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

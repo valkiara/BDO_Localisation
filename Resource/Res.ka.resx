@@ -211,7 +211,7 @@
     <value>ბპ. სახელი</value>
   </data>
   <data name="BPNotFound" xml:space="preserve">
-    <value>ბიზნესპარტნიორი არ მოიძებნა!</value>
+    <value>ბიზნეს პარტნიორი არ მოიძებნა!</value>
   </data>
   <data name="BPTin" xml:space="preserve">
     <value>ბპ. გსნ</value>
@@ -1609,7 +1609,7 @@
     <value>ვერ მიენიჭა სტატუსი</value>
   </data>
   <data name="CardCode" xml:space="preserve">
-    <value>ბიზნესპარტნიორი</value>
+    <value>ბიზნეს პარტნიორი</value>
   </data>
   <data name="Comments" xml:space="preserve">
     <value>კომენტარი</value>
@@ -2605,7 +2605,7 @@
   <data name="ARDownPaymentVATAccrual" xml:space="preserve">
     <value>ავანსის დღგ-ის დარიცხვის დოკუმენტი</value>
   </data>
-  <data name="ARVATAccrualWizard" xml:space="preserve">
+  <data name="ARDownPaymentVATAccrualWizard" xml:space="preserve">
     <value>ავანსის დღგ-ის დარიცხვის დამხმარე</value>
   </data>
   <data name="DocEntVT" xml:space="preserve">
@@ -2617,8 +2617,8 @@
   <data name="ChangeDocDate" xml:space="preserve">
     <value>თარიღის შეცვლა</value>
   </data>
-  <data name="ReconcilationWizard" xml:space="preserve">
-    <value>რეკონსილაციის დამხმარე</value>
+  <data name="VATReconcilationWizard" xml:space="preserve">
+    <value>დღგ-ის რეკონსილაციის დამხმარე</value>
   </data>
   <data name="ReconSum" xml:space="preserve">
     <value>რეკონსილაციის თანხა</value>
@@ -2626,8 +2626,8 @@
   <data name="NewDate" xml:space="preserve">
     <value>ახალი თარიღი</value>
   </data>
-  <data name="CreateVATAccrualDocuments" xml:space="preserve">
-    <value>შეიქმნას დღგ-ის დარიცხვის დოკუმენტი</value>
+  <data name="CreateARDownPaymentVATAccrualDocuments" xml:space="preserve">
+    <value>შეიქმნას ავანსის დღგ-ის დარიცხვის დოკუმენტები</value>
   </data>
   <data name="AlRcnSum" xml:space="preserve">
     <value>გატარებული თანხა</value>
@@ -3327,5 +3327,113 @@
   </data>
   <data name="TheTableCanNotBeEmpty" xml:space="preserve">
     <value>ცხრილი არ შეიძლება იყოს ცარიელი</value>
+  </data>
+  <data name="CreditLineMasterData" xml:space="preserve">
+    <value>საკრედიტო ხაზის ცნობარი</value>
+  </data>
+  <data name="CreditLineAccount" xml:space="preserve">
+    <value>სასესხო ვალდებულების ანგარიში</value>
+  </data>
+  <data name="CreditLineCode" xml:space="preserve">
+    <value>საკრედიტო ხაზის კოდი</value>
+  </data>
+  <data name="InterestPayableAccount" xml:space="preserve">
+    <value>საპროცენტო ვალდებულების ანგარიში</value>
+  </data>
+  <data name="InterestRate" xml:space="preserve">
+    <value>საპროცენტო განაკვეთი</value>
+  </data>
+  <data name="StartingDate" xml:space="preserve">
+    <value>დაწყების თარიღი</value>
+  </data>
+  <data name="Bank" xml:space="preserve">
+    <value>ბანკი</value>
+  </data>
+  <data name="InterestAccrualDocument" xml:space="preserve">
+    <value>პროცენტის დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="CreditLineBalanceFC" xml:space="preserve">
+    <value>სესხის ნაშთი (უცხ. ვალუტა)</value>
+  </data>
+  <data name="CreditLineBalanceLC" xml:space="preserve">
+    <value>სესხის ნაშთი (ეროვნ. ვალუტა)</value>
+  </data>
+  <data name="InterestAmountFC" xml:space="preserve">
+    <value>პროცენტის თანხა (უცხ. ვალუტა)</value>
+  </data>
+  <data name="InterestAmountLC" xml:space="preserve">
+    <value>პროცენტის თანხა (ეროვნ. ვალუტა)</value>
+  </data>
+  <data name="ExchangeRate" xml:space="preserve">
+    <value>კურსი</value>
+  </data>
+  <data name="BeforeChoosingCreditLineCodeFillBankFirst" xml:space="preserve">
+    <value>საკრედიტო ხაზის არჩევამდე შეავსეთ ბანკის ველი</value>
+  </data>
+  <data name="InterestAccrualWizard" xml:space="preserve">
+    <value>სესხის პროცენტის დარიცხვის დამხმარე</value>
+  </data>
+  <data name="CloseInterestAccrualWizard" xml:space="preserve">
+    <value>დაიხუროს სესხის პროცენტის დარიცხვის დამხმარე</value>
+  </data>
+  <data name="CreateInterestAccrualDocument" xml:space="preserve">
+    <value>შეიქმნას პროცენტის დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="CreditLine" xml:space="preserve">
+    <value>საკრედიტო ხაზი</value>
+  </data>
+  <data name="AccrualDateStart" xml:space="preserve">
+    <value>დარიცხვის თარიღი (საწყისი)</value>
+  </data>
+  <data name="QuantityOfAccrualDays" xml:space="preserve">
+    <value>დარიცხვის დღეების რაოდენობა</value>
+  </data>
+  <data name="WarehouseAddresses" xml:space="preserve">
+    <value>საწყობის მისამართები</value>
+  </data>
+  <data name="WaybillAlreadyExistsForThisDocument" xml:space="preserve">
+    <value>მოცემულ დოკუმენტზე ზედნადები უკვე არსებობს</value>
+  </data>
+  <data name="SelectValues" xml:space="preserve">
+    <value>აირჩიეთ მნიშვნელობები</value>
+  </data>
+  <data name="CloseReceivedWaybillsAnalysis" xml:space="preserve">
+    <value>დაიხუროს მიღებული ზედნადებების ანალიზი</value>
+  </data>
+  <data name="DoYouReallyWantCancelDoc" xml:space="preserve">
+    <value>ნამდვილად გსურთ დოკუმენტის გაუქმება</value>
+  </data>
+  <data name="YouCantCancelJournalEntry" xml:space="preserve">
+    <value>გატარებების ჯურნალს ვერ გააუქმებთ</value>
+  </data>
+  <data name="saveWhs" xml:space="preserve">
+    <value>შეინახე საწყობი</value>
+  </data>
+  <data name="YouCantCancelDocumentBecauseOfARDownPaymentVATAccrual" xml:space="preserve">
+    <value>დოკუმენტს ვერ გააუქმებთ! მასზე არსებობს ავანსის დღგ-ის დარიცხვის დოკუმენტი</value>
+  </data>
+  <data name="CloseARDownPaymentVATAccrualWizard" xml:space="preserve">
+    <value>დაიხუროს ავანსის დღგ-ის დარიცხვის დამხმარე</value>
+  </data>
+  <data name="CloseVATReconcilationWizard" xml:space="preserve">
+    <value>დაიხუროს ავანსის დღგ-ის რეკონსილაციის დამხმარე</value>
+  </data>
+  <data name="PrjName" xml:space="preserve">
+    <value>პროექტის დასახელება</value>
+  </data>
+  <data name="PrjCode" xml:space="preserve">
+    <value>პროექტის კოდი</value>
+  </data>
+  <data name="DoYouWantToContinueOperation" xml:space="preserve">
+    <value>გსურთ ოპერაციის გაგრძელება</value>
+  </data>
+  <data name="DoYouWantToContinue" xml:space="preserve">
+    <value>გსურთ გააგრძელოთ</value>
+  </data>
+  <data name="CloseDepreciationAccruingWizard" xml:space="preserve">
+    <value>დაიხუროს ცვეთის დარიცხვის დამხმარე - რაოდენობრივი აღრიცხვა</value>
+  </data>
+  <data name="CreateDocumentForThePreviousMonths" xml:space="preserve">
+    <value>შექმენით დოკუმენტი წინა თვეებისთვის</value>
   </data>
 </root>
