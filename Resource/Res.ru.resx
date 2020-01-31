@@ -3415,6 +3415,18 @@
   <data name="CloseVATReconcilationWizard" xml:space="preserve">
     <value>Do you want to close vat reconciliation wizard</value>
   </data>
+  <data name="PrjName" xml:space="preserve">
+    <value>Project Name</value>
+  </data>
+  <data name="PrjCode" xml:space="preserve">
+    <value>Project Code</value>
+  </data>
+  <data name="DoYouWantToContinueOperation" xml:space="preserve">
+    <value>Do you want to continue operation</value>
+  </data>
+  <data name="DoYouWantToContinue" xml:space="preserve">
+    <value>Do you want to continue</value>
+  </data>
   <data name="CloseDepreciationAccruingWizard" xml:space="preserve">
     <value>Do you want to close depreciation accruing wizard - with quantities</value>
   </data>

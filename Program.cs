@@ -917,6 +917,13 @@ namespace BDO_Localisation_AddOn
                             cancellationTrans = true;
                             canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORIN").GetValue("DocEntry", 0));
                         }
+
+                        //----------------------------->A/R Correction Invoice<-----------------------------
+                        else if (oForm.TypeEx == "70008")
+                        {
+                            cancellationTrans = true;
+                            canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OCSI").GetValue("DocEntry", 0));
+                        }
                         //----------------------------->Depreciation<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
                         {
@@ -1098,6 +1105,12 @@ namespace BDO_Localisation_AddOn
                         ARCreditNote.formDataLoad(oForm, out errorText);
                     }
 
+                    //----------------------------->A/R Correction Invoice<-----------------------------
+                    else if (oForm.TypeEx == "70008")
+                    {
+                        ArCorrectionInvoice.FormDataLoad(oForm, out errorText);
+                    }
+
                     //----------------------------->A/P Invoice<-----------------------------
                     else if (oForm.TypeEx == "141")
                     {
@@ -1239,6 +1252,12 @@ namespace BDO_Localisation_AddOn
                     else if (oForm.TypeEx == "179")
                     {
                         ARCreditNote.formDataLoad(oForm, out errorText);
+                    }
+
+                    //----------------------------->A/R Correction Invoice<-----------------------------
+                    else if (oForm.TypeEx == "70008")
+                    {
+                        ArCorrectionInvoice.FormDataLoad(oForm, out errorText);
                     }
 
                     //----------------------------->A/P Invoice<-----------------------------
@@ -1653,6 +1672,12 @@ namespace BDO_Localisation_AddOn
                 else if (BusinessObjectInfo.Type == "UDO_F_BDOSINAC_D")
                 {
                     BDOSInterestAccrual.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
+                //----------------------------->A/R Correction Invoice<-----------------------------
+                else if (BusinessObjectInfo.Type == "165" && BusinessObjectInfo.FormTypeEx == "70008")
+                {
+                    ArCorrectionInvoice.UiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
             }
             catch (Exception ex)
@@ -2390,6 +2415,12 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormUID == "BDOSInterestAccrualWizard")
                 {
                     BDOSInterestAccrualWizard.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->A/R Correction Invoice<-----------------------------
+                else if (pVal.FormTypeEx == "70008")
+                {
+                    ArCorrectionInvoice.UiApp_ItemEvent(ref pVal, out BubbleEvent);
                 }
             }
             catch (Exception ex)

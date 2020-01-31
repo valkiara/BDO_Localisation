@@ -82,6 +82,8 @@ namespace BDO_Localisation_AddOn
             AssetClass.createUserFields(out errorText);
 
             Projects.createUserFields(out errorText);
+
+            ArCorrectionInvoice.CreateUserFields(out errorText);
         }
 
         public static void addMenusForAddOn()

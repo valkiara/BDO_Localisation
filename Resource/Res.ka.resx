@@ -3418,6 +3418,18 @@
   <data name="CloseVATReconcilationWizard" xml:space="preserve">
     <value>დაიხუროს ავანსის დღგ-ის რეკონსილაციის დამხმარე</value>
   </data>
+  <data name="PrjName" xml:space="preserve">
+    <value>პროექტის დასახელება</value>
+  </data>
+  <data name="PrjCode" xml:space="preserve">
+    <value>პროექტის კოდი</value>
+  </data>
+  <data name="DoYouWantToContinueOperation" xml:space="preserve">
+    <value>გსურთ ოპერაციის გაგრძელება</value>
+  </data>
+  <data name="DoYouWantToContinue" xml:space="preserve">
+    <value>გსურთ გააგრძელოთ</value>
+  </data>
   <data name="CloseDepreciationAccruingWizard" xml:space="preserve">
     <value>დაიხუროს ცვეთის დარიცხვის დამხმარე - რაოდენობრივი აღრიცხვა</value>
   </data>
