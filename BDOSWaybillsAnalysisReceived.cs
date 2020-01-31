@@ -916,13 +916,12 @@ namespace BDO_Localisation_AddOn
                     {
                         ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
                         ItemName = oRecordSet.Fields.Item("ItemDesc").Value;
+                        PrjCode = (string)oRecordSet.Fields.Item("PrjCode").Value;
+                        PrjName = (string)oRecordSet.Fields.Item("PrjName").Value;
                     }
 
                     BaseDType = (string)oRecordSet.Fields.Item("BaseDType").Value;
-
-                    PrjCode = (string)oRecordSet.Fields.Item("PrjCode").Value;
-                    PrjName = (string)oRecordSet.Fields.Item("PrjName").Value;
-
+                    
                     Amount = Convert.ToDecimal(oRecordSet.Fields.Item("Gtotal").Value, CultureInfo.InvariantCulture);
                     Amount_Full = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value, CultureInfo.InvariantCulture);
                     RSAmount = 0;
