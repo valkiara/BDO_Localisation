@@ -1261,7 +1261,7 @@ namespace BDO_Localisation_AddOn
 
                 if (WBDocTp == "2")
                 {
-                    queryStr = queryStr + " GROUP BY \"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"ORIN\".\"DocDate\",\"ORIN\".\"CardCode\",\"OCRD\".\"CardName\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" " +
+                    queryStr = queryStr + " GROUP BY \"ORIN\".\"ObjType\",\"BDO_WBLD\".\"U_tporter\",\"MNTB\".\"DocEntry\", \"ORIN\".\"DocDate\",\"ORIN\".\"CardCode\",\"OCRD\".\"CardName\",\"OCRD\".\"LicTradNum\",\"BDO_WBLD\".\"U_status\",\"BDO_WBLD\".\"U_vehicle\",\"BDO_WBLD\".\"U_drvCode\",\"BDO_WBLD\".\"U_number\",\"BDO_WBLD\".\"U_wblID\",\"BDO_WBLD\".\"DocEntry\",\"BDO_WBLD\".\"U_trnsType\" " +
 
                                "UNION SELECT " +
                                 "'000000' AS \"LineNum\", " +
