@@ -3430,4 +3430,10 @@
   <data name="DoYouWantToContinue" xml:space="preserve">
     <value>გსურთ გააგრძელოთ</value>
   </data>
+  <data name="CloseDepreciationAccruingWizard" xml:space="preserve">
+    <value>დაიხუროს ცვეთის დარიცხვის დამხმარე - რაოდენობრივი აღრიცხვა</value>
+  </data>
+  <data name="CreateDocumentForThePreviousMonths" xml:space="preserve">
+    <value>შექმენით დოკუმენტი წინა თვეებისთვის</value>
+  </data>
 </root>
