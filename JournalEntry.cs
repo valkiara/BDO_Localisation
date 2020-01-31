@@ -816,6 +816,37 @@ namespace BDO_Localisation_AddOn
                     oForm.Items.Item("BDOSAddEnt").Enabled = true;
                 }
             }
+
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD &
+                BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess)
+            {
+                if (Program.canceledDocEntry == 0) return;
+                try
+                {
+                    int transId =
+                        Convert.ToInt32(oForm.Items.Item("BDOSJrnEnt").Specific.Value);
+
+                    SAPbobsCOM.JournalEntries oJournalDoc =
+                        Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
+                    oJournalDoc.GetByKey(transId);
+
+                    int response = oJournalDoc.Cancel();
+
+                    if (response != 0)
+                    {
+                        Program.oCompany.GetLastError(out response, out string errorText);
+                    }
+                    else
+                    {
+                        Program.canceledDocEntry = 0;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+                }
+            }
         }
 
         public static void cancellation(SAPbouiCOM.Form oForm, int Ref1, string Ref2, out string errorText)
@@ -976,7 +1007,8 @@ namespace BDO_Localisation_AddOn
 
             if (pVal.BeforeAction && pVal.MenuUID == "1284")
             {
-                if (oForm.DataSources.DBDataSources.Item("OJDT").GetValue("DataSource", 0) == "O" && oForm.DataSources.DBDataSources.Item("OJDT").GetValue("Ref2", 0) != "Reconcilation")
+                if (oForm.DataSources.DBDataSources.Item("OJDT").GetValue("DataSource", 0) == "O" &&
+                    oForm.DataSources.DBDataSources.Item("OJDT").GetValue("Ref2", 0) != "Reconcilation")
                 {
                     BubbleEvent = false;
                     throw new Exception(BDOSResources.getTranslate("YouCantCancelJournalEntry") + "!");
