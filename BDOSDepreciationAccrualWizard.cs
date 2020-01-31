@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -478,7 +479,7 @@ namespace BDO_Localisation_AddOn
                     if (errorText != null)
                     {
                         CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
                     }
                     else
                     {
@@ -489,7 +490,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception Ex)
             {
-                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + Ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + Ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
             return docEntry;
         }
@@ -518,16 +519,19 @@ namespace BDO_Localisation_AddOn
             int newRow = 0;
             for (int i = 0; i < oMatrix.RowCount; i++)
             {
+                string itemCode = depreciationLines.GetValue("ItemCode", i);
+                string distNumber = depreciationLines.GetValue("DistNumber", i);
+                string project = depreciationLines.GetValue("Project", i);
                 double curMnthAmt = depreciationLines.GetValue("CurMnthAmt", i);
+
                 if (curMnthAmt == 0)
                 {
                     newRow = depreciationLinesTmp.Rows.Count;
                     depreciationLinesTmp.Rows.Add();
-                    depreciationLinesTmp.SetValue("ItemCode", newRow, depreciationLines.GetValue("ItemCode", i));
-                    depreciationLinesTmp.SetValue("DistNumber", newRow, depreciationLines.GetValue("DistNumber", i));
+                    depreciationLinesTmp.SetValue("ItemCode", newRow, itemCode);
+                    depreciationLinesTmp.SetValue("DistNumber", newRow, distNumber);
                     depreciationLinesTmp.SetValue("UseLife", newRow, depreciationLines.GetValue("UseLife", i));
-                    depreciationLinesTmp.SetValue("Project", newRow, depreciationLines.GetValue("Project", i));
-
+                    depreciationLinesTmp.SetValue("Project", newRow, project);
                     depreciationLinesTmp.SetValue("Quantity", newRow, depreciationLines.GetValue("Quantity", i));
                     depreciationLinesTmp.SetValue("DeprAmt", newRow, depreciationLines.GetValue("DeprAmt", i));
                     depreciationLinesTmp.SetValue("AlrDeprAmt", newRow, depreciationLines.GetValue("AlrDeprAmt", i));
@@ -556,11 +560,40 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                    string ItemCode = depreciationLines.GetValue("ItemCode", i);
-                    string DistNumber = depreciationLines.GetValue("DistNumber", i);
-
-                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreatedForBatchNumber") + " " + DistNumber + " (" + ItemCode + ")", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreated") + "! " + itemCode + " - " + distNumber + " - " + project, SAPbouiCOM.BoMessageTime.bmt_Short);
+                    continue;
                 }
+
+                //StringBuilder query = new StringBuilder();
+                ////query.Append("SELECT * \n");
+                ////query.Append("FROM \n");
+                //query.Append("(SELECT TOP 1 \n");
+                //query.Append("\"@BDOSDEPACR\".\"DocEntry\", \n");
+                //query.Append("\"@BDOSDEPACR\".\"U_DocDate\" \n");
+                //query.Append("FROM \"@BDOSDEPACR\" \n");
+                //query.Append("INNER JOIN \"@BDOSDEPAC1\" ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
+                //query.Append("WHERE \"U_DocDate\" <= '" + dateStr + "' \n");
+                //query.Append("AND \"Canceled\" = 'N' \n");
+                //query.Append("AND \"@BDOSDEPAC1\".\"U_ItemCode\" = '" + itemCode + "' \n");
+                //query.Append("AND \"@BDOSDEPAC1\".\"U_DistNumber\" = '" + distNumber + "' \n");
+                //query.Append("AND \"@BDOSDEPAC1\".\"U_Project\" = '" + project + "' \n");
+                //query.Append("ORDER BY \n");
+                //query.Append("\"U_DocDate\" DESC, \n");
+                //query.Append("\"DocEntry\" DESC) \n");
+                ////query.Append("WHERE ABS((MONTH('" + dateStr + "') - MONTH(\"U_DocDate\")))>1");
+
+                //SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                //oRecordSet.DoQuery(query.ToString());
+                //if (!oRecordSet.EoF)
+                //{
+                //    if (Math.Abs(accrMnth.Month - oRecordSet.Fields.Item("U_DocDate").Value.Month) > 1)
+                //    {
+                //        depreciationLinesTmp.Rows.Clear();
+                //        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreateDocumentForThePreviousMonths") + "! " + itemCode + " - " + distNumber + " - " + project, SAPbouiCOM.BoMessageTime.bmt_Short);
+                //        Marshal.ReleaseComObject(oRecordSet);
+                //        continue;
+                //    }
+                //}
             }
 
             if (!isInvoice && depreciationLinesTmp.Rows.Count > 0)
@@ -576,7 +609,7 @@ namespace BDO_Localisation_AddOn
                 int mtrWidth = oForm.ClientWidth;
                 oForm.Items.Item("ItemsMTR").Width = mtrWidth;
                 oForm.Items.Item("ItemsMTR").Height = oForm.ClientHeight - 25;
-                FormsB1.resetWidthMatrixColumns(oForm, "ItemsMTR", "LineNum", mtrWidth);               
+                FormsB1.resetWidthMatrixColumns(oForm, "ItemsMTR", "LineNum", mtrWidth);
             }
             catch (Exception ex)
             {
@@ -876,21 +909,17 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue("ItemCode", rowIndex, oRecordSet.Fields.Item("ItemCode").Value);
                 oDataTable.SetValue("ItemName", rowIndex, oRecordSet.Fields.Item("ItemName").Value);
                 oDataTable.SetValue("DistNumber", rowIndex, oRecordSet.Fields.Item("DistNumber").Value);
-                oDataTable.SetValue("DepcDoc", rowIndex, oRecordSet.Fields.Item("DepcDoc").Value);
-
+                if (oRecordSet.Fields.Item("DepcDoc").Value != 0)
+                    oDataTable.SetValue("DepcDoc", rowIndex, oRecordSet.Fields.Item("DepcDoc").Value);
                 oDataTable.SetValue("UseLife", rowIndex, monthsApart);
                 oDataTable.SetValue("Quantity", rowIndex, Convert.ToDouble(Quantity));
                 oDataTable.SetValue("APCost", rowIndex, oRecordSet.Fields.Item("APCost").Value * Convert.ToDouble(Quantity));
                 oDataTable.SetValue("AlrDeprAmt", rowIndex, Convert.ToDouble(AlrDeprAmt));
                 oDataTable.SetValue("NtBookVal", rowIndex, Convert.ToDouble(NtBookVal));
                 if (CurrDeprAmt > 0)
-                {
                     oDataTable.SetValue("DeprAmt", rowIndex, 0);
-                }
                 else
-                {
                     oDataTable.SetValue("DeprAmt", rowIndex, Convert.ToDouble(DeprAmt));
-                }
                 oDataTable.SetValue("CurMnthAmt", rowIndex, Convert.ToDouble(CurrDeprAmt));
                 if (isInvoice)
                 {
