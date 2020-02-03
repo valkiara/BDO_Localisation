@@ -1028,6 +1028,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                            \"OJDT\".\"Ref1\" \n");
             query.Append("                  Having Sum(\"OJDT\".\"Debit\") > 0) AS \"OJDT1\" \n");
             query.Append("              ON \"@BDOSARDV\".\"DocEntry\" = \"OJDT1\".\"Ref1\" \n");
+            query.Append("WHERE \"ODPI\".\"TransId\" IS NULL \n");
             query.Append("ORDER  BY \"ODPI\".\"DocDate\" ASC");
 
             if (Program.oCompany.DbServerType != SAPbobsCOM.BoDataServerTypes.dst_HANADB)

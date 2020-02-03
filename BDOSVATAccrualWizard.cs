@@ -1071,6 +1071,7 @@ namespace BDO_Localisation_AddOn
                 query.Append("   AND \"ODPI\".\"DocDate\" <= '" + dateEE + "' \n");
                 if (!string.IsNullOrEmpty(cardCode))
                     query.Append("   AND \"ODPI\".\"CardCode\" = '" + cardCode + "' \n");
+                query.Append("   AND \"ODPI\".\"TransId\" IS NULL \n");
                 query.Append("ORDER  BY \"ODPI\".\"DocDate\" ASC");
               
                 if (Program.oCompany.DbServerType != SAPbobsCOM.BoDataServerTypes.dst_HANADB)
