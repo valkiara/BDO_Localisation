@@ -299,6 +299,7 @@ namespace BDO_Localisation_AddOn
                             string ItemCode = "";
                             string ItemName = "";
                             ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out ItemName);
+                            if (ItemName == null) ItemName = "";
 
                             SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
 
@@ -3175,6 +3176,7 @@ namespace BDO_Localisation_AddOn
                     string ItemName = "";
 
                     ItemCode = findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out ItemName);
+                    if (ItemName == null) ItemName = "";
                     CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
 
                     if (CatalogEntry != null)
