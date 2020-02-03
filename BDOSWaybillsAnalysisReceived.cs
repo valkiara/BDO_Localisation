@@ -793,6 +793,7 @@ namespace BDO_Localisation_AddOn
                                         if (Cardcode != null)
                                         {
                                             ItmCode = BDO_WaybillsJournalReceived.findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out ItemName);
+                                            if (ItemName == null) ItemName = "";
 
                                             SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
 
