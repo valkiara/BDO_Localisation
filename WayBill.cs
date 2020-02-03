@@ -1210,6 +1210,7 @@ namespace BDO_Localisation_AddOn
                     string INVOICE_ID = (itemNode.SelectSingleNode("INVOICE_ID") == null) ? "" : itemNode.SelectSingleNode("INVOICE_ID").InnerText;
                     string IS_CORRECTED = (itemNode.SelectSingleNode("IS_CORRECTED") == null) ? "" : itemNode.SelectSingleNode("IS_CORRECTED").InnerText;
                     string SELLER_ST = (itemNode.SelectSingleNode("SELLER_ST") == null) ? "" : itemNode.SelectSingleNode("SELLER_ST").InnerText;
+                    string UOM_CODE = (itemNode.SelectSingleNode("UOM_CODE") == null) ? "" : itemNode.SelectSingleNode("UOM_CODE").InnerText;
 
                     waybill_map.Add("ID", ID);
                     waybill_map.Add("TYPE", TYPE);
@@ -1240,6 +1241,7 @@ namespace BDO_Localisation_AddOn
                     waybill_map.Add("INVOICE_ID", INVOICE_ID);
                     waybill_map.Add("IS_CORRECTED", IS_CORRECTED);
                     waybill_map.Add("SELLER_ST", SELLER_ST);
+                    waybill_map.Add("UOM_CODE", UOM_CODE);
 
                     waybills_map.Add(ID, waybill_map);
                 }

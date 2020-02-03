@@ -1135,7 +1135,7 @@ namespace BDO_Localisation_AddOn
 
                             if (rowCount == 1) // ეს ნიშნავს რომ რეალიზაციაზე მარტო ერთი сreditNote არის მიბმული. ამიტომ უნდა დავაკორექტიროთ რეალიზაციის ა/ფ.
                             {
-                                taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo(Convert.ToInt32(BaseDoc), "ARInvoice", queryCardCode, out errorText);
+                                taxDocInfo = BDO_TaxInvoiceSent.getTaxInvoiceSentDocumentInfo(Convert.ToInt32(BaseDoc), "ARInvoice", queryCardCode);
                                 if (taxDocInfo != null)
                                 {
                                     corrDocEntry = taxDocInfo["docEntry"].ToString(); //კორექტირების ა/ფ-ის Entry

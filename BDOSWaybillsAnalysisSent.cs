@@ -1566,6 +1566,11 @@ namespace BDO_Localisation_AddOn
                             obaseDocT.LinkedObjectType = "14";
                         }
 
+                        else if (DocType == "165") // AR Correction Invoice
+                        {
+                            obaseDocT.LinkedObjectType = "165";
+                        }
+
                         else if (BaseType == "15") //მიწოდება
                         {
                             obaseDocT.LinkedObjectType = "15";
@@ -1667,7 +1672,9 @@ namespace BDO_Localisation_AddOn
                 THEN '1' 
             WHEN ""BaseType"" = '14' 
 	        THEN '5' 
-	        ELSE '5' 
+WHEN ""BaseType"" = '165' THEN '165' 
+
+            ELSE '5' 
 	        END) AS ""TYPE"",
 	         (CASE WHEN ""U_status"" = '1' 
 	        THEN '0' WHEN ""U_status"" = '2' 
@@ -1830,7 +1837,37 @@ UNION ALL SELECT
 		        WHERE ""RIN1"".""TargetType"" < 0 
 		        AND ""ORIN"".""U_BDO_CNTp"" = 1 
 		        
-		        UNION ALL SELECT
+
+UNION ALL 
+                SELECT '165', 
+                       ""CSI1"".""Quantity"" * ( -1 ) * ( CASE 
+            WHEN
+            ""CSI1"".""NoInvtryMv"" = 'Y'
+            THEN 0
+            ELSE 1
+            END ) *
+                ""CSI1"".""NumPerMsr"", 
+            ""CSI1"".""GTotal"" * (-1), 
+            ""CSI1"".""BaseLine"", 
+            ""CSI1"".""Dscription"", 
+            ""CSI1"".""ItemCode"", 
+            ""CSI1"".""BaseCard"", 
+            ""CSI1"".""DocEntry"", 
+            NULL AS ""WhsFrom"", 
+            ""CSI1"".""WhsCode"" AS ""WhsTo"", 
+            ""OCSI"".""DocNum"", 
+            ""OCSI"".""DocDate"", 
+            ""OCSI"".""DocTotal"" * (-1) + ""OCSI"".""DpmAmnt"" * (-1), 
+            ""OCSI"".""CANCELED""
+            FROM   ""CSI1""
+            INNER JOIN ""OCSI""
+            ON ""OCSI"".""DocEntry"" = ""CSI1"".""DocEntry""
+            WHERE  ""CSI1"".""TargetType"" < 0
+            AND ""OCSI"".""U_BDOSCITp"" = 1
+
+
+
+                UNION ALL SELECT
 	         '67',
 	         ""WTR1"".""Quantity"" * (CASE WHEN ""WTR1"".""NoInvtryMv"" = 'Y' 
 			        THEN 0 
@@ -1945,8 +1982,9 @@ UNION ALL SELECT
 	        THEN '1' 
             WHEN ""BaseType"" = '14' 
 	        THEN '5' 
+WHEN ""BaseType"" = '165' THEN '165'
 	        ELSE '5' 
-	        END) ='" + itypes + "' " : " ") +
+	        END) ='" + itypes + @"'  OR ""BaseType"" = '165' " : " ") +
       ((statuses != "" && statuses != "-99") ? @"AND (CASE WHEN ""U_status"" = '1' 
 	    THEN '0' WHEN ""U_status""= '2' 
 	    THEN '1' WHEN ""U_status"" = '3' 
