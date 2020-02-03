@@ -180,6 +180,26 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            //ოდომეტრის საწყისი ჩვენება (სთ)
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "OdmtrStHr");
+            fieldskeysMap.Add("TableName", "BDOSFUC1");
+            fieldskeysMap.Add("Description", "Starting Value of Odometer");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            //ოდომეტრის საბოლოო ჩვენება (სთ)
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "OdmtrEnHr");
+            fieldskeysMap.Add("TableName", "BDOSFUC1");
+            fieldskeysMap.Add("Description", "Ending Value of Odometer");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             //ნამუშევარი საათები
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "HrsWorked");
@@ -1197,6 +1217,14 @@ namespace BDO_Localisation_AddOn
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("EndingValueOfOdometer");
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrEnd");
 
+            oColumn = oColumns.Add("OdmtrStHr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("StartingValueOfOdometerInHours");
+            oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrStHr");
+
+            oColumn = oColumns.Add("OdmtrEnHr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("EndingValueOfOdometerInHours");
+            oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrEnHr");
+
             oColumn = oColumns.Add("HrsWorked", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("HoursWorked");
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_HrsWorked");
@@ -1516,6 +1544,8 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("FuPerHr").Width = mtrWidth;
                 oMatrix.Columns.Item("OdmtrStart").Width = mtrWidth;
                 oMatrix.Columns.Item("OdmtrEnd").Width = mtrWidth;
+                oMatrix.Columns.Item("OdmtrStHr").Width = mtrWidth;
+                oMatrix.Columns.Item("OdmtrEnHr").Width = mtrWidth;
                 oMatrix.Columns.Item("HrsWorked").Width = mtrWidth;
                 oMatrix.Columns.Item("NormCn").Width = mtrWidth;
                 oMatrix.Columns.Item("ActuallyCn").Width = mtrWidth;
@@ -1695,9 +1725,13 @@ namespace BDO_Localisation_AddOn
 
                     Marshal.ReleaseComObject(oRecordSet);
                 }
-                decimal odmtrStart = getOdmtrStart(itemCode, docEntry);
+                decimal odmtrStHr = 0;
+                decimal odmtrStart = getOdmtrStart(itemCode, docEntry, out odmtrStHr);
+                
                 oDBDataSourceMTR.SetValue("U_OdmtrStart", i, FormsB1.ConvertDecimalToString(odmtrStart));
                 oDBDataSourceMTR.SetValue("U_OdmtrEnd", i, FormsB1.ConvertDecimalToString(odmtrStart));
+                oDBDataSourceMTR.SetValue("U_OdmtrStHr", i, FormsB1.ConvertDecimalToString(odmtrStHr));
+                oDBDataSourceMTR.SetValue("U_OdmtrEnHr", i, FormsB1.ConvertDecimalToString(odmtrStHr));
 
                 //------------------------------------------>Dimension<------------------------------------------
                 oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -1762,10 +1796,14 @@ namespace BDO_Localisation_AddOn
                         var fuPerKm = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_FuPerKm", i), CultureInfo.InvariantCulture);
                         var odmtrStart = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrStart", i), CultureInfo.InvariantCulture);
                         var odmtrEnd = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrEnd", i), CultureInfo.InvariantCulture);
+                        var odmtrStHr = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrStHr", i), CultureInfo.InvariantCulture);
+                        var odmtrEnHr = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_OdmtrEnHr", i), CultureInfo.InvariantCulture);
                         var fuPerHr = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_FuPerHr", i), CultureInfo.InvariantCulture);
                         var hrsWorked = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_HrsWorked", i), CultureInfo.InvariantCulture);
+
                         decimal normConsumptionKm = fuPerKm / 100 * (odmtrEnd - odmtrStart);
-                        decimal normConsumptionHr = fuPerHr * hrsWorked;
+                        //decimal normConsumptionHr = fuPerHr * hrsWorked;
+                        decimal normConsumptionHr = fuPerHr * (odmtrEnHr - odmtrStHr);
                         decimal normConsumption = normConsumptionKm + normConsumptionHr;
 
                         oDBDataSourceMTR.SetValue("U_NormCn", i, FormsB1.ConvertDecimalToString(normConsumption));
@@ -1945,12 +1983,23 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        static decimal getOdmtrStart(string itemCode, int docEntry)
+        static decimal getOdmtrStart(string itemCode, int docEntry, out decimal odmtrStHr)
         {
+            odmtrStHr = 0;
             try
             {
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
+                string query =  "SELECT TOP 1 \"@BDOSFUC1\".\"U_OdmtrEnd\", \"@BDOSFUC1\".\"U_OdmtrStHr\", \"@BDOSFUC1\".\"U_OdmtrEnHr\" " + "\n"
+                + "FROM \"@BDOSFUCN\" " + "\n"
+                + "INNER JOIN \"@BDOSFUC1\" " + "\n"
+                + "ON \"@BDOSFUCN\".\"DocEntry\" = \"@BDOSFUC1\".\"DocEntry\" " + "\n"
+                + "WHERE \"@BDOSFUCN\".\"Canceled\" = 'N' " + "\n"
+                + "AND \"@BDOSFUC1\".\"U_ItemCode\" = 'FA000001' " + "\n"
+                + "AND \"@BDOSFUCN\".\"DocEntry\" <> 0 " + "\n"
+                + "ORDER BY " + "\n"
+                + "\"@BDOSFUCN\".\"U_DocDate\" DESC, " + "\n"
+                + "\"@BDOSFUCN\".\"DocEntry\" DESC";
+                /*
                 StringBuilder query = new StringBuilder();
                 query.Append("SELECT TOP 1 \"@BDOSFUC1\".\"U_OdmtrEnd\" \n");
                 query.Append("FROM \"@BDOSFUCN\" \n");
@@ -1962,8 +2011,28 @@ namespace BDO_Localisation_AddOn
                 query.Append("ORDER BY \n");
                 query.Append("\"@BDOSFUCN\".\"U_DocDate\" DESC, \n");
                 query.Append(" \"@BDOSFUCN\".\"DocEntry\" DESC");
-
+                */
                 oRecordSet.DoQuery(query.ToString());
+                while (!oRecordSet.EoF)
+                {
+
+                }
+
+                /*
+                SELECT TOP 1 "@BDOSFUC1"."U_OdmtrEnd", "@BDOSFUC1"."U_OdmtrStHr", "@BDOSFUC1"."U_OdmtrEnHr"
+                FROM "@BDOSFUCN"
+                INNER JOIN "@BDOSFUC1"
+                ON "@BDOSFUCN"."DocEntry" = "@BDOSFUC1"."DocEntry"
+                WHERE "@BDOSFUCN"."Canceled" = 'N'
+                AND "@BDOSFUC1"."U_ItemCode" = 'FA000001'
+                AND "@BDOSFUCN"."DocEntry" <> 0
+                ORDER BY
+                "@BDOSFUCN"."U_DocDate" DESC, 
+                "@BDOSFUCN"."DocEntry" DESC
+                    */
+
+
+
 
                 if (!oRecordSet.EoF)
                 {
