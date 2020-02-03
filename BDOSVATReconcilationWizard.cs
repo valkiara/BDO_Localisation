@@ -902,7 +902,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                               ON \"ITR1\".\"ReconNum\" = \"OITR\".\"ReconNum\" \n");
             query.Append("                                  AND \"OITR\".\"ReconDate\" >= '" + dateES + "' \n");
             query.Append("                                  AND \"OITR\".\"ReconDate\" <= '" + dateEE + "' \n");
-            query.Append("                                  AND \"OITR\".\"Canceled\" <> 'C' \n");
+            query.Append("                                  AND \"OITR\".\"Canceled\" = 'N' \n");
             query.Append("                WHERE  \"ITR1\".\"SrcObjTyp\" = 24 \n");
             if (!string.IsNullOrEmpty(cardCode))
                 query.Append("                       AND \"ITR1\".\"ShortName\" = '" + cardCode + "' \n");

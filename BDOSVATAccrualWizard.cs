@@ -1012,51 +1012,67 @@ namespace BDO_Localisation_AddOn
                 string dateES = new DateTime(date.Year, date.Month, 1).ToString("yyyyMMdd");
                 string dateEE = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)).ToString("yyyyMMdd");
 
-                string cardCodeE = oForm.DataSources.UserDataSources.Item("BPCode").ValueEx;
-                cardCodeE = cardCodeE == "" ? "1=1" : @" ""ODPI"".""CardCode"" = '" + cardCodeE + "'";
+                string cardCode = oForm.DataSources.UserDataSources.Item("BPCode").ValueEx;
 
-                string query = @"select 
-                    ""ODPI"".""DocEntry"",
-                    ""ODPI"".""CANCELED"",
-                    ""ODPI"".""DocNum"",
-                    ""ODPI"".""DocDate"",
-                    ""ODPI"".""CardCode"",
-                    ""ODPI"".""CardName"",
-					IFNULL(""OCRD"".""LicTradNum"",'') as ""LicTradNum"",
-                    ""SumApplied""-IFNULL(""ITR1"".""ReconSum"",0) as ""Total"",
-                    ""@BDOSARDV"".""U_GrsAmnt"" as ""DocTotal"",                    
-                    ""@BDOSARDV"".""U_VatAmount"" as ""DocVAtTotal"",                    
-                    IFNULL(""@BDOSARDV"".""DocEntry"",0) as ""DocEntVT"",
-                    IFNULL(""@BDOSARDV"".""DocNum"",0) as ""DocNumVT""
-
-                    from ""ODPI""
-                    left join ""@BDOSARDV"" on ""ODPI"".""DocEntry""= ""@BDOSARDV"".""U_baseDoc"" and ""@BDOSARDV"".""U_baseDocT""=203 and ""@BDOSARDV"".""Canceled""='N'
-                    inner join ""OCRD"" on ""ODPI"".""CardCode""= ""OCRD"".""CardCode""                     
-                    
-                    left join (select
-	                 ""RCT2"".""DocEntry"",
-	                 MAX(""RCT2"".""SumApplied"") as ""SumApplied"",
-	                 SUM(""ITR1"".""ReconSum"") as ""ReconSum"" 
-	                from ""RCT2""
-                    inner join ""ORCT"" on ""ORCT"".""DocEntry"" = ""RCT2"".""DocNum"" and ""ORCT"".""Canceled"" = 'N'
-	                left join (select
-                    ""ITR1"".""LineSeq"",
-                    ""ITR1"".""SrcObjAbs"",
-                    ""ITR1"".""SrcObjTyp"",
-
-                     ""ITR1"".""ReconSum"" 
-		                from ""ITR1"" 
-		                inner join ""OITR"" on ""ITR1"".""ReconNum"" = ""OITR"".""ReconNum"" 
-		                and ""OITR"".""ReconDate""<='" + dateEE + @"' 
-		                and ""OITR"".""Canceled"" = 'N' 
-		                and ""OITR"".""ReconType""<>'3') as ""ITR1"" on ""RCT2"".""InvoiceId"" = ""ITR1"".""LineSeq"" 
-	                and ""RCT2"".""DocNum"" = ""ITR1"".""SrcObjAbs"" 
-	                and ""ITR1"".""SrcObjTyp"" = 24 
-	                and ""RCT2"".""InvType"" = 203 
-	                group by ""RCT2"".""DocEntry"") as ""ITR1""  on  ""ITR1"".""DocEntry"" = ""ODPI"".""DocEntry""                   
-                  
-                    where ""DocStatus""='C' and (""DocTotal"">""DpmAppl"" or IFNULL(""@BDOSARDV"".""DocEntry"",0) <>0) and ""ODPI"".""DocDate"" >= '" + dateES + @"' and ""ODPI"".""DocDate"" <= '" + dateEE + @"' and " + cardCodeE + @"
-                    order by  ""ODPI"".""DocDate"" asc";
+                StringBuilder query = new StringBuilder();
+                query.Append("SELECT \"ODPI\".\"DocEntry\", \n");
+                query.Append("       \"ODPI\".\"CANCELED\", \n");
+                query.Append("       \"ODPI\".\"DocNum\", \n");
+                query.Append("       \"ODPI\".\"DocDate\", \n");
+                query.Append("       \"ODPI\".\"CardCode\", \n");
+                query.Append("       \"ODPI\".\"CardName\", \n");
+                query.Append("       IFNULL(\"OCRD\".\"LicTradNum\", '')             AS \"LicTradNum\", \n");
+                query.Append("       \"SumApplied\" - IFNULL(\"ITR1\".\"ReconSum\", 0) AS \"Total\", \n");
+                query.Append("       \"@BDOSARDV\".\"U_GrsAmnt\"                     AS \"DocTotal\", \n");
+                query.Append("       \"@BDOSARDV\".\"U_VatAmount\"                   AS \"DocVAtTotal\", \n");
+                query.Append("       IFNULL(\"@BDOSARDV\".\"DocEntry\", 0)           AS \"DocEntVT\", \n");
+                query.Append("       IFNULL(\"@BDOSARDV\".\"DocNum\", 0)             AS \"DocNumVT\" \n");
+                query.Append("FROM   \"ODPI\" \n");
+                query.Append("       LEFT JOIN \"@BDOSARDV\" \n");
+                query.Append("              ON \"ODPI\".\"DocEntry\" = \"@BDOSARDV\".\"U_baseDoc\" \n");
+                query.Append("                 AND \"@BDOSARDV\".\"U_baseDocT\" = 203 \n");
+                query.Append("                 AND \"@BDOSARDV\".\"Canceled\" = 'N' \n");
+                query.Append("       INNER JOIN \"OCRD\" \n");
+                query.Append("               ON \"ODPI\".\"CardCode\" = \"OCRD\".\"CardCode\" \n");
+                query.Append("       LEFT JOIN (SELECT \"IncomingPayment\".\"DownPmntEntry\"        AS \"DocEntry\", \n");
+                query.Append("                         Sum(\"IncomingPayment\".\"SumApplied\")      AS \"SumApplied\", \n");
+                query.Append("                         Sum(\"InternalReconciliation\".\"ReconSum\") AS \"ReconSum\" \n");
+                query.Append("                  FROM   (SELECT \"SrcObjAbs\"            AS \"IncPmntEntry\", \n");
+                query.Append("                                 Sum(\"ITR1\".\"ReconSum\") AS \"ReconSum\" \n");
+                query.Append("                          FROM   \"ITR1\" \n");
+                query.Append("                                 INNER JOIN \"OITR\" \n");
+                query.Append("                                         ON \"ITR1\".\"ReconNum\" = \n");
+                query.Append("                                            \"OITR\".\"ReconNum\" \n");
+                query.Append("                                            AND \"OITR\".\"ReconDate\" <= '" + dateEE + "' \n");
+                query.Append("                                            AND \"OITR\".\"Canceled\" = 'N' \n");
+                query.Append("                                            AND \"OITR\".\"ReconType\" <> '3' \n");
+                query.Append("                          WHERE  \"ITR1\".\"SrcObjTyp\" = 24 \n");
+                if (!string.IsNullOrEmpty(cardCode))
+                    query.Append("                             AND \"ITR1\".\"ShortName\" = '" + cardCode + "' \n");
+                query.Append("                          GROUP  BY \"SrcObjAbs\") AS \"InternalReconciliation\" \n");
+                query.Append("                         RIGHT JOIN (SELECT \"RCT2\".\"DocNum\"     AS\"IncPmntEntry\", \n");
+                query.Append("                                            \"RCT2\".\"DocEntry\"   AS \"DownPmntEntry\", \n");
+                query.Append("                                            \"RCT2\".\"SumApplied\" AS \"SumApplied\" \n");
+                query.Append("                                     FROM   \"RCT2\" \n");
+                query.Append("                                            INNER JOIN \"ORCT\" \n");
+                query.Append("                                                    ON \"ORCT\".\"DocEntry\" = \n");
+                query.Append("                                                       \"RCT2\".\"DocNum\" \n");
+                query.Append("                                                       AND \"ORCT\".\"Canceled\" = 'N' \n");
+                if (!string.IsNullOrEmpty(cardCode))
+                    query.Append("                                                       AND \"ORCT\".\"CardCode\" = '" + cardCode + "' \n");
+                query.Append("                                                       AND \"RCT2\".\"InvType\" = 203) AS \"IncomingPayment\" \n");
+                query.Append("                                 ON \"InternalReconciliation\".\"IncPmntEntry\" = \"IncomingPayment\".\"IncPmntEntry\" \n");
+                query.Append("                  GROUP  BY \"IncomingPayment\".\"DownPmntEntry\") AS \"ITR1\" \n");
+                query.Append("              ON \"ITR1\".\"DocEntry\" = \"ODPI\".\"DocEntry\" \n");
+                query.Append("WHERE  \"DocStatus\" = 'C' \n");
+                query.Append("   AND ( \"DocTotal\" > \"DpmAppl\" \n");
+                query.Append("          OR IFNULL(\"@BDOSARDV\".\"DocEntry\", 0) <> 0 ) \n");
+                query.Append("   AND \"ODPI\".\"DocDate\" >= '" + dateES + "' \n");
+                query.Append("   AND \"ODPI\".\"DocDate\" <= '" + dateEE + "' \n");
+                if (!string.IsNullOrEmpty(cardCode))
+                    query.Append("   AND \"ODPI\".\"CardCode\" = '" + cardCode + "' \n");
+                query.Append("ORDER  BY \"ODPI\".\"DocDate\" ASC");
+              
                 if (Program.oCompany.DbServerType != SAPbobsCOM.BoDataServerTypes.dst_HANADB)
                 {
                     query = query.Replace("IFNULL", "ISNULL");
@@ -1065,13 +1081,12 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
                 oDataTable.Rows.Clear();
 
-                oRecordSet.DoQuery(query);
+                oRecordSet.DoQuery(query.ToString());
 
                 int rowIndex = 0;
                 string DocEntry;
                 string DocNum;
                 string DocDate;
-
                 string DocEntVT;
                 string CardCode;
                 string CardName;
