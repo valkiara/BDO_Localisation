@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using SAPbobsCOM;
 
 namespace BDO_Localisation_AddOn
 {
@@ -285,6 +286,7 @@ namespace BDO_Localisation_AddOn
             listValidValuesDict = new Dictionary<string, string>();
             listValidValuesDict.Add("ARInvoice", "ARInvoice");
             listValidValuesDict.Add("ARCreditNote", "ARCreditNote");
+            listValidValuesDict.Add("ARCorrectionInvoice", "ARCorrectionInvoice");
             listValidValuesDict.Add("ARDownPaymentRequest", "ARDownPaymentRequest");
             listValidValuesDict.Add("ARDownPaymentInvoice", "ARDownPaymentInvoice");
             listValidValuesDict.Add("ARDownPaymentVAT", "ARDownPaymentVAT");
@@ -301,6 +303,7 @@ namespace BDO_Localisation_AddOn
 
             bool result2 = UDO.addNewValidValuesUserFieldsMD("@BDO_TXS1", "baseDocT", "ARDownPaymentRequest", "ARDownPaymentRequest", out errorText);
             result2 = UDO.addNewValidValuesUserFieldsMD("@BDO_TXS1", "baseDocT", "ARDownPaymentVAT", "ARDownPaymentVAT", out errorText);
+            result2 = UDO.addNewValidValuesUserFieldsMD("@BDO_TXS1", "baseDocT", "ARCorrectionInvoice", "ARCorrectionInvoice", out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "baseDoc"); //საფუძველი დოკუმენტი
@@ -1746,9 +1749,15 @@ namespace BDO_Localisation_AddOn
             objectType = "13"; //SAPbouiCOM.BoLinkedObject.lf_Invoice
             string uniqueID_lf_InvoiceCFL = "Invoice_CFL";
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_InvoiceCFL);
+
             objectType = "14"; //SAPbouiCOM.BoLinkedObject.lf_InvoiceCreditMemo 
             string uniqueID_lf_InvoiceCreditMemoCFL = "InvoiceCreditMemo_CFL";
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_InvoiceCreditMemoCFL);
+
+            objectType = "165";
+            string uniqueID_lf_InvoiceCorrectionInvoiceCFL = "InvoiceCorrectionInvoice_CFL";
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_InvoiceCorrectionInvoiceCFL);
+
             objectType = "203"; //A/R Down Payment Invoice
             string uniqueID_lf_DownPaymentInvoiceCFL = "DownPaymentInvoice_CFL";
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_DownPaymentInvoiceCFL);
@@ -2694,6 +2703,14 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = "14"; //SAPbouiCOM.BoLinkedObject.lf_InvoiceCreditMemo
                         }
+                        else if (oComboBox.Value == "ARCorrectionInvoice") //AR Correction Invoice
+                        {
+                            oColumn = oMatrix.Columns.Item(pVal.ColUID);
+                            oColumn.ChooseFromListUID = "InvoiceCorrectionInvoice_CFL";
+                            oColumn.ChooseFromListAlias = "DocEntry";
+                            SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = "165";
+                        }
                         else if (oComboBox.Value == "ARDownPaymentRequest") //ავანსი
                         {
                             oColumn = oMatrix.Columns.Item(pVal.ColUID);
@@ -2832,7 +2849,7 @@ namespace BDO_Localisation_AddOn
 
                 if (beforeAction)
                 {
-                    if (sCFL_ID == "Invoice_CFL" || sCFL_ID == "InvoiceCreditMemo_CFL" || sCFL_ID == "DownPaymentInvoice_CFL" || sCFL_ID == "ARDownPaymentVAT_CFL")
+                    if (sCFL_ID == "Invoice_CFL" || sCFL_ID == "InvoiceCreditMemo_CFL" || sCFL_ID == "InvoiceCorrectionInvoice_CFL" || sCFL_ID == "DownPaymentInvoice_CFL" || sCFL_ID == "ARDownPaymentVAT_CFL")
                     {
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("wblMTR").Specific));
                         SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
@@ -2879,6 +2896,7 @@ namespace BDO_Localisation_AddOn
                             {
                                 case "Invoice_CFL": baseDocType = "ARInvoice"; break;
                                 case "InvoiceCreditMemo_CFL": baseDocType = "ARCreditNote"; break;
+                                case "InvoiceCorrectionInvoice_CFL": baseDocType = "ARCorrectionInvoice"; break;
                                 case "DownPaymentInvoice_CFL": baseDocType = "ARDownPaymentRequest"; break;
                                 case "ARDownPaymentVAT_CFL": baseDocType = "ARDownPaymentVAT"; break;
                                 default: baseDocType = null; break;
@@ -2943,7 +2961,7 @@ namespace BDO_Localisation_AddOn
                                 oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                             }
                         }
-                        else if (sCFL_ID == "Invoice_CFL" || sCFL_ID == "InvoiceCreditMemo_CFL" || sCFL_ID == "DownPaymentInvoice_CFL" || sCFL_ID == "ARDownPaymentVAT_CFL")
+                        else if (sCFL_ID == "Invoice_CFL" || sCFL_ID == "InvoiceCreditMemo_CFL" || sCFL_ID == "InvoiceCorrectionInvoice_CFL" || sCFL_ID == "DownPaymentInvoice_CFL" || sCFL_ID == "ARDownPaymentVAT_CFL")
                         {
                             SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("wblMTR").Specific));
                             SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
@@ -2969,6 +2987,12 @@ namespace BDO_Localisation_AddOn
                             {
                                 ARCreditNote.getAmount(docEntry, out amount, out amountTX, out errorText);
                                 wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(docEntry, "14", out errorText);
+                                wbNumber = wblDocInfo["number"];
+                            }
+                            else if (sCFL_ID == "InvoiceCorrectionInvoice_CFL")
+                            {
+                                ArCorrectionInvoice.GetAmount(docEntry, out amount, out amountTX, out errorText);
+                                wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(docEntry, "165", out errorText);
                                 wbNumber = wblDocInfo["number"];
                             }
                             else if (sCFL_ID == "DownPaymentInvoice_CFL")
@@ -3027,11 +3051,12 @@ namespace BDO_Localisation_AddOn
                     string baseDocT = oDBDataSourceMTR.GetValue("U_baseDocT", i);
                     if (!string.IsNullOrEmpty(baseDocT))
                     {
-                        if (oDBDataSourceMTR.GetValue("U_baseDocT", i) == "ARCreditNote")
+                        if (oDBDataSourceMTR.GetValue("U_baseDocT", i) == "ARCreditNote" || oDBDataSourceMTR.GetValue("U_baseDocT", i) == "ARCorrectionInvoice")
                         {
                             totalAmount = totalAmount - Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_amtBsDc", i), CultureInfo.InvariantCulture);
                             totalVAT = totalVAT - Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_tAmtBsDc", i), CultureInfo.InvariantCulture);
                         }
+                        
                         else
                         {
                             totalAmount = totalAmount + Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_amtBsDc", i), CultureInfo.InvariantCulture);
@@ -3256,6 +3281,12 @@ namespace BDO_Localisation_AddOn
                 baseDocRowTable = "RIN1";
                 objectType = "14";
             }
+            else if (baseDocType == "ARCorrectionInvoice") //A/R Correction Invoice
+            {
+                baseDocTable = "OCSI";
+                baseDocRowTable = "CSI1";
+                objectType = "165";
+            }
             else if (baseDocType == "ARDownPaymentRequest") //A/R DownPaymentInvoice
             {
                 baseDocTable = "ODPI";
@@ -3284,6 +3315,11 @@ namespace BDO_Localisation_AddOn
                 else
                 {
                     connectedDocList = ARCreditNote.getAllConnectedDoc(primaryBaseDocList, "13");
+
+                    if (baseDocTable == "OCSI")
+                    {
+                        connectedDocList = ArCorrectionInvoice.getAllConnectedDoc(primaryBaseDocList,"13");
+                    }
                 }
             }
 
@@ -3380,14 +3416,16 @@ namespace BDO_Localisation_AddOn
             return baseDocs;
         }
 
-        public static string getAllConnectedDoc(int docEntry, ref List<int> docEntryARInvoiceList, ref List<int> docEntryARCreditNoteList)
+        public static string getAllConnectedDoc(int docEntry, ref List<int> docEntryARInvoiceList,
+            ref List<int> docEntryARCreditNoteList, ref List<int> docEntryARCorrectionInvoiceList)
         {
             int corrDoc = 0;
             string corrInv = null;
             string corrDocStr = null;
             string baseDocStr = null;
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            SAPbobsCOM.Recordset oRecordSet =
+                (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string query = @"SELECT 
             ""BDO_TAXS"".""CreateDate"" AS ""createDate"",
             ""BDO_TAXS"".""DocEntry"" AS ""docEntry"",
@@ -3431,14 +3469,22 @@ namespace BDO_Localisation_AddOn
                             {
                                 docEntryARCreditNoteList.Add(Convert.ToInt32(baseDocStr));
                             }
+                            else if (baseDocT == "ARCorrectionInvoice") //A/R Correction Invoice
+                            {
+                                docEntryARCorrectionInvoiceList.Add(Convert.ToInt32(baseDocStr));
+                            }
                         }
+
                         oRecordSet.MoveNext();
                     }
+
                     if (corrInv == "Y" && corrDoc != 0)
                     {
-                        getAllConnectedDoc(corrDoc, ref docEntryARInvoiceList, ref docEntryARCreditNoteList);
+                        getAllConnectedDoc(corrDoc, ref docEntryARInvoiceList, ref docEntryARCreditNoteList,
+                            ref docEntryARCorrectionInvoiceList);
                     }
                 }
+
                 return null;
             }
             catch (Exception ex)
@@ -3448,8 +3494,6 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 Marshal.FinalReleaseComObject(oRecordSet);
-                oRecordSet = null;
-                GC.Collect();
             }
         }
 
@@ -3585,18 +3629,22 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void createDocument(string objectType, int baseDocEntry, string corrType, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, List<int> docEntryARCreditNoteList, out int newDocEntry, out string errorText)
+        public static void createDocument(string objectType, int baseDocEntry, string corrType, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, List<int> docEntryARCreditNoteList, List<int> docEntryARCorrectionInvoiceList, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
 
             if (objectType == "13")  //A/R Invoice
             {
-                createDocumentARInvoiceType(baseDocEntry, fromDoc, answer, oGeneralData, union, docEntryARCreditNoteList, out newDocEntry, out errorText);
+                createDocumentARInvoiceType(baseDocEntry, fromDoc, answer, oGeneralData, union, docEntryARCreditNoteList, docEntryARCorrectionInvoiceList, out newDocEntry, out errorText);
             }
             else if (objectType == "14") //A/R Credit Memo 
             {
                 createDocumentInvoiceCreditMemoType(baseDocEntry, corrType, fromDoc, answer, oGeneralData, union, out newDocEntry, out errorText);
+            }
+            else if (objectType == "165") //A/R Correction Invoice
+            {
+                createDocumentInvoiceCorrectionInvoiceType(baseDocEntry, corrType, fromDoc, answer, oGeneralData, union, out newDocEntry, out errorText);
             }
             else if (objectType == "203") //A/R Down Payment Invoice 
             {
@@ -3615,7 +3663,7 @@ namespace BDO_Localisation_AddOn
             createDocumentARInvoiceTypeForUnion(PrevCardCode, PrevOpDate, UnionTable, ref docEntry, out errorText);
         }
 
-        private static void createDocumentARInvoiceType(int baseDocEntry, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, List<int> docEntryARCreditNoteList, out int newDocEntry, out string errorText)
+        private static void createDocumentARInvoiceType(int baseDocEntry, bool fromDoc, int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, List<int> docEntryARCreditNoteList, List<int> docEntryARCorrectionInvoiceList, out int newDocEntry, out string errorText)
         {
             errorText = null;
             newDocEntry = 0;
@@ -3683,75 +3731,178 @@ namespace BDO_Localisation_AddOn
                     oChild.SetProperty("U_tAmtBsDc", oRecordSet.Fields.Item("VatSum").Value); //დღგ-ის თანხა
                     oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
 
-                    //კორექტირების დოკუმენტები 
+                    
                     List<int> connectedDocList = ARInvoice.getAllConnectedDoc(new List<int>() { baseDocEntry }, "13", docDate, new DateTime(), 0, out errorText);
-                    int rowCount = connectedDocList.Count();
+                    int rowCountCN = connectedDocList.Count();
 
-                    if (rowCount != 0)
+                    List<int> connectedDocListCI = ARInvoice.getAllConnectedARCorrectionDoc(new List<int>() { baseDocEntry }, "13", docDate, new DateTime(), 0, out errorText);
+                    int rowCount = connectedDocListCI.Count();
+
+                    if (rowCount != 0 || rowCountCN != 0)
                     {
                         if (fromDoc)
                         {
-                            answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("ARCDocumentsOnARIDoYouWantToCreateUnitedTaxInvoiceIncludingTheseDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), ""); //არსებობს რეალიზაციის დოკუმენტზე რეალიზაციის კორექტირების დოკუმენტები, გსურთ შეიქმნას ერთიანი ფაქტურა ამ დოკუმენტების გათვალისწინებით                   
+                            answer = Program.uiApp.MessageBox(
+                                BDOSResources.getTranslate(
+                                    "ARCDocumentsOnARIDoYouWantToCreateUnitedTaxInvoiceIncludingTheseDocuments") + "?",
+                                1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"),
+                                ""); //არსებობს რეალიზაციის დოკუმენტზე რეალიზაციის კორექტირების დოკუმენტები, გსურთ შეიქმნას ერთიანი ფაქტურა ამ დოკუმენტების გათვალისწინებით                   
                         }
+
                         if (answer == 1 || union)
                         {
-                            wblDocInfo = null;
-                            int corrDocEntry = 0;
-                            string corrInvID = null;
-                            string BDO_CNTp = null;
-                            int creditNoteDocEntry = 0;
-
-                            for (int i = 0; i < rowCount; i++)
+                            //კორექტირების დოკუმენტები (AR Credit Note)
+                            if (rowCountCN != 0)
                             {
-                                creditNoteDocEntry = connectedDocList[i];
-                                if (union && docEntryARCreditNoteList.Contains(creditNoteDocEntry) == false)
+                                wblDocInfo = null;
+                                int corrDocEntry = 0;
+                                string corrInvID = null;
+                                string BDO_CNTp = null;
+                                int creditNoteDocEntry = 0;
+
+                                for (int i = 0; i < rowCountCN; i++)
                                 {
-                                    continue;
-                                }
-
-                                BDO_CNTp = CommonFunctions.getValue("ORIN", "U_BDO_CNTp", "DocEntry", creditNoteDocEntry.ToString()).ToString(); //0=კორექტირება, 1=დაბრუნება
-
-                                Dictionary<string, object> taxDocInfo = getTaxInvoiceSentDocumentInfo(creditNoteDocEntry, "ARCreditNote", cardCode);
-                                if (taxDocInfo != null)
-                                {
-                                    corrDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]); //კორექტირების ა/ფ-ის Entry //წესით არ უნდა იყოს შევსებული
-                                    corrInvID = taxDocInfo["invID"].ToString(); //კორექტირების ა/ფ-ის ID //წესით არ უნდა იყოს შევსებული
-                                }
-
-                                if (corrDocEntry == 0 && string.IsNullOrEmpty(corrInvID))
-                                {
-                                    double gTotal;
-                                    double lineVat;
-                                    ARCreditNote.getAmount(creditNoteDocEntry, out gTotal, out lineVat, out errorText);
-
-                                    if (BDO_CNTp == "0") //კორექტირება
+                                    creditNoteDocEntry = connectedDocList[i];
+                                    if (union && docEntryARCreditNoteList.Contains(creditNoteDocEntry) == false)
                                     {
-                                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(baseDocEntry, "13", out errorText);
-                                    }
-                                    else //დაბრუნება
-                                    {
-                                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(creditNoteDocEntry, "14", out errorText);
+                                        continue;
                                     }
 
-                                    oChild = oChildren.Add();
-                                    oChild.SetProperty("U_baseDocT", "ARCreditNote");
-                                    oChild.SetProperty("U_baseDoc", creditNoteDocEntry);
-                                    oChild.SetProperty("U_baseDTxt", creditNoteDocEntry.ToString());
-                                    oChild.SetProperty("U_amtBsDc", gTotal); //თანხა დღგ-ის ჩათვლით
-                                    oChild.SetProperty("U_tAmtBsDc", lineVat); //დღგ-ის თანხა
-                                    oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
+                                    BDO_CNTp = CommonFunctions.getValue("ORIN", "U_BDO_CNTp", "DocEntry",
+                                        creditNoteDocEntry.ToString()).ToString(); //0=კორექტირება, 1=დაბრუნება
 
-                                    amount = amount - Convert.ToDecimal(gTotal);
-                                    amountTX = amountTX - Convert.ToDecimal(lineVat);
+                                    Dictionary<string, object> taxDocInfo =
+                                        getTaxInvoiceSentDocumentInfo(creditNoteDocEntry, "ARCreditNote", cardCode);
+                                    if (taxDocInfo != null)
+                                    {
+                                        corrDocEntry =
+                                            Convert.ToInt32(
+                                                taxDocInfo[
+                                                    "docEntry"]); //კორექტირების ა/ფ-ის Entry //წესით არ უნდა იყოს შევსებული
+                                        corrInvID = taxDocInfo["invID"]
+                                            .ToString(); //კორექტირების ა/ფ-ის ID //წესით არ უნდა იყოს შევსებული
+                                    }
+
+                                    if (corrDocEntry == 0 && string.IsNullOrEmpty(corrInvID))
+                                    {
+                                        double gTotal;
+                                        double lineVat;
+                                        ARCreditNote.getAmount(creditNoteDocEntry, out gTotal, out lineVat,
+                                            out errorText);
+
+                                        if (BDO_CNTp == "0") //კორექტირება
+                                        {
+                                            wblDocInfo =
+                                                BDO_Waybills.getWaybillDocumentInfo(baseDocEntry, "13", out errorText);
+                                        }
+                                        else //დაბრუნება
+                                        {
+                                            wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(creditNoteDocEntry, "14",
+                                                out errorText);
+                                        }
+
+                                        oChild = oChildren.Add();
+                                        oChild.SetProperty("U_baseDocT", "ARCreditNote");
+                                        oChild.SetProperty("U_baseDoc", creditNoteDocEntry);
+                                        oChild.SetProperty("U_baseDTxt", creditNoteDocEntry.ToString());
+                                        oChild.SetProperty("U_amtBsDc", gTotal); //თანხა დღგ-ის ჩათვლით
+                                        oChild.SetProperty("U_tAmtBsDc", lineVat); //დღგ-ის თანხა
+                                        oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
+
+                                        amount = amount - Convert.ToDecimal(gTotal);
+                                        amountTX = amountTX - Convert.ToDecimal(lineVat);
+                                    }
+                                    else
+                                    {
+                                        errorText = BDOSResources.getTranslate(
+                                                        "TaxInvoiceIsAlreadyCreatedBasedOnARCorrection") + "! ID : " +
+                                                    corrInvID;
+                                        return;
+                                    }
                                 }
-                                else
+                            }
+
+                            //კორექტირების დოკუმენტები (AR Correction Invoice)
+                            if (rowCount != 0)
+                            {
+                                wblDocInfo = null;
+                                int corrDocEntry = 0;
+                                string corrInvID = null;
+                                string BDOSCITp = null;
+                                int correctionInvoiceDocEntry = 0;
+
+                                for (int i = 0; i < rowCount; i++)
                                 {
-                                    errorText = BDOSResources.getTranslate("TaxInvoiceIsAlreadyCreatedBasedOnARCreditNote") + "! ID : " + corrInvID;
-                                    return;
+                                    correctionInvoiceDocEntry = connectedDocListCI[i];
+                                    if (union && docEntryARCorrectionInvoiceList.Contains(correctionInvoiceDocEntry) ==
+                                        false)
+                                    {
+                                        continue;
+                                    }
+
+                                    BDOSCITp = CommonFunctions
+                                        .getValue("OCSI", "U_BDOSCITp", "DocEntry",
+                                            correctionInvoiceDocEntry.ToString())
+                                        .ToString(); //0=კორექტირება, 1=დაბრუნება
+
+                                    Dictionary<string, object> taxDocInfo =
+                                        getTaxInvoiceSentDocumentInfo(correctionInvoiceDocEntry, "ARCorrectionInvoice",
+                                            cardCode);
+                                    if (taxDocInfo != null)
+                                    {
+                                        corrDocEntry =
+                                            Convert.ToInt32(
+                                                taxDocInfo[
+                                                    "docEntry"]); //კორექტირების ა/ფ-ის Entry //წესით არ უნდა იყოს შევსებული
+                                        corrInvID = taxDocInfo["invID"]
+                                            .ToString(); //კორექტირების ა/ფ-ის ID //წესით არ უნდა იყოს შევსებული
+                                    }
+
+                                    if (corrDocEntry == 0 && string.IsNullOrEmpty(corrInvID))
+                                    {
+                                        double gTotal;
+                                        double lineVat;
+                                        ArCorrectionInvoice.GetAmount(correctionInvoiceDocEntry, out gTotal,
+                                            out lineVat,
+                                            out errorText);
+
+                                        if (BDOSCITp == "0") //კორექტირება
+                                        {
+                                            wblDocInfo =
+                                                BDO_Waybills.getWaybillDocumentInfo(baseDocEntry, "13", out errorText);
+                                        }
+                                        else //დაბრუნება
+                                        {
+                                            wblDocInfo =
+                                                BDO_Waybills.getWaybillDocumentInfo(correctionInvoiceDocEntry, "165",
+                                                    out errorText);
+                                        }
+
+                                        oChild = oChildren.Add();
+                                        oChild.SetProperty("U_baseDocT", "ARCorrectionInvoice");
+                                        oChild.SetProperty("U_baseDoc", correctionInvoiceDocEntry);
+                                        oChild.SetProperty("U_baseDTxt", correctionInvoiceDocEntry.ToString());
+                                        oChild.SetProperty("U_amtBsDc", gTotal); //თანხა დღგ-ის ჩათვლით
+                                        oChild.SetProperty("U_tAmtBsDc", lineVat); //დღგ-ის თანხა
+                                        oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
+
+                                        amount = amount - Convert.ToDecimal(gTotal);
+                                        amountTX = amountTX - Convert.ToDecimal(lineVat);
+                                    }
+                                    else
+                                    {
+                                        errorText =
+                                            BDOSResources.getTranslate(
+                                                "TaxInvoiceIsAlreadyCreatedBasedOnARCorrection") +
+                                            "! ID : " + corrInvID;
+                                        return;
+                                    }
                                 }
                             }
                         }
                     }
+
+
 
                     if (union == false)
                     {
@@ -3782,8 +3933,6 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 Marshal.FinalReleaseComObject(oRecordSet);
-                oRecordSet = null;
-                GC.Collect();
             }
         }
 
@@ -4219,7 +4368,7 @@ namespace BDO_Localisation_AddOn
                             int corrDocEntry = 0;
                             string corrInvID = null;
                             string corrStatus = null;
-                            text = BDOSResources.getTranslate("OnThePreviousARCreditNote");
+                            text = BDOSResources.getTranslate("OnThePreviousARCorrection");
 
                             for (int i = 0; i < rowCount; i++)
                             {
@@ -4334,6 +4483,380 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oRecordSet = null;
                 GC.Collect();
+            }
+        }
+
+        private static void createDocumentInvoiceCorrectionInvoiceType(int baseDocEntry, string corrType, bool fromDoc,
+            int answer, SAPbobsCOM.GeneralData oGeneralData, bool union, out int newDocEntry, out string errorText)
+        {
+            errorText = null;
+            newDocEntry = 0;
+
+            SAPbobsCOM.Recordset oRecordSet = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            string query = "SELECT " +
+                           "\"OCSI\".\"DocEntry\", " +
+                           "\"OCSI\".\"DocDate\", " +
+                           "\"OCSI\".\"DocTime\", " +
+                           "\"OCSI\".\"CardCode\", " +
+                           "\"OCSI\".\"U_BDOSCITp\", " +
+                           "\"OCRD\".\"CardName\", " +
+                           "\"OCRD\".\"LicTradNum\", " +
+                           "SUM(\"CSI1\".\"GTotal\") as \"DocTotal\", " +
+                           "SUM(\"CSI1\".\"LineVat\") as \"VatSum\"  " +
+                           "FROM \"CSI1\"  " +
+                           "left join \"OCSI\" on \"CSI1\".\"DocEntry\" = \"OCSI\".\"DocEntry\"  " +
+                           "left join \"OCRD\" on \"OCSI\".\"CardCode\" = \"OCRD\".\"CardCode\"  " +
+                           "WHERE \"CSI1\".\"DocEntry\" = '" + baseDocEntry + "'  " +
+                           "GROUP BY \"OCSI\".\"DocEntry\", " +
+                           "\"OCSI\".\"DocDate\", " +
+                           "\"OCSI\".\"DocTime\", " +
+                           "\"OCSI\".\"CardCode\", " +
+                           "\"OCSI\".\"U_BDOSCITp\", " +
+                           "\"OCRD\".\"CardName\", " +
+                           "\"OCRD\".\"LicTradNum\"  ";
+
+            try
+            {
+                oRecordSet.DoQuery(query);
+
+                while (!oRecordSet.EoF)
+                {
+                    decimal amount = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value);
+                    decimal amountTX = Convert.ToDecimal(oRecordSet.Fields.Item("VatSum").Value);
+                    decimal amtOutTX = amount - amountTX;
+
+                    DateTime docDate = oRecordSet.Fields.Item("DocDate").Value;
+                    int docTime = oRecordSet.Fields.Item("DocTime").Value;
+                    string cardCode = oRecordSet.Fields.Item("CardCode").Value.ToString();
+                    string BDOSCITp = oRecordSet.Fields.Item("U_BDOSCITp").Value.ToString();
+
+                    SAPbobsCOM.CompanyService oCompanyService = null;
+                    SAPbobsCOM.GeneralService oGeneralService = null;
+
+                    if (union == false)
+                    {
+                        oCompanyService = Program.oCompany.GetCompanyService();
+                        oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXS_D");
+                        oGeneralData =
+                            ((SAPbobsCOM.GeneralData) (oGeneralService.GetDataInterface(SAPbobsCOM
+                                .GeneralServiceDataInterfaces.gsGeneralData)));
+
+                        oGeneralData.SetProperty("U_opDate", new DateTime(docDate.Year, docDate.Month, 1));
+                        oGeneralData.SetProperty("U_cardCode", cardCode);
+                        oGeneralData.SetProperty("U_cardCodeN", oRecordSet.Fields.Item("CardName").Value.ToString());
+                        oGeneralData.SetProperty("U_cardCodeT", oRecordSet.Fields.Item("LicTradNum").Value.ToString());
+                        oGeneralData.SetProperty("U_status", "empty");
+                    }
+
+                    ArCorrectionInvoice.GetBaseDoc(baseDocEntry, out int ARInvoiceDocEntry);
+
+                    Dictionary<string, string> wblDocInfo = null;
+                    if (BDOSCITp == "0" && ARInvoiceDocEntry != 0) //კორექტირება                   
+                    {
+                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(ARInvoiceDocEntry, "13", out errorText);
+                    }
+
+                    else
+                    {
+                        wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(baseDocEntry, "165", out errorText);
+                    }
+
+                    if (ARInvoiceDocEntry == 0)
+                    {
+                        if (union == false)
+                        {
+                            errorText = BDOSResources.getTranslate("BaseARInvoiceCouldNotFound") + "! ";
+                            return;
+                        }
+
+                        if (fromDoc)
+                        {
+                            answer = Program.uiApp.MessageBox(
+                                BDOSResources.getTranslate("BaseARInvoiceCouldNotFound") + "! " +
+                                BDOSResources.getTranslate("ContinueCreatingTaxInvoice") + "?", 1,
+                                BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        }
+
+                        if (answer == 1)
+                        {
+                            try
+                            {
+                                //საფუძველის ცხრილის შევსება
+                                SAPbobsCOM.GeneralDataCollection oChildren = null;
+                                oChildren = oGeneralData.Child("BDO_TXS1");
+
+                                SAPbobsCOM.GeneralData oChild = oChildren.Add();
+
+                                oChild.SetProperty("U_baseDocT", "ARCorrectionInvoice"); //A/R Correction Invoice
+                                oChild.SetProperty("U_baseDoc", baseDocEntry);
+                                oChild.SetProperty("U_baseDTxt", baseDocEntry.ToString());
+                                oChild.SetProperty("U_amtBsDc",
+                                    oRecordSet.Fields.Item("DocTotal").Value); //თანხა დღგ-ის ჩათვლით
+                                oChild.SetProperty("U_tAmtBsDc", oRecordSet.Fields.Item("VatSum").Value); //დღგ-ის თანხა
+                                oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
+
+                                if (union == false)
+                                {
+                                    oGeneralData.SetProperty("U_amount",
+                                        Convert.ToDouble(amount)); //თანხა დღგ-ის ჩათვლით
+                                    oGeneralData.SetProperty("U_amountTX", Convert.ToDouble(amountTX)); //დღგ-ის თანხა
+                                    oGeneralData.SetProperty("U_amtOutTX",
+                                        Convert.ToDouble(amount - amountTX)); //თანხა დღგ-ის გარეშე
+
+                                    var response = oGeneralService.Add(oGeneralData);
+                                    var docEntry = response.GetProperty("DocEntry");
+                                    newDocEntry = Convert.ToInt32(docEntry);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                errorText = BDOSResources.getTranslate("ErrorDocumentAddEdit") + " : " + ex.Message;
+                                return;
+                            }
+                        }
+
+                        return;
+                    }
+                    else if (union)
+                    {
+                        SAPbobsCOM.GeneralDataCollection oChildren = null;
+                        oChildren = oGeneralData.Child("BDO_TXS1");
+                        int count = oChildren.Count;
+                        if (count > 0)
+                        {
+                            for (int i = 0; i < count; i++)
+                            {
+                                errorText =
+                                    BDOSResources.getTranslate("BaseARInvoiceCouldNotFoundInTheMarkedDocumentsSList") +
+                                    " : " + ARInvoiceDocEntry + "! ";
+
+                                SAPbobsCOM.GeneralData InvoiceRow = oChildren.Item(i);
+                                if (InvoiceRow.GetProperty("U_baseDocT") == "ARInvoice" &&
+                                    InvoiceRow.GetProperty("U_baseDoc") == ARInvoiceDocEntry)
+                                {
+                                    errorText = null;
+                                    return;
+                                }
+                            }
+                        }
+                        else
+                            errorText =
+                                BDOSResources.getTranslate("BaseARInvoiceCouldNotFoundInTheMarkedDocumentsSList") +
+                                " : " + ARInvoiceDocEntry + "! ";
+
+                        return;
+                    }
+
+                    if (union == false)
+                    {
+                        //------------------------------------>კორექტირების ფაქტურის მონაცემების შევსება<------------------------------------ 
+                        oGeneralData.SetProperty("U_corrInv", "Y");
+                        oGeneralData.SetProperty("U_corrType", corrType);
+
+                        //კორექტირების დოკუმენტები                    
+                        List<int> connectedDocList = ARInvoice.getAllConnectedARCorrectionDoc(new List<int>() {ARInvoiceDocEntry},
+                            "13", docDate, docDate, docTime, out errorText);
+                        int rowCount = connectedDocList.Count();
+
+                        //რეალიზაციის დოკუმენტის თანხა -->
+                        double gTotal;
+                        double lineVat;
+                        ARInvoice.getAmount(ARInvoiceDocEntry, out gTotal, out lineVat, out errorText);
+
+                        decimal amountInvoice = Convert.ToDecimal(gTotal); //რეალიზაციის თანხას უნდა გამოაკლდეს
+                        decimal amountTXInvoice = Convert.ToDecimal(lineVat);
+
+                        Dictionary<string, object> taxDocInfo = null;
+                        int correctionInvoiceDocEntry = 0;
+                        int corrARDocEntry = 0;
+                        string corrARInvID = null;
+                        string corrARStatus = null;
+                        string text;
+
+                        taxDocInfo = getTaxInvoiceSentDocumentInfo(ARInvoiceDocEntry, "ARInvoice", cardCode);
+                        if (taxDocInfo != null)
+                        {
+                            corrARDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]); //კორექტირების ა/ფ-ის Entry
+                            corrARInvID = taxDocInfo["invID"].ToString(); //კორექტირების ა/ფ-ის ID
+                            corrARStatus = taxDocInfo["status"].ToString(); //კორექტირების ა/ფ-ის სტატუსი
+                        }
+
+                        text = BDOSResources.getTranslate("OnTheBaseARInvoice");
+
+                        if (string.IsNullOrEmpty(corrARInvID) && corrARDocEntry == 0)
+                        {
+                            errorText = BDOSResources.getTranslate("NoTaxInvoiceSaved") + " " + text + "! " +
+                                        BDOSResources.getTranslate("Document") + " : " + ARInvoiceDocEntry;
+                            return;
+                        }
+                        else if (corrARStatus != "confirmed" && corrARStatus != "correctionConfirmed" &&
+                                 corrARStatus != "primary")
+                        {
+                            errorText = BDOSResources.getTranslate("NoTaxInvoiceConfirmed") + "! " +
+                                        BDOSResources.getTranslate("Document") + " : " + corrARDocEntry;
+                            return;
+                        }
+
+                        if (rowCount == 1
+                        ) // ეს ნიშნავს რომ რეალიზაციაზე მარტო ერთი Correction Invoice არის მიბმული. ამიტომ უნდა დავაკორექტიროთ რეალიზაციის ა/ფ.
+                        {
+                            //თანხები ---------->
+                            amount = amountInvoice - amount; //რეალიზაციის თანხას უნდა გამოაკლდეს
+                            amountTX = amountTXInvoice - amountTX;
+                            //თანხები <----------
+
+                            oGeneralData.SetProperty("U_corrDoc", corrARDocEntry);
+                            oGeneralData.SetProperty("U_corrDTxt", corrARDocEntry.ToString());
+                            oGeneralData.SetProperty("U_corrDocID", corrARInvID);
+
+                            //საფუძველის ცხრილის შევსება
+                            SAPbobsCOM.GeneralDataCollection oChildren = null;
+                            oChildren = oGeneralData.Child("BDO_TXS1");
+
+                            SAPbobsCOM.GeneralData oChild = oChildren.Add();
+
+                            oChild.SetProperty("U_baseDocT", "ARCorrectionInvoice"); //A/R Correction Invoice
+                            oChild.SetProperty("U_baseDoc", baseDocEntry);
+                            oChild.SetProperty("U_baseDTxt", baseDocEntry.ToString());
+                            oChild.SetProperty("U_amtBsDc",
+                                oRecordSet.Fields.Item("DocTotal").Value); //თანხა დღგ-ის ჩათვლით
+                            oChild.SetProperty("U_tAmtBsDc", oRecordSet.Fields.Item("VatSum").Value); //დღგ-ის თანხა
+                            oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
+                        }
+                        else
+                        {
+                            int corrDocEntry = 0;
+                            string corrInvID = null;
+                            string corrStatus = null;
+                            text = BDOSResources.getTranslate("OnThePreviousARCorrection");
+
+                            for (int i = 0; i < rowCount; i++)
+                            {
+                                correctionInvoiceDocEntry = connectedDocList[i];
+
+                                BDOSCITp = CommonFunctions.getValue("OCSI", "U_BDOSCITp", "DocEntry",
+                                    correctionInvoiceDocEntry.ToString()).ToString(); //0=კორექტირება, 1=დაბრუნება
+
+                                taxDocInfo = getTaxInvoiceSentDocumentInfo(correctionInvoiceDocEntry,
+                                    "ARCorrectionInvoice", cardCode);
+                                if (taxDocInfo != null)
+                                {
+                                    corrDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]); //კორექტირების ა/ფ-ის Entry
+                                    corrInvID = taxDocInfo["invID"].ToString(); //კორექტირების ა/ფ-ის ID 
+                                    corrStatus = taxDocInfo["status"].ToString(); //კორექტირების ა/ფ-ის სტატუსი 
+                                }
+
+                                if (correctionInvoiceDocEntry != baseDocEntry && corrDocEntry != 0)
+                                {
+                                    continue;
+                                }
+
+                                if (string.IsNullOrEmpty(corrInvID) && corrDocEntry == 0)
+                                {
+                                    if (fromDoc)
+                                    {
+                                        answer = Program.uiApp.MessageBox(
+                                            BDOSResources.getTranslate(
+                                                "ARCDocumentsOnARIDoYouWantToCreateUnitedTaxInvoiceIncludingTheseDocuments") +
+                                            "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"),
+                                            ""); //არსებობს რეალიზაციის დოკუმენტზე რეალიზაციის კორექტირების დოკუმენტები, გსურთ შეიქმნას ერთიანი ფაქტურა ამ დოკუმენტების გათვალისწინებით                   
+                                    }
+
+                                    if (answer != 1)
+                                    {
+                                        errorText = BDOSResources.getTranslate("NoTaxInvoiceSaved") + " " + text +
+                                                    "! " + BDOSResources.getTranslate("Document") + " : " +
+                                                    correctionInvoiceDocEntry;
+                                        return;
+                                    }
+                                }
+                                else if (corrStatus != "confirmed" && corrStatus != "correctionConfirmed")
+                                {
+                                    errorText = BDOSResources.getTranslate("NoTaxInvoiceConfirmed") + "! " +
+                                                BDOSResources.getTranslate("Document") + " : " + corrDocEntry;
+                                    return;
+                                }
+
+                                if (BDOSCITp == "0" && ARInvoiceDocEntry != 0) //კორექტირება
+                                {
+                                    wblDocInfo =
+                                        BDO_Waybills.getWaybillDocumentInfo(ARInvoiceDocEntry, "13", out errorText);
+                                }
+                                else //დაბრუნება
+                                {
+                                    wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(correctionInvoiceDocEntry, "165",
+                                        out errorText);
+                                }
+
+                                //თანხები ---------->
+                                ArCorrectionInvoice.GetAmount(correctionInvoiceDocEntry, out gTotal, out lineVat,
+                                    out errorText);
+                                amountInvoice =
+                                    amountInvoice - Convert.ToDecimal(gTotal); //რეალიზაციის თანხას უნდა გამოაკლდეს
+                                amountTXInvoice = amountTXInvoice - Convert.ToDecimal(lineVat);
+                                //თანხები <----------
+
+                                if (corrDocEntry == 0) //answer == 1
+                                {
+                                    oGeneralData.SetProperty("U_corrDoc", corrARDocEntry);
+                                    oGeneralData.SetProperty("U_corrDTxt", corrARDocEntry.ToString());
+                                    oGeneralData.SetProperty("U_corrDocID", corrARInvID);
+                                }
+                                else
+                                {
+                                    oGeneralData.SetProperty("U_corrDoc", corrDocEntry);
+                                    oGeneralData.SetProperty("U_corrDTxt", corrDocEntry.ToString());
+                                    oGeneralData.SetProperty("U_corrDocID", corrInvID);
+                                }
+
+                                //საფუძველის ცხრილის შევსება
+                                SAPbobsCOM.GeneralDataCollection oChildren = null;
+                                oChildren = oGeneralData.Child("BDO_TXS1");
+
+                                SAPbobsCOM.GeneralData oChild = oChildren.Add();
+
+                                oChild.SetProperty("U_baseDocT", "ARCorrectionInvoice"); //A/R Correction Invoice
+                                oChild.SetProperty("U_baseDoc", correctionInvoiceDocEntry);
+                                oChild.SetProperty("U_baseDTxt", correctionInvoiceDocEntry.ToString());
+                                oChild.SetProperty("U_amtBsDc", gTotal); //თანხა დღგ-ის ჩათვლით
+                                oChild.SetProperty("U_tAmtBsDc", lineVat); //დღგ-ის თანხა
+                                oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
+                                //}
+                            }
+                        }
+                        //------------------------------------>კორექტირების ფაქტურის მონაცემების შევსება<------------------------------------                   
+
+                        //საბოლოო თანხის შევსება
+                        oGeneralData.SetProperty("U_amount", Convert.ToDouble(amount)); //თანხა დღგ-ის ჩათვლით
+                        oGeneralData.SetProperty("U_amountTX", Convert.ToDouble(amountTX)); //დღგ-ის თანხა
+                        oGeneralData.SetProperty("U_amtOutTX",
+                            Convert.ToDouble(amount - amountTX)); //თანხა დღგ-ის გარეშე
+
+                        try
+                        {
+                            var response = oGeneralService.Add(oGeneralData);
+                            var docEntry = response.GetProperty("DocEntry");
+                            newDocEntry = Convert.ToInt32(docEntry);
+                        }
+                        catch (Exception ex)
+                        {
+                            errorText = BDOSResources.getTranslate("ErrorDocumentAddEdit") + " : " + ex.Message;
+                            return;
+                        }
+                    }
+
+                    oRecordSet.MoveNext();
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                errorText = ex.Message;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
             }
         }
 
@@ -5290,6 +5813,17 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
+                    else if (baseDocT == "ARCorrectionInvoice")
+                    {
+                        oDocument = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oCreditNotes);
+                        oDocument.GetByKey(baseDoc);
+
+                        if (oDocument.UserFields.Fields.Item("U_BDOSCITp").Value == "1") //დაბრუნების ტიპია
+                        {
+                            wblDocInfo = BDO_Waybills.getWaybillDocumentInfo(baseDoc, "165", out errorText);
+                        }
+                    }
+
                     if (wblDocInfo != null)
                     {
                         actDate = wblDocInfo["actDate"];
@@ -5368,6 +5902,7 @@ namespace BDO_Localisation_AddOn
                     {
                         List<int> docEntryARInvoiceList = new List<int>(); // A/R Invoice - ს docEntry
                         List<int> docEntryARCreditNoteList = new List<int>(); // A/R Credit Note - ს docEntry
+                        List<int> docEntryARCorrectionInvoiceList = new List<int>(); // A/R Correction Invoice - ს docEntry
 
                         for (int i = 0; i < oGeneralData.Child("BDO_TXS1").Count; i++)
                         {
@@ -5387,20 +5922,24 @@ namespace BDO_Localisation_AddOn
                             {
                                 docEntryARCreditNoteList.Add(baseDoc);
                             }
+                            else if (baseDocT == "ARCorrectionInvoice") //A/R Correction Invoice
+                            {
+                                docEntryARCorrectionInvoiceList.Add(baseDoc);
+                            }
                         }
                         if (corrInv)
                         {
-                            errorText = getAllConnectedDoc(docEntry, ref docEntryARInvoiceList, ref docEntryARCreditNoteList);
+                            errorText = getAllConnectedDoc(docEntry, ref docEntryARInvoiceList, ref docEntryARCreditNoteList, ref docEntryARCorrectionInvoiceList);
                             if (string.IsNullOrEmpty(errorText) == false)
                                 return false;
                         }
 
-                        if (docEntryARInvoiceList.Count == 0 && docEntryARCreditNoteList.Count == 0)
+                        if (docEntryARInvoiceList.Count == 0 && docEntryARCreditNoteList.Count == 0 && docEntryARCorrectionInvoiceList.Count == 0)
                         {
                             errorText = BDOSResources.getTranslate("TaxInvoiceTableEmpty");
                             return false;
                         }
-                        query = getQueryArrayGoodsARInvoiceARCreditNoteType(docEntryARInvoiceList, docEntryARCreditNoteList, inv_ID);
+                        query = getQueryArrayGoodsARInvoiceARCreditNoteARCorrectionInvoiceType(docEntryARInvoiceList, docEntryARCreditNoteList, docEntryARCorrectionInvoiceList, inv_ID);
                     }
                     else
                     {
@@ -5586,12 +6125,14 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string getQueryArrayGoodsARInvoiceARCreditNoteType(List<int> docEntryARInvoiceList, List<int> docEntryARCreditNoteList, int inv_ID)
+        public static string getQueryArrayGoodsARInvoiceARCreditNoteARCorrectionInvoiceType(List<int> docEntryARInvoiceList, List<int> docEntryARCreditNoteList, List<int> docEntryARCorrectionInvoiceList, int inv_ID)
         {
             if (docEntryARInvoiceList.Count == 0)
                 docEntryARInvoiceList.Add(-99);
             if (docEntryARCreditNoteList.Count == 0)
                 docEntryARCreditNoteList.Add(-99);
+            if (docEntryARCorrectionInvoiceList.Count == 0)
+                docEntryARCorrectionInvoiceList.Add(-99);
 
             //""BDO_RSUOM"".""U_RSCode"" AS ""UNIT_ID"",
             //     ""OITM"".""InvntryUom"" AS ""UNIT_TXT"",
@@ -5662,7 +6203,44 @@ namespace BDO_Localisation_AddOn
 		                        LEFT JOIN ""OITM"" AS ""OITM"" ON ""RIN1"".""ItemCode"" = ""OITM"".""ItemCode"" 
 		                        WHERE ""RIN1"".""DocEntry"" IN (" + string.Join(",", docEntryARCreditNoteList) + @") 
 		                        AND ""RIN1"".""BaseEntry"" IN (" + string.Join(",", docEntryARInvoiceList) + @") 
-		                        AND ""RIN1"".""TargetType"" < 0 ) AS ""MNTB"" 
+		                        AND ""RIN1"".""TargetType"" < 0 
+
+                                UNION ALL
+                                
+                                 SELECT
+	                         ""OCSI"".""U_BDOSSrvDsc"" AS ""U_BDOSSrvDsc"",
+	                         ""CSI1"".""DocEntry"" AS ""DocEntry"",
+	                         ""CSI1"".""BaseEntry"" AS ""BaseEntry"",
+	                         ""CSI1"".""BaseLine"" AS ""LineNum"",
+--""CSI1"".""ItemCode"",
+                            (CASE WHEN ""OCSI"".""U_BDOSSrvDsc"" is null 
+	                        		THEN ""CSI1"".""ItemCode"" 
+	                        		ELSE '' 
+	                        		END)  AS ""ItemCode"",
+--""CSI1"".""Dscription"",
+                            (CASE WHEN ""OCSI"".""U_BDOSSrvDsc"" is null 
+	                        		THEN ""CSI1"".""Dscription"" 
+	                        		ELSE ""OCSI"".""U_BDOSSrvDsc"" 
+	                        		END)  AS ""Dscription"",
+                             ""CSI1"".""unitMsr"",
+                             ""CSI1"".""Quantity"" * (-1) * (CASE WHEN ""CSI1"".""NoInvtryMv"" = 'Y' 
+	                        		THEN 0 
+	                        		ELSE 1 
+	                        		END) * ""CSI1"".""NumPerMsr"" AS ""Quantity"",
+	                         ""CSI1"".""GTotal"" * (-1) AS ""GTotal"",
+	                         ""CSI1"".""VatPrcnt"",
+	                         ""CSI1"".""VatGroup"",
+	                         ""CSI1"".""LineVat"" * (-1) AS ""LineVat"",
+--""OITM"".""ItemType"",
+                             CASE WHEN ""OCSI"".""U_BDOSSrvDsc"" is null THEN ""OITM"".""ItemType"" ELSE 'L' END AS ""ItemType"", 
+--""OITM"".""InvntItem"" 
+                             CASE WHEN ""OCSI"".""U_BDOSSrvDsc"" is null THEN ""OITM"".""InvntItem"" ELSE 'N' END AS ""InvntItem""
+		                        FROM ""CSI1"" 
+		                        INNER JOIN ""OCSI"" ON ""CSI1"".""DocEntry"" = ""OCSI"".""DocEntry"" 
+		                        LEFT JOIN ""OITM"" AS ""OITM"" ON ""CSI1"".""ItemCode"" = ""OITM"".""ItemCode"" 
+		                        WHERE ""CSI1"".""DocEntry"" IN (" + string.Join(",", docEntryARCorrectionInvoiceList) + @") 
+		                        AND ""CSI1"".""BaseEntry"" IN (" + string.Join(",", docEntryARInvoiceList) + @") 
+		                        AND ""CSI1"".""TargetType"" < 0 ) AS ""MNTB"" 
 	                        LEFT JOIN ""OITM"" AS ""OITM"" ON ""MNTB"".""ItemCode"" = ""OITM"".""ItemCode"" 
 	                        LEFT JOIN ""OUOM"" AS ""OUOM"" ON ""MNTB"".""unitMsr"" = ""OUOM"".""UomName"" 
 	                        LEFT JOIN ""@BDO_RSUOM"" AS ""BDO_RSUOM"" ON ""OUOM"".""UomEntry"" = ""BDO_RSUOM"".""U_UomEntry"" 

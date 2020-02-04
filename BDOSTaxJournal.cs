@@ -59,6 +59,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     List<int> docEntryARCreditNoteList = new List<int>();
+                    List<int> docEntryARCorrectionInvoiceList = new List<int>();
 
                     for (int row = 1; row <= rowCount; row++)
                     {
@@ -68,7 +69,7 @@ namespace BDO_Localisation_AddOn
                         string docEntry = oMatrix.Columns.Item("Document").Cells.Item(row).Specific.Value;
                         string docType = oMatrix.Columns.Item("DocType").Cells.Item(row).Specific.Value;
 
-                        if (checkedLine && docEntry == "" && (docType == "ARInvoice" || docType == "ARCreditNote"))
+                        if (checkedLine && docEntry == "" && (docType == "ARInvoice" || docType == "ARCreditNote" || docType == "ARCorrectionInvoice"))
                         {
                             DataRow newRow = oDataTable.NewRow();
                             for (int col = 0; col <= oDataTable.Columns.Count - 1; col++)
@@ -80,6 +81,9 @@ namespace BDO_Localisation_AddOn
 
                             if (docType == "ARCreditNote")
                                 docEntryARCreditNoteList.Add(Convert.ToInt32(newRow["InvEntry"]));
+
+                            else if (docType == "ARCorrectionInvoice")
+                                docEntryARCorrectionInvoiceList.Add(Convert.ToInt32(newRow["InvEntry"]));
                         }
                         else if (checkedLine && docType == "ARDownPaymentVAT")
                         {
@@ -200,11 +204,15 @@ namespace BDO_Localisation_AddOn
                                 errorText = null;
                                 if (docType == "ARInvoice")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), null, false, answer, oGeneralData, true, docEntryARCreditNoteList, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), null, false, answer, oGeneralData, true, docEntryARCreditNoteList, docEntryARCorrectionInvoiceList, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARCreditNote")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument("14", Convert.ToInt32(invEntry), null, false, 1, oGeneralData, true, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("14", Convert.ToInt32(invEntry), null, false, 1, oGeneralData, true, null, null, out newDocEntry, out errorText);
+                                }
+                                else if (docType == "ARCorrectionInvoice")
+                                {
+                                    BDO_TaxInvoiceSent.createDocument("165", Convert.ToInt32(invEntry), null, false, 1, oGeneralData, true, null, null, out newDocEntry, out errorText);
                                 }
                                 if (string.IsNullOrEmpty(errorText) == false)
                                 {
@@ -233,7 +241,7 @@ namespace BDO_Localisation_AddOn
                                             amount = amount + Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
                                             amountTX = amountTX + Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
                                         }
-                                        else if (oChild.GetProperty("U_baseDocT") == "ARCreditNote")
+                                        else if (oChild.GetProperty("U_baseDocT") == "ARCreditNote" || oChild.GetProperty("U_baseDocT") == "ARCorrectionInvoice")
                                         {
                                             amount = amount - Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
                                             amountTX = amountTX - Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
@@ -324,7 +332,7 @@ namespace BDO_Localisation_AddOn
                         string corrDoc = oMatrix.Columns.Item("CorrDoc").Cells.Item(row).Specific.Value;
                         string statusDoc = oMatrix.Columns.Item("StatusDoc").Cells.Item(row).Specific.Value;
 
-                        if ((oOperation == 0 || oOperation == 1) && (docType == "ARInvoice" || docType == "ARCreditNote") && answer == 0)
+                        if ((oOperation == 0 || oOperation == 1) && (docType == "ARInvoice" || docType == "ARCreditNote" || docType == "ARCorrectionInvoice") && answer == 0)
                         {
                             answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("ARCDocumentsOnARIDoYouWantToCreateUnitedTaxInvoiceIncludingTheseDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), ""); //არსებობს რეალიზაციის დოკუმენტზე რეალიზაციის კორექტირების დოკუმენტები, გსურთ შეიქმნას ერთიანი ფაქტურა ამ დოკუმენტების გათვალისწინებით                   
                         }
@@ -344,15 +352,19 @@ namespace BDO_Localisation_AddOn
                                 }
                                 else if (docType == "ARInvoice")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, null, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARCreditNote")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument("14", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("14", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, null, out newDocEntry, out errorText);
+                                }
+                                else if (docType == "ARCorrectionInvoice")
+                                {
+                                    BDO_TaxInvoiceSent.createDocument("165", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, null, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARDownPaymentVAT")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument("UDO_F_BDO_ARDPV_D", Convert.ToInt32(invEntry), corrType, false, 0, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("UDO_F_BDO_ARDPV_D", Convert.ToInt32(invEntry), corrType, false, 0, null, false, null, null, out newDocEntry, out errorText);
                                 }
                                 docEntry = newDocEntry.ToString();
                             }
@@ -373,15 +385,19 @@ namespace BDO_Localisation_AddOn
                                 }
                                 else if (docType == "ARInvoice")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null,null, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARCreditNote")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument("14", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("14", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, null, out newDocEntry, out errorText);
+                                }
+                                else if (docType == "ARCorrectionInvoice")
+                                {
+                                    BDO_TaxInvoiceSent.createDocument("165", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, null, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARDownPaymentVAT")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument("UDO_F_BDO_ARDPV_D", Convert.ToInt32(invEntry), corrType, false, 0, null, false, null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("UDO_F_BDO_ARDPV_D", Convert.ToInt32(invEntry), corrType, false, 0, null, false, null, null, out newDocEntry, out errorText);
                                 }
                                 docEntry = newDocEntry.ToString();
                             }
