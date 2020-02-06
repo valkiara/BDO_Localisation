@@ -6223,14 +6223,14 @@ namespace BDO_Localisation_AddOn
 	                        		ELSE ""OCSI"".""U_BDOSSrvDsc"" 
 	                        		END)  AS ""Dscription"",
                              ""CSI1"".""unitMsr"",
-                             ""CSI1"".""Quantity"" * (-1) * (CASE WHEN ""CSI1"".""NoInvtryMv"" = 'Y' 
+                             ""CSI1"".""Quantity"" * (CASE WHEN ""CSI1"".""NoInvtryMv"" = 'Y' 
 	                        		THEN 0 
 	                        		ELSE 1 
 	                        		END) * ""CSI1"".""NumPerMsr"" AS ""Quantity"",
-	                         ""CSI1"".""GTotal"" * (-1) AS ""GTotal"",
+	                         ""CSI1"".""GTotal"" AS ""GTotal"",
 	                         ""CSI1"".""VatPrcnt"",
 	                         ""CSI1"".""VatGroup"",
-	                         ""CSI1"".""LineVat"" * (-1) AS ""LineVat"",
+	                         ""CSI1"".""LineVat"" AS ""LineVat"",
 --""OITM"".""ItemType"",
                              CASE WHEN ""OCSI"".""U_BDOSSrvDsc"" is null THEN ""OITM"".""ItemType"" ELSE 'L' END AS ""ItemType"", 
 --""OITM"".""InvntItem"" 
