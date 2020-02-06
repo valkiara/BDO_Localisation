@@ -3330,10 +3330,9 @@ namespace BDO_Localisation_AddOn
             FROM ""@BDO_WBLD"" AS ""BDO_WBLD"" 
             WHERE ""BDO_WBLD"".""Canceled"" = 'N'
             AND ""BDO_WBLD"".""U_baseDocT"" = '" + objectType + @"' 
-            AND ""BDO_WBLD"".""U_baseDoc"" <> ''
+            AND ""BDO_WBLD"".""U_baseDoc"" <> '0'
             AND ""BDO_WBLD"".""U_cardCode"" = N'" + cardCode + @"'
-            AND ""BDO_WBLD"".""U_number"" = '" + overhead_no + @"'
-            GROUP BY ""DOC"".""DocEntry""";
+            AND ""BDO_WBLD"".""U_number"" = '" + overhead_no + @"'";
 
             string query = @"SELECT
 	             ""TABL"".""DocEntry"",
@@ -3349,7 +3348,7 @@ namespace BDO_Localisation_AddOn
 
             if (baseDocType != "ARDownPaymentRequest" && string.IsNullOrEmpty(overhead_no) == false) //ვეძებთ ზედნადების ნომრით
             {
-                query = query + @" AND ""TABL"".""DocEntry"" IN '" + queryWbl + "'";
+                query = query + @" AND ""TABL"".""DocEntry"" IN (" + queryWbl + ")";
             }
             if (baseDocType == "ARDownPaymentRequest")
             {
