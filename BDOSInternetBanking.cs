@@ -1518,13 +1518,9 @@ namespace BDO_Localisation_AddOn
                     if (transactionType == "CCO")
                     {
                         if (correspondentAccountNumber == senderAccountNumber)
-                        {
                             debitCredit = 1; //შემოსვლა
-                        }
                         else
-                        {
                             debitCredit = 0; //გასვლა
-                        }
 
                         sourceCurrency = oStatementDetail[rowIndex].DocumentDestinationCurrency;
                         destinationCurrency = oStatementDetail[rowIndex].DocumentSourceCurrency;
@@ -1546,7 +1542,7 @@ namespace BDO_Localisation_AddOn
 
                         else
                         {
-                            int s = 0;
+                            int s = 0;//wtf
                             s++;
                             continue;
                         }
@@ -1554,6 +1550,13 @@ namespace BDO_Localisation_AddOn
 
                     senderAccountNumber = CommonFunctions.accountParse(senderAccountNumber);
                     beneficiaryAccountNumber = CommonFunctions.accountParse(beneficiaryAccountNumber);
+
+                    if(transactionType == "CCO") //swap
+                    {
+                        var tempAcc = senderAccountNumber;
+                        senderAccountNumber = beneficiaryAccountNumber;
+                        beneficiaryAccountNumber = tempAcc;
+                    }
 
                     amount = oStatementDetail[rowIndex].EntryAmountDebit;
                     amountDc = 0;
@@ -4767,19 +4770,19 @@ namespace BDO_Localisation_AddOn
                             {
                                 checkUncheckMTRImport(oForm, pVal.ItemUID, out errorText);
                             }
-                            else if(pVal.ItemUID == "getDataB")
+                            else if (pVal.ItemUID == "getDataB")
                             {
                                 getData(oForm);
                             }
-                            else if(pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2")
+                            else if (pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2")
                             {
                                 checkUncheckMTRExport(oForm, pVal.ItemUID, out errorText);
                             }
-                            else if(pVal.ItemUID == "exportMTR" && pVal.ColUID == "CheckBox")
+                            else if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "CheckBox")
                             {
                                 OnCheckImportDocuments(oForm, pVal.Row, pVal.ColUID);
                             }
-                            else if(pVal.ItemUID == "createDocB")
+                            else if (pVal.ItemUID == "createDocB")
                             {
                                 int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CreatePaymentDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
 
@@ -4796,7 +4799,7 @@ namespace BDO_Localisation_AddOn
                                 }
                                 return;
                             }
-                            else if(pVal.ItemUID == "exportMTR" && pVal.ColUID == "InDetail")
+                            else if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "InDetail")
                             {
                                 SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("exportMTR");
 
@@ -4866,7 +4869,7 @@ namespace BDO_Localisation_AddOn
                                 BDOSInternetBankingDocuments.createForm(oForm, docDate, cardCode, cardName, BPCurrency, amount, currency, downPaymentAmount, invoicesAmount, paymentOnAccount, addDPAmount, docRateIN, out oFormInternetBankingDocuments, out errorText);
                                 BDOSInternetBankingDocuments.fillInvoicesMTR(oFormInternetBankingDocuments, blnkAgr, out errorText);
                             }
-                            else if(pVal.ItemUID == "syncDate")
+                            else if (pVal.ItemUID == "syncDate")
                             {
                                 if (SynchronizePayments(oForm))
                                 {
@@ -4884,7 +4887,7 @@ namespace BDO_Localisation_AddOn
                         {
                             setVisibleFormItemsMatrixColumns(oForm, out errorText);
                         }
-                        else if(pVal.ItemUID == "imptTypeCB" && !pVal.BeforeAction)
+                        else if (pVal.ItemUID == "imptTypeCB" && !pVal.BeforeAction)
                         {
                             setVisibleFormItemsImport(oForm, out errorText);
                         }
