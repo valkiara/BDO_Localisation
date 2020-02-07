@@ -10,6 +10,9 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_TaxInvoiceSent
     {
+        const int clientHeight = 650;
+        const int clientWidth = 800;
+
         public static void createDocumentUDO(out string errorText)
         {
             errorText = null;
@@ -1724,12 +1727,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("isDataSource", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
             formItems.Add("Left", left_s);
-            //formItems.Add("Width", wblMTRWidth);
             formItems.Add("Top", top);
-            formItems.Add("Height", 100);
             formItems.Add("UID", itemName);
-            //formItems.Add("DisplayDesc", true);
-            //formItems.Add("AffectsFormMode", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1901,7 +1900,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Left", left_e);
             formItems.Add("Width", width_e);
             formItems.Add("Top", top);
-            formItems.Add("Height", 3 * height);
+            formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("DisplayDesc", true);
             formItems.Add("ScrollBars", SAPbouiCOM.BoScrollBars.sb_Vertical);
@@ -1912,7 +1911,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + 3 * height + 1;
+            top = top + height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "CommentS"; //10 characters
@@ -2170,46 +2169,30 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("wblMTR").Width = mtrWidth;
                 oForm.Items.Item("wblMTR").Top = top;
                 oForm.Items.Item("wblMTR").Height = oForm.ClientHeight / 3;
-                oMatrix.Columns.Item("LineId").Width = 19;
-                mtrWidth -= 19;
-                mtrWidth /= 5;
-                oMatrix.Columns.Item("U_baseDocT").Width = mtrWidth;
-                oMatrix.Columns.Item("U_baseDTxt").Width = mtrWidth;
-                oMatrix.Columns.Item("U_amtBsDc").Width = mtrWidth;
-                oMatrix.Columns.Item("U_tAmtBsDc").Width = mtrWidth;
-                oMatrix.Columns.Item("U_wbNumber").Width = mtrWidth;
+                FormsB1.resetWidthMatrixColumns(oForm, "wblMTR", "LineId", mtrWidth);
 
-                //სარდაფი
+                if (oForm.ClientHeight <= clientHeight)
+                    top += oForm.Items.Item("wblMTR").Height + 10;
+                else
+                    top = oForm.ClientHeight - (5 * height + 10);
 
-                top = top + oForm.Items.Item("wblMTR").Height + 40;
+                oForm.Items.Item("CreatorS").Top = top;
+                oForm.Items.Item("CreatorE").Top = top;
 
-                oItem = oForm.Items.Item("CreatorS");
-                oItem.Top = top;
-                oItem = oForm.Items.Item("CreatorE");
-                oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
-                oItem = oForm.Items.Item("RemarksS");
-                oItem.Top = top;
-                oItem = oForm.Items.Item("RemarksE");
-                oItem.Top = top;
-                top = top + 3 * height + 1;
+                oForm.Items.Item("RemarksS").Top = top;
+                oForm.Items.Item("RemarksE").Top = top;
 
-                oItem = oForm.Items.Item("CommentS");
-                oItem.Top = top;
-                oItem = oForm.Items.Item("CommentE");
-                oItem.Top = top;
+                top += height + 1;
 
-                int topTemp1 = oForm.Items.Item("CommentE").Top + 2 * height + 1;
-                int topTemp2 = oForm.ClientHeight - 25;
-                //ღილაკები
-                top = topTemp2 > topTemp1 ? topTemp2 : topTemp1;
+                oForm.Items.Item("CommentS").Top = top;
+                oForm.Items.Item("CommentE").Top = top;
 
-                oItem = oForm.Items.Item("1");
-                oItem.Top = top;
+                top += 2 * height + 1;
 
-                oItem = oForm.Items.Item("2");
-                oItem.Top = top;
+                oForm.Items.Item("1").Top = top;
+                oForm.Items.Item("2").Top = top;
 
                 oItem = oForm.Items.Item("operationB");
                 oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
@@ -2230,10 +2213,8 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                oForm.ClientHeight = System.Windows.Forms.SystemInformation.VirtualScreen.Height;
-                oForm.ClientWidth = System.Windows.Forms.SystemInformation.VirtualScreen.Width;
-                //oForm.ClientHeight = oForm.Height * 5 + 20; //1400;
-                //oForm.ClientWidth = oForm.Width * 2; //1000;
+                oForm.ClientHeight = clientHeight;
+                oForm.ClientWidth = clientWidth;
             }
             catch (Exception ex)
             {

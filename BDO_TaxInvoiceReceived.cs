@@ -11,6 +11,9 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_TaxInvoiceReceived
     {
+        const int clientHeight = 730;
+        const int clientWidth = 900;
+
         public static void createDocumentUDO(out string errorText)
         {
             errorText = null;
@@ -877,7 +880,7 @@ namespace BDO_Localisation_AddOn
             int width_s = 121;
             int width_e = 148;
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "cardCodeS"; //10 characters
@@ -970,8 +973,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "cardCodeTS"; //10 characters
@@ -1012,7 +1014,7 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Items.Item("cardCodeTE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "recvDateS"; //10 characters
@@ -1051,7 +1053,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "corrInvCH"; //10 characters
@@ -1100,7 +1102,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "downPmntCH"; //10 characters
@@ -1126,8 +1128,8 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Items.Item("downPmntCH").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
-            top = top + height + 1;
-            //top = top + 1;
+            top += height + 1;
+            //top += 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "BDOSJrnEnS"; //10 characters
@@ -1292,7 +1294,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            top += height + 1;
 
             List<string> listValidValues = new List<string>(); //კორექტირების მიზეზები
             listValidValues.Add(""); //-1
@@ -1391,7 +1393,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "StatusS"; //10 characters
@@ -1433,7 +1435,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "CreateDatS"; //10 characters
@@ -1474,7 +1476,7 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Items.Item("CreateDatE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "DocDateS"; //10 characters
@@ -1515,7 +1517,7 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Items.Item("DocDateE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "taxDateS"; //10 characters
@@ -1561,7 +1563,7 @@ namespace BDO_Localisation_AddOn
             left_e = 127;
 
             //ელექტრონული ანგარიშ-ფაქტურა ---->
-            //top = top + height + 1;
+            //top += height + 1;
             top = 86 + 40;
 
             formItems = new Dictionary<string, object>();
@@ -1582,7 +1584,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + 25;
+            top += 25;
 
             formItems = new Dictionary<string, object>();
             itemName = "seriesS"; //10 characters
@@ -1645,7 +1647,7 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Items.Item("numberE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "statusS1"; //10 characters
@@ -1707,7 +1709,7 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Items.Item("statusCB").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "confInfoS"; //10 characters
@@ -1793,7 +1795,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "confDateS"; //10 characters
@@ -1835,7 +1837,7 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Items.Item("confDateE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "declNumS"; //10 characters
@@ -1855,7 +1857,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "declDateS"; //10 characters
@@ -1895,7 +1897,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             //oForm.Items.Item("declDateE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "declNmberS"; //10 characters
@@ -1938,7 +1940,7 @@ namespace BDO_Localisation_AddOn
             left_s = 295;
             left_e = left_s + 121;
             top = 86 + 40;
-            top = top + 25;
+            top += 25;
 
             formItems = new Dictionary<string, object>();
             itemName = "invIDS"; //10 characters
@@ -1978,7 +1980,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             oForm.Items.Item("invIDE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "opDateS"; //10 characters
@@ -2018,7 +2020,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             oForm.Items.Item("opDateE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "amountS"; //10 characters
@@ -2058,7 +2060,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             oForm.Items.Item("amountE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "amountTXS"; //10 characters
@@ -2159,7 +2161,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + 25;
+            top += 25;
 
             formItems = new Dictionary<string, object>();
             itemName = "amtCorS"; //10 characters
@@ -2199,7 +2201,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             oForm.Items.Item("amtCorE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "amtTXCorS"; //10 characters
@@ -2264,7 +2266,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + 25;
+            top += 25;
 
             formItems = new Dictionary<string, object>();
             itemName = "amtACorS"; //10 characters
@@ -2305,7 +2307,7 @@ namespace BDO_Localisation_AddOn
             }
             oForm.Items.Item("amtACorE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "amtTXACrS"; //10 characters
@@ -2351,7 +2353,7 @@ namespace BDO_Localisation_AddOn
 
             left_s = 6;
             left_e = 127;
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "taxInRcvdS"; //10 characters
@@ -2400,7 +2402,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "vatRDateS"; //10 characters
@@ -2439,7 +2441,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 5;
+            top += height + 5;
 
             formItems = new Dictionary<string, object>();
             itemName = "wblS"; //10 characters
@@ -2459,7 +2461,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 5;
+            top += height + 5;
 
             formItems = new Dictionary<string, object>();
             itemName = "addMTRB"; //10 characters 
@@ -2495,18 +2497,14 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + top + 1;
-
-            int wblMTRWidth = oForm.ClientWidth * 2 / 3;
+            top += top + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "wblMTR"; //10 characters
             formItems.Add("isDataSource", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
             formItems.Add("Left", left_s);
-            formItems.Add("Width", wblMTRWidth);
             formItems.Add("Top", top);
-            //formItems.Add("Height", 100);
             formItems.Add("UID", itemName);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -2532,12 +2530,8 @@ namespace BDO_Localisation_AddOn
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_DownPaymentInvoiceCFL);
 
             oColumn = oColumns.Add("LineID", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "  ";
-            oColumn.Width = 20 - 1;
+            oColumn.TitleObject.Caption = "#";
             oColumn.Editable = false;
-            oColumn.Visible = true;
-
-            wblMTRWidth = wblMTRWidth - 20 - 1;
 
             listValidValues = new List<string>();
             //listValidValues.Add("");
@@ -2547,9 +2541,7 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Add("U_baseDocT", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("DocumentType");
-            oColumn.Width = wblMTRWidth / 5;
-            oColumn.Editable = true;
-            oColumn.Visible = true;
+            //oColumn.Width = wblMTRWidth / 5;
             for (int i = 0; i < listValidValues.Count(); i++)
             {
                 oColumn.ValidValues.Add(i == 0 && listValidValues[i] == "" ? "-1" : i.ToString(), listValidValues[i]);
@@ -2557,33 +2549,22 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Add("U_baseDoc", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Document");
-            oColumn.Width = 1;
-            oColumn.Editable = true;
             oColumn.Visible = false;
 
             oColumn = oColumns.Add("U_baseDTxt", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Document");
-            oColumn.Width = wblMTRWidth / 5;
-            oColumn.Editable = true;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("U_amtBsDc", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("AmountWithVat");
-            oColumn.Width = wblMTRWidth / 5;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("U_tAmtBsDc", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatAmount");
-            oColumn.Width = wblMTRWidth / 5;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("U_wbNumber", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("WaybillNumber");
-            oColumn.Width = wblMTRWidth / 5;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             SAPbouiCOM.DBDataSource oDBDataSource;
             oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDO_TXR1");
@@ -2618,16 +2599,11 @@ namespace BDO_Localisation_AddOn
             left_s = 295;
             left_e = left_s + 121;
 
-            int wblMTR2Width = oForm.ClientWidth / 4;
-
             formItems = new Dictionary<string, object>();
             itemName = "wblMTR2"; //10 characters
             formItems.Add("isDataSource", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
-            formItems.Add("Left", oForm.ClientWidth - wblMTR2Width);
-            formItems.Add("Width", wblMTR2Width);
             formItems.Add("Top", top);
-            formItems.Add("Height", 100);
             formItems.Add("UID", itemName);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -2641,18 +2617,12 @@ namespace BDO_Localisation_AddOn
             oColumns = oMatrix.Columns;
 
             oColumn = oColumns.Add("LineID", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "  ";
-            oColumn.Width = 20;
+            oColumn.TitleObject.Caption = "#";
             oColumn.Editable = false;
-            oColumn.Visible = true;
-
-            wblMTR2Width = wblMTR2Width - 20;
 
             oColumn = oColumns.Add("U_wbNumber", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("WaybillNumber");
-            oColumn.Width = wblMTR2Width;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Item("LineID");
             oColumn.DataBind.SetBound(true, "@BDO_TXR2", "LineId");
@@ -2666,7 +2636,7 @@ namespace BDO_Localisation_AddOn
 
             left_s = 6;
 
-            top = top + oForm.Items.Item("wblMTR").Height + 5;
+            top += oForm.Items.Item("wblMTR").Height + 5;
 
             formItems = new Dictionary<string, object>();
             itemName = "dpInvS"; //10 characters
@@ -2686,7 +2656,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 5;
+            top += height + 5;
 
             formItems = new Dictionary<string, object>();
             itemName = "addDPinv"; //10 characters
@@ -2720,18 +2690,15 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + top + 1;
+            top += top + 1;
 
-            int itemsWidth = oForm.ClientWidth * 2 / 3;
 
             formItems = new Dictionary<string, object>();
             itemName = "DPitems"; //10 characters
             formItems.Add("isDataSource", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
             formItems.Add("Left", left_s);
-            formItems.Add("Width", itemsWidth);
             formItems.Add("Top", top);
-            //formItems.Add("Height", 100);
             formItems.Add("UID", itemName);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -2740,7 +2707,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("DPitems").Specific));
+            oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("DPitems").Specific;
             oMatrix.SelectionMode = SAPbouiCOM.BoMatrixSelect.ms_Auto;
             oColumns = oMatrix.Columns;
 
@@ -2759,49 +2726,31 @@ namespace BDO_Localisation_AddOn
             oCFL.SetConditions(oCons);
 
             oColumn = oColumns.Add("LineID", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "  ";
-            oColumn.Width = 20 - 1;
+            oColumn.TitleObject.Caption = "#";
             oColumn.Editable = false;
-            oColumn.Visible = true;
-
-            itemsWidth = itemsWidth - 20 - 1;
 
             oColumn = oColumns.Add("goods", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Item");
-            oColumn.Width = itemsWidth / 6;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("g_unit", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("UomName");
-            oColumn.Width = itemsWidth / 6;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("g_number", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Quantity");
-            oColumn.Width = itemsWidth / 6;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("fullAmount", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("GrossAmount");
-            oColumn.Width = itemsWidth / 6;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("drgAmount", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatAmount");
-            oColumn.Width = itemsWidth / 6;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
-            //oColumn = oColumns.Add("vatType", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn = oColumns.Add("vatType", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("VATCode");
-            oColumn.Width = itemsWidth / 6;
-            oColumn.Editable = true;
-            oColumn.Visible = true;
 
             oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDO_TXR3");
 
@@ -2835,9 +2784,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("isDataSource", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_MATRIX);
             formItems.Add("Left", left_s);
-            formItems.Add("Width", itemsWidth);
             formItems.Add("Top", top);
-            //formItems.Add("Height", 100);
             formItems.Add("UID", itemName);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -2856,12 +2803,8 @@ namespace BDO_Localisation_AddOn
             //FormsB1.addChooseFromList( oForm, multiSelection, objectType, uniqueID_lf_VatType);
 
             oColumn = oColumns.Add("LineID", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = "  ";
-            oColumn.Width = 20 - 1;
+            oColumn.TitleObject.Caption = "#";
             oColumn.Editable = false;
-            oColumn.Visible = true;
-
-            itemsWidth = itemsWidth - 20 - 1;
 
             //multiSelection = false;
             //objectType = "UDO_F_BDO_TAXR_D";
@@ -2870,22 +2813,14 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Add("DPinvoice", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("APDownPaymentInvoice");
-            oColumn.Width = itemsWidth / 6;
-            oColumn.Editable = true;
-            oColumn.Visible = true;
             oColumn.Editable = false;
 
             oColumn = oColumns.Add("maxAmount", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("OpenVAT");
-            oColumn.Width = itemsWidth / 6;
             oColumn.Editable = false;
-            oColumn.Visible = true;
 
             oColumn = oColumns.Add("drgAmount", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatAmount");
-            oColumn.Width = itemsWidth / 6;
-            oColumn.Editable = true;
-            oColumn.Visible = true;
 
             oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDO_TXR4");
 
@@ -2908,7 +2843,7 @@ namespace BDO_Localisation_AddOn
             //სარდაფი
             left_s = 6;
             left_e = 127;
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "CreatorS"; //10 characters
@@ -2948,7 +2883,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             oForm.Items.Item("CreatorE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "RemarksS"; //10 characters
@@ -2988,7 +2923,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "CommentS"; //10 characters
@@ -3032,7 +2967,7 @@ namespace BDO_Localisation_AddOn
             left_s = 295;
             left_e = left_s + 121;
 
-            top = top + height + 1;
+            top += height + 1;
 
             formItems = new Dictionary<string, object>();
             itemName = "postB"; //10 characters
@@ -3082,10 +3017,8 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                oForm.ClientHeight = System.Windows.Forms.SystemInformation.VirtualScreen.Height;
-                oForm.ClientWidth = System.Windows.Forms.SystemInformation.VirtualScreen.Width;
-                //oForm.ClientHeight = oForm.Height * 5 + 40;//1400;
-                //oForm.ClientWidth = oForm.Width * 2; //1000;
+                oForm.ClientHeight = clientHeight;
+                oForm.ClientWidth = clientWidth;
             }
             catch (Exception ex)
             {
@@ -3105,7 +3038,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.Item oItem = null;
                 int height = 15;
                 int top = 6;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("cardCodeS");
                 oItem.Top = top;
@@ -3115,29 +3048,29 @@ namespace BDO_Localisation_AddOn
                 oItem.Top = top;
                 oItem = oForm.Items.Item("cardCodeLB");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("cardCodeTS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("cardCodeTE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("recvDateS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("recvDateE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("corrInvCH");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("elctrnicCH");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("downPmntCH");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("BDOSJrnEnS");
                 oItem.Top = top;
@@ -3157,31 +3090,31 @@ namespace BDO_Localisation_AddOn
                 oItem.Top = top;
                 oItem = oForm.Items.Item("DocNumE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("StatusS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("StatusC");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("CreateDatS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("CreateDatE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("DocDateS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("DocDateE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("taxDateS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("taxDateE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("corrDocIDS");
                 oItem.Top = top;
@@ -3198,7 +3131,7 @@ namespace BDO_Localisation_AddOn
 
                 oItem = oForm.Items.Item("taxInvS");
                 oItem.Top = top;
-                top = top + 25;
+                top += 25;
 
                 oItem = oForm.Items.Item("seriesS");
                 oItem.Top = top;
@@ -3206,13 +3139,13 @@ namespace BDO_Localisation_AddOn
                 oItem.Top = top;
                 oItem = oForm.Items.Item("numberE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("statusS1");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("statusCB");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("confInfoS");
                 oItem.Top = top;
@@ -3222,23 +3155,23 @@ namespace BDO_Localisation_AddOn
                 oItem.Top = top;
                 oItem = oForm.Items.Item("confInfoLB");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("confDateS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("confDateE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("declNumS");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("declDateS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("declDateE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("declNmberS");
                 oItem.Top = top;
@@ -3246,25 +3179,25 @@ namespace BDO_Localisation_AddOn
                 oItem.Top = top;
 
                 top = 86 + 40;
-                top = top + 25;
+                top += 25;
 
                 oItem = oForm.Items.Item("invIDS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("invIDE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("opDateS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("opDateE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("amountS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("amountE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("amountTXS");
                 oItem.Top = top;
@@ -3277,7 +3210,7 @@ namespace BDO_Localisation_AddOn
                 oItem.Top = top;
                 oItem = oForm.Items.Item("declStatS1");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 //კორექტირებული ფაქტურის მონაცემები ---->
 
@@ -3285,31 +3218,31 @@ namespace BDO_Localisation_AddOn
 
                 oItem = oForm.Items.Item("21_U_S");
                 oItem.Top = top;
-                top = top + 25;
+                top += 25;
 
                 oItem = oForm.Items.Item("amtCorS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("amtCorE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("amtTXCorS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("amtTXCorE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("taxInRcvdS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("taxInRcvdC");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("vatRDateS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("vatRDateE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 //მონაცემები კორექტირების შემდეგ ---->
 
@@ -3318,19 +3251,19 @@ namespace BDO_Localisation_AddOn
                 oItem = oForm.Items.Item("24_U_S");
                 oItem.Top = top;
 
-                top = top + 25;
+                top += 25;
 
                 oItem = oForm.Items.Item("amtACorS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("amtACorE");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 oItem = oForm.Items.Item("amtTXACrS");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("amtTXACrE");
                 oItem.Top = top;
-                top = top + 2 * height + 1;
+                top += 2 * height + 1;
 
                 //oItem = oForm.Items.Item("vatRecvdCH");
                 //oItem.Top = top;
@@ -3339,151 +3272,88 @@ namespace BDO_Localisation_AddOn
                 oItem = oForm.Items.Item("vatRDateE");
                 oItem.Top = top;
 
-                top = top + height + 5;
+                top += height + 5;
 
                 oItem = oForm.Items.Item("wblS");
                 oItem.Top = top;
-                top = top + height + 5;
+                top += height + 5;
 
                 oItem = oForm.Items.Item("addMTRB");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("delMTRB");
                 oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
                 int wblMTRWidth = oForm.ClientWidth * 2 / 3;
                 oItem = oForm.Items.Item("wblMTR");
                 oItem.Top = top;
                 oItem.Width = wblMTRWidth;
-                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
-                SAPbouiCOM.Columns oColumns = oMatrix.Columns;
-                SAPbouiCOM.Column oColumn;
-                oColumn = oMatrix.Columns.Item("LineID");
-                oColumn.Width = 20 - 1;
-                wblMTRWidth = wblMTRWidth - 20 - 1;
-                oColumn = oMatrix.Columns.Item("U_baseDocT");
-                oColumn.Width = wblMTRWidth / 5;
-                oColumn = oMatrix.Columns.Item("U_baseDoc");
-                oColumn.Width = 1;
-                oColumn = oMatrix.Columns.Item("U_baseDTxt");
-                oColumn.Width = wblMTRWidth / 5;
-                oColumn = oMatrix.Columns.Item("U_amtBsDc");
-                oColumn.Width = wblMTRWidth / 5;
-                oColumn = oMatrix.Columns.Item("U_tAmtBsDc");
-                oColumn.Width = wblMTRWidth / 5;
-                oColumn = oMatrix.Columns.Item("U_wbNumber");
-                oColumn.Width = wblMTRWidth / 5;
+                oItem.Height = 100;
+                FormsB1.resetWidthMatrixColumns(oForm, "wblMTR", "LineID", wblMTRWidth);
 
                 int wblMTR2Width = oForm.ClientWidth / 4;
                 oItem = oForm.Items.Item("wblMTR2");
                 oItem.Top = top;
                 oItem.Width = wblMTR2Width;
                 oItem.Left = oForm.ClientWidth - wblMTR2Width;
-                oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("wblMTR2").Specific));
-                oColumns = oMatrix.Columns;
-                oColumn = oMatrix.Columns.Item("LineID");
-                oColumn.Width = 20;
-                wblMTRWidth = wblMTRWidth - 20;
-                oColumn = oMatrix.Columns.Item("U_wbNumber");
-                oColumn.Width = wblMTRWidth;
+                oItem.Height = 100;
+                FormsB1.resetWidthMatrixColumns(oForm, "wblMTR2", "LineID", wblMTR2Width);
 
-                //DPitems
+                top += 100 + 5;
 
-                top = top + oForm.Items.Item("wblMTR").Height + 5;
-                int topForButtons = top;
                 oItem = oForm.Items.Item("dpInvS");
                 oItem.Top = top;
-                top = top + height + 5;
+
+                top += height + 5;
 
                 oItem = oForm.Items.Item("addDPinv");
                 oItem.Top = top;
                 oItem = oForm.Items.Item("delDPinv");
                 oItem.Top = top;
-                top = top + height + 1;
+
+                top += height + 1;
 
                 int itemsWidth = oForm.ClientWidth * 2 / 3;
                 oItem = oForm.Items.Item("DPitems");
                 oItem.Top = top;
                 oItem.Width = itemsWidth;
-                oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("DPitems").Specific));
-                oColumns = oMatrix.Columns;
-                oColumn = oMatrix.Columns.Item("LineID");
-                oColumn.Width = 20 - 1;
-                itemsWidth = itemsWidth - 20 - 1;
-                oColumn = oMatrix.Columns.Item("goods");
-                oColumn.Width = itemsWidth / 6;
+                oItem.Height = 100;
+                FormsB1.resetWidthMatrixColumns(oForm, "DPitems", "LineID", itemsWidth);
 
-                oColumn = oMatrix.Columns.Item("g_unit");
-                oColumn.Width = itemsWidth / 6;
-
-                oColumn = oMatrix.Columns.Item("g_number");
-                oColumn.Width = itemsWidth / 6;
-
-                oColumn = oMatrix.Columns.Item("fullAmount");
-                oColumn.Width = itemsWidth / 6;
-
-                oColumn = oMatrix.Columns.Item("drgAmount");
-                oColumn.Width = itemsWidth / 6;
-
-                oColumn = oMatrix.Columns.Item("vatType");
-                oColumn.Width = itemsWidth / 6;
-
-                //DPinvoices
                 int dpinvoicesWidth = oForm.ClientWidth * 2 / 3;
                 oItem = oForm.Items.Item("DPinvoices");
                 oItem.Top = top;
                 oItem.Width = dpinvoicesWidth;
-                oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("DPinvoices").Specific));
-                oColumns = oMatrix.Columns;
-                oColumn = oMatrix.Columns.Item("LineID");
-                oColumn.Width = 20 - 1;
-                itemsWidth = itemsWidth - 20 - 1;
+                oItem.Height = 100;
+                FormsB1.resetWidthMatrixColumns(oForm, "DPinvoices", "LineID", dpinvoicesWidth);
 
-                oColumn = oMatrix.Columns.Item("DPinvoice");
-                oColumn.Width = itemsWidth / 3;
+                if (oForm.ClientHeight <= clientHeight)
+                    top += 100 + 10;
+                else
+                    top = oForm.ClientHeight - (5 * height + 10);
 
-                oColumn = oMatrix.Columns.Item("maxAmount");
-                oColumn.Width = itemsWidth / 3;
+                oForm.Items.Item("CreatorS").Top = top;
+                oForm.Items.Item("CreatorE").Top = top;
 
-                oColumn = oMatrix.Columns.Item("drgAmount");
-                oColumn.Width = itemsWidth / 3;
+                top += height + 1;
 
-                //სარდაფი
-                top = topForButtons + height * 2 + 5 + 1 + 100;
+                oForm.Items.Item("RemarksS").Top = top;
+                oForm.Items.Item("RemarksE").Top = top;
 
-                oItem = oForm.Items.Item("CreatorS");
-                oItem.Top = top;
-                oItem = oForm.Items.Item("CreatorE");
-                oItem.Top = top;
-                top = top + height + 1;
+                top += height + 1;
 
-                oItem = oForm.Items.Item("RemarksS");
-                oItem.Top = top;
-                oItem = oForm.Items.Item("RemarksE");
-                oItem.Top = top;
-                top = top + height + 1;
-                //top = top + 3 * height + 1;
+                oForm.Items.Item("CommentS").Top = top;
+                oForm.Items.Item("CommentE").Top = top;
 
-                oItem = oForm.Items.Item("CommentS");
-                oItem.Top = top;
-                oItem = oForm.Items.Item("CommentE");
-                oItem.Top = top;
+                top += 2 * height + 1;
 
-                //ღილაკები
-                int topTemp1 = oForm.Items.Item("CommentE").Top + height + 1;
-                int topTemp2 = oForm.ClientHeight - 28;
-                //ღილაკები
-                top = topTemp2 > topTemp1 ? topTemp2 : topTemp1;
-
-                oItem = oForm.Items.Item("1");
-                oItem.Top = top;
-
-                oItem = oForm.Items.Item("2");
-                oItem.Top = top;
+                oForm.Items.Item("1").Top = top;
+                oForm.Items.Item("2").Top = top;
 
                 oItem = oForm.Items.Item("operationB");
                 oItem.Left = oForm.ClientWidth - 6 - oItem.Width;
                 oItem.Top = top;
+
                 oItem = oForm.Items.Item("postB");
                 oItem.Left = oForm.ClientWidth - 6 - oItem.Width - 100 - 5;
                 oItem.Top = top;
@@ -3499,7 +3369,7 @@ namespace BDO_Localisation_AddOn
         }
 
         public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
-        {           
+        {
             try
             {
                 oForm.Freeze(true);
@@ -3644,7 +3514,7 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("DPitems").Enabled = (docJrnEntryIsEmpty);
 
                 bool DPitemsEditable = (downPmnt == "Y" && (docJrnEntryIsEmpty) && elctrnic == "N");
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("DPitems").Specific));
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("DPitems").Specific;
                 oMatrix.Columns.Item("goods").Editable = DPitemsEditable;
                 oMatrix.Columns.Item("g_unit").Editable = DPitemsEditable;
                 oMatrix.Columns.Item("g_number").Editable = DPitemsEditable;
@@ -6438,7 +6308,7 @@ namespace BDO_Localisation_AddOn
                     {
                         oMatrix.CommonSetting.SetRowBackColor(i, FormsB1.getLongIntRGB(231, 231, 231));
                     }
-                    oMatrix.CommonSetting.SetRowBackColor(row, FormsB1.getLongIntRGB(255, 255, 153));                  
+                    oMatrix.CommonSetting.SetRowBackColor(row, FormsB1.getLongIntRGB(255, 255, 153));
                 }
             }
             catch (Exception ex)
