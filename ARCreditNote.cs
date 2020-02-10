@@ -644,7 +644,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (taxDoc == "" && cancelled == "N") // && cNTp == "1"
                     {
-                        BDO_TaxInvoiceSent.createDocument(objectType, docEntry, "", true, 0, null, false, null, out newDocEntry, out errorText);
+                        BDO_TaxInvoiceSent.createDocument(objectType, docEntry, "", true, 0, null, false, null, null, out newDocEntry, out errorText);
                         if (string.IsNullOrEmpty(errorText) && newDocEntry != 0)
                         {
                             oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = newDocEntry.ToString();
