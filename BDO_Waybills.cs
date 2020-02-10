@@ -6004,7 +6004,6 @@ namespace BDO_Localisation_AddOn
 
             string query = "SELECT " +
             "'" + ID + "'" + " AS \"ID\", " +
-            "\"MNTB\".\"LineNum\" AS \"LineNum\", " +
             "\"MNTB\".\"DocEntry\" AS \"DocEntry\", " +
             "\"MNTB\".\"ItemCode\" AS \"ItemCode\", " +
             "\"OITM\".\"CodeBars\" AS \"CodeBars\", " +
@@ -6024,15 +6023,14 @@ namespace BDO_Localisation_AddOn
 
             "(SELECT " +
             "\"CSI1\".\"DocEntry\", " +
-            "\"CSI1\".\"LineNum\", " +
             "\"CSI1\".\"ItemCode\", " +
             "\"CSI1\".\"Dscription\", " +
             "\"CSI1\".\"unitMsr\", " +
-            "\"CSI1\".\"Quantity\" * (CASE WHEN \"CSI1\".\"NoInvtryMv\" = 'Y' THEN 0 ELSE 1 END) * \"CSI1\".\"NumPerMsr\" AS \"Quantity\", " +
-            "\"CSI1\".\"GTotal\" , " +
+            "ABS(SUM(\"CSI1\".\"Quantity\" * (CASE WHEN \"CSI1\".\"NoInvtryMv\" = 'Y' THEN 0 ELSE 1 END) * \"CSI1\".\"NumPerMsr\")) AS \"Quantity\", " +
+            "ABS(SUM(\"CSI1\".\"GTotal\")) AS \"GTotal\", " +
             "\"CSI1\".\"VatPrcnt\", " +
             "\"CSI1\".\"VatGroup\", " +
-            "\"CSI1\".\"LineVat\" " +
+            "ABS(SUM(\"CSI1\".\"LineVat\")) AS \"LineVat\"" +
 
             "FROM \"CSI1\" " +
 
@@ -6042,7 +6040,7 @@ namespace BDO_Localisation_AddOn
             "LEFT JOIN \"OITM\" AS \"OITM\" " +
             "ON \"CSI1\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
 
-            "WHERE \"CSI1\".\"DocEntry\" = '" + baseDocEntry + "' AND \"CSI1\".\"TargetType\" < 0  AND \"OCSI\".\"U_BDOSCITp\" = 1 AND ((\"OITM\".\"ItemType\" = 'I' AND \"OITM\".\"InvntItem\" = 'Y') OR \"OITM\".\"ItemType\" = 'F' ) ) AS \"MNTB\" " +
+            "WHERE \"CSI1\".\"DocEntry\" = '" + baseDocEntry + "' AND \"CSI1\".\"TargetType\" < 0  AND \"OCSI\".\"U_BDOSCITp\" = 1 AND ((\"OITM\".\"ItemType\" = 'I' AND \"OITM\".\"InvntItem\" = 'Y') OR \"OITM\".\"ItemType\" = 'F' ) group by \"CSI1\".\"DocEntry\",\"CSI1\".\"Dscription\",\"CSI1\".\"unitMsr\",\"CSI1\".\"VatPrcnt\", \"CSI1\".\"VatGroup\",\"CSI1\".\"ItemCode\") AS \"MNTB\" " +
 
             "LEFT JOIN \"OITM\" AS \"OITM\" " +
             "ON \"MNTB\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
@@ -6055,7 +6053,6 @@ namespace BDO_Localisation_AddOn
 
             "GROUP BY " +
             "\"MNTB\".\"DocEntry\", " +
-            "\"MNTB\".\"LineNum\", " +
             "\"MNTB\".\"ItemCode\", " +
             "\"MNTB\".\"Dscription\", " +
             "\"OITM\".\"CodeBars\", " +
