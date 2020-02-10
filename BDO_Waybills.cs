@@ -5132,7 +5132,7 @@ namespace BDO_Localisation_AddOn
 
                     //ტრანსორტირების დაწყების საათები
                     decimal U_beginTime = Convert.ToDecimal(oRecordSet.Fields.Item("U_beginTime").Value);
-                    int Hour = Convert.ToInt32(Math.Round(U_beginTime / 100));
+                    int Hour = Convert.ToInt32(Math.Floor(U_beginTime / 100));
                     int Min = Convert.ToInt32(U_beginTime - Hour * 100);
                     BEGIN_DATE = new DateTime(BEGIN_DATE.Year, BEGIN_DATE.Month, BEGIN_DATE.Day, Hour, Min, 0);
 
@@ -5431,7 +5431,30 @@ namespace BDO_Localisation_AddOn
             "LEFT JOIN \"OITM\" AS \"OITM\" " +
             "ON \"RIN1\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
 
-            "WHERE \"RIN1\".\"BaseEntry\" = '" + baseDocEntry + "' AND \"RIN1\".\"TargetType\" < 0  AND \"ORIN\".\"U_BDO_CNTp\" <> 1 AND ((\"OITM\".\"ItemType\" = 'I' AND \"OITM\".\"InvntItem\" = 'Y') OR \"OITM\".\"ItemType\" = 'F' ) ) AS \"MNTB\" " +
+            "WHERE \"RIN1\".\"BaseEntry\" = '" + baseDocEntry + "' AND \"RIN1\".\"TargetType\" < 0  AND \"ORIN\".\"U_BDO_CNTp\" <> 1 AND ((\"OITM\".\"ItemType\" = 'I' AND \"OITM\".\"InvntItem\" = 'Y') OR \"OITM\".\"ItemType\" = 'F' ) " +
+            "UNION ALL " +
+
+            "SELECT " +
+                "\"CSI1\".\"BaseEntry\", " +
+                "\"CSI1\".\"BaseLine\", " +
+                "\"CSI1\".\"ItemCode\", " +
+                "\"CSI1\".\"Dscription\", " +
+                "\"CSI1\".\"unitMsr\", " +
+                "\"CSI1\".\"Quantity\" * (CASE WHEN \"CSI1\".\"NoInvtryMv\" = 'Y' THEN 0 ELSE 1 END) * \"CSI1\".\"NumPerMsr\", " +
+                "\"CSI1\".\"GTotal\" , " +
+                "\"CSI1\".\"VatPrcnt\", " +
+                "\"CSI1\".\"VatGroup\", " +
+                "\"CSI1\".\"LineVat\"  " +
+
+                "FROM \"CSI1\" " +
+
+                "INNER JOIN \"OCSI\" " +
+                "ON \"OCSI\".\"DocEntry\" = \"CSI1\".\"DocEntry\" " +
+
+                "LEFT JOIN \"OITM\" AS \"OITM\" " +
+                "ON \"CSI1\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
+
+                "WHERE \"CSI1\".\"BaseEntry\" = '" + baseDocEntry + "' AND \"CSI1\".\"TargetType\" < 0  AND \"OCSI\".\"U_BDOSCITp\" <> 1 AND ((\"OITM\".\"ItemType\" = 'I' AND \"OITM\".\"InvntItem\" = 'Y') OR \"OITM\".\"ItemType\" = 'F' ) ) AS \"MNTB\" " +
 
             "LEFT JOIN \"OITM\" AS \"OITM\" " +
             "ON \"MNTB\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
