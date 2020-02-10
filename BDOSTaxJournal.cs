@@ -154,10 +154,15 @@ namespace BDO_Localisation_AddOn
                                                     amount = amount + Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
                                                     amountTX = amountTX + Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
                                                 }
-                                                else if (oChild.GetProperty("U_baseDocT") == "ARCreditNote" || oChild.GetProperty("U_baseDocT") == "ARCorrectionInvoice")
+                                                else if (oChild.GetProperty("U_baseDocT") == "ARCreditNote")
                                                 {
                                                     amount = amount - Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
                                                     amountTX = amountTX - Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
+                                                }
+                                                else if (oChild.GetProperty("U_baseDocT") == "ARCorrectionInvoice")
+                                                {
+                                                    amount = amount + Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
+                                                    amountTX = amountTX + Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
                                                 }
                                             }
 
@@ -241,10 +246,15 @@ namespace BDO_Localisation_AddOn
                                             amount = amount + Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
                                             amountTX = amountTX + Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
                                         }
-                                        else if (oChild.GetProperty("U_baseDocT") == "ARCreditNote" || oChild.GetProperty("U_baseDocT") == "ARCorrectionInvoice")
+                                        else if (oChild.GetProperty("U_baseDocT") == "ARCreditNote")
                                         {
                                             amount = amount - Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
                                             amountTX = amountTX - Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
+                                        }
+                                        else if (oChild.GetProperty("U_baseDocT") == "ARCorrectionInvoice")
+                                        {
+                                            amount = amount + Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
+                                            amountTX = amountTX + Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
                                         }
                                     }
 

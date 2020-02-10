@@ -3051,12 +3051,18 @@ namespace BDO_Localisation_AddOn
                     string baseDocT = oDBDataSourceMTR.GetValue("U_baseDocT", i);
                     if (!string.IsNullOrEmpty(baseDocT))
                     {
-                        if (oDBDataSourceMTR.GetValue("U_baseDocT", i) == "ARCreditNote" || oDBDataSourceMTR.GetValue("U_baseDocT", i) == "ARCorrectionInvoice")
+                        if (oDBDataSourceMTR.GetValue("U_baseDocT", i) == "ARCreditNote")
                         {
                             totalAmount = totalAmount - Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_amtBsDc", i), CultureInfo.InvariantCulture);
                             totalVAT = totalVAT - Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_tAmtBsDc", i), CultureInfo.InvariantCulture);
                         }
-                        
+
+                        else if (oDBDataSourceMTR.GetValue("U_baseDocT", i) == "ARCorrectionInvoice")
+                        {
+                            totalAmount = totalAmount + Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_amtBsDc", i), CultureInfo.InvariantCulture);
+                            totalVAT = totalVAT + Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_tAmtBsDc", i), CultureInfo.InvariantCulture);
+                        }
+
                         else
                         {
                             totalAmount = totalAmount + Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_amtBsDc", i), CultureInfo.InvariantCulture);
@@ -3885,8 +3891,8 @@ namespace BDO_Localisation_AddOn
                                         oChild.SetProperty("U_tAmtBsDc", lineVat); //დღგ-ის თანხა
                                         oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
 
-                                        amount = amount - Convert.ToDecimal(gTotal);
-                                        amountTX = amountTX - Convert.ToDecimal(lineVat);
+                                        amount = amount + Convert.ToDecimal(gTotal);
+                                        amountTX = amountTX + Convert.ToDecimal(lineVat);
                                     }
                                     else
                                     {
