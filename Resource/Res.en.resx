@@ -3466,4 +3466,10 @@
   <data name="CreateDocumentForThePreviousMonths" xml:space="preserve">
     <value>Create document for the previous months</value>
   </data>
+  <data name="AutoAgrNo" xml:space="preserve">
+    <value>AgrNo Auto-Reference</value>
+  </data>
+  <data name="AutoProject" xml:space="preserve">
+    <value>Project Auto-Reference</value>
+  </data>
 </root>

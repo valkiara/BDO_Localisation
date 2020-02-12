@@ -3436,4 +3436,10 @@
   <data name="CreateDocumentForThePreviousMonths" xml:space="preserve">
     <value>შექმენით დოკუმენტი წინა თვეებისთვის</value>
   </data>
+  <data name="AutoProject" xml:space="preserve">
+    <value>პროექტის ავტომატური მითითება</value>
+  </data>
+  <data name="AutoAgrNo" xml:space="preserve">
+    <value>საერთო შეთანხმების ავტომატური მითითება</value>
+  </data>
 </root>

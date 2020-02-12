@@ -9,41 +9,124 @@ using System.Data;
 using System.Xml;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
+using SAPbobsCOM;
+using SAPbouiCOM;
 
 namespace BDO_Localisation_AddOn
 {
     static partial class ExchangeRateDiffs
     {
+        private static void CreateFormItems(Form oForm)
+        {
 
-        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+            #region Auto Project Checkbox
+
+            var oItem = oForm.Items.Item("26");
+
+            var height = oItem.Height;
+            var top = oItem.Top - height - 3;
+            var width = oItem.Width;
+            var left = oItem.Left;
+
+            var formItems = new Dictionary<string, object>();
+            var itemName = "AutoPrjCH"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "UserDataSources");
+            formItems.Add("TableName", "");
+            formItems.Add("Alias", itemName);
+            formItems.Add("Bound", true);
+            formItems.Add("Type", BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 1);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("AutoProject"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("ValueEx", "Y");
+
+            FormsB1.createFormItem(oForm, formItems, out var errorText);
+            if (errorText != null)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(errorText, BoMessageTime.bmt_Short);
+                return;
+            }
+
+            #endregion
+
+            #region Auto Blanket Agreement Checkbox
+
+            oItem = oForm.Items.Item("27");
+            left = oItem.Left;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "AutoAgrCH"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "UserDataSources");
+            formItems.Add("TableName", "");
+            formItems.Add("Alias", itemName);
+            formItems.Add("Bound", true);
+            formItems.Add("Type", BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 1);
+            formItems.Add("Left", left);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("AutoAgrNo"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("ValueEx", "Y");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(errorText, BoMessageTime.bmt_Short);
+            }
+
+            #endregion
+        }
+
+        public static void UiApp_ItemEvent(string formUid, ref ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
 
-            if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
-            {
-                SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+            if (pVal.EventType == BoEventTypes.et_FORM_UNLOAD) return;
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
+            var oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
+            if (pVal.EventType == BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
+            {
+                CreateFormItems(oForm);
+            }
+
+            else if (pVal.EventType == BoEventTypes.et_ITEM_PRESSED)
+            {
+                if (pVal.ItemUID == "1")
                 {
-                    if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
+                    if (pVal.BeforeAction)
                     {
-                        SAPbouiCOM.EditText oRemark = oForm.Items.Item("5").Specific;
+                        EditText oRemark = oForm.Items.Item("5").Specific;
                         oRemark.Value = DateTime.Now.ToString();
                     }
-                    if (pVal.ItemUID == "1" && pVal.BeforeAction == false)
+
+                    else
                     {
-                        SAPbouiCOM.EditText oRemark = oForm.Items.Item("5").Specific;
-                        GetDataForUpdate(oRemark.Value);
-                        oRemark.Value = "";
+                        GetDataForUpdate(oForm);
                     }
                 }
+            }
 
-                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_CLOSE && pVal.BeforeAction == true)
+            else if (pVal.EventType == BoEventTypes.et_FORM_CLOSE)
+            {
+                if (pVal.BeforeAction)
                 {
-                    SAPbouiCOM.EditText oRemark = oForm.Items.Item("5").Specific;
-                    GetDataForUpdate(oRemark.Value);
+                    GetDataForUpdate(oForm);
                 }
-
             }
         }
 
@@ -68,51 +151,49 @@ namespace BDO_Localisation_AddOn
         //    }
         //}
 
-        private static void GetDataForUpdate(string memo)
+        private static void GetDataForUpdate(Form oForm)
         {
-            if(memo == "") return;
+            EditText oRemark = oForm.Items.Item("5").Specific;
+            var memo = oRemark.Value;
 
-            string docType = "";
-            int docNum = 0;
-            string docTable = "";
-            string project = "";
-            int transId;
-            int agrNo;
-            string useBlaAgrRt = "N";
-            double blaAgrRt = 0;
-            double dayrt = 0;
-            string docCur = "";
-            string docChildTable = "";
-            double docRate = 0;
+            if (memo == "") return;
 
-            SAPbobsCOM.Recordset oRecordSetJDT1 = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            SAPbobsCOM.Recordset oRecordSetDoc = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            double dayRate = 0;
+            var docCur = "";
 
-            StringBuilder queryJDT1 = new StringBuilder();
-            queryJDT1.Append("select OJDT.\"BaseTrans\", OJDT.\"RevSource\", JDT1.\"Ref3Line\", JDT1.\"TransId\", JDT1.\"Debit\", JDT1.\"Credit\" \n");
+            var oRecordSetJDT1 = (Recordset) Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+            var oRecordSetDoc = (Recordset) Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+
+            var queryJDT1 = new StringBuilder();
+            queryJDT1.Append(
+                "select OJDT.\"BaseTrans\", OJDT.\"RevSource\", JDT1.\"Ref3Line\", JDT1.\"TransId\", JDT1.\"Debit\", JDT1.\"Credit\" \n");
             queryJDT1.Append("from JDT1 join OJDT on JDT1.\"TransId\" = OJDT.\"TransId\"\n");
             queryJDT1.Append("where \"LineMemo\" = '" + memo + "'");
 
-            oRecordSetJDT1.DoQuery(queryJDT1.ToString());
+            oRecordSetJDT1.DoQuery(queryJDT1
+                .ToString()); // წამოიღებს გადაფასების ვიზარდიდან Journal Entry-ში შექმნილ დოკუმენტებს
 
             while (!oRecordSetJDT1.EoF)
             {
-
                 string ref3 = oRecordSetJDT1.Fields.Item("Ref3Line").Value;
                 int baseTrans = oRecordSetJDT1.Fields.Item("BaseTrans").Value;
                 string revSource = oRecordSetJDT1.Fields.Item("RevSource").Value;
-                if (ref3 != "")
+
+                if (ref3 != "") // ამით იფილტრება რომელი ანგარიშია JDT1-ში, ეს თუ ცარიელია ეგ ანგარიში არ გვაწყობს
                 {
                     double debit = 0;
                     double credit = 0;
 
-                    StringBuilder queryDoc = new StringBuilder();
+                    var queryDoc = new StringBuilder();
 
-                    docType = ref3.Substring(ref3.IndexOf('/') + 1, 2);
-                    docNum = Convert.ToInt32(ref3.Substring(ref3.LastIndexOf('/') + 1));
-                    transId = oRecordSetJDT1.Fields.Item("TransId").Value;
+                    var docType = ref3.Substring(ref3.IndexOf('/') + 1, 2);
+                    var docNum = Convert.ToInt32(ref3.Substring(ref3.LastIndexOf('/') + 1));
+                    int transId = oRecordSetJDT1.Fields.Item("TransId").Value;
 
-                    switch (docType)
+                    string docTable;
+                    string docChildTable;
+
+                    switch (docType) // რომელი დოკუმენტის მიხედვით იქმნება
                     {
                         case "PU":
                             docTable = "OPCH";
@@ -147,7 +228,8 @@ namespace BDO_Localisation_AddOn
                         case "PS":
                             docTable = "OVPM";
 
-                            queryDoc.Append("select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                            queryDoc.Append(
+                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
                             queryDoc.Append("from " + docTable + " \n");
                             queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
                             queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\",\"U_UseBlaAgRt\"");
@@ -155,53 +237,64 @@ namespace BDO_Localisation_AddOn
                         case "RC":
                             docTable = "ORCT";
 
-                            queryDoc.Append("select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                            queryDoc.Append(
+                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
                             queryDoc.Append("from " + docTable + " \n");
                             queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
                             queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\", \"U_UseBlaAgRt\"");
                             goto shortCut;
                         default:
-                            Program.uiApp.StatusBar.SetSystemMessage("Document with type - " + docType + " not supported", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            Program.uiApp.StatusBar.SetSystemMessage(
+                                "Document with type - " + docType + " not supported", BoMessageTime.bmt_Short,
+                                BoStatusBarMessageType.smt_Error);
                             continue;
                     }
 
-                    queryDoc.Append("select " + docTable + ".\"Project\", " + docTable + ".\"DocRate\", " + docTable + ".\"AgrNo\", " + docTable + ".\"U_UseBlaAgRt\", sum(" + docChildTable + ".\"OpenSumFC\") as \"Amount\" \n");
-                    queryDoc.Append("from " + docTable + " inner join " + docChildTable + " on " + docTable + ".\"DocEntry\"= " + docChildTable + ".\"DocEntry\" \n");
+                    queryDoc.Append("select " + docTable + ".\"Project\", " + docTable + ".\"DocRate\", " + docTable +
+                                    ".\"AgrNo\", " + docTable + ".\"U_UseBlaAgRt\", sum(" + docChildTable +
+                                    ".\"OpenSumFC\") as \"Amount\" \n");
+                    queryDoc.Append("from " + docTable + " inner join " + docChildTable + " on " + docTable +
+                                    ".\"DocEntry\"= " + docChildTable + ".\"DocEntry\" \n");
                     queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
-                    queryDoc.Append("group by " + docTable + ".\"Project\", " + docTable + ".\"AgrNo\", " + docTable + ".\"DocRate\", " + docTable + ".\"U_UseBlaAgRt\"");
+                    queryDoc.Append("group by " + docTable + ".\"Project\", " + docTable + ".\"AgrNo\", " + docTable +
+                                    ".\"DocRate\", " + docTable + ".\"U_UseBlaAgRt\"");
 
-                shortCut:
-                    oRecordSetDoc.DoQuery(queryDoc.ToString());
+                    shortCut:
+                    oRecordSetDoc.DoQuery(queryDoc
+                        .ToString()); // წამოიღებს იმ დოკუმენტს რის საფუძველზეც იქმნება Journal Entry
                     if (!oRecordSetDoc.EoF)
                     {
-                        project = oRecordSetDoc.Fields.Item("Project").Value;
-                        agrNo = oRecordSetDoc.Fields.Item("agrNo").Value;
+                        string project = oRecordSetDoc.Fields.Item("Project").Value;
+                        int agrNo = oRecordSetDoc.Fields.Item("AgrNo").Value;
+
                         if (docTable != "OJDT") //kursis reinjebis gamoyeneba jer ar aris damatebuli jurnal entrishi
                         {
-                            useBlaAgrRt = oRecordSetDoc.Fields.Item("U_UseBlaAgRt").Value;
+                            string useBlaAgrRt = oRecordSetDoc.Fields.Item("U_UseBlaAgRt").Value;
 
                             if (agrNo != 0)
                             {
                                 if (useBlaAgrRt == "Y")
                                 {
-                                    blaAgrRt = Convert.ToDouble(BlanketAgreement.GetBlAgremeentCurrencyRate(agrNo, out docCur, DateTime.Today));
+                                    var blaAgrRt = Convert.ToDouble(
+                                        BlanketAgreement.GetBlAgremeentCurrencyRate(agrNo, out docCur, DateTime.Today));
 
-                                    SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                                    SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(docCur, DateTime.Today);
+                                    SBObob oSboBob = Program.oCompany.GetBusinessObject(BoObjectTypes.BoBridge);
+                                    var rateRecordset = oSboBob.GetCurrencyRate(docCur, DateTime.Today);
 
-                                    if (!RateRecordset.EoF)
+                                    if (!rateRecordset.EoF)
                                     {
-                                        dayrt = RateRecordset.Fields.Item("CurrencyRate").Value;
+                                        dayRate = rateRecordset.Fields.Item("CurrencyRate").Value;
                                     }
 
-                                    docRate = oRecordSetDoc.Fields.Item("DocRate").Value;
+                                    double docRate = oRecordSetDoc.Fields.Item("DocRate").Value;
 
-                                    double amount = oRecordSetDoc.Fields.Item("Amount").Value;// * 1.18; //დღგ-ს გათვალისწინება
+                                    double amount =
+                                        oRecordSetDoc.Fields.Item("Amount").Value; // * 1.18; //დღგ-ს გათვალისწინება
 
                                     debit = oRecordSetJDT1.Fields.Item("Debit").Value;
                                     credit = oRecordSetJDT1.Fields.Item("Credit").Value;
 
-                                    if (blaAgrRt != dayrt)
+                                    if (blaAgrRt != dayRate)
                                     {
                                         if (credit != 0)
                                         {
@@ -216,27 +309,76 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
                         }
-                        UpdateJournalEntryTable(transId, memo, ref3, baseTrans, revSource, project, agrNo, credit, debit, docCur);
+
+                        var updateProject = oForm.DataSources.UserDataSources.Item("AutoPrjCH").ValueEx;
+                        var updateAgrNo = oForm.DataSources.UserDataSources.Item("AutoAgrCH").ValueEx;
+
+                        UpdateJournalEntryTable(transId, memo, ref3, baseTrans, revSource, project, agrNo, credit,
+                            debit, docCur, updateProject, updateAgrNo);
                     }
                 }
+
                 oRecordSetJDT1.MoveNext();
             }
 
             Marshal.ReleaseComObject(oRecordSetDoc);
             Marshal.ReleaseComObject(oRecordSetJDT1);
+
+            oRemark.Value = "";
         }
 
-        private static void UpdateJournalEntryTable(int transId, string memo, string ref3, int baseTrans, string revSource, string project, int agrNo, double credit, double debit, string docCur)
+        private static void UpdateJournalEntryTable(int transId, string memo, string ref3, int baseTrans,
+            string revSource, string project, int agrNo, double credit, double debit, string docCur,
+            string updateProject, string updateAgrNo)
         {
-            //ვიღებთ საპის მიერ შექმნილ გატარებას, ვუცვლით თანხებს, გადაგვყავს ექსემელში და ამის მიხედვით ვქმნით ახალს
-            double oldDebit = 0;
-            double oldCredit = 0;
-            SAPbobsCOM.JournalEntries oJournalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
+            #region Update Project and Blanket Agreement in old Journal Entry
+
+            Recordset oRecordSetAgrNoAndProjectForOld = Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+            try
+            {
+                var updateQuery = new StringBuilder();
+
+                if (updateAgrNo == "Y")
+                {
+                    updateQuery.Append("UPDATE \"OJDT\" \n");
+                    updateQuery.Append("SET \"AgrNo\" = '" + agrNo + "', \"U_BDOSAgrNo\" = '" + agrNo + "' \n");
+                    updateQuery.Append("WHERE \"TransId\" = '" + transId + "';");
+                    oRecordSetAgrNoAndProjectForOld.DoQuery(updateQuery.ToString());
+
+                    updateQuery.Clear();
+                }
+
+                if (updateProject == "Y")
+                {
+                    updateQuery.Append("UPDATE \"JDT1\" \n");
+                    updateQuery.Append("SET \"Project\" = '" + project + "' \n");
+                    updateQuery.Append("WHERE \"TransId\" = '" + transId + "';");
+                    oRecordSetAgrNoAndProjectForOld.DoQuery(updateQuery.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, BoMessageTime.bmt_Short);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSetAgrNoAndProjectForOld);
+            }
+
+            #endregion
+
+            if (credit == 0 && debit == 0) return; // თუ თანხები ნოლია, მაკორექტირებელს აღარ ვქმნით
+
+            #region Prepare old Journal Entry for new corrected journal entry
+
+            //ვიღებთ საპის მიერ შექმნილ გატარებას, ვუცვლით თანხებს, გადაგვყავს ექსემელში და ამის მიხედვით ვქმნით მაკორექტირებელს
+
+            JournalEntries oJournalEntry = Program.oCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
             oJournalEntry.GetByKey(transId);
 
-            SAPbobsCOM.Recordset oRecordSetTransType = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            Recordset oRecordSetTransType = Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
-            StringBuilder queryTransType = new StringBuilder();
+            var queryTransType = new StringBuilder();
             queryTransType.Append("select \"TransType\" \n");
             queryTransType.Append("from OJDT \n");
             queryTransType.Append("where \"TransId\" = '" + transId + "'");
@@ -246,21 +388,19 @@ namespace BDO_Localisation_AddOn
             {
                 oJournalEntry.Reference2 = oRecordSetTransType.Fields.Item("TransType").Value;
             }
+
+            Marshal.ReleaseComObject(oRecordSetTransType);
+
             oJournalEntry.Reference = oJournalEntry.Original.ToString();
 
-            for (int line = 0; line < oJournalEntry.Lines.Count; line++)
+            for (var line = 0; line < oJournalEntry.Lines.Count; line++)
             {
                 oJournalEntry.Lines.SetCurrentLine(line);
 
-                if (!string.IsNullOrEmpty(project))
-                {
-                    oJournalEntry.Lines.ProjectCode = project;
-                }
                 if (agrNo != 0)
                 {
-
-                    //oJounalEntry.UserFields.Fields.Item("blanket agreementis columni").Value = agrNo;
-
+                    double oldDebit;
+                    double oldCredit;
                     if (oJournalEntry.Lines.AdditionalReference == ref3) //for bp
                     {
                         if (credit != 0)
@@ -274,7 +414,7 @@ namespace BDO_Localisation_AddOn
                             oJournalEntry.Lines.Debit = debit - oldDebit;
                         }
                     }
-                    else if (oJournalEntry.Lines.AdditionalReference != ref3)  //for second account
+                    else if (oJournalEntry.Lines.AdditionalReference != ref3) //for second account
                     {
                         oJournalEntry.Lines.FCCurrency = docCur;
                         if (credit != 0)
@@ -292,49 +432,44 @@ namespace BDO_Localisation_AddOn
             }
 
             Program.oCompany.XMLAsString = true;
-            Program.oCompany.XmlExportType = SAPbobsCOM.BoXmlExportTypes.xet_ExportImportMode;
+            Program.oCompany.XmlExportType = BoXmlExportTypes.xet_ExportImportMode;
 
-            string xml = oJournalEntry.GetAsXML();
-            int updateCode;
-            //int updateCode = oJounalEntry.Cancel();
-            //if (updateCode != 0)
-            //{
-            //    Program.oCompany.GetLastError(out updateCode, out error);
-            //    Program.uiApp.StatusBar.SetSystemMessage(error, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-            //}
-            if (credit == 0 && debit == 0)
-            {
-                goto shortcut;
-            }
+            var xml = oJournalEntry.GetAsXML();
+            Marshal.ReleaseComObject(oJournalEntry);
+
             //ვშლით ისეთ ველებს რომლებიც არ შეიძლება რომ იყოს
-            xml = Regex.Replace(xml, @"<\?.*?\?>|<DebitSys>.*?</DebitSys>|<CreditSys>.*?</CreditSys>|<JdtNum>.*?</JdtNum>|<SystemBaseAmount>.*?</SystemBaseAmount>|<VatAmount>.*?</VatAmount>|<SystemVatAmount>.*?</SystemVatAmount>|<GrossValue>.*?</GrossValue>", "");
+            xml = Regex.Replace(xml,
+                @"<\?.*?\?>|<DebitSys>.*?</DebitSys>|<CreditSys>.*?</CreditSys>|<JdtNum>.*?</JdtNum>|<SystemBaseAmount>.*?</SystemBaseAmount>|<VatAmount>.*?</VatAmount>|<SystemVatAmount>.*?</SystemVatAmount>|<GrossValue>.*?</GrossValue>",
+                "");
 
-            SAPbobsCOM.JournalEntries oJounalEntryNew = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
+            JournalEntries oJournalEntryNew = Program.oCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
 
-            oJounalEntryNew.Browser.ReadXml(xml, 0);
+            oJournalEntryNew.Browser.ReadXml(xml, 0);
 
-            updateCode = oJounalEntryNew.Add();
+            var updateCode = oJournalEntryNew.Add();
+            Marshal.ReleaseComObject(oJournalEntryNew);
+
+            #endregion
 
             if (updateCode != 0)
             {
                 Program.oCompany.GetLastError(out updateCode, out var error);
-                Program.uiApp.StatusBar.SetSystemMessage(error, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage(error, BoMessageTime.bmt_Short);
             }
             else
             {
-                SAPbobsCOM.Recordset oRecordSetNewTransId = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                #region Get new Journal Entry TransId
 
-                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                StringBuilder updateString = new StringBuilder();
+                var oRecordSetNewTransId = (Recordset) Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+                var queryNewTransId = new StringBuilder();
 
-                StringBuilder queryNewTransId = new StringBuilder();
                 queryNewTransId.Append("select \"TransId\" \n");
                 queryNewTransId.Append("from JDT1 \n");
                 queryNewTransId.Append("where \"LineMemo\" = '" + memo + "'");
 
                 oRecordSetNewTransId.DoQuery(queryNewTransId.ToString());
 
-                int transIdNew = 0;
+                var transIdNew = 0;
 
                 while (!oRecordSetNewTransId.EoF)
                 {
@@ -349,62 +484,79 @@ namespace BDO_Localisation_AddOn
                         break;
                     }
                 }
+
                 Marshal.ReleaseComObject(oRecordSetNewTransId);
+
+                #endregion
+
+                #region Update new Journal Entry fields
+
+                var oUpdateRecordSet = (Recordset) Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+                var updateString = new StringBuilder();
 
                 try
                 {
                     updateString.Append("UPDATE \"OJDT\" \n");
-                    updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "' \n");
+                    updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "'");
+
+                    if (updateAgrNo == "Y")
+                    {
+                        updateString.Append(", \"AgrNo\" = '" + agrNo + "', \"U_BDOSAgrNo\" = '" + agrNo + "' \n");
+                    }
+                    else
+                    {
+                        updateString.Append(" \n");
+                    }
+
                     updateString.Append("WHERE \"TransId\" = '" + transIdNew + "'; \n \n");
-                    oRecordSet.DoQuery(updateString.ToString());
+                    oUpdateRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"JDT1\" \n");
                     updateString.Append("SET \"RevSource\" = '" + revSource + "' \n");
                     updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
-                    oRecordSet.DoQuery(updateString.ToString());
+                    oUpdateRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"AJDT\" \n");
-                    updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "' \n");
+                    updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource +
+                                        "' \n");
                     updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
-                    oRecordSet.DoQuery(updateString.ToString());
+                    oUpdateRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"AJD1\" \n");
                     updateString.Append("SET \"RevSource\" = '" + revSource + "' \n");
                     updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
-                    oRecordSet.DoQuery(updateString.ToString());
+                    oUpdateRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"OBTF\" \n");
-                    updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource + "' \n");
+                    updateString.Append("SET \"BaseTrans\" = '" + baseTrans + "', \"RevSource\" = '" + revSource +
+                                        "' \n");
                     updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
-                    oRecordSet.DoQuery(updateString.ToString());
+                    oUpdateRecordSet.DoQuery(updateString.ToString());
 
                     updateString.Clear();
                     updateString.Append("UPDATE \"BTF1\" \n");
                     updateString.Append("SET \"RevSource\" = '" + revSource + "' \n");
                     updateString.Append("WHERE \"TransId\" = '" + transIdNew + "';  \n \n");
-                    oRecordSet.DoQuery(updateString.ToString());
+                    oUpdateRecordSet.DoQuery(updateString.ToString());
                 }
                 catch (Exception ex)
                 {
-                    Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                    Program.uiApp.StatusBar.SetSystemMessage(ex.Message, BoMessageTime.bmt_Short,
+                        BoStatusBarMessageType.smt_Error);
                 }
 
                 finally
                 {
-                    Marshal.ReleaseComObject(oRecordSet);
+                    Marshal.ReleaseComObject(oUpdateRecordSet);
                 }
 
+                #endregion
             }
-
-            Marshal.ReleaseComObject(oJounalEntryNew);
-        shortcut:
-            Marshal.ReleaseComObject(oJournalEntry);
         }
     }
-
 }
 

@@ -3439,4 +3439,10 @@
   <data name="Retirement" xml:space="preserve">
     <value>Retirement</value>
   </data>
+  <data name="AutoAgrNo" xml:space="preserve">
+    <value>AgrNo Auto-Reference</value>
+  </data>
+  <data name="AutoProject" xml:space="preserve">
+    <value>Project Auto-Reference</value>
+  </data>
 </root>
