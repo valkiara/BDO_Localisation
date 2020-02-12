@@ -3454,4 +3454,10 @@
   <data name="DoYouWantToContinue" xml:space="preserve">
     <value>Do you want to continue</value>
   </data>
+  <data name="EndingValueOfOdometerInHours" xml:space="preserve">
+    <value>Ending value of odometer in hours</value>
+  </data>
+  <data name="StartingValueOfOdometerInHours" xml:space="preserve">
+    <value>Starting value of odometerIn hours</value>
+  </data>
 </root>

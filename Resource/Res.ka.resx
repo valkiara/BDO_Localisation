@@ -3430,4 +3430,10 @@
   <data name="DoYouWantToContinue" xml:space="preserve">
     <value>გსურთ გააგრძელოთ</value>
   </data>
+  <data name="EndingValueOfOdometerInHours" xml:space="preserve">
+    <value>ოდომეტრის საბოლოო მაჩვენებელი საათებში</value>
+  </data>
+  <data name="StartingValueOfOdometerInHours" xml:space="preserve">
+    <value>ოდომეტრის საწყისი მაჩვენებელი საათებში</value>
+  </data>
 </root>
