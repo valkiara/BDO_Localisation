@@ -3442,4 +3442,10 @@
   <data name="StartingValueOfOdometerInHours" xml:space="preserve">
     <value>ოდომეტრის საწყისი მაჩვენებელი საათებში</value>
   </data>
+  <data name="AutoProject" xml:space="preserve">
+    <value>პროექტის ავტომატური მითითება</value>
+  </data>
+  <data name="AutoAgrNo" xml:space="preserve">
+    <value>საერთო შეთანხმების ავტომატური მითითება</value>
+  </data>
 </root>

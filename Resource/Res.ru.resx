@@ -3445,4 +3445,10 @@
   <data name="StartingValueOfOdometerInHours" xml:space="preserve">
     <value>Starting Value of Odometer in Hours</value>
   </data>
+  <data name="AutoAgrNo" xml:space="preserve">
+    <value>AgrNo Auto-Reference</value>
+  </data>
+  <data name="AutoProject" xml:space="preserve">
+    <value>Project Auto-Reference</value>
+  </data>
 </root>

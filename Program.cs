@@ -1862,7 +1862,7 @@ namespace BDO_Localisation_AddOn
                 //----------------------------->Exchange Rate Differences<-----------------------------
                 else if (pVal.FormTypeEx == "369")
                 {
-                    ExchangeRateDiffs.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    ExchangeRateDiffs.UiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //else if (pVal.FormTypeEx == "370")
