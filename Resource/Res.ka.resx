@@ -630,7 +630,7 @@
   <data name="InventoryTransfer" xml:space="preserve">
     <value>მარაგის გადაადგილება</value>
   </data>
-  <data name="TaxInvoiceIsAlreadyCreatedBasedOnARCreditNote" xml:space="preserve">
+  <data name="TaxInvoiceIsAlreadyCreatedBasedOnARCorrection" xml:space="preserve">
     <value>კორექტირების დოკუმენტზე უკვე გამოწერილია ა/ფ</value>
   </data>
   <data name="InvoiceNumber" xml:space="preserve">
@@ -762,7 +762,7 @@
   <data name="OnTheBaseARInvoice" xml:space="preserve">
     <value>საფუძველ რეალიზაციაზე</value>
   </data>
-  <data name="OnThePreviousARCreditNote" xml:space="preserve">
+  <data name="OnThePreviousARCorrection" xml:space="preserve">
     <value>წინა რეალიზაციის კორექტირებაზე</value>
   </data>
   <data name="Operation" xml:space="preserve">
@@ -3429,6 +3429,12 @@
   </data>
   <data name="DoYouWantToContinue" xml:space="preserve">
     <value>გსურთ გააგრძელოთ</value>
+  </data>
+  <data name="CloseDepreciationAccruingWizard" xml:space="preserve">
+    <value>დაიხუროს ცვეთის დარიცხვის დამხმარე - რაოდენობრივი აღრიცხვა</value>
+  </data>
+  <data name="CreateDocumentForThePreviousMonths" xml:space="preserve">
+    <value>შექმენით დოკუმენტი წინა თვეებისთვის</value>
   </data>
   <data name="EndingValueOfOdometerInHours" xml:space="preserve">
     <value>ოდომეტრის საბოლოო მაჩვენებელი საათებში</value>

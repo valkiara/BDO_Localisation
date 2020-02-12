@@ -451,7 +451,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (taxDoc == "" && cancelled == "N")
                     {
-                        BDO_TaxInvoiceSent.createDocument(objectType, docEntry, "", true, 0, null, false, null, out newDocEntry, out errorText);
+                        BDO_TaxInvoiceSent.createDocument(objectType, docEntry, "", true, 0, null, false, null, null, out newDocEntry, out errorText);
                         if (string.IsNullOrEmpty(errorText) && newDocEntry != 0)
                         {
                             oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = newDocEntry.ToString();
@@ -818,6 +818,66 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oRecordSet = null;
                 GC.Collect();
+            }
+        }
+
+        public static List<int> getAllConnectedARCorrectionDoc(List<int> docEntry, string baseType, DateTime docDate, DateTime docDateCorr, int docTime, out string errorText)
+        {
+            errorText = null;
+            List<int> connectedDocList = new List<int>();
+
+            DateTime firstDayOfMonth = new DateTime(docDate.Year, docDate.Month, 1);
+            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            SAPbobsCOM.Recordset oRecordSet = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            string query = @"SELECT
+	             DISTINCT ""CSI1"".""DocEntry"",
+	             ""CSI1"".""DocDate"",
+	             ""CSI1"".""BaseType"",
+	             ""CSI1"".""BaseEntry"",
+	             ""OCSI"".""U_BDOSCITp"",
+                 ""OCSI"".""DocTime"",
+	             ""OCSI"".""ObjType"" 
+            FROM ""CSI1"" 
+            INNER JOIN ""OCSI"" AS ""OCSI"" ON ""CSI1"".""DocEntry"" = ""OCSI"".""DocEntry"" 
+            WHERE ""CSI1"".""BaseEntry"" IN (" + string.Join(",", docEntry) + @")            
+            AND ""OCSI"".""CANCELED"" = 'N' 
+            AND ""CSI1"".""BaseType"" = '" + baseType + @"'";
+
+            if (docDate != new DateTime())
+            {
+                query = query + @" AND ""CSI1"".""DocDate"" >= '" + firstDayOfMonth.ToString("yyyyMMdd") + @"'  
+                                   AND ""CSI1"".""DocDate"" <= '" + lastDayOfMonth.ToString("yyyyMMdd") + @"'";
+            }
+            if (docDateCorr != new DateTime())
+            {
+                query = query + @" AND ""CSI1"".""DocDate"" <= '" + docDateCorr.ToString("yyyyMMdd") + @"'";
+                query = query + @" AND ""OCSI"".""DocTime"" <= '" + docTime + @"'";
+            }
+
+            query = query + @" ORDER BY ""CSI1"".""DocDate"", ""OCSI"".""DocTime"", ""CSI1"".""DocEntry"" ASC";
+
+            try
+            {
+                oRecordSet.DoQuery(query);
+                if (oRecordSet.RecordCount > 0)
+                {
+                    while (!oRecordSet.EoF)
+                    {
+                        connectedDocList.Add(Convert.ToInt32(oRecordSet.Fields.Item("DocEntry").Value));
+                        oRecordSet.MoveNext();
+                    }
+                }
+                return connectedDocList;
+            }
+            catch (Exception ex)
+            {
+                errorText = ex.Message;
+                return connectedDocList;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
             }
         }
     }

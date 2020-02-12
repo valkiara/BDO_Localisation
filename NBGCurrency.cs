@@ -33,9 +33,8 @@ namespace BDO_Localisation_AddOn
         /// <param name="currency"></param>
         /// <param name="errorText"></param>
         /// <returns>აბრუნებს ვალუტის კურსს</returns>
-        public string GetCurrency(Currency currency, out string errorText)
+        public string GetCurrency(Currency currency)
         {
-            errorText = null;
             string getCurrencyResult = null;
 
             try
@@ -44,7 +43,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return getCurrencyResult;
@@ -54,9 +53,8 @@ namespace BDO_Localisation_AddOn
         /// <param name="currency"></param>
         /// <param name="errorText"></param>
         /// <returns>აბრუნებს ვალუტის აღწერას</returns>
-        public string GetCurrencyDescription(Currency currency, out string errorText)
+        public string GetCurrencyDescription(Currency currency)
         {
-            errorText = null;
             string getCurrencyDescriptionResult = null;
 
             try
@@ -65,7 +63,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return getCurrencyDescriptionResult;
@@ -75,9 +73,8 @@ namespace BDO_Localisation_AddOn
         /// <param name="currency"></param>
         /// <param name="errorText"></param>
         /// <returns>აბრუნებს ვალუტის ცვლილების მნიშვნელობას</returns>
-        public string GetCurrencyChange(Currency currency, out string errorText)
+        public string GetCurrencyChange(Currency currency)
         {
-            errorText = null;
             string getCurrencyChangeResult = null;
 
             try
@@ -86,7 +83,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return getCurrencyChangeResult;
@@ -97,9 +94,8 @@ namespace BDO_Localisation_AddOn
         /// <param name="currency"></param>
         /// <param name="errorText"></param>
         /// <returns>1 - თუ გაიზარდა; -1 - თუ დაიკლო, 0 - თუ იგივე დარჩა</returns>
-        public int GetCurrencyRate(Currency currency, out string errorText)
+        public int GetCurrencyRate(Currency currency)
         {
-            errorText = null;
             int getCurrencyRateResult = 0;
 
             try
@@ -108,7 +104,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return getCurrencyRateResult;
@@ -118,9 +114,8 @@ namespace BDO_Localisation_AddOn
         /// <summary>კურსების შესაბამის თარიღის მიღება</summary>
         /// <param name="errorText"></param>
         /// <returns>აბრუნებს კურსების შესაბამის თარიღს</returns>
-        public string GetDate(out string errorText)
+        public string GetDate()
         {
-            errorText = null;
             string getDateResult = null;
 
             try
@@ -129,7 +124,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return getDateResult;
@@ -138,26 +133,20 @@ namespace BDO_Localisation_AddOn
         /// <summary>კურსების ჩამოტვირთვა ყველა ვალუტისთვის</summary>
         /// <param name="errorText"></param>
         /// <returns>აბრუნებს კურსებს ყველა ვალუტისთვის</returns>
-        public Dictionary<string, List<object>> GetCurrencyRateList(string dateStr, out string errorText)
+        public Dictionary<string, List<object>> GetCurrencyRateList(string dateStr)
         {
-            errorText = null;
             XmlDocument xDoc = null;
             Dictionary<string, List<object>> currencyMap = null;
 
             try
             {
                 xDoc = new XmlDocument();
-                xDoc.Load("http://www.nbg.ge/rss.php?date=" + dateStr);
+                xDoc.Load("http://www.nbg.gov.ge/rss.php?date=" + dateStr);
             }
 
             catch (Exception ex)
             {
-                errorText = BDOSResources.getTranslate("ErrorWhileImportRateServiceCall") + " ERROR : " + ex.Message;
-            }
-
-            finally
-            {
-                GC.Collect();
+                throw new Exception(BDOSResources.getTranslate("ErrorWhileImportRateServiceCall") + " ERROR : " + ex.Message);
             }
 
             string valueXML = null;
@@ -167,7 +156,7 @@ namespace BDO_Localisation_AddOn
             valueXML = currencyListNode.InnerText;
             string valueStr = null;
 
-            if (valueXML.Contains("gif" + '"'.ToString() + "/>") == true)
+            if (valueXML.Contains("gif" + '"'.ToString() + "/>"))
             {
                 valueStr = valueXML;
             }
@@ -191,12 +180,11 @@ namespace BDO_Localisation_AddOn
                 double currencyRate = Convert.ToDouble(childNodes[2].InnerText, CultureInfo.InvariantCulture);
                 currencyRate = currencyRate / Convert.ToDouble(divider, CultureInfo.InvariantCulture);
                 string currencyGif = childNodes[3].ChildNodes[0].Attributes[0].Value;
-                double currencyChange = Convert.ToDouble(childNodes[4].InnerText, CultureInfo.InvariantCulture) * ((currencyGif.Contains("red") == true) ? (-1) : 1);
+                double currencyChange = Convert.ToDouble(childNodes[4].InnerText, CultureInfo.InvariantCulture) * ((currencyGif.Contains("red")) ? (-1) : 1);
 
                 currencyMap.Add(currency, new List<object>() { currencyDescription, currencyRate, currencyGif, currencyChange });
             }
 
-            GC.Collect();
             return currencyMap;
         }
     }

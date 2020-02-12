@@ -115,8 +115,6 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Percentage);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-
-            GC.Collect();
         }
 
         public static void registerUDO()
@@ -125,7 +123,6 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.UserObjectMD_FindColumns oUDOFind = null;
             SAPbobsCOM.UserObjectMD_FormColumns oUDOForm = null;
             SAPbobsCOM.IUserObjectMD_ChildTables oUDOChildTables = null;
-            GC.Collect();
             oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
             Marshal.ReleaseComObject(oUserObjectMD);
             oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD) as SAPbobsCOM.UserObjectsMD;
@@ -724,12 +721,6 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Item("CrtrPr");
             oColumn.DataBind.SetBound(true, "@BDOSFUN1", "U_CrtrPr");
-
-            //oMatrix.Clear();
-            //oDBDataSource.Query();
-            //oMatrix.LoadFromDataSource();
-
-            GC.Collect();
         }
 
         public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.IChooseFromListEvent oCFLEvento)
@@ -913,7 +904,7 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("CrtrMTR").Specific));
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("CrtrMTR").Specific;
                 oMatrix.FlushToDataSource();
                 int firstRow = 0;
                 int row = 0;
@@ -954,7 +945,6 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                GC.Collect();
                 oForm.Freeze(false);
             }
         }

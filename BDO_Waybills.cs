@@ -4379,6 +4379,9 @@ namespace BDO_Localisation_AddOn
                     case "15":
                         caption = BDOSResources.getTranslate("Delivery"); //"Delivery";
                         break;
+                    case "165":
+                        caption = "AR Correction Invoice"; //AR Correction Invoice
+                        break;
                     case "67":
                         caption = BDOSResources.getTranslate("StockTransfer"); //"Inventory Transfer";
                         break;
@@ -4404,7 +4407,7 @@ namespace BDO_Localisation_AddOn
                 oLinkedButton.LinkedObjectType = baseDocType;
                 
                 oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("20_U_E").Specific;
-                if (baseDocType == "13" || baseDocType == "14" || oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_cardCode", 0).Trim() != "")
+                if (baseDocType == "13" || baseDocType == "14" || baseDocType == "165" || oForm.DataSources.DBDataSources.Item("@BDO_WBLD").GetValue("U_cardCode", 0).Trim() != "")
                 {
                     oEditText.ChooseFromListUID = "Contact_CFL"; //საკონტაქტო პირი
                     oEditText.ChooseFromListAlias = "Name";
@@ -5066,7 +5069,8 @@ namespace BDO_Localisation_AddOn
                             TYPE = "1"; //შიდა გადაზიდვა  //Fixed Asset Transfer
                             break;
                         case "14":
-                            TYPE = "5"; //უკან დაბრუნება  //A/R Credit Memo
+                        case "165":
+                            TYPE = "5"; //უკან დაბრუნება  //A/R Credit Memo //A/R Correction Invoice
                             break;
                         case "60":
                             TYPE = "1"; //შიდა გადაზიდვა  //Goods Issue
@@ -5128,7 +5132,7 @@ namespace BDO_Localisation_AddOn
 
                     //ტრანსორტირების დაწყების საათები
                     decimal U_beginTime = Convert.ToDecimal(oRecordSet.Fields.Item("U_beginTime").Value);
-                    int Hour = Convert.ToInt32(Math.Round(U_beginTime / 100));
+                    int Hour = Convert.ToInt32(Math.Floor(U_beginTime / 100));
                     int Min = Convert.ToInt32(U_beginTime - Hour * 100);
                     BEGIN_DATE = new DateTime(BEGIN_DATE.Year, BEGIN_DATE.Month, BEGIN_DATE.Day, Hour, Min, 0);
 
@@ -5243,6 +5247,10 @@ namespace BDO_Localisation_AddOn
                 else if (U_baseDocT == "14") //A/R Credit Memo
                 {
                     getArrayGoodsInvoiceCreditMemoType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
+                }
+                else if (U_baseDocT == "165") //A/R Correction Invoice
+                {
+                    getArrayGoodsInvoiceCorrectionType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
                 }
                 else if (U_baseDocT == "60") //Goods Issue
                 {
@@ -5423,7 +5431,30 @@ namespace BDO_Localisation_AddOn
             "LEFT JOIN \"OITM\" AS \"OITM\" " +
             "ON \"RIN1\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
 
-            "WHERE \"RIN1\".\"BaseEntry\" = '" + baseDocEntry + "' AND \"RIN1\".\"TargetType\" < 0  AND \"ORIN\".\"U_BDO_CNTp\" <> 1 AND ((\"OITM\".\"ItemType\" = 'I' AND \"OITM\".\"InvntItem\" = 'Y') OR \"OITM\".\"ItemType\" = 'F' ) ) AS \"MNTB\" " +
+            "WHERE \"RIN1\".\"BaseEntry\" = '" + baseDocEntry + "' AND \"RIN1\".\"TargetType\" < 0  AND \"ORIN\".\"U_BDO_CNTp\" <> 1 AND ((\"OITM\".\"ItemType\" = 'I' AND \"OITM\".\"InvntItem\" = 'Y') OR \"OITM\".\"ItemType\" = 'F' ) " +
+            "UNION ALL " +
+
+            "SELECT " +
+                "\"CSI1\".\"BaseEntry\", " +
+                "\"CSI1\".\"BaseLine\", " +
+                "\"CSI1\".\"ItemCode\", " +
+                "\"CSI1\".\"Dscription\", " +
+                "\"CSI1\".\"unitMsr\", " +
+                "\"CSI1\".\"Quantity\" * (CASE WHEN \"CSI1\".\"NoInvtryMv\" = 'Y' THEN 0 ELSE 1 END) * \"CSI1\".\"NumPerMsr\", " +
+                "\"CSI1\".\"GTotal\" , " +
+                "\"CSI1\".\"VatPrcnt\", " +
+                "\"CSI1\".\"VatGroup\", " +
+                "\"CSI1\".\"LineVat\"  " +
+
+                "FROM \"CSI1\" " +
+
+                "INNER JOIN \"OCSI\" " +
+                "ON \"OCSI\".\"DocEntry\" = \"CSI1\".\"DocEntry\" " +
+
+                "LEFT JOIN \"OITM\" AS \"OITM\" " +
+                "ON \"CSI1\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
+
+                "WHERE \"CSI1\".\"BaseEntry\" = '" + baseDocEntry + "' AND \"CSI1\".\"TargetType\" < 0  AND \"OCSI\".\"U_BDOSCITp\" <> 1 AND ((\"OITM\".\"ItemType\" = 'I' AND \"OITM\".\"InvntItem\" = 'Y') OR \"OITM\".\"ItemType\" = 'F' ) ) AS \"MNTB\" " +
 
             "LEFT JOIN \"OITM\" AS \"OITM\" " +
             "ON \"MNTB\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
@@ -5838,6 +5869,191 @@ namespace BDO_Localisation_AddOn
             "GROUP BY " +
             "\"MNTB\".\"DocEntry\", " +
             "\"MNTB\".\"LineNum\", " +
+            "\"MNTB\".\"ItemCode\", " +
+            "\"MNTB\".\"Dscription\", " +
+            "\"OITM\".\"CodeBars\", " +
+            "\"OITM\".\"SWW\", " +
+            "\"BDO_RSUOM\".\"U_RSCode\", " +
+            "\"MNTB\".\"unitMsr\", " +
+            "\"MNTB\".\"VatPrcnt\", " +
+            "\"MNTB\".\"VatGroup\" " +
+            "HAVING SUM(\"MNTB\".\"Quantity\") > 0 ";
+
+            try
+            {
+                oRecordSet.DoQuery(query);
+                int recordCount = oRecordSet.RecordCount;
+
+                NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
+                int i = 0;
+
+                //წასაშლელი Goods --->      
+                string[] array_HEADER = null;
+                string[][] array_GOODS_RS = null;
+                string[][] arry_SUB_WAYBILLS = null;
+
+                if ((ID == "0" || ID == "") == false)
+                {
+                    int get_waybill_result_int = oWayBill.get_waybill(Convert.ToInt32(ID), out array_HEADER, out array_GOODS_RS, out arry_SUB_WAYBILLS, out errorText);
+                    if (get_waybill_result_int != 1)
+                    {
+                        return;
+                    }
+                    if (array_HEADER != null)
+                    {
+                        QUANTITYRS = Convert.ToDouble(array_HEADER[44], CultureInfo.InvariantCulture);
+                        AMOUNTRS = Convert.ToDouble(array_HEADER[45], CultureInfo.InvariantCulture);
+                    }
+                }
+
+                int j = 0;
+                int countRS = array_GOODS_RS == null ? 0 : array_GOODS_RS.Count();
+                array_GOODS = new string[recordCount + countRS][];
+                for (j = 0; j < countRS; j++)
+                {
+                    array_GOODS[j] = new string[13];
+                    array_GOODS[j][0] = array_GOODS_RS[j][0]; //ID
+                    array_GOODS[j][1] = array_GOODS_RS[j][1]; //W_NAME
+                    array_GOODS[j][2] = array_GOODS_RS[j][2]; //UNIT_ID 
+                    array_GOODS[j][3] = ""; //ერთეულის სახელი UNIT_TXT
+                    array_GOODS[j][4] = array_GOODS_RS[j][3]; //QUANTITY
+                    array_GOODS[j][5] = array_GOODS_RS[j][4]; //PRICE
+                    array_GOODS[j][6] = "-1"; //STATUS 1 ან -1 თუ გადაეცით -1 შესაბამისი საქონელი წაიშლება
+                    array_GOODS[j][7] = array_GOODS_RS[j][5]; //AMOUNT
+                    array_GOODS[j][8] = array_GOODS_RS[j][6]; //პროგრამის კოდი
+                    array_GOODS[j][9] = array_GOODS_RS[j][7]; //A_ID
+                    array_GOODS[j][10] = array_GOODS_RS[j][8]; //VAT_TYPE 0 - ჩეულებრივი; 1 - ნულოვალი; 2 - დაუბეგრავი
+                    array_GOODS[j][11] = array_GOODS_RS[j][9]; //QUANTITY_EXT
+                }
+                //<--- წასაშლელი Goods
+
+                i = j;
+                while (!oRecordSet.EoF)
+                {
+                    array_GOODS[i] = new string[13];
+                    array_GOODS[i][0] = "0"; //ID ზედნადებში საქონლის ჩანაწერის ID გადაეცემა 0 თუ ახალი იქმნება
+                    array_GOODS[i][1] = oRecordSet.Fields.Item("W_NAME").Value.ToString(); //W_NAME
+                    array_GOODS[i][2] = oRecordSet.Fields.Item("UNIT_ID").Value.ToString(); //UNIT_ID 1
+                    string UNIT_TXT = oRecordSet.Fields.Item("UNIT_TXT").Value.ToString();
+                    array_GOODS[i][3] = array_GOODS[i][2] == "99" ? (UNIT_TXT == "" ? "სხვა" : UNIT_TXT) : "";//ერთეულის სახელი აუცილებელია როდესაც UNIT_ID=99 („სხვა“)UNIT_TXT
+                    array_GOODS[i][4] = oRecordSet.Fields.Item("QUANTITY").Value.ToString(Nfi); //QUANTITY
+                    array_GOODS[i][5] = oRecordSet.Fields.Item("PRICE").Value.ToString(Nfi); //PRICE
+                    array_GOODS[i][6] = "1"; //STATUS 1 ან -1 თუ გადაეცით -1 შესაბამისი საქონელი წაიშლება
+                    array_GOODS[i][7] = oRecordSet.Fields.Item("AMOUNT").Value.ToString(Nfi); //AMOUNT
+                    switch (itemCode)
+                    {
+                        case "0":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("ItemCode").Value.ToString(); //პროგრამის კოდი //BAR_CODE
+                            break;
+                        case "1":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("AdditionalIdentifier").Value.ToString(); //არტიკული       //BAR_CODE  
+                            break;
+                        case "2":
+                            array_GOODS[i][8] = oRecordSet.Fields.Item("CodeBars").Value.ToString(); //ძირითადი შტრიხკოდი  //BAR_CODE
+                            break;
+                    }
+                    array_GOODS[i][9] = oRecordSet.Fields.Item("A_ID").Value.ToString(); //A_ID თუ აქციზური არ არის გადაეცით 0.
+                    string VAT_TYPE = oRecordSet.Fields.Item("VAT_TYPE").Value.ToString(); //VAT_TYPE 0 - ჩეულებრივი; 1 - ნულოვალი; 2 - დაუბეგრავი
+                    string VatGroup = oRecordSet.Fields.Item("VatGroup").Value.ToString();
+                    VAT_TYPE = VatGroup == "X0" ? "" : VAT_TYPE;
+                    switch (VAT_TYPE)
+                    {
+                        //case "18": VAT_TYPE = "0"; //ჩვეულებრივი 18%
+                        //    break;
+                        case "0":
+                            VAT_TYPE = "1"; //ნულოვანი 0%
+                            break;
+                        case "":
+                            VAT_TYPE = "2"; //დაუბეგრავი
+                            break;
+                        default:
+                            VAT_TYPE = "0"; //ჩეულებრივი 18%
+                            break;
+                    }
+                    array_GOODS[i][10] = VAT_TYPE; //VAT_TYPE 0 - ჩეულებრივი; 1 - ნულოვალი; 2 - დაუბეგრავი
+                    array_GOODS[i][11] = ""; //QUANTITY_EXT          
+
+                    i = i + 1;
+                    oRecordSet.MoveNext();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorText = ex.Message;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+                GC.Collect();
+            }
+        }
+
+        private static void getArrayGoodsInvoiceCorrectionType(WayBill oWayBill, int baseDocEntry, string ID, out string[][] array_GOODS, out double QUANTITYRS, out double AMOUNTRS, out string errorText)
+        {
+            array_GOODS = null;
+            QUANTITYRS = 0;
+            AMOUNTRS = 0;
+
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+            string itemCode = rsSettings["ItemCode"];
+
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+
+            string query = "SELECT " +
+            "'" + ID + "'" + " AS \"ID\", " +
+            "\"MNTB\".\"DocEntry\" AS \"DocEntry\", " +
+            "\"MNTB\".\"ItemCode\" AS \"ItemCode\", " +
+            "\"OITM\".\"CodeBars\" AS \"CodeBars\", " +
+            "\"OITM\".\"SWW\" AS \"AdditionalIdentifier\", " +
+            "\"MNTB\".\"Dscription\" AS \"W_NAME\", " +
+            "CASE WHEN \"BDO_RSUOM\".\"U_RSCode\" is null THEN '99' ELSE \"BDO_RSUOM\".\"U_RSCode\" END AS \"UNIT_ID\", " +
+            "CASE WHEN \"MNTB\".\"unitMsr\"='' THEN 'სხვა' ELSE \"MNTB\".\"unitMsr\" END  AS \"UNIT_TXT\", " +
+            "\"MNTB\".\"VatPrcnt\" AS \"VAT_TYPE\", " +
+            "\"MNTB\".\"VatGroup\"AS \"VatGroup\", " +
+            "'0' AS \"A_ID\", " +
+            "SUM(\"MNTB\".\"Quantity\") AS \"QUANTITY\", " +
+            "SUM(\"MNTB\".\"GTotal\") AS \"AMOUNT\", " +
+            "CASE WHEN SUM(\"MNTB\".\"Quantity\") = 0 THEN 0 ELSE SUM(\"MNTB\".\"GTotal\")/SUM(\"MNTB\".\"Quantity\") END AS \"PRICE\", " +
+            "SUM(\"MNTB\".\"LineVat\") AS \"LineVat\" " +
+
+            "FROM " +
+
+            "(SELECT " +
+            "\"CSI1\".\"DocEntry\", " +
+            "\"CSI1\".\"ItemCode\", " +
+            "\"CSI1\".\"Dscription\", " +
+            "\"CSI1\".\"unitMsr\", " +
+            "ABS(SUM(\"CSI1\".\"Quantity\" * (CASE WHEN \"CSI1\".\"NoInvtryMv\" = 'Y' THEN 0 ELSE 1 END) * \"CSI1\".\"NumPerMsr\")) AS \"Quantity\", " +
+            "ABS(SUM(\"CSI1\".\"GTotal\")) AS \"GTotal\", " +
+            "\"CSI1\".\"VatPrcnt\", " +
+            "\"CSI1\".\"VatGroup\", " +
+            "ABS(SUM(\"CSI1\".\"LineVat\")) AS \"LineVat\"" +
+
+            "FROM \"CSI1\" " +
+
+            "INNER JOIN \"OCSI\" " +
+            "ON \"OCSI\".\"DocEntry\" = \"CSI1\".\"DocEntry\" " +
+
+            "LEFT JOIN \"OITM\" AS \"OITM\" " +
+            "ON \"CSI1\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
+
+            "WHERE \"CSI1\".\"DocEntry\" = '" + baseDocEntry + "' AND \"CSI1\".\"TargetType\" < 0  AND \"OCSI\".\"U_BDOSCITp\" = 1 AND ((\"OITM\".\"ItemType\" = 'I' AND \"OITM\".\"InvntItem\" = 'Y') OR \"OITM\".\"ItemType\" = 'F' ) group by \"CSI1\".\"DocEntry\",\"CSI1\".\"Dscription\",\"CSI1\".\"unitMsr\",\"CSI1\".\"VatPrcnt\", \"CSI1\".\"VatGroup\",\"CSI1\".\"ItemCode\") AS \"MNTB\" " +
+
+            "LEFT JOIN \"OITM\" AS \"OITM\" " +
+            "ON \"MNTB\".\"ItemCode\" = \"OITM\".\"ItemCode\" " +
+
+            "LEFT JOIN \"OUOM\" AS \"OUOM\" " +
+            "ON \"MNTB\".\"unitMsr\" = \"OUOM\".\"UomName\" " +
+
+            "LEFT JOIN \"@BDO_RSUOM\" AS \"BDO_RSUOM\" " +
+            "ON \"OUOM\".\"UomEntry\" = \"BDO_RSUOM\".\"U_UomEntry\" " +
+
+            "GROUP BY " +
+            "\"MNTB\".\"DocEntry\", " +
             "\"MNTB\".\"ItemCode\", " +
             "\"MNTB\".\"Dscription\", " +
             "\"OITM\".\"CodeBars\", " +
@@ -6545,6 +6761,30 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
+
+                else if (baseDocType == "165") //A/R Correction Invoice
+                {
+                    getArrayGoodsInvoiceCorrectionType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out AMOUNTRS, out errorText);
+                    if (array_GOODS != null)
+                    {
+                        double QUANTITY = 0;
+                        double AMOUNT = 0;
+
+                        for (int i = 0; i < array_GOODS.Count(); i++)
+                        {
+                            if (array_GOODS[i][6] == "1")
+                            {
+                                QUANTITY = QUANTITY + Convert.ToDouble(array_GOODS[i][4], CultureInfo.InvariantCulture);
+                                AMOUNT = AMOUNT + Convert.ToDouble(array_GOODS[i][7], CultureInfo.InvariantCulture);
+                            }
+                        }
+                        if (QUANTITY != QUANTITYRS || AMOUNT != AMOUNTRS)
+                        {
+                            return 0; //სინქრონიზაცია დარღვეულია
+                        }
+                    }
+                }
+
                 else if (baseDocType == "60") //Goods Issue
                 {
                     getArrayGoodsGoodsIssueType(oWayBill, baseDocEntry, ID, out array_GOODS, out QUANTITYRS, out errorText);
