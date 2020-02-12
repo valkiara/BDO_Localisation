@@ -145,7 +145,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Name", "FuPerKm");
             fieldskeysMap.Add("TableName", "BDOSFUC1");
             fieldskeysMap.Add("Description", "Per 100 km");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
@@ -1819,7 +1819,7 @@ namespace BDO_Localisation_AddOn
                         
                         oDBDataSourceMTR.SetValue("U_NormCn", i, FormsB1.ConvertDecimalToString(normConsumption));
                         oDBDataSourceMTR.SetValue("U_ActuallyCn", i, FormsB1.ConvertDecimalToString(normConsumption));
-                        oDBDataSourceMTR.SetValue("U_HrsWorked", i, hoursWorked.ToString());
+                        oDBDataSourceMTR.SetValue("U_HrsWorked", i, FormsB1.ConvertDecimalToString(hoursWorked));
                     }
                 }
                 oMatrix.LoadFromDataSource();

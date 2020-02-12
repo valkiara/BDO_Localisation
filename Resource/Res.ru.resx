@@ -3431,6 +3431,6 @@
     <value>Ending value of odometer in hours</value>
   </data>
   <data name="StartingValueOfOdometerInHours" xml:space="preserve">
-    <value>Starting value of odometer in hours</value>
+    <value>Starting Value of Odometer in Hours</value>
   </data>
 </root>
