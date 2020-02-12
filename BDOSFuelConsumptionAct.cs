@@ -179,7 +179,27 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
+            
+            //ოდომეტრის საწყისი ჩვენება (სთ)
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "OdmtrStHr");
+            fieldskeysMap.Add("TableName", "BDOSFUC1");
+            fieldskeysMap.Add("Description", "Starting Value of Odometer In Hours");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 5);
 
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            //ოდომეტრის საბოლოო ჩვენება (სთ)
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "OdmtrEnHr");
+            fieldskeysMap.Add("TableName", "BDOSFUC1");
+            fieldskeysMap.Add("Description", "Ending Value of Odometer In Hours");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 5);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+            
             //ნამუშევარი საათები
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "HrsWorked");
@@ -476,7 +496,7 @@ namespace BDO_Localisation_AddOn
                             oForm.Freeze(false);
                         }
                     }
-                    if (pVal.ColUID == "OdmtrStart" || pVal.ColUID == "OdmtrEnd" || pVal.ColUID == "HrsWorked")
+                    if (pVal.ColUID == "OdmtrStart" || pVal.ColUID == "OdmtrEnd" || pVal.ColUID == "HrsWorked" || pVal.ColUID == "OdmtrStHr" || pVal.ColUID == "OdmtrEnHr")
                     {
                         calculateConsumptionValue(oForm, pVal.Row - 1);
                     }
@@ -507,9 +527,9 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.ItemUID == "addMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
                     if (pVal.FormMode == 3)
-                        addMatrixRow(oForm);
+                    addMatrixRow(oForm);
                 }
-
+                 
                 else if (pVal.ItemUID == "delMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
                     if (pVal.FormMode == 3)
@@ -1196,7 +1216,15 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Add("OdmtrEnd", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("EndingValueOfOdometer");
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrEnd");
+            
+            oColumn = oColumns.Add("OdmtrStHr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("StartingValueOfOdometerInHours");
+            oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrStHr");
 
+            oColumn = oColumns.Add("OdmtrEnHr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("EndingValueOfOdometerInHours");
+            oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrEnHr");
+            
             oColumn = oColumns.Add("HrsWorked", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("HoursWorked");
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_HrsWorked");
@@ -1314,7 +1342,7 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-
+            
             GC.Collect();
         }
 
@@ -1415,7 +1443,7 @@ namespace BDO_Localisation_AddOn
                 else
                 {
                     SAPbouiCOM.DataTable oDataTable = oCFLEvento.SelectedObjects;
-
+                     
                     if (oDataTable != null)
                     {
                         SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSFUCN");
@@ -1516,6 +1544,8 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("FuPerHr").Width = mtrWidth;
                 oMatrix.Columns.Item("OdmtrStart").Width = mtrWidth;
                 oMatrix.Columns.Item("OdmtrEnd").Width = mtrWidth;
+                oMatrix.Columns.Item("OdmtrStHr").Width = mtrWidth;
+                oMatrix.Columns.Item("OdmtrEnHr").Width = mtrWidth;
                 oMatrix.Columns.Item("HrsWorked").Width = mtrWidth;
                 oMatrix.Columns.Item("NormCn").Width = mtrWidth;
                 oMatrix.Columns.Item("ActuallyCn").Width = mtrWidth;
@@ -1525,7 +1555,7 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("Dimension4").Width = mtrWidth;
                 oMatrix.Columns.Item("Dimension5").Width = mtrWidth;
                 oMatrix.Columns.Item("DocEntryGI").Width = mtrWidth;
-
+                
                 int height = 15;
                 int top = oForm.Items.Item("AssetMTR").Top - height - 1;
                 oForm.Items.Item("addMTRB").Top = top;
@@ -1596,9 +1626,11 @@ namespace BDO_Localisation_AddOn
                     oDBDataSourceMTR.InsertRecord(oDBDataSourceMTR.Size);
                 }
                 oDBDataSourceMTR.SetValue("LineId", oDBDataSourceMTR.Size - 1, oDBDataSourceMTR.Size.ToString());
+                
+                oDBDataSourceMTR.SetValue("U_OdmtrStHr", oDBDataSourceMTR.Size - 1, "12:00");
+                oDBDataSourceMTR.SetValue("U_OdmtrEnHr", oDBDataSourceMTR.Size - 1, "12:00");
 
                 oMatrix.LoadFromDataSource();
-
                 if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
                 {
                     oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
@@ -1682,7 +1714,6 @@ namespace BDO_Localisation_AddOn
                 oMatrix.FlushToDataSource();
 
                 SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
-
                 SAPbobsCOM.Recordset oRecordSet = getFuelType(itemCode);
 
                 if (!oRecordSet.EoF)
@@ -1692,12 +1723,18 @@ namespace BDO_Localisation_AddOn
                     oDBDataSourceMTR.SetValue("U_FuelCode", i, oRecordSet.Fields.Item("U_ItemCode").Value);
                     oDBDataSourceMTR.SetValue("U_FuUomEntry", i, FormsB1.ConvertDecimalToString(Convert.ToDecimal(oRecordSet.Fields.Item("U_UomEntry").Value, CultureInfo.InvariantCulture)));
                     oDBDataSourceMTR.SetValue("U_FuUomCode", i, oRecordSet.Fields.Item("U_UomCode").Value);
-
+                    
                     Marshal.ReleaseComObject(oRecordSet);
                 }
                 decimal odmtrStart = getOdmtrStart(itemCode, docEntry);
+
+                string odmtrStHr = getOdmtrStartTime(itemCode);
+                if (odmtrStHr == null || odmtrStHr == "") odmtrStHr = "12:00";
+
                 oDBDataSourceMTR.SetValue("U_OdmtrStart", i, FormsB1.ConvertDecimalToString(odmtrStart));
                 oDBDataSourceMTR.SetValue("U_OdmtrEnd", i, FormsB1.ConvertDecimalToString(odmtrStart));
+                oDBDataSourceMTR.SetValue("U_OdmtrStHr", i, odmtrStHr);
+                oDBDataSourceMTR.SetValue("U_OdmtrEnHr", i, odmtrStHr);
 
                 //------------------------------------------>Dimension<------------------------------------------
                 oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -1748,13 +1785,12 @@ namespace BDO_Localisation_AddOn
 
                 SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("AssetMTR").Specific;
                 oMatrix.FlushToDataSource();
-
                 SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDOSFUC1");
 
                 int rowCount = rowIndex == -1 ? oDBDataSourceMTR.Size - 1 : rowIndex;
                 int i = rowIndex == -1 ? 0 : rowIndex;
 
-                for (; i <= rowCount; i++)
+                for (; i <= rowCount; i++) 
                 {
                     string itemCode = oDBDataSourceMTR.GetValue("U_ItemCode", i);
                     if (!string.IsNullOrEmpty(itemCode))
@@ -1765,11 +1801,25 @@ namespace BDO_Localisation_AddOn
                         var fuPerHr = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_FuPerHr", i), CultureInfo.InvariantCulture);
                         var hrsWorked = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_HrsWorked", i), CultureInfo.InvariantCulture);
                         decimal normConsumptionKm = fuPerKm / 100 * (odmtrEnd - odmtrStart);
-                        decimal normConsumptionHr = fuPerHr * hrsWorked;
-                        decimal normConsumption = normConsumptionKm + normConsumptionHr;
 
+                        
+                        int startHour = getOdmtrTimeInMinutes(oDBDataSourceMTR, i, "U_OdmtrStHr");
+                        int endHour = getOdmtrTimeInMinutes(oDBDataSourceMTR, i, "U_OdmtrEnHr");
+
+                        decimal minutesWorked = endHour - startHour;
+                        decimal hoursWorked = minutesWorked/60;
+                        if (hoursWorked < 0)
+                        {
+                            minutesWorked = 24 * 60 - startHour + endHour;
+                            hoursWorked = minutesWorked / 60;
+                        }
+                        
+                        decimal normConsumptionHr = fuPerHr * hoursWorked;
+                        decimal normConsumption = normConsumptionKm + normConsumptionHr;
+                        
                         oDBDataSourceMTR.SetValue("U_NormCn", i, FormsB1.ConvertDecimalToString(normConsumption));
                         oDBDataSourceMTR.SetValue("U_ActuallyCn", i, FormsB1.ConvertDecimalToString(normConsumption));
+                        oDBDataSourceMTR.SetValue("U_HrsWorked", i, FormsB1.ConvertDecimalToString(hoursWorked));
                     }
                 }
                 oMatrix.LoadFromDataSource();
@@ -1950,7 +2000,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
+                
                 StringBuilder query = new StringBuilder();
                 query.Append("SELECT TOP 1 \"@BDOSFUC1\".\"U_OdmtrEnd\" \n");
                 query.Append("FROM \"@BDOSFUCN\" \n");
@@ -1975,6 +2025,59 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(ex.Message);
             }
+        }
+        
+        static bool isValidTimeFormat(string time, int length)
+        {
+
+            if (time == null) return false;
+            if (time.Length == 0) return true;
+            if (time.Length != length) return false;
+            string firstchar = time.Substring(0, 1);
+            char firstLetter = char.Parse(firstchar);
+            length -= 1;
+            if ((firstLetter >= '0' && firstLetter <= '9') || firstLetter == ':') return isValidTimeFormat(time.Substring(1, time.Length - 1), length);
+            return false;
+        }
+
+        static string getOdmtrStartTime(string itemCode)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            string query = "select TOP 1 \"@BDOSFUC1\".\"U_OdmtrEnHr\" " + "\n"
+            + " from \"@BDOSFUC1\" " + "\n"
+            + " INNER JOIN \"@BDOSFUCN\" " + "\n"
+            + " ON \"@BDOSFUCN\".\"DocEntry\" = \"@BDOSFUC1\".\"DocEntry\" " + "\n"
+            + " where \"@BDOSFUC1\".\"U_ItemCode\" = '"+ itemCode + "'\n"
+            + " ORDER BY " + "\n"
+            + " \"@BDOSFUCN\".\"DocEntry\" desc";
+
+            oRecordSet.DoQuery(query);
+
+            if (!oRecordSet.EoF)
+            {
+                return oRecordSet.Fields.Item("U_OdmtrEnHr").Value;
+            }
+
+            return "";
+        }
+        
+        static int getOdmtrTimeInMinutes(SAPbouiCOM.DBDataSource oDBDataSourceMTR, int i, string fieldName)
+        {
+            int hours = 0;
+            string odmtrHours = oDBDataSourceMTR.GetValue(fieldName, i);
+            oDBDataSourceMTR.SetValue(fieldName, oDBDataSourceMTR.Size - 1, odmtrHours);
+
+            if (!isValidTimeFormat(odmtrHours, 5))
+            {
+                Program.uiApp.StatusBar.SetSystemMessage("Time format is not correct(hh:mm)");
+                oDBDataSourceMTR.SetValue(fieldName, i, "12:00");
+            }
+            int OdmtrHr = Convert.ToInt32(odmtrHours.Substring(0, 2));
+            int OdmtrMin = Convert.ToInt32(odmtrHours.Substring(3, 2));
+            hours = 60 * OdmtrHr + OdmtrMin;
+
+            return hours;
         }
     }
 }
