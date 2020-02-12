@@ -18,7 +18,6 @@ namespace BDO_Localisation_AddOn
     {
         private static void CreateFormItems(Form oForm)
         {
-
             #region Auto Project Checkbox
 
             var oItem = oForm.Items.Item("26");
@@ -130,27 +129,6 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        //private static void UpdateRTM1Table(SAPbouiCOM.Form oForm)
-        //{
-        //    SAPbouiCOM.CheckBox oCheckBox;
-        //    SAPbouiCOM.Matrix oMatrix;
-
-        //    oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("18").Specific));
-
-        //    int rowCount = oMatrix.RowCount;
-        //    for (int row = 1; row <= rowCount; row++)
-        //    {
-        //        oCheckBox = oMatrix.Columns.Item("1").Cells.Item(row).Specific;
-        //        bool checkedLine = oCheckBox.Checked;
-
-        //        if (checkedLine)
-        //        {
-        //            string bpCode = oMatrix.Columns.Item("2").Cells.Item(row).Specific.Value;
-
-        //        }
-        //    }
-        //}
-
         private static void GetDataForUpdate(Form oForm)
         {
             EditText oRemark = oForm.Items.Item("5").Specific;
@@ -245,8 +223,7 @@ namespace BDO_Localisation_AddOn
                             goto shortCut;
                         default:
                             Program.uiApp.StatusBar.SetSystemMessage(
-                                "Document with type - " + docType + " not supported", BoMessageTime.bmt_Short,
-                                BoStatusBarMessageType.smt_Error);
+                                "Document with type - " + docType + " not supported", BoMessageTime.bmt_Short);
                             continue;
                     }
 
@@ -545,8 +522,7 @@ namespace BDO_Localisation_AddOn
                 }
                 catch (Exception ex)
                 {
-                    Program.uiApp.StatusBar.SetSystemMessage(ex.Message, BoMessageTime.bmt_Short,
-                        BoStatusBarMessageType.smt_Error);
+                    Program.uiApp.StatusBar.SetSystemMessage(ex.Message, BoMessageTime.bmt_Short);
                 }
 
                 finally
