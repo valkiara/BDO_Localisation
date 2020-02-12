@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading;
 using System.Data;
 using System.Globalization;
+using System.Xml;
+
 
 namespace BDO_Localisation_AddOn
 {
@@ -16,6 +18,8 @@ namespace BDO_Localisation_AddOn
             errorText = null;
             Dictionary<string, object> fieldskeysMap;
 
+            #region Employee ID
+
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSEmpID");
             fieldskeysMap.Add("TableName", "JDT1");
@@ -25,7 +29,9 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            GC.Collect();
+            #endregion
+
+            #region AC Number
 
             fieldskeysMap = new Dictionary<string, object>(); //  A/C Number ივსება Good Receipt PO, AP Invoice, AP Credit memo, Landed Cost დოკუმენტებიდან
             fieldskeysMap.Add("Name", "BDOSACNum");
@@ -35,6 +41,21 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            #endregion
+
+            #region Blanket Agreement Number
+
+            fieldskeysMap = new Dictionary<string, object>(); //  Blanket Agreement Number
+            fieldskeysMap.Add("Name", "BDOSAgrNo");
+            fieldskeysMap.Add("TableName", "OJDT");
+            fieldskeysMap.Add("Description", "Blanket Agreement Number");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            #endregion
         }
 
         public static void JrnEntry(string jeReference, string jeReference2, string remark, DateTime jeDate, DataTable jeLines, out string errorText)
@@ -339,6 +360,74 @@ namespace BDO_Localisation_AddOn
                 throw new Exception(errorText);
             }
 
+            #region Blanket Agreement Number string and element
+
+            oItem = oForm.Items.Item("1980002040");
+            top = oItem.Top;
+            width = oItem.Width;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSAgrNoS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left + 18);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top - height - 1);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("BlanketAgreement"));
+            formItems.Add("LinkTo", "BDOSAgrNoE");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            var objectType = "1250000025"; //Blanket Agreement
+
+            FormsB1.addChooseFromList(oForm, false, objectType, "BlanketAgreement_Cfl");
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSAgrNoE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OJDT");
+            formItems.Add("Alias", "U_BDOSAgrNo");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left + 18);
+            formItems.Add("Width", width);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("ChooseFromListUID", "BlanketAgreement_Cfl");
+            formItems.Add("ChooseFromListAlias", "AbsID");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSAgrNoL"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            formItems.Add("Left", left + 1);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("LinkTo", "BDOSAgrNoE");
+            formItems.Add("LinkedObjectType", objectType);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            #endregion
+
             formItems = new Dictionary<string, object>();
             itemName = "BDOSAddEnt";
             try
@@ -552,6 +641,36 @@ namespace BDO_Localisation_AddOn
             oColumn.Width = 10;
             oColumn.Editable = false;
             oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_BDOSEmpID").DataBind.Alias);
+        }
+
+        private static void ChooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.ChooseFromListEvent oCflEventO)
+        {
+            if (!pVal.BeforeAction)
+            {
+                try
+                {
+                    oForm.Freeze(true);
+
+                    var oDataTable = oCflEventO.SelectedObjects;
+
+                    if (oDataTable == null) return;
+
+                    if (oCflEventO.ChooseFromListUID == "BlanketAgreement_Cfl")
+                    {
+                        string blanketAgreementNumber = Convert.ToString(oDataTable.GetValue("AbsID", 0));
+                        LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("BDOSAgrNoE").Specific.Value = blanketAgreementNumber); //ერორს აგდებს, რატო კაცმა არ იცის
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    oForm.Freeze(false);
+                }
+            }
         }
 
         private static void ShowAdditionalEntries(SAPbouiCOM.Form oForm)
@@ -820,6 +939,8 @@ namespace BDO_Localisation_AddOn
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD &
                 BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess)
             {
+                UpdateBlanketAgreementNumber(BusinessObjectInfo.ObjectKey, oForm);
+
                 if (Program.canceledDocEntry == 0) return;
                 try
                 {
@@ -840,7 +961,6 @@ namespace BDO_Localisation_AddOn
                     {
                         Program.canceledDocEntry = 0;
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -996,6 +1116,12 @@ namespace BDO_Localisation_AddOn
                         oLink.LinkedObjectType = "1";
                     }
                 }
+
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                {
+                    var oCflEventO = (SAPbouiCOM.ChooseFromListEvent)pVal;
+                    ChooseFromList(oForm, pVal, oCflEventO);
+                }
             }
         }
 
@@ -1055,6 +1181,36 @@ namespace BDO_Localisation_AddOn
 
                     oRecordSet.MoveNext();
                 }
+            }
+        }
+
+        private static void UpdateBlanketAgreementNumber(string objectKeyXml, SAPbouiCOM.Form oForm)
+        {
+            var blanketAgreementNumber = oForm.Items.Item("BDOSAgrNoE").Specific.Value;
+            if (string.IsNullOrEmpty(blanketAgreementNumber)) return;
+
+            var objectKeyXmlDoc = new XmlDocument();
+            objectKeyXmlDoc.LoadXml(objectKeyXml);
+
+            var docEntry = Convert.ToInt32(objectKeyXmlDoc.InnerText);
+
+            var oRecordSet = (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            var updateQuery = new StringBuilder();
+            try
+            {
+                updateQuery.Append("UPDATE OJDT \n");
+                updateQuery.Append("SET \"AgrNo\" = '" + Convert.ToInt32(blanketAgreementNumber) + "' \n");
+                updateQuery.Append("WHERE \"TransId\" = '" + docEntry + "'");
+
+                oRecordSet.DoQuery(updateQuery.ToString());
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
             }
         }
     }
