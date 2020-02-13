@@ -765,8 +765,8 @@ namespace BDO_Localisation_AddOn
 
                         if (opType == "transferToOwnAccount") //გადარიცხვა პირად ანგარიშზე
                         {
-                            oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("tresrCodeE").Specific;
-                            oEditText.Value = "";
+                            //oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("tresrCodeE").Specific;
+                            //oEditText.Value = "";
                             oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("crdActCuCB").Specific;
                             oComboBox.Select("", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("chrgDtlsCB").Specific;
@@ -776,8 +776,8 @@ namespace BDO_Localisation_AddOn
                         }
                         else if (opType == "currencyExchange") //კონვერტაცია
                         {
-                            oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("tresrCodeE").Specific;
-                            oEditText.Value = "";
+                            //oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("tresrCodeE").Specific;
+                            //oEditText.Value = "";
                             oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("chrgDtlsCB").Specific;
                             oComboBox.Select("", SAPbouiCOM.BoSearchKey.psk_ByValue);
                             oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("dsptTypeCB").Specific;
@@ -792,7 +792,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                oForm.Freeze(true);
+                oForm.Freeze(false);
             }
         }
 
@@ -1049,6 +1049,8 @@ namespace BDO_Localisation_AddOn
                     oItem.Enabled = true;
                 else
                     oItem.Enabled = false;
+
+                oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
 
                 oForm.Items.Item("statusCB").Enabled = false;
                 string docEntry = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("DocEntry", 0).Trim();
@@ -1318,13 +1320,11 @@ namespace BDO_Localisation_AddOn
                         {
                             string account = Convert.ToString(oDataTable.GetValue("Account", 0));
                             string currency;
-                            SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("creditActE").Specific;
-                            oEditText.Value = account;
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("creditActE").Specific.Value = account);
                             try
-                            {
-                                SAPbouiCOM.ComboBox oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("crdActCuCB").Specific;
+                            {                               
                                 CommonFunctions.accountParse(account, out currency);
-                                oComboBox.Select(currency, SAPbouiCOM.BoSearchKey.psk_ByValue);
+                                oForm.Items.Item("crdActCuCB").Specific.Select(currency, SAPbouiCOM.BoSearchKey.psk_ByValue);
                             }
                             catch { }
                         }
@@ -1333,10 +1333,9 @@ namespace BDO_Localisation_AddOn
                             string docEntry = Convert.ToString(oDataTable.GetValue("DocEntry", 0));
                             if (!string.IsNullOrEmpty(docEntry))
                             {
-                                SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("outDocE").Specific;
                                 try
                                 {
-                                    oEditText.Value = docEntry;
+                                    LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("outDocE").Specific.Value = docEntry);
                                     if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
                                     {
                                         changeU_OutDoc = true;
@@ -1619,6 +1618,7 @@ namespace BDO_Localisation_AddOn
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
                 {
+                    comboSelect(oForm, pVal);
                     if (!pVal.BeforeAction)
                     {
                         if (pVal.ItemUID == "opTypeCB" || pVal.ItemUID == "18" || pVal.ItemUID == "107")
@@ -1627,8 +1627,7 @@ namespace BDO_Localisation_AddOn
                                 return;
                             setVisibleFormItems(oForm);
                         }
-                    }
-                    comboSelect(oForm, pVal);
+                    }                   
                 }
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
