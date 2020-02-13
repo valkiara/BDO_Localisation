@@ -2407,6 +2407,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);//6
                     oDataTable.Columns.Add("WBQty", SAPbouiCOM.BoFieldsType.ft_Quantity, 20);//7
                     oDataTable.Columns.Add("WBPrice", SAPbouiCOM.BoFieldsType.ft_Price, 20);//8
+                    oDataTable.Columns.Add("WBLPrice", SAPbouiCOM.BoFieldsType.ft_Price, 20);//8
                     oDataTable.Columns.Add("WBSum", SAPbouiCOM.BoFieldsType.ft_Sum, 20);//9
                     oDataTable.Columns.Add("WBUntCdRS", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);//10
                     oDataTable.Columns.Add("WBPrjCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 100);//11
@@ -2552,6 +2553,12 @@ namespace BDO_Localisation_AddOn
                     oColumn.Width = 40;
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind("WbGdsTable", "WBPrice");
+
+                    oColumn = oColumns.Add("WBLPrice", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("LastPrice");
+                    oColumn.Width = 40;
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind("WbGdsTable", "WBLPrice");
 
                     oColumn = oColumns.Add("WBSum", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("Amount");

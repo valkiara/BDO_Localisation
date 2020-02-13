@@ -3478,4 +3478,7 @@
   <data name="AutoProject" xml:space="preserve">
     <value>Project Auto-Reference</value>
   </data>
+  <data name="lastPrice" xml:space="preserve">
+    <value>Last Price</value>
+  </data>
 </root>

@@ -3448,4 +3448,7 @@
   <data name="AutoAgrNo" xml:space="preserve">
     <value>საერთო შეთანხმების ავტომატური მითითება</value>
   </data>
+  <data name="lastPrice" xml:space="preserve">
+    <value>ბოლო ფასი</value>
+  </data>
 </root>
