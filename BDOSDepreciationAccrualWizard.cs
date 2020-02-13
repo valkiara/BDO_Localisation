@@ -434,12 +434,9 @@ namespace BDO_Localisation_AddOn
         {
             string errorText = null;
 
-            SAPbobsCOM.CompanyService oCompanyService = null;
-            SAPbobsCOM.GeneralService oGeneralService = null;
-            SAPbobsCOM.GeneralData oGeneralData = null;
-            oCompanyService = Program.oCompany.GetCompanyService();
-            oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDOSDEPACR_D");
-            oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
+            SAPbobsCOM.CompanyService oCompanyService = Program.oCompany.GetCompanyService();
+            SAPbobsCOM.GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDOSDEPACR_D");
+            SAPbobsCOM.GeneralData oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
 
             oGeneralData.SetProperty("U_AccrMnth", AccrMnth);
             oGeneralData.SetProperty("U_DocDate", PostingDate);
@@ -459,7 +456,6 @@ namespace BDO_Localisation_AddOn
                 oChild.SetProperty("U_InvEntry", DepreciationLines.GetValue("DocEntry", i));
                 oChild.SetProperty("U_InvType", DepreciationLines.GetValue("DocType", i));
                 oChild.SetProperty("U_AlrDeprAmt", DepreciationLines.GetValue("AlrDeprAmt", i));
-
             }
             int docEntry = 0;
 

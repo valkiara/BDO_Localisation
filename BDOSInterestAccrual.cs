@@ -178,8 +178,6 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 15);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-
-            GC.Collect();
         }
 
         public static void registerUDO()
@@ -188,7 +186,6 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.UserObjectMD_FindColumns oUDOFind = null;
             SAPbobsCOM.UserObjectMD_FormColumns oUDOForm = null;
             SAPbobsCOM.IUserObjectMD_ChildTables oUDOChildTables = null;
-            GC.Collect();
             oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
             Marshal.ReleaseComObject(oUserObjectMD);
             oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD) as SAPbobsCOM.UserObjectsMD;
@@ -1098,8 +1095,6 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-
-            GC.Collect();
         }
 
         public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.IChooseFromListEvent oCFLEvento, ref bool bubbleEvent)
@@ -1386,7 +1381,6 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                GC.Collect();
                 oForm.Freeze(false);
             }
         }
@@ -1505,7 +1499,6 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 oForm.Freeze(false);
-                GC.Collect();
             }
         }
 
