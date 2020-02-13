@@ -911,15 +911,6 @@ namespace BDO_Localisation_AddOn
                             cancellationTrans = true;
                             canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OWTR").GetValue("DocEntry", 0));
                         }
-                        //----------------------------->Internal Reconciliation<-----------------------------
-                        else if (oForm.TypeEx == "120060805")
-                        {
-
-                         //   InternalReconciliation.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
-
-                         //   cancellationTrans = true;
-                         //   canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OWTR").GetValue("DocEntry", 0));
-                        }
                         //----------------------------->A/R Credit Note<-----------------------------
                         else if (oForm.TypeEx == "179")
                         {
@@ -1622,12 +1613,6 @@ namespace BDO_Localisation_AddOn
                 else if (BusinessObjectInfo.Type == "UDO_F_BDO_VECL_D")
                 {
                     BDO_Vehicles.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
-                }
-
-                //----------------------------->Internal Reconciliation<----------------------------
-                else if (BusinessObjectInfo.Type == "321")
-                {
-                    //  InternalReconciliation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Drivers<----------------------------
