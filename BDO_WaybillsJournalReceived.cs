@@ -3129,11 +3129,14 @@ namespace BDO_Localisation_AddOn
                 }
 
 
+
+
                 SAPbobsCOM.Recordset CatalogEntry = null;
                 SAPbobsCOM.Recordset oRecordsetbyRSCODE = null;
 
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                 SAPbobsCOM.Recordset oRecordSetBN = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                SAPbobsCOM.Recordset oRecordPrevPrice = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
                 string apInvoice = oMatrix.GetCellSpecific("APInvoice", row).Value;
                 string queryBN = "";
@@ -3217,7 +3220,7 @@ namespace BDO_Localisation_AddOn
                     string strWBSum = goodsRow[5];
 
                     decimal price = CommonFunctions.roundAmountByGeneralSettings(FormsB1.cleanStringOfNonDigits(strWBSum) / FormsB1.cleanStringOfNonDigits(strWBQty), "Price");
-
+                    decimal prevPrice=0;
                     if (WBItmName.Length > 254)
                     {
                         WBItmName = WBItmName.Substring(0, 254);
@@ -3228,6 +3231,18 @@ namespace BDO_Localisation_AddOn
                         DistNumber = oRecordSetBN.Fields.Item("DistNumber").Value;
                         oRecordSetBN.MoveNext();
                     }
+                    StringBuilder priceQuery = new StringBuilder();
+                    priceQuery.Append("select TOP 1 * from( \n");
+                    priceQuery.Append("select OPDN.\"CardCode\",OIVL.\"Price\",OIVL.\"DocDate\" from OIVL \n");
+                    priceQuery.Append("left join OPDN on OIVL.\"CreatedBy\"=OPDN.\"DocEntry\" \n");
+                    priceQuery.Append("where OIVL.\"TransType\"='20' and OPDN.\"CardCode\"='"+Cardcode+"' and OIVL.\"ItemCode\"='"+ItemCode+"' \n");
+                    priceQuery.Append("union all \n");
+                    priceQuery.Append("select OPCH.\"CardCode\",OIVL.\"Price\",OIVL.\"DocDate\" from OIVL \n");
+                    priceQuery.Append("left join OPCH on OIVL.\"CreatedBy\"=OPCH.\"DocEntry\" \n");
+                    priceQuery.Append("where OIVL.\"TransType\"='18' and OPCH.\"CardCode\"='"+Cardcode+"' and OIVL.\"ItemCode\"='"+ItemCode+"' \n");
+                    priceQuery.Append("order by OIVL.\"DocDate\" desc)");
+                    oRecordPrevPrice.DoQuery(priceQuery.ToString());
+                    if (!oRecordPrevPrice.EoF)  prevPrice = oRecordPrevPrice.Fields.Item("Price").Value;
 
                     Sbuilder.Append("<Row>");
                     Sbuilder.Append("<Cell> <ColumnUid>#</ColumnUid> <Value>");
@@ -3284,6 +3299,10 @@ namespace BDO_Localisation_AddOn
 
                     Sbuilder.Append("<Cell> <ColumnUid>WBPrice</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, price.ToString(CultureInfo.InvariantCulture));
+                    Sbuilder.Append("</Value></Cell>");
+
+                    Sbuilder.Append("<Cell> <ColumnUid>WBLPrice</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, prevPrice.ToString());
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>WBSum</ColumnUid> <Value>");
