@@ -672,6 +672,24 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
+            
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSStRev"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+            formItems.Add("Left", left_s + 200);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("StockRevaluation"));
+            //formItems.Add("TextStyle", 4);
+            //formItems.Add("FontSize", 10);
+            //formItems.Add("Enabled", false);
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
 
             oItem = oForm.Items.Item("68");
             itemName = "BDOSFllAmt";
@@ -1044,6 +1062,12 @@ namespace BDO_Localisation_AddOn
                 //    oForm.Freeze(true);
                 //    oForm.Freeze(false);
                 //}
+
+                if (pVal.ItemUID == "BDOSStRev")
+                {
+
+                    //Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, bstrUDOObjectType, newDocEntry.ToString());
+                }
             }
         }
     }

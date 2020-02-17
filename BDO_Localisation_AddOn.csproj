@@ -120,6 +120,7 @@
     <Compile Include="BDOSInterestAccrualWizard.cs" />
     <Compile Include="BDOSTasksForApproval.cs" />
     <Compile Include="BDOSWarehouseAddresses.cs" />
+    <Compile Include="BDO_StockRevaluation.cs" />
     <Compile Include="CashFlowLineItem.cs" />
     <Compile Include="BDOSDeleteUDF.cs" />
     <Compile Include="BDOSDepreciationAccrualDocument.cs" />

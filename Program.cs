@@ -2144,6 +2144,11 @@ namespace BDO_Localisation_AddOn
                 {
                     ARInvoice.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
+                
+                else if (pVal.FormTypeEx == "70001")
+                {
+                    BDO_StockRevaluation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
 
                 //----------------------------->Blanket Agreement<-----------------------------
                 else if (pVal.FormTypeEx == "1250000100" || pVal.FormTypeEx == "1250000102")

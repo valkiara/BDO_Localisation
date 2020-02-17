@@ -680,9 +680,6 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
 
-
-
-
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
                     createFormItems(oForm, out errorText);
