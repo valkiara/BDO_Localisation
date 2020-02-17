@@ -1062,13 +1062,17 @@ namespace BDO_Localisation_AddOn
                 //    oForm.Freeze(true);
                 //    oForm.Freeze(false);
                 //}
-
+                string str = pVal.ItemUID;
                 if (pVal.ItemUID == "BDOSStRev")
                 {
-
-                    //Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, bstrUDOObjectType, newDocEntry.ToString());
+                    //aq meore da mesame parametrad me rac minda is ro gadavce, xsnis formas
+                    SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item(0);
+                    string docNum = DocDBSourcePAYR.GetValue("DocNum", 0);
+                    //"UDO_F_BDO_WBLD_D"
+                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "162", docNum);
                 }
             }
         }
     }
 }
+//OIPF aris chemtvis saintereso ert-erti cxrili
