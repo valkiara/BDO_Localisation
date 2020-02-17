@@ -2026,7 +2026,7 @@ namespace BDO_Localisation_AddOn
                 throw new Exception(ex.Message);
             }
         }
-        
+        /*
         static bool isValidTimeFormat(string time, int length)
         {
 
@@ -2039,7 +2039,7 @@ namespace BDO_Localisation_AddOn
             if ((firstLetter >= '0' && firstLetter <= '9') || firstLetter == ':') return isValidTimeFormat(time.Substring(1, time.Length - 1), length);
             return false;
         }
-
+        */
         static string getOdmtrStartTime(string itemCode)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -2068,13 +2068,31 @@ namespace BDO_Localisation_AddOn
             string odmtrHours = oDBDataSourceMTR.GetValue(fieldName, i);
             oDBDataSourceMTR.SetValue(fieldName, oDBDataSourceMTR.Size - 1, odmtrHours);
 
-            if (!isValidTimeFormat(odmtrHours, 5))
+            //if (!isValidTimeFormat(odmtrHours, 5))
+            //{
+            //Program.uiApp.StatusBar.SetSystemMessage("Time format is not correct(hh:mm)");
+            //oDBDataSourceMTR.SetValue(fieldName, i, "12:00");
+            //}
+
+            //int OdmtrHr = Convert.ToInt32(odmtrHours.Substring(0, 2));
+            //int OdmtrMin = Convert.ToInt32(odmtrHours.Substring(3, 2));
+
+            int index = -1;
+            for (int j = 0; j < odmtrHours.Length; j++)
             {
-                Program.uiApp.StatusBar.SetSystemMessage("Time format is not correct(hh:mm)");
-                oDBDataSourceMTR.SetValue(fieldName, i, "12:00");
+                if (odmtrHours[j] == ':') index = j;
             }
-            int OdmtrHr = Convert.ToInt32(odmtrHours.Substring(0, 2));
-            int OdmtrMin = Convert.ToInt32(odmtrHours.Substring(3, 2));
+            int OdmtrHr = 0;
+            int OdmtrMin = 0;
+            if (index != -1)
+            {
+                OdmtrHr = Convert.ToInt32(odmtrHours.Substring(0, index));
+                OdmtrMin = Convert.ToInt32(odmtrHours.Substring(index + 1));
+            }
+            else
+                OdmtrHr = Convert.ToInt32(odmtrHours);
+
+
             hours = 60 * OdmtrHr + OdmtrMin;
 
             return hours;
