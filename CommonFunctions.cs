@@ -1373,7 +1373,7 @@ namespace BDO_Localisation_AddOn
             }
 
 
-            string query = BDOSDepreciationAccrualWizard.BatchDepreciaionQuery(DocDate, ItemCodes, "", "", false);
+            string query = "";//BDOSDepreciationAccrualWizard.BatchDepreciaionQuery(DocDate, ItemCodes, "", "", false);
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
 
