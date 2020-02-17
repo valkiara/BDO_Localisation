@@ -98,8 +98,14 @@ namespace BDO_Localisation_AddOn
                         itm = oForm.Items.Item("PrjCodeE");
                         itm.Enabled = false;
                     }
+                    else if (pVal.ItemUID=="120000039" && oForm.Items.Item("PrjCodeE").Specific.value.ToString() != "" && !pVal.BeforeAction)
+                    {
+                        oForm.Items.Item("PrjCodeE").Enabled = false;
+                    }
+                
                     else if (pVal.ItemUID == "120000001" && pVal.BeforeAction)
                     {
+                        oForm.Items.Item("PrjCodeE").Enabled = false;
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("120000039").Specific));
                         for (int i = 1; i <= oMatrix.RowCount; i++)
                         {
@@ -117,6 +123,8 @@ namespace BDO_Localisation_AddOn
                     }
                     if ((pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS || pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)  && checker)
                     {
+                        oForm.Items.Item("PrjCodeE").Enabled = false;
+
                         SAPbobsCOM.Recordset oRecordset = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                         try
                         {

@@ -17,6 +17,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formItems = null;
 
             string itemName = "";
+    
 
             // -------------------- Use blanket agreement rates-----------------
             int pane = 7;
