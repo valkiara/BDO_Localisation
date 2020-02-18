@@ -11,19 +11,20 @@ namespace BDO_Localisation_AddOn
 {
     class BDOSDepreciationAccrualWizard
     {
+        const int clientHeight = 600;
+        const int clientWidth = 800;
+
         public static void createForm()
         {
             string errorText;
-            int formHeight = Program.uiApp.Desktop.Height;
-            int formWidth = Program.uiApp.Desktop.Width;
 
             //ფორმის აუცილებელი თვისებები
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
             formProperties.Add("UniqueID", "BDOSDepAccrForm");
             formProperties.Add("BorderStyle", SAPbouiCOM.BoFormBorderStyle.fbs_Sizable);
             formProperties.Add("Title", BDOSResources.getTranslate("DepreciationAccruingWizard"));
-            formProperties.Add("ClientWidth", formWidth);
-            formProperties.Add("ClientHeight", formHeight);
+            formProperties.Add("ClientWidth", clientWidth);
+            formProperties.Add("ClientHeight", clientHeight);
 
             SAPbouiCOM.Form oForm;
             bool newForm;
@@ -132,7 +133,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("GroupWith", "InvDepr");
                     formItems.Add("ValOn", "Y");
                     formItems.Add("ValOff", "N");
-                    formItems.Add("Value", 1);
+                    formItems.Add("Value", 2);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -309,7 +310,7 @@ namespace BDO_Localisation_AddOn
                     oColumn.DataBind.Bind(UID, "DepreciationAmt");
 
                     oColumn = oColumns.Add("AlrdDprAmt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("AlreadyDepreciationAmountInCurrentMonth");
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("AlreadyDepreciatedAmountInCurrentMonth");
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "AlreadyDepreciatedAmt");
 
@@ -662,7 +663,7 @@ namespace BDO_Localisation_AddOn
             query.Append("         WHEN T0.\"AlreadyDepreciatedAmt\" IS NULL THEN \n");
             query.Append("         T0.\"PurchaseCost\" / T0.\"UsefulLife\" \n");
             query.Append("         ELSE 0 \n");
-            query.Append("       END                                              AS \"DepreciationAmt\", \n");
+            query.Append("       END                                                  AS \"DepreciationAmt\", \n");
             query.Append("       T0.\"PurchaseCost\" - \"AccumulatedDepreciationAmt\" AS \"NetBookValue\" \n");
             query.Append("FROM   (SELECT \"OBTN\".\"DistNumber\", \n");
             query.Append("               \"OBTQ\".\"WhsCode\", \n");

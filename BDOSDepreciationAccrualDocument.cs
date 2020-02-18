@@ -12,7 +12,7 @@ namespace BDO_Localisation_AddOn
     class BDOSDepreciationAccrualDocument
     {
         const int clientHeight = 540;
-        const int clientWidth = 700;
+        const int clientWidth = 600;
 
         public static void createDocumentUDO(out string errorText)
         {
@@ -442,7 +442,7 @@ namespace BDO_Localisation_AddOn
             int width_s = 139;
             int width_e = 140;
 
-            int left_s2 = 400;
+            int left_s2 = 305;
             int left_e2 = left_s2 + 121;
             int top2 = 5;
 

@@ -2938,9 +2938,6 @@
   <data name="ItmsGrpCod" xml:space="preserve">
     <value>Item Group Code</value>
   </data>
-  <data name="NtBookVal" xml:space="preserve">
-    <value>Net Book Value</value>
-  </data>
   <data name="UseLife" xml:space="preserve">
     <value>Useful Life</value>
   </data>
@@ -3438,5 +3435,26 @@
   </data>
   <data name="Retirement" xml:space="preserve">
     <value>Retirement</value>
+  </data>
+  <data name="AccumulatedDepreciationAmount" xml:space="preserve">
+    <value>Accumulated Depreciation Amount</value>
+  </data>
+  <data name="AlreadyDepreciatedAmountInCurrentMonth" xml:space="preserve">
+    <value>Already Depreciated Amount (Curr. Month)</value>
+  </data>
+  <data name="AssetGroupCode" xml:space="preserve">
+    <value>Asset Group Code</value>
+  </data>
+  <data name="NetBookValue" xml:space="preserve">
+    <value>Net Book Value</value>
+  </data>
+  <data name="PurchaseCost" xml:space="preserve">
+    <value>Purchase Cost</value>
+  </data>
+  <data name="PurchasePrice" xml:space="preserve">
+    <value>Purchase Price</value>
+  </data>
+  <data name="UsefulLife" xml:space="preserve">
+    <value>Useful Life</value>
   </data>
 </root>
