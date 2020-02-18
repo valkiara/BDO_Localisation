@@ -459,31 +459,32 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.CompanyService oCompanyService = Program.oCompany.GetCompanyService();
             SAPbobsCOM.GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDOSDEPACR_D");
             SAPbobsCOM.GeneralData oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
-
-            oGeneralData.SetProperty("U_AccrMnth", AccrMnth);
-            oGeneralData.SetProperty("U_DocDate", PostingDate);
-
             SAPbobsCOM.GeneralDataCollection oChildren = oGeneralData.Child("BDOSDEPAC1");
-            SAPbouiCOM.DataTable DepreciationLines = oForm.DataSources.DataTables.Item("ItemMTRTmp");
-
-            for (int i = 0; i < DepreciationLines.Rows.Count; i++)
-            {
-                SAPbobsCOM.GeneralData oChild = oChildren.Add();
-                oChild.SetProperty("U_ItemCode", DepreciationLines.GetValue("ItemCode", i));
-                oChild.SetProperty("U_DistNumber", DepreciationLines.GetValue("DistNumber", i));
-                oChild.SetProperty("U_BDOSUsLife", DepreciationLines.GetValue("UsefulLife", i));
-                oChild.SetProperty("U_Project", DepreciationLines.GetValue("PrjCode", i));
-                oChild.SetProperty("U_Quantity", DepreciationLines.GetValue("Quantity", i));
-                if (DepreciationLines.GetValue("RemainingLife", i) == 1)
-                    oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("NetBookValue", i));
-                else
-                    oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("DepreciationAmt", i));
-                oChild.SetProperty("U_AccmDprAmt", DepreciationLines.GetValue("AccumulatedDepreciationAmt", i));
-            }
             int docEntry = 0;
+
             try
             {
                 CommonFunctions.StartTransaction();
+
+                oGeneralData.SetProperty("U_AccrMnth", AccrMnth);
+                oGeneralData.SetProperty("U_DocDate", PostingDate);
+
+                SAPbouiCOM.DataTable DepreciationLines = oForm.DataSources.DataTables.Item("ItemMTRTmp");
+
+                for (int i = 0; i < DepreciationLines.Rows.Count; i++)
+                {
+                    SAPbobsCOM.GeneralData oChild = oChildren.Add();
+                    oChild.SetProperty("U_ItemCode", DepreciationLines.GetValue("ItemCode", i));
+                    oChild.SetProperty("U_DistNumber", DepreciationLines.GetValue("DistNumber", i));
+                    oChild.SetProperty("U_BDOSUsLife", DepreciationLines.GetValue("UsefulLife", i));
+                    oChild.SetProperty("U_Project", DepreciationLines.GetValue("PrjCode", i));
+                    oChild.SetProperty("U_Quantity", DepreciationLines.GetValue("Quantity", i));
+                    if (DepreciationLines.GetValue("RemainingLife", i) == 1)
+                        oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("NetBookValue", i));
+                    else
+                        oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("DepreciationAmt", i));
+                    oChild.SetProperty("U_AccmDprAmt", DepreciationLines.GetValue("AccumulatedDepreciationAmt", i));
+                }
 
                 var response = oGeneralService.Add(oGeneralData);
                 docEntry = response.GetProperty("DocEntry");
@@ -495,20 +496,25 @@ namespace BDO_Localisation_AddOn
                     BDOSDepreciationAccrualDocument.JrnEntry(docEntry.ToString(), docEntry.ToString(), PostingDate, JrnLinesDT, "", out errorText);
 
                     if (errorText != null)
-                    {
-                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
-                    }
+                        throw new Exception(errorText);
                     else
                     {
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + " #" + docEntry.ToString(), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                         CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + " #" + docEntry.ToString(), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                     }
                 }
             }
             catch (Exception ex)
             {
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oChildren);
+                Marshal.ReleaseComObject(oGeneralData);
+                Marshal.ReleaseComObject(oGeneralService);
+                Marshal.ReleaseComObject(oCompanyService);
             }
             return docEntry;
         }
