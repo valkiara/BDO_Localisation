@@ -86,60 +86,60 @@ namespace BDO_Localisation_AddOn
                         throw new Exception(errorText);
                     }
 
-                    top += height + 10;
+                    //top += height + 10;
 
-                    formItems = new Dictionary<string, object>();
-                    itemName = "InvDepr"; //10 characters
-                    formItems.Add("isDataSource", true);
-                    formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("Length", 1);
-                    formItems.Add("TableName", "");
-                    formItems.Add("Alias", itemName);
-                    formItems.Add("Bound", true);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_OPTION_BUTTON);
-                    formItems.Add("Left", left_s);
-                    formItems.Add("Width", width_s);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("Retirement"));
-                    formItems.Add("ValOn", "Y");
-                    formItems.Add("ValOff", "N");
-                    //formItems.Add("Value", 1);
+                    //formItems = new Dictionary<string, object>();
+                    //itemName = "InvDepr"; //10 characters
+                    //formItems.Add("isDataSource", true);
+                    //formItems.Add("DataSource", "UserDataSources");
+                    //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    //formItems.Add("Length", 1);
+                    //formItems.Add("TableName", "");
+                    //formItems.Add("Alias", itemName);
+                    //formItems.Add("Bound", true);
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_OPTION_BUTTON);
+                    //formItems.Add("Left", left_s);
+                    //formItems.Add("Width", width_s);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("Caption", BDOSResources.getTranslate("Retirement"));
+                    //formItems.Add("ValOn", "Y");
+                    //formItems.Add("ValOff", "N");
+                    ////formItems.Add("Value", 1);
 
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        throw new Exception(errorText);
-                    }
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    throw new Exception(errorText);
+                    //}
 
-                    formItems = new Dictionary<string, object>();
-                    itemName = "StckDepr"; //10 characters
-                    formItems.Add("isDataSource", true);
-                    formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("Length", 1);
-                    formItems.Add("TableName", "");
-                    formItems.Add("Alias", itemName);
-                    formItems.Add("Bound", true);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_OPTION_BUTTON);
-                    formItems.Add("Left", left_e);
-                    formItems.Add("Width", width_s);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("Depreciation"));
-                    formItems.Add("GroupWith", "InvDepr");
-                    formItems.Add("ValOn", "Y");
-                    formItems.Add("ValOff", "N");
-                    formItems.Add("Value", 2);
+                    //formItems = new Dictionary<string, object>();
+                    //itemName = "StckDepr"; //10 characters
+                    //formItems.Add("isDataSource", true);
+                    //formItems.Add("DataSource", "UserDataSources");
+                    //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    //formItems.Add("Length", 1);
+                    //formItems.Add("TableName", "");
+                    //formItems.Add("Alias", itemName);
+                    //formItems.Add("Bound", true);
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_OPTION_BUTTON);
+                    //formItems.Add("Left", left_e);
+                    //formItems.Add("Width", width_s);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("Caption", BDOSResources.getTranslate("Depreciation"));
+                    //formItems.Add("GroupWith", "InvDepr");
+                    //formItems.Add("ValOn", "Y");
+                    //formItems.Add("ValOff", "N");
+                    //formItems.Add("Value", 2);
 
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        throw new Exception(errorText);
-                    }
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    throw new Exception(errorText);
+                    //}
 
                     top += height + 10;
 
@@ -196,35 +196,28 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.Columns oColumns = oMatrix.Columns;
                     SAPbouiCOM.Column oColumn;
 
-                    //SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Add("ItemMTRTmp");
-                    ////oDataTable.Columns.Add("DocType", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
-                    ////oDataTable.Columns.Add("DocEntry", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
-                    //oDataTable.Columns.Add("PrjCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
-                    //oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
-                    //oDataTable.Columns.Add("DistNumber", SAPbouiCOM.BoFieldsType.ft_Text, 36);
-                    //oDataTable.Columns.Add("UsefulLife", SAPbouiCOM.BoFieldsType.ft_Integer, 6);
-                    //oDataTable.Columns.Add("Quantity", SAPbouiCOM.BoFieldsType.ft_Quantity);
-                    //oDataTable.Columns.Add("DprAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
-                    ////oDataTable.Columns.Add("DepcDoc", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
-                    //oDataTable.Columns.Add("AlrDprAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
-
                     SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Add("ItemsMTR");
-                    oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50);
-                    oDataTable.Columns.Add("DistNumber", SAPbouiCOM.BoFieldsType.ft_Text, 36);
+                    oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer);
+                    oDataTable.Columns.Add("DistNumber", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 36);
                     oDataTable.Columns.Add("WhsCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 8);
-                    oDataTable.Columns.Add("PrjCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);                   
+                    oDataTable.Columns.Add("PrjCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
-                    oDataTable.Columns.Add("ItemName", SAPbouiCOM.BoFieldsType.ft_Text, 100);
+                    oDataTable.Columns.Add("ItemName", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 100);
                     oDataTable.Columns.Add("ItmsGrpCod", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 6);
                     oDataTable.Columns.Add("ItmsGrpNam", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
-                    oDataTable.Columns.Add("UsefulLife", SAPbouiCOM.BoFieldsType.ft_Integer, 6);                     
+                    oDataTable.Columns.Add("UsefulLife", SAPbouiCOM.BoFieldsType.ft_Integer);
+                    oDataTable.Columns.Add("RemainingLife", SAPbouiCOM.BoFieldsType.ft_Integer);
                     oDataTable.Columns.Add("Quantity", SAPbouiCOM.BoFieldsType.ft_Quantity);
                     oDataTable.Columns.Add("PurchasePrice", SAPbouiCOM.BoFieldsType.ft_Price);
                     oDataTable.Columns.Add("PurchaseCost", SAPbouiCOM.BoFieldsType.ft_Sum);
                     oDataTable.Columns.Add("NetBookValue", SAPbouiCOM.BoFieldsType.ft_Sum);
                     oDataTable.Columns.Add("DepreciationAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
                     oDataTable.Columns.Add("AlreadyDepreciatedAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
+                    oDataTable.Columns.Add("DepreciationDocEntry", SAPbouiCOM.BoFieldsType.ft_Integer);
                     oDataTable.Columns.Add("AccumulatedDepreciationAmt", SAPbouiCOM.BoFieldsType.ft_Sum);
+
+                    SAPbouiCOM.DataTable oDataTableTmp = oForm.DataSources.DataTables.Add("ItemMTRTmp");
+                    oDataTableTmp.CopyFrom(oDataTable);
 
                     string UID = "ItemsMTR";
                     SAPbouiCOM.LinkedButton oLink;
@@ -258,31 +251,33 @@ namespace BDO_Localisation_AddOn
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "ItemCode");
                     oLink = oColumn.ExtendedObject;
-                    oLink.LinkedObjectType = "4"; 
+                    oLink.LinkedObjectType = "4";
 
                     oColumn = oColumns.Add("ItemName", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("AssetName");
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "ItemName");
 
-                    oColumn = oColumns.Add("ItmsGrpCod", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    oColumn = oColumns.Add("ItmsGrpCod", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("AssetGroupCode");
                     oColumn.Editable = false;
+                    oColumn.Visible = false;
                     oColumn.DataBind.Bind(UID, "ItmsGrpCod");
-                    oLink = oColumn.ExtendedObject;
-                    oLink.LinkedObjectType = "1470000046";
 
-                    //oColumn = oColumns.Add("ItmsGrpNam", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-                    //oColumn.TitleObject.Caption = BDOSResources.getTranslate("AssetGroupName");
-                    //oColumn.Editable = false;
-                    //oColumn.DataBind.Bind(UID, "ItmsGrpNam");
-                    //oLink = oColumn.ExtendedObject;
-                    //oLink.LinkedObjectType = "1470000046";
+                    oColumn = oColumns.Add("ItmsGrpNam", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("AssetGroupName");
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind(UID, "ItmsGrpNam");
 
                     oColumn = oColumns.Add("UsefulLife", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("UsefulLife");
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "UsefulLife");
+
+                    oColumn = oColumns.Add("RmnngLife", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("RemainingLife");
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind(UID, "RemainingLife");
 
                     oColumn = oColumns.Add("Quantity", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("Quantity");
@@ -313,6 +308,13 @@ namespace BDO_Localisation_AddOn
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("AlreadyDepreciatedAmountInCurrentMonth");
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "AlreadyDepreciatedAmt");
+
+                    oColumn = oColumns.Add("DprEntry", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("DepreciationAccrualDocumentInCurrentMonth");
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind(UID, "DepreciationDocEntry");
+                    oLink = oColumn.ExtendedObject;
+                    oLink.LinkedObjectType = "UDO_F_BDOSDEPACR_D";
 
                     oColumn = oColumns.Add("AccmDprAmt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("AccumulatedDepreciationAmount");
@@ -472,13 +474,13 @@ namespace BDO_Localisation_AddOn
                 oChild.SetProperty("U_BDOSUsLife", DepreciationLines.GetValue("UsefulLife", i));
                 oChild.SetProperty("U_Project", DepreciationLines.GetValue("PrjCode", i));
                 oChild.SetProperty("U_Quantity", DepreciationLines.GetValue("Quantity", i));
-                oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("DeprAmt", i));
-                oChild.SetProperty("U_InvEntry", DepreciationLines.GetValue("DocEntry", i));
-                oChild.SetProperty("U_InvType", DepreciationLines.GetValue("DocType", i));
-                oChild.SetProperty("U_AlrDeprAmt", DepreciationLines.GetValue("AlrDeprAmt", i));
+                if (DepreciationLines.GetValue("RemainingLife", i) == 1)
+                    oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("NetBookValue", i));
+                else
+                    oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("DepreciationAmt", i));
+                oChild.SetProperty("U_AccmDprAmt", DepreciationLines.GetValue("AccumulatedDepreciationAmt", i));
             }
             int docEntry = 0;
-
             try
             {
                 CommonFunctions.StartTransaction();
@@ -499,25 +501,25 @@ namespace BDO_Localisation_AddOn
                     }
                     else
                     {
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + ": " + docEntry.ToString(), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + " #" + docEntry.ToString(), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                         CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
                     }
                 }
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + Ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
             return docEntry;
         }
 
         private static void CreateDocuments(SAPbouiCOM.Form oForm)
         {
-            bool isInvoice = oForm.Items.Item("InvDepr").Specific.Selected;
+            //bool isInvoice = oForm.Items.Item("InvDepr").Specific.Selected;
 
-            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("ItemsMTR").Specific;
             SAPbouiCOM.DataTable depreciationLinesTmp = oForm.DataSources.DataTables.Item("ItemMTRTmp");
             depreciationLinesTmp.Rows.Clear();
+            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("ItemsMTR").Specific;
             SAPbouiCOM.DataTable depreciationLines = oForm.DataSources.DataTables.Item("ItemsMTR");
 
             string dateStr = oForm.DataSources.UserDataSources.Item("DeprMonth").ValueEx;
@@ -538,41 +540,42 @@ namespace BDO_Localisation_AddOn
                 string itemCode = depreciationLines.GetValue("ItemCode", i);
                 string distNumber = depreciationLines.GetValue("DistNumber", i);
                 string project = depreciationLines.GetValue("PrjCode", i);
-                double curMnthAmt = depreciationLines.GetValue("CurMnthAmt", i);
 
-                if (curMnthAmt == 0)
+                if (depreciationLines.GetValue("DepreciationDocEntry", i) == 0)
                 {
                     newRow = depreciationLinesTmp.Rows.Count;
                     depreciationLinesTmp.Rows.Add();
                     depreciationLinesTmp.SetValue("ItemCode", newRow, itemCode);
                     depreciationLinesTmp.SetValue("DistNumber", newRow, distNumber);
                     depreciationLinesTmp.SetValue("UsefulLife", newRow, depreciationLines.GetValue("UsefulLife", i));
+                    depreciationLinesTmp.SetValue("RemainingLife", newRow, depreciationLines.GetValue("RemainingLife", i));
                     depreciationLinesTmp.SetValue("PrjCode", newRow, project);
                     depreciationLinesTmp.SetValue("Quantity", newRow, depreciationLines.GetValue("Quantity", i));
-                    depreciationLinesTmp.SetValue("DeprAmt", newRow, depreciationLines.GetValue("DeprAmt", i));
-                    depreciationLinesTmp.SetValue("AlrDeprAmt", newRow, depreciationLines.GetValue("AlrDeprAmt", i));
+                    depreciationLinesTmp.SetValue("NetBookValue", newRow, depreciationLines.GetValue("NetBookValue", i));
+                    depreciationLinesTmp.SetValue("DepreciationAmt", newRow, depreciationLines.GetValue("DepreciationAmt", i));
+                    depreciationLinesTmp.SetValue("AccumulatedDepreciationAmt", newRow, depreciationLines.GetValue("AccumulatedDepreciationAmt", i));
 
-                    if (isInvoice)
-                    {
-                        depreciationLinesTmp.SetValue("DocEntry", newRow, depreciationLines.GetValue("DocEntry", i));
-                        depreciationLinesTmp.SetValue("DocType", newRow, depreciationLines.GetValue("DocType", i));
+                    ////if (isInvoice)
+                    ////{
+                    //depreciationLinesTmp.SetValue("DocEntry", newRow, depreciationLines.GetValue("DocEntry", i));
+                    //depreciationLinesTmp.SetValue("DocType", newRow, depreciationLines.GetValue("DocType", i));
 
-                        SAPbobsCOM.BoObjectTypes DocType;
+                    //SAPbobsCOM.BoObjectTypes DocType;
 
-                        if (depreciationLines.GetValue("DocType", i) == "13") //Invoice object
-                            DocType = SAPbobsCOM.BoObjectTypes.oInvoices;
-                        else
-                            DocType = SAPbobsCOM.BoObjectTypes.oInventoryGenExit;
+                    //if (depreciationLines.GetValue("DocType", i) == "13") //Invoice object
+                    //    DocType = SAPbobsCOM.BoObjectTypes.oInvoices;
+                    //else
+                    //    DocType = SAPbobsCOM.BoObjectTypes.oInventoryGenExit;
 
-                        SAPbobsCOM.Documents oInvoice = Program.oCompany.GetBusinessObject(DocType);
-                        DateTime DocDate = new DateTime();
-                        if (oInvoice.GetByKey(depreciationLines.GetValue("DocEntry", i)))
-                            DocDate = oInvoice.DocDate;
+                    //SAPbobsCOM.Documents oInvoice = Program.oCompany.GetBusinessObject(DocType);
+                    //DateTime DocDate = new DateTime();
+                    //if (oInvoice.GetByKey(depreciationLines.GetValue("DocEntry", i)))
+                    //    DocDate = oInvoice.DocDate;
 
-                        CreateDocument(oForm, accrMnth, DocDate);
+                    //CreateDocument(oForm, accrMnth, DocDate);
 
-                        depreciationLinesTmp.Rows.Clear();
-                    }
+                    //depreciationLinesTmp.Rows.Clear();
+                    ////}
                 }
                 else
                 {
@@ -580,39 +583,39 @@ namespace BDO_Localisation_AddOn
                     continue;
                 }
 
-                //StringBuilder query = new StringBuilder();
-                ////query.Append("SELECT * \n");
-                ////query.Append("FROM \n");
-                //query.Append("(SELECT TOP 1 \n");
-                //query.Append("\"@BDOSDEPACR\".\"DocEntry\", \n");
-                //query.Append("\"@BDOSDEPACR\".\"U_DocDate\" \n");
-                //query.Append("FROM \"@BDOSDEPACR\" \n");
-                //query.Append("INNER JOIN \"@BDOSDEPAC1\" ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-                //query.Append("WHERE \"U_DocDate\" <= '" + dateStr + "' \n");
-                //query.Append("AND \"Canceled\" = 'N' \n");
-                //query.Append("AND \"@BDOSDEPAC1\".\"U_ItemCode\" = '" + itemCode + "' \n");
-                //query.Append("AND \"@BDOSDEPAC1\".\"U_DistNumber\" = '" + distNumber + "' \n");
-                //query.Append("AND \"@BDOSDEPAC1\".\"U_Project\" = '" + project + "' \n");
-                //query.Append("ORDER BY \n");
-                //query.Append("\"U_DocDate\" DESC, \n");
-                //query.Append("\"DocEntry\" DESC) \n");
-                ////query.Append("WHERE ABS((MONTH('" + dateStr + "') - MONTH(\"U_DocDate\")))>1");
+                StringBuilder query = new StringBuilder();
+                //query.Append("SELECT * \n");
+                //query.Append("FROM \n");
+                query.Append("(SELECT TOP 1 \n");
+                query.Append("\"@BDOSDEPACR\".\"DocEntry\", \n");
+                query.Append("\"@BDOSDEPACR\".\"U_DocDate\" \n");
+                query.Append("FROM \"@BDOSDEPACR\" \n");
+                query.Append("INNER JOIN \"@BDOSDEPAC1\" ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
+                query.Append("WHERE \"U_DocDate\" <= '" + dateStr + "' \n");
+                query.Append("AND \"Canceled\" = 'N' \n");
+                query.Append("AND \"@BDOSDEPAC1\".\"U_ItemCode\" = '" + itemCode + "' \n");
+                query.Append("AND \"@BDOSDEPAC1\".\"U_DistNumber\" = '" + distNumber + "' \n");
+                query.Append("AND \"@BDOSDEPAC1\".\"U_Project\" = '" + project + "' \n");
+                query.Append("ORDER BY \n");
+                query.Append("\"U_DocDate\" DESC, \n");
+                query.Append("\"DocEntry\" DESC) \n");
+                //query.Append("WHERE ABS((MONTH('" + dateStr + "') - MONTH(\"U_DocDate\")))>1");
 
-                //SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                //oRecordSet.DoQuery(query.ToString());
-                //if (!oRecordSet.EoF)
-                //{
-                //    if (Math.Abs(accrMnth.Month - oRecordSet.Fields.Item("U_DocDate").Value.Month) > 1)
-                //    {
-                //        depreciationLinesTmp.Rows.Clear();
-                //        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreateDocumentForThePreviousMonths") + "! " + itemCode + " - " + distNumber + " - " + project, SAPbouiCOM.BoMessageTime.bmt_Short);
-                //        Marshal.ReleaseComObject(oRecordSet);
-                //        continue;
-                //    }
-                //}
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                oRecordSet.DoQuery(query.ToString());
+                if (!oRecordSet.EoF)
+                {
+                    if (Math.Abs(accrMnth.Month - oRecordSet.Fields.Item("U_DocDate").Value.Month) > 1)
+                    {
+                        depreciationLinesTmp.Rows.Remove(newRow);
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreateDocumentForThePreviousMonths") + "! " + itemCode + " - " + distNumber + " - " + project, SAPbouiCOM.BoMessageTime.bmt_Short);
+                        Marshal.ReleaseComObject(oRecordSet);
+                        continue;
+                    }
+                }
             }
 
-            if (!isInvoice && depreciationLinesTmp.Rows.Count > 0)
+            if (depreciationLinesTmp.Rows.Count > 0) //!isInvoice && 
                 CreateDocument(oForm, accrMnth, accrMnth);
         }
 
@@ -636,7 +639,7 @@ namespace BDO_Localisation_AddOn
                 oForm.Freeze(false);
             }
         }
-      
+
         public static void fillMTRItems(SAPbouiCOM.Form oForm)
         {
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("ItemsMTR");
@@ -664,7 +667,8 @@ namespace BDO_Localisation_AddOn
             query.Append("         T0.\"PurchaseCost\" / T0.\"UsefulLife\" \n");
             query.Append("         ELSE 0 \n");
             query.Append("       END                                                  AS \"DepreciationAmt\", \n");
-            query.Append("       T0.\"PurchaseCost\" - \"AccumulatedDepreciationAmt\" AS \"NetBookValue\" \n");
+            query.Append("       T0.\"PurchaseCost\" - \"AccumulatedDepreciationAmt\" AS \"NetBookValue\", \n");
+            query.Append("       T0.\"UsefulLife\" - T0.\"AllDeprDocQty\"             AS \"RemainingLife\" \n");
             query.Append("FROM   (SELECT \"OBTN\".\"DistNumber\", \n");
             query.Append("               \"OBTQ\".\"WhsCode\", \n");
             query.Append("               \"OWHS\".\"WhsName\", \n");
@@ -677,8 +681,15 @@ namespace BDO_Localisation_AddOn
             query.Append("               \"OITM\".\"U_BDOSUsLife\" AS \"UsefulLife\", \n");
             query.Append("               T1.\"U_DeprAmt\"                                                 AS \"AccumulatedDepreciationAmt\", \n");
             query.Append("               T2.\"U_DeprAmt\"                                                 AS \"AlreadyDepreciatedAmt\", \n");
-            query.Append("               \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\"                         AS \"PurchasePrice\", \n");
-            query.Append("               ( \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\" ) * \"OBTQ\".\"Quantity\" AS \"PurchaseCost\" \n");
+            query.Append("               T2.\"DepreciationDocEntry\", \n");
+            query.Append("               \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\"                             AS \"PurchasePrice\", \n");
+            query.Append("               ( \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\" ) * \"OBTQ\".\"Quantity\" AS \"PurchaseCost\", \n");
+            query.Append("               (SELECT Count(DISTINCT \"@BDOSDEPAC1\".\"DocEntry\") \n");
+            query.Append("               FROM   \"@BDOSDEPAC1\" \n");
+            query.Append("                       INNER JOIN \"@BDOSDEPACR\" \n");
+            query.Append("                               ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
+            query.Append("               WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
+            query.Append("                       AND \"@BDOSDEPAC1\".\"U_ItemCode\" = \"OBTQ\".\"ItemCode\")    AS \"AllDeprDocQty\" \n");
             query.Append("        FROM   \"OBTQ\" \n");
             query.Append("               INNER JOIN \"OBTN\" \n");
             query.Append("                       ON \"OBTQ\".\"ItemCode\" = \"OBTN\".\"ItemCode\" \n");
@@ -703,7 +714,8 @@ namespace BDO_Localisation_AddOn
             query.Append("                      ON T1.\"U_ItemCode\" = \"OBTQ\".\"ItemCode\" \n");
             query.Append("                         AND T1.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
             query.Append("                         AND T1.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
-            query.Append("               LEFT JOIN (SELECT \"@BDOSDEPAC1\".\"U_Project\", \n");
+            query.Append("               LEFT JOIN (SELECT \"@BDOSDEPACR\".\"DocEntry\" AS \"DepreciationDocEntry\", \n");
+            query.Append("                                 \"@BDOSDEPAC1\".\"U_Project\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_DeprAmt\" \n");
@@ -731,13 +743,17 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue("ItemCode", rowIndex, oRecordSet.Fields.Item("ItemCode").Value);
                 oDataTable.SetValue("ItemName", rowIndex, oRecordSet.Fields.Item("ItemName").Value);
                 oDataTable.SetValue("ItmsGrpCod", rowIndex, oRecordSet.Fields.Item("ItmsGrpCod").Value);
+                oDataTable.SetValue("ItmsGrpNam", rowIndex, oRecordSet.Fields.Item("ItmsGrpNam").Value);
                 oDataTable.SetValue("UsefulLife", rowIndex, oRecordSet.Fields.Item("UsefulLife").Value);
+                oDataTable.SetValue("RemainingLife", rowIndex, oRecordSet.Fields.Item("RemainingLife").Value);
                 oDataTable.SetValue("Quantity", rowIndex, oRecordSet.Fields.Item("Quantity").Value);
                 oDataTable.SetValue("PurchasePrice", rowIndex, oRecordSet.Fields.Item("PurchasePrice").Value);
                 oDataTable.SetValue("PurchaseCost", rowIndex, oRecordSet.Fields.Item("PurchaseCost").Value);
                 oDataTable.SetValue("NetBookValue", rowIndex, oRecordSet.Fields.Item("NetBookValue").Value);
                 oDataTable.SetValue("DepreciationAmt", rowIndex, oRecordSet.Fields.Item("DepreciationAmt").Value);
                 oDataTable.SetValue("AlreadyDepreciatedAmt", rowIndex, oRecordSet.Fields.Item("AlreadyDepreciatedAmt").Value);
+                if ((int)oRecordSet.Fields.Item("DepreciationDocEntry").Value != 0)
+                    oDataTable.SetValue("DepreciationDocEntry", rowIndex, oRecordSet.Fields.Item("DepreciationDocEntry").Value);
                 oDataTable.SetValue("AccumulatedDepreciationAmt", rowIndex, oRecordSet.Fields.Item("AccumulatedDepreciationAmt").Value);
 
                 //DateTime InDateStart = oRecordSet.Fields.Item("InDate").Value;
@@ -835,20 +851,20 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(true);
 
-                bool isRetirement = oForm.Items.Item("InvDepr").Specific.Selected;
+                //bool isRetirement = oForm.Items.Item("InvDepr").Specific.Selected;
 
-                SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
+                //SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("ItemsMTR").Specific;
 
-                if (isRetirement)
-                {
-                    oMatrix.Columns.Item("DocType").Visible = true;
-                    oMatrix.Columns.Item("DocEntry").Visible = true;
-                }
-                else
-                {
-                    oMatrix.Columns.Item("DocType").Visible = false;
-                    oMatrix.Columns.Item("DocEntry").Visible = false;
-                }
+                //if (isRetirement)
+                //{
+                //    oMatrix.Columns.Item("DocType").Visible = true;
+                //    oMatrix.Columns.Item("DocEntry").Visible = true;
+                //}
+                //else
+                //{
+                //    oMatrix.Columns.Item("DocType").Visible = false;
+                //    oMatrix.Columns.Item("DocEntry").Visible = false;
+                //}
 
                 int mtrWidth = oForm.ClientWidth;
                 oForm.Items.Item("ItemsMTR").Width = mtrWidth;

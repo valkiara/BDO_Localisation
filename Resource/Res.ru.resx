@@ -850,7 +850,7 @@
     <value>Reason</value>
   </data>
   <data name="ReasonIs" xml:space="preserve">
-    <value>because of </value>
+    <value>because of</value>
   </data>
   <data name="ReceiveAddDeclaration" xml:space="preserve">
     <value>Receive/Add To Declaration</value>
@@ -3456,5 +3456,14 @@
   </data>
   <data name="UsefulLife" xml:space="preserve">
     <value>Useful Life</value>
+  </data>
+  <data name="AssetGroupName" xml:space="preserve">
+    <value>Asset Group Name</value>
+  </data>
+  <data name="DepreciationAccrualDocumentInCurrentMonth" xml:space="preserve">
+    <value>Depreciation Accrual Document (Curr. Month)</value>
+  </data>
+  <data name="RemainingLife" xml:space="preserve">
+    <value>Remaining Life</value>
   </data>
 </root>

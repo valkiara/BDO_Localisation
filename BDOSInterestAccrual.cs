@@ -1589,9 +1589,7 @@ namespace BDO_Localisation_AddOn
             JournalEntry.cancellation(oForm, docEntry, "UDO_F_BDOSINAC_D", out errorText);
             Program.canceledDocEntry = 0;
             if (!string.IsNullOrEmpty(errorText))
-            {
                 throw new Exception(errorText);
-            }
         }
     }
 }

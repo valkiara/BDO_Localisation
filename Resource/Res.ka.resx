@@ -3454,4 +3454,13 @@
   <data name="UsefulLife" xml:space="preserve">
     <value>გამოყენების ვადა</value>
   </data>
+  <data name="AssetGroupName" xml:space="preserve">
+    <value>ძს ჯგუფის დასახელება</value>
+  </data>
+  <data name="DepreciationAccrualDocumentInCurrentMonth" xml:space="preserve">
+    <value>ცვეთის დარიცხვის დოკუმენტი (მიმდ. თვე)</value>
+  </data>
+  <data name="RemainingLife" xml:space="preserve">
+    <value>დარჩენილი ვადა</value>
+  </data>
 </root>

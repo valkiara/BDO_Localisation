@@ -349,8 +349,8 @@ namespace BDO_Localisation_AddOn
 
                     SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Add("InvoiceMTR");
 
-                    oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50); //ინდექსი 
-                    oDataTable.Columns.Add("CheckBox", SAPbouiCOM.BoFieldsType.ft_Text, 1); // 
+                    oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer); //ინდექსი 
+                    oDataTable.Columns.Add("CheckBox", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 1); // 
                     oDataTable.Columns.Add("DocEntry", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
                     oDataTable.Columns.Add("DocNum", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ნომერი
                     oDataTable.Columns.Add("cancelled", SAPbouiCOM.BoFieldsType.ft_Text, 1); //ნომერი                    
@@ -1586,7 +1586,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Add("ItemsMTR");
-                    oDataTable.Columns.Add("LineID", SAPbouiCOM.BoFieldsType.ft_Integer, 50);
+                    oDataTable.Columns.Add("LineID", SAPbouiCOM.BoFieldsType.ft_Integer);
                     oDataTable.Columns.Add("DocEntry", SAPbouiCOM.BoFieldsType.ft_Text, 50);
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("Dscptn", SAPbouiCOM.BoFieldsType.ft_Text, 50);
