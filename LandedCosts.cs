@@ -13,6 +13,7 @@ namespace BDO_Localisation_AddOn
     static partial class LandedCosts
     {
         public static CultureInfo cultureInfo = null;
+        public static bool isOpened = false;
 
         public static void CheckAccounts(SAPbouiCOM.Form oForm, out string errorText)
         {
@@ -1062,14 +1063,25 @@ namespace BDO_Localisation_AddOn
                 //    oForm.Freeze(true);
                 //    oForm.Freeze(false);
                 //}
-                string str = pVal.ItemUID;
-                if (pVal.ItemUID == "BDOSStRev")
+                if (pVal.ItemUID == "BDOSStRev" && !isOpened)
                 {
-                    //aq meore da mesame parametrad me rac minda is ro gadavce, xsnis formas
+                    isOpened = true;
                     SAPbouiCOM.DBDataSource DocDBSourcePAYR = oForm.DataSources.DBDataSources.Item(0);
                     string docNum = DocDBSourcePAYR.GetValue("DocNum", 0);
-                    //"UDO_F_BDO_WBLD_D"
-                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "162", docNum);
+                    //"UDO_F_BDO_WBLD_D" form type ex
+                    //oForm unda iyos stock revaluation ro magaze daematos 
+                    //form id
+
+
+                    oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+                    oForm.GetType();
+                    BDO_StockRevaluation.createFormItems(oForm, out errorText);
+                    BDO_StockRevaluation.fillLandedCostNumber(oForm, docNum);
+                    
+                    
+                    
+                    // ..., form type ex(menu id), docNum
+                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, "162", "5");
                 }
             }
         }
