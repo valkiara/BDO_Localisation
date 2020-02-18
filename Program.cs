@@ -686,7 +686,7 @@ namespace BDO_Localisation_AddOn
 
                     if (oDocForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
                     {
-                        BDOSDepreciationAccrualDocument.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
+                        BDOSDepreciationAccrualDocument.uiApp_MenuEvent(ref pVal, out BubbleEvent);
                     }
                 }
             }
@@ -1063,299 +1063,325 @@ namespace BDO_Localisation_AddOn
             //----------------------------->Duplicate<-----------------------------
             if (pVal.MenuUID == "1287")
             {
-                if (pVal.BeforeAction)
+                try
                 {
-                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
+                    if (pVal.BeforeAction)
+                    {
+                        SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
+                    }
+                    else
+                    {
+                        SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
+                        //----------------------------->A/R Invoice<-----------------------------
+                        if (oForm.TypeEx == "133")
+                        {
+                            ARInvoice.formDataLoad(oForm, out errorText);
+                        }
+                        //----------------------------->Asset Master Data<-----------------------------
+                        if (oForm.TypeEx == "1473000075")
+                        {
+                            FixedAsset.formDataLoad(oForm);
+                        }
+
+                        //----------------------------->Depreciation Accrual Document<-----------------------------
+                        if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
+                        {
+                            BDOSDepreciationAccrualDocument.formDataLoad(oForm);
+                        }
+
+                        //----------------------------->A/R Reserve Invoice<-----------------------------
+                        if (oForm.TypeEx == "60091")
+                        {
+                            ARReserveInvoice.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Inventory Transfer<-----------------------------
+                        else if (oForm.TypeEx == "940")
+                        {
+                            StockTransfer.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/R Credit Note<-----------------------------
+                        else if (oForm.TypeEx == "179")
+                        {
+                            ARCreditNote.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/R Correction Invoice<-----------------------------
+                        else if (oForm.TypeEx == "70008")
+                        {
+                            ArCorrectionInvoice.FormDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/P Invoice<-----------------------------
+                        else if (oForm.TypeEx == "141")
+                        {
+                            APInvoice.formDataLoad(oForm, out errorText);
+                            APInvoice.setVisibleFormItems(oForm, out errorText);
+                        }
+
+                        //----------------------------->Goods Receipt PO<-----------------------------
+                        else if (oForm.TypeEx == "143")
+                        {
+                            GoodsReceiptPO.formDataLoad(oForm, out errorText);
+                            GoodsReceiptPO.setVisibleFormItems(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/P Credit Memo<-----------------------------
+                        else if (oForm.TypeEx == "181")
+                        {
+                            APCreditMemo.formDataLoad(oForm, out errorText);
+                            APCreditMemo.setVisibleFormItems(oForm, out errorText);
+                        }
+
+                        //----------------------------->Outgoing Payments<-----------------------------
+                        else if (oForm.TypeEx == "426")
+                        {
+                            OutgoingPayment.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Blanket agreement<-----------------------------
+                        else if (oForm.TypeEx == "1250000100")
+                        {
+                            BlanketAgreement.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Goods Issue<-----------------------------
+                        else if (oForm.TypeEx == "720")
+                        {
+                            GoodsIssue.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Profit Tax Accural<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
+                        {
+                            BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/P Down Payment Request<-----------------------------
+                        else if (oForm.TypeEx == "65309")
+                        {
+                            APDownPaymentRequest.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/P Down Payment Invoice<-----------------------------
+                        else if (oForm.TypeEx == "65301")
+                        {
+                            APDownPaymentInvoice.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/R Down Payment Request<-----------------------------
+                        //else if (oForm.TypeEx == "65308")
+                        //{
+                        //    ARDownPaymentRequest.formDataLoad(oForm, out errorText);
+                        //}
+                        //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
+                        {
+                            BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
+                        }
+
+                        //----------------------------->Retirement<-----------------------------
+                        else if (oForm.TypeEx == "1470000014")
+                        {
+                            Retirement.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Warehouses<-----------------------------
+                        else if (oForm.TypeEx == "62")
+                        {
+                            Warehouses.formDataLoad(oForm, out errorText);
+                        }
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
-                    //----------------------------->A/R Invoice<-----------------------------
-                    if (oForm.TypeEx == "133")
-                    {
-                        ARInvoice.formDataLoad(oForm, out errorText);
-                    }
-                    //----------------------------->Asset Master Data<-----------------------------
-                    if (oForm.TypeEx == "1473000075")
-                    {
-                        FixedAsset.formDataLoad(oForm);
-                    }
-
-                    //----------------------------->Depreciation Accrual Document<-----------------------------
-                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
-                    {
-                        BDOSDepreciationAccrualDocument.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/R Reserve Invoice<-----------------------------
-                    if (oForm.TypeEx == "60091")
-                    {
-                        ARReserveInvoice.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Inventory Transfer<-----------------------------
-                    else if (oForm.TypeEx == "940")
-                    {
-                        StockTransfer.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/R Credit Note<-----------------------------
-                    else if (oForm.TypeEx == "179")
-                    {
-                        ARCreditNote.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/R Correction Invoice<-----------------------------
-                    else if (oForm.TypeEx == "70008")
-                    {
-                        ArCorrectionInvoice.FormDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/P Invoice<-----------------------------
-                    else if (oForm.TypeEx == "141")
-                    {
-                        APInvoice.formDataLoad(oForm, out errorText);
-                        APInvoice.setVisibleFormItems(oForm, out errorText);
-                    }
-
-                    //----------------------------->Goods Receipt PO<-----------------------------
-                    else if (oForm.TypeEx == "143")
-                    {
-                        GoodsReceiptPO.formDataLoad(oForm, out errorText);
-                        GoodsReceiptPO.setVisibleFormItems(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/P Credit Memo<-----------------------------
-                    else if (oForm.TypeEx == "181")
-                    {
-                        APCreditMemo.formDataLoad(oForm, out errorText);
-                        APCreditMemo.setVisibleFormItems(oForm, out errorText);
-                    }
-
-                    //----------------------------->Outgoing Payments<-----------------------------
-                    else if (oForm.TypeEx == "426")
-                    {
-                        OutgoingPayment.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Blanket agreement<-----------------------------
-                    else if (oForm.TypeEx == "1250000100")
-                    {
-                        BlanketAgreement.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Goods Issue<-----------------------------
-                    else if (oForm.TypeEx == "720")
-                    {
-                        GoodsIssue.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Profit Tax Accural<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
-                    {
-                        BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/P Down Payment Request<-----------------------------
-                    else if (oForm.TypeEx == "65309")
-                    {
-                        APDownPaymentRequest.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/P Down Payment Invoice<-----------------------------
-                    else if (oForm.TypeEx == "65301")
-                    {
-                        APDownPaymentInvoice.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/R Down Payment Request<-----------------------------
-                    //else if (oForm.TypeEx == "65308")
-                    //{
-                    //    ARDownPaymentRequest.formDataLoad(oForm, out errorText);
-                    //}
-                    //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
-                    {
-                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
-                    }
-
-                    //----------------------------->Retirement<-----------------------------
-                    else if (oForm.TypeEx == "1470000014")
-                    {
-                        Retirement.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Warehouses<-----------------------------
-                    else if (oForm.TypeEx == "62")
-                    {
-                        Warehouses.formDataLoad(oForm, out errorText);
-                    }
+                    uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
                 }
             }
 
             //----------------------------->Add<-----------------------------
             if (pVal.MenuUID == "1282")
             {
-                if (pVal.BeforeAction)
+                try
                 {
-                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
-
-                    //----------------------------->Waybill document<-----------------------------
-                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_WBLD_D")
+                    if (pVal.BeforeAction)
                     {
-                        uiApp.MessageBox(BDOSResources.getTranslate("CreateWaybillAllowedBasedOnlyOtherDocument"));
-                        BubbleEvent = false;
+                        SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
+
+                        //----------------------------->Waybill document<-----------------------------
+                        if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_WBLD_D")
+                        {
+                            uiApp.MessageBox(BDOSResources.getTranslate("CreateWaybillAllowedBasedOnlyOtherDocument"));
+                            BubbleEvent = false;
+                        }
+                    }
+                    else
+                    {
+                        SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
+
+                        //----------------------------->A/R Invoice<-----------------------------
+                        if (oForm.TypeEx == "133")
+                        {
+                            ARInvoice.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Depreciation Accrual Document<-----------------------------
+                        if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
+                        {
+                            BDOSDepreciationAccrualDocument.formDataLoad(oForm);
+                        }
+
+                        //----------------------------->Delivery<-----------------------------
+                        if (oForm.TypeEx == "140")
+                        {
+                            Delivery.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Asset Master Data<-----------------------------
+                        if (oForm.TypeEx == "1473000075")
+                        {
+                            FixedAsset.formDataLoad(oForm);
+                        }
+
+                        //----------------------------->A/R Reserve Invoice<-----------------------------
+                        if (oForm.TypeEx == "60091")
+                        {
+                            ARReserveInvoice.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Inventory Transfer<-----------------------------
+                        else if (oForm.TypeEx == "940")
+                        {
+                            StockTransfer.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/R Credit Note<-----------------------------
+                        else if (oForm.TypeEx == "179")
+                        {
+                            ARCreditNote.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/R Correction Invoice<-----------------------------
+                        else if (oForm.TypeEx == "70008")
+                        {
+                            ArCorrectionInvoice.FormDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/P Invoice<-----------------------------
+                        else if (oForm.TypeEx == "141")
+                        {
+                            APInvoice.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Goods Receipt PO<-----------------------------
+                        else if (oForm.TypeEx == "143")
+                        {
+                            GoodsReceiptPO.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/P Credit Memo<-----------------------------
+                        else if (oForm.TypeEx == "181")
+                        {
+                            APCreditMemo.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Tax Invoice Sent<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXS_D")
+                        {
+                            BDO_TaxInvoiceSent.formDataLoad(oForm, out errorText);
+                        }
+                        //----------------------------->Profit Tax Accural<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
+                        {
+                            BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Outgoing Payments<-----------------------------
+                        else if (oForm.TypeEx == "426")
+                        {
+                            OutgoingPayment.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Blanket agreement<-----------------------------
+                        else if (oForm.TypeEx == "1250000100")
+                        {
+                            BlanketAgreement.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->Goods Issue<-----------------------------
+                        else if (oForm.TypeEx == "720")
+                        {
+                            GoodsIssue.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/P Down Payment Request<-----------------------------
+                        else if (oForm.TypeEx == "65309")
+                        {
+                            APDownPaymentRequest.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/P Down Payment Invoice<-----------------------------
+                        else if (oForm.TypeEx == "65301")
+                        {
+                            APDownPaymentInvoice.formDataLoad(oForm, out errorText);
+                        }
+
+                        //----------------------------->A/R Down Payment Request<-----------------------------
+                        //else if (oForm.TypeEx == "65308")
+                        //{
+                        //    ARDownPaymentRequest.formDataLoad(oForm, out errorText);
+                        //}
+                        //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
+                        {
+                            BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
+                        }
+
+                        //----------------------------->Retirement<-----------------------------
+                        else if (oForm.TypeEx == "1470000014")
+                        {
+                            Retirement.formDataLoad(oForm, out errorText);
+                        }
+
+                        //-----------------------------Warehouses<-----------------------------
+                        else if (oForm.TypeEx == "62")
+                        {
+                            Warehouses.formDataLoad(oForm, out errorText);
+                        }
                     }
                 }
-
-                else
+                catch (Exception ex)
                 {
-                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
-
-                    //----------------------------->A/R Invoice<-----------------------------
-                    if (oForm.TypeEx == "133")
-                    {
-                        ARInvoice.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Depreciation Accrual Document<-----------------------------
-                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
-                    {
-                        BDOSDepreciationAccrualDocument.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Delivery<-----------------------------
-                    if (oForm.TypeEx == "140")
-                    {
-                        Delivery.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Asset Master Data<-----------------------------
-                    if (oForm.TypeEx == "1473000075")
-                    {
-                        FixedAsset.formDataLoad(oForm);
-                    }
-
-                    //----------------------------->A/R Reserve Invoice<-----------------------------
-                    if (oForm.TypeEx == "60091")
-                    {
-                        ARReserveInvoice.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Inventory Transfer<-----------------------------
-                    else if (oForm.TypeEx == "940")
-                    {
-                        StockTransfer.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/R Credit Note<-----------------------------
-                    else if (oForm.TypeEx == "179")
-                    {
-                        ARCreditNote.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/R Correction Invoice<-----------------------------
-                    else if (oForm.TypeEx == "70008")
-                    {
-                        ArCorrectionInvoice.FormDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/P Invoice<-----------------------------
-                    else if (oForm.TypeEx == "141")
-                    {
-                        APInvoice.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Goods Receipt PO<-----------------------------
-                    else if (oForm.TypeEx == "143")
-                    {
-                        GoodsReceiptPO.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/P Credit Memo<-----------------------------
-                    else if (oForm.TypeEx == "181")
-                    {
-                        APCreditMemo.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Tax Invoice Sent<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXS_D")
-                    {
-                        BDO_TaxInvoiceSent.formDataLoad(oForm, out errorText);
-                    }
-                    //----------------------------->Profit Tax Accural<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
-                    {
-                        BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Outgoing Payments<-----------------------------
-                    else if (oForm.TypeEx == "426")
-                    {
-                        OutgoingPayment.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Blanket agreement<-----------------------------
-                    else if (oForm.TypeEx == "1250000100")
-                    {
-                        BlanketAgreement.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->Goods Issue<-----------------------------
-                    else if (oForm.TypeEx == "720")
-                    {
-                        GoodsIssue.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/P Down Payment Request<-----------------------------
-                    else if (oForm.TypeEx == "65309")
-                    {
-                        APDownPaymentRequest.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/P Down Payment Invoice<-----------------------------
-                    else if (oForm.TypeEx == "65301")
-                    {
-                        APDownPaymentInvoice.formDataLoad(oForm, out errorText);
-                    }
-
-                    //----------------------------->A/R Down Payment Request<-----------------------------
-                    //else if (oForm.TypeEx == "65308")
-                    //{
-                    //    ARDownPaymentRequest.formDataLoad(oForm, out errorText);
-                    //}
-                    //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
-                    else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
-                    {
-                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
-                    }
-
-                    //----------------------------->Retirement<-----------------------------
-                    else if (oForm.TypeEx == "1470000014")
-                    {
-                        Retirement.formDataLoad(oForm, out errorText);
-                    }
-
-                    //-----------------------------Warehouses<-----------------------------
-                    else if (oForm.TypeEx == "62")
-                    {
-                        Warehouses.formDataLoad(oForm, out errorText);
-                    }
+                    uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
                 }
             }
 
             //----------------------------->Find<-----------------------------
             if (pVal.MenuUID == "1281")
             {
-                SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
-
-                if (!pVal.BeforeAction)
+                try
                 {
-                    //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
-                    if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
+                    SAPbouiCOM.Form oForm = uiApp.Forms.ActiveForm;
+
+                    if (!pVal.BeforeAction)
                     {
-                        BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
+                        //----------------------------->A/R Down Payment VAT Accrual<-----------------------------
+                        if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_ARDPV_D")
+                        {
+                            BDOSARDownPaymentVATAccrual.formDataLoad(oForm);
+                        }
+
+                        //----------------------------->Depreciation Accrual Document<-----------------------------
+                        else if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
+                        {
+                            BDOSDepreciationAccrualDocument.formDataLoad(oForm);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
                 }
             }
 
