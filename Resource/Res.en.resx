@@ -630,8 +630,8 @@
   <data name="InventoryTransfer" xml:space="preserve">
     <value>Inventory Transfer</value>
   </data>
-  <data name="TaxInvoiceIsAlreadyCreatedBasedOnARCreditNote" xml:space="preserve">
-    <value>Tax invoice is already created based on AR credit note</value>
+  <data name="TaxInvoiceIsAlreadyCreatedBasedOnARCorrection" xml:space="preserve">
+    <value>Tax invoice is already created based on AR correction</value>
   </data>
   <data name="InvoiceNumber" xml:space="preserve">
     <value>Invoice Number</value>
@@ -762,8 +762,8 @@
   <data name="OnTheBaseARInvoice" xml:space="preserve">
     <value>on the base AR Invoice</value>
   </data>
-  <data name="OnThePreviousARCreditNote" xml:space="preserve">
-    <value>on the previous AR Credit Note</value>
+  <data name="OnThePreviousARCorrection" xml:space="preserve">
+    <value>on the previous AR Correction</value>
   </data>
   <data name="Operation" xml:space="preserve">
     <value>Operation</value>
@@ -2024,7 +2024,7 @@
     <value>Invoice</value>
   </data>
   <data name="ARCDocumentsOnARIDoYouWantToCreateUnitedTaxInvoiceIncludingTheseDocuments" xml:space="preserve">
-    <value>There are AR Credit Note documents on AR Invoice (without Tax Invoice). Do you want to create united Tax Invoice including these documents</value>
+    <value>There are AR Correction documents on AR Invoice (without Tax Invoice). Do you want to create united Tax Invoice including these documents</value>
   </data>
   <data name="CannotBeCreated" xml:space="preserve">
     <value>cannot be created</value>
@@ -3465,5 +3465,17 @@
   </data>
   <data name="CreateDocumentForThePreviousMonths" xml:space="preserve">
     <value>Create document for the previous months</value>
+  </data>
+  <data name="EndingValueOfOdometerInHours" xml:space="preserve">
+    <value>Ending value of odometer in hours</value>
+  </data>
+  <data name="StartingValueOfOdometerInHours" xml:space="preserve">
+    <value>Starting Value of Odometer in Hours</value>
+  </data>
+  <data name="AutoAgrNo" xml:space="preserve">
+    <value>AgrNo Auto-Reference</value>
+  </data>
+  <data name="AutoProject" xml:space="preserve">
+    <value>Project Auto-Reference</value>
   </data>
 </root>

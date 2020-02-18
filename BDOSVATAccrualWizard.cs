@@ -473,51 +473,42 @@ namespace BDO_Localisation_AddOn
         {
             string errorText = null;
 
-            SAPbobsCOM.SBObob vObj;
-            vObj = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-
-            SAPbobsCOM.CompanyService oCompanyService = null;
-            SAPbobsCOM.GeneralService oGeneralService = null;
-            SAPbobsCOM.GeneralData oGeneralData = null;
-            oCompanyService = Program.oCompany.GetCompanyService();
-            oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_ARDPV_D");
-            oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
-
-            DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(headerLine["DocDate"].ToString(), "yyyyMMdd", CultureInfo.InvariantCulture));
-
-            oGeneralData.SetProperty("U_DocDate", DocDate);
-            oGeneralData.SetProperty("U_cardCode", headerLine["CardCode"].ToString());
-            oGeneralData.SetProperty("U_cardCodeN", headerLine["CardName"].ToString());
-            oGeneralData.SetProperty("U_baseDoc", headerLine["DocEntry"].ToString());
-            oGeneralData.SetProperty("U_baseDocT", "203");
-            oGeneralData.SetProperty("U_GrsAmnt", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture));
-            oGeneralData.SetProperty("U_VatAmount", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture) * 18 / 118);
-            SAPbobsCOM.GeneralDataCollection oChildren = null;
-
-            oChildren = oGeneralData.Child("BDOSRDV1");
-            double U_VatAmount = 0;
-            //////////
-            for (int row = 0; row < ItemsDT.Rows.Count; row++)
-            {
-                if (headerLine["DocEntry"].ToString() == ItemsDT.Rows[row]["DocEntry"].ToString())
-                {
-                    SAPbobsCOM.GeneralData oChild = oChildren.Add();
-                    oChild.SetProperty("U_ItemCode", ItemsDT.Rows[row]["ItemCode"]);
-                    oChild.SetProperty("U_Dscptn", ItemsDT.Rows[row]["Dscptn"]);
-                    oChild.SetProperty("U_GrsAmnt", Convert.ToDouble(ItemsDT.Rows[row]["GrsAmnt"], CultureInfo.InvariantCulture));
-                    oChild.SetProperty("U_VatGrp", ItemsDT.Rows[row]["VatGrp"]);
-                    oChild.SetProperty("U_VatAmount", Convert.ToDouble(ItemsDT.Rows[row]["VatAmnt"], CultureInfo.InvariantCulture));
-                    U_VatAmount = U_VatAmount + Convert.ToDouble(ItemsDT.Rows[row]["VatAmnt"], CultureInfo.InvariantCulture);
-                }
-            }
-            oGeneralData.SetProperty("U_VatAmount", U_VatAmount);
-            //////////
-
-
+            SAPbobsCOM.SBObob vObj = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+            SAPbobsCOM.CompanyService oCompanyService = Program.oCompany.GetCompanyService();
+            SAPbobsCOM.GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_ARDPV_D");
+            SAPbobsCOM.GeneralData oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
+            SAPbobsCOM.GeneralDataCollection oChildren = oGeneralData.Child("BDOSRDV1");
             int docEntry = 0;
+
             try
             {
                 CommonFunctions.StartTransaction();
+
+                DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(headerLine["DocDate"].ToString(), "yyyyMMdd", CultureInfo.InvariantCulture));
+                oGeneralData.SetProperty("U_DocDate", DocDate);
+                oGeneralData.SetProperty("U_cardCode", headerLine["CardCode"].ToString());
+                oGeneralData.SetProperty("U_cardCodeN", headerLine["CardName"].ToString());
+                oGeneralData.SetProperty("U_baseDoc", headerLine["DocEntry"].ToString());
+                oGeneralData.SetProperty("U_baseDocT", "203");
+                oGeneralData.SetProperty("U_GrsAmnt", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture));
+                oGeneralData.SetProperty("U_VatAmount", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture) * 18 / 118);
+                
+                double U_VatAmount = 0;
+
+                for (int row = 0; row < ItemsDT.Rows.Count; row++)
+                {
+                    if (headerLine["DocEntry"].ToString() == ItemsDT.Rows[row]["DocEntry"].ToString())
+                    {
+                        SAPbobsCOM.GeneralData oChild = oChildren.Add();
+                        oChild.SetProperty("U_ItemCode", ItemsDT.Rows[row]["ItemCode"]);
+                        oChild.SetProperty("U_Dscptn", ItemsDT.Rows[row]["Dscptn"]);
+                        oChild.SetProperty("U_GrsAmnt", Convert.ToDouble(ItemsDT.Rows[row]["GrsAmnt"], CultureInfo.InvariantCulture));
+                        oChild.SetProperty("U_VatGrp", ItemsDT.Rows[row]["VatGrp"]);
+                        oChild.SetProperty("U_VatAmount", Convert.ToDouble(ItemsDT.Rows[row]["VatAmnt"], CultureInfo.InvariantCulture));
+                        U_VatAmount = U_VatAmount + Convert.ToDouble(ItemsDT.Rows[row]["VatAmnt"], CultureInfo.InvariantCulture);
+                    }
+                }
+                oGeneralData.SetProperty("U_VatAmount", U_VatAmount);
 
                 var response = oGeneralService.Add(oGeneralData);
                 docEntry = response.GetProperty("DocEntry");
@@ -527,25 +518,25 @@ namespace BDO_Localisation_AddOn
                     DataTable JrnLinesDT = BDOSARDownPaymentVATAccrual.createAdditionalEntries(null, oGeneralData, null, "", 0);
                     BDOSARDownPaymentVATAccrual.JrnEntry(docEntry.ToString(), docEntry.ToString(), DocDate, JrnLinesDT, out errorText);
                     if (errorText != null)
-                    {
-                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                    }
+                        throw new Exception(errorText);
                     else
-                    {
                         CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                    }
                 }
-
             }
-            catch
+            catch (Exception ex)
             {
                 CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                Program.uiApp.SetStatusBarMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
-
-
-
+            finally
+            {
+                Marshal.ReleaseComObject(oChildren);
+                Marshal.ReleaseComObject(oGeneralData);
+                Marshal.ReleaseComObject(oGeneralService);
+                Marshal.ReleaseComObject(oCompanyService);
+                Marshal.ReleaseComObject(vObj);
+            }
             return docEntry;
-
         }
 
         private static bool GetAccountCashFlowRelevant(string GLAccount)
@@ -1012,51 +1003,68 @@ namespace BDO_Localisation_AddOn
                 string dateES = new DateTime(date.Year, date.Month, 1).ToString("yyyyMMdd");
                 string dateEE = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)).ToString("yyyyMMdd");
 
-                string cardCodeE = oForm.DataSources.UserDataSources.Item("BPCode").ValueEx;
-                cardCodeE = cardCodeE == "" ? "1=1" : @" ""ODPI"".""CardCode"" = '" + cardCodeE + "'";
+                string cardCode = oForm.DataSources.UserDataSources.Item("BPCode").ValueEx;
 
-                string query = @"select 
-                    ""ODPI"".""DocEntry"",
-                    ""ODPI"".""CANCELED"",
-                    ""ODPI"".""DocNum"",
-                    ""ODPI"".""DocDate"",
-                    ""ODPI"".""CardCode"",
-                    ""ODPI"".""CardName"",
-					IFNULL(""OCRD"".""LicTradNum"",'') as ""LicTradNum"",
-                    ""SumApplied""-IFNULL(""ITR1"".""ReconSum"",0) as ""Total"",
-                    ""@BDOSARDV"".""U_GrsAmnt"" as ""DocTotal"",                    
-                    ""@BDOSARDV"".""U_VatAmount"" as ""DocVAtTotal"",                    
-                    IFNULL(""@BDOSARDV"".""DocEntry"",0) as ""DocEntVT"",
-                    IFNULL(""@BDOSARDV"".""DocNum"",0) as ""DocNumVT""
-
-                    from ""ODPI""
-                    left join ""@BDOSARDV"" on ""ODPI"".""DocEntry""= ""@BDOSARDV"".""U_baseDoc"" and ""@BDOSARDV"".""U_baseDocT""=203 and ""@BDOSARDV"".""Canceled""='N'
-                    inner join ""OCRD"" on ""ODPI"".""CardCode""= ""OCRD"".""CardCode""                     
-                    
-                    left join (select
-	                 ""RCT2"".""DocEntry"",
-	                 MAX(""RCT2"".""SumApplied"") as ""SumApplied"",
-	                 SUM(""ITR1"".""ReconSum"") as ""ReconSum"" 
-	                from ""RCT2""
-                    inner join ""ORCT"" on ""ORCT"".""DocEntry"" = ""RCT2"".""DocNum"" and ""ORCT"".""Canceled"" = 'N'
-	                left join (select
-                    ""ITR1"".""LineSeq"",
-                    ""ITR1"".""SrcObjAbs"",
-                    ""ITR1"".""SrcObjTyp"",
-
-                     ""ITR1"".""ReconSum"" 
-		                from ""ITR1"" 
-		                inner join ""OITR"" on ""ITR1"".""ReconNum"" = ""OITR"".""ReconNum"" 
-		                and ""OITR"".""ReconDate""<='" + dateEE + @"' 
-		                and ""OITR"".""Canceled"" = 'N' 
-		                and ""OITR"".""ReconType""<>'3') as ""ITR1"" on ""RCT2"".""InvoiceId"" = ""ITR1"".""LineSeq"" 
-	                and ""RCT2"".""DocNum"" = ""ITR1"".""SrcObjAbs"" 
-	                and ""ITR1"".""SrcObjTyp"" = 24 
-	                and ""RCT2"".""InvType"" = 203 
-	                group by ""RCT2"".""DocEntry"") as ""ITR1""  on  ""ITR1"".""DocEntry"" = ""ODPI"".""DocEntry""                   
-                  
-                    where ""DocStatus""='C' and (""DocTotal"">""DpmAppl"" or IFNULL(""@BDOSARDV"".""DocEntry"",0) <>0) and ""ODPI"".""DocDate"" >= '" + dateES + @"' and ""ODPI"".""DocDate"" <= '" + dateEE + @"' and " + cardCodeE + @"
-                    order by  ""ODPI"".""DocDate"" asc";
+                StringBuilder query = new StringBuilder();
+                query.Append("SELECT \"ODPI\".\"DocEntry\", \n");
+                query.Append("       \"ODPI\".\"CANCELED\", \n");
+                query.Append("       \"ODPI\".\"DocNum\", \n");
+                query.Append("       \"ODPI\".\"DocDate\", \n");
+                query.Append("       \"ODPI\".\"CardCode\", \n");
+                query.Append("       \"ODPI\".\"CardName\", \n");
+                query.Append("       IFNULL(\"OCRD\".\"LicTradNum\", '')             AS \"LicTradNum\", \n");
+                query.Append("       \"SumApplied\" - IFNULL(\"ITR1\".\"ReconSum\", 0) AS \"Total\", \n");
+                query.Append("       \"@BDOSARDV\".\"U_GrsAmnt\"                     AS \"DocTotal\", \n");
+                query.Append("       \"@BDOSARDV\".\"U_VatAmount\"                   AS \"DocVAtTotal\", \n");
+                query.Append("       IFNULL(\"@BDOSARDV\".\"DocEntry\", 0)           AS \"DocEntVT\", \n");
+                query.Append("       IFNULL(\"@BDOSARDV\".\"DocNum\", 0)             AS \"DocNumVT\" \n");
+                query.Append("FROM   \"ODPI\" \n");
+                query.Append("       LEFT JOIN \"@BDOSARDV\" \n");
+                query.Append("              ON \"ODPI\".\"DocEntry\" = \"@BDOSARDV\".\"U_baseDoc\" \n");
+                query.Append("                 AND \"@BDOSARDV\".\"U_baseDocT\" = 203 \n");
+                query.Append("                 AND \"@BDOSARDV\".\"Canceled\" = 'N' \n");
+                query.Append("       INNER JOIN \"OCRD\" \n");
+                query.Append("               ON \"ODPI\".\"CardCode\" = \"OCRD\".\"CardCode\" \n");
+                query.Append("       LEFT JOIN (SELECT \"IncomingPayment\".\"DownPmntEntry\"        AS \"DocEntry\", \n");
+                query.Append("                         Sum(\"IncomingPayment\".\"SumApplied\")      AS \"SumApplied\", \n");
+                query.Append("                         Sum(\"InternalReconciliation\".\"ReconSum\") AS \"ReconSum\" \n");
+                query.Append("                  FROM   (SELECT \"SrcObjAbs\"            AS \"IncPmntEntry\", \n");
+                query.Append("                                 Sum(\"ITR1\".\"ReconSum\") AS \"ReconSum\" \n");
+                query.Append("                          FROM   \"ITR1\" \n");
+                query.Append("                                 INNER JOIN \"OITR\" \n");
+                query.Append("                                         ON \"ITR1\".\"ReconNum\" = \n");
+                query.Append("                                            \"OITR\".\"ReconNum\" \n");
+                query.Append("                                            AND \"OITR\".\"ReconDate\" <= '" + dateEE + "' \n");
+                query.Append("                                            AND \"OITR\".\"Canceled\" = 'N' \n");
+                query.Append("                                            AND \"OITR\".\"ReconType\" <> '3' \n");
+                query.Append("                          WHERE  \"ITR1\".\"SrcObjTyp\" = 24 \n");
+                if (!string.IsNullOrEmpty(cardCode))
+                    query.Append("                             AND \"ITR1\".\"ShortName\" = '" + cardCode + "' \n");
+                query.Append("                          GROUP  BY \"SrcObjAbs\") AS \"InternalReconciliation\" \n");
+                query.Append("                         RIGHT JOIN (SELECT \"RCT2\".\"DocNum\"     AS\"IncPmntEntry\", \n");
+                query.Append("                                            \"RCT2\".\"DocEntry\"   AS \"DownPmntEntry\", \n");
+                query.Append("                                            \"RCT2\".\"SumApplied\" AS \"SumApplied\" \n");
+                query.Append("                                     FROM   \"RCT2\" \n");
+                query.Append("                                            INNER JOIN \"ORCT\" \n");
+                query.Append("                                                    ON \"ORCT\".\"DocEntry\" = \n");
+                query.Append("                                                       \"RCT2\".\"DocNum\" \n");
+                query.Append("                                                       AND \"ORCT\".\"Canceled\" = 'N' \n");
+                if (!string.IsNullOrEmpty(cardCode))
+                    query.Append("                                                       AND \"ORCT\".\"CardCode\" = '" + cardCode + "' \n");
+                query.Append("                                                       AND \"RCT2\".\"InvType\" = 203) AS \"IncomingPayment\" \n");
+                query.Append("                                 ON \"InternalReconciliation\".\"IncPmntEntry\" = \"IncomingPayment\".\"IncPmntEntry\" \n");
+                query.Append("                  GROUP  BY \"IncomingPayment\".\"DownPmntEntry\") AS \"ITR1\" \n");
+                query.Append("              ON \"ITR1\".\"DocEntry\" = \"ODPI\".\"DocEntry\" \n");
+                query.Append("WHERE  \"DocStatus\" = 'C' \n");
+                query.Append("   AND ( \"DocTotal\" > \"DpmAppl\" \n");
+                query.Append("          OR IFNULL(\"@BDOSARDV\".\"DocEntry\", 0) <> 0 ) \n");
+                query.Append("   AND \"ODPI\".\"DocDate\" >= '" + dateES + "' \n");
+                query.Append("   AND \"ODPI\".\"DocDate\" <= '" + dateEE + "' \n");
+                if (!string.IsNullOrEmpty(cardCode))
+                    query.Append("   AND \"ODPI\".\"CardCode\" = '" + cardCode + "' \n");
+                query.Append("   AND \"ODPI\".\"TransId\" IS NULL \n");
+                query.Append("ORDER  BY \"ODPI\".\"DocDate\" ASC");
+              
                 if (Program.oCompany.DbServerType != SAPbobsCOM.BoDataServerTypes.dst_HANADB)
                 {
                     query = query.Replace("IFNULL", "ISNULL");
@@ -1065,13 +1073,12 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
                 oDataTable.Rows.Clear();
 
-                oRecordSet.DoQuery(query);
+                oRecordSet.DoQuery(query.ToString());
 
                 int rowIndex = 0;
                 string DocEntry;
                 string DocNum;
                 string DocDate;
-
                 string DocEntVT;
                 string CardCode;
                 string CardName;

@@ -1518,6 +1518,7 @@ namespace BDO_Localisation_AddOn
                     StockTransfer.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
+
                 //----------------------------->Inventory Transfer Request<-----------------------------
                 else if (BusinessObjectInfo.Type == "1250000001")
                 {
@@ -1862,7 +1863,7 @@ namespace BDO_Localisation_AddOn
                 //----------------------------->Exchange Rate Differences<-----------------------------
                 else if (pVal.FormTypeEx == "369")
                 {
-                    ExchangeRateDiffs.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    ExchangeRateDiffs.UiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //else if (pVal.FormTypeEx == "370")
@@ -2160,6 +2161,12 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "940")
                 {
                     StockTransfer.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->Internal Reconcillation<-----------------------------
+                else if (pVal.FormTypeEx == "120060805" || pVal.FormTypeEx == "0")
+                {
+                    InternalReconciliation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //-----------------------------Inventory Transfer Request<-----------------------------
