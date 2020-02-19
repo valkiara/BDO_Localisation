@@ -1099,119 +1099,89 @@ namespace BDO_Localisation_AddOn
         }
 
         public static void fillDocRate(SAPbouiCOM.Form oForm, string documentTable, string paymentTable)
-        {
-            decimal DocRate = 0;
-            string errorText = null;
+        {           
+            SAPbouiCOM.DBDataSource oDBDataSourcePayment = oForm.DataSources.DBDataSources.Item(paymentTable);
+            SAPbouiCOM.DBDataSource oBDataSourceDocument = oForm.DataSources.DBDataSources.Item(documentTable);
+            string docDateStr = oBDataSourceDocument.GetValue("DocDate", 0);
+            DateTime docDate = DateTime.TryParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out docDate) == false ? DateTime.Now : docDate;
 
-            SAPbouiCOM.DBDataSource DBDataSource11 = oForm.DataSources.DBDataSources.Item(paymentTable);
-            SAPbouiCOM.DBDataSource DBDataSourceO = oForm.DataSources.DBDataSources.Item(documentTable);
-            string DocDateStr = DBDataSourceO.GetValue("DocDate", 0);
-            DateTime DocDate = DateTime.TryParseExact(DocDateStr, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DocDate) == false ? DateTime.Now : DocDate;
-
-            string DocCurr = "";
+            string docCurr = "";
+            decimal docRate = 0;
 
             if (documentTable == "OINV" || documentTable == "OPCH" || documentTable == "ODPI" || documentTable == "ODPO")
-            {
-                DocCurr = DBDataSourceO.GetValue("DocCur", 0);
-            }
-            else DocCurr = DBDataSourceO.GetValue("DocCurr", 0);
-            if (DocCurr == getLocalCurrency())
-            {
+                docCurr = oBDataSourceDocument.GetValue("DocCur", 0);
+            else
+                docCurr = oBDataSourceDocument.GetValue("DocCurr", 0);
+            if (docCurr == getLocalCurrency())
                 return;
-            }
 
-            if (DBDataSourceO.GetValue("CANCELED", 0) != "N")
-            {
+            if (oBDataSourceDocument.GetValue("CANCELED", 0) != "N")
                 return;
-            }
 
+            string useBlaAgRt = oBDataSourceDocument.GetValue("U_UseBlaAgRt", 0);
+            string blaAgrDocEntryStr = oBDataSourceDocument.GetValue("AgrNo", 0);
 
-            string UseBlaAgRt = DBDataSourceO.GetValue("U_UseBlaAgRt", 0);
-            string BlaAgrDocEntryStr = DBDataSourceO.GetValue("AgrNo", 0);
-            if (BlaAgrDocEntryStr != "")
+            if (blaAgrDocEntryStr != "")
             {
-                int BlaAgrDocEntry = Convert.ToInt32(BlaAgrDocEntryStr);
-                string docCurr;
-                if (UseBlaAgRt == "Y")
-                {
-                    DocRate = BlanketAgreement.GetBlAgremeentCurrencyRate(BlaAgrDocEntry, out docCurr, DocDate);
-
-                }
+                int blaAgrDocEntry = Convert.ToInt32(blaAgrDocEntryStr);
+                if (useBlaAgRt == "Y")
+                    docRate = BlanketAgreement.GetBlAgremeentCurrencyRate(blaAgrDocEntry, out docCurr, docDate);
             }
             if (documentTable == "OINV" || documentTable == "OPCH")
             {
-                if (DBDataSource11.Size > 0)
+                if (oDBDataSourcePayment.Size > 0)
                 {
-                    decimal GrossSum = 0;
-                    decimal GrossFCSum = 0;
-                    for (int row = 0; row < DBDataSource11.Size; row++)
+                    decimal grossSum = 0;
+                    decimal grossFCSum = 0;
+
+                    for (int row = 0; row < oDBDataSourcePayment.Size; row++)
                     {
-                        decimal Gross = FormsB1.cleanStringOfNonDigits(DBDataSource11.GetValue("BaseGross", row));
-                        decimal GrossFC = FormsB1.cleanStringOfNonDigits(DBDataSource11.GetValue("BaseGrossF", row));
+                        decimal gross = FormsB1.cleanStringOfNonDigits(oDBDataSourcePayment.GetValue("BaseGross", row));
+                        decimal grossFC = FormsB1.cleanStringOfNonDigits(oDBDataSourcePayment.GetValue("BaseGrossF", row));
 
-
-                        if (Gross > 0)
+                        if (gross > 0)
                         {
-                            GrossSum = GrossSum + Gross;
-                            GrossFCSum = GrossFCSum + GrossFC;
-
+                            grossSum = grossSum + gross;
+                            grossFCSum = grossFCSum + grossFC;
                         }
                     }
 
-                    decimal DocTotalFC = FormsB1.cleanStringOfNonDigits(DBDataSourceO.GetValue("DocTotalFC", 0));
-                    decimal DocTotal = FormsB1.cleanStringOfNonDigits(DBDataSourceO.GetValue("DocTotal", 0));
+                    decimal docTotalFC = FormsB1.cleanStringOfNonDigits(oBDataSourceDocument.GetValue("DocTotalFC", 0));
+                    decimal docTotal = FormsB1.cleanStringOfNonDigits(oBDataSourceDocument.GetValue("DocTotal", 0));
 
-
-
-
-                    if (UseBlaAgRt == "N")
+                    if (useBlaAgRt == "N")
                     {
                         SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                        SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(DocCurr, DocDate);
+                        SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(docCurr, docDate);
 
                         while (!RateRecordset.EoF)
                         {
-                            DocRate = Convert.ToDecimal(RateRecordset.Fields.Item("CurrencyRate").Value);
+                            docRate = Convert.ToDecimal(RateRecordset.Fields.Item("CurrencyRate").Value);
                             RateRecordset.MoveNext();
                         }
                     }
-
-
-
-                    DocRate = (roundAmountByGeneralSettings(DocTotalFC * DocRate, "Sum") + GrossSum) / (DocTotalFC + GrossFCSum);
-
+                    docRate = (roundAmountByGeneralSettings(docTotalFC * docRate, "Sum") + grossSum) / (docTotalFC + grossFCSum);
                 }
             }
 
-            if (DocRate > 0)
+            if (docRate > 0)
             {
-
                 if (documentTable == "OINV" || documentTable == "OPCH" || documentTable == "ODPI" || documentTable == "ODPO")
                 {
                     if (oForm.Items.Item("64").Enabled)
-                    {
-                        oForm.Items.Item("64").Specific.Value = FormsB1.ConvertDecimalToString(DocRate);
-
-                    }
+                        oForm.Items.Item("64").Specific.Value = FormsB1.ConvertDecimalToString(docRate);
                 }
-
                 else if ((documentTable == "OVPM" || documentTable == "ORCT") && (oForm.TypeEx == "196" || oForm.TypeEx == "146"))
                 {
                     if (oForm.Items.Item("95").Enabled && oForm.Items.Item("95").Visible)
-                    {
-                        oForm.Items.Item("95").Specific.Value = FormsB1.ConvertDecimalToString(DocRate);
-                    }
+                        oForm.Items.Item("95").Specific.Value = FormsB1.ConvertDecimalToString(docRate);
                 }
-
                 else
                 {
                     if (oForm.Items.Item("21").Enabled && oForm.Items.Item("21").Visible)
-                    {
-                        oForm.Items.Item("21").Specific.Value = FormsB1.ConvertDecimalToString(DocRate);
-                    }
+                        oForm.Items.Item("21").Specific.Value = FormsB1.ConvertDecimalToString(docRate);
                 }
             }
-
         }
 
         public static void fillPhysicalEntityTaxes(string objType, SAPbouiCOM.Form oFormWtax, SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, out string errorText)
