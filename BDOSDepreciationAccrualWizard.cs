@@ -733,7 +733,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                      ON T2.\"U_ItemCode\" = \"OBTQ\".\"ItemCode\" \n");
             query.Append("                         AND T2.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
             query.Append("                         AND T2.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
-            query.Append("        WHERE  \"OBTQ\".\"ItemCode\" = 'FNRA1') AS T0");
+            query.Append("        WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0) AS T0");
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             oRecordSet.DoQuery(query.ToString());
