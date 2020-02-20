@@ -328,7 +328,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                     {
-                        CommonFunctions.fillDocRate( oForm, "OINV", "INV11");
+                        CommonFunctions.fillDocRate( oForm, "OINV");
                     }
                 }
 

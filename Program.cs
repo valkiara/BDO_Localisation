@@ -38,7 +38,7 @@ namespace BDO_Localisation_AddOn
         public static CultureInfo cultureInfo = null;
         public static ResourceManager resourceManager = null;
         public static string LocalCurrency = null;
-        public static string MainCurrencySapCode = null;
+        public static string MainCurrency = null;
         public static bool openPaymentMeans = false;
         public static decimal transferSumFC;
         public static decimal overallAmount;
@@ -119,7 +119,7 @@ namespace BDO_Localisation_AddOn
                 SAPbobsCOM.SBObob oSBOBob = oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
                 LocalCurrency = CommonFunctions.getCurrencyInternationalCode(oSBOBob.GetLocalCurrency().Fields.Item("LocalCurrency").Value);
 
-                MainCurrencySapCode = CurrencyB1.getMainCurrency(out errorText);
+                MainCurrency = CurrencyB1.getMainCurrency(out errorText);
 
                 return connectResult;
             }
@@ -302,32 +302,32 @@ namespace BDO_Localisation_AddOn
 
                 if (oDocForm.TypeEx == "141" || oDocForm.TypeEx == "60092")
                 {
-                    CommonFunctions.fillDocRate(oDocForm, "OPCH", "PCH11");
+                    CommonFunctions.fillDocRate(oDocForm, "OPCH");
                 }
 
                 if (oDocForm.TypeEx == "133" || oDocForm.TypeEx == "60091")
                 {
-                    CommonFunctions.fillDocRate(oDocForm, "OINV", "INV11");
+                    CommonFunctions.fillDocRate(oDocForm, "OINV");
                 }
 
                 if (oDocForm.TypeEx == "170")
                 {
-                    CommonFunctions.fillDocRate(oDocForm, "ORCT", "ORCT");
+                    CommonFunctions.fillDocRate(oDocForm, "ORCT");
                 }
 
                 if (oDocForm.TypeEx == "426")
                 {
-                    CommonFunctions.fillDocRate(oDocForm, "OVPM", "OVPM");
+                    CommonFunctions.fillDocRate(oDocForm, "OVPM");
                 }
 
                 if (oDocForm.TypeEx == "65308")
                 {
-                    CommonFunctions.fillDocRate(oDocForm, "ODPI", "ODPI");
+                    CommonFunctions.fillDocRate(oDocForm, "ODPI");
                 }
 
                 if (oDocForm.TypeEx == "65309")
                 {
-                    CommonFunctions.fillDocRate(oDocForm, "ODPO", "ODPO");
+                    CommonFunctions.fillDocRate(oDocForm, "ODPO");
                 }
 
             }

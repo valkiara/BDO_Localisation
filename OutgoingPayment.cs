@@ -3477,7 +3477,7 @@ namespace BDO_Localisation_AddOn
                     {
                         if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                         {
-                            CommonFunctions.fillDocRate(oForm, "OVPM", "OVPM");
+                            CommonFunctions.fillDocRate(oForm, "OVPM");
                         }
                     }
                     
@@ -3621,7 +3621,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
                         if (oCheckBox.Checked == true && pVal.BeforeAction == false)
                         {
-                            CommonFunctions.fillDocRate(oForm, "OVPM", "OVPM");
+                            CommonFunctions.fillDocRate(oForm, "OVPM");
                         }
                     }
 

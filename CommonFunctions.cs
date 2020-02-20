@@ -1098,70 +1098,52 @@ namespace BDO_Localisation_AddOn
             return activeDimensionsList;
         }
 
-        public static void fillDocRate(SAPbouiCOM.Form oForm, string documentTable, string paymentTable)
-        {           
-            SAPbouiCOM.DBDataSource oDBDataSourcePayment = oForm.DataSources.DBDataSources.Item(paymentTable);
+        public static void fillDocRate(SAPbouiCOM.Form oForm, string documentTable)
+        {
             SAPbouiCOM.DBDataSource oBDataSourceDocument = oForm.DataSources.DBDataSources.Item(documentTable);
-            string docDateStr = oBDataSourceDocument.GetValue("DocDate", 0);
-            DateTime docDate = DateTime.TryParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out docDate) == false ? DateTime.Now : docDate;
+            if (oBDataSourceDocument.GetValue("CANCELED", 0) != "N")
+                return;
 
-            string docCurr = "";
-            decimal docRate = 0;
-
+            string docCurr;
             if (documentTable == "OINV" || documentTable == "OPCH" || documentTable == "ODPI" || documentTable == "ODPO")
                 docCurr = oBDataSourceDocument.GetValue("DocCur", 0);
             else
                 docCurr = oBDataSourceDocument.GetValue("DocCurr", 0);
-            if (docCurr == getLocalCurrency())
+            if (docCurr == Program.MainCurrency)
                 return;
 
-            if (oBDataSourceDocument.GetValue("CANCELED", 0) != "N")
-                return;
-
+            string docDateStr = oBDataSourceDocument.GetValue("DocDate", 0);
+            DateTime docDate = DateTime.TryParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out docDate) == false ? DateTime.Now : docDate;
             string useBlaAgRt = oBDataSourceDocument.GetValue("U_UseBlaAgRt", 0);
             string blaAgrDocEntryStr = oBDataSourceDocument.GetValue("AgrNo", 0);
+            decimal docRate = decimal.Zero;
+            decimal docRateForWeightedAverage = decimal.Zero;
 
-            if (blaAgrDocEntryStr != "")
+            if (!string.IsNullOrEmpty(blaAgrDocEntryStr))
             {
-                int blaAgrDocEntry = Convert.ToInt32(blaAgrDocEntryStr);
                 if (useBlaAgRt == "Y")
+                {
+                    int blaAgrDocEntry = Convert.ToInt32(blaAgrDocEntryStr);
                     docRate = BlanketAgreement.GetBlAgremeentCurrencyRate(blaAgrDocEntry, out docCurr, docDate);
+                    docRateForWeightedAverage = docRate;
+                }
             }
             if (documentTable == "OINV" || documentTable == "OPCH")
             {
-                if (oDBDataSourcePayment.Size > 0)
+                if (useBlaAgRt == "N")
                 {
-                    decimal grossSum = 0;
-                    decimal grossFCSum = 0;
+                    SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                    SAPbobsCOM.Recordset rateRecordset = oSBOBob.GetCurrencyRate(docCurr, docDate);
 
-                    for (int row = 0; row < oDBDataSourcePayment.Size; row++)
-                    {
-                        decimal gross = FormsB1.cleanStringOfNonDigits(oDBDataSourcePayment.GetValue("BaseGross", row));
-                        decimal grossFC = FormsB1.cleanStringOfNonDigits(oDBDataSourcePayment.GetValue("BaseGrossF", row));
+                    if (!rateRecordset.EoF)
+                        docRateForWeightedAverage = Convert.ToDecimal(rateRecordset.Fields.Item("CurrencyRate").Value);
 
-                        if (gross > 0)
-                        {
-                            grossSum = grossSum + gross;
-                            grossFCSum = grossFCSum + grossFC;
-                        }
-                    }
-
-                    decimal docTotalFC = FormsB1.cleanStringOfNonDigits(oBDataSourceDocument.GetValue("DocTotalFC", 0));
-                    decimal docTotal = FormsB1.cleanStringOfNonDigits(oBDataSourceDocument.GetValue("DocTotal", 0));
-
-                    if (useBlaAgRt == "N")
-                    {
-                        SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                        SAPbobsCOM.Recordset RateRecordset = oSBOBob.GetCurrencyRate(docCurr, docDate);
-
-                        while (!RateRecordset.EoF)
-                        {
-                            docRate = Convert.ToDecimal(RateRecordset.Fields.Item("CurrencyRate").Value);
-                            RateRecordset.MoveNext();
-                        }
-                    }
-                    docRate = (roundAmountByGeneralSettings(docTotalFC * docRate, "Sum") + grossSum) / (docTotalFC + grossFCSum);
+                    Marshal.ReleaseComObject(rateRecordset);
+                    Marshal.ReleaseComObject(oSBOBob);
                 }
+
+                decimal weightedAverageRate = getWeightedAverageRateForInvoices(oForm, documentTable, docRateForWeightedAverage);
+                docRate = weightedAverageRate == decimal.Zero ? docRate : weightedAverageRate;
             }
 
             if (docRate > 0)
@@ -1181,6 +1163,86 @@ namespace BDO_Localisation_AddOn
                     if (oForm.Items.Item("21").Enabled && oForm.Items.Item("21").Visible)
                         oForm.Items.Item("21").Specific.Value = FormsB1.ConvertDecimalToString(docRate);
                 }
+            }
+        }
+
+        public static decimal getWeightedAverageRateForInvoices(SAPbouiCOM.Form oForm, string documentTable, decimal docRate)
+        {
+            try
+            {
+                decimal weightedAverageRate = decimal.Zero;
+
+                SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item(documentTable);
+                if (oDBDataSource.GetValue("DocCur", 0) == Program.MainCurrency)
+                    return weightedAverageRate;
+
+                string drawnDpmTable = documentTable == "OINV" ? "INV9" : "PCH9";
+                SAPbouiCOM.DBDataSource oDBDataSourceDrawnDpm = oForm.DataSources.DBDataSources.Item(drawnDpmTable);
+
+                if (oDBDataSourceDrawnDpm.Size > 0)
+                {
+                    List<string> downPmntDocEntries = new List<string>();
+                    for (int i = 0; i < oDBDataSourceDrawnDpm.Size; i++)
+                        downPmntDocEntries.Add(oDBDataSourceDrawnDpm.GetValue("BaseAbs", i));
+
+                    decimal appliedDownPmntSumFC;
+                    decimal appliedDownPmntSumSC;
+                    string pmntInvoicesTable = documentTable == "OINV" ? "RCT2" : "VPM2";
+
+                    getDownPmntSumAppliedAccordingToPmntDocRate(downPmntDocEntries, pmntInvoicesTable, out appliedDownPmntSumFC, out appliedDownPmntSumSC);
+                    appliedDownPmntSumFC = roundAmountByGeneralSettings(appliedDownPmntSumFC, "Sum");
+                    appliedDownPmntSumSC = roundAmountByGeneralSettings(appliedDownPmntSumSC, "Sum");
+
+                    decimal docTotalFC = FormsB1.cleanStringOfNonDigits(oDBDataSource.GetValue("DocTotalFC", 0));
+                    //decimal docTotal = FormsB1.cleanStringOfNonDigits(oDBDataSource.GetValue("DocTotal", 0));
+
+                    weightedAverageRate = (roundAmountByGeneralSettings(docTotalFC * docRate, "Sum") + appliedDownPmntSumSC) / (docTotalFC + appliedDownPmntSumFC);
+                }
+                return weightedAverageRate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static void getDownPmntSumAppliedAccordingToPmntDocRate(List<string> downPmntDocEntries, string pmntInvoicesTable, out decimal appliedDownPmntSumFC, out decimal appliedDownPmntSumSC)
+        {
+            int boRcptInvType;
+            appliedDownPmntSumFC = 0;
+            appliedDownPmntSumSC = 0;
+
+            if (pmntInvoicesTable == "RCT2") //Incoming Payments - Invoices
+                boRcptInvType = (int)SAPbobsCOM.BoRcptInvTypes.it_DownPayment;
+            else if (pmntInvoicesTable == "VPM2") //Outgoing Payments - Invoices
+                boRcptInvType = (int)SAPbobsCOM.BoRcptInvTypes.it_PurchaseDownPayment;
+            else return;
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                StringBuilder query = new StringBuilder();
+                query.Append("SELECT Sum(\"T0\".\"AppliedFC\")                      AS \"AppliedDownPmntSumFC\", \n");
+                query.Append("       Sum(\"T0\".\"AppliedFC\" * \"T0\".\"DocRate\") AS \"AppliedDownPmntSumSC\" \n");
+                query.Append("FROM   \"" + pmntInvoicesTable + "\" AS \"T0\" \n");
+                query.Append("WHERE  \"T0\".\"DocEntry\" IN (" + string.Join(",", downPmntDocEntries) + ") \n");
+                query.Append("       AND \"T0\".\"InvType\" = '" + boRcptInvType + "'");
+
+                oRecordSet.DoQuery(query.ToString());
+
+                if (!oRecordSet.EoF)
+                {
+                    appliedDownPmntSumFC = Convert.ToDecimal(oRecordSet.Fields.Item("AppliedDownPmntSumFC").Value);
+                    appliedDownPmntSumSC = Convert.ToDecimal(oRecordSet.Fields.Item("AppliedDownPmntSumSC").Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
             }
         }
 

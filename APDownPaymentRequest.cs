@@ -353,7 +353,7 @@ namespace BDO_Localisation_AddOn
 
                     if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                     {
-                        CommonFunctions.fillDocRate(oForm, "ODPO", "ODPO");
+                        CommonFunctions.fillDocRate(oForm, "ODPO");
                     }
 
                     if (pVal.ItemUID == "UsBlaAgRtS" & pVal.BeforeAction == false)
