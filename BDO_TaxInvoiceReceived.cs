@@ -6125,7 +6125,7 @@ namespace BDO_Localisation_AddOn
 
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && !pVal.BeforeAction)
                     {
-                        if (pVal.ItemUID == "InvDocs")
+                        if (pVal.ItemUID == "InvDocs" && pVal.Row > 0)
                         {
                             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                             setInvDocsMatrixRowBackColor(oForm, pVal.Row);
@@ -6279,7 +6279,7 @@ namespace BDO_Localisation_AddOn
         {
             try
             {
-                oForm.Freeze(false);
+                oForm.Freeze(true);
 
                 SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvDocs").Specific;
 
@@ -6298,7 +6298,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                oForm.Freeze(true);
+                oForm.Freeze(false);
             }
         }
 
