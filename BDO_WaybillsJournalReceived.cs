@@ -3242,7 +3242,7 @@ namespace BDO_Localisation_AddOn
                     priceQuery.Append("where OIVL.\"TransType\"='18' and OPCH.\"CardCode\"='"+Cardcode+"' and OIVL.\"ItemCode\"='"+ItemCode+"' \n");
                     priceQuery.Append("order by OIVL.\"DocDate\" desc)");
                     oRecordPrevPrice.DoQuery(priceQuery.ToString());
-                    if (!oRecordPrevPrice.EoF)  prevPrice = oRecordPrevPrice.Fields.Item("Price").Value;
+                    if (!oRecordPrevPrice.EoF)  prevPrice = Convert.ToDecimal(oRecordPrevPrice.Fields.Item("Price").Value);
 
                     Sbuilder.Append("<Row>");
                     Sbuilder.Append("<Cell> <ColumnUid>#</ColumnUid> <Value>");
@@ -3344,7 +3344,16 @@ namespace BDO_Localisation_AddOn
 
                 for (int i = 1; i <= oMatrixGoods.RowCount; i++)
                 {
-                    oMatrixGoods.CommonSetting.SetRowBackColor(i, FormsB1.getLongIntRGB(231, 231, 231));
+                    SAPbouiCOM.EditText last = (SAPbouiCOM.EditText)oMatrixGoods.Columns.Item("WBLPrice").Cells.Item(i).Specific;
+                    SAPbouiCOM.EditText that = (SAPbouiCOM.EditText)oMatrixGoods.Columns.Item("WBPrice").Cells.Item(i).Specific;
+                    if (Decimal.Parse(last.Value.ToString()) > Decimal.Parse(that.Value.ToString()))
+                    {
+                        oMatrixGoods.CommonSetting.SetCellBackColor(i,13, FormsB1.getLongIntRGB(0, 255, 0));
+
+                    }
+                    else {
+                        oMatrixGoods.CommonSetting.SetCellBackColor(i,13, FormsB1.getLongIntRGB(255, 0, 0));
+                    }
                 }
 
                 WBGdMatrixRow = 0;
