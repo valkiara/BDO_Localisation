@@ -1564,7 +1564,7 @@ namespace BDO_Localisation_AddOn
                                     tempCheck = false;
                                 }
                             }
-
+                            
                             if (tempCheck)
                             {
                                 errorText = BDOSResources.getTranslate("InsufficientStockBalanceOnPostingDate") + ", " + BDOSResources.getTranslate("ItemCode") + ": " + itemCode;
@@ -1574,7 +1574,7 @@ namespace BDO_Localisation_AddOn
                                 }
                                 Program.uiApp.StatusBar.SetSystemMessage(errorText);
                                 rejection = true;
-                            }
+                            }                            
                         }
                     }
                 }

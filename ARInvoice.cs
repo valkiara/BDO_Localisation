@@ -538,19 +538,20 @@ namespace BDO_Localisation_AddOn
                 {
                     if (BusinessObjectInfo.BeforeAction == true)
                     {
+                        /*
                         SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                        bool rejection = false;
+                        bool rejection = false;                  
                         if (DocDBSource.GetValue("CANCELED", 0) == "N")
-                        {
+                        {                           
                             //უარყოფითი ნაშთების კონტროლი დოკ.თარიღით
                             CommonFunctions.blockNegativeStockByDocDate(oForm, "OINV", "INV1", "WhsCode", out rejection);
                             if (rejection)
                             {
                                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
                                 BubbleEvent = false;
-                            }
+                            }                            
                         }
-
+                        */
 
                         //ძირითადი საშუალებების შემოწმება
                         bool rejectionAsset = false;
