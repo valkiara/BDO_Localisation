@@ -3553,8 +3553,6 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.BeforeAction)
                 {
-                    if (pVal.ItemUID == "operationB")
-                        oForm.Freeze(true);
                 }
                 else if (!pVal.BeforeAction)
                 {
@@ -3609,7 +3607,6 @@ namespace BDO_Localisation_AddOn
                             return;
                         }
 
-                        oForm.Freeze(false);
                         oButtonCombo.Caption = BDOSResources.getTranslate("Operations");
 
                         if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_UPDATE_MODE || oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE)
@@ -3895,7 +3892,6 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                oForm.Freeze(false);
                 throw new Exception(ex.Message);
             }
         }
@@ -6267,6 +6263,7 @@ namespace BDO_Localisation_AddOn
                             {
                                 oForm.Freeze(true);
                                 setValidValuesBtnCombo(oForm);
+                                oForm.Freeze(false);
                             }
                         }
                     }
