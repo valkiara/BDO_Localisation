@@ -3478,4 +3478,7 @@
   <data name="RemainingLife" xml:space="preserve">
     <value>Remaining Life</value>
   </data>
+  <data name="lastPrice" xml:space="preserve">
+    <value>Last Price</value>
+  </data>
 </root>

@@ -3475,4 +3475,7 @@
   <data name="RemainingLife" xml:space="preserve">
     <value>დარჩენილი ვადა</value>
   </data>
+  <data name="lastPrice" xml:space="preserve">
+    <value>ბოლო ფასი</value>
+  </data>
 </root>
