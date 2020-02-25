@@ -3191,7 +3191,11 @@ namespace BDO_Localisation_AddOn
 
                     if (CatalogEntry != null)
                     {
+                        SAPbobsCOM.Recordset orec = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                         ItemCode = CatalogEntry.Fields.Item("ItemCode").Value;
+                        string queryForName = "select \"ItemName\" from OITM " + "\n"+ "where \"ItemCode\"='"+ ItemCode+"'";
+                        orec.DoQuery(queryForName);                
+                        if(!orec.EoF)  ItemName = orec.Fields.Item("ItemName").Value;
                         WBGUntCode = CatalogEntry.Fields.Item("U_BDO_UoMCod").Value;
                     }
 
@@ -3231,17 +3235,12 @@ namespace BDO_Localisation_AddOn
                         DistNumber = oRecordSetBN.Fields.Item("DistNumber").Value;
                         oRecordSetBN.MoveNext();
                     }
-                    StringBuilder priceQuery = new StringBuilder();
-                    priceQuery.Append("select TOP 1 * from( \n");
-                    priceQuery.Append("select OPDN.\"CardCode\",OIVL.\"Price\",OIVL.\"DocDate\" from OIVL \n");
-                    priceQuery.Append("left join OPDN on OIVL.\"CreatedBy\"=OPDN.\"DocEntry\" \n");
-                    priceQuery.Append("where OIVL.\"TransType\"='20' and OPDN.\"CardCode\"='"+Cardcode+"' and OIVL.\"ItemCode\"='"+ItemCode+"' \n");
-                    priceQuery.Append("union all \n");
-                    priceQuery.Append("select OPCH.\"CardCode\",OIVL.\"Price\",OIVL.\"DocDate\" from OIVL \n");
-                    priceQuery.Append("left join OPCH on OIVL.\"CreatedBy\"=OPCH.\"DocEntry\" \n");
-                    priceQuery.Append("where OIVL.\"TransType\"='18' and OPCH.\"CardCode\"='"+Cardcode+"' and OIVL.\"ItemCode\"='"+ItemCode+"' \n");
-                    priceQuery.Append("order by OIVL.\"DocDate\" desc)");
-                    oRecordPrevPrice.DoQuery(priceQuery.ToString());
+                    String priceQuery = "select TOP 1 * from( " + "\n" + "select OPDN.\"CardCode\",PDN1.\"GTotal\" as \"Price\",OIVL.\"DocDate\" from OIVL " + "\n" + "left join OPDN on OIVL.\"CreatedBy\"=OPDN.\"DocEntry\" " + "\n"
+                    + "join PDN1 on OPDN.\"DocEntry\"=PDN1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='20' and OPDN.\"CardCode\"='"+Cardcode+"' and OIVL.\"ItemCode\"='"+ItemCode+"' " +
+                    "\n" + "union all " + "\n" + "select OPCH.\"CardCode\",PCH1.\"GTotal\"as \"Price\",OIVL.\"DocDate\" from OIVL " + "\n"
+                    + "left join OPCH on OIVL.\"CreatedBy\"=OPCH.\"DocEntry\" " + "\n" + "join PCH1 on OPCH.\"DocEntry\"=PCH1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='18' and OPCH.\"CardCode\"='"+Cardcode+"' and OIVL.\"ItemCode\"='"+
+                    ItemCode+"' " + "\n" + "order by OIVL.\"DocDate\" desc)";
+                    oRecordPrevPrice.DoQuery(priceQuery);
                     if (!oRecordPrevPrice.EoF)  prevPrice = Convert.ToDecimal(oRecordPrevPrice.Fields.Item("Price").Value);
 
                     Sbuilder.Append("<Row>");
@@ -3346,13 +3345,13 @@ namespace BDO_Localisation_AddOn
                 {
                     SAPbouiCOM.EditText last = (SAPbouiCOM.EditText)oMatrixGoods.Columns.Item("WBLPrice").Cells.Item(i).Specific;
                     SAPbouiCOM.EditText that = (SAPbouiCOM.EditText)oMatrixGoods.Columns.Item("WBPrice").Cells.Item(i).Specific;
-                    if (Decimal.Parse(last.Value.ToString()) > Decimal.Parse(that.Value.ToString()))
+                    if (Decimal.Parse(last.Value.ToString()) >= Decimal.Parse(that.Value.ToString()) || Decimal.Parse(last.Value.ToString())==0)
                     {
-                        oMatrixGoods.CommonSetting.SetCellBackColor(i,13, FormsB1.getLongIntRGB(0, 255, 0));
+                        oMatrixGoods.CommonSetting.SetCellFontColor(i, 13, FormsB1.getLongIntRGB(1, 110, 3));
 
                     }
                     else {
-                        oMatrixGoods.CommonSetting.SetCellBackColor(i,13, FormsB1.getLongIntRGB(255, 0, 0));
+                            oMatrixGoods.CommonSetting.SetCellFontColor(i, 13, FormsB1.getLongIntRGB(255, 0, 0));
                     }
                 }
 
@@ -3812,9 +3811,9 @@ namespace BDO_Localisation_AddOn
                             WBGdMatrixRow = row;
 
                             if (oMatrixGoods.RowCount > 0)
-                            {
+                            {                               
                                 oForm.Freeze(false);
-                                for (int i = 1; i <= oMatrixGoods.RowCount; i++)
+                               for (int i = 1; i <= oMatrixGoods.RowCount; i++)
                                 {
                                     oMatrixGoods.CommonSetting.SetRowBackColor(i, FormsB1.getLongIntRGB(231, 231, 231));
                                 }
@@ -3829,7 +3828,7 @@ namespace BDO_Localisation_AddOn
                                 catch
                                 {
                                 }
-                                oForm.Freeze(true);
+                                oForm.Freeze(true);                               
                             }
 
                             oForm.Freeze(false);
