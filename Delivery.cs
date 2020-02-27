@@ -296,7 +296,13 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-
+                if(pVal.EventType==SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction)
+                {
+                    if (pVal.ItemUID == "10000329")
+                    {
+                        ARInvoice.fromDelivery = true;
+                    }
+                }              
             }
 
         }
