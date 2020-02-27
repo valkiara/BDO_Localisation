@@ -1181,20 +1181,24 @@ namespace BDO_Localisation_AddOn
 
                 if (oDBDataSourceDrawnDpm.Size > 0)
                 {
-                    List<string> downPmntDocEntries = new List<string>();
+
+                    DataTable drawnDpm = new DataTable("DrawnDpmTBL");
+                    drawnDpm.Columns.Add(new DataColumn("BaseAbs", typeof(string)));
+                    drawnDpm.Columns.Add(new DataColumn("GrossFc", typeof(string)));
+                    drawnDpm.Columns.Add(new DataColumn("ObjType", typeof(string)));
+
                     for (int i = 0; i < oDBDataSourceDrawnDpm.Size; i++)
-                        downPmntDocEntries.Add(oDBDataSourceDrawnDpm.GetValue("BaseAbs", i));
+                        drawnDpm.Rows.Add(oDBDataSourceDrawnDpm.GetValue("BaseAbs", i), oDBDataSourceDrawnDpm.GetValue("GrossFc", i), oDBDataSourceDrawnDpm.GetValue("ObjType", i));
 
                     decimal appliedDownPmntSumFC;
                     decimal appliedDownPmntSumSC;
-                    string pmntInvoicesTable = documentTable == "OINV" ? "RCT2" : "VPM2";
+                    SAPbobsCOM.BoRcptInvTypes boRcptInvType = documentTable == "OINV" ? SAPbobsCOM.BoRcptInvTypes.it_DownPayment : SAPbobsCOM.BoRcptInvTypes.it_PurchaseDownPayment;
 
-                    getDownPmntSumAppliedAccordingToPmntDocRate(downPmntDocEntries, pmntInvoicesTable, out appliedDownPmntSumFC, out appliedDownPmntSumSC);
+                    getDownPmntSumAppliedAccordingToPmntDocRate(drawnDpm, boRcptInvType, out appliedDownPmntSumFC, out appliedDownPmntSumSC);
                     appliedDownPmntSumFC = roundAmountByGeneralSettings(appliedDownPmntSumFC, "Sum");
                     appliedDownPmntSumSC = roundAmountByGeneralSettings(appliedDownPmntSumSC, "Sum");
 
                     decimal docTotalFC = FormsB1.cleanStringOfNonDigits(oDBDataSource.GetValue("DocTotalFC", 0));
-                    //decimal docTotal = FormsB1.cleanStringOfNonDigits(oDBDataSource.GetValue("DocTotal", 0));
 
                     weightedAverageRate = (roundAmountByGeneralSettings(docTotalFC * docRate, "Sum") + appliedDownPmntSumSC) / (docTotalFC + appliedDownPmntSumFC);
                 }
@@ -1206,29 +1210,58 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void getDownPmntSumAppliedAccordingToPmntDocRate(List<string> downPmntDocEntries, string pmntInvoicesTable, out decimal appliedDownPmntSumFC, out decimal appliedDownPmntSumSC)
+        public static void getDownPmntSumAppliedAccordingToPmntDocRate(DataTable drawnDpm, SAPbobsCOM.BoRcptInvTypes boRcptInvType, out decimal appliedDownPmntSumFC, out decimal appliedDownPmntSumSC)
         {
-            int boRcptInvType;
             appliedDownPmntSumFC = 0;
             appliedDownPmntSumSC = 0;
+            string pmntInvoicesTable;
+            string pmntTable;
+            string downPmntTable;
 
-            if (pmntInvoicesTable == "RCT2") //Incoming Payments - Invoices
-                boRcptInvType = (int)SAPbobsCOM.BoRcptInvTypes.it_DownPayment;
-            else if (pmntInvoicesTable == "VPM2") //Outgoing Payments - Invoices
-                boRcptInvType = (int)SAPbobsCOM.BoRcptInvTypes.it_PurchaseDownPayment;
+            if (boRcptInvType == SAPbobsCOM.BoRcptInvTypes.it_DownPayment)
+            {
+                pmntInvoicesTable = "RCT2"; //Incoming Payments - Invoices
+                pmntTable = "ORCT"; //Incoming Payment
+                downPmntTable = "ODPI"; //A/R Down Payment
+            }
+            else if (boRcptInvType == SAPbobsCOM.BoRcptInvTypes.it_PurchaseDownPayment)
+            {
+                pmntInvoicesTable = "VPM2"; //Outgoing Payments - Invoices
+                pmntTable = "OVPM"; //Outgoing Payment
+                downPmntTable = "ODPO"; //A/P Down Payment
+            }
             else return;
-
+            
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try
             {
-                StringBuilder query = new StringBuilder();
-                query.Append("SELECT Sum(\"T0\".\"AppliedFC\")                      AS \"AppliedDownPmntSumFC\", \n");
-                query.Append("       Sum(\"T0\".\"AppliedFC\" * \"T0\".\"DocRate\") AS \"AppliedDownPmntSumSC\" \n");
-                query.Append("FROM   \"" + pmntInvoicesTable + "\" AS \"T0\" \n");
-                query.Append("WHERE  \"T0\".\"DocEntry\" IN (" + string.Join(",", downPmntDocEntries) + ") \n");
-                query.Append("       AND \"T0\".\"InvType\" = '" + boRcptInvType + "'");
+                try
+                {
+                    oRecordSet.DoQuery("CREATE LOCAL TEMPORARY TABLE #DRAWNDPMTBL (\"BaseAbs\" INTEGER, \"GrossFc\" DECIMAL, \"ObjType\" NVARCHAR(20)) ");
+                }
+                catch (Exception ex)
+                {
+                    string err = ex.Message; 
+                }
 
-                oRecordSet.DoQuery(query.ToString());
+                foreach (DataRow dataRow in drawnDpm.Select())
+                    oRecordSet.DoQuery("INSERT INTO #DRAWNDPMTBL values(" + dataRow["BaseAbs"] + ", " + dataRow["GrossFc"] + ", '" + dataRow["ObjType"] + "') ");
+
+                StringBuilder query2 = new StringBuilder();
+                query2.Append("SELECT Sum(MainTBL.\"GrossFC\")                       AS \"AppliedDownPmntSumFC\", \n");
+                query2.Append("       Sum(MainTBL.\"GrossFC\" * MainTBL.\"DocRate\") AS \"AppliedDownPmntSumSC\" \n");
+                query2.Append("FROM  (SELECT T0.\"DocRate\", \n");
+                query2.Append("              #DRAWNDPMTBL.\"GrossFc\" * ( T0.\"AppliedFC\" / (SELECT \"DocTotalFC\" \n");
+                query2.Append("                                                           FROM   " + downPmntTable + " \n");
+                query2.Append("                                                           WHERE  \"DocEntry\" = T0.\"DocEntry\")) AS \"GrossFC\" \n");
+                query2.Append("       FROM   " + pmntInvoicesTable + " AS T0 \n");
+                query2.Append("              INNER JOIN " + pmntTable + " AS T1 \n");
+                query2.Append("                      ON T0.\"DocNum\" = T1.\"DocEntry\" \n");
+                query2.Append("                         AND T1.\"Canceled\" = 'N' \n");
+                query2.Append("              INNER JOIN #DRAWNDPMTBL \n");
+                query2.Append("                      ON T0.\"DocEntry\" = #DRAWNDPMTBL.\"BaseAbs\" \n");
+                query2.Append("                         AND T0.\"InvType\" = #DRAWNDPMTBL.\"ObjType\") AS MainTBL \n");
+                oRecordSet.DoQuery(query2.ToString());
 
                 if (!oRecordSet.EoF)
                 {
@@ -1242,6 +1275,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
+                oRecordSet.DoQuery("DELETE FROM #DRAWNDPMTBL");
                 Marshal.ReleaseComObject(oRecordSet);
             }
         }
