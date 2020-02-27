@@ -920,7 +920,7 @@ namespace BDO_Localisation_AddOn
                 //{
                 //    if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                 //    {
-                //        CommonFunctions.fillDocRate( oForm, "ORIN", "RIN11");
+                //        CommonFunctions.fillDocRate( oForm, "ORIN");
                 //    }
                 //}
 

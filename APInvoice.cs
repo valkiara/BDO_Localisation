@@ -1070,7 +1070,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                     {
-                        CommonFunctions.fillDocRate(oForm, "OPCH", "PCH11");
+                        CommonFunctions.fillDocRate(oForm, "OPCH");
                     }
 
                     if (pVal.ItemUID == "UsBlaAgRtS")

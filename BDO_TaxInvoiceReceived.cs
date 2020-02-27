@@ -3553,8 +3553,6 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.BeforeAction)
                 {
-                    if (pVal.ItemUID == "operationB")
-                        oForm.Freeze(true);
                 }
                 else if (!pVal.BeforeAction)
                 {
@@ -3609,7 +3607,6 @@ namespace BDO_Localisation_AddOn
                             return;
                         }
 
-                        oForm.Freeze(false);
                         oButtonCombo.Caption = BDOSResources.getTranslate("Operations");
 
                         if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_UPDATE_MODE || oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE)
@@ -3895,7 +3892,6 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                oForm.Freeze(false);
                 throw new Exception(ex.Message);
             }
         }
@@ -4038,6 +4034,8 @@ namespace BDO_Localisation_AddOn
 
             try
             {
+                oForm.Freeze(true);
+
                 string sCFL_ID = oCFLEvento.ChooseFromListUID;
                 SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
 
@@ -4051,8 +4049,6 @@ namespace BDO_Localisation_AddOn
                         {
                             return;
                         }
-
-                        oForm.Freeze(true);
 
                         SAPbouiCOM.EditText oEditText = oMatrix.Columns.Item("U_wbNumber").Cells.Item(cellPos.rowIndex).Specific;
                         string wbNumber = oEditText.Value;
@@ -4121,7 +4117,6 @@ namespace BDO_Localisation_AddOn
                             }
                             oCFL.SetConditions(oCons);
                         }
-                        oForm.Freeze(false);
                     }
 
                     if (sCFL_ID == "DPinvoiceCFL")
@@ -4239,12 +4234,15 @@ namespace BDO_Localisation_AddOn
                     {
                         oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                     }
-                    setVisibleFormItems(oForm);
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
@@ -6125,7 +6123,7 @@ namespace BDO_Localisation_AddOn
 
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && !pVal.BeforeAction)
                     {
-                        if (pVal.ItemUID == "InvDocs")
+                        if (pVal.ItemUID == "InvDocs" && pVal.Row > 0)
                         {
                             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                             setInvDocsMatrixRowBackColor(oForm, pVal.Row);
@@ -6203,6 +6201,8 @@ namespace BDO_Localisation_AddOn
                         {
                             SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                             chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out BubbleEvent);
+                            if (!pVal.BeforeAction)
+                                setVisibleFormItems(oForm);
                         }
                     }
 
@@ -6263,6 +6263,7 @@ namespace BDO_Localisation_AddOn
                             {
                                 oForm.Freeze(true);
                                 setValidValuesBtnCombo(oForm);
+                                oForm.Freeze(false);
                             }
                         }
                     }
@@ -6279,7 +6280,7 @@ namespace BDO_Localisation_AddOn
         {
             try
             {
-                oForm.Freeze(false);
+                oForm.Freeze(true);
 
                 SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvDocs").Specific;
 
@@ -6298,7 +6299,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                oForm.Freeze(true);
+                oForm.Freeze(false);
             }
         }
 

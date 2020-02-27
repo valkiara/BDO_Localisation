@@ -1635,7 +1635,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.BeforeAction)
                     {
                         if (pVal.ItemUID == "1")
-                            CommonFunctions.fillDocRate(oForm, "ORCT", "ORCT");
+                            CommonFunctions.fillDocRate(oForm, "ORCT");
                     }
                     else
                     {
@@ -1644,7 +1644,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
                             if (oCheckBox.Checked)
                             {
-                                CommonFunctions.fillDocRate(oForm, "ORCT", "ORCT");
+                                CommonFunctions.fillDocRate(oForm, "ORCT");
                             }
                         }
                         else if (pVal.ItemUID == "57" || pVal.ItemUID == "56" || pVal.ItemUID == "58")
@@ -2137,11 +2137,11 @@ namespace BDO_Localisation_AddOn
                             string DueDate = oRecordSet.Fields.Item("DueDate").Value.ToString("yyyyMMdd") == "18991230" ? "" : oRecordSet.Fields.Item("DueDate").Value.ToString("yyyyMMdd");
 
                             if (string.IsNullOrEmpty(DocCur))
-                                DocCur = Program.MainCurrencySapCode;
+                                DocCur = Program.MainCurrency;
 
                             TotalPaymentLocal = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmount").Value);
                             addDPamtLocal = addDPAmt;
-                            if (Program.MainCurrencySapCode == DocCur)
+                            if (Program.MainCurrency == DocCur)
                             {
                                 OpenAmount = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmount").Value);
                                 TotalPayment = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmount").Value);
@@ -2170,7 +2170,7 @@ namespace BDO_Localisation_AddOn
                             }
 
                             //currency - gadaxdis valuta
-                            if (currency == Program.MainCurrencySapCode)
+                            if (currency == Program.MainCurrency)
                             {
                                 TotalPayment = TotalPaymentLocal;
                             }
