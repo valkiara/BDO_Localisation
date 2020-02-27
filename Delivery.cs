@@ -295,13 +295,6 @@ namespace BDO_Localisation_AddOn
                             Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, bstrUDOObjectType, newDocEntry.ToString());
                         }
                     }
-                }
-                if(pVal.EventType==SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction)
-                {
-                    if (pVal.ItemUID == "10000329")
-                    {
-                        ARInvoice.fromDelivery = true;
-                    }
                 }              
             }
 

@@ -11,7 +11,6 @@ namespace BDO_Localisation_AddOn
 {
     static partial class ARInvoice
     {
-        public static bool fromDelivery = false;
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
@@ -544,7 +543,7 @@ namespace BDO_Localisation_AddOn
                         if (DocDBSource.GetValue("CANCELED", 0) == "N")
                         {                           
                             //უარყოფითი ნაშთების კონტროლი დოკ.თარიღით
-                            if(!fromDelivery) CommonFunctions.blockNegativeStockByDocDate(oForm, "OINV", "INV1", "WhsCode", out rejection);
+                            CommonFunctions.blockNegativeStockByDocDate(oForm, "OINV", "INV1", "WhsCode", out rejection);
                             if (rejection)
                             {
                                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
@@ -599,7 +598,6 @@ namespace BDO_Localisation_AddOn
                             if (Program.oCompany.InTransaction)
                             {
                                 //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
-                                fromDelivery = false;
                                 if (BusinessObjectInfo.ActionSuccess == true & BusinessObjectInfo.BeforeAction == false)
                                 {
                                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
