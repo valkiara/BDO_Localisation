@@ -3235,11 +3235,11 @@ namespace BDO_Localisation_AddOn
                         DistNumber = oRecordSetBN.Fields.Item("DistNumber").Value;
                         oRecordSetBN.MoveNext();
                     }
-                    String priceQuery = "select TOP 1 * from( " + "\n" + "select OPDN.\"CardCode\",PDN1.\"GTotal\" as \"Price\",OIVL.\"DocDate\" from OIVL " + "\n" + "left join OPDN on OIVL.\"CreatedBy\"=OPDN.\"DocEntry\" " + "\n"
-                    + "join PDN1 on OPDN.\"DocEntry\"=PDN1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='20' and OPDN.\"CardCode\"='"+Cardcode+"' and OIVL.\"ItemCode\"='"+ItemCode+"' " +
-                    "\n" + "union all " + "\n" + "select OPCH.\"CardCode\",PCH1.\"GTotal\"as \"Price\",OIVL.\"DocDate\" from OIVL " + "\n"
-                    + "left join OPCH on OIVL.\"CreatedBy\"=OPCH.\"DocEntry\" " + "\n" + "join PCH1 on OPCH.\"DocEntry\"=PCH1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='18' and OPCH.\"CardCode\"='"+Cardcode+"' and OIVL.\"ItemCode\"='"+
-                    ItemCode+"' " + "\n" + "order by OIVL.\"DocDate\" desc)";
+                    String priceQuery = "select TOP 1 * from( " + "\n" + "select OPDN.\"CardCode\",PDN1.\"PriceAfVAT\" as \"Price\",PDN1.\"DocDate\" as \"DocDatee\" from OIVL " + "\n" + "left join OPDN on OIVL.\"CreatedBy\"=OPDN.\"DocEntry\" " + "\n"
+                    + "join PDN1 on OPDN.\"DocEntry\"=PDN1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='20' and OPDN.\"CardCode\"='"+Cardcode+"' and PDN1.\"ItemCode\"='"+ItemCode+"' " +
+                    "\n" + "union all " + "\n" + "select OPCH.\"CardCode\",PCH1.\"PriceAfVAT\"as \"Price\",PCH1.\"DocDate\" as \"DocDatee\" from OIVL " + "\n"
+                    + "left join OPCH on OIVL.\"CreatedBy\"=OPCH.\"DocEntry\" " + "\n" + "join PCH1 on OPCH.\"DocEntry\"=PCH1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='18' and OPCH.\"CardCode\"='"+Cardcode+"' and PCH1.\"ItemCode\"='"+
+                    ItemCode+"' " + "\n" + "order by \"DocDatee\" desc)";
                     oRecordPrevPrice.DoQuery(priceQuery);
                     if (!oRecordPrevPrice.EoF)  prevPrice = Convert.ToDecimal(oRecordPrevPrice.Fields.Item("Price").Value);
 
