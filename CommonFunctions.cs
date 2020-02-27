@@ -1518,6 +1518,7 @@ namespace BDO_Localisation_AddOn
                         for (int row = 0; row < DBDataSourceTable.Size; row++)
                         {
                             itemCode = getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "ItemCode", row).ToString().Trim();
+                            if (tableDBSourcesName == "INV1" && getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "BaseType", row).ToString().Trim() == "15") continue;
                             if (getValue("OITM", "InvntItem", "ItemCode", itemCode).ToString() == "Y")
                             {
                                 quantity = Convert.ToDecimal(getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "Quantity", row), CultureInfo.InvariantCulture);
@@ -1630,7 +1631,7 @@ namespace BDO_Localisation_AddOn
                                     tempCheck = false;
                                 }
                             }
-
+                            
                             if (tempCheck)
                             {
                                 errorText = BDOSResources.getTranslate("InsufficientStockBalanceOnPostingDate") + ", " + BDOSResources.getTranslate("ItemCode") + ": " + itemCode;
@@ -1640,7 +1641,7 @@ namespace BDO_Localisation_AddOn
                                 }
                                 Program.uiApp.StatusBar.SetSystemMessage(errorText);
                                 rejection = true;
-                            }
+                            }                            
                         }
                     }
                 }
