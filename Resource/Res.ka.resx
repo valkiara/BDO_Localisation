@@ -3478,4 +3478,16 @@
   <data name="lastPrice" xml:space="preserve">
     <value>ბოლო ფასი</value>
   </data>
+  <data name="AdmissionDate" xml:space="preserve">
+    <value>შესყიდვის თარიღი</value>
+  </data>
+  <data name="DateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
+    <value>ბოლო არსებული ცვეთის დარიცხვის დოკუმენტის თარიღი</value>
+  </data>
+  <data name="PayAttentionToTheAdmissionDate" xml:space="preserve">
+    <value>ყურადღება მიაქციეთ შესყიდვის თარიღს</value>
+  </data>
+  <data name="PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
+    <value>ყურადღება მიაქციეთ ბოლო არსებული ცვეთის დარიცხვის დოკუმენტის თარიღს</value>
+  </data>
 </root>

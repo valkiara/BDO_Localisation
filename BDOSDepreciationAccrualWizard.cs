@@ -201,6 +201,8 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("DistNumber", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 36);
                     oDataTable.Columns.Add("WhsCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 8);
                     oDataTable.Columns.Add("PrjCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
+                    oDataTable.Columns.Add("InDate", SAPbouiCOM.BoFieldsType.ft_Date);
+                    oDataTable.Columns.Add("LastDeprDocDate", SAPbouiCOM.BoFieldsType.ft_Date);
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("ItemName", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 100);
                     oDataTable.Columns.Add("ItmsGrpCod", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 6);
@@ -245,6 +247,18 @@ namespace BDO_Localisation_AddOn
                     oColumn.DataBind.Bind(UID, "PrjCode");
                     oLink = oColumn.ExtendedObject;
                     oLink.LinkedObjectType = "63";
+
+                    oColumn = oColumns.Add("InDate", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("AdmissionDate");
+                    oColumn.Editable = false;
+                    //oColumn.Visible = false;
+                    oColumn.DataBind.Bind(UID, "InDate");
+
+                    oColumn = oColumns.Add("LstDprDcDt", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("DateOfLastExistingDepreciationAccrualDocument");
+                    oColumn.Editable = false;
+                    //oColumn.Visible = false;
+                    oColumn.DataBind.Bind(UID, "LastDeprDocDate");
 
                     oColumn = oColumns.Add("ItemCode", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("AssetCode");
@@ -500,14 +514,14 @@ namespace BDO_Localisation_AddOn
                     else
                     {
                         CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCreatedSuccesfully") + " #" + docEntry.ToString(), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                        Program.uiApp.StatusBar.SetSystemMessage($"{BDOSResources.getTranslate("DocumentCreatedSuccesfully")}", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success, "", "", $"{BDOSResources.getTranslate("DocEntry")}: {docEntry.ToString()}");
                     }
                 }
             }
             catch (Exception ex)
             {
                 CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentNotCreated") + ". " + BDOSResources.getTranslate("ReasonIs") + ": " + ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+                Program.uiApp.StatusBar.SetSystemMessage($"{BDOSResources.getTranslate("DocumentNotCreated")}", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error, "", "", $"{ex.Message}");
             }
             finally
             {
@@ -546,11 +560,25 @@ namespace BDO_Localisation_AddOn
                 string itemCode = depreciationLines.GetValue("ItemCode", i);
                 string distNumber = depreciationLines.GetValue("DistNumber", i);
                 string project = depreciationLines.GetValue("PrjCode", i);
+                DateTime inDate = depreciationLines.GetValue("InDate", i);
+                DateTime? lastDeprDocDate = depreciationLines.GetValue("LastDeprDocDate", i);
+                int lineNum = depreciationLines.GetValue("LineNum", i);
 
                 if (depreciationLines.GetValue("DepreciationDocEntry", i) == 0)
                 {
+                    DateTime dateForCheck = lastDeprDocDate.HasValue ? lastDeprDocDate.Value : inDate;
+                    DateTime lastDayOfDateForCheckNextMonth = new DateTime(dateForCheck.Year, dateForCheck.Month, 1).AddMonths(2).AddDays(-1);
+                    if (lastDayOfDateForCheckNextMonth != accrMnth)
+                    {
+                        string text = lastDeprDocDate.HasValue ? BDOSResources.getTranslate("PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument") : BDOSResources.getTranslate("PayAttentionToTheAdmissionDate");
+                        Program.uiApp.StatusBar.SetSystemMessage($"{BDOSResources.getTranslate("CreateDocumentForThePreviousMonths")}", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error, "", "", $"{text}! {BDOSResources.getTranslate("TableRow")}: {lineNum}");
+                        continue;
+                    }
+
                     newRow = depreciationLinesTmp.Rows.Count;
                     depreciationLinesTmp.Rows.Add();
+                    depreciationLinesTmp.SetValue("LineNum", newRow, lineNum);
+                    depreciationLinesTmp.SetValue("InDate", newRow, inDate);
                     depreciationLinesTmp.SetValue("ItemCode", newRow, itemCode);
                     depreciationLinesTmp.SetValue("DistNumber", newRow, distNumber);
                     depreciationLinesTmp.SetValue("UsefulLife", newRow, depreciationLines.GetValue("UsefulLife", i));
@@ -585,39 +613,8 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentAlreadyCreated") + "! " + itemCode + " - " + distNumber + " - " + project, SAPbouiCOM.BoMessageTime.bmt_Short);
+                    Program.uiApp.StatusBar.SetSystemMessage($"{BDOSResources.getTranslate("DocumentAlreadyCreated")}", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error, "", "", $"{BDOSResources.getTranslate("TableRow")}: {lineNum}");
                     continue;
-                }
-
-                StringBuilder query = new StringBuilder();
-                //query.Append("SELECT * \n");
-                //query.Append("FROM \n");
-                query.Append("(SELECT TOP 1 \n");
-                query.Append("\"@BDOSDEPACR\".\"DocEntry\", \n");
-                query.Append("\"@BDOSDEPACR\".\"U_DocDate\" \n");
-                query.Append("FROM \"@BDOSDEPACR\" \n");
-                query.Append("INNER JOIN \"@BDOSDEPAC1\" ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-                query.Append("WHERE \"U_DocDate\" <= '" + dateStr + "' \n");
-                query.Append("AND \"Canceled\" = 'N' \n");
-                query.Append("AND \"@BDOSDEPAC1\".\"U_ItemCode\" = '" + itemCode + "' \n");
-                query.Append("AND \"@BDOSDEPAC1\".\"U_DistNumber\" = '" + distNumber + "' \n");
-                query.Append("AND \"@BDOSDEPAC1\".\"U_Project\" = '" + project + "' \n");
-                query.Append("ORDER BY \n");
-                query.Append("\"U_DocDate\" DESC, \n");
-                query.Append("\"DocEntry\" DESC) \n");
-                //query.Append("WHERE ABS((MONTH('" + dateStr + "') - MONTH(\"U_DocDate\")))>1");
-
-                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                oRecordSet.DoQuery(query.ToString());
-                if (!oRecordSet.EoF)
-                {
-                    if (Math.Abs(accrMnth.Month - oRecordSet.Fields.Item("U_DocDate").Value.Month) > 1)
-                    {
-                        depreciationLinesTmp.Rows.Remove(newRow);
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreateDocumentForThePreviousMonths") + "! " + itemCode + " - " + distNumber + " - " + project, SAPbouiCOM.BoMessageTime.bmt_Short);
-                        Marshal.ReleaseComObject(oRecordSet);
-                        continue;
-                    }
                 }
             }
 
@@ -679,6 +676,8 @@ namespace BDO_Localisation_AddOn
             query.Append("               \"OBTQ\".\"WhsCode\", \n");
             query.Append("               \"OWHS\".\"WhsName\", \n");
             query.Append("               \"OWHS\".\"U_BDOSPrjCod\" AS \"PrjCode\", \n");
+            query.Append("               \"OBTN\".\"InDate\", \n");
+            query.Append("               \"T3\".\"LastDeprDocDate\", \n");
             query.Append("               \"OBTQ\".\"ItemCode\", \n");
             query.Append("               \"OITM\".\"ItemName\", \n");
             query.Append("               \"OITM\".\"ItmsGrpCod\", \n");
@@ -701,6 +700,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                       ON \"OBTQ\".\"ItemCode\" = \"OBTN\".\"ItemCode\" \n");
             query.Append("                          AND \"OBTQ\".\"SysNumber\" = \"OBTN\".\"SysNumber\" \n");
             query.Append("                          AND \"OBTQ\".\"MdAbsEntry\" = \"OBTN\".\"AbsEntry\" \n");
+            query.Append("                          AND NEXT_DAY(LAST_DAY(\"OBTN\".\"InDate\")) < '" + dateStr + "' \n");
             query.Append("               INNER JOIN \"OWHS\" \n");
             query.Append("                       ON \"OBTQ\".\"WhsCode\" = \"OWHS\".\"WhsCode\" \n");
             query.Append("               INNER JOIN \"OITM\" \n");
@@ -711,12 +711,13 @@ namespace BDO_Localisation_AddOn
             query.Append("               LEFT JOIN (SELECT \"@BDOSDEPAC1\".\"U_Project\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_DeprAmt\" \n");
+            query.Append("                                 SUM(\"@BDOSDEPAC1\".\"U_DeprAmt\") AS \"U_DeprAmt\" \n");
             query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
             query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
             query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
-            query.Append("                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" <= '" + dateStr + "') AS T1 \n");
+            query.Append("                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" <= '" + dateStr + "' \n");
+            query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_Project\", \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T1 \n");
             query.Append("                      ON T1.\"U_ItemCode\" = \"OBTQ\".\"ItemCode\" \n");
             query.Append("                         AND T1.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
             query.Append("                         AND T1.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
@@ -733,6 +734,19 @@ namespace BDO_Localisation_AddOn
             query.Append("                      ON T2.\"U_ItemCode\" = \"OBTQ\".\"ItemCode\" \n");
             query.Append("                         AND T2.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
             query.Append("                         AND T2.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
+            query.Append("               LEFT JOIN (SELECT MAX(\"@BDOSDEPACR\".\"U_DocDate\") AS \"LastDeprDocDate\", \n");
+            query.Append("                                 \"@BDOSDEPAC1\".\"U_Project\", \n");
+            query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
+            query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\" \n");
+            query.Append("                          FROM   \"@BDOSDEPACR\" \n");
+            query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
+            query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
+            query.Append("                          WHERE  \"Canceled\" = 'N' \n");
+            query.Append("                                 AND \"U_DocDate\" <= '" + dateStr + "' \n");
+            query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_Project\", \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T3 \n");
+            query.Append("                      ON T3.\"U_ItemCode\" = \"OBTQ\".\"ItemCode\" \n");
+            query.Append("                         AND T3.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
+            query.Append("                         AND T3.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
             query.Append("        WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0) AS T0");
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -746,6 +760,9 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue("DistNumber", rowIndex, oRecordSet.Fields.Item("DistNumber").Value);
                 oDataTable.SetValue("WhsCode", rowIndex, oRecordSet.Fields.Item("WhsCode").Value);
                 oDataTable.SetValue("PrjCode", rowIndex, oRecordSet.Fields.Item("PrjCode").Value);
+                oDataTable.SetValue("InDate", rowIndex, oRecordSet.Fields.Item("InDate").Value);
+                if (oRecordSet.Fields.Item("LastDeprDocDate").Value.ToString("yyyyMMdd") != "18991230")
+                    oDataTable.SetValue("LastDeprDocDate", rowIndex, oRecordSet.Fields.Item("LastDeprDocDate").Value);
                 oDataTable.SetValue("ItemCode", rowIndex, oRecordSet.Fields.Item("ItemCode").Value);
                 oDataTable.SetValue("ItemName", rowIndex, oRecordSet.Fields.Item("ItemName").Value);
                 oDataTable.SetValue("ItmsGrpCod", rowIndex, oRecordSet.Fields.Item("ItmsGrpCod").Value);
