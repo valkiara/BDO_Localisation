@@ -2957,7 +2957,7 @@
     <value>ცვეთის დარიცხვის დამხმარე - რაოდენობრივი აღრიცხვა</value>
   </data>
   <data name="DistNumber" xml:space="preserve">
-    <value>პარტის ნომერი</value>
+    <value>პარტიის ნომერი</value>
   </data>
   <data name="ItmsGrpCod" xml:space="preserve">
     <value>საქონლის ჯგუფი</value>
@@ -3477,5 +3477,17 @@
   </data>
   <data name="lastPrice" xml:space="preserve">
     <value>ბოლო ფასი</value>
+  </data>
+  <data name="AdmissionDate" xml:space="preserve">
+    <value>შემოსვლის თარიღი</value>
+  </data>
+  <data name="DateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
+    <value>ბოლო არსებული ცვეთის დარიცხვის დოკუმენტის თარიღი</value>
+  </data>
+  <data name="PayAttentionToTheAdmissionDate" xml:space="preserve">
+    <value>ყურადღება მიაქციეთ შემოსვლის თარიღს</value>
+  </data>
+  <data name="PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
+    <value>ყურადღება მიაქციეთ ბოლო არსებული ცვეთის დარიცხვის დოკუმენტის თარიღს</value>
   </data>
 </root>

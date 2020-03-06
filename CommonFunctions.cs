@@ -1231,36 +1231,46 @@ namespace BDO_Localisation_AddOn
                 downPmntTable = "ODPO"; //A/P Down Payment
             }
             else return;
-            
+
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try
             {
-                try
-                {
-                    oRecordSet.DoQuery("CREATE LOCAL TEMPORARY TABLE #DRAWNDPMTBL (\"BaseAbs\" INTEGER, \"GrossFc\" DECIMAL, \"ObjType\" NVARCHAR(20)) ");
-                }
-                catch (Exception ex)
-                {
-                    string err = ex.Message; 
-                }
+                //try
+                //{
+                //    oRecordSet.DoQuery("CREATE LOCAL TEMPORARY TABLE #DRAWNDPMTBL (\"BaseAbs\" INTEGER, \"GrossFc\" DECIMAL, \"ObjType\" NVARCHAR(20)) ");
+                //}
+                //catch (Exception ex)
+                //{
+                //    string err = ex.Message; 
+                //}
 
+                //foreach (DataRow dataRow in drawnDpm.Select())
+                //    oRecordSet.DoQuery("INSERT INTO #DRAWNDPMTBL values(" + dataRow["BaseAbs"] + ", " + dataRow["GrossFc"] + ", '" + dataRow["ObjType"] + "') ");
+
+                StringBuilder dummyTable = new StringBuilder();
                 foreach (DataRow dataRow in drawnDpm.Select())
-                    oRecordSet.DoQuery("INSERT INTO #DRAWNDPMTBL values(" + dataRow["BaseAbs"] + ", " + dataRow["GrossFc"] + ", '" + dataRow["ObjType"] + "') ");
+                {
+                    dummyTable.AppendLine("SELECT " + dataRow["BaseAbs"] + " AS \"BaseAbs\", " + dataRow["GrossFc"] + " AS \"GrossFc\", '" + dataRow["ObjType"] + "' AS \"ObjType\" ");
+                    if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
+                        dummyTable.Append(" FROM DUMMY ");
+                    if (drawnDpm.Rows.IndexOf(dataRow) != (drawnDpm.Rows.Count - 1))
+                        dummyTable.AppendLine(" UNION ALL ");
+                }
 
                 StringBuilder query2 = new StringBuilder();
                 query2.Append("SELECT Sum(MainTBL.\"GrossFC\")                       AS \"AppliedDownPmntSumFC\", \n");
                 query2.Append("       Sum(MainTBL.\"GrossFC\" * MainTBL.\"DocRate\") AS \"AppliedDownPmntSumSC\" \n");
                 query2.Append("FROM  (SELECT T0.\"DocRate\", \n");
-                query2.Append("              #DRAWNDPMTBL.\"GrossFc\" * ( T0.\"AppliedFC\" / (SELECT \"DocTotalFC\" \n");
+                query2.Append("              DRAWNDPMTBL.\"GrossFc\" * ( T0.\"AppliedFC\" / (SELECT \"DocTotalFC\" \n");
                 query2.Append("                                                           FROM   " + downPmntTable + " \n");
                 query2.Append("                                                           WHERE  \"DocEntry\" = T0.\"DocEntry\")) AS \"GrossFC\" \n");
                 query2.Append("       FROM   " + pmntInvoicesTable + " AS T0 \n");
                 query2.Append("              INNER JOIN " + pmntTable + " AS T1 \n");
                 query2.Append("                      ON T0.\"DocNum\" = T1.\"DocEntry\" \n");
                 query2.Append("                         AND T1.\"Canceled\" = 'N' \n");
-                query2.Append("              INNER JOIN #DRAWNDPMTBL \n");
-                query2.Append("                      ON T0.\"DocEntry\" = #DRAWNDPMTBL.\"BaseAbs\" \n");
-                query2.Append("                         AND T0.\"InvType\" = #DRAWNDPMTBL.\"ObjType\") AS MainTBL \n");
+                query2.Append("              INNER JOIN (" + dummyTable + ") AS DRAWNDPMTBL \n");
+                query2.Append("                      ON T0.\"DocEntry\" = DRAWNDPMTBL.\"BaseAbs\" \n");
+                query2.Append("                         AND T0.\"InvType\" = DRAWNDPMTBL.\"ObjType\") AS MainTBL \n");
                 oRecordSet.DoQuery(query2.ToString());
 
                 if (!oRecordSet.EoF)
@@ -1275,7 +1285,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                oRecordSet.DoQuery("DELETE FROM #DRAWNDPMTBL");
+                //oRecordSet.DoQuery("DELETE FROM #DRAWNDPMTBL");
                 Marshal.ReleaseComObject(oRecordSet);
             }
         }
@@ -1631,7 +1641,7 @@ namespace BDO_Localisation_AddOn
                                     tempCheck = false;
                                 }
                             }
-                            
+
                             if (tempCheck)
                             {
                                 errorText = BDOSResources.getTranslate("InsufficientStockBalanceOnPostingDate") + ", " + BDOSResources.getTranslate("ItemCode") + ": " + itemCode;
@@ -1641,7 +1651,7 @@ namespace BDO_Localisation_AddOn
                                 }
                                 Program.uiApp.StatusBar.SetSystemMessage(errorText);
                                 rejection = true;
-                            }                            
+                            }
                         }
                     }
                 }

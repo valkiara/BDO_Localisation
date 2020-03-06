@@ -4307,6 +4307,7 @@ namespace BDO_Localisation_AddOn
                 for (int i = 1; i < oMatrix.RowCount + 1; i++)
                 {
                     string Payment = FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("24").Cells.Item(i).Specific.Value).ToString();
+                    decimal wTaxAmt = FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("72").Cells.Item(i).Specific.Value);
                     string DocType = oMatrix.Columns.Item("45").Cells.Item(i).Specific.Value.ToString();
                     string DocNum = oMatrix.Columns.Item("1").Cells.Item(i).Specific.Value.ToString();
                     string Selected = oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Caption;
@@ -4316,7 +4317,9 @@ namespace BDO_Localisation_AddOn
                         bool prTx = GetNonEconExpAP(Convert.ToInt16(DocNum), DocType);
                         if (prTx)
                         {
-                            AmountPr = AmountPr + Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(Convert.ToDecimal(Payment) / Convert.ToDecimal(100 - profitTaxRate) * Convert.ToDecimal(profitTaxRate), "Sum"));
+                            AmountPr += Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(
+                                (Convert.ToDecimal(Payment) + wTaxAmt) / Convert.ToDecimal(100 - profitTaxRate) *
+                                Convert.ToDecimal(profitTaxRate), "Sum"));
                         }
                     }
 
