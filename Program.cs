@@ -1886,6 +1886,12 @@ namespace BDO_Localisation_AddOn
                     ChartOfAccounts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
+                //----------------------------->AP correction invoice <------------------------------
+                else if (pVal.FormTypeEx== "70002")
+                {
+                    APCorrectionInvoice.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
                 //----------------------------->Exchange Rate Differences<-----------------------------
                 else if (pVal.FormTypeEx == "369")
                 {
