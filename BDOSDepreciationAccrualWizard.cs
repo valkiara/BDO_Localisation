@@ -732,7 +732,7 @@ namespace BDO_Localisation_AddOn
             query.Append("               INNER JOIN \"OITB\" \n");
             query.Append("                       ON \"OITM\".\"ItmsGrpCod\" = \"OITB\".\"ItmsGrpCod\" \n");
             query.Append("                          AND \"OITB\".\"U_BDOSFxAs\" = 'Y' \n");
-            query.Append("               LEFT JOIN (SELECT \"@BDOSDEPAC1\".\"U_Project\", \n");
+            query.Append("               LEFT JOIN (SELECT --\"@BDOSDEPAC1\".\"U_Project\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\", \n");
             query.Append("                                 SUM(\"@BDOSDEPAC1\".\"U_DeprAmt\") AS \"U_DeprAmt\" \n");
@@ -741,10 +741,10 @@ namespace BDO_Localisation_AddOn
             query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
             query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
             query.Append("                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" <= '" + dateStr + "' \n");
-            query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_Project\", \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T1 \n");
+            query.Append("                          GROUP BY /*\"@BDOSDEPAC1\".\"U_Project\",*/ \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T1 \n");
             query.Append("                      ON T1.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
             query.Append("                         AND T1.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("                         AND T1.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
+            query.Append("                         --AND T1.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
             query.Append("               LEFT JOIN (SELECT \"@BDOSDEPACR\".\"DocEntry\" AS \"DepreciationDocEntry\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_Project\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
@@ -813,7 +813,7 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue("AlreadyDepreciatedAmt", rowIndex, oRecordSet.Fields.Item("AlreadyDepreciatedAmt").Value);
                 if ((int)oRecordSet.Fields.Item("DepreciationDocEntry").Value != 0)
                     oDataTable.SetValue("DepreciationDocEntry", rowIndex, oRecordSet.Fields.Item("DepreciationDocEntry").Value);
-                oDataTable.SetValue("AccumulatedDepreciationAmt", rowIndex, oRecordSet.Fields.Item("AccumulatedDepreciationAmt").Value);
+                oDataTable.SetValue("AccumulatedDepreciationAmt", rowIndex, oRecordSet.Fields.Item("Coefficient").Value * oRecordSet.Fields.Item("AccumulatedDepreciationAmt").Value);
 
                 //DateTime InDateStart = oRecordSet.Fields.Item("InDate").Value;
                 //DateTime InDateEnd = InDateStart.AddMonths(oRecordSet.Fields.Item("UsefulLife").Value);
