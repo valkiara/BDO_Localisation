@@ -213,7 +213,7 @@ namespace BDO_Localisation_AddOn
                             docTable = "OVPM";
 
                             queryDoc.Append(
-                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"DocTotalFC\") as \"Amount\" \n");
                             queryDoc.Append("from " + docTable + " \n");
                             queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
                             queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\",\"U_UseBlaAgRt\"");
@@ -222,7 +222,7 @@ namespace BDO_Localisation_AddOn
                             docTable = "ORCT";
 
                             queryDoc.Append(
-                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"DocTotalFC\") as \"Amount\" \n");
                             queryDoc.Append("from " + docTable + " \n");
                             queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
                             queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\", \"U_UseBlaAgRt\"");
@@ -273,8 +273,7 @@ namespace BDO_Localisation_AddOn
 
                                     double docRate = oRecordSetDoc.Fields.Item("DocRate").Value;
 
-                                    double amount =
-                                        oRecordSetDoc.Fields.Item("Amount").Value; // * 1.18; //დღგ-ს გათვალისწინება
+                                    double amount = oRecordSetDoc.Fields.Item("Amount").Value; 
 
                                     debit = oRecordSetJDT1.Fields.Item("Debit").Value;
                                     credit = oRecordSetJDT1.Fields.Item("Credit").Value;
@@ -396,6 +395,8 @@ namespace BDO_Localisation_AddOn
 
             Recordset oRecordSetOldEntriesAmount = Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
             var amountColumn = "Debit";
+            double oldDebit = 0;
+            double oldCredit = 0;
             double oldAmount = 0;
 
             if (credit != 0)
@@ -404,14 +405,17 @@ namespace BDO_Localisation_AddOn
             }
 
             var querySumAmount = new StringBuilder();
-            querySumAmount.Append("SELECT SUM(\"JDT1\".\"" + amountColumn + "\") AS \"Amount\" \n");
+            querySumAmount.Append("SELECT SUM(\"JDT1\".\"Credit\") AS \"Credit\",SUM(\"JDT1\".\"Debit\") AS \"Debit\" \n");
             querySumAmount.Append("FROM \"JDT1\" \n");
             querySumAmount.Append("WHERE \"Ref3Line\" = '" + ref3 + "'");
 
             oRecordSetOldEntriesAmount.DoQuery(querySumAmount.ToString());
             if (!oRecordSetOldEntriesAmount.EoF)
             {
-                oldAmount = oRecordSetOldEntriesAmount.Fields.Item("Amount").Value;
+                oldCredit = oRecordSetOldEntriesAmount.Fields.Item("Credit").Value;
+                oldDebit = oRecordSetOldEntriesAmount.Fields.Item("Debit").Value;
+
+                oldAmount = Math.Abs(oldDebit - oldCredit);
             }
 
             #endregion
