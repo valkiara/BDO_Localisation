@@ -2988,7 +2988,7 @@ namespace BDO_Localisation_AddOn
 
                 if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
                 {
-                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE; 
                 }
 
                 oForm.Freeze(false);
