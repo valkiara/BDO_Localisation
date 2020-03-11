@@ -718,6 +718,11 @@ namespace BDO_Localisation_AddOn
                     {
                         oCFLEvento = ((SAPbouiCOM.ChooseFromListEvent)(pVal));
                         string sCFL_ID = oCFLEvento.ChooseFromListUID;
+                        if (sCFL_ID == "ItemMTR_CFL" && oForm.Items.Item("DocDateE").Specific.Value == "")
+                        {
+                            BubbleEvent = false;
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TheFollowingFieldIsMandatory")+ ": "+ BDOSResources.getTranslate("PostingDate"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
+                        }
                         SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
 
@@ -2941,8 +2946,8 @@ namespace BDO_Localisation_AddOn
                 string itemcode = mtrDataSource.GetValue("U_ItemCode", row);
                 if (!string.IsNullOrEmpty(itemcode))
                 {
-
-                    string query = getAssetQuery(new DateTime(), itemcode, "", "");
+                    DateTime dt= DateTime.TryParseExact(oForm.Items.Item("DocDateE").Specific.Value.ToString(), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt) == false ? DateTime.Now : dt;
+                    string query = getAssetQuery(dt, itemcode, "", "");
 
                     if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
                     {
@@ -2993,6 +2998,7 @@ namespace BDO_Localisation_AddOn
 
         public static string getAssetQuery(DateTime docDate, string itemCode, string fLocCode, string fEmplID)
         {
+            string ThisYear = docDate.Year.ToString();
             string query = @"SELECT
 	                                 ""Assets"".* 
                                 FROM (SELECT
@@ -3020,7 +3026,8 @@ namespace BDO_Localisation_AddOn
 			                                (SELECT
 				                                 ""ItemCode"",
 				                                 ""APC"" ,
-				                                 ""Quantity"" 
+				                                 ""Quantity"" ,
+                                                   ""PeriodCat""
 			                                FROM (SELECT
 					                                 ""ItemCode"",
 					                                 ""APC"" ,
@@ -3028,24 +3035,28 @@ namespace BDO_Localisation_AddOn
 					                                 ""PeriodCat"",
 				 	                                 RANK ( ) OVER (PARTITION BY ""ItemCode"" ORDER BY ""PeriodCat"" Desc) AS ""Rank"" 
 				                                FROM ""ITM8"" ) AS ""Items""
-				                                WHERE ""Rank"" = 1
+				                                WHERE ""Rank"" = 1 and ""PeriodCat""='" + ThisYear+ @"' 
 			
 			                                UNION ALL 
 			                                SELECT
 				                                 ""ItemCode"",
 				                                 ""APC"" ,
-				                                 ""Qty"" 
+				                                 ""Qty"" ,
+                                            ""PeriodCat""
 			                                FROM ""FIX1"" 
 			                                INNER JOIN ""OFIX"" ON ""FIX1"".""AbsEntry"" = ""OFIX"".""AbsEntry"" AND ""Canceled"" = 'N'
-			
+			                                where ""PeriodCat""='" + ThisYear + @"' 
 			                                UNION ALL 
 			                                SELECT
 				                                 ""RecvAsst"",
 				                                 -1*""APC"" ,
-				                                 -1*""Qty"" 
+				                                 -1*""Qty"" ,
+                                            ""PeriodCat""
 			                                FROM ""FIX1"" 
 			                                INNER JOIN ""OFIX"" ON ""FIX1"".""AbsEntry"" = ""OFIX"".""AbsEntry"" AND ""Canceled"" = 'N' AND ISNULL(""RecvAsst"",
-				                                 '') <> '') AS ""UnionAssets""			
+				                                 '') <> ''
+                                              where ""PeriodCat""='" + ThisYear + @"' 
+                                            ) AS ""UnionAssets""			
 			                                GROUP BY ""ItemCode"") AS ""AssetCost""	ON ""OITM"".""ItemCode"" = ""AssetCost"".""ItemCode""
 	
 	                                WHERE ""OITM"".""ItemType"" = 'F' AND ""OITM"".""AsstStatus"" = 'A' " +
