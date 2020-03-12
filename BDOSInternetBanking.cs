@@ -986,10 +986,7 @@ namespace BDO_Localisation_AddOn
                         oMatrix.CommonSetting.SetCellEditable(i, 31, false);
                     }
 
-                    if (!string.IsNullOrEmpty(docEntry))
-                    {
-                        oMatrix.CommonSetting.SetCellEditable(i, 33, false);
-                    }
+                    oMatrix.CommonSetting.SetCellEditable(i, 33, string.IsNullOrEmpty(docEntry));
                 }
             }
             catch (Exception ex)
