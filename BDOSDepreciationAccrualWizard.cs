@@ -504,7 +504,7 @@ namespace BDO_Localisation_AddOn
                         oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("NetBookValue", i));
                     else
                         oChild.SetProperty("U_DeprAmt", DepreciationLines.GetValue("DepreciationAmt", i));
-                    oChild.SetProperty("U_AccmDprAmt", DepreciationLines.GetValue("AccumulatedDepreciationAmt", i));
+                    oChild.SetProperty("U_AccmDprAmt", DepreciationLines.GetValue("AccumulatedDepreciationAmt", i) + DepreciationLines.GetValue("DepreciationAmt", i));
                 }
 
                 var response = oGeneralService.Add(oGeneralData);
@@ -679,11 +679,11 @@ namespace BDO_Localisation_AddOn
             StringBuilder query = new StringBuilder();
             query.Append("SELECT T0.*, \n");
             query.Append("       CASE \n");
-            query.Append("         WHEN T0.\"AlreadyDepreciatedAmt\" IS NULL THEN \n");
+            query.Append("         WHEN T0.\"AlreadyDepreciatedAmt\" = 0 THEN \n");
             query.Append("         T0.\"PurchaseCost\" / T0.\"UsefulLife\" \n");
             query.Append("         ELSE 0 \n");
             query.Append("       END                                                  AS \"DepreciationAmt\", \n");
-            query.Append("       T0.\"PurchaseCost\" - \"AccumulatedDepreciationAmt\" AS \"NetBookValue\", \n");
+            query.Append("       T0.\"PurchaseCost\" - (T0.\"AccumulatedDepreciationAmt\" * T0.\"Coefficient\") AS \"NetBookValue\", \n");
             query.Append("       T0.\"UsefulLife\" - T0.\"AllDeprDocQty\"             AS \"RemainingLife\" \n");
             query.Append("FROM   (SELECT \"OBTN\".\"DistNumber\", \n");
             query.Append("               \"OIBT\".\"WhsCode\", \n");
@@ -700,8 +700,8 @@ namespace BDO_Localisation_AddOn
             query.Append("               \"OIBT\".\"QuantityAll\", \n");
             query.Append("               \"OIBT\".\"Quantity\" / \"OIBT\".\"QuantityAll\"                 AS \"Coefficient\", \n");
             query.Append("               \"OITM\".\"U_BDOSUsLife\"                                        AS \"UsefulLife\", \n");
-            query.Append("               T1.\"U_DeprAmt\"                                                 AS \"AccumulatedDepreciationAmt\", \n");
-            query.Append("               T2.\"U_DeprAmt\"                                                 AS \"AlreadyDepreciatedAmt\", \n");
+            query.Append("               CASE WHEN T1.\"U_DeprAmt\" IS NULL THEN 0 ELSE T1.\"U_DeprAmt\" END        AS \"AccumulatedDepreciationAmt\", \n");
+            query.Append("               CASE WHEN T2.\"U_DeprAmt\" IS NULL THEN 0 ELSE T2.\"U_DeprAmt\" END        AS \"AlreadyDepreciatedAmt\", \n");
             query.Append("               T2.\"DepreciationDocEntry\", \n");
             query.Append("               \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\"                             AS \"PurchasePrice\", \n");
             query.Append("               ( \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\" ) * \"OIBT\".\"Quantity\" AS \"PurchaseCost\", \n");
@@ -772,13 +772,16 @@ namespace BDO_Localisation_AddOn
             query.Append("                         AND T3.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
             query.Append("                         AND T3.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
             query.Append("               LEFT JOIN (SELECT Count(DISTINCT \"@BDOSDEPAC1\".\"DocEntry\") AS \"DocEntry\", \n");
+            query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\" \n");
             query.Append("                          FROM   \"@BDOSDEPACR\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
             query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
             query.Append("                          WHERE  \"Canceled\" = 'N' \n");
-            query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
+            query.Append("                                 AND \"U_DocDate\" <= '" + dateStr + "' \n");
+            query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
             query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
+            query.Append("                         AND T4.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
             query.Append("          WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0 \n");
             query.Append("           AND (NEXT_DAY(LAST_DAY(\"OIBT\".\"InDate\")) < '" + dateStr + "' OR (\"OIBT\".\"BaseType\" = 67 AND LAST_DAY(\"OIBT\".\"InDate\") = '" + dateStr + "')) \n");
             query.Append("        ) AS T0 \n");
@@ -809,7 +812,7 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue("PurchasePrice", rowIndex, oRecordSet.Fields.Item("PurchasePrice").Value);
                 oDataTable.SetValue("PurchaseCost", rowIndex, oRecordSet.Fields.Item("PurchaseCost").Value);
                 oDataTable.SetValue("NetBookValue", rowIndex, oRecordSet.Fields.Item("NetBookValue").Value);
-                oDataTable.SetValue("DepreciationAmt", rowIndex, oRecordSet.Fields.Item("Coefficient").Value * oRecordSet.Fields.Item("DepreciationAmt").Value);
+                oDataTable.SetValue("DepreciationAmt", rowIndex, oRecordSet.Fields.Item("DepreciationAmt").Value);
                 oDataTable.SetValue("AlreadyDepreciatedAmt", rowIndex, oRecordSet.Fields.Item("AlreadyDepreciatedAmt").Value);
                 if ((int)oRecordSet.Fields.Item("DepreciationDocEntry").Value != 0)
                     oDataTable.SetValue("DepreciationDocEntry", rowIndex, oRecordSet.Fields.Item("DepreciationDocEntry").Value);
