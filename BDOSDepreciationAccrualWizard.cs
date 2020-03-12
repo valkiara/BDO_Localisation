@@ -576,7 +576,7 @@ namespace BDO_Localisation_AddOn
                     DateTime dateForCheck = lastDeprDocDate.HasValue ? lastDeprDocDate.Value : inDate;
                     DateTime lastDayOfDateForCheckNextMonth;
 
-                    if (depreciationLines.GetValue("BaseType", i) == 67)
+                    if (depreciationLines.GetValue("BaseType", i) == 67 && !lastDeprDocDate.HasValue)
                         lastDayOfDateForCheckNextMonth = new DateTime(dateForCheck.Year, dateForCheck.Month, 1).AddMonths(1).AddDays(-1);
                     else
                         lastDayOfDateForCheckNextMonth = new DateTime(dateForCheck.Year, dateForCheck.Month, 1).AddMonths(2).AddDays(-1);
