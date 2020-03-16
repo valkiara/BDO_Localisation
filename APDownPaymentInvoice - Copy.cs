@@ -16,8 +16,8 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
             if (oForm.TypeEx == "65301")
-            {
-                
+            {              
+
 
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD & BusinessObjectInfo.BeforeAction == true)
                 {

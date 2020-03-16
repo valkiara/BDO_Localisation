@@ -402,7 +402,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("UsLife"));
+            formItems.Add("Caption", BDOSResources.getTranslate("UsefulLife"));
             formItems.Add("LinkTo", "UsLife");
             formItems.Add("FromPane", pane);
             formItems.Add("ToPane", pane);

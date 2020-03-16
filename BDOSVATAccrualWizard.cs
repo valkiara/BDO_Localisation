@@ -349,8 +349,8 @@ namespace BDO_Localisation_AddOn
 
                     SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Add("InvoiceMTR");
 
-                    oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50); //ინდექსი 
-                    oDataTable.Columns.Add("CheckBox", SAPbouiCOM.BoFieldsType.ft_Text, 1); // 
+                    oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer); //ინდექსი 
+                    oDataTable.Columns.Add("CheckBox", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 1); // 
                     oDataTable.Columns.Add("DocEntry", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
                     oDataTable.Columns.Add("DocNum", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ნომერი
                     oDataTable.Columns.Add("cancelled", SAPbouiCOM.BoFieldsType.ft_Text, 1); //ნომერი                    
@@ -473,51 +473,42 @@ namespace BDO_Localisation_AddOn
         {
             string errorText = null;
 
-            SAPbobsCOM.SBObob vObj;
-            vObj = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-
-            SAPbobsCOM.CompanyService oCompanyService = null;
-            SAPbobsCOM.GeneralService oGeneralService = null;
-            SAPbobsCOM.GeneralData oGeneralData = null;
-            oCompanyService = Program.oCompany.GetCompanyService();
-            oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_ARDPV_D");
-            oGeneralData = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
-
-            DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(headerLine["DocDate"].ToString(), "yyyyMMdd", CultureInfo.InvariantCulture));
-
-            oGeneralData.SetProperty("U_DocDate", DocDate);
-            oGeneralData.SetProperty("U_cardCode", headerLine["CardCode"].ToString());
-            oGeneralData.SetProperty("U_cardCodeN", headerLine["CardName"].ToString());
-            oGeneralData.SetProperty("U_baseDoc", headerLine["DocEntry"].ToString());
-            oGeneralData.SetProperty("U_baseDocT", "203");
-            oGeneralData.SetProperty("U_GrsAmnt", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture));
-            oGeneralData.SetProperty("U_VatAmount", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture) * 18 / 118);
-            SAPbobsCOM.GeneralDataCollection oChildren = null;
-
-            oChildren = oGeneralData.Child("BDOSRDV1");
-            double U_VatAmount = 0;
-            //////////
-            for (int row = 0; row < ItemsDT.Rows.Count; row++)
-            {
-                if (headerLine["DocEntry"].ToString() == ItemsDT.Rows[row]["DocEntry"].ToString())
-                {
-                    SAPbobsCOM.GeneralData oChild = oChildren.Add();
-                    oChild.SetProperty("U_ItemCode", ItemsDT.Rows[row]["ItemCode"]);
-                    oChild.SetProperty("U_Dscptn", ItemsDT.Rows[row]["Dscptn"]);
-                    oChild.SetProperty("U_GrsAmnt", Convert.ToDouble(ItemsDT.Rows[row]["GrsAmnt"], CultureInfo.InvariantCulture));
-                    oChild.SetProperty("U_VatGrp", ItemsDT.Rows[row]["VatGrp"]);
-                    oChild.SetProperty("U_VatAmount", Convert.ToDouble(ItemsDT.Rows[row]["VatAmnt"], CultureInfo.InvariantCulture));
-                    U_VatAmount = U_VatAmount + Convert.ToDouble(ItemsDT.Rows[row]["VatAmnt"], CultureInfo.InvariantCulture);
-                }
-            }
-            oGeneralData.SetProperty("U_VatAmount", U_VatAmount);
-            //////////
-
-
+            SAPbobsCOM.SBObob vObj = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+            SAPbobsCOM.CompanyService oCompanyService = Program.oCompany.GetCompanyService();
+            SAPbobsCOM.GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_ARDPV_D");
+            SAPbobsCOM.GeneralData oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
+            SAPbobsCOM.GeneralDataCollection oChildren = oGeneralData.Child("BDOSRDV1");
             int docEntry = 0;
+
             try
             {
                 CommonFunctions.StartTransaction();
+
+                DateTime DocDate = Convert.ToDateTime(DateTime.ParseExact(headerLine["DocDate"].ToString(), "yyyyMMdd", CultureInfo.InvariantCulture));
+                oGeneralData.SetProperty("U_DocDate", DocDate);
+                oGeneralData.SetProperty("U_cardCode", headerLine["CardCode"].ToString());
+                oGeneralData.SetProperty("U_cardCodeN", headerLine["CardName"].ToString());
+                oGeneralData.SetProperty("U_baseDoc", headerLine["DocEntry"].ToString());
+                oGeneralData.SetProperty("U_baseDocT", "203");
+                oGeneralData.SetProperty("U_GrsAmnt", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture));
+                oGeneralData.SetProperty("U_VatAmount", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture) * 18 / 118);
+                
+                double U_VatAmount = 0;
+
+                for (int row = 0; row < ItemsDT.Rows.Count; row++)
+                {
+                    if (headerLine["DocEntry"].ToString() == ItemsDT.Rows[row]["DocEntry"].ToString())
+                    {
+                        SAPbobsCOM.GeneralData oChild = oChildren.Add();
+                        oChild.SetProperty("U_ItemCode", ItemsDT.Rows[row]["ItemCode"]);
+                        oChild.SetProperty("U_Dscptn", ItemsDT.Rows[row]["Dscptn"]);
+                        oChild.SetProperty("U_GrsAmnt", Convert.ToDouble(ItemsDT.Rows[row]["GrsAmnt"], CultureInfo.InvariantCulture));
+                        oChild.SetProperty("U_VatGrp", ItemsDT.Rows[row]["VatGrp"]);
+                        oChild.SetProperty("U_VatAmount", Convert.ToDouble(ItemsDT.Rows[row]["VatAmnt"], CultureInfo.InvariantCulture));
+                        U_VatAmount = U_VatAmount + Convert.ToDouble(ItemsDT.Rows[row]["VatAmnt"], CultureInfo.InvariantCulture);
+                    }
+                }
+                oGeneralData.SetProperty("U_VatAmount", U_VatAmount);
 
                 var response = oGeneralService.Add(oGeneralData);
                 docEntry = response.GetProperty("DocEntry");
@@ -527,25 +518,25 @@ namespace BDO_Localisation_AddOn
                     DataTable JrnLinesDT = BDOSARDownPaymentVATAccrual.createAdditionalEntries(null, oGeneralData, null, "", 0);
                     BDOSARDownPaymentVATAccrual.JrnEntry(docEntry.ToString(), docEntry.ToString(), DocDate, JrnLinesDT, out errorText);
                     if (errorText != null)
-                    {
-                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                    }
+                        throw new Exception(errorText);
                     else
-                    {
                         CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                    }
                 }
-
             }
-            catch
+            catch (Exception ex)
             {
                 CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                Program.uiApp.SetStatusBarMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
-
-
-
+            finally
+            {
+                Marshal.ReleaseComObject(oChildren);
+                Marshal.ReleaseComObject(oGeneralData);
+                Marshal.ReleaseComObject(oGeneralService);
+                Marshal.ReleaseComObject(oCompanyService);
+                Marshal.ReleaseComObject(vObj);
+            }
             return docEntry;
-
         }
 
         private static bool GetAccountCashFlowRelevant(string GLAccount)
@@ -1586,7 +1577,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Add("ItemsMTR");
-                    oDataTable.Columns.Add("LineID", SAPbouiCOM.BoFieldsType.ft_Integer, 50);
+                    oDataTable.Columns.Add("LineID", SAPbouiCOM.BoFieldsType.ft_Integer);
                     oDataTable.Columns.Add("DocEntry", SAPbouiCOM.BoFieldsType.ft_Text, 50);
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 50);
                     oDataTable.Columns.Add("Dscptn", SAPbouiCOM.BoFieldsType.ft_Text, 50);

@@ -17,6 +17,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formItems = null;
 
             string itemName = "";
+    
 
             // -------------------- Use blanket agreement rates-----------------
             int pane = 7;
@@ -352,7 +353,7 @@ namespace BDO_Localisation_AddOn
 
                     if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                     {
-                        CommonFunctions.fillDocRate(oForm, "ODPO", "ODPO");
+                        CommonFunctions.fillDocRate(oForm, "ODPO");
                     }
 
                     if (pVal.ItemUID == "UsBlaAgRtS" & pVal.BeforeAction == false)

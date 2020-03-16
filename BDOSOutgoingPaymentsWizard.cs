@@ -2575,7 +2575,7 @@ namespace BDO_Localisation_AddOn
                     overdueDays = Convert.ToInt32(oRecordSet.Fields.Item("OverdueDays").Value);
                     string docCur = Convert.ToString(oRecordSet.Fields.Item("DocCur").Value);
                     if (string.IsNullOrEmpty(docCur))
-                        docCur = Program.MainCurrencySapCode;
+                        docCur = Program.MainCurrency;
 
                     if (docCur != Program.LocalCurrency)
                     {

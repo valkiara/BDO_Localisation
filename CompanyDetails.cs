@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using SAPbobsCOM;
+using SAPbouiCOM;
+using static BDO_Localisation_AddOn.Program;
 
 namespace BDO_Localisation_AddOn
 {
@@ -314,7 +317,7 @@ namespace BDO_Localisation_AddOn
             itemName = "BDO_RSGE";
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_FOLDER);
             formItems.Add("Left", oFolder.Left + oFolder.Width);
-            formItems.Add("Width", oFolder.Width);
+            formItems.Add("Width", 80);
             formItems.Add("Top", oFolder.Top);
             formItems.Add("Height", oFolder.Height);
             formItems.Add("UID", itemName);
@@ -338,7 +341,7 @@ namespace BDO_Localisation_AddOn
             itemName = "BDO_INBNK";
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_FOLDER);
             formItems.Add("Left", oFolder.Left + oFolder.Width);
-            formItems.Add("Width", oFolder.Width - 15);
+            formItems.Add("Width", 50);
             formItems.Add("Top", oFolder.Top);
             formItems.Add("Height", oFolder.Height);
             formItems.Add("UID", itemName);
@@ -1267,7 +1270,7 @@ namespace BDO_Localisation_AddOn
             itemName = "BDO_TAXG";
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_FOLDER);
             formItems.Add("Left", oFolder.Left + oFolder.Width);
-            formItems.Add("Width", oFolder.Width);
+            formItems.Add("Width", 50);
             formItems.Add("Top", oFolder.Top);
             formItems.Add("Height", oFolder.Height);
             formItems.Add("UID", itemName);
@@ -2635,6 +2638,44 @@ namespace BDO_Localisation_AddOn
                             taxTyp_OnClick(oForm);
                         }
                     }
+
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
+                    {
+                        FORM_LOAD_FOR_ACTIVATE = true;
+                    }
+
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
+                    {
+                        if (FORM_LOAD_FOR_ACTIVATE)
+                        {
+                            oForm.Freeze(true);
+                            try
+                            {
+                                if (Convert.ToInt32(oCompany.language) == 100007 || Convert.ToInt32(oCompany.language) == 3)
+                                {
+                                    Folder folder = oForm.Items.Item("1320002089").Specific;
+                                    folder.Caption = "ელ. დღგ ანგ.";
+
+                                    folder = oForm.Items.Item("34").Specific;
+                                    folder.Caption = "აღრც. მონაც";
+
+                                    folder = oForm.Items.Item("36").Specific;
+                                    folder.Caption = "საწყ. ინიც";
+                                }
+
+                                FORM_LOAD_FOR_ACTIVATE = false;
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception(ex.Message);
+                            }
+                            finally
+                            {
+                                oForm.Freeze(false);
+                            }
+                        }
+                    }
+
                     oForm.Freeze(false);
                 }
             }

@@ -47,14 +47,14 @@ namespace BDO_Localisation_AddOn
 
                     if (pVal.ItemChanged == true && pVal.ItemUID == "8" && pVal.BeforeAction == false)
                     {
-                        CommonFunctions.fillDocRate(oForm, "OVPM", "OVPM");
+                        CommonFunctions.fillDocRate(oForm, "OVPM");
                     }
                 }
                 else
                 {
                     if (pVal.ItemChanged == true && pVal.ItemUID == "8" && pVal.BeforeAction == false)
                     {
-                        CommonFunctions.fillDocRate(oForm, "ORCT", "ORCT");
+                        CommonFunctions.fillDocRate(oForm, "ORCT");
                     }
                 }
             }

@@ -16,6 +16,8 @@ namespace BDO_Localisation_AddOn
 {
     static partial class ExchangeRateDiffs
     {
+        private static string ExecDate { get; set; }
+
         private static void CreateFormItems(Form oForm)
         {
             #region Auto Project Checkbox
@@ -101,6 +103,7 @@ namespace BDO_Localisation_AddOn
             if (pVal.EventType == BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
             {
                 CreateFormItems(oForm);
+                oForm.Items.Item("26").Visible = false;
             }
 
             else if (pVal.EventType == BoEventTypes.et_ITEM_PRESSED)
@@ -139,8 +142,8 @@ namespace BDO_Localisation_AddOn
             double dayRate = 0;
             var docCur = "";
 
-            var oRecordSetJDT1 = (Recordset) Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
-            var oRecordSetDoc = (Recordset) Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+            var oRecordSetJDT1 = (Recordset)Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+            var oRecordSetDoc = (Recordset)Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
 
             var queryJDT1 = new StringBuilder();
             queryJDT1.Append(
@@ -161,6 +164,9 @@ namespace BDO_Localisation_AddOn
                 {
                     double debit = 0;
                     double credit = 0;
+
+                    double newDebit = 0;
+                    double newCredit = 0;
 
                     var queryDoc = new StringBuilder();
 
@@ -207,7 +213,7 @@ namespace BDO_Localisation_AddOn
                             docTable = "OVPM";
 
                             queryDoc.Append(
-                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"DocTotalFC\") as \"Amount\" \n");
                             queryDoc.Append("from " + docTable + " \n");
                             queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
                             queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\",\"U_UseBlaAgRt\"");
@@ -216,7 +222,7 @@ namespace BDO_Localisation_AddOn
                             docTable = "ORCT";
 
                             queryDoc.Append(
-                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"OpenBalFc\") as \"Amount\" \n");
+                                "select \"PrjCode\" as \"Project\", \"DocRate\", \"AgrNo\", \"U_UseBlaAgRt\", sum(\"DocTotalFC\") as \"Amount\" \n");
                             queryDoc.Append("from " + docTable + " \n");
                             queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
                             queryDoc.Append("group by \"PrjCode\", \"AgrNo\", \"DocRate\", \"U_UseBlaAgRt\"");
@@ -228,15 +234,15 @@ namespace BDO_Localisation_AddOn
                     }
 
                     queryDoc.Append("select " + docTable + ".\"Project\", " + docTable + ".\"DocRate\", " + docTable +
-                                    ".\"AgrNo\", " + docTable + ".\"U_UseBlaAgRt\", sum(" + docChildTable +
-                                    ".\"OpenSumFC\") as \"Amount\" \n");
+                                    ".\"AgrNo\", " + docTable + ".\"U_UseBlaAgRt\", sum(" + docTable +
+                                    ".\"DocTotalFC\") as \"Amount\" \n");
                     queryDoc.Append("from " + docTable + " inner join " + docChildTable + " on " + docTable +
                                     ".\"DocEntry\"= " + docChildTable + ".\"DocEntry\" \n");
                     queryDoc.Append("where \"DocNum\"  = '" + docNum + "'");
                     queryDoc.Append("group by " + docTable + ".\"Project\", " + docTable + ".\"AgrNo\", " + docTable +
                                     ".\"DocRate\", " + docTable + ".\"U_UseBlaAgRt\"");
 
-                    shortCut:
+                shortCut:
                     oRecordSetDoc.DoQuery(queryDoc
                         .ToString()); // წამოიღებს იმ დოკუმენტს რის საფუძველზეც იქმნება Journal Entry
                     if (!oRecordSetDoc.EoF)
@@ -252,11 +258,13 @@ namespace BDO_Localisation_AddOn
                             {
                                 if (useBlaAgrRt == "Y")
                                 {
+                                    DateTime execDate = DateTime.ParseExact(ExecDate, "yyyyMMdd", CultureInfo.InvariantCulture);
+
                                     var blaAgrRt = Convert.ToDouble(
-                                        BlanketAgreement.GetBlAgremeentCurrencyRate(agrNo, out docCur, DateTime.Today));
+                                        BlanketAgreement.GetBlAgremeentCurrencyRate(agrNo, out docCur, execDate));
 
                                     SBObob oSboBob = Program.oCompany.GetBusinessObject(BoObjectTypes.BoBridge);
-                                    var rateRecordset = oSboBob.GetCurrencyRate(docCur, DateTime.Today);
+                                    var rateRecordset = oSboBob.GetCurrencyRate(docCur, execDate);
 
                                     if (!rateRecordset.EoF)
                                     {
@@ -265,22 +273,35 @@ namespace BDO_Localisation_AddOn
 
                                     double docRate = oRecordSetDoc.Fields.Item("DocRate").Value;
 
-                                    double amount =
-                                        oRecordSetDoc.Fields.Item("Amount").Value; // * 1.18; //დღგ-ს გათვალისწინება
+                                    double amount = oRecordSetDoc.Fields.Item("Amount").Value; 
 
                                     debit = oRecordSetJDT1.Fields.Item("Debit").Value;
                                     credit = oRecordSetJDT1.Fields.Item("Credit").Value;
+
 
                                     if (blaAgrRt != dayRate)
                                     {
                                         if (credit != 0)
                                         {
-                                            credit = amount * Math.Abs(blaAgrRt - docRate);
+                                            newCredit = amount * Math.Abs(blaAgrRt - docRate);
+                                            if (newCredit != 0)
+                                            {
+                                                credit = newCredit;
+                                            }
                                         }
                                         else if (debit != 0)
                                         {
-                                            debit = amount * Math.Round(Math.Abs(blaAgrRt - docRate), 4);
+                                            newDebit = amount * Math.Round(Math.Abs(blaAgrRt - docRate), 4);
+                                            if (newDebit != 0)
+                                            {
+                                                debit = newDebit;
+                                            }
                                         }
+                                    }
+                                    else
+                                    {
+                                        debit = 0;
+                                        credit = 0;
                                     }
 
                                 }
@@ -348,7 +369,7 @@ namespace BDO_Localisation_AddOn
 
             #region Prepare old Journal Entry for new corrected journal entry
 
-            //ვიღებთ საპის მიერ შექმნილ გატარებას, ვუცვლით თანხებს, გადაგვყავს ექსემელში და ამის მიხედვით ვქმნით მაკორექტირებელს
+            //ვიღებთ საპის მიერ შექმნილ გატარებას, ვუცვლით თანხებს, გადაგვყავს ექსემელში და ამის მიხედვით ვქმნით მაკორექტირებელს, ბანძობაა ვიცი, 9ჯერ შეიცვალა ლოგიკა და ჩქარ-ჩქარა იყო დასაწერი (ფაცეპალმ)
 
             JournalEntries oJournalEntry = Program.oCompany.GetBusinessObject(BoObjectTypes.oJournalEntries);
             oJournalEntry.GetByKey(transId);
@@ -370,39 +391,89 @@ namespace BDO_Localisation_AddOn
 
             oJournalEntry.Reference = oJournalEntry.Original.ToString();
 
+            #region Get sum amount of already transited entries
+
+            Recordset oRecordSetOldEntriesAmount = Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+            var amountColumn = "Debit";
+            double oldDebit = 0;
+            double oldCredit = 0;
+            double oldAmount = 0;
+
+            if (credit != 0)
+            {
+                amountColumn = "Credit";
+            }
+
+            var querySumAmount = new StringBuilder();
+            querySumAmount.Append("SELECT SUM(\"JDT1\".\"Credit\") AS \"Credit\",SUM(\"JDT1\".\"Debit\") AS \"Debit\" \n");
+            querySumAmount.Append("FROM \"JDT1\" \n");
+            querySumAmount.Append("WHERE \"Ref3Line\" = '" + ref3 + "'");
+
+            oRecordSetOldEntriesAmount.DoQuery(querySumAmount.ToString());
+            if (!oRecordSetOldEntriesAmount.EoF)
+            {
+                oldCredit = oRecordSetOldEntriesAmount.Fields.Item("Credit").Value;
+                oldDebit = oRecordSetOldEntriesAmount.Fields.Item("Debit").Value;
+
+                oldAmount = Math.Abs(oldDebit - oldCredit);
+            }
+
+            #endregion
+
             for (var line = 0; line < oJournalEntry.Lines.Count; line++)
             {
                 oJournalEntry.Lines.SetCurrentLine(line);
 
-                if (agrNo != 0)
+                if (agrNo == 0) continue;
+
+                if (oJournalEntry.Lines.AdditionalReference == ref3) //for bp
                 {
-                    double oldDebit;
-                    double oldCredit;
-                    if (oJournalEntry.Lines.AdditionalReference == ref3) //for bp
+                    if (credit != 0)
                     {
-                        if (credit != 0)
+                        if (credit == oldAmount)
                         {
-                            oldCredit = oJournalEntry.Lines.Credit;
-                            oJournalEntry.Lines.Credit = credit - oldCredit;
+                            oJournalEntry.Lines.Credit = 0 - credit;
                         }
-                        else if (debit != 0)
+                        else
                         {
-                            oldDebit = oJournalEntry.Lines.Debit;
-                            oJournalEntry.Lines.Debit = debit - oldDebit;
+                            oJournalEntry.Lines.Credit = credit - oldAmount;
                         }
                     }
-                    else if (oJournalEntry.Lines.AdditionalReference != ref3) //for second account
+                    else if (debit != 0)
                     {
-                        oJournalEntry.Lines.FCCurrency = docCur;
-                        if (credit != 0)
+                        if (debit == oldAmount)
                         {
-                            oldDebit = oJournalEntry.Lines.Debit;
-                            oJournalEntry.Lines.Debit = credit - oldDebit;
+                            oJournalEntry.Lines.Debit = 0 - debit;
                         }
-                        else if (debit != 0)
+                        else
                         {
-                            oldCredit = oJournalEntry.Lines.Credit;
-                            oJournalEntry.Lines.Credit = debit - oldCredit;
+                            oJournalEntry.Lines.Debit = debit - oldAmount;
+                        }
+                    }
+                }
+                else if (oJournalEntry.Lines.AdditionalReference != ref3) //for second account
+                {
+                    oJournalEntry.Lines.FCCurrency = docCur;
+                    if (credit != 0)
+                    {
+                        if (credit == oldAmount)
+                        {
+                            oJournalEntry.Lines.Debit = 0 - credit;
+                        }
+                        else
+                        {
+                            oJournalEntry.Lines.Debit = credit - oldAmount;
+                        }
+                    }
+                    else if (debit != 0)
+                    {
+                        if (debit == oldAmount)
+                        {
+                            oJournalEntry.Lines.Credit = 0 - debit;
+                        }
+                        else
+                        {
+                            oJournalEntry.Lines.Credit = debit - oldAmount;
                         }
                     }
                 }
@@ -437,7 +508,7 @@ namespace BDO_Localisation_AddOn
             {
                 #region Get new Journal Entry TransId
 
-                var oRecordSetNewTransId = (Recordset) Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+                var oRecordSetNewTransId = (Recordset)Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                 var queryNewTransId = new StringBuilder();
 
                 queryNewTransId.Append("select \"TransId\" \n");
@@ -468,7 +539,7 @@ namespace BDO_Localisation_AddOn
 
                 #region Update new Journal Entry fields
 
-                var oUpdateRecordSet = (Recordset) Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+                var oUpdateRecordSet = (Recordset)Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
                 var updateString = new StringBuilder();
 
                 try
@@ -531,6 +602,17 @@ namespace BDO_Localisation_AddOn
                 }
 
                 #endregion
+            }
+        }
+
+        public static void SetExecDate(ItemEvent pVal)
+        {
+            var oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
+            if (pVal.EventType == BoEventTypes.et_CLICK && pVal.ItemUID == "1" && pVal.BeforeAction)
+            {
+                EditText oExecDate = oForm.Items.Item("29").Specific;
+                ExecDate = oExecDate.Value;
             }
         }
     }

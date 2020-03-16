@@ -295,8 +295,7 @@ namespace BDO_Localisation_AddOn
                             Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, bstrUDOObjectType, newDocEntry.ToString());
                         }
                     }
-                }
-
+                }              
             }
 
         }
