@@ -1566,11 +1566,6 @@ namespace BDO_Localisation_AddOn
                 {
                     StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
-
-                else if (BusinessObjectInfo.Type == "70001")
-                {
-                    //BDO_StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
-                }
                 
                 //----------------------------->Tax Invoice Received<-----------------------------
                 else if (BusinessObjectInfo.Type == "UDO_F_BDO_TAXR_D")
