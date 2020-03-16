@@ -1075,6 +1075,16 @@ namespace BDO_Localisation_AddOn
                     {
                         ARInvoice.formDataLoad(oForm, out errorText);
                     }
+                    if (oForm.TypeEx == "70001")
+                    {
+                        StockRevaluation.formDataLoad(oForm);
+                    }
+
+                    if (oForm.TypeEx == "992")
+                    {
+                        LandedCosts.formDataLoad(oForm);
+                    }
+
                     //----------------------------->Asset Master Data<-----------------------------
                     if (oForm.TypeEx == "1473000075")
                     {
@@ -1216,6 +1226,16 @@ namespace BDO_Localisation_AddOn
                     if (oForm.TypeEx == "133")
                     {
                         ARInvoice.formDataLoad(oForm, out errorText);
+                    }
+
+                    if (oForm.TypeEx == "70001")
+                    {
+                        StockRevaluation.formDataLoad(oForm);
+                    }
+
+                    if (oForm.TypeEx == "992")
+                    {
+                        LandedCosts.formDataLoad(oForm);
                     }
 
                     //----------------------------->Depreciation Accrual Document<-----------------------------
@@ -1488,6 +1508,11 @@ namespace BDO_Localisation_AddOn
                     ARInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
+                else if (BusinessObjectInfo.FormTypeEx == "70001")
+                {
+                    StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
                 //----------------------------->Asset Master Data<-----------------------------
                 else if (BusinessObjectInfo.Type == "4" && BusinessObjectInfo.FormTypeEx == "1473000075")
                 {
@@ -1537,6 +1562,16 @@ namespace BDO_Localisation_AddOn
                     BDO_Waybills.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
+                else if (BusinessObjectInfo.Type == "70001")
+                {
+                    StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+
+                else if (BusinessObjectInfo.Type == "70001")
+                {
+                    //BDO_StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
+                
                 //----------------------------->Tax Invoice Received<-----------------------------
                 else if (BusinessObjectInfo.Type == "UDO_F_BDO_TAXR_D")
                 {
@@ -1877,9 +1912,10 @@ namespace BDO_Localisation_AddOn
                     LandedCosts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
+                //----------------------------->Stock Revaluation<-----------------------------
                 else if (pVal.FormTypeEx == "70001")
                 {
-                    BDO_StockRevaluation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    StockRevaluation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->TAX Groups<-----------------------------
@@ -2149,11 +2185,6 @@ namespace BDO_Localisation_AddOn
                 {
                     ARInvoice.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
-                
-                //else if (pVal.FormTypeEx == "70001")
-                //{
-                    //BDO_StockRevaluation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                //}
 
                 //----------------------------->Blanket Agreement<-----------------------------
                 else if (pVal.FormTypeEx == "1250000100" || pVal.FormTypeEx == "1250000102")

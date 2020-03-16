@@ -3451,4 +3451,10 @@
   <data name="AutoProject" xml:space="preserve">
     <value>Project Auto-Reference</value>
   </data>
+  <data name="LandedCost" xml:space="preserve">
+    <value>Landed Cost</value>
+  </data>
+  <data name="StockRevaluation" xml:space="preserve">
+    <value>Stock Revaluation</value>
+  </data>
 </root>
