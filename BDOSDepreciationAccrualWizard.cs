@@ -547,11 +547,6 @@ namespace BDO_Localisation_AddOn
                             DocType = SAPbobsCOM.BoObjectTypes.oInvoices;
                         else
                             DocType = SAPbobsCOM.BoObjectTypes.oInventoryGenExit;
-                       // SAPbobsCOM.MaterialRevaluation oMaterialRevaluation = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oMaterialRevaluation);
-                        //oMaterialRevaluation.RevalType =
-                         //   oMaterialRevaluation.DocDate
-
-                          //  oMaterialRevaluation.Lines.Add()
 
                         SAPbobsCOM.Documents oInvoice = Program.oCompany.GetBusinessObject(DocType);
                         DateTime DocDate = new DateTime();

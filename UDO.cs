@@ -75,10 +75,6 @@ namespace BDO_Localisation_AddOn
             }
 
             StockRevaluation.createUserFields(out errorText);
-            if (oUserObjectsMD.GetByKey("UDO_F_BDO_STRV_D") == false)
-            {
-                //BDO_StockRevaluation.registerUDO(out errorText);
-            }
 
             BDO_Vehicles.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_VECL_D") == false)
