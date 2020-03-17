@@ -5,7 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using System.Data;
+using SAPbouiCOM;
+using DataTable = System.Data.DataTable;
 
 namespace BDO_Localisation_AddOn
 {
@@ -205,12 +206,64 @@ namespace BDO_Localisation_AddOn
             formItems.Add("FromPane", pane);
             formItems.Add("ToPane", pane);
 
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            #region Discount field
+            
+            left_s = oForm.Items.Item("34").Left;
+            double width_s = oForm.Items.Item("34").Width;
+            height = oForm.Items.Item("34").Height;
+            top = oForm.Items.Item("34").Top + height + 1;
+
+            left_e = oForm.Items.Item("33").Left;
+            width_e = oForm.Items.Item("33").Width;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DiscountS"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Discount"));
+            formItems.Add("Enabled", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
                 return;
             }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DiscountE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OINV");
+            formItems.Add("Alias", "U_Discount");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_LONG_NUMBER);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Discount"));
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("SetAutoManaged", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            #endregion
 
             GC.Collect();
         }
@@ -221,6 +274,8 @@ namespace BDO_Localisation_AddOn
 
             Dictionary<string, object> fieldskeysMap;
 
+            #region UseBlaAgRt
+
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "UseBlaAgRt");
             fieldskeysMap.Add("TableName", "OINV");
@@ -230,6 +285,22 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("DefaultValue", "N");
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            #endregion
+
+            #region Discount
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "Discount");
+            fieldskeysMap.Add("TableName", "OINV");
+            fieldskeysMap.Add("Description", "Discount Amount");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
+            fieldskeysMap.Add("EditSize", 6);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            #endregion
+
             GC.Collect();
         }
 
@@ -723,6 +794,14 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
+
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE)
+                {
+                    if (pVal.ItemUID == "DiscountE")
+                    {
+                        ApplyDiscount(oForm);
+                    }
+                }
             }
         }
 
@@ -866,6 +945,11 @@ namespace BDO_Localisation_AddOn
             {
                 Marshal.FinalReleaseComObject(oRecordSet);
             }
+        }
+
+        private static void ApplyDiscount(Form oForm)
+        {
+            
         }
     }
 }

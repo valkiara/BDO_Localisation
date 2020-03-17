@@ -3493,4 +3493,7 @@
   <data name="PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
     <value>Pay attention to the date of last existing depreciation accrual document</value>
   </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
 </root>
