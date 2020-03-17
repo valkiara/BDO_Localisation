@@ -576,7 +576,7 @@ namespace BDO_Localisation_AddOn
                     DateTime dateForCheck = lastDeprDocDate.HasValue ? lastDeprDocDate.Value : inDate;
                     DateTime lastDayOfDateForCheckNextMonth;
 
-                    if (depreciationLines.GetValue("BaseType", i) == 67)
+                    if (depreciationLines.GetValue("BaseType", i) == 67 && !lastDeprDocDate.HasValue)
                         lastDayOfDateForCheckNextMonth = new DateTime(dateForCheck.Year, dateForCheck.Month, 1).AddMonths(1).AddDays(-1);
                     else
                         lastDayOfDateForCheckNextMonth = new DateTime(dateForCheck.Year, dateForCheck.Month, 1).AddMonths(2).AddDays(-1);
@@ -782,7 +782,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
             query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
             query.Append("                         AND T4.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("          WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0 \n");
+            query.Append("          WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0 AND \"OIBT\".\"Quantity\" > 0 \n");
             query.Append("           AND (NEXT_DAY(LAST_DAY(\"OIBT\".\"InDate\")) < '" + dateStr + "' OR (\"OIBT\".\"BaseType\" = 67 AND LAST_DAY(\"OIBT\".\"InDate\") = '" + dateStr + "')) \n");
             query.Append("        ) AS T0 \n");
             query.Append("ORDER BY T0.\"ItemCode\", T0.\"DistNumber\", T0.\"InDate\", T0.\"LastDeprDocDate\" DESC");
