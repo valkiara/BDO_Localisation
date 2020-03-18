@@ -956,7 +956,7 @@ namespace BDO_Localisation_AddOn
                 Matrix oMatrix = oForm.Items.Item("38").Specific;
                 EditText oEditText = oForm.Items.Item("DiscountE").Specific;
 
-                string discountTotal = oEditText.Value;
+                var discountTotal = oEditText.Value;
                 if (string.IsNullOrEmpty(discountTotal)) return;
 
                 var quantityTotal = 0;
