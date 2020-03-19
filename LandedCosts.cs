@@ -1112,11 +1112,11 @@ namespace BDO_Localisation_AddOn
                     if (pVal.ItemUID == "BDOSStRev")
                     {
                         SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                        string docNum = DocDBSource.GetValue("DocNum", 0);
+                        string docEntLC = DocDBSource.GetValue("DocEntry", 0);
                         string docEntry = "";
-                        if (!stockExists(docNum))
+                        if (!stockExists(docEntLC))
                         {
-                            StockRevaluation.fillStockRevaluation(docNum, out docEntry);
+                            StockRevaluation.fillStockRevaluation(docEntLC, out docEntry);
                             formDataLoad(oForm);                       
                             if (docEntry != "")
                             {
@@ -1135,9 +1135,9 @@ namespace BDO_Localisation_AddOn
                 oForm.Freeze(true);
 
                 SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                string docNum = DocDBSource.GetValue("DocNum", 0);
+                string docEntry = DocDBSource.GetValue("DocEntry", 0);
 
-                oForm.Items.Item("StockRevE").Specific.Value = StockRevaluation.getDocEntry(docNum);
+                oForm.Items.Item("StockRevE").Specific.Value = StockRevaluation.getDocEntry(docEntry);
 
                 oForm.Update();
             }
@@ -1151,13 +1151,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static bool stockExists(string docNum)
+        public static bool stockExists(string docEntry)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try
             {
-                string query = "select \"DocNum\" from OMRV " + "\n"
-                + "where \"U_BaseDocNum\" = '" + docNum + "'";
+                string query = "select \"DocEntry\" from OMRV " + "\n"
+                + "where \"U_BasDocEntr\" = '" + docEntry + "'";
 
                 oRecordSet.DoQuery(query);
 
