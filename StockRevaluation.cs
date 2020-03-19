@@ -271,44 +271,56 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             SAPbobsCOM.Recordset oRecordSetCost = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string docNum = "";
-
-            string queryDocNums = "select \"BaseRef\" from \"JDT1\" " + "\n"
-            + "where \"TransType\" = '69' and \"Account\" = " + "\n"
-            + "(select \"BalInvntAc\" from \"OITB\" " + "\n"
-            + "where \"ItmsGrpCod\" = " + "\n"
-            + "(select \"ItmsGrpCod\" from \"OITM\" " + "\n"
-            + "where \"ItemCode\" = '" + itemCode + "')) " + "\n"
-            + "order by \"TransId\" desc";
-
-            oRecordSetDocNums.DoQuery(queryDocNums);
-            
-            while (!oRecordSetDocNums.EoF)
+            try
             {
-                docNum = oRecordSetDocNums.Fields.Item("BaseRef").Value.ToString();
-                string query =  "select \"ItemCode\" from IPF1 " + "\n"
-                + "where \"DocEntry\" = ( " + "\n"
-                + "select \"DocEntry\" from OIPF " + "\n"
-                + "where \"DocNum\" = '" + docNum +"' ) and \"ItemCode\" = '" + itemCode + "'";
+                string queryDocNums = "select \"BaseRef\" from \"JDT1\" " + "\n"
+                + "where \"TransType\" = '69' and \"Account\" = " + "\n"
+                + "(select \"BalInvntAc\" from \"OITB\" " + "\n"
+                + "where \"ItmsGrpCod\" = " + "\n"
+                + "(select \"ItmsGrpCod\" from \"OITM\" " + "\n"
+                + "where \"ItemCode\" = '" + itemCode + "')) " + "\n"
+                + "order by \"TransId\" desc";
 
-                oRecordSet.DoQuery(query);
-                if (docNum != docNumLC)
+                oRecordSetDocNums.DoQuery(queryDocNums);
+
+                while (!oRecordSetDocNums.EoF)
                 {
-                    if (!oRecordSet.EoF) break;
+                    docNum = oRecordSetDocNums.Fields.Item("BaseRef").Value.ToString();
+                    string query = "select \"ItemCode\" from IPF1 " + "\n"
+                    + "where \"DocEntry\" = ( " + "\n"
+                    + "select \"DocEntry\" from OIPF " + "\n"
+                    + "where \"DocNum\" = '" + docNum + "' ) and \"ItemCode\" = '" + itemCode + "'";
+
+                    oRecordSet.DoQuery(query);
+                    if (docNum != docNumLC)
+                    {
+                        if (!oRecordSet.EoF) break;
+                    }
+                    oRecordSetDocNums.MoveNext();
                 }
-                oRecordSetDocNums.MoveNext();
+
+                string queryCost = "select \"TtlExpndLC\" " + "\n"
+                + "from IPF1 " + "\n"
+                + "where \"ItemCode\" = '" + itemCode + "' and \"DocEntry\" = " + "\n"
+                + "(select \"DocEntry\" from OIPF " + "\n"
+                + "where \"DocNum\" = '" + docNum + "')";
+
+                oRecordSetCost.DoQuery(queryCost);
+
+                if (!oRecordSetCost.EoF) return oRecordSetCost.Fields.Item("TtlExpndLC").Value;
+
+                return 0;
             }
-
-            string queryCost = "select \"TtlExpndLC\" " + "\n"
-            + "from IPF1 " + "\n"
-            + "where \"ItemCode\" = '" + itemCode + "' and \"DocEntry\" = " + "\n"
-            + "(select \"DocEntry\" from OIPF " + "\n"
-            + "where \"DocNum\" = '" + docNum + "')";
-
-            oRecordSetCost.DoQuery(queryCost);
-
-            if (!oRecordSetCost.EoF) return oRecordSetCost.Fields.Item("TtlExpndLC").Value;
-
-            return 0;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+                Marshal.FinalReleaseComObject(oRecordSetCost);
+                Marshal.FinalReleaseComObject(oRecordSetDocNums);
+            }
         }
     }
 }
