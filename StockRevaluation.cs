@@ -94,61 +94,15 @@ namespace BDO_Localisation_AddOn
                 }
             }
         }
-
-        public static double lastAllCostVal()
-        {
-            string docNum = "";
-            double allCostVal = 0;
-
-            SAPbobsCOM.Recordset oRecordSetDocNum = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            try
-            {
-                string queryDocNum = "select TOP 2 \"JDT1\".\"BaseRef\", \"JDT1\".\"TransId\" " + "\n"
-                + "from JDT1 " + "\n"
-                + "join \"OJDT\" on \"JDT1\".\"TransId\" = \"OJDT\".\"TransId\" " + "\n"
-                + "where \"JDT1\".\"Account\" = '161010' and (substring(\"JDT1\".\"LineMemo\", 0, 12) = 'Landed Costs') " + "\n"
-                + "Group by \"JDT1\".\"BaseRef\", \"JDT1\".\"TransId\" " + "\n"
-                + "order by \"JDT1\".\"TransId\" desc";
-
-                oRecordSetDocNum.DoQuery(queryDocNum);
-                while (!oRecordSetDocNum.EoF)
-                {
-                    docNum = oRecordSetDocNum.Fields.Item("BaseRef").Value;
-                    oRecordSetDocNum.MoveNext();
-                }
-
-                string query = "select \"TtlExpndLC\" " + "\n"
-                + "from IPF1 " + "\n"
-                + "where \"DocEntry\" = " + "\n"
-                + "(select \"DocEntry\" from OIPF " + "\n"
-                + "where \"DocNum\" = '" + docNum + "')";
-
-                oRecordSet.DoQuery(query);
-
-                if (!oRecordSet.EoF) return allCostVal = oRecordSet.Fields.Item("TtlExpndLC").Value;
-
-                return allCostVal;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                Marshal.FinalReleaseComObject(oRecordSet);
-                Marshal.FinalReleaseComObject(oRecordSetDocNum);
-            }
-        }
-
+        
         public static void createUserFields(out string errorText)
         {
             Dictionary<string, object> fieldskeysMap;
 
             fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "BaseDocEntr");
+            fieldskeysMap.Add("Name", "BaseDocNum");
             fieldskeysMap.Add("TableName", "OMRV");
-            fieldskeysMap.Add("Description", "Base Doc Entry");
+            fieldskeysMap.Add("Description", "Base Doc Num");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
             fieldskeysMap.Add("EditSize", 11);
 
@@ -164,23 +118,9 @@ namespace BDO_Localisation_AddOn
 
             try
             {
-
-                double allCostVal = lastAllCostVal();
+                string itemCode = "";
+                string lastItemCode = "";
                 double allCostValByDocNum = 0;
-
-                string query = "select \"TtlExpndLC\" " + "\n"
-                + "from IPF1 " + "\n"
-                + "where \"DocEntry\" = " + "\n"
-                + "(select \"DocEntry\" from OIPF " + "\n"
-                + "where \"DocNum\" = '" + docNum + "')";
-
-                oRecordSetCostVal.DoQuery(query);
-                if (!oRecordSetCostVal.EoF)
-                {
-                    allCostValByDocNum = oRecordSetCostVal.Fields.Item("TtlExpndLC").Value;
-                }
-                double newCost = allCostVal - allCostValByDocNum;
-                double DebCred = newCost;
 
                 string queryStockDoesNotExist = "select \"ItemCode\", \"WhsCode\", \"Quantity\" from IPF1 " + "\n"
                   + "where \"DocEntry\" = (select \"DocEntry\" from OIPF where \"DocNum\" = '" + docNum + "')";
@@ -195,10 +135,30 @@ namespace BDO_Localisation_AddOn
                 while (!oRecordSet.EoF)
                 {
                     m_MaterialRevLines.SetCurrentLine(row);
-                    m_MaterialRevLines.ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
+                    itemCode = oRecordSet.Fields.Item("ItemCode").Value;
                     m_MaterialRevLines.Quantity = oRecordSet.Fields.Item("Quantity").Value;
-                    m_MaterialRevLines.DebitCredit = DebCred;
                     m_MaterialRevLines.WarehouseCode = oRecordSet.Fields.Item("WhsCode").Value;
+                    m_MaterialRevLines.ItemCode = itemCode;
+
+
+                    double allocCostVal = lastAllCostVal(itemCode, docNum);
+                    string query = "select \"TtlExpndLC\", \"ItemCode\" " + "\n"
+                     + "from IPF1 " + "\n"
+                     + "where \"DocEntry\" = " + "\n"
+                     + "(select \"DocEntry\" from OIPF " + "\n"
+                     + "where \"DocNum\" = '" + docNum + "')";
+
+                    oRecordSetCostVal.DoQuery(query);
+                    while (!oRecordSetCostVal.EoF)
+                    {
+                        allCostValByDocNum = oRecordSetCostVal.Fields.Item("TtlExpndLC").Value;
+                        lastItemCode = oRecordSetCostVal.Fields.Item("ItemCode").Value;
+                        if(itemCode == lastItemCode)
+                        {
+                            m_MaterialRevLines.DebitCredit = allCostValByDocNum - allocCostVal;
+                        }
+                        oRecordSetCostVal.MoveNext();
+                    }
                     m_MaterialRevLines.Add();
 
                     row += 1;
@@ -303,6 +263,52 @@ namespace BDO_Localisation_AddOn
             {
                 formDataLoad(oForm);
             }
+        }
+
+        public static double lastAllCostVal(string itemCode, string docNumLC)
+        {
+            SAPbobsCOM.Recordset oRecordSetDocNums = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            SAPbobsCOM.Recordset oRecordSetCost = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            string docNum = "";
+
+            string queryDocNums = "select \"BaseRef\" from \"JDT1\" " + "\n"
+            + "where \"TransType\" = '69' and \"Account\" = " + "\n"
+            + "(select \"BalInvntAc\" from \"OITB\" " + "\n"
+            + "where \"ItmsGrpCod\" = " + "\n"
+            + "(select \"ItmsGrpCod\" from \"OITM\" " + "\n"
+            + "where \"ItemCode\" = '" + itemCode + "')) " + "\n"
+            + "order by \"TransId\" desc";
+
+            oRecordSetDocNums.DoQuery(queryDocNums);
+            
+            while (!oRecordSetDocNums.EoF)
+            {
+                docNum = oRecordSetDocNums.Fields.Item("BaseRef").Value.ToString();
+                string query =  "select \"ItemCode\" from IPF1 " + "\n"
+                + "where \"DocEntry\" = ( " + "\n"
+                + "select \"DocEntry\" from OIPF " + "\n"
+                + "where \"DocNum\" = '" + docNum +"' ) and \"ItemCode\" = '" + itemCode + "'";
+
+                oRecordSet.DoQuery(query);
+                if (docNum != docNumLC)
+                {
+                    if (!oRecordSet.EoF) break;
+                }
+                oRecordSetDocNums.MoveNext();
+            }
+
+            string queryCost = "select \"TtlExpndLC\" " + "\n"
+            + "from IPF1 " + "\n"
+            + "where \"ItemCode\" = '" + itemCode + "' and \"DocEntry\" = " + "\n"
+            + "(select \"DocEntry\" from OIPF " + "\n"
+            + "where \"DocNum\" = '" + docNum + "')";
+
+            oRecordSetCost.DoQuery(queryCost);
+
+            if (!oRecordSetCost.EoF) return oRecordSetCost.Fields.Item("TtlExpndLC").Value;
+
+            return 0;
         }
     }
 }
