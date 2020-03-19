@@ -3499,4 +3499,7 @@
   <data name="StockRevaluation" xml:space="preserve">
     <value>Stock Revaluation</value>
   </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
 </root>

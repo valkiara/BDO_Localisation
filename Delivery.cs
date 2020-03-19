@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Data;
+using SAPbouiCOM;
 
 namespace BDO_Localisation_AddOn
 {
@@ -103,7 +104,59 @@ namespace BDO_Localisation_AddOn
             oForm.DataSources.UserDataSources.Add("BDO_WblSts", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
             //<-------------------------------------------სასაქონლო ზედნადები-----------------------------------
 
-           
+            #region Discount field
+
+            left_s = oForm.Items.Item("34").Left;
+            double width_s = oForm.Items.Item("34").Width;
+            height = oForm.Items.Item("34").Height;
+            top = oForm.Items.Item("34").Top + height + 1;
+
+            left_e = oForm.Items.Item("33").Left;
+            width_e = oForm.Items.Item("33").Width;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DiscountS"; //10 characters
+            formItems.Add("Type", BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Discount"));
+            formItems.Add("Enabled", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DiscountE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "ODLN");
+            formItems.Add("Alias", "U_Discount");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", BoFormItemTypes.it_EDIT);
+            formItems.Add("DataType", BoDataType.dt_SUM);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Discount"));
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("SetAutoManaged", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            #endregion
+
 
             GC.Collect();
         }
@@ -270,6 +323,7 @@ namespace BDO_Localisation_AddOn
                 {
                     createFormItems(oForm, out errorText);
                     formDataLoad(oForm, out errorText);
+                    oForm.Items.Item("4").Click();
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
@@ -295,7 +349,15 @@ namespace BDO_Localisation_AddOn
                             Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_UserDefinedObject, bstrUDOObjectType, newDocEntry.ToString());
                         }
                     }
-                }              
+                }
+
+                else if (pVal.EventType == BoEventTypes.et_VALIDATE && !pVal.BeforeAction && !pVal.InnerEvent)
+                {
+                    if (pVal.ItemUID == "DiscountE")
+                    {
+                        ApplyDiscount(oForm);
+                    }
+                }
             }
 
         }
@@ -343,6 +405,64 @@ namespace BDO_Localisation_AddOn
                 }
 
             }
+        }
+
+        private static void ApplyDiscount(Form oForm)
+        {
+            try
+            {
+                oForm.Freeze(true);
+                Matrix oMatrix = oForm.Items.Item("38").Specific;
+                EditText oEditText = oForm.Items.Item("DiscountE").Specific;
+
+                var discountTotal = oEditText.Value;
+                if (string.IsNullOrEmpty(discountTotal)) return;
+
+                var quantityTotal = 0;
+
+                for (var row = 1; row < oMatrix.RowCount; row++)
+                {
+                    string unitPrice = oMatrix.GetCellSpecific("14", row).Value;
+                    if (!string.IsNullOrEmpty(unitPrice))
+                    {
+                        quantityTotal += Convert.ToDecimal(oMatrix.GetCellSpecific("11", row).Value);
+                    }
+                    else
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage("Fill Item Prices", BoMessageTime.bmt_Short);
+                        oEditText.Value = string.Empty;
+                        return;
+                    }
+                }
+
+                var discount = Convert.ToDecimal(discountTotal) / quantityTotal;
+
+                for (var row = 1; row < oMatrix.RowCount; row++)
+                {
+                    var quantity = Convert.ToDecimal(oMatrix.GetCellSpecific("11", row).Value);
+
+                    var netUnitPrice =
+                        Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("14", row).Value));
+                    var taxCode = oMatrix.GetCellSpecific("18", row).Value;
+                    var taxRate = CommonFunctions.GetVatGroupRate(taxCode, "");
+
+                    var grossUnitAmt = netUnitPrice + (netUnitPrice * taxRate / 100);
+
+                    var grossAfterDiscount = Math.Round(grossUnitAmt - discount, 4);
+
+                    oMatrix.GetCellSpecific("20", row).Value =
+                        FormsB1.ConvertDecimalToStringForEditboxStrings(grossAfterDiscount);
+                }
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
+
         }
 
     }

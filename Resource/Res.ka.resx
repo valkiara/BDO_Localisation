@@ -3496,4 +3496,13 @@
   <data name="StockRevaluation" xml:space="preserve">
     <value>მარაგის გადაფასება</value>
   </data>
+  <data name="LandedCost" xml:space="preserve">
+    <value>დამატებითი ხარჯები</value>
+  </data>
+  <data name="StockRevaluation" xml:space="preserve">
+    <value>მარაგის გადაფასება</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>ფასდაკლება</value>
+  </data>
 </root>
