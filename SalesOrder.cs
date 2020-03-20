@@ -6,6 +6,8 @@ namespace BDO_Localisation_AddOn
 {
     static class SalesOrder
     {
+        private static Dictionary<int, decimal> InitialItemGrossPrices = new Dictionary<int, decimal>();
+
         private static void CreateFormItems(Form oForm)
         {
             #region Discount field
@@ -86,6 +88,14 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        private static void SetInitialItemGrossPrices(Form oForm, int row)
+        {
+            Matrix oMatrix = oForm.Items.Item("38").Specific;
+            var initialItemGrossPrice = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("20", row).Value));
+
+            InitialItemGrossPrices[row] = initialItemGrossPrice;
+        }
+
         private static void ApplyDiscount(Form oForm)
         {
             try
@@ -101,7 +111,7 @@ namespace BDO_Localisation_AddOn
 
                 for (var row = 1; row < oMatrix.RowCount; row++)
                 {
-                    string unitPrice = oMatrix.GetCellSpecific("14", row).Value;
+                    var unitPrice = oMatrix.GetCellSpecific("14", row).Value;
                     if (!string.IsNullOrEmpty(unitPrice))
                     {
                         quantityTotal += Convert.ToDecimal(oMatrix.GetCellSpecific("11", row).Value);
@@ -118,14 +128,7 @@ namespace BDO_Localisation_AddOn
 
                 for (var row = 1; row < oMatrix.RowCount; row++)
                 {
-                    var quantity = Convert.ToDecimal(oMatrix.GetCellSpecific("11", row).Value);
-
-                    var netUnitPrice =
-                        Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("14", row).Value));
-                    var taxCode = oMatrix.GetCellSpecific("18", row).Value;
-                    var taxRate = CommonFunctions.GetVatGroupRate(taxCode, "");
-
-                    var grossUnitAmt = netUnitPrice + (netUnitPrice * taxRate / 100);
+                    var grossUnitAmt = InitialItemGrossPrices[row];
 
                     var grossAfterDiscount = Math.Round(grossUnitAmt - discount, 4);
 
