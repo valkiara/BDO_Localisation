@@ -6348,7 +6348,7 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                if (invStatus == "confirmed" || (invStatus == "corrected" && !corrInv) || invStatus == "correctionConfirmed")
+                if (invStatus == "confirmed" || (invStatus == "corrected" && !corrInv) || invStatus == "correctionConfirmed" || invStatus=="paper")
                 {
                     if (taxDateFromTaxJournal.HasValue)
                     {
