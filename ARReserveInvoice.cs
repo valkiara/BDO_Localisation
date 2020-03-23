@@ -229,7 +229,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("Discount"));
-            formItems.Add("Enabled", true);
+            formItems.Add("SetAutoManaged", true);
+            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -254,6 +255,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Caption", BDOSResources.getTranslate("Discount"));
             formItems.Add("DisplayDesc", true);
             formItems.Add("SetAutoManaged", true);
+            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -378,6 +380,7 @@ namespace BDO_Localisation_AddOn
                 {
                     createFormItems( oForm, out errorText);
                     formDataLoad( oForm, out errorText);
+                    SetVisibility(oForm);
                     oForm.Items.Item("4").Click();
                 }
 
@@ -396,16 +399,20 @@ namespace BDO_Localisation_AddOn
                         setVisibleFormItems(oForm, out errorText);
                     }
 
-                    else if (pVal.ItemUID == "38" && (pVal.ColUID == "14" || pVal.ColUID == "15") && pVal.ItemChanged)
+                    else if (oForm.Items.Item("DiscountE").Visible && pVal.ItemChanged)
                     {
-                        SetInitialItemGrossPrices(oForm, pVal.Row);
-                    }
+                        if (pVal.ItemUID == "38" && (pVal.ColUID == "14" || (pVal.ColUID == "15" && !pVal.InnerEvent)))
+                        {
+                            SetInitialItemGrossPrices(oForm, pVal.Row);
+                            ApplyDiscount(oForm);
+                        }
 
-                    else if (pVal.ItemUID == "DiscountE" && !pVal.InnerEvent)
-                    {
-                        ApplyDiscount(oForm);
+                        else if (((pVal.ItemUID == "38" && pVal.ColUID == "11") || pVal.ItemUID == "DiscountE") &&
+                                 !pVal.InnerEvent)
+                        {
+                            ApplyDiscount(oForm);
+                        }
                     }
-
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & pVal.BeforeAction == false)
@@ -508,11 +515,19 @@ namespace BDO_Localisation_AddOn
 
         }
 
+        private static void SetVisibility(Form oForm)
+        {
+            oForm.Items.Item("DiscountS").Visible = CompanyDetails.IsDiscountUsed();
+            oForm.Items.Item("DiscountE").Visible = CompanyDetails.IsDiscountUsed();
+        }
+
         private static void SetInitialItemGrossPrices(Form oForm, int row)
         {
             Matrix oMatrix = oForm.Items.Item("38").Specific;
+
             var initialItemGrossPrice = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("20", row).Value));
 
+            if (initialItemGrossPrice == 0) return;
             InitialItemGrossPrices[row] = initialItemGrossPrice;
         }
 
@@ -524,8 +539,7 @@ namespace BDO_Localisation_AddOn
                 Matrix oMatrix = oForm.Items.Item("38").Specific;
                 EditText oEditText = oForm.Items.Item("DiscountE").Specific;
 
-                var discountTotal = oEditText.Value;
-                if (string.IsNullOrEmpty(discountTotal)) return;
+                var discountTotal = string.IsNullOrEmpty(oEditText.Value) ? 0 : Convert.ToDecimal(oEditText.Value);
 
                 var quantityTotal = 0;
 
@@ -538,7 +552,7 @@ namespace BDO_Localisation_AddOn
                     }
                     else
                     {
-                        Program.uiApp.StatusBar.SetSystemMessage("Fill Item Prices", BoMessageTime.bmt_Short);
+                        //Program.uiApp.StatusBar.SetSystemMessage("Fill Item Prices", BoMessageTime.bmt_Short);
                         oEditText.Value = string.Empty;
                         return;
                     }
