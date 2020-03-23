@@ -298,6 +298,16 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "Discount");
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Using Discount");
+            fieldskeysMap.Add("Type", BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             GC.Collect();
         }
 
@@ -923,6 +933,42 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
+
+            #region Use Discount
+
+            var topD = oForm.Items.Item("SP").Top;
+            var leftD = oForm.Items.Item("SP").Left;
+            var heightD = oForm.Items.Item("SP").Height;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "Discount";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_Discount");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Left", leftD);
+            formItems.Add("Width", 300);
+            formItems.Add("Top", top + heightD + 1);
+            formItems.Add("Height", heightD);
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("Description", BDOSResources.getTranslate("DiscountUse"));
+            formItems.Add("Caption", BDOSResources.getTranslate("DiscountUse"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            #endregion
 
             SAPbouiCOM.Item oItemOK = oForm.Items.Item("1");
             formItems = new Dictionary<string, object>();
@@ -2679,6 +2725,24 @@ namespace BDO_Localisation_AddOn
                     oForm.Freeze(false);
                 }
             }
+        }
+
+        public static bool IsDiscountUsed()
+        {
+            var result = false;
+            Recordset oRecordSet = oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+            var query = new StringBuilder();
+            query.Append("SELECT \"U_Discount\" \n");
+            query.Append("FROM \"OADM\"");
+
+            oRecordSet.DoQuery(query.ToString());
+
+            if (!oRecordSet.EoF)
+            {
+                result = oRecordSet.Fields.Item("U_Discount").Value == "Y";
+            }
+
+            return result;
         }
     }
 }
