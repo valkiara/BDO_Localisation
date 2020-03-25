@@ -3502,4 +3502,7 @@
   <data name="DiscountUse" xml:space="preserve">
     <value>ფასდაკლების გამოყენება</value>
   </data>
+  <data name="CapDateError" xml:space="preserve">
+    <value>ამ თარიღში ექსპლუატაციაში არ არის  ძ.ს - </value>
+  </data>
 </root>

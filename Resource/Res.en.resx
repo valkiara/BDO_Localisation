@@ -3532,4 +3532,7 @@
   <data name="DiscountUse" xml:space="preserve">
     <value>Using Discount</value>
   </data>
+  <data name="CapDateError" xml:space="preserve">
+    <value>For This Date The Fixed Asset Is Not In Exploitation. Fixed Asset Code - </value>
+  </data>
 </root>
