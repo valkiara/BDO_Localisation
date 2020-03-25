@@ -335,8 +335,29 @@ namespace BDO_Localisation_AddOn
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
+                
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+                /*
+                SAPbouiCOM.Matrix oMatrixWtax = oForm.Items.Item("6").Specific;
+                string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value;
 
+                
+
+                SAPbouiCOM.Form oForm1 = Program.uiApp.Forms.GetForm("141", 1);
+                SAPbouiCOM.Matrix oMatrix = oForm1.Items.Item("39").Specific;
+
+                string Total = oMatrix.Columns.Item("12").Cells.Item(1).Specific.Value;
+                SAPbouiCOM.DBDataSources docDBSources = oForm1.DataSources.DBDataSources;
+                string wtCode = docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim();
+                if (wtCode != WTCode)
+                {
+                    
+                    oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = 5;
+                    oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = 0;
+                    oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = 0;
+                }
+
+    */
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
                     SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
