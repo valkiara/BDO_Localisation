@@ -6050,7 +6050,7 @@ namespace BDO_Localisation_AddOn
                 else
                 {
                     DateTime reg_dt = Convert.ToDateTime(responseDictionary["reg_dt"]);
-                    int f_number = Convert.ToInt32(responseDictionary["f_number"]);
+                    string f_number = responseDictionary["f_number"] == null ? "" : responseDictionary["f_number"].ToString();
                     string f_series = responseDictionary["f_series"] == null ? "" : responseDictionary["f_series"].ToString();
                     int statusRS = Convert.ToInt32(responseDictionary["status"]);
                     string seq_num_b = responseDictionary["seq_num_b"] == null ? "" : responseDictionary["seq_num_b"].ToString();
@@ -6072,12 +6072,12 @@ namespace BDO_Localisation_AddOn
 
                     if (string.IsNullOrEmpty(invoice_no))
                     {
-                        invoice_no = f_number == -1 ? "" : f_number.ToString();
+                        invoice_no = f_number;
                     }
-                    else
-                    {
-                        invoice_no = f_number == -1 ? "" : invoice_no;
-                    }
+                    //else
+                    //{
+                    //    invoice_no = f_number == null ? "" : invoice_no;
+                    //}
 
                     if ((statusDoc == "shipped" && status == "created") || (statusDoc == "correctionShipped" && status == "correctionCreated"))
                     {
