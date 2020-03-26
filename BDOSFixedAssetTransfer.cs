@@ -8,9 +8,9 @@ using SAPbouiCOM;
 
 namespace BDO_Localisation_AddOn
 {
-    class BDOSFixedAssetTransfer
+    static class BDOSFixedAssetTransfer
     {
-        public static bool openFormEvent = false;
+        public static bool openFormEvent;
 
         public static void createDocumentUDO(out string errorText)
         {
@@ -1004,6 +1004,14 @@ namespace BDO_Localisation_AddOn
                         Program.FORM_LOAD_FOR_ACTIVATE = false;
                     }
                 }
+            }
+            else
+            {
+                if (pVal.BeforeAction)
+                {
+                    openFormEvent = false;
+                }
+                
             }
         }
 
@@ -2776,21 +2784,20 @@ namespace BDO_Localisation_AddOn
                     {
                         var docDate = oDBDataSources.Item("@BDOSFASTRD").GetValue("U_DocDate", 0);
 
-                        var oCons = oCFL.GetConditions();
+                        var oCons = new SAPbouiCOM.Conditions();
 
                         var oCon = oCons.Add();
                         oCon.Alias = "ItemType";
                         oCon.Operation = BoConditionOperation.co_EQUAL;
                         oCon.CondVal = "F"; //Fixed Assets
                         oCon.Relationship = BoConditionRelationship.cr_AND;
-                        
+
                         oCon = oCons.Add();
                         oCon.Alias = "CapDate"; //Capitalization Date
                         oCon.Operation = BoConditionOperation.co_LESS_EQUAL;
                         oCon.CondVal = docDate;
 
                         oCFL.SetConditions(oCons);
-                        
                     }
                 }
             }
