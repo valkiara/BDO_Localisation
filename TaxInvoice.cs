@@ -463,7 +463,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> ResponseStructure = null;
 
             string f_series = null;
-            int f_number = -1;
+            string f_number = null;
             DateTime operation_dt = new DateTime(1, 1, 1);
             DateTime reg_dt = new DateTime(1, 1, 1);
             int seller_un_id = -1;
@@ -499,7 +499,7 @@ namespace BDO_Localisation_AddOn
                 if (f_series == null || success == false)
                 {
                     ResponseStructure.Add("reg_dt", new DateTime(1, 1, 1));
-                    ResponseStructure.Add("f_number", -1);
+                    ResponseStructure.Add("f_number", null);
                     ResponseStructure.Add("f_series", null);
                     ResponseStructure.Add("result", true);
                     ResponseStructure.Add("status", -1);

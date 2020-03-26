@@ -7052,7 +7052,7 @@ namespace BDO_Localisation_AddOn
                 else
                 {
                     DateTime reg_dt = Convert.ToDateTime(responseDictionary["reg_dt"]);
-                    int f_number = Convert.ToInt32(responseDictionary["f_number"]);
+                    string f_number = responseDictionary["f_number"] == null ? "" : responseDictionary["f_number"].ToString();
                     string f_series = responseDictionary["f_series"] == null ? "" : responseDictionary["f_series"].ToString();
                     int statusRS = Convert.ToInt32(responseDictionary["status"]);
                     string seq_num_b = responseDictionary["seq_num_b"] == null ? "" : responseDictionary["seq_num_b"].ToString();
@@ -7073,7 +7073,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_status", status);
                     oGeneralData.SetProperty("U_opDate", operation_dt);
                     oGeneralData.SetProperty("U_recvDate", reg_dt);
-                    oGeneralData.SetProperty("U_number", f_number == -1 ? "" : f_number.ToString());
+                    oGeneralData.SetProperty("U_number", f_number);
                     oGeneralData.SetProperty("U_series", f_series);
                     oGeneralData.SetProperty("U_declNumber", seq_num_b);
                     //oGeneralData.SetProperty("U_corrType", k_type == -1 ? "-1" : k_type.ToString());
