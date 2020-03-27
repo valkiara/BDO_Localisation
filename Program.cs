@@ -33,6 +33,7 @@ namespace BDO_Localisation_AddOn
         public static bool removeLineTrans = false;
         public static SAPbouiCOM.Form oIncWaybDocFormAPInv;
         public static SAPbouiCOM.Form oIncWaybDocFormCrMemo;
+        public static SAPbouiCOM.Form oIncWaybDocFormAPCorInv;
         public static SAPbouiCOM.Form oIncWaybDocFormGdsRecpPO;
         public static int currentFormCount = 1;
         public static CultureInfo cultureInfo = null;
