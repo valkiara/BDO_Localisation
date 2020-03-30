@@ -1300,7 +1300,7 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
                 string wtCode = docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim();
-                
+
 
                 bool physicalEntityTax = (docDBSources.Item("OCRD").GetValue("WTLiable", 0).Trim() == "Y" &&
                                             getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
@@ -1391,7 +1391,8 @@ namespace BDO_Localisation_AddOn
                         {
                             totalTaxes = totalTaxes + PensPhAm + WhtAmt;
                         }
-                    } else
+                    }
+                    else
                     {
                         PensPhAm = 0;
                         WhtAmt = GrossAmount * 20 / 100;
@@ -1412,12 +1413,14 @@ namespace BDO_Localisation_AddOn
                     WhtAmt = roundAmountByGeneralSettings((taxableAmt - PensPhAm) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
                     totalTaxes = PensPhAm + WhtAmt;
                 }
-                if(objType != "204" && WTCode != wtCode)
+                if (objType != "204" && WTCode != wtCode)
                 {
                     decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                     WhtAmt = taxableAmt * 20 / 100;
                     totalTaxes = WhtAmt;
                 }
+
+                
 
                 if (physicalEntityTax)
                 {
