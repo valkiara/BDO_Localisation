@@ -12,34 +12,13 @@ namespace BDO_Localisation_AddOn
         {
             #region Discount field
 
-            var leftS = oForm.Items.Item("34").Left;
-            var widthS = oForm.Items.Item("34").Width;
-            var height = oForm.Items.Item("34").Height;
-            var top = oForm.Items.Item("34").Top + height + 1;
-
-            var leftE = oForm.Items.Item("33").Left;
-            var widthE = oForm.Items.Item("33").Width;
+            var height = oForm.Items.Item("42").Height;
+            var top = oForm.Items.Item("42").Top;
+            var leftE = oForm.Items.Item("42").Left;
+            var widthE = oForm.Items.Item("42").Width;
 
             var formItems = new Dictionary<string, object>();
-            var itemName = "DiscountS"; //10 characters
-            formItems.Add("Type", BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", leftS);
-            formItems.Add("Width", widthS);
-            formItems.Add("Top", top);
-            formItems.Add("Height", height);
-            formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("Discount"));
-            formItems.Add("SetAutoManaged", true);
-            formItems.Add("Visible", false);
-
-            FormsB1.createFormItem(oForm, formItems, out var errorText);
-            if (errorText != null)
-            {
-                return;
-            }
-
-            formItems = new Dictionary<string, object>();
-            itemName = "DiscountE"; //10 characters
+            var itemName = "DiscountE"; //10 characters
             formItems.Add("isDataSource", true);
             formItems.Add("DataSource", "DBDataSources");
             formItems.Add("TableName", "ORDR");
@@ -57,7 +36,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("SetAutoManaged", true);
             formItems.Add("Visible", false);
 
-            FormsB1.createFormItem(oForm, formItems, out errorText);
+            FormsB1.createFormItem(oForm, formItems, out var errorText);
             if (errorText != null)
             {
                 return;
@@ -87,7 +66,7 @@ namespace BDO_Localisation_AddOn
                     {
                         if (pVal.ItemUID == "38" && (pVal.ColUID == "14" || (pVal.ColUID == "15" && !pVal.InnerEvent)))
                         {
-                            SetInitialItemGrossPrices(oForm, pVal.Row);
+                            SetInitialItemGrossPrices(oForm, pVal.ColUID, pVal.Row);
                             ApplyDiscount(oForm);
                         }
 
@@ -102,16 +81,40 @@ namespace BDO_Localisation_AddOn
 
         private static void SetVisibility(Form oForm)
         {
-            oForm.Items.Item("DiscountS").Visible = CompanyDetails.IsDiscountUsed();
-            oForm.Items.Item("DiscountE").Visible = CompanyDetails.IsDiscountUsed();
+            var isDiscountUsed = CompanyDetails.IsDiscountUsed();
+            oForm.Items.Item("24").Visible = !isDiscountUsed;
+            oForm.Items.Item("283").Visible = !isDiscountUsed;
+            oForm.Items.Item("42").Visible = !isDiscountUsed;
+            oForm.Items.Item("DiscountE").Visible = isDiscountUsed;
         }
 
-        private static void SetInitialItemGrossPrices(Form oForm, int row)
+        private static void SetInitialItemGrossPrices(Form oForm, string column, int row)
         {
-            Matrix oMatrix = oForm.Items.Item("38").Specific;
-            var initialItemGrossPrice = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("20", row).Value));
-            if (initialItemGrossPrice == 0) return;
-            InitialItemGrossPrices[row] = initialItemGrossPrice;
+            try
+            {
+                oForm.Freeze(true);
+
+                Matrix oMatrix = oForm.Items.Item("38").Specific;
+
+                if (column == "14")
+                {
+                    oMatrix.GetCellSpecific("15", row).Value = 0;
+                }
+
+                var initialItemGrossPrice =
+                    Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("20", row).Value));
+
+                if (initialItemGrossPrice == 0) return;
+                InitialItemGrossPrices[row] = initialItemGrossPrice;
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
         }
 
         private static void ApplyDiscount(Form oForm)
@@ -124,14 +127,16 @@ namespace BDO_Localisation_AddOn
 
                 var discountTotal = string.IsNullOrEmpty(oEditText.Value) ? 0 : Convert.ToDecimal(oEditText.Value);
 
-                var quantityTotal = 0;
+                var grossTotal = 0;
 
                 for (var row = 1; row < oMatrix.RowCount; row++)
                 {
-                    var unitPrice = oMatrix.GetCellSpecific("14", row).Value;
-                    if (!string.IsNullOrEmpty(unitPrice))
+                    var itemPrice = oMatrix.GetCellSpecific("14", row).Value;
+                    if (!string.IsNullOrEmpty(itemPrice))
                     {
-                        quantityTotal += Convert.ToDecimal(oMatrix.GetCellSpecific("11", row).Value);
+                        var itemQuantity = Convert.ToDecimal(oMatrix.GetCellSpecific("11", row).Value);
+
+                        grossTotal += itemQuantity * InitialItemGrossPrices[row];
                     }
                     else
                     {
@@ -141,13 +146,13 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                var discount = Convert.ToDecimal(discountTotal) / quantityTotal;
-
                 for (var row = 1; row < oMatrix.RowCount; row++)
                 {
-                    var grossUnitAmt = InitialItemGrossPrices[row];
+                    var grossItemAmt = InitialItemGrossPrices[row];
 
-                    var grossAfterDiscount = Math.Round(grossUnitAmt - discount, 4);
+                    var discount = discountTotal / grossTotal * grossItemAmt;
+
+                    var grossAfterDiscount = Math.Round(grossItemAmt - discount, 4);
 
                     oMatrix.GetCellSpecific("20", row).Value =
                         FormsB1.ConvertDecimalToStringForEditboxStrings(grossAfterDiscount);
