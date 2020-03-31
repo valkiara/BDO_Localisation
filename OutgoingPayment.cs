@@ -3094,6 +3094,7 @@ namespace BDO_Localisation_AddOn
                             DataTable reLines;
                             DataTable JrnLinesDT = createAdditionalEntries(oForm, null, null, null, DocCurrency, out reLines, DocRate);
 
+                            JrnEntry(DocEntry, DocNum, DocDate, JrnLinesDT, reLines, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
