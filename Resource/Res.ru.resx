@@ -3493,12 +3493,6 @@
   <data name="PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
     <value>Pay attention to the date of last existing depreciation accrual document</value>
   </data>
-  <data name="LandedCost" xml:space="preserve">
-    <value>Landed Cost</value>
-  </data>
-  <data name="StockRevaluation" xml:space="preserve">
-    <value>Stock Revaluation</value>
-  </data>
   <data name="Discount" xml:space="preserve">
     <value>Discount</value>
   </data>
