@@ -33,6 +33,7 @@ namespace BDO_Localisation_AddOn
         public static bool removeLineTrans = false;
         public static SAPbouiCOM.Form oIncWaybDocFormAPInv;
         public static SAPbouiCOM.Form oIncWaybDocFormCrMemo;
+        public static SAPbouiCOM.Form oIncWaybDocFormAPCorInv;
         public static SAPbouiCOM.Form oIncWaybDocFormGdsRecpPO;
         public static int currentFormCount = 1;
         public static CultureInfo cultureInfo = null;
@@ -1516,7 +1517,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->A/P Correction Invoice<-----------------------------
-                else if (BusinessObjectInfo.Type == "164")
+                else if (BusinessObjectInfo.Type == "164" || BusinessObjectInfo.Type == "163")
                 {
                     APCorrectionInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
@@ -1913,6 +1914,12 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "804")
                 {
                     ChartOfAccounts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->AP correction invoice <------------------------------
+                else if (pVal.FormTypeEx== "70002" || pVal.FormTypeEx == "0")
+                {
+                    APCorrectionInvoice.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Exchange Rate Differences<-----------------------------
@@ -2486,7 +2493,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->A/R Correction Invoice<-----------------------------
-                else if (pVal.FormTypeEx == "70008")
+                else if (pVal.FormTypeEx == "70008" )
                 {
                     ArCorrectionInvoice.UiApp_ItemEvent(ref pVal, out BubbleEvent);
                 }
