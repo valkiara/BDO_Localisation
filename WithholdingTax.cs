@@ -357,8 +357,6 @@ namespace BDO_Localisation_AddOn
                     {
                         decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                         decimal PensPhAm = CommonFunctions.roundAmountByGeneralSettings(taxableAmt * 2 / 100, "Sum");
-                        WhtAmt = CommonFunctions.roundAmountByGeneralSettings((taxableAmt - PensPhAm) * 2 / 100, "Sum");
-                        decimal totalTaxes = PensPhAm + WhtAmt;
                         decimal rate = Convert.ToDecimal(oMatrixWtax.Columns.Item("3").Cells.Item(1).Specific.Value);
                         decimal WTax = (taxableAmt - PensPhAm) * rate / 100;
 
