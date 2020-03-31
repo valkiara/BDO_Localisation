@@ -2076,11 +2076,6 @@ namespace BDO_Localisation_AddOn
                         {
                             DocType = "3"; // Goods Receipt PO
                         }
-                        else if (oDBDataSource.TableName == "OCPI")
-                        {
-                            DocType = "4"; // Credit Memo
-                            oCNTp = oDBDataSource.GetValue("U_BDO_CNTp", 0);
-                        }
                     }
 
                     oForm.DataSources.UserDataSources.Item("WBNo").Value = oCNTp == "1" ? "" : WbNo;
@@ -3683,7 +3678,7 @@ namespace BDO_Localisation_AddOn
                         else if (pVal.ItemUID == "3")
                         {
                             string DocType = oForm.DataSources.UserDataSources.Item("DocType").Value;
-                            if (Program.oIncWaybDocFormAPInv != null || Program.oIncWaybDocFormCrMemo != null || Program.oIncWaybDocFormGdsRecpPO != null || Program.oIncWaybDocFormAPCorInv!=null)
+                            if (Program.oIncWaybDocFormAPInv != null || Program.oIncWaybDocFormCrMemo != null || Program.oIncWaybDocFormGdsRecpPO != null)
                             {
                                 if (DocType == "1")
                                 {
@@ -3696,10 +3691,6 @@ namespace BDO_Localisation_AddOn
                                 else if (DocType == "3")
                                 {
                                     GoodsReceiptPO.attachWBToDoc(oForm, Program.oIncWaybDocFormGdsRecpPO, out errorText);
-                                }
-                                else if (DocType == "4")
-                                {
-                                    APCorrectionInvoice.attachWBToDoc(oForm, Program.oIncWaybDocFormAPCorInv, out errorText);
                                 }
                             }
                             else
