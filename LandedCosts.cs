@@ -425,9 +425,9 @@ namespace BDO_Localisation_AddOn
                     query = @"SELECT
                             ""OALC"".""AlcCode"",
 	                        ""JDT1"".""Account"",
-	                        SUM(""JDT1"".""Debit""),
+	                        SUM(""JDT1"".""Debit"") AS ""Amount"",
 	                        SUM(""JDT1"".""Credit""),
-	                        SUM(""JDT1"".""Debit"") - SUM(""JDT1"".""Credit"") AS ""Amount""
+	                        SUM(""JDT1"".""Debit"") - SUM(""JDT1"".""Credit"") 
                         FROM ""JDT1""
                         INNER JOIN ""OJDT"" ON ""JDT1"".""TransId"" = ""OJDT"".""TransId"" AND ""OJDT"".""U_BDOSACNum"" = '" + acNumber.Trim() + @"'
                         INNER JOIN ""OALC"" ON ""JDT1"".""Account"" = ""OALC"".""LaCAllcAcc""
