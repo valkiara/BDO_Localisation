@@ -3102,6 +3102,7 @@ namespace BDO_Localisation_AddOn
                             DataTable reLines;
                             DataTable JrnLinesDT = createAdditionalEntries(oForm, null, null, null, DocCurrency, out reLines, DocRate);
 
+                            JrnEntry(DocEntry, DocNum, DocDate, JrnLinesDT, reLines, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -4360,8 +4361,7 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
 
-                string wtCode = oForm.Items.Item("110").Specific.Value.ToString();
-                //oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WtCode", 0);
+                string wtCode = oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WtCode", 0);
 
                 bool physicalEntityTax = (oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WTLiable", 0) == "Y" &&
                                 CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
@@ -7258,8 +7258,6 @@ namespace BDO_Localisation_AddOn
             }
             return dtPmtInvoices;
         }
-
-
 
         public enum PaymentType
         {
