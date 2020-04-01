@@ -216,7 +216,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("UID", itemName);
                     formItems.Add("Caption", BDOSResources.getTranslate("BPCurrencyRate"));
                     formItems.Add("LinkTo", "docRateINE");
-                    if (BPCurrency != "##" && BPCurrency != Program.MainCurrencySapCode)
+                    if (BPCurrency != "##" && BPCurrency != Program.MainCurrency)
                         formItems.Add("Visible", true);
                     else
                         formItems.Add("Visible", false);
@@ -246,7 +246,7 @@ namespace BDO_Localisation_AddOn
                     //formItems.Add("Enabled", true);
                     //formItems.Add("ValueEx", rate);
                     formItems.Add("AffectsFormMode", false);
-                    if (BPCurrency != "##" && BPCurrency != Program.MainCurrencySapCode)
+                    if (BPCurrency != "##" && BPCurrency != Program.MainCurrency)
                     {
                         formItems.Add("Visible", true);
                         if (docRateIN == 0)
@@ -1242,7 +1242,7 @@ namespace BDO_Localisation_AddOn
                         {
                             unselectedAll = false;
 
-                            if (currency == Program.MainCurrencySapCode)
+                            if (currency == Program.MainCurrency)
                             {
                                 totalPayment = totalPaymentLocal;
                             }
@@ -1414,10 +1414,10 @@ namespace BDO_Localisation_AddOn
                         string DocCur = Convert.ToString(oRecordSet.Fields.Item("DocCur").Value);
 
                         if (string.IsNullOrEmpty(DocCur))
-                            DocCur = Program.MainCurrencySapCode;
+                            DocCur = Program.MainCurrency;
 
                         TotalPaymentLocal = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmount").Value);
-                        if (Program.MainCurrencySapCode == DocCur)
+                        if (Program.MainCurrency == DocCur)
                         {
                             OpenAmount = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmount").Value);
                             TotalPayment = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmount").Value);
@@ -1685,7 +1685,7 @@ namespace BDO_Localisation_AddOn
             string docCur = Convert.ToString(oDataTable.GetValue("Currency", row));
             decimal rate = Convert.ToDecimal(oForm.DataSources.UserDataSources.Item("docRateINE").ValueEx, Nfi);
 
-            if (docCur != Program.MainCurrencySapCode)
+            if (docCur != Program.MainCurrency)
             {
                 string dateE = oForm.DataSources.UserDataSources.Item("dateE").ValueEx;
                 DateTime docDate = FormsB1.DateFormats(dateE, "yyyyMMdd");

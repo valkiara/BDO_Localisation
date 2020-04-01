@@ -976,6 +976,7 @@ namespace BDO_Localisation_AddOn
                 for (; i <= rowCount; i++)
                 {
                     string absID = oMatrix.GetCellSpecific("BlnkAgr", i).Value;
+                    string docEntry = oMatrix.GetCellSpecific("DocEntry", i).Value;
                     if (!string.IsNullOrEmpty(absID) && BlanketAgreement.UsesCurrencyExchangeRates(Convert.ToInt32(absID)))
                     {
                         oMatrix.CommonSetting.SetCellEditable(i, 31, true);
@@ -984,6 +985,8 @@ namespace BDO_Localisation_AddOn
                     {
                         oMatrix.CommonSetting.SetCellEditable(i, 31, false);
                     }
+
+                    oMatrix.CommonSetting.SetCellEditable(i, 33, string.IsNullOrEmpty(docEntry));
                 }
             }
             catch (Exception ex)
@@ -997,10 +1000,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void getPaymentsDocument(string table, string paymentID, string ePaymentID, string docNumber, string transCode, string operationCode, out string docEntry, out string docNum)
+        public static void getPaymentsDocument(string table, string paymentID, string ePaymentID, string docNumber, 
+            string transCode, string operationCode, out string docEntry, out string docNum, out string cFWId, out string cFWName)
         {
             docEntry = "";
             docNum = "";
+            cFWId = "";
+            cFWName = "";
             string transactionCode;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -1013,8 +1019,22 @@ namespace BDO_Localisation_AddOn
 	                  ""PMNT"".""U_ePaymentID"",
 	                  ""PMNT"".""U_docNumber"",
 	                  ""PMNT"".""U_transCode"",
-                      ""PMNT"".""U_opCode""
+                      ""PMNT"".""U_opCode"",
+                      ""CFW"".""CFWId"",
+                      ""CFW"".""CFWName""
                  FROM """ + table + @""" AS ""PMNT"" 
+                 join 
+	                (SELECT 
+		                ""OCFW"".""CFWId"" as ""CFWId"", 
+                        ""OCFW"".""CFWName"" as ""CFWName"",
+                        ""OJDT"".""CreatedBy"" as ""CreatedBy""
+                    FROM ""OJDT""
+                    JOIN ""OCFT""  ON ""OJDT"".""TransId"" = ""OCFT"".""JDTId""
+                    JOIN ""OCFW"" ON ""OCFT"".""CFWId"" = ""OCFW"".""CFWId""
+                    ) as ""CFW""
+
+                on ""CFW"".""CreatedBy"" = ""PMNT"".""DocEntry""
+
                  WHERE ""PMNT"".""Canceled"" = 'N' AND ""PMNT"".""U_paymentID"" = '" + paymentID + @"'
                  
                  AND ((""PMNT"".""U_ePaymentID"" = '' OR ""PMNT"".""U_ePaymentID"" IS NULL) 
@@ -1044,11 +1064,16 @@ namespace BDO_Localisation_AddOn
                     {
                         docEntry = "";
                         docNum = "";
+                        cFWId = "";
+                        cFWName = "";
                     }
                     else
                     {
                         docEntry = oRecordSet.Fields.Item("DocEntry").Value.ToString();
                         docNum = oRecordSet.Fields.Item("DocNum").Value.ToString();
+
+                        cFWId = oRecordSet.Fields.Item("CFWId").Value.ToString();
+                        cFWName = oRecordSet.Fields.Item("CFWName").Value.ToString();
                     }
                 }
             }
@@ -1160,6 +1185,8 @@ namespace BDO_Localisation_AddOn
                 int row = 0;
                 string docEntry = "";
                 string docNum = "";
+                string cFWId = "";
+                string cFWName = "";
                 string paymentID;
                 string ePaymentID;
                 string docNumber;
@@ -1250,9 +1277,9 @@ namespace BDO_Localisation_AddOn
                     transCode = oAccountMovementDetailIo[rowIndex].transactionType;
 
                     if (debitCredit == 0) //გასვლა
-                        getPaymentsDocument("OVPM", paymentID, ePaymentID, docNumber, transCode, operationCode, out docEntry, out docNum);
+                        getPaymentsDocument("OVPM", paymentID, ePaymentID, docNumber, transCode, operationCode, out docEntry, out docNum, out cFWId, out cFWName);
                     else
-                        getPaymentsDocument("ORCT", paymentID, ePaymentID, docNumber, transCode, operationCode, out docEntry, out docNum);
+                        getPaymentsDocument("ORCT", paymentID, ePaymentID, docNumber, transCode, operationCode, out docEntry, out docNum, out cFWId, out cFWName);
 
                     bool deleteFromUnsynchronized = false;
                     //ნაპოვნი დოკუმენტის განახლება --->
@@ -1353,12 +1380,18 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue("GLAccountCode", row, oRecordSet.Fields.Item("U_AcctCode").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_AcctCode").Value.ToString());
                     }
 
-                    if (oRecordSet != null)
+                    if (!string.IsNullOrEmpty(cFWId))
+                    {
+                        oDataTable.SetValue("CashFlowLineItemID", row, cFWId);
+                        oDataTable.SetValue("CashFlowLineItemName", row, cFWName);
+                    }
+
+                    else if (oRecordSet != null)
                     {
                         oDataTable.SetValue("CashFlowLineItemID", row, oRecordSet.Fields.Item("U_CFWId").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_CFWId").Value.ToString());
                         oDataTable.SetValue("CashFlowLineItemName", row, oRecordSet.Fields.Item("U_CFWName").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_CFWName").Value.ToString());
                     }
-
+                    
                     if (CommonFunctions.IsDevelopment())
                     {
                         if (oRecordSet != null)
@@ -1490,6 +1523,8 @@ namespace BDO_Localisation_AddOn
                 string beneficiaryAccountNumber;
                 string docEntry = "";
                 string docNum = "";
+                string cFWId = "";
+                string cFWName = "";
                 string paymentID;
                 string ePaymentID;
                 string docNumber;
@@ -1637,9 +1672,9 @@ namespace BDO_Localisation_AddOn
                     transCode = oStatementDetail[rowIndex].DocumentProductGroup;
 
                     if (debitCredit == 0) //გასვლა
-                        getPaymentsDocument("OVPM", paymentID, ePaymentID, docNumber, transCode, transCode, out docEntry, out docNum);
+                        getPaymentsDocument("OVPM", paymentID, ePaymentID, docNumber, transCode, transCode, out docEntry, out docNum, out cFWId, out cFWName);
                     else
-                        getPaymentsDocument("ORCT", paymentID, ePaymentID, docNumber, transCode, transCode, out docEntry, out docNum);
+                        getPaymentsDocument("ORCT", paymentID, ePaymentID, docNumber, transCode, transCode, out docEntry, out docNum, out cFWId, out cFWName);
 
                     //ნაპოვნი დოკუმენტის განახლება --->
                     bool deleteFromUnsynchronized = false;
@@ -1773,7 +1808,13 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue("GLAccountCode", row, oRecordSet.Fields.Item("U_AcctCode").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_AcctCode").Value.ToString());
                     }
 
-                    if (oRecordSet != null)
+                    if (!string.IsNullOrEmpty(cFWId))
+                    {
+                        oDataTable.SetValue("CashFlowLineItemID", row, cFWId);
+                        oDataTable.SetValue("CashFlowLineItemName", row, cFWName);
+                    }
+
+                    else if (oRecordSet != null)
                     {
                         oDataTable.SetValue("CashFlowLineItemID", row, oRecordSet.Fields.Item("U_CFWId").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_CFWId").Value.ToString());
                         oDataTable.SetValue("CashFlowLineItemName", row, oRecordSet.Fields.Item("U_CFWName").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_CFWName").Value.ToString());

@@ -1445,6 +1445,14 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
             }
 
+            if (PayNoDoc != "Y" && LiablePrTx == "Y")
+            {
+                SAPbouiCOM.CheckBox oliablePrTx = oForm.Items.Item("liablePrTx").Specific;
+                oliablePrTx.Checked = false;
+                Program.uiApp.SetStatusBarMessage("Payment on Account should be checked for Profit Taxes",
+                    SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
+
             //fillAmountTaxes( oForm, out errorText);
 
             setVisibleFormItems(oForm, out errorText);
@@ -3477,7 +3485,7 @@ namespace BDO_Localisation_AddOn
                     {
                         if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                         {
-                            CommonFunctions.fillDocRate(oForm, "OVPM", "OVPM");
+                            CommonFunctions.fillDocRate(oForm, "OVPM");
                         }
                     }
                     
@@ -3592,7 +3600,7 @@ namespace BDO_Localisation_AddOn
 
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                     {
-                        if ((pVal.ItemUID == "liablePrTx" || pVal.ItemUID == "37") && pVal.BeforeAction == false)
+                        if ((pVal.ItemUID == "liablePrTx" || pVal.ItemUID == "37") && pVal.BeforeAction == false && !pVal.InnerEvent)
                         {
                             oForm.Freeze(true);
                             taxes_OnClick(oForm, out errorText);
@@ -3621,7 +3629,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
                         if (oCheckBox.Checked == true && pVal.BeforeAction == false)
                         {
-                            CommonFunctions.fillDocRate(oForm, "OVPM", "OVPM");
+                            CommonFunctions.fillDocRate(oForm, "OVPM");
                         }
                     }
 
@@ -4307,6 +4315,7 @@ namespace BDO_Localisation_AddOn
                 for (int i = 1; i < oMatrix.RowCount + 1; i++)
                 {
                     string Payment = FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("24").Cells.Item(i).Specific.Value).ToString();
+                    decimal wTaxAmt = FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("72").Cells.Item(i).Specific.Value);
                     string DocType = oMatrix.Columns.Item("45").Cells.Item(i).Specific.Value.ToString();
                     string DocNum = oMatrix.Columns.Item("1").Cells.Item(i).Specific.Value.ToString();
                     string Selected = oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Caption;
@@ -4316,7 +4325,9 @@ namespace BDO_Localisation_AddOn
                         bool prTx = GetNonEconExpAP(Convert.ToInt16(DocNum), DocType);
                         if (prTx)
                         {
-                            AmountPr = AmountPr + Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(Convert.ToDecimal(Payment) / Convert.ToDecimal(100 - profitTaxRate) * Convert.ToDecimal(profitTaxRate), "Sum"));
+                            AmountPr += Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(
+                                (Convert.ToDecimal(Payment) + wTaxAmt) / Convert.ToDecimal(100 - profitTaxRate) *
+                                Convert.ToDecimal(profitTaxRate), "Sum"));
                         }
                     }
 

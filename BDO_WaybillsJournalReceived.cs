@@ -2076,6 +2076,11 @@ namespace BDO_Localisation_AddOn
                         {
                             DocType = "3"; // Goods Receipt PO
                         }
+                        else if (oDBDataSource.TableName == "OCPI")
+                        {
+                            DocType = "4"; // Credit Memo
+                            oCNTp = oDBDataSource.GetValue("U_BDO_CNTp", 0);
+                        }
                     }
 
                     oForm.DataSources.UserDataSources.Item("WBNo").Value = oCNTp == "1" ? "" : WbNo;
@@ -2407,6 +2412,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("ItemCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);//6
                     oDataTable.Columns.Add("WBQty", SAPbouiCOM.BoFieldsType.ft_Quantity, 20);//7
                     oDataTable.Columns.Add("WBPrice", SAPbouiCOM.BoFieldsType.ft_Price, 20);//8
+                    oDataTable.Columns.Add("WBLPrice", SAPbouiCOM.BoFieldsType.ft_Price, 20);//8
                     oDataTable.Columns.Add("WBSum", SAPbouiCOM.BoFieldsType.ft_Sum, 20);//9
                     oDataTable.Columns.Add("WBUntCdRS", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);//10
                     oDataTable.Columns.Add("WBPrjCode", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 100);//11
@@ -2552,6 +2558,12 @@ namespace BDO_Localisation_AddOn
                     oColumn.Width = 40;
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind("WbGdsTable", "WBPrice");
+
+                    oColumn = oColumns.Add("WBLPrice", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("LastPrice");
+                    oColumn.Width = 40;
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind("WbGdsTable", "WBLPrice");
 
                     oColumn = oColumns.Add("WBSum", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("Amount");
@@ -3122,11 +3134,14 @@ namespace BDO_Localisation_AddOn
                 }
 
 
+
+
                 SAPbobsCOM.Recordset CatalogEntry = null;
                 SAPbobsCOM.Recordset oRecordsetbyRSCODE = null;
 
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                 SAPbobsCOM.Recordset oRecordSetBN = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                SAPbobsCOM.Recordset oRecordPrevPrice = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
                 string apInvoice = oMatrix.GetCellSpecific("APInvoice", row).Value;
                 string queryBN = "";
@@ -3181,7 +3196,11 @@ namespace BDO_Localisation_AddOn
 
                     if (CatalogEntry != null)
                     {
+                        SAPbobsCOM.Recordset orec = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                         ItemCode = CatalogEntry.Fields.Item("ItemCode").Value;
+                        string queryForName = "select \"ItemName\" from OITM " + "\n"+ "where \"ItemCode\"='"+ ItemCode+"'";
+                        orec.DoQuery(queryForName);                
+                        if(!orec.EoF)  ItemName = orec.Fields.Item("ItemName").Value;
                         WBGUntCode = CatalogEntry.Fields.Item("U_BDO_UoMCod").Value;
                     }
 
@@ -3210,7 +3229,7 @@ namespace BDO_Localisation_AddOn
                     string strWBSum = goodsRow[5];
 
                     decimal price = CommonFunctions.roundAmountByGeneralSettings(FormsB1.cleanStringOfNonDigits(strWBSum) / FormsB1.cleanStringOfNonDigits(strWBQty), "Price");
-
+                    decimal prevPrice=0;
                     if (WBItmName.Length > 254)
                     {
                         WBItmName = WBItmName.Substring(0, 254);
@@ -3221,6 +3240,13 @@ namespace BDO_Localisation_AddOn
                         DistNumber = oRecordSetBN.Fields.Item("DistNumber").Value;
                         oRecordSetBN.MoveNext();
                     }
+                    String priceQuery = "select TOP 1 * from( " + "\n" + "select OPDN.\"CardCode\",PDN1.\"PriceAfVAT\" as \"Price\",PDN1.\"DocDate\" as \"DocDatee\" from OIVL " + "\n" + "left join OPDN on OIVL.\"CreatedBy\"=OPDN.\"DocEntry\" " + "\n"
+                    + "join PDN1 on OPDN.\"DocEntry\"=PDN1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='20' and OPDN.\"CardCode\"='"+Cardcode+"' and PDN1.\"ItemCode\"='"+ItemCode+"' " +
+                    "\n" + "union all " + "\n" + "select OPCH.\"CardCode\",PCH1.\"PriceAfVAT\"as \"Price\",PCH1.\"DocDate\" as \"DocDatee\" from OIVL " + "\n"
+                    + "left join OPCH on OIVL.\"CreatedBy\"=OPCH.\"DocEntry\" " + "\n" + "join PCH1 on OPCH.\"DocEntry\"=PCH1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='18' and OPCH.\"CardCode\"='"+Cardcode+"' and PCH1.\"ItemCode\"='"+
+                    ItemCode+"' " + "\n" + "order by \"DocDatee\" desc)";
+                    oRecordPrevPrice.DoQuery(priceQuery);
+                    if (!oRecordPrevPrice.EoF)  prevPrice = Convert.ToDecimal(oRecordPrevPrice.Fields.Item("Price").Value);
 
                     Sbuilder.Append("<Row>");
                     Sbuilder.Append("<Cell> <ColumnUid>#</ColumnUid> <Value>");
@@ -3279,6 +3305,10 @@ namespace BDO_Localisation_AddOn
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, price.ToString(CultureInfo.InvariantCulture));
                     Sbuilder.Append("</Value></Cell>");
 
+                    Sbuilder.Append("<Cell> <ColumnUid>WBLPrice</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, prevPrice.ToString());
+                    Sbuilder.Append("</Value></Cell>");
+
                     Sbuilder.Append("<Cell> <ColumnUid>WBSum</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, strWBSum);
                     Sbuilder.Append("</Value></Cell>");
@@ -3318,7 +3348,16 @@ namespace BDO_Localisation_AddOn
 
                 for (int i = 1; i <= oMatrixGoods.RowCount; i++)
                 {
-                    oMatrixGoods.CommonSetting.SetRowBackColor(i, FormsB1.getLongIntRGB(231, 231, 231));
+                    SAPbouiCOM.EditText last = (SAPbouiCOM.EditText)oMatrixGoods.Columns.Item("WBLPrice").Cells.Item(i).Specific;
+                    SAPbouiCOM.EditText that = (SAPbouiCOM.EditText)oMatrixGoods.Columns.Item("WBPrice").Cells.Item(i).Specific;
+                    if (Decimal.Parse(last.Value.ToString()) >= Decimal.Parse(that.Value.ToString()) || Decimal.Parse(last.Value.ToString())==0)
+                    {
+                        oMatrixGoods.CommonSetting.SetCellFontColor(i, 13, FormsB1.getLongIntRGB(1, 110, 3));
+
+                    }
+                    else {
+                            oMatrixGoods.CommonSetting.SetCellFontColor(i, 13, FormsB1.getLongIntRGB(255, 0, 0));
+                    }
                 }
 
                 WBGdMatrixRow = 0;
@@ -3644,7 +3683,7 @@ namespace BDO_Localisation_AddOn
                         else if (pVal.ItemUID == "3")
                         {
                             string DocType = oForm.DataSources.UserDataSources.Item("DocType").Value;
-                            if (Program.oIncWaybDocFormAPInv != null || Program.oIncWaybDocFormCrMemo != null || Program.oIncWaybDocFormGdsRecpPO != null)
+                            if (Program.oIncWaybDocFormAPInv != null || Program.oIncWaybDocFormCrMemo != null || Program.oIncWaybDocFormGdsRecpPO != null || Program.oIncWaybDocFormAPCorInv!=null)
                             {
                                 if (DocType == "1")
                                 {
@@ -3657,6 +3696,10 @@ namespace BDO_Localisation_AddOn
                                 else if (DocType == "3")
                                 {
                                     GoodsReceiptPO.attachWBToDoc(oForm, Program.oIncWaybDocFormGdsRecpPO, out errorText);
+                                }
+                                else if (DocType == "4")
+                                {
+                                    APCorrectionInvoice.attachWBToDoc(oForm, Program.oIncWaybDocFormAPCorInv, out errorText);
                                 }
                             }
                             else
@@ -3777,9 +3820,9 @@ namespace BDO_Localisation_AddOn
                             WBGdMatrixRow = row;
 
                             if (oMatrixGoods.RowCount > 0)
-                            {
+                            {                               
                                 oForm.Freeze(false);
-                                for (int i = 1; i <= oMatrixGoods.RowCount; i++)
+                               for (int i = 1; i <= oMatrixGoods.RowCount; i++)
                                 {
                                     oMatrixGoods.CommonSetting.SetRowBackColor(i, FormsB1.getLongIntRGB(231, 231, 231));
                                 }
@@ -3794,7 +3837,7 @@ namespace BDO_Localisation_AddOn
                                 catch
                                 {
                                 }
-                                oForm.Freeze(true);
+                                oForm.Freeze(true);                               
                             }
 
                             oForm.Freeze(false);

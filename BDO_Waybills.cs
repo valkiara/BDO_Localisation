@@ -3638,6 +3638,8 @@ namespace BDO_Localisation_AddOn
                 oItem.Top = top;
                 oItem = oForm.Items.Item("24_U_E");
                 oItem.Top = top;
+                oItem = oForm.Items.Item("24_U_LB");
+                oItem.Top = top;
                 oItem = oForm.Items.Item("24_U_E1");
                 oItem.Top = top;
                 top = top + height + 1;

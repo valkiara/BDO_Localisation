@@ -5,12 +5,15 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Data;
+using SAPbouiCOM;
 
 namespace BDO_Localisation_AddOn
 {
     static partial class ARReserveInvoice
     {
         public static bool ReserveInvoiceAsService = false;
+
+        private static Dictionary<int, decimal> InitialItemGrossPrices = new Dictionary<int, decimal>();
 
         public static void createUserFields( out string errorText)
         {
@@ -207,6 +210,41 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
+            #region Discount field
+
+            
+            height = oForm.Items.Item("42").Height;
+            top = oForm.Items.Item("42").Top;
+            left_e = oForm.Items.Item("42").Left;
+            width_e = oForm.Items.Item("42").Width;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DiscountE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OINV");
+            formItems.Add("Alias", "U_Discount");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", BoFormItemTypes.it_EDIT);
+            formItems.Add("DataType", BoDataType.dt_SUM);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Discount"));
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("SetAutoManaged", true);
+            formItems.Add("Visible", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            #endregion
+
             GC.Collect();
         }
         
@@ -322,13 +360,15 @@ namespace BDO_Localisation_AddOn
                 {
                     createFormItems( oForm, out errorText);
                     formDataLoad( oForm, out errorText);
+                    SetVisibility(oForm);
+                    oForm.Items.Item("4").Click();
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                 {
                     if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
                     {
-                        CommonFunctions.fillDocRate( oForm, "OINV", "INV11");
+                        CommonFunctions.fillDocRate( oForm, "OINV");
                     }
                 }
 
@@ -337,6 +377,21 @@ namespace BDO_Localisation_AddOn
                     if (pVal.ItemUID == "1980002192")
                     {
                         setVisibleFormItems(oForm, out errorText);
+                    }
+
+                    else if (oForm.Items.Item("DiscountE").Visible && pVal.ItemChanged)
+                    {
+                        if (pVal.ItemUID == "38" && (pVal.ColUID == "14" || (pVal.ColUID == "15" && !pVal.InnerEvent)))
+                        {
+                            SetInitialItemGrossPrices(oForm, pVal.ColUID, pVal.Row);
+                            ApplyDiscount(oForm);
+                        }
+
+                        else if (((pVal.ItemUID == "38" && pVal.ColUID == "11") || pVal.ItemUID == "DiscountE") &&
+                                 !pVal.InnerEvent)
+                        {
+                            ApplyDiscount(oForm);
+                        }
                     }
                 }
 
@@ -436,6 +491,96 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
                 oForm.Freeze(false);
                 oForm.Update();
+            }
+
+        }
+
+        private static void SetVisibility(Form oForm)
+        {
+            var isDiscountUsed = CompanyDetails.IsDiscountUsed();
+            oForm.Items.Item("24").Visible = !isDiscountUsed;
+            oForm.Items.Item("283").Visible = !isDiscountUsed;
+            oForm.Items.Item("42").Visible = !isDiscountUsed;
+            oForm.Items.Item("DiscountE").Visible = isDiscountUsed;
+        }
+
+        private static void SetInitialItemGrossPrices(Form oForm, string column, int row)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                Matrix oMatrix = oForm.Items.Item("38").Specific;
+
+                if (column == "14")
+                {
+                    oMatrix.GetCellSpecific("15", row).Value = 0;
+                }
+
+                var initialItemGrossPrice =
+                    Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("20", row).Value));
+
+                if (initialItemGrossPrice == 0) return;
+                InitialItemGrossPrices[row] = initialItemGrossPrice;
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
+        }
+
+        private static void ApplyDiscount(Form oForm)
+        {
+            try
+            {
+                oForm.Freeze(true);
+                Matrix oMatrix = oForm.Items.Item("38").Specific;
+                EditText oEditText = oForm.Items.Item("DiscountE").Specific;
+
+                var discountTotal = string.IsNullOrEmpty(oEditText.Value) ? 0 : Convert.ToDecimal(oEditText.Value);
+
+                var grossTotal = 0;
+
+                for (var row = 1; row < oMatrix.RowCount; row++)
+                {
+                    var itemPrice = oMatrix.GetCellSpecific("14", row).Value;
+                    if (!string.IsNullOrEmpty(itemPrice))
+                    {
+                        var itemQuantity = Convert.ToDecimal(oMatrix.GetCellSpecific("11", row).Value);
+
+                        grossTotal += itemQuantity * InitialItemGrossPrices[row];
+                    }
+                    else
+                    {
+                        //Program.uiApp.StatusBar.SetSystemMessage("Fill Item Prices", BoMessageTime.bmt_Short);
+                        oEditText.Value = string.Empty;
+                        return;
+                    }
+                }
+
+                for (var row = 1; row < oMatrix.RowCount; row++)
+                {
+                    var grossItemAmt = InitialItemGrossPrices[row];
+
+                    var discount = discountTotal / grossTotal * grossItemAmt;
+
+                    var grossAfterDiscount = Math.Round(grossItemAmt - discount, 4);
+
+                    oMatrix.GetCellSpecific("20", row).Value =
+                        FormsB1.ConvertDecimalToStringForEditboxStrings(grossAfterDiscount);
+                }
+            }
+            catch (Exception ex)
+            {
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
 
         }

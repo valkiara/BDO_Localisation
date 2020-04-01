@@ -2855,7 +2855,7 @@
     <value>ადგილმდებარეობა</value>
   </data>
   <data name="DepreciationAmount" xml:space="preserve">
-    <value>ცვეთის რაოდენობა</value>
+    <value>ცვეთის თანხა</value>
   </data>
   <data name="Back" xml:space="preserve">
     <value>უკან</value>
@@ -2957,13 +2957,10 @@
     <value>ცვეთის დარიცხვის დამხმარე - რაოდენობრივი აღრიცხვა</value>
   </data>
   <data name="DistNumber" xml:space="preserve">
-    <value>პარტის ნომერი</value>
+    <value>პარტიის ნომერი</value>
   </data>
   <data name="ItmsGrpCod" xml:space="preserve">
     <value>საქონლის ჯგუფი</value>
-  </data>
-  <data name="NtBookVal" xml:space="preserve">
-    <value>საბალანსო ღირებულება</value>
   </data>
   <data name="UseLife" xml:space="preserve">
     <value>გამოყენების ვადა (თვე)</value>
@@ -3447,5 +3444,59 @@
   </data>
   <data name="AutoAgrNo" xml:space="preserve">
     <value>საერთო შეთანხმების ავტომატური მითითება</value>
+  </data>
+  <data name="AccumulatedDepreciationAmount" xml:space="preserve">
+    <value>დაგროვილი ცვეთის თანხა</value>
+  </data>
+  <data name="AlreadyDepreciatedAmountInCurrentMonth" xml:space="preserve">
+    <value>ცვეთის თანხა (მიმდ. თვე)</value>
+  </data>
+  <data name="AssetGroupCode" xml:space="preserve">
+    <value>ძს ჯგუფის კოდი</value>
+  </data>
+  <data name="NetBookValue" xml:space="preserve">
+    <value>საბალანსო ღირებულება</value>
+  </data>
+  <data name="PurchaseCost" xml:space="preserve">
+    <value>შესყიდვის ღირებულება</value>
+  </data>
+  <data name="PurchasePrice" xml:space="preserve">
+    <value>შესყიდვის ფასი</value>
+  </data>
+  <data name="UsefulLife" xml:space="preserve">
+    <value>გამოყენების ვადა</value>
+  </data>
+  <data name="AssetGroupName" xml:space="preserve">
+    <value>ძს ჯგუფის დასახელება</value>
+  </data>
+  <data name="DepreciationAccrualDocumentInCurrentMonth" xml:space="preserve">
+    <value>ცვეთის დარიცხვის დოკუმენტი (მიმდ. თვე)</value>
+  </data>
+  <data name="RemainingLife" xml:space="preserve">
+    <value>დარჩენილი ვადა</value>
+  </data>
+  <data name="lastPrice" xml:space="preserve">
+    <value>ბოლო ფასი</value>
+  </data>
+  <data name="AdmissionDate" xml:space="preserve">
+    <value>შემოსვლის თარიღი</value>
+  </data>
+  <data name="DateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
+    <value>ბოლო არსებული ცვეთის დარიცხვის დოკუმენტის თარიღი</value>
+  </data>
+  <data name="PayAttentionToTheAdmissionDate" xml:space="preserve">
+    <value>ყურადღება მიაქციეთ შემოსვლის თარიღს</value>
+  </data>
+  <data name="PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
+    <value>ყურადღება მიაქციეთ ბოლო არსებული ცვეთის დარიცხვის დოკუმენტის თარიღს</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>ფასდაკლება</value>
+  </data>
+  <data name="DiscountUse" xml:space="preserve">
+    <value>ფასდაკლების გამოყენება</value>
+  </data>
+  <data name="CapDateError" xml:space="preserve">
+    <value>ამ თარიღში ექსპლუატაციაში არ არის  ძ.ს - </value>
   </data>
 </root>

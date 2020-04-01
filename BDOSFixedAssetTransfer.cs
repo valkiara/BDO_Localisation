@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using SAPbouiCOM;
 
 namespace BDO_Localisation_AddOn
 {
-    class BDOSFixedAssetTransfer
+    static class BDOSFixedAssetTransfer
     {
-        public static bool openFormEvent = false;
+        public static bool openFormEvent;
 
         public static void createDocumentUDO(out string errorText)
         {
@@ -718,6 +719,11 @@ namespace BDO_Localisation_AddOn
                     {
                         oCFLEvento = ((SAPbouiCOM.ChooseFromListEvent)(pVal));
                         string sCFL_ID = oCFLEvento.ChooseFromListUID;
+                        if (sCFL_ID == "ItemMTR_CFL" && oForm.Items.Item("DocDateE").Specific.Value == "")
+                        {
+                            BubbleEvent = false;
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("TheFollowingFieldIsMandatory")+ ": "+ BDOSResources.getTranslate("PostingDate"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
+                        }
                         SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
 
@@ -998,6 +1004,14 @@ namespace BDO_Localisation_AddOn
                         Program.FORM_LOAD_FOR_ACTIVATE = false;
                     }
                 }
+            }
+            else
+            {
+                if (pVal.BeforeAction)
+                {
+                    openFormEvent = false;
+                }
+                
             }
         }
 
@@ -1918,14 +1932,14 @@ namespace BDO_Localisation_AddOn
 
             string uniqueID_lf_ItemMTR_CFL = "ItemMTR_CFL";
             FormsB1.addChooseFromList(oForm, true, objectTypeItem, uniqueID_lf_ItemMTR_CFL);
-            //პირობის დადება ძს არჩევის სიაზე
-            SAPbouiCOM.ChooseFromList oCFL_Item = oForm.ChooseFromLists.Item(uniqueID_lf_ItemMTR_CFL);
-            SAPbouiCOM.Conditions oCons_Item = oCFL_Item.GetConditions();
-            SAPbouiCOM.Condition oCon_Item = oCons_Item.Add();
-            oCon_Item.Alias = "ItemType";
-            oCon_Item.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
-            oCon_Item.CondVal = "F"; //Fixed Assets
-            oCFL_Item.SetConditions(oCons_Item);
+            ////პირობის დადება ძს არჩევის სიაზე
+            //SAPbouiCOM.ChooseFromList oCFL_Item = oForm.ChooseFromLists.Item(uniqueID_lf_ItemMTR_CFL);
+            //SAPbouiCOM.Conditions oCons_Item = oCFL_Item.GetConditions();
+            //SAPbouiCOM.Condition oCon_Item = oCons_Item.Add();
+            //oCon_Item.Alias = "ItemType";
+            //oCon_Item.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+            //oCon_Item.CondVal = "F"; //Fixed Assets
+            //oCFL_Item.SetConditions(oCons_Item);
 
             string uniqueID_lf_ToLocMTR_CFL = "ToLocMTR_CFL";
             FormsB1.addChooseFromList(oForm, multiSelection, objectTypeLocation, uniqueID_lf_ToLocMTR_CFL);
@@ -2766,6 +2780,25 @@ namespace BDO_Localisation_AddOn
                         oForm.Freeze(false);
 
                     }
+                    else if (sCFL_ID == "ItemMTR_CFL")
+                    {
+                        var docDate = oDBDataSources.Item("@BDOSFASTRD").GetValue("U_DocDate", 0);
+
+                        var oCons = new SAPbouiCOM.Conditions();
+
+                        var oCon = oCons.Add();
+                        oCon.Alias = "ItemType";
+                        oCon.Operation = BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = "F"; //Fixed Assets
+                        oCon.Relationship = BoConditionRelationship.cr_AND;
+
+                        oCon = oCons.Add();
+                        oCon.Alias = "CapDate"; //Capitalization Date
+                        oCon.Operation = BoConditionOperation.co_LESS_EQUAL;
+                        oCon.CondVal = docDate;
+
+                        oCFL.SetConditions(oCons);
+                    }
                 }
             }
             catch (Exception ex)
@@ -2941,8 +2974,8 @@ namespace BDO_Localisation_AddOn
                 string itemcode = mtrDataSource.GetValue("U_ItemCode", row);
                 if (!string.IsNullOrEmpty(itemcode))
                 {
-
-                    string query = getAssetQuery(new DateTime(), itemcode, "", "");
+                    DateTime dt= DateTime.TryParseExact(oForm.Items.Item("DocDateE").Specific.Value.ToString(), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt) == false ? DateTime.Now : dt;
+                    string query = getAssetQuery(dt, itemcode, "", "");
 
                     if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
                     {
@@ -2983,7 +3016,7 @@ namespace BDO_Localisation_AddOn
 
                 if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
                 {
-                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE; 
                 }
 
                 oForm.Freeze(false);
@@ -2993,6 +3026,7 @@ namespace BDO_Localisation_AddOn
 
         public static string getAssetQuery(DateTime docDate, string itemCode, string fLocCode, string fEmplID)
         {
+            string ThisYear = docDate.Year.ToString();
             string query = @"SELECT
 	                                 ""Assets"".* 
                                 FROM (SELECT
@@ -3020,7 +3054,8 @@ namespace BDO_Localisation_AddOn
 			                                (SELECT
 				                                 ""ItemCode"",
 				                                 ""APC"" ,
-				                                 ""Quantity"" 
+				                                 ""Quantity"" ,
+                                                   ""PeriodCat""
 			                                FROM (SELECT
 					                                 ""ItemCode"",
 					                                 ""APC"" ,
@@ -3028,24 +3063,28 @@ namespace BDO_Localisation_AddOn
 					                                 ""PeriodCat"",
 				 	                                 RANK ( ) OVER (PARTITION BY ""ItemCode"" ORDER BY ""PeriodCat"" Desc) AS ""Rank"" 
 				                                FROM ""ITM8"" ) AS ""Items""
-				                                WHERE ""Rank"" = 1
+				                                WHERE ""Rank"" = 1 and ""PeriodCat""='" + ThisYear+ @"' 
 			
 			                                UNION ALL 
 			                                SELECT
 				                                 ""ItemCode"",
 				                                 ""APC"" ,
-				                                 ""Qty"" 
+				                                 ""Qty"" ,
+                                            ""PeriodCat""
 			                                FROM ""FIX1"" 
 			                                INNER JOIN ""OFIX"" ON ""FIX1"".""AbsEntry"" = ""OFIX"".""AbsEntry"" AND ""Canceled"" = 'N'
-			
+			                                where ""PeriodCat""='" + ThisYear + @"' 
 			                                UNION ALL 
 			                                SELECT
 				                                 ""RecvAsst"",
 				                                 -1*""APC"" ,
-				                                 -1*""Qty"" 
+				                                 -1*""Qty"" ,
+                                            ""PeriodCat""
 			                                FROM ""FIX1"" 
 			                                INNER JOIN ""OFIX"" ON ""FIX1"".""AbsEntry"" = ""OFIX"".""AbsEntry"" AND ""Canceled"" = 'N' AND ISNULL(""RecvAsst"",
-				                                 '') <> '') AS ""UnionAssets""			
+				                                 '') <> ''
+                                              where ""PeriodCat""='" + ThisYear + @"' 
+                                            ) AS ""UnionAssets""			
 			                                GROUP BY ""ItemCode"") AS ""AssetCost""	ON ""OITM"".""ItemCode"" = ""AssetCost"".""ItemCode""
 	
 	                                WHERE ""OITM"".""ItemType"" = 'F' AND ""OITM"".""AsstStatus"" = 'A' " +
@@ -3367,28 +3406,46 @@ namespace BDO_Localisation_AddOn
                         }
                         else
                         {
-                        errorText = BDOSResources.getTranslate("ItemCode") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty");
-                        break;
-                    }
+                            errorText = BDOSResources.getTranslate("ItemCode") + " " +
+                                        BDOSResources.getTranslate("YouCantLeaveEmpty");
+                            break;
+                        }
                     }
                     else
                     {
-                    query = @"SELECT * 
+                        query = @"SELECT * 
                                     FROM ""@BDOSFASTR1""
                                     INNER JOIN ""@BDOSFASTRD"" ON ""@BDOSFASTR1"".""DocEntry"" = ""@BDOSFASTRD"".""DocEntry""
 
                                     WHERE ""@BDOSFASTRD"".""Canceled"" = 'N' AND 
 	                                        ""@BDOSFASTR1"".""U_ItemCode"" = N'" + itemCode +
-                                                @"' AND ""@BDOSFASTRD"".""U_DocDate"" >= '" + docDate.ToString("yyyyMMdd") + "'";
+                                @"' AND ""@BDOSFASTRD"".""U_DocDate"" >= '" + docDate.ToString("yyyyMMdd") + "'";
 
-                    oRecordSet.DoQuery(query);
+                        oRecordSet.DoQuery(query);
 
-                    if (!oRecordSet.EoF)
-                    {
-                            errorText = BDOSResources.getTranslate("TransferDocumentAlreadyExistsForAsset") + " '" + itemCode + "' ";
+                        if (!oRecordSet.EoF)
+                        {
+                            errorText = BDOSResources.getTranslate("TransferDocumentAlreadyExistsForAsset") + " '" +
+                                        itemCode + "' ";
                             break;
                         }
+
+                        var queryCapDate = new StringBuilder();
+                        queryCapDate.Append("SELECT \"ItemCode\" \n");
+                        queryCapDate.Append("FROM \"OITM\" \n");
+                        queryCapDate.Append("WHERE \"CapDate\" > '" + strDocDate + "' \n");
+                        queryCapDate.Append("    AND  \"ItemCode\" = '" + itemCode + "'");
+
+                        oRecordSet.DoQuery(queryCapDate.ToString());
+                        if (!oRecordSet.EoF)
+                        {
+                            errorText = BDOSResources.getTranslate("CapDateError") + " '" +
+                                        itemCode + "' ";
+                            break;
+                        }
+
                     }
+
                 }
 
                 oMatrix.LoadFromDataSource();
@@ -3400,8 +3457,7 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 System.Runtime.InteropServices.Marshal.ReleaseComObject(oRecordSet);
-                oRecordSet = null;
-
+                
                 oForm.Freeze(false);
             }
         }
