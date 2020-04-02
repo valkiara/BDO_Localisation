@@ -226,7 +226,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_Discount");
             formItems.Add("Bound", true);
             formItems.Add("Type", BoFormItemTypes.it_EDIT);
-            formItems.Add("DataType", BoDataType.dt_SUM);
+            formItems.Add("DataType", BoDataType.dt_PRICE);
             formItems.Add("Left", left_e);
             formItems.Add("Width", width_e);
             formItems.Add("Top", top);
@@ -379,16 +379,19 @@ namespace BDO_Localisation_AddOn
                         setVisibleFormItems(oForm, out errorText);
                     }
 
-                    else if (oForm.Items.Item("DiscountE").Visible && pVal.ItemChanged)
+                    if (oForm.Items.Item("DiscountE").Visible)
                     {
-                        if (pVal.ItemUID == "38" && (pVal.ColUID == "14" || (pVal.ColUID == "15" && !pVal.InnerEvent)))
+                        if (pVal.ItemUID == "38" &&
+                            (pVal.ItemChanged && (pVal.ColUID == "14" || pVal.ColUID == "1" ||
+                                                  (pVal.ColUID == "15" && !pVal.InnerEvent)) ||
+                             (pVal.ColUID == "1" && !pVal.InnerEvent)))
                         {
                             SetInitialItemGrossPrices(oForm, pVal.ColUID, pVal.Row);
                             ApplyDiscount(oForm);
                         }
 
                         else if (((pVal.ItemUID == "38" && pVal.ColUID == "11") || pVal.ItemUID == "DiscountE") &&
-                                 !pVal.InnerEvent)
+                                 !pVal.InnerEvent && pVal.ItemChanged)
                         {
                             ApplyDiscount(oForm);
                         }
