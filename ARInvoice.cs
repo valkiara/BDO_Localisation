@@ -992,7 +992,7 @@ namespace BDO_Localisation_AddOn
 
                 var discountTotal = string.IsNullOrEmpty(oEditText.Value) ? 0 : Convert.ToDecimal(oEditText.Value);
                 
-                var grossTotal = 0;
+                decimal grossTotal = 0;
 
                 for (var row = 1; row < oMatrix.RowCount; row++)
                 {
@@ -1017,7 +1017,7 @@ namespace BDO_Localisation_AddOn
 
                     var discount = discountTotal / grossTotal * grossItemAmt;
 
-                    var grossAfterDiscount = Math.Round(grossItemAmt - discount, 4);
+                    var grossAfterDiscount = Math.Round((grossItemAmt - discount),4);
 
                     oMatrix.GetCellSpecific("20", row).Value =
                         FormsB1.ConvertDecimalToStringForEditboxStrings(grossAfterDiscount);
