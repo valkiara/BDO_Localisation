@@ -969,7 +969,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Type", BoFormItemTypes.it_CHECK_BOX);
             formItems.Add("DataType", BoDataType.dt_SHORT_TEXT);
             formItems.Add("Left", leftD);
-            formItems.Add("Width", 300);
+            formItems.Add("Width", 150);
             formItems.Add("Top", topD);
             formItems.Add("Height", heightD);
             formItems.Add("UID", itemName);
