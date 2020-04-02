@@ -934,42 +934,6 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            #region Use Discount
-
-            var topD = oForm.Items.Item("SP").Top;
-            var leftD = oForm.Items.Item("SP").Left;
-            var heightD = oForm.Items.Item("SP").Height;
-
-            formItems = new Dictionary<string, object>();
-            itemName = "Discount";
-            formItems.Add("isDataSource", true);
-            formItems.Add("DataSource", "DBDataSources");
-            formItems.Add("TableName", "OADM");
-            formItems.Add("Alias", "U_Discount");
-            formItems.Add("Bound", true);
-            formItems.Add("Type", BoFormItemTypes.it_CHECK_BOX);
-            formItems.Add("DataType", BoDataType.dt_SHORT_TEXT);
-            formItems.Add("Left", leftD);
-            formItems.Add("Width", 300);
-            formItems.Add("Top", top + heightD + 1);
-            formItems.Add("Height", heightD);
-            formItems.Add("UID", itemName);
-            formItems.Add("FromPane", 12);
-            formItems.Add("ToPane", 12);
-            formItems.Add("Description", BDOSResources.getTranslate("DiscountUse"));
-            formItems.Add("Caption", BDOSResources.getTranslate("DiscountUse"));
-            formItems.Add("ValOff", "N");
-            formItems.Add("ValOn", "Y");
-            formItems.Add("DisplayDesc", true);
-
-            FormsB1.createFormItem(oForm, formItems, out errorText);
-            if (errorText != null)
-            {
-                return;
-            }
-
-            #endregion
-
             SAPbouiCOM.Item oItemOK = oForm.Items.Item("1");
             formItems = new Dictionary<string, object>();
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
@@ -987,6 +951,43 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
+
+
+            #region Use Discount
+
+            var topD = oForm.Items.Item("BDO_SetPas").Top;
+            var leftD = oForm.Items.Item("BDO_SetPas").Left + oForm.Items.Item("BDO_SetPas").Width + 5;
+            var heightD = oForm.Items.Item("SP").Height;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "Discount";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_Discount");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Left", leftD);
+            formItems.Add("Width", 300);
+            formItems.Add("Top", topD);
+            formItems.Add("Height", heightD);
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("Description", BDOSResources.getTranslate("DiscountUse"));
+            formItems.Add("Caption", BDOSResources.getTranslate("DiscountUse"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            #endregion
 
             top = top + oItemOK.Height;
 
