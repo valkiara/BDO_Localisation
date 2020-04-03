@@ -341,14 +341,14 @@ namespace BDO_Localisation_AddOn
                     {
                         if (pVal.ItemUID == "38" &&
                             (pVal.ItemChanged && (pVal.ColUID == "14" || pVal.ColUID == "1" ||
-                                                  (pVal.ColUID == "15" && !pVal.InnerEvent)) ||
+                                                  (pVal.ColUID == "15" || pVal.ColUID == "11" && !pVal.InnerEvent)) ||
                              (pVal.ColUID == "1" && !pVal.InnerEvent)))
                         {
                             SetInitialLineNetTotals(oForm, pVal.ColUID, pVal.Row);
                             ApplyDiscount(oForm);
                         }
 
-                        else if (((pVal.ItemUID == "38" && pVal.ColUID == "11") || pVal.ItemUID == "DiscountE") &&
+                        else if (pVal.ItemUID == "DiscountE" &&
                                  !pVal.InnerEvent && pVal.ItemChanged)
                         {
                             ApplyDiscount(oForm);
