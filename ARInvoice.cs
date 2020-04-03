@@ -785,14 +785,14 @@ namespace BDO_Localisation_AddOn
                     {
                         if (pVal.ItemUID == "38" &&
                             (pVal.ItemChanged && (pVal.ColUID == "14" || pVal.ColUID == "1" ||
-                                                  (pVal.ColUID == "15" && !pVal.InnerEvent)) ||
+                                                  (pVal.ColUID == "15" || pVal.ColUID == "11" && !pVal.InnerEvent)) ||
                              (pVal.ColUID == "1" && !pVal.InnerEvent)))
                         {
                             SetInitialItemGrossPrices(oForm, pVal.ColUID, pVal.Row);
                             ApplyDiscount(oForm);
                         }
 
-                        else if (((pVal.ItemUID == "38" && pVal.ColUID == "11") || pVal.ItemUID == "DiscountE") &&
+                        else if (pVal.ItemUID == "DiscountE" &&
                                  !pVal.InnerEvent && pVal.ItemChanged)
                         {
                             ApplyDiscount(oForm);
@@ -967,7 +967,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 var initialItemGrossPrice =
-                    Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("20", row).Value));
+                    Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("21", row).Value));
 
                 if (initialItemGrossPrice == 0) return;
                 InitialItemGrossPrices[row] = initialItemGrossPrice;
@@ -1001,7 +1001,7 @@ namespace BDO_Localisation_AddOn
                     {
                         var itemQuantity = Convert.ToDecimal(oMatrix.GetCellSpecific("11", row).Value);
 
-                        grossTotal += itemQuantity * InitialItemGrossPrices[row];
+                        grossTotal += InitialItemGrossPrices[row]; //itemQuantity * 
                     }
                     else
                     {
@@ -1015,11 +1015,11 @@ namespace BDO_Localisation_AddOn
                 {
                     var grossItemAmt = InitialItemGrossPrices[row];
 
-                    var discount = discountTotal / grossTotal * grossItemAmt;
+                    var discount = grossItemAmt / grossTotal * discountTotal / 1.18M;
 
                     var grossAfterDiscount = Math.Round((grossItemAmt - discount),4);
 
-                    oMatrix.GetCellSpecific("20", row).Value =
+                    oMatrix.GetCellSpecific("21", row).Value =
                         FormsB1.ConvertDecimalToStringForEditboxStrings(grossAfterDiscount);
                 }
             }
