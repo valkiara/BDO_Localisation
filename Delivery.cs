@@ -11,7 +11,7 @@ namespace BDO_Localisation_AddOn
 {
     static partial class Delivery
     {
-        private static Dictionary<int, decimal> InitialItemGrossPrices = new Dictionary<int, decimal>();
+        private static Dictionary<int, decimal> InitialLineNetTotals = new Dictionary<int, decimal>();
         public static void createUserFields( out string errorText)
         {
             errorText = null;
@@ -344,7 +344,7 @@ namespace BDO_Localisation_AddOn
                                                   (pVal.ColUID == "15" && !pVal.InnerEvent)) ||
                              (pVal.ColUID == "1" && !pVal.InnerEvent)))
                         {
-                            SetInitialItemGrossPrices(oForm, pVal.ColUID, pVal.Row);
+                            SetInitialLineNetTotals(oForm, pVal.ColUID, pVal.Row);
                             ApplyDiscount(oForm);
                         }
 
@@ -413,7 +413,7 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item("DiscountE").Visible = isDiscountUsed;
         }
 
-        private static void SetInitialItemGrossPrices(Form oForm, string column, int row)
+        private static void SetInitialLineNetTotals(Form oForm, string column, int row)
         {
             try
             {
@@ -421,16 +421,18 @@ namespace BDO_Localisation_AddOn
 
                 Matrix oMatrix = oForm.Items.Item("38").Specific;
 
+                var col = oForm.Items.Item("63").Specific.Value == "GEL" ? "21" : "23";
+
                 if (column == "14")
                 {
                     oMatrix.GetCellSpecific("15", row).Value = 0;
                 }
 
-                var initialItemGrossPrice =
-                    Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("20", row).Value));
+                var initialLineNetTotal =
+                    Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific(col, row).Value));
 
-                if (initialItemGrossPrice == 0) return;
-                InitialItemGrossPrices[row] = initialItemGrossPrice;
+                if (initialLineNetTotal == 0) return;
+                InitialLineNetTotals[row] = initialLineNetTotal;
             }
             catch (Exception ex)
             {
@@ -447,25 +449,24 @@ namespace BDO_Localisation_AddOn
             try
             {
                 oForm.Freeze(true);
-                Matrix oMatrix = oForm.Items.Item("38").Specific;
-                EditText oEditText = oForm.Items.Item("DiscountE").Specific;
 
+                Matrix oMatrix = oForm.Items.Item("38").Specific;
+                var col = oForm.Items.Item("63").Specific.Value == "GEL" ? "21" : "23";
+
+                EditText oEditText = oForm.Items.Item("DiscountE").Specific;
                 var discountTotal = string.IsNullOrEmpty(oEditText.Value) ? 0 : Convert.ToDecimal(oEditText.Value);
 
-                var grossTotal = 0;
+                decimal docTotal = 0;
 
                 for (var row = 1; row < oMatrix.RowCount; row++)
                 {
                     var itemPrice = oMatrix.GetCellSpecific("14", row).Value;
                     if (!string.IsNullOrEmpty(itemPrice))
                     {
-                        var itemQuantity = Convert.ToDecimal(oMatrix.GetCellSpecific("11", row).Value);
-
-                        grossTotal += itemQuantity * InitialItemGrossPrices[row];
+                        docTotal += InitialLineNetTotals[row];
                     }
                     else
                     {
-                        //Program.uiApp.StatusBar.SetSystemMessage("Fill Item Prices", BoMessageTime.bmt_Short);
                         oEditText.Value = string.Empty;
                         return;
                     }
@@ -473,14 +474,17 @@ namespace BDO_Localisation_AddOn
 
                 for (var row = 1; row < oMatrix.RowCount; row++)
                 {
-                    var grossItemAmt = InitialItemGrossPrices[row];
+                    var lineNetTotal = InitialLineNetTotals[row];
 
-                    var discount = discountTotal / grossTotal * grossItemAmt;
+                    var taxCode = oMatrix.GetCellSpecific("18", row).Value;
+                    var taxRate = CommonFunctions.GetVatGroupRate(taxCode, "");
 
-                    var grossAfterDiscount = Math.Round(grossItemAmt - discount, 4);
+                    var discount = lineNetTotal / docTotal * discountTotal / (1 + taxRate / 100);
 
-                    oMatrix.GetCellSpecific("20", row).Value =
-                        FormsB1.ConvertDecimalToStringForEditboxStrings(grossAfterDiscount);
+                    var lineNetTotalAfterDiscount = Math.Round(lineNetTotal - discount, 4);
+
+                    oMatrix.GetCellSpecific(col, row).Value =
+                        FormsB1.ConvertDecimalToStringForEditboxStrings(lineNetTotalAfterDiscount);
                 }
             }
             catch (Exception ex)
