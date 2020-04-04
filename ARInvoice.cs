@@ -608,12 +608,15 @@ namespace BDO_Localisation_AddOn
                         }
 
                         //ძირითადი საშუალებების შემოწმება
-                        bool rejectionAsset = false;
-                        CommonFunctions.blockAssetInvoice(oForm, "OINV", "INV1", "", out rejectionAsset);
-                        if (rejectionAsset)
+                        if (BatchNumberSelection.SelectedBatches != null)
                         {
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
-                            BubbleEvent = false;
+                            bool rejectionAsset = false;
+                            CommonFunctions.blockAssetInvoice(oForm, "OINV", out rejectionAsset);
+                            if (rejectionAsset)
+                            {
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
+                                BubbleEvent = false;
+                            }
                         }
                     }
 

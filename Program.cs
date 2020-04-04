@@ -54,8 +54,9 @@ namespace BDO_Localisation_AddOn
         public static bool localisationAddonLicensed = false;
         public static readonly string ExecutionDateISO = DateTime.UtcNow.ToString("o");
         public static bool selectItemsToCopyOkClick = false;
+        
 
-        static void Main(string[] args)
+    static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -2491,6 +2492,12 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "70008" )
                 {
                     ArCorrectionInvoice.UiApp_ItemEvent(ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->Batch Number Selection<-----------------------------
+                else if (pVal.FormTypeEx == "42")
+                {
+                    BatchNumberSelection.UiApp_ItemEvent(ref pVal, out BubbleEvent);
                 }
             }
             catch (Exception ex)
