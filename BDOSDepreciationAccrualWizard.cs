@@ -86,60 +86,34 @@ namespace BDO_Localisation_AddOn
                         throw new Exception(errorText);
                     }
 
-                    //top += height + 10;
+                    top += height + 10;
 
-                    //formItems = new Dictionary<string, object>();
-                    //itemName = "InvDepr"; //10 characters
-                    //formItems.Add("isDataSource", true);
-                    //formItems.Add("DataSource", "UserDataSources");
-                    //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    //formItems.Add("Length", 1);
-                    //formItems.Add("TableName", "");
-                    //formItems.Add("Alias", itemName);
-                    //formItems.Add("Bound", true);
-                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_OPTION_BUTTON);
-                    //formItems.Add("Left", left_s);
-                    //formItems.Add("Width", width_s);
-                    //formItems.Add("Top", top);
-                    //formItems.Add("Height", height);
-                    //formItems.Add("UID", itemName);
-                    //formItems.Add("Caption", BDOSResources.getTranslate("Retirement"));
-                    //formItems.Add("ValOn", "Y");
-                    //formItems.Add("ValOff", "N");
-                    ////formItems.Add("Value", 1);
-
-                    //FormsB1.createFormItem(oForm, formItems, out errorText);
-                    //if (errorText != null)
-                    //{
-                    //    throw new Exception(errorText);
-                    //}
-
-                    //formItems = new Dictionary<string, object>();
-                    //itemName = "StckDepr"; //10 characters
-                    //formItems.Add("isDataSource", true);
-                    //formItems.Add("DataSource", "UserDataSources");
-                    //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    //formItems.Add("Length", 1);
-                    //formItems.Add("TableName", "");
-                    //formItems.Add("Alias", itemName);
-                    //formItems.Add("Bound", true);
-                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_OPTION_BUTTON);
-                    //formItems.Add("Left", left_e);
-                    //formItems.Add("Width", width_s);
-                    //formItems.Add("Top", top);
-                    //formItems.Add("Height", height);
-                    //formItems.Add("UID", itemName);
-                    //formItems.Add("Caption", BDOSResources.getTranslate("Depreciation"));
-                    //formItems.Add("GroupWith", "InvDepr");
-                    //formItems.Add("ValOn", "Y");
-                    //formItems.Add("ValOff", "N");
-                    //formItems.Add("Value", 2);
-
-                    //FormsB1.createFormItem(oForm, formItems, out errorText);
-                    //if (errorText != null)
-                    //{
-                    //    throw new Exception(errorText);
-                    //}
+                    var oItem = oForm.Items.Add("Rtrmnt", SAPbouiCOM.BoFormItemTypes.it_OPTION_BUTTON);
+                    oItem.Left = left_s;
+                    oItem.Top = top;
+                    oItem.Height = height;
+                    oItem.Width = width_s;
+                    SAPbouiCOM.OptionBtn optBtn = oItem.Specific;
+                    optBtn.Caption = BDOSResources.getTranslate("Retirement");
+                    var oUserDataSource = oForm.DataSources.UserDataSources.Add("Rtrmnt", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 1);
+                    optBtn.DataBind.SetBound(true,"", "Rtrmnt");
+                    optBtn.PressedAfter += (o, a) =>
+                    {
+                        OptBtnPressedAfter(oForm);
+                    };
+                
+                    oItem = oForm.Items.Add("Dprctn", SAPbouiCOM.BoFormItemTypes.it_OPTION_BUTTON);
+                    oItem.Left = left_e;
+                    oItem.Top = top;
+                    oItem.Height = height;
+                    oItem.Width = width_s;
+                    optBtn = oItem.Specific;
+                    optBtn.Caption = BDOSResources.getTranslate("Depreciation");
+                    optBtn.GroupWith("Rtrmnt");
+                    optBtn.PressedAfter += (o, a) =>
+                    {
+                        OptBtnPressedAfter(oForm);
+                    };
 
                     top += height + 10;
 
@@ -347,6 +321,15 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        private static void OptBtnPressedAfter(SAPbouiCOM.Form oForm)
+        {
+            oForm.Freeze(true);
+            SAPbouiCOM.Matrix oMatrix2 = (SAPbouiCOM.Matrix)oForm.Items.Item("ItemsMTR").Specific;
+            if (oMatrix2.RowCount > 0)
+                oMatrix2.Clear();
+            oForm.Freeze(false);
+        }
+
         public static void matrixColumnSetLinkedObjectTypeInvoicesMTR(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
         {
             try
@@ -426,14 +409,14 @@ namespace BDO_Localisation_AddOn
                         matrixColumnSetLinkedObjectTypeInvoicesMTR(oForm, pVal);
                 }
 
-                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
-                {
-                    if (!pVal.BeforeAction)
-                    {
-                        if (pVal.ItemUID == "StckDepr" || pVal.ItemUID == "InvDepr")
-                            setVisibleFormItems(oForm);
-                    }
-                }
+                //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
+                //{
+                //    if (!pVal.BeforeAction)
+                //    {
+                //        if (pVal.ItemUID == "StckDepr" || pVal.ItemUID == "InvDepr")
+                //            setVisibleFormItems(oForm);
+                //    }
+                //}
 
                 else if (pVal.ItemChanged && !pVal.BeforeAction)
                 {
@@ -672,120 +655,125 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             DateTime deprMonth = Convert.ToDateTime(DateTime.ParseExact(dateStr, "yyyyMMdd", CultureInfo.InvariantCulture));
-            //bool isInvoice = oForm.Items.Item("InvDepr").Specific.Selected;
-
-            //string query = BatchDepreciaionQuery(deprMonth, "", "", "", isInvoice);
 
             StringBuilder query = new StringBuilder();
-            query.Append("SELECT T0.*, \n");
-            query.Append("       CASE \n");
-            query.Append("         WHEN T0.\"AlreadyDepreciatedAmt\" = 0 THEN \n");
-            query.Append("         T0.\"PurchaseCost\" / T0.\"UsefulLife\" \n");
-            query.Append("         ELSE 0 \n");
-            query.Append("       END                                                  AS \"DepreciationAmt\", \n");
-            query.Append("       T0.\"PurchaseCost\" - (T0.\"AccumulatedDepreciationAmt\" * T0.\"Coefficient\") AS \"NetBookValue\", \n");
-            query.Append("       T0.\"UsefulLife\" - T0.\"AllDeprDocQty\"             AS \"RemainingLife\" \n");
-            query.Append("FROM   (SELECT \"OBTN\".\"DistNumber\", \n");
-            query.Append("               \"OIBT\".\"WhsCode\", \n");
-            query.Append("               \"OWHS\".\"WhsName\", \n");
-            query.Append("               \"OWHS\".\"U_BDOSPrjCod\"                                        AS \"PrjCode\", \n");
-            query.Append("               \"OIBT\".\"InDate\", \n");
-            query.Append("               \"OIBT\".\"BaseType\", \n");
-            query.Append("               \"T3\".\"LastDeprDocDate\", \n");
-            query.Append("               \"OIBT\".\"ItemCode\", \n");
-            query.Append("               \"OITM\".\"ItemName\", \n");
-            query.Append("               \"OITM\".\"ItmsGrpCod\", \n");
-            query.Append("               \"OITB\".\"ItmsGrpNam\", \n");
-            query.Append("               \"OIBT\".\"Quantity\", \n");
-            query.Append("               \"OIBT\".\"QuantityAll\", \n");
-            query.Append("               \"OIBT\".\"Quantity\" / \"OIBT\".\"QuantityAll\"                 AS \"Coefficient\", \n");
-            query.Append("               \"OITM\".\"U_BDOSUsLife\"                                        AS \"UsefulLife\", \n");
-            query.Append("               CASE WHEN T1.\"U_DeprAmt\" IS NULL THEN 0 ELSE T1.\"U_DeprAmt\" END        AS \"AccumulatedDepreciationAmt\", \n");
-            query.Append("               CASE WHEN T2.\"U_DeprAmt\" IS NULL THEN 0 ELSE T2.\"U_DeprAmt\" END        AS \"AlreadyDepreciatedAmt\", \n");
-            query.Append("               T2.\"DepreciationDocEntry\", \n");
-            query.Append("               \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\"                             AS \"PurchasePrice\", \n");
-            query.Append("               ( \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\" ) * \"OIBT\".\"Quantity\" AS \"PurchaseCost\", \n");
-            query.Append("               CASE WHEN T4.\"DocEntry\" IS NULL THEN 0 ELSE T4.\"DocEntry\" END AS \"AllDeprDocQty\" \n");
-            query.Append("        FROM   (\n");
-            query.Append("               SELECT DISTINCT \n");
-            query.Append("                      B0.\"SysNumber\", \n");
-            query.Append("                      B0.\"ItemCode\", \n");
-            query.Append("                      B0.\"BatchNum\", \n");
-            query.Append("                      B0.\"WhsCode\", \n");
-            query.Append("                      MIN(B1.\"BaseType\") OVER(PARTITION BY B0.\"ItemCode\", B0.\"BatchNum\", B0.\"WhsCode\", B0.\"SysNumber\")    AS \"BaseType\", \n");
-            query.Append("                      MIN(B1.\"DocDate\") OVER(PARTITION BY B0.\"ItemCode\", B0.\"BatchNum\", B0.\"WhsCode\", B0.\"SysNumber\")    AS \"InDate\", \n");
-            query.Append("                      SUM(CASE WHEN B1.\"Direction\" = 0 THEN B1.\"Quantity\" ELSE(-1) * B1.\"Quantity\" END) OVER(PARTITION BY B0.\"ItemCode\", B0.\"BatchNum\", B0.\"WhsCode\", B0.\"SysNumber\")    AS \"Quantity\", \n");
-            query.Append("                      SUM(CASE WHEN B1.\"Direction\" = 0 THEN B1.\"Quantity\" ELSE(-1) * B1.\"Quantity\" END) OVER(PARTITION BY B0.\"ItemCode\", B0.\"BatchNum\", B0.\"SysNumber\")    AS \"QuantityAll\" \n");
-            query.Append("               FROM   \"OIBT\" B0 \n");
-            query.Append("                      INNER JOIN \"IBT1\" B1 ON B0.\"ItemCode\" = B1.\"ItemCode\" \n");
-            query.Append("                                                AND B0.\"BatchNum\" = B1.\"BatchNum\" \n");
-            query.Append("                                                AND B0.\"WhsCode\" = B1.\"WhsCode\" \n");
-            query.Append("               WHERE  B1.\"DocDate\" <= '" + dateStr + "') \"OIBT\" \n");
-            query.Append("               INNER JOIN \"OBTN\" \n");
-            query.Append("                       ON \"OIBT\".\"ItemCode\" = \"OBTN\".\"ItemCode\" \n");
-            query.Append("                          AND \"OIBT\".\"SysNumber\" = \"OBTN\".\"SysNumber\" \n");
-            query.Append("                          AND \"OIBT\".\"BatchNum\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("               INNER JOIN \"OWHS\" \n");
-            query.Append("                       ON \"OIBT\".\"WhsCode\" = \"OWHS\".\"WhsCode\" \n");
-            query.Append("               INNER JOIN \"OITM\" \n");
-            query.Append("                       ON \"OIBT\".\"ItemCode\" = \"OITM\".\"ItemCode\" \n");
-            query.Append("               INNER JOIN \"OITB\" \n");
-            query.Append("                       ON \"OITM\".\"ItmsGrpCod\" = \"OITB\".\"ItmsGrpCod\" \n");
-            query.Append("                          AND \"OITB\".\"U_BDOSFxAs\" = 'Y' \n");
-            query.Append("               LEFT JOIN (SELECT --\"@BDOSDEPAC1\".\"U_Project\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\", \n");
-            query.Append("                                 SUM(\"@BDOSDEPAC1\".\"U_DeprAmt\") AS \"U_DeprAmt\" \n");
-            query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
-            query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
-            query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
-            query.Append("                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" <= '" + dateStr + "' \n");
-            query.Append("                          GROUP BY /*\"@BDOSDEPAC1\".\"U_Project\",*/ \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T1 \n");
-            query.Append("                      ON T1.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
-            query.Append("                         AND T1.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("                         --AND T1.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
-            query.Append("               LEFT JOIN (SELECT \"@BDOSDEPACR\".\"DocEntry\" AS \"DepreciationDocEntry\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_Project\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_DeprAmt\" \n");
-            query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
-            query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
-            query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
-            query.Append("                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" = '" + dateStr + "') AS T2 \n");
-            query.Append("                      ON T2.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
-            query.Append("                         AND T2.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("                         AND T2.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
-            query.Append("               LEFT JOIN (SELECT MAX(\"@BDOSDEPACR\".\"U_DocDate\") AS \"LastDeprDocDate\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_Project\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\" \n");
-            query.Append("                          FROM   \"@BDOSDEPACR\" \n");
-            query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
-            query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"Canceled\" = 'N' \n");
-            query.Append("                                 AND \"U_DocDate\" <= '" + dateStr + "' \n");
-            query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_Project\", \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T3 \n");
-            query.Append("                      ON T3.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
-            query.Append("                         AND T3.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("                         AND T3.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
-            query.Append("               LEFT JOIN (SELECT Count(DISTINCT \"@BDOSDEPAC1\".\"DocEntry\") AS \"DocEntry\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
-            query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\" \n");
-            query.Append("                          FROM   \"@BDOSDEPACR\" \n");
-            query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
-            query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"Canceled\" = 'N' \n");
-            query.Append("                                 AND \"U_DocDate\" <= '" + dateStr + "' \n");
-            query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
-            query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
-            query.Append("                         AND T4.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("          WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0 AND \"OIBT\".\"Quantity\" > 0 \n");
-            query.Append("           AND (NEXT_DAY(LAST_DAY(\"OIBT\".\"InDate\")) < '" + dateStr + "' OR (\"OIBT\".\"BaseType\" = 67 AND LAST_DAY(\"OIBT\".\"InDate\") = '" + dateStr + "')) \n");
-            query.Append("        ) AS T0 \n");
-            query.Append("ORDER BY T0.\"ItemCode\", T0.\"DistNumber\", T0.\"InDate\", T0.\"LastDeprDocDate\" DESC");
+
+            bool isRetirment = oForm.Items.Item("Rtrmnt").Specific.Selected;
+
+            if (isRetirment)
+                query.Append("SELECT T0.*, \n");
+            else
+            {
+                query.Append("SELECT T0.*, \n");
+                query.Append("       CASE \n");
+                query.Append("         WHEN T0.\"AlreadyDepreciatedAmt\" = 0 THEN \n");
+                query.Append("         T0.\"PurchaseCost\" / T0.\"UsefulLife\" \n");
+                query.Append("         ELSE 0 \n");
+                query.Append("       END                                                  AS \"DepreciationAmt\", \n");
+                query.Append("       T0.\"PurchaseCost\" - (T0.\"AccumulatedDepreciationAmt\" * T0.\"Coefficient\") AS \"NetBookValue\", \n");
+                query.Append("       T0.\"UsefulLife\" - T0.\"AllDeprDocQty\"             AS \"RemainingLife\" \n");
+                query.Append("FROM   (SELECT \"OBTN\".\"DistNumber\", \n");
+                query.Append("               \"OIBT\".\"WhsCode\", \n");
+                query.Append("               \"OWHS\".\"WhsName\", \n");
+                query.Append("               \"OWHS\".\"U_BDOSPrjCod\"                                        AS \"PrjCode\", \n");
+                query.Append("               \"OIBT\".\"InDate\", \n");
+                query.Append("               \"OIBT\".\"BaseType\", \n");
+                query.Append("               \"T3\".\"LastDeprDocDate\", \n");
+                query.Append("               \"OIBT\".\"ItemCode\", \n");
+                query.Append("               \"OITM\".\"ItemName\", \n");
+                query.Append("               \"OITM\".\"ItmsGrpCod\", \n");
+                query.Append("               \"OITB\".\"ItmsGrpNam\", \n");
+                query.Append("               \"OIBT\".\"Quantity\", \n");
+                query.Append("               \"OIBT\".\"QuantityAll\", \n");
+                query.Append("               \"OIBT\".\"Quantity\" / \"OIBT\".\"QuantityAll\"                 AS \"Coefficient\", \n");
+                query.Append("               \"OITM\".\"U_BDOSUsLife\"                                        AS \"UsefulLife\", \n");
+                query.Append("               CASE WHEN T1.\"U_DeprAmt\" IS NULL THEN 0 ELSE T1.\"U_DeprAmt\" END        AS \"AccumulatedDepreciationAmt\", \n");
+                query.Append("               CASE WHEN T2.\"U_DeprAmt\" IS NULL THEN 0 ELSE T2.\"U_DeprAmt\" END        AS \"AlreadyDepreciatedAmt\", \n");
+                query.Append("               T2.\"DepreciationDocEntry\", \n");
+                query.Append("               \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\"                             AS \"PurchasePrice\", \n");
+                query.Append("               ( \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\" ) * \"OIBT\".\"Quantity\" AS \"PurchaseCost\", \n");
+                query.Append("               CASE WHEN T4.\"DocEntry\" IS NULL THEN 0 ELSE T4.\"DocEntry\" END AS \"AllDeprDocQty\" \n");
+                query.Append("        FROM   (\n");
+                query.Append("               SELECT DISTINCT \n");
+                query.Append("                      B0.\"SysNumber\", \n");
+                query.Append("                      B0.\"ItemCode\", \n");
+                query.Append("                      B0.\"BatchNum\", \n");
+                query.Append("                      B0.\"WhsCode\", \n");
+                query.Append("                      MIN(B1.\"BaseType\") OVER(PARTITION BY B0.\"ItemCode\", B0.\"BatchNum\", B0.\"WhsCode\", B0.\"SysNumber\")    AS \"BaseType\", \n");
+                query.Append("                      MIN(B1.\"DocDate\") OVER(PARTITION BY B0.\"ItemCode\", B0.\"BatchNum\", B0.\"WhsCode\", B0.\"SysNumber\")    AS \"InDate\", \n");
+                query.Append("                      SUM(CASE WHEN B1.\"Direction\" = 0 THEN B1.\"Quantity\" ELSE(-1) * B1.\"Quantity\" END) OVER(PARTITION BY B0.\"ItemCode\", B0.\"BatchNum\", B0.\"WhsCode\", B0.\"SysNumber\")    AS \"Quantity\", \n");
+                query.Append("                      SUM(CASE WHEN B1.\"Direction\" = 0 THEN B1.\"Quantity\" ELSE(-1) * B1.\"Quantity\" END) OVER(PARTITION BY B0.\"ItemCode\", B0.\"BatchNum\", B0.\"SysNumber\")    AS \"QuantityAll\" \n");
+                query.Append("               FROM   \"OIBT\" B0 \n");
+                query.Append("                      INNER JOIN \"IBT1\" B1 ON B0.\"ItemCode\" = B1.\"ItemCode\" \n");
+                query.Append("                                                AND B0.\"BatchNum\" = B1.\"BatchNum\" \n");
+                query.Append("                                                AND B0.\"WhsCode\" = B1.\"WhsCode\" \n");
+                query.Append("               WHERE  B1.\"DocDate\" <= '" + dateStr + "') \"OIBT\" \n");
+                query.Append("               INNER JOIN \"OBTN\" \n");
+                query.Append("                       ON \"OIBT\".\"ItemCode\" = \"OBTN\".\"ItemCode\" \n");
+                query.Append("                          AND \"OIBT\".\"SysNumber\" = \"OBTN\".\"SysNumber\" \n");
+                query.Append("                          AND \"OIBT\".\"BatchNum\" = \"OBTN\".\"DistNumber\" \n");
+                query.Append("               INNER JOIN \"OWHS\" \n");
+                query.Append("                       ON \"OIBT\".\"WhsCode\" = \"OWHS\".\"WhsCode\" \n");
+                query.Append("               INNER JOIN \"OITM\" \n");
+                query.Append("                       ON \"OIBT\".\"ItemCode\" = \"OITM\".\"ItemCode\" \n");
+                query.Append("               INNER JOIN \"OITB\" \n");
+                query.Append("                       ON \"OITM\".\"ItmsGrpCod\" = \"OITB\".\"ItmsGrpCod\" \n");
+                query.Append("                          AND \"OITB\".\"U_BDOSFxAs\" = 'Y' \n");
+                query.Append("               LEFT JOIN (SELECT --\"@BDOSDEPAC1\".\"U_Project\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\", \n");
+                query.Append("                                 SUM(\"@BDOSDEPAC1\".\"U_DeprAmt\") AS \"U_DeprAmt\" \n");
+                query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
+                query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
+                query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
+                query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
+                query.Append("                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" <= '" + dateStr + "' \n");
+                query.Append("                          GROUP BY /*\"@BDOSDEPAC1\".\"U_Project\",*/ \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T1 \n");
+                query.Append("                      ON T1.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
+                query.Append("                         AND T1.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
+                query.Append("                         --AND T1.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
+                query.Append("               LEFT JOIN (SELECT \"@BDOSDEPACR\".\"DocEntry\" AS \"DepreciationDocEntry\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_Project\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_DeprAmt\" \n");
+                query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
+                query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
+                query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
+                query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
+                query.Append("                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" = '" + dateStr + "') AS T2 \n");
+                query.Append("                      ON T2.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
+                query.Append("                         AND T2.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
+                query.Append("                         AND T2.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
+                query.Append("               LEFT JOIN (SELECT MAX(\"@BDOSDEPACR\".\"U_DocDate\") AS \"LastDeprDocDate\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_Project\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\" \n");
+                query.Append("                          FROM   \"@BDOSDEPACR\" \n");
+                query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
+                query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
+                query.Append("                          WHERE  \"Canceled\" = 'N' \n");
+                query.Append("                                 AND \"U_DocDate\" <= '" + dateStr + "' \n");
+                query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_Project\", \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T3 \n");
+                query.Append("                      ON T3.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
+                query.Append("                         AND T3.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
+                query.Append("                         AND T3.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
+                query.Append("               LEFT JOIN (SELECT Count(DISTINCT \"@BDOSDEPAC1\".\"DocEntry\") AS \"DocEntry\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
+                query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\" \n");
+                query.Append("                          FROM   \"@BDOSDEPACR\" \n");
+                query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
+                query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
+                query.Append("                          WHERE  \"Canceled\" = 'N' \n");
+                query.Append("                                 AND \"U_DocDate\" <= '" + dateStr + "' \n");
+                query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
+                query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
+                query.Append("                         AND T4.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
+                query.Append("          WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0 AND \"OIBT\".\"Quantity\" > 0 \n");
+                query.Append("           AND (NEXT_DAY(LAST_DAY(\"OIBT\".\"InDate\")) < '" + dateStr + "' OR (\"OIBT\".\"BaseType\" = 67 AND LAST_DAY(\"OIBT\".\"InDate\") = '" + dateStr + "')) \n");
+                query.Append("        ) AS T0 \n");
+                query.Append("ORDER BY T0.\"ItemCode\", T0.\"DistNumber\", T0.\"InDate\", T0.\"LastDeprDocDate\" DESC");
+            }
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             oRecordSet.DoQuery(query.ToString());
