@@ -3499,4 +3499,7 @@
   <data name="CapDateError" xml:space="preserve">
     <value>ამ თარიღში ექსპლუატაციაში არ არის  ძ.ს - </value>
   </data>
+  <data name="DepreciationIsAccrued" xml:space="preserve">
+    <value>ცვეთა დარიცხულია</value>
+  </data>
 </root>
