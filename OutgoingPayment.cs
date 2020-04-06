@@ -4322,7 +4322,6 @@ namespace BDO_Localisation_AddOn
                                 Convert.ToDecimal(profitTaxRate), "Sum"));
                         }
                     }
-
                 }
 
                 SAPbouiCOM.EditText oEditAmtPrTx = ((SAPbouiCOM.EditText)(oItemPrTx.Specific));
@@ -4354,7 +4353,6 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
 
                 string wtCode = oForm.Items.Item("110").Specific.Value.ToString();
-                //oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WtCode", 0);
 
                 bool physicalEntityTax = (oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WTLiable", 0) == "Y" &&
                                 CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
@@ -4464,6 +4462,49 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
+
+                
+                SAPbouiCOM.Matrix oMatrix1 = oForm.Items.Item("20").Specific;
+                decimal WhtAmtt = 0;
+                decimal PnPhAmt = 0;
+                decimal PnCoAm = 0;
+                for (int row = 1; row <= oMatrix1.RowCount; row++)
+                {
+                    SAPbouiCOM.CheckBox Edtfield = oMatrix1.Columns.Item("10000127").Cells.Item(row).Specific;
+                    bool checkedLine = (Edtfield.Checked);
+                    if (checkedLine)
+                    {
+                        int docNum = (int)FormsB1.cleanStringOfNonDigits(oMatrix1.Columns.Item("1").Cells.Item(row).Specific.Value);
+                        SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                        string query = "select \"U_BDOSWhtAmt\", \"U_BDOSPnPhAm\", \"U_BDOSPnCoAm\" from PCH1 " + "\n"
+                        + "where \"DocEntry\" = " + "\n"
+                        + "(select \"DocEntry\" from OPCH " + "\n"
+                        + "where \"DocNum\" = '" + docNum + "')";
+
+                        oRecordSet.DoQuery(query);
+
+                        while (!oRecordSet.EoF)
+                        {
+                            WhtAmtt += Convert.ToDecimal((oRecordSet.Fields.Item("U_BDOSWhtAmt").Value));
+                            PnPhAmt += (decimal)oRecordSet.Fields.Item("U_BDOSPnPhAm").Value;
+                            PnCoAm += (decimal)oRecordSet.Fields.Item("U_BDOSPnCoAm").Value;
+
+                            SAPbouiCOM.EditText oEdit1 = oForm.Items.Item("BDOSWhtAmt").Specific;
+                            oEdit1.Value = FormsB1.ConvertDecimalToString(WhtAmtt);
+
+                            oEdit1 = oForm.Items.Item("BDOSPnPhAm").Specific;
+                            oEdit1.Value = FormsB1.ConvertDecimalToString(PnPhAmt);
+
+                            oEdit1 = oForm.Items.Item("BDOSPnCoAm").Specific;
+                            oEdit1.Value = FormsB1.ConvertDecimalToString(PnCoAm);
+
+                            oRecordSet.MoveNext();
+                        }
+                    }
+                }
+                 
+                
                 SAPbouiCOM.EditText oEdit = oForm.Items.Item("BDOSWhtAmt").Specific;
                 oEdit.Value = FormsB1.ConvertDecimalToString(TotalWhtAmt);
 
@@ -4474,6 +4515,7 @@ namespace BDO_Localisation_AddOn
                 oEdit.Value = FormsB1.ConvertDecimalToString(TotalPensCoAm);
 
                 oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                
 
             }
             catch (Exception ex)
@@ -4487,7 +4529,6 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
-
 
         public static bool GetNonEconExpAP(int DocNum, string DocType)
         {

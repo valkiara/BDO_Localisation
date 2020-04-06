@@ -343,7 +343,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.Matrix oMatrixWtax = oForm.Items.Item("6").Specific;
                 string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value; //default
 
-                if (pVal.ItemUID == "1" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & pVal.BeforeAction == false)
                 {
                     decimal WhtAmt;
                     if (WTCode != wtCode)
@@ -360,6 +360,7 @@ namespace BDO_Localisation_AddOn
                         decimal rate = Convert.ToDecimal(oMatrixWtax.Columns.Item("3").Cells.Item(1).Specific.Value);
                         decimal WTax = (taxableAmt - PensPhAm) * rate / 100;
 
+                        oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax + PensPhAm);
                         oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax);
                         oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
                         oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
