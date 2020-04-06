@@ -58,12 +58,15 @@ namespace BDO_Localisation_AddOn
                     CreateFormItems(oForm);
                     SetVisibility(oForm);
                     oForm.Items.Item("4").Click();
+                    Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
 
                 else if (pVal.EventType == BoEventTypes.et_VALIDATE && !pVal.BeforeAction)
                 {
                     if (oForm.Items.Item("DiscountE").Visible)
                     {
+                        if (Program.FORM_LOAD_FOR_ACTIVATE) return;
+
                         if (pVal.ItemUID == "38" &&
                             (pVal.ItemChanged && (pVal.ColUID == "14" || pVal.ColUID == "1" ||
                                                   (pVal.ColUID == "15" || pVal.ColUID == "11" && !pVal.InnerEvent)) ||
@@ -79,6 +82,27 @@ namespace BDO_Localisation_AddOn
                             ApplyDiscount(oForm);
                         }
                     }
+                }
+
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
+                {
+                    if (!Program.FORM_LOAD_FOR_ACTIVATE) return;
+
+                    var discount = oForm.Items.Item("DiscountE");
+
+                    if (discount.Visible)
+                    {
+                        discount.Specific.Value = 0;
+
+                        Matrix oMatrix = oForm.Items.Item("38").Specific;
+
+                        for (var row = 1; row < oMatrix.RowCount; row++)
+                        {
+                            SetInitialLineNetTotals(oForm, "14", row);
+                        }
+                    }
+
+                    Program.FORM_LOAD_FOR_ACTIVATE = false;
                 }
             }
         }
@@ -102,7 +126,7 @@ namespace BDO_Localisation_AddOn
 
                 var col = oForm.Items.Item("63").Specific.Value == "GEL" ? "21" : "23";
 
-                if (column == "14")
+                if (column == "14" && !Program.FORM_LOAD_FOR_ACTIVATE)
                 {
                     oMatrix.GetCellSpecific("15", row).Value = 0;
                 }

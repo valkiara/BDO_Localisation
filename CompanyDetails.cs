@@ -955,9 +955,9 @@ namespace BDO_Localisation_AddOn
 
             #region Use Discount
 
-            var topD = oForm.Items.Item("BDO_SetPas").Top;
-            var leftD = oForm.Items.Item("BDO_SetPas").Left + oForm.Items.Item("BDO_SetPas").Width + 5;
-            var heightD = oForm.Items.Item("SP").Height;
+            var topD = oForm.Items.Item("230").Top;
+            var leftD = oForm.Items.Item("162").Left;
+            var heightD = oForm.Items.Item("230").Height;
 
             formItems = new Dictionary<string, object>();
             itemName = "Discount";
@@ -973,8 +973,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", topD);
             formItems.Add("Height", heightD);
             formItems.Add("UID", itemName);
-            formItems.Add("FromPane", 12);
-            formItems.Add("ToPane", 12);
+            formItems.Add("FromPane", 11);
+            formItems.Add("ToPane", 11);
             formItems.Add("Description", BDOSResources.getTranslate("DiscountUse"));
             formItems.Add("Caption", BDOSResources.getTranslate("DiscountUse"));
             formItems.Add("ValOff", "N");
