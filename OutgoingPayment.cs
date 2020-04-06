@@ -4499,12 +4499,14 @@ namespace BDO_Localisation_AddOn
                             oEdit1 = oForm.Items.Item("BDOSPnCoAm").Specific;
                             oEdit1.Value = FormsB1.ConvertDecimalToString(PnCoAm);
 
+                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+
                             oRecordSet.MoveNext();
                         }
                     }
                 }
                  
-                
+                /*
                 SAPbouiCOM.EditText oEdit = oForm.Items.Item("BDOSWhtAmt").Specific;
                 oEdit.Value = FormsB1.ConvertDecimalToString(TotalWhtAmt);
 
@@ -4515,7 +4517,7 @@ namespace BDO_Localisation_AddOn
                 oEdit.Value = FormsB1.ConvertDecimalToString(TotalPensCoAm);
 
                 oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                
+                */
 
             }
             catch (Exception ex)
