@@ -1457,18 +1457,16 @@ namespace BDO_Localisation_AddOn
                     }
 
                     StringBuilder query = new StringBuilder();
-                    query.Append("SELECT T0.\"DocEntry\" AS \"DepreciationDocEntry\", \n");
-                    query.Append("       T1.\"U_Project\", \n");
+                    query.Append("SELECT DISTINCT \n");
                     query.Append("       T1.\"U_DistNumber\", \n");
-                    query.Append("       T1.\"U_ItemCode\", \n");
-                    query.Append("       T1.\"U_DeprAmt\" \n");
+                    query.Append("       T1.\"U_ItemCode\" \n");
                     query.Append("FROM   \"@BDOSDEPAC1\" T1 \n");
                     query.Append("       INNER JOIN \"@BDOSDEPACR\" T0 \n");
                     query.Append("               ON T1.\"DocEntry\" = T0.\"DocEntry\" \n");
                     query.Append($"      INNER JOIN ({dummyTable}) ITEMS \n");
                     query.Append("               ON T1.\"U_ItemCode\" = ITEMS.\"ItemCode\" AND T1.\"U_DistNumber\" = ITEMS.\"DistNumber\" \n");
                     query.Append("WHERE  T0.\"Canceled\" = 'N' \n");
-                    query.Append($"       AND T0.\"U_AccrMnth\" = '{docDateStr}'");
+                    query.Append($"       AND T0.\"U_AccrMnth\" >= '{docDateStr}'");
 
                     oRecordSet.DoQuery(query.ToString());
                     while (!oRecordSet.EoF)

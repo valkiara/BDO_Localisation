@@ -97,11 +97,11 @@ namespace BDO_Localisation_AddOn
                     optBtn.Caption = BDOSResources.getTranslate("Retirement");
                     var oUserDataSource = oForm.DataSources.UserDataSources.Add("Rtrmnt", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 1);
                     optBtn.DataBind.SetBound(true, "", "Rtrmnt");
-                    optBtn.PressedAfter += (o, a) =>
-                    {
-                        if (!a.InnerEvent)
-                            OptBtnPressedAfter(oForm);
-                    };
+                    //optBtn.PressedAfter += (o, a) =>
+                    //{
+                    //    if (!a.InnerEvent)
+                    //        OptBtnPressedAfter(oForm);
+                    //};
 
                     oItem = oForm.Items.Add("Dprctn", SAPbouiCOM.BoFormItemTypes.it_OPTION_BUTTON);
                     oItem.Left = left_e;
@@ -111,11 +111,11 @@ namespace BDO_Localisation_AddOn
                     optBtn = oItem.Specific;
                     optBtn.Caption = BDOSResources.getTranslate("Depreciation");
                     optBtn.GroupWith("Rtrmnt");
-                    optBtn.PressedAfter += (o, a) =>
-                    {
-                        if (!a.InnerEvent)
-                            OptBtnPressedAfter(oForm);
-                    };
+                    //optBtn.PressedAfter += (o, a) =>
+                    //{
+                    //    if (!a.InnerEvent)
+                    //        OptBtnPressedAfter(oForm);
+                    //};
 
                     top += height + 10;
 
@@ -427,14 +427,14 @@ namespace BDO_Localisation_AddOn
                         matrixColumnSetLinkedObjectTypeInvoicesMTR(oForm, pVal);
                 }
 
-                //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
-                //{
-                //    if (!pVal.BeforeAction)
-                //    {
-                //        if (pVal.ItemUID == "StckDepr" || pVal.ItemUID == "InvDepr")
-                //            setVisibleFormItems(oForm);
-                //    }
-                //}
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
+                {
+                    if (!pVal.BeforeAction)
+                    {
+                        if (!pVal.InnerEvent && (pVal.ItemUID == "Dprctn" || pVal.ItemUID == "Rtrmnt"))
+                            OptBtnPressedAfter(oForm);
+                    }
+                }
 
                 else if (pVal.ItemChanged && !pVal.BeforeAction)
                 {
@@ -828,7 +828,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                       ON B0.\"ItemCode\" = B1.\"ItemCode\" \n");
             query.Append("                          AND B0.\"BatchNum\" = B1.\"BatchNum\" \n");
             query.Append("                          AND B0.\"WhsCode\" = B1.\"WhsCode\" \n");
-            query.Append("        WHERE  B1.\"BaseType\" IN(13) \n");
+            query.Append("        WHERE  B1.\"BaseType\" IN(13, 60) \n");
             query.Append($"               AND B1.\"DocDate\" <= '{dateStr}' \n");
             query.Append("        GROUP  BY B0.\"SysNumber\", \n");
             query.Append("                  B0.\"ItemCode\", \n");
