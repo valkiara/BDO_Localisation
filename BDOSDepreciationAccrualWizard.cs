@@ -474,7 +474,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static int CreateDocument(SAPbouiCOM.Form oForm, DateTime AccrMnth, DateTime PostingDate)
+        private static int CreateDocument(SAPbouiCOM.Form oForm, DateTime accrMnth, DateTime postingDate, bool isRetirement)
         {
             string errorText = null;
 
@@ -488,8 +488,10 @@ namespace BDO_Localisation_AddOn
             {
                 CommonFunctions.StartTransaction();
 
-                oGeneralData.SetProperty("U_AccrMnth", AccrMnth);
-                oGeneralData.SetProperty("U_DocDate", PostingDate);
+                oGeneralData.SetProperty("U_AccrMnth", accrMnth);
+                oGeneralData.SetProperty("U_DocDate", postingDate);
+                if (isRetirement)
+                    oGeneralData.SetProperty("U_Retirement", "Y");
 
                 SAPbouiCOM.DataTable DepreciationLines = oForm.DataSources.DataTables.Item("ItemMTRTmp");
 
@@ -513,9 +515,9 @@ namespace BDO_Localisation_AddOn
 
                 if (docEntry > 0)
                 {
-                    DataTable JrnLinesDT = BDOSDepreciationAccrualDocument.createAdditionalEntries(null, oGeneralData, 0, PostingDate, "", null, null);
+                    DataTable jrnLinesDT = BDOSDepreciationAccrualDocument.createAdditionalEntries(null, oGeneralData, 0, postingDate);
 
-                    BDOSDepreciationAccrualDocument.JrnEntry(docEntry.ToString(), docEntry.ToString(), PostingDate, JrnLinesDT, "", out errorText);
+                    BDOSDepreciationAccrualDocument.JrnEntry(docEntry.ToString(), docEntry.ToString(), postingDate, jrnLinesDT, "", out errorText);
 
                     if (errorText != null)
                         throw new Exception(errorText);
@@ -545,8 +547,8 @@ namespace BDO_Localisation_AddOn
         {
             bool isRetirement = oForm.Items.Item("Rtrmnt").Specific.Selected;
 
-            if (isRetirement)
-                return;
+            //if (isRetirement)
+            //    return;
 
             SAPbouiCOM.DataTable depreciationLinesTmp = oForm.DataSources.DataTables.Item("ItemMTRTmp");
             depreciationLinesTmp.Rows.Clear();
@@ -571,31 +573,34 @@ namespace BDO_Localisation_AddOn
                 string itemCode = depreciationLines.GetValue("ItemCode", i);
                 string distNumber = depreciationLines.GetValue("DistNumber", i);
                 string project = depreciationLines.GetValue("PrjCode", i);
-                DateTime inDate = depreciationLines.GetValue("InDate", i);
                 DateTime? lastDeprDocDate = depreciationLines.GetValue("LastDeprDocDate", i);
                 int lineNum = depreciationLines.GetValue("LineNum", i);
 
                 if (depreciationLines.GetValue("DepreciationDocEntry", i) == 0)
                 {
-                    DateTime dateForCheck = lastDeprDocDate.HasValue ? lastDeprDocDate.Value : inDate;
-                    DateTime lastDayOfDateForCheckNextMonth;
-
-                    if (depreciationLines.GetValue("BaseType", i) == 67 && !lastDeprDocDate.HasValue)
-                        lastDayOfDateForCheckNextMonth = new DateTime(dateForCheck.Year, dateForCheck.Month, 1).AddMonths(1).AddDays(-1);
-                    else
-                        lastDayOfDateForCheckNextMonth = new DateTime(dateForCheck.Year, dateForCheck.Month, 1).AddMonths(2).AddDays(-1);
-
-                    if (lastDayOfDateForCheckNextMonth != accrMnth)
+                    if (!isRetirement)
                     {
-                        string text = lastDeprDocDate.HasValue ? BDOSResources.getTranslate("PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument") : BDOSResources.getTranslate("PayAttentionToTheAdmissionDate");
-                        Program.uiApp.StatusBar.SetSystemMessage($"{BDOSResources.getTranslate("CreateDocumentForThePreviousMonths")}", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error, "", "", $"{text}! {BDOSResources.getTranslate("TableRow")}: {lineNum}");
-                        continue;
+                        DateTime inDate = depreciationLines.GetValue("InDate", i);
+                        DateTime dateForCheck = lastDeprDocDate.HasValue ? lastDeprDocDate.Value : inDate;
+                        DateTime lastDayOfDateForCheckNextMonth;
+
+                        if (depreciationLines.GetValue("BaseType", i) == 67 && !lastDeprDocDate.HasValue)
+                            lastDayOfDateForCheckNextMonth = new DateTime(dateForCheck.Year, dateForCheck.Month, 1).AddMonths(1).AddDays(-1);
+                        else
+                            lastDayOfDateForCheckNextMonth = new DateTime(dateForCheck.Year, dateForCheck.Month, 1).AddMonths(2).AddDays(-1);
+
+                        if (lastDayOfDateForCheckNextMonth != accrMnth)
+                        {
+                            string text = lastDeprDocDate.HasValue ? BDOSResources.getTranslate("PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument") : BDOSResources.getTranslate("PayAttentionToTheAdmissionDate");
+                            Program.uiApp.StatusBar.SetSystemMessage($"{BDOSResources.getTranslate("CreateDocumentForThePreviousMonths")}", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error, "", "", $"{text}! {BDOSResources.getTranslate("TableRow")}: {lineNum}");
+                            continue;
+                        }
                     }
 
                     newRow = depreciationLinesTmp.Rows.Count;
                     depreciationLinesTmp.Rows.Add();
                     depreciationLinesTmp.SetValue("LineNum", newRow, lineNum);
-                    depreciationLinesTmp.SetValue("InDate", newRow, inDate);
+                    //depreciationLinesTmp.SetValue("InDate", newRow, inDate);
                     depreciationLinesTmp.SetValue("ItemCode", newRow, itemCode);
                     depreciationLinesTmp.SetValue("DistNumber", newRow, distNumber);
                     depreciationLinesTmp.SetValue("UsefulLife", newRow, depreciationLines.GetValue("UsefulLife", i));
@@ -605,28 +610,6 @@ namespace BDO_Localisation_AddOn
                     depreciationLinesTmp.SetValue("NetBookValue", newRow, depreciationLines.GetValue("NetBookValue", i));
                     depreciationLinesTmp.SetValue("DepreciationAmt", newRow, depreciationLines.GetValue("DepreciationAmt", i));
                     depreciationLinesTmp.SetValue("AccumulatedDepreciationAmt", newRow, depreciationLines.GetValue("AccumulatedDepreciationAmt", i));
-
-                    ////if (isInvoice)
-                    ////{
-                    //depreciationLinesTmp.SetValue("DocEntry", newRow, depreciationLines.GetValue("DocEntry", i));
-                    //depreciationLinesTmp.SetValue("DocType", newRow, depreciationLines.GetValue("DocType", i));
-
-                    //SAPbobsCOM.BoObjectTypes DocType;
-
-                    //if (depreciationLines.GetValue("DocType", i) == "13") //Invoice object
-                    //    DocType = SAPbobsCOM.BoObjectTypes.oInvoices;
-                    //else
-                    //    DocType = SAPbobsCOM.BoObjectTypes.oInventoryGenExit;
-
-                    //SAPbobsCOM.Documents oInvoice = Program.oCompany.GetBusinessObject(DocType);
-                    //DateTime DocDate = new DateTime();
-                    //if (oInvoice.GetByKey(depreciationLines.GetValue("DocEntry", i)))
-                    //    DocDate = oInvoice.DocDate;
-
-                    //CreateDocument(oForm, accrMnth, DocDate);
-
-                    //depreciationLinesTmp.Rows.Clear();
-                    ////}
                 }
                 else
                 {
@@ -635,8 +618,8 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            if (depreciationLinesTmp.Rows.Count > 0) //!isInvoice && 
-                CreateDocument(oForm, accrMnth, accrMnth);
+            if (depreciationLinesTmp.Rows.Count > 0)
+                CreateDocument(oForm, accrMnth, accrMnth, isRetirement);
         }
 
         public static void resizeForm(SAPbouiCOM.Form oForm)
@@ -854,7 +837,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
             query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
+            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' AND \"@BDOSDEPACR\".\"U_Retirement\" = 'Y' \n");
             query.Append($"                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" <= '{dateStr}' \n");
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T1 \n");
             query.Append("                      ON T1.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
@@ -867,7 +850,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
             query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
+            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' AND \"@BDOSDEPACR\".\"U_Retirement\" = 'Y' \n");
             query.Append($"                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" = '{dateStr}') AS T2 \n");
             query.Append("                      ON T2.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
             query.Append("                         AND T2.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
@@ -879,7 +862,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPACR\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
             query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"Canceled\" = 'N' \n");
+            query.Append("                          WHERE  \"Canceled\" = 'N' AND \"U_Retirement\" = 'Y' \n");
             query.Append($"                                 AND \"U_DocDate\" <= '{dateStr}' \n");
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_Project\", \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T3 \n");
             query.Append("                      ON T3.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
@@ -891,7 +874,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPACR\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
             query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"Canceled\" = 'N' \n");
+            query.Append("                          WHERE  \"Canceled\" = 'N' AND \"U_Retirement\" = 'Y' \n");
             query.Append($"                                 AND \"U_DocDate\" <= '{dateStr}' \n");
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
             query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
@@ -998,7 +981,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
             query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
+            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' AND \"@BDOSDEPACR\".\"U_Retirement\" = 'N' \n");
             query.Append($"                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" <= '{dateStr}' \n");
             query.Append("                          GROUP BY /*\"@BDOSDEPAC1\".\"U_Project\",*/ \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T1 \n");
             query.Append("                      ON T1.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
@@ -1012,7 +995,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
             query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' \n");
+            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' AND \"@BDOSDEPACR\".\"U_Retirement\" = 'N' \n");
             query.Append($"                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" = '{dateStr}') AS T2 \n");
             query.Append("                      ON T2.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
             query.Append("                         AND T2.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
@@ -1024,7 +1007,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPACR\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
             query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"Canceled\" = 'N' \n");
+            query.Append("                          WHERE  \"Canceled\" = 'N' AND \"U_Retirement\" = 'N' \n");
             query.Append($"                                 AND \"U_DocDate\" <= '{dateStr}' \n");
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_Project\", \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T3 \n");
             query.Append("                      ON T3.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
@@ -1036,7 +1019,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPACR\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
             query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"Canceled\" = 'N' \n");
+            query.Append("                          WHERE  \"Canceled\" = 'N' AND \"U_Retirement\" = 'N' \n");
             query.Append($"                                 AND \"U_DocDate\" <= '{dateStr}' \n");
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
             query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
