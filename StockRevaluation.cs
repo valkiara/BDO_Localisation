@@ -93,6 +93,12 @@ namespace BDO_Localisation_AddOn
                     formDataLoad(oForm);
                 }
             }
+            if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == true)
+            {
+                SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm("70001", 1);
+                SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
+                createStockRevaluation(oForm, oMatrix);
+            }
         }
         
         public static void createUserFields(out string errorText)
@@ -100,7 +106,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> fieldskeysMap;
 
             fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "BasDocEntr");
+            fieldskeysMap.Add("Name", "BsDocEntry");
             fieldskeysMap.Add("TableName", "OMRV");
             fieldskeysMap.Add("Description", "Base Doc Entry");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
@@ -113,8 +119,12 @@ namespace BDO_Localisation_AddOn
         {
             SAPbobsCOM.Recordset oRecordSetCostVal = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            SAPbobsCOM.MaterialRevaluation m_MaterialRev = (MaterialRevaluation)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oMaterialRevaluation);
-            SAPbobsCOM.MaterialRevaluation_lines m_MaterialRevLines = m_MaterialRev.Lines;
+            docEntry = getDocEntry(docEntLC);
+
+            Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_StockRevaluation, "162", docEntry);
+
+            SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm("70001", 1);
+            SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
 
             try
             {
@@ -127,22 +137,23 @@ namespace BDO_Localisation_AddOn
 
                 oRecordSet.DoQuery(queryStockDoesNotExist);
 
-                m_MaterialRev.DocDate = DateTime.Now;
-                m_MaterialRev.RevalType = "M";
-                m_MaterialRev.UserFields.Fields.Item("U_BasDocEntr").Value = docEntLC;
+                SAPbouiCOM.ComboBox oCombobox = (SAPbouiCOM.ComboBox)oForm.Items.Item("1003").Specific;
+                //oCombobox.Item.Specific.Select("M", SAPbouiCOM.BoSearchKey.psk_ByValue);
+                //oCombobox.Select("M", SAPbouiCOM.BoSearchKey.psk_ByValue);
+                //oCombobox.Item.Specific.Select("M");
+                //oCombobox.Select("-1");
+
                 int row = 0;
 
                 while (!oRecordSet.EoF)
                 {
-                    m_MaterialRevLines.SetCurrentLine(row);
                     itemCode = oRecordSet.Fields.Item("ItemCode").Value;
-                    m_MaterialRevLines.Quantity = oRecordSet.Fields.Item("Quantity").Value;
-                    m_MaterialRevLines.WarehouseCode = oRecordSet.Fields.Item("WhsCode").Value;
-                    m_MaterialRevLines.ItemCode = itemCode;
-
+                    oMatrix.Columns.Item("6").Cells.Item(1).Specific.Value = itemCode;
+                    //oMatrix.Columns.Item("1").Cells.Item(1).Specific.Value = oRecordSet.Fields.Item("Quantity").Value;
+                    oMatrix.Columns.Item("4").Cells.Item(1).Specific.Value = oRecordSet.Fields.Item("WhsCode").Value;
 
                     double allocCostVal = lastAllCostVal(itemCode, docEntLC);
-                    string query = "select \"TtlExpndLC\", \"ItemCode\" " + "\n"
+                    string query = "select \"TtlCostLC\", \"ItemCode\" " + "\n"
                      + "from IPF1 " + "\n"
                      + "where \"DocEntry\" = " + "\n"
                      + "(select \"DocEntry\" from OIPF " + "\n"
@@ -151,28 +162,20 @@ namespace BDO_Localisation_AddOn
                     oRecordSetCostVal.DoQuery(query);
                     while (!oRecordSetCostVal.EoF)
                     {
-                        allCostValByDocEnt = oRecordSetCostVal.Fields.Item("TtlExpndLC").Value;
+                        allCostValByDocEnt = oRecordSetCostVal.Fields.Item("TtlCostLC").Value;
                         lastItemCode = oRecordSetCostVal.Fields.Item("ItemCode").Value;
                         if(itemCode == lastItemCode)
                         {
-                            m_MaterialRevLines.DebitCredit = allCostValByDocEnt - allocCostVal;
+                            decimal sxvaoba = (decimal)(allCostValByDocEnt - allocCostVal);
+                            //oMatrix.Columns.Item("7").Cells.Item(1).Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(sxvaoba);
+                            
                         }
                         oRecordSetCostVal.MoveNext();
                     }
-                    m_MaterialRevLines.Add();
-
                     row += 1;
                     oRecordSet.MoveNext();
                 }
-
-                int res = m_MaterialRev.Add();
-                int errCode = oCompany.GetLastErrorCode();
-                string errMsg;
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                if (errMsg == "At least one amount is required in document rows ") errMsg = "Stock revaluation document can't be created because item type is - Batch/Serial number";
-                if (errMsg != "") uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate(errMsg), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-
-                docEntry = getDocEntry(docEntLC);
+                //docEntry = getDocEntry(docEntLC);
             }
             catch (Exception ex)
             {
@@ -180,8 +183,8 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                Marshal.FinalReleaseComObject(m_MaterialRev);
-                Marshal.FinalReleaseComObject(m_MaterialRevLines);
+                //Marshal.FinalReleaseComObject(m_MaterialRev);
+                //Marshal.FinalReleaseComObject(m_MaterialRevLines);
                 Marshal.FinalReleaseComObject(oRecordSetCostVal);
                 Marshal.FinalReleaseComObject(oRecordSet);
             }
@@ -193,7 +196,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 string query = "select \"DocEntry\" from \"OMRV\" " + "\n"
-            + "where \"U_BasDocEntr\" = '" + docEntry + "'";
+            + "where \"U_BsDocEntry\" = '" + docEntry + "'";
 
                 oRecordSet.DoQuery(query);
                 if (!oRecordSet.EoF)
@@ -232,8 +235,10 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try
             {
+                if (DocEntry == "") return string.Empty;
+
                 string query = "select \"DocEntry\" from \"OIPF\" " + "\n"
-                + "where \"DocEntry\" = (select \"U_BasDocEntr\" from OMRV " + "\n"
+                + "where \"DocEntry\" = (select \"U_BsDocEntry\" from OMRV " + "\n"
                 + "where \"DocEntry\" = '" + DocEntry + "')";
 
                 oRecordSet.DoQuery(query);
@@ -299,7 +304,7 @@ namespace BDO_Localisation_AddOn
                     oRecordSetDocEnts.MoveNext();
                 }
 
-                string queryCost = "select \"TtlExpndLC\" " + "\n"
+                string queryCost = "select \"TtlCostLC\" " + "\n"
                 + "from IPF1 " + "\n"
                 + "where \"ItemCode\" = '" + itemCode + "' and \"DocEntry\" = " + "\n"
                 + "(select \"DocEntry\" from OIPF " + "\n"
@@ -307,7 +312,7 @@ namespace BDO_Localisation_AddOn
 
                 oRecordSetCost.DoQuery(queryCost);
 
-                if (!oRecordSetCost.EoF) return oRecordSetCost.Fields.Item("TtlExpndLC").Value;
+                if (!oRecordSetCost.EoF) return oRecordSetCost.Fields.Item("TtlCostLC").Value;
 
                 return 0;
             }
@@ -320,6 +325,43 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSet);
                 Marshal.FinalReleaseComObject(oRecordSetCost);
                 Marshal.FinalReleaseComObject(oRecordSetDocEnts);
+            }
+        }
+
+        public static void createStockRevaluation(SAPbouiCOM.Form oForm, SAPbouiCOM.Matrix oMatrix)
+        {
+            SAPbobsCOM.MaterialRevaluation m_MaterialRev = (MaterialRevaluation)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oMaterialRevaluation);
+            SAPbobsCOM.MaterialRevaluation_lines m_MaterialRevLines = m_MaterialRev.Lines;
+
+            SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
+            SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+            string docEntLC = DocDBSource.GetValue("DocEntry", 0);
+
+            try
+            {
+                m_MaterialRev.DocDate = DateTime.Now;
+                m_MaterialRev.RevalType = "M";
+                m_MaterialRev.UserFields.Fields.Item("U_BasDocEntr").Value = docEntLC;
+
+                m_MaterialRevLines.SetCurrentLine(0);
+                string itemCode = oMatrix.Columns.Item("6").Cells.Item(1).Specific.Value;
+                m_MaterialRevLines.Quantity = Convert.ToDouble(oMatrix.Columns.Item("1").Cells.Item(1).Specific.Value);
+                m_MaterialRevLines.WarehouseCode = oMatrix.Columns.Item("4").Cells.Item(1).Specific.Value;
+                m_MaterialRevLines.ItemCode = itemCode;
+
+                string debCred = oMatrix.Columns.Item("7").Cells.Item(1).Specific.Value;
+                m_MaterialRevLines.DebitCredit = Convert.ToDouble(debCred.Substring(0, 4));
+
+                m_MaterialRevLines.Add();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(m_MaterialRev);
+                Marshal.FinalReleaseComObject(m_MaterialRevLines);
             }
         }
     }

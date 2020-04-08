@@ -1116,11 +1116,16 @@ namespace BDO_Localisation_AddOn
                         string docEntry = "";
                         if (!stockExists(docEntLC))
                         {
-                            StockRevaluation.fillStockRevaluation(docEntLC, out docEntry);
-                            formDataLoad(oForm);                       
-                            if (docEntry != "")
+                            //BDOSResources.getTranslate("AfterChangeDateFormWillCloseReopen")
+                            int answer = Program.uiApp.MessageBox("დოკუმენტში არსებული პროდუქტების გადაფასება მოხდება გადაფასების საწყობზე გსურთ დოკუმენტის გაფოემება", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                            if (answer == 1)
                             {
-                                Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_StockRevaluation, "162", docEntry);
+                                StockRevaluation.fillStockRevaluation(docEntLC, out docEntry);
+                                formDataLoad(oForm);
+                                if (docEntry != "")
+                                {
+                                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_StockRevaluation, "162", docEntry);
+                                }
                             }
                         }
                     }
@@ -1157,7 +1162,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 string query = "select \"DocEntry\" from OMRV " + "\n"
-                + "where \"U_BasDocEntr\" = '" + docEntry + "'";
+                + "where \"U_BsDocEntry\" = '" + docEntry + "'";
 
                 oRecordSet.DoQuery(query);
 
@@ -1172,6 +1177,26 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 Marshal.FinalReleaseComObject(oRecordSet);
+            }
+        }
+
+        //im Landed cost-is DocNum da ItemCode unda gadavce romlidanac gaketda stock da daabrunebs mag LC-s stock account-ze ramdenia
+        public static void TtlCostLCFromJrnEntry(string docNum, string itemCode)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            string query = "select \"Debit\", \"Credit\" from JDT1 " + "\n"
+            + "where \"BaseRef\" = '" + docNum + "' and \"TransType\" = '69' and \"Account\" = " + "\n"
+            + "(select \"BalInvntAc\" from OITB " + "\n"
+            + "where \"ItmsGrpCod\" = " + "\n"
+            + "(select \"ItmsGrpCod\" from \"OITM\" " + "\n"
+            + "where \"ItemCode\" = '" + itemCode + "'))";
+
+            oRecordSet.DoQuery(query);
+            if (!oRecordSet.EoF)
+            {
+                string Debit =  oRecordSet.Fields.Item("Debit").Value.ToString();
+                string Credit = oRecordSet.Fields.Item("Credit").Value.ToString();
             }
         }
         
