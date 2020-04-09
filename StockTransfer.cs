@@ -465,7 +465,10 @@ namespace BDO_Localisation_AddOn
 
                         //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
                         if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction)
+                        {
                             CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                            BatchNumberSelection.SelectedBatches = null;
+                        }
                         else
                             CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
                     }

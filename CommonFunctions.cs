@@ -1483,11 +1483,11 @@ namespace BDO_Localisation_AddOn
             catch (Exception ex)
             {
                 rejection = true;
+                BatchNumberSelection.SelectedBatches = null;
                 throw new Exception(ex.Message);
             }
             finally
-            {
-                BatchNumberSelection.SelectedBatches = null;
+            {               
                 Marshal.FinalReleaseComObject(oRecordSet);
             }
         }
