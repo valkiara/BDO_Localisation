@@ -4949,7 +4949,8 @@ namespace BDO_Localisation_AddOn
                                 SUM(""BDO_TXR5"".""U_drg_amount"") AS ""closedVat"",
 	                                ""BDO_TXR5"".""DocEntry""
 	                                 FROM ""@BDO_TXR5"" AS ""BDO_TXR5""
-	                                 GROUP BY ""BDO_TXR5"".""DocEntry""
+                                     WHERE ""BDO_TXR5"".""U_tax_invoice"" in (select ""DocEntry"" from ""@BDO_TAXR"" where ""Canceled"" = 'N')
+                                     GROUP BY ""BDO_TXR5"".""DocEntry""
 	                                ) AS ""closedVatAmounts""
 	                                ON ""closedVatAmounts"".""DocEntry"" = ""BDO_TAXR"".""DocEntry""  
 
