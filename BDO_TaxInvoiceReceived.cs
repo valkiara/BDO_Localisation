@@ -4949,7 +4949,6 @@ namespace BDO_Localisation_AddOn
                                 SUM(""BDO_TXR5"".""U_drg_amount"") AS ""closedVat"",
 	                                ""BDO_TXR5"".""DocEntry""
 	                                 FROM ""@BDO_TXR5"" AS ""BDO_TXR5""
-                                     WHERE ""BDO_TXR5"".""U_tax_invoice"" in (select ""DocEntry"" from ""@BDO_TAXR"" where ""Canceled"" = 'N')
                                      GROUP BY ""BDO_TXR5"".""DocEntry""
 	                                ) AS ""closedVatAmounts""
 	                                ON ""closedVatAmounts"".""DocEntry"" = ""BDO_TAXR"".""DocEntry""  
@@ -5706,10 +5705,39 @@ namespace BDO_Localisation_AddOn
             try
             {
                 JournalEntry.cancellation(oForm, docEntry, "UDO_F_BDO_TAXR_D", out errorText);
+
+                if (errorText == null)
+                {
+
+                    SAPbobsCOM.Recordset oRecordSet =
+                        (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                    string query = @"DELETE
+                        FROM ""@BDO_TXR5"" 
+                        WHERE ""@BDO_TXR5"".""U_tax_invoice"" = '" + docEntry + @"'";
+
+                    oRecordSet.DoQuery(query);
+
+                    query = @"DELETE
+                        FROM ""@BDO_TXR4"" 
+                        WHERE ""@BDO_TXR4"".""DocEntry"" = '" + docEntry + @"'";
+
+                    oRecordSet.DoQuery(query);
+                }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                int errCode;
+                string errMsg;
+
+                Program.oCompany.GetLastError(out errCode, out errMsg);
+                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " +
+                            BDOSResources.getTranslate("Code") + " : " + errCode + "! " +
+                            BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+            }
+            finally
+            {
+                GC.Collect();
             }
         }
 
