@@ -5718,11 +5718,11 @@ namespace BDO_Localisation_AddOn
 
                     oRecordSet.DoQuery(query);
 
-                    query = @"DELETE
-                        FROM ""@BDO_TXR4"" 
-                        WHERE ""@BDO_TXR4"".""DocEntry"" = '" + docEntry + @"'";
+                    //query = @"DELETE
+                    //    FROM ""@BDO_TXR4"" 
+                    //    WHERE ""@BDO_TXR4"".""DocEntry"" = '" + docEntry + @"'";
 
-                    oRecordSet.DoQuery(query);
+                    //oRecordSet.DoQuery(query);
                 }
             }
             catch (Exception ex)
