@@ -3094,7 +3094,7 @@ namespace BDO_Localisation_AddOn
                             DataTable reLines;
                             DataTable JrnLinesDT = createAdditionalEntries(oForm, null, null, null, DocCurrency, out reLines, DocRate);
 
-                            JrnEntry(DocEntry, DocNum, DocDate, JrnLinesDT, reLines, out errorText);
+                          JrnEntry(DocEntry, DocNum, DocDate, JrnLinesDT, reLines, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -4281,7 +4281,6 @@ namespace BDO_Localisation_AddOn
         {
             errorText = null;
             oForm.Freeze(true);
-            NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
             try
             {
                 double AmountPr = 0;
@@ -4505,19 +4504,6 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-                 
-                /*
-                SAPbouiCOM.EditText oEdit = oForm.Items.Item("BDOSWhtAmt").Specific;
-                oEdit.Value = FormsB1.ConvertDecimalToString(TotalWhtAmt);
-
-                oEdit = oForm.Items.Item("BDOSPnPhAm").Specific;
-                oEdit.Value = FormsB1.ConvertDecimalToString(TotalPensPhAm);
-
-                oEdit = oForm.Items.Item("BDOSPnCoAm").Specific;
-                oEdit.Value = FormsB1.ConvertDecimalToString(TotalPensCoAm);
-
-                oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                */
 
             }
             catch (Exception ex)
