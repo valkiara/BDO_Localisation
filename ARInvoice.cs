@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using SAPbobsCOM;
 using SAPbouiCOM;
 using DataTable = System.Data.DataTable;
 
@@ -271,6 +272,31 @@ namespace BDO_Localisation_AddOn
             #endregion
 
             #region Discount
+
+                #region Delete Old Discount Field
+
+                var sboField = (UserFieldsMD)Program.oCompany.GetBusinessObject(BoObjectTypes.oUserFields);
+
+                try
+                {
+                    if (sboField.GetByKey("OINV", 37))
+                    {
+                        if (sboField.SubType != BoFldSubTypes.st_Price)
+                        {
+                            if (sboField.Remove() != 0)
+                            {
+                                errorText = Program.oCompany.GetLastErrorDescription();
+                            }
+                        }
+                    }
+                }
+
+                finally
+                {
+                    Marshal.ReleaseComObject(sboField);
+                }
+
+                #endregion
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "Discount");
