@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using System.Data;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using SAPbobsCOM;
 
 namespace BDO_Localisation_AddOn
 {
@@ -339,7 +340,7 @@ namespace BDO_Localisation_AddOn
                             decimal WBQty = FormsB1.cleanStringOfNonDigits(goodsRow[3]);
                             //double WBPrice = Convert.ToDouble(goodsRow[4], CultureInfo.InvariantCulture);
                             decimal WBSum = FormsB1.cleanStringOfNonDigits(goodsRow[5]);
-                            decimal price = CommonFunctions.roundAmountByGeneralSettings(WBSum / WBQty, "Price");
+                            //decimal price = CommonFunctions.roundAmountByGeneralSettings(WBSum / WBQty, "Price");
 
                             SAPbobsCOM.Recordset oRecordSetIt = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                             string queryIt = @"SELECT ""ManBtchNum"" FROM ""OITM"" WHERE ""ItemCode"" = '" + ItemCode + "'";
@@ -452,10 +453,28 @@ namespace BDO_Localisation_AddOn
 
                             APInv.Lines.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
 
-                            APInv.Lines.LineTotal = Convert.ToDouble(WBSum, CultureInfo.InvariantCulture);
+                            
 
                             oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
                             oBP.GetByKey(CardCode);
+
+                            var curr = oBP.Currency;
+                            if (curr != "##" || curr != "GEL")
+                            {
+                                SBObob oSboBob = Program.oCompany.GetBusinessObject(BoObjectTypes.BoBridge);
+                                var rateRecordset = oSboBob.GetCurrencyRate(curr, WBActDate);
+
+                                if (!rateRecordset.EoF)
+                                {
+                                    var rate = Convert.ToDecimal(rateRecordset.Fields.Item("CurrencyRate").Value);
+                                    WBSum /= rate;
+                                }
+
+                                Marshal.ReleaseComObject(oSboBob);
+                                Marshal.ReleaseComObject(rateRecordset);
+                            }
+
+                            APInv.Lines.GrossTotal = Convert.ToDouble(WBSum, CultureInfo.InvariantCulture);
 
                             pricelistnum = oBP.PriceListNum;
 
