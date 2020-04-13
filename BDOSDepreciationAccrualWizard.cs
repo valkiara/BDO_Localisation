@@ -874,7 +874,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPACR\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
             query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"Canceled\" = 'N' AND \"U_Retirement\" = 'Y' \n");
+            query.Append("                          WHERE  \"Canceled\" = 'N' \n");
             query.Append($"                                 AND \"U_DocDate\" <= '{dateStr}' \n");
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
             query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
@@ -1019,7 +1019,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPACR\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPAC1\" \n");
             query.Append("                                         ON \"@BDOSDEPACR\".\"DocEntry\" = \"@BDOSDEPAC1\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"Canceled\" = 'N' AND \"U_Retirement\" = 'N' \n");
+            query.Append("                          WHERE  \"Canceled\" = 'N' \n");
             query.Append($"                                 AND \"U_DocDate\" <= '{dateStr}' \n");
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
             query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
