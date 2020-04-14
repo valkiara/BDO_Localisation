@@ -4476,10 +4476,9 @@ namespace BDO_Localisation_AddOn
                         int docNum = (int)FormsB1.cleanStringOfNonDigits(oMatrix1.Columns.Item("1").Cells.Item(row).Specific.Value);
                         SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-                        string query = "select \"U_BDOSWhtAmt\", \"U_BDOSPnPhAm\", \"U_BDOSPnCoAm\" from PCH1 " + "\n"
-                        + "where \"DocEntry\" = " + "\n"
-                        + "(select \"DocEntry\" from OPCH " + "\n"
-                        + "where \"DocNum\" = '" + docNum + "')";
+                        string query = "select \"PCH1\".\"U_BDOSWhtAmt\", \"PCH1\".\"U_BDOSPnPhAm\", \"PCH1\".\"U_BDOSPnCoAm\" From \"PCH1\" " + "\n"
+                        + "join \"OPCH\" on \"OPCH\".\"DocEntry\" = \"PCH1\".\"DocEntry\" " + "\n"
+                        + "where \"OPCH\".\"DocNum\" = '" + docNum + "'";
 
                         oRecordSet.DoQuery(query);
 
