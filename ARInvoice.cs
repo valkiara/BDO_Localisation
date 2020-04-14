@@ -686,6 +686,7 @@ namespace BDO_Localisation_AddOn
                                 if (BusinessObjectInfo.ActionSuccess && BusinessObjectInfo.BeforeAction == false)
                                 {
                                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                                    BatchNumberSelection.SelectedBatches = null;
                                 }
                                 else
                                 {
