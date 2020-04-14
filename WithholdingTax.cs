@@ -327,7 +327,7 @@ namespace BDO_Localisation_AddOn
 
             return PhysicalEntityPensionRates;
         }
-
+        /*
         public static void openTaxTableFromAPDocs(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
@@ -335,6 +335,20 @@ namespace BDO_Localisation_AddOn
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
+            }
+        }
+        */
+        public static void openTaxTableFromAPDocs(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+            string errorText = null;
+
+            if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
+            {
+                SAPbouiCOM.Form oFormApInv = Program.uiApp.Forms.GetForm("141", 1);
+                SAPbouiCOM.DBDataSources docDBSources = oFormApInv.DataSources.DBDataSources;
+                SAPbouiCOM.Matrix oMatrix = oFormApInv.Items.Item("39").Specific;
+                string wtCode = docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim(); //on ap invoice
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 SAPbouiCOM.Matrix oMatrixWtax = oForm.Items.Item("6").Specific;
                 string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value; //default
@@ -349,7 +363,7 @@ namespace BDO_Localisation_AddOn
 
                 if (!oRecordSet.EoF) WTCodeDesc = oRecordSet.Fields.Item("WTName").Value;
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & !pVal.BeforeAction)
+                if (pVal.ItemUID == "1" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
                     decimal WhtAmt;
                     if (WTCode != wtCode || WTCodeDesc == "მომსახურება")
@@ -359,20 +373,20 @@ namespace BDO_Localisation_AddOn
                         oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
                         oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = 0;
                         oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = 0;
-                    } else
+                    }
+                    else
                     {
                         decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                         decimal PensPhAm = CommonFunctions.roundAmountByGeneralSettings(taxableAmt * 2 / 100, "Sum");
                         decimal rate = Convert.ToDecimal(oMatrixWtax.Columns.Item("3").Cells.Item(1).Specific.Value);
                         decimal WTax = (taxableAmt - PensPhAm) * rate / 100;
 
-                        oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax + PensPhAm);
                         oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax);
                         oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
                         oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
                     }
                 }
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
                     SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
                     if (DocDBSource.GetValue("DocEntry", 0) == "" && DocDBSource.GetValue("CANCELED", 0) == "N")
@@ -396,7 +410,7 @@ namespace BDO_Localisation_AddOn
                         }
 
                         //A/P Reserve Invoice
-                        else if(DocDBSource.GetValue("ObjType", 0).Trim() == "18" && DocDBSource.GetValue("isIns", 0).Trim() == "Y")
+                        else if (DocDBSource.GetValue("ObjType", 0).Trim() == "18" && DocDBSource.GetValue("isIns", 0).Trim() == "Y")
                         {
                             SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("60092", Program.currentFormCount);
 
@@ -405,7 +419,7 @@ namespace BDO_Localisation_AddOn
                         }
 
                         //A/P Down Payment Request
-                        else if(DocDBSource.GetValue("ObjType", 0).Trim() == "204")
+                        else if (DocDBSource.GetValue("ObjType", 0).Trim() == "204")
                         {
                             SAPbouiCOM.Form oFormDoc = Program.uiApp.Forms.GetForm("65309", Program.currentFormCount);
 
@@ -413,7 +427,7 @@ namespace BDO_Localisation_AddOn
                             CommonFunctions.fillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormDoc, "ODPO", "DPO1", out errorText);
                         }
 
-                        if(!string.IsNullOrEmpty(errorText))
+                        if (!string.IsNullOrEmpty(errorText))
                         {
                             Program.uiApp.StatusBar.SetSystemMessage(errorText);
                             Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
