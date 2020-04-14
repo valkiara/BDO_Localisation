@@ -327,17 +327,7 @@ namespace BDO_Localisation_AddOn
 
             return PhysicalEntityPensionRates;
         }
-        /*
-        public static void openTaxTableFromAPDocs(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
-        {
-            BubbleEvent = true;
-            string errorText = null;
 
-            if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
-            {
-            }
-        }
-        */
         public static void openTaxTableFromAPDocs(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
