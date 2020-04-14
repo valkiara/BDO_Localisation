@@ -451,8 +451,7 @@ namespace BDO_Localisation_AddOn
                             }
 
                             APInv.Lines.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
-
-                            APInv.Lines.LineTotal = Convert.ToDouble(WBSum, CultureInfo.InvariantCulture);
+                            //APInv.Lines.LineTotal = WBSum;
 
                             oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
                             oBP.GetByKey(CardCode);
@@ -476,8 +475,8 @@ namespace BDO_Localisation_AddOn
                             //}
                             APInv.Lines.Currency = Program.LocalCurrency;
 
-                            //APInv.Lines.PriceAfterVAT = Convert.ToDouble(price, CultureInfo.InvariantCulture);
-                            
+                            APInv.Lines.PriceAfterVAT = Convert.ToDouble(price, CultureInfo.InvariantCulture);
+
                             APInv.Lines.Add();
 
                             index++;
