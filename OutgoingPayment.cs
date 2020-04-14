@@ -1445,6 +1445,14 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
             }
 
+            if (PayNoDoc != "Y" && LiablePrTx == "Y")
+            {
+                SAPbouiCOM.CheckBox oliablePrTx = oForm.Items.Item("liablePrTx").Specific;
+                oliablePrTx.Checked = false;
+                Program.uiApp.SetStatusBarMessage("Payment on Account should be checked for Profit Taxes",
+                    SAPbouiCOM.BoMessageTime.bmt_Short);
+            }
+
             //fillAmountTaxes( oForm, out errorText);
 
             setVisibleFormItems(oForm, out errorText);
@@ -3094,7 +3102,7 @@ namespace BDO_Localisation_AddOn
                             DataTable reLines;
                             DataTable JrnLinesDT = createAdditionalEntries(oForm, null, null, null, DocCurrency, out reLines, DocRate);
 
-                          JrnEntry(DocEntry, DocNum, DocDate, JrnLinesDT, reLines, out errorText);
+                            JrnEntry(DocEntry, DocNum, DocDate, JrnLinesDT, reLines, out errorText);
                             if (errorText != null)
                             {
                                 Program.uiApp.MessageBox(errorText);
@@ -3592,7 +3600,7 @@ namespace BDO_Localisation_AddOn
 
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                     {
-                        if ((pVal.ItemUID == "liablePrTx" || pVal.ItemUID == "37") && pVal.BeforeAction == false)
+                        if ((pVal.ItemUID == "liablePrTx" || pVal.ItemUID == "37") && pVal.BeforeAction == false && !pVal.InnerEvent)
                         {
                             oForm.Freeze(true);
                             taxes_OnClick(oForm, out errorText);
@@ -4352,6 +4360,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
 
                 string wtCode = oForm.Items.Item("110").Specific.Value.ToString();
+                //oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WtCode", 0);
 
                 bool physicalEntityTax = (oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WTLiable", 0) == "Y" &&
                                 CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
@@ -7279,8 +7288,6 @@ namespace BDO_Localisation_AddOn
             }
             return dtPmtInvoices;
         }
-
-
 
         public enum PaymentType
         {

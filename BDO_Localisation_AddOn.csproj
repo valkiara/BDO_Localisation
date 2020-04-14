@@ -105,6 +105,7 @@
     <Compile Include="ARInvoice.cs" />
     <Compile Include="AssetClass.cs" />
     <Compile Include="BalanceSheet.cs" />
+    <Compile Include="BatchNumberSelection.cs" />
     <Compile Include="BDOSApprovalProcedures.cs" />
     <Compile Include="BDOSApprovalStages.cs" />
     <Compile Include="BDOSARDownPaymentVATAccrual.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="BDOSInterestAccrualWizard.cs" />
     <Compile Include="BDOSTasksForApproval.cs" />
     <Compile Include="BDOSWarehouseAddresses.cs" />
+    <Compile Include="StockRevaluation.cs" />
     <Compile Include="CashFlowLineItem.cs" />
     <Compile Include="BDOSDeleteUDF.cs" />
     <Compile Include="BDOSDepreciationAccrualDocument.cs" />

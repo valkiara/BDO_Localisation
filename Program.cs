@@ -33,6 +33,7 @@ namespace BDO_Localisation_AddOn
         public static bool removeLineTrans = false;
         public static SAPbouiCOM.Form oIncWaybDocFormAPInv;
         public static SAPbouiCOM.Form oIncWaybDocFormCrMemo;
+        public static SAPbouiCOM.Form oIncWaybDocFormAPCorInv;
         public static SAPbouiCOM.Form oIncWaybDocFormGdsRecpPO;
         public static int currentFormCount = 1;
         public static CultureInfo cultureInfo = null;
@@ -53,8 +54,9 @@ namespace BDO_Localisation_AddOn
         public static bool localisationAddonLicensed = false;
         public static readonly string ExecutionDateISO = DateTime.UtcNow.ToString("o");
         public static bool selectItemsToCopyOkClick = false;
+        
 
-        static void Main(string[] args)
+    static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -1077,6 +1079,16 @@ namespace BDO_Localisation_AddOn
                         {
                             ARInvoice.formDataLoad(oForm, out errorText);
                         }
+                        //if (oForm.TypeEx == "70001")
+                        //{
+                        //    StockRevaluation.formDataLoad(oForm);
+                        //}
+
+                        //if (oForm.TypeEx == "992")
+                        //{
+                        //    LandedCosts.formDataLoad(oForm);
+                        //}
+
                         //----------------------------->Asset Master Data<-----------------------------
                         if (oForm.TypeEx == "1473000075")
                         {
@@ -1199,7 +1211,6 @@ namespace BDO_Localisation_AddOn
                     uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
                 }
             }
-
             //----------------------------->Add<-----------------------------
             if (pVal.MenuUID == "1282")
             {
@@ -1225,6 +1236,16 @@ namespace BDO_Localisation_AddOn
                         {
                             ARInvoice.formDataLoad(oForm, out errorText);
                         }
+
+                        //if (oForm.TypeEx == "70001")
+                        //{
+                        //    StockRevaluation.formDataLoad(oForm);
+                        //}
+
+                        //if (oForm.TypeEx == "992")
+                        //{
+                        //    LandedCosts.formDataLoad(oForm);
+                        //}
 
                         //----------------------------->Depreciation Accrual Document<-----------------------------
                         if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
@@ -1497,7 +1518,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->A/P Correction Invoice<-----------------------------
-                else if (BusinessObjectInfo.Type == "164")
+                else if (BusinessObjectInfo.Type == "164" || BusinessObjectInfo.Type == "163")
                 {
                     APCorrectionInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
@@ -1513,6 +1534,11 @@ namespace BDO_Localisation_AddOn
                 {
                     ARInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
+
+                //else if (BusinessObjectInfo.FormTypeEx == "70001")
+                //{
+                //    StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                //}
 
                 //----------------------------->Asset Master Data<-----------------------------
                 else if (BusinessObjectInfo.Type == "4" && BusinessObjectInfo.FormTypeEx == "1473000075")
@@ -1886,6 +1912,12 @@ namespace BDO_Localisation_AddOn
                     ChartOfAccounts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
+                //----------------------------->AP correction invoice <------------------------------
+                else if (pVal.FormTypeEx== "70002" || pVal.FormTypeEx == "0")
+                {
+                    APCorrectionInvoice.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
                 //----------------------------->Exchange Rate Differences<-----------------------------
                 else if (pVal.FormTypeEx == "369")
                 {
@@ -1902,6 +1934,12 @@ namespace BDO_Localisation_AddOn
                 {
                     LandedCosts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
+
+                ////----------------------------->Stock Revaluation<-----------------------------
+                //else if (pVal.FormTypeEx == "70001")
+                //{
+                //    StockRevaluation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                //}
 
                 //----------------------------->TAX Groups<-----------------------------
                 else if (pVal.FormTypeEx == "895")
@@ -2451,9 +2489,15 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->A/R Correction Invoice<-----------------------------
-                else if (pVal.FormTypeEx == "70008")
+                else if (pVal.FormTypeEx == "70008" )
                 {
                     ArCorrectionInvoice.UiApp_ItemEvent(ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->Batch Number Selection<-----------------------------
+                else if (pVal.FormTypeEx == "42")
+                {
+                    BatchNumberSelection.UiApp_ItemEvent(ref pVal, out BubbleEvent);
                 }
             }
             catch (Exception ex)

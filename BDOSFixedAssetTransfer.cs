@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using SAPbouiCOM;
 
 namespace BDO_Localisation_AddOn
 {
-    class BDOSFixedAssetTransfer
+    static class BDOSFixedAssetTransfer
     {
-        public static bool openFormEvent = false;
+        public static bool openFormEvent;
 
         public static void createDocumentUDO(out string errorText)
         {
@@ -1004,6 +1005,14 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             }
+            else
+            {
+                if (pVal.BeforeAction)
+                {
+                    openFormEvent = false;
+                }
+                
+            }
         }
 
         public static void uiApp_RightClickEvent(SAPbouiCOM.Form oForm, SAPbouiCOM.ContextMenuInfo eventInfo, out bool BubbleEvent)
@@ -1923,14 +1932,14 @@ namespace BDO_Localisation_AddOn
 
             string uniqueID_lf_ItemMTR_CFL = "ItemMTR_CFL";
             FormsB1.addChooseFromList(oForm, true, objectTypeItem, uniqueID_lf_ItemMTR_CFL);
-            //პირობის დადება ძს არჩევის სიაზე
-            SAPbouiCOM.ChooseFromList oCFL_Item = oForm.ChooseFromLists.Item(uniqueID_lf_ItemMTR_CFL);
-            SAPbouiCOM.Conditions oCons_Item = oCFL_Item.GetConditions();
-            SAPbouiCOM.Condition oCon_Item = oCons_Item.Add();
-            oCon_Item.Alias = "ItemType";
-            oCon_Item.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
-            oCon_Item.CondVal = "F"; //Fixed Assets
-            oCFL_Item.SetConditions(oCons_Item);
+            ////პირობის დადება ძს არჩევის სიაზე
+            //SAPbouiCOM.ChooseFromList oCFL_Item = oForm.ChooseFromLists.Item(uniqueID_lf_ItemMTR_CFL);
+            //SAPbouiCOM.Conditions oCons_Item = oCFL_Item.GetConditions();
+            //SAPbouiCOM.Condition oCon_Item = oCons_Item.Add();
+            //oCon_Item.Alias = "ItemType";
+            //oCon_Item.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+            //oCon_Item.CondVal = "F"; //Fixed Assets
+            //oCFL_Item.SetConditions(oCons_Item);
 
             string uniqueID_lf_ToLocMTR_CFL = "ToLocMTR_CFL";
             FormsB1.addChooseFromList(oForm, multiSelection, objectTypeLocation, uniqueID_lf_ToLocMTR_CFL);
@@ -2771,6 +2780,25 @@ namespace BDO_Localisation_AddOn
                         oForm.Freeze(false);
 
                     }
+                    else if (sCFL_ID == "ItemMTR_CFL")
+                    {
+                        var docDate = oDBDataSources.Item("@BDOSFASTRD").GetValue("U_DocDate", 0);
+
+                        var oCons = new SAPbouiCOM.Conditions();
+
+                        var oCon = oCons.Add();
+                        oCon.Alias = "ItemType";
+                        oCon.Operation = BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = "F"; //Fixed Assets
+                        oCon.Relationship = BoConditionRelationship.cr_AND;
+
+                        oCon = oCons.Add();
+                        oCon.Alias = "CapDate"; //Capitalization Date
+                        oCon.Operation = BoConditionOperation.co_LESS_EQUAL;
+                        oCon.CondVal = docDate;
+
+                        oCFL.SetConditions(oCons);
+                    }
                 }
             }
             catch (Exception ex)
@@ -3378,28 +3406,46 @@ namespace BDO_Localisation_AddOn
                         }
                         else
                         {
-                        errorText = BDOSResources.getTranslate("ItemCode") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty");
-                        break;
-                    }
+                            errorText = BDOSResources.getTranslate("ItemCode") + " " +
+                                        BDOSResources.getTranslate("YouCantLeaveEmpty");
+                            break;
+                        }
                     }
                     else
                     {
-                    query = @"SELECT * 
+                        query = @"SELECT * 
                                     FROM ""@BDOSFASTR1""
                                     INNER JOIN ""@BDOSFASTRD"" ON ""@BDOSFASTR1"".""DocEntry"" = ""@BDOSFASTRD"".""DocEntry""
 
                                     WHERE ""@BDOSFASTRD"".""Canceled"" = 'N' AND 
 	                                        ""@BDOSFASTR1"".""U_ItemCode"" = N'" + itemCode +
-                                                @"' AND ""@BDOSFASTRD"".""U_DocDate"" >= '" + docDate.ToString("yyyyMMdd") + "'";
+                                @"' AND ""@BDOSFASTRD"".""U_DocDate"" >= '" + docDate.ToString("yyyyMMdd") + "'";
 
-                    oRecordSet.DoQuery(query);
+                        oRecordSet.DoQuery(query);
 
-                    if (!oRecordSet.EoF)
-                    {
-                            errorText = BDOSResources.getTranslate("TransferDocumentAlreadyExistsForAsset") + " '" + itemCode + "' ";
+                        if (!oRecordSet.EoF)
+                        {
+                            errorText = BDOSResources.getTranslate("TransferDocumentAlreadyExistsForAsset") + " '" +
+                                        itemCode + "' ";
                             break;
                         }
+
+                        var queryCapDate = new StringBuilder();
+                        queryCapDate.Append("SELECT \"ItemCode\" \n");
+                        queryCapDate.Append("FROM \"OITM\" \n");
+                        queryCapDate.Append("WHERE \"CapDate\" > '" + strDocDate + "' \n");
+                        queryCapDate.Append("    AND  \"ItemCode\" = '" + itemCode + "'");
+
+                        oRecordSet.DoQuery(queryCapDate.ToString());
+                        if (!oRecordSet.EoF)
+                        {
+                            errorText = BDOSResources.getTranslate("CapDateError") + " '" +
+                                        itemCode + "' ";
+                            break;
+                        }
+
                     }
+
                 }
 
                 oMatrix.LoadFromDataSource();
@@ -3411,8 +3457,7 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 System.Runtime.InteropServices.Marshal.ReleaseComObject(oRecordSet);
-                oRecordSet = null;
-
+                
                 oForm.Freeze(false);
             }
         }

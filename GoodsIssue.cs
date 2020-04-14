@@ -1139,16 +1139,16 @@ namespace BDO_Localisation_AddOn
                         }
 
                         //ძირითადი საშუალებების შემოწმება
-                        if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
+                        if (BatchNumberSelection.SelectedBatches != null)
                         {
                             bool rejectionAsset = false;
-                            CommonFunctions.blockAssetInvoice(oForm, "OIGE", "IGE1", "", out rejectionAsset);
+                            CommonFunctions.blockAssetInvoice(oForm, "OIGE", out rejectionAsset);
                             if (rejectionAsset)
                             {
                                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
                                 BubbleEvent = false;
                             }
-                        } 
+                        }
 
                         if (ProfitTaxTypeIsSharing == true)
                         {

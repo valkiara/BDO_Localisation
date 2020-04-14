@@ -341,7 +341,7 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Blob oBlob = (SAPbobsCOM.Blob)oCompanyService.GetDataInterface(SAPbobsCOM.CompanyServiceDataInterfaces.csdiBlob);
 
             // Put the rpt file into buffer 
-            FileStream oFile = new FileStream(rptFilePath, System.IO.FileMode.Open);
+            FileStream oFile = new FileStream(rptFilePath, System.IO.FileMode.Open, FileAccess.Read);
             int fileSize = (int)oFile.Length;
             byte[] buf = new byte[fileSize];
             oFile.Read(buf, 0, fileSize);

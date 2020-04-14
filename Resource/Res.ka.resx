@@ -3490,4 +3490,16 @@
   <data name="PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
     <value>ყურადღება მიაქციეთ ბოლო არსებული ცვეთის დარიცხვის დოკუმენტის თარიღს</value>
   </data>
+  <data name="Discount" xml:space="preserve">
+    <value>ფასდაკლება</value>
+  </data>
+  <data name="DiscountUse" xml:space="preserve">
+    <value>ფასდაკლების გამოყენება</value>
+  </data>
+  <data name="CapDateError" xml:space="preserve">
+    <value>ამ თარიღში ექსპლუატაციაში არ არის  ძ.ს - </value>
+  </data>
+  <data name="DepreciationIsAccrued" xml:space="preserve">
+    <value>ცვეთა დარიცხულია</value>
+  </data>
 </root>

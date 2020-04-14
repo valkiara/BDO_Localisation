@@ -335,10 +335,6 @@ namespace BDO_Localisation_AddOn
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
-                SAPbouiCOM.Form oFormApInv = Program.uiApp.Forms.GetForm("141", 1);
-                SAPbouiCOM.DBDataSources docDBSources = oFormApInv.DataSources.DBDataSources;
-                SAPbouiCOM.Matrix oMatrix = oFormApInv.Items.Item("39").Specific;
-                string wtCode = docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim(); //on ap invoice
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 SAPbouiCOM.Matrix oMatrixWtax = oForm.Items.Item("6").Specific;
                 string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value; //default

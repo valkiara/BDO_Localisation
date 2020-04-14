@@ -37,6 +37,8 @@ namespace BDO_Localisation_AddOn
 
             APCreditMemo.createUserFields(out errorText);
 
+            APCorrectionInvoice.createUserFields(out errorText);
+
             VatGroup.createUserFields(out errorText);
 
             WithholdingTax.createUserFields(out errorText);

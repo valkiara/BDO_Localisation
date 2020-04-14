@@ -3493,4 +3493,16 @@
   <data name="PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
     <value>Pay attention to the date of last existing depreciation accrual document</value>
   </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+  <data name="DiscountUse" xml:space="preserve">
+    <value>Using Discount</value>
+  </data>
+  <data name="CapDateError" xml:space="preserve">
+    <value>For This Date The Fixed Asset Is Not In Exploitation. Fixed Asset Code -</value>
+  </data>
+  <data name="DepreciationIsAccrued" xml:space="preserve">
+    <value>Depreciation is accrued</value>
+  </data>
 </root>

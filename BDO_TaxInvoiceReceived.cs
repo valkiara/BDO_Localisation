@@ -4949,7 +4949,7 @@ namespace BDO_Localisation_AddOn
                                 SUM(""BDO_TXR5"".""U_drg_amount"") AS ""closedVat"",
 	                                ""BDO_TXR5"".""DocEntry""
 	                                 FROM ""@BDO_TXR5"" AS ""BDO_TXR5""
-	                                 GROUP BY ""BDO_TXR5"".""DocEntry""
+                                     GROUP BY ""BDO_TXR5"".""DocEntry""
 	                                ) AS ""closedVatAmounts""
 	                                ON ""closedVatAmounts"".""DocEntry"" = ""BDO_TAXR"".""DocEntry""  
 
@@ -5705,10 +5705,39 @@ namespace BDO_Localisation_AddOn
             try
             {
                 JournalEntry.cancellation(oForm, docEntry, "UDO_F_BDO_TAXR_D", out errorText);
+
+                if (errorText == null)
+                {
+
+                    SAPbobsCOM.Recordset oRecordSet =
+                        (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                    string query = @"DELETE
+                        FROM ""@BDO_TXR5"" 
+                        WHERE ""@BDO_TXR5"".""U_tax_invoice"" = '" + docEntry + @"'";
+
+                    oRecordSet.DoQuery(query);
+
+                    //query = @"DELETE
+                    //    FROM ""@BDO_TXR4"" 
+                    //    WHERE ""@BDO_TXR4"".""DocEntry"" = '" + docEntry + @"'";
+
+                    //oRecordSet.DoQuery(query);
+                }
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                int errCode;
+                string errMsg;
+
+                Program.oCompany.GetLastError(out errCode, out errMsg);
+                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " +
+                            BDOSResources.getTranslate("Code") + " : " + errCode + "! " +
+                            BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+            }
+            finally
+            {
+                GC.Collect();
             }
         }
 
@@ -6348,7 +6377,7 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                if (invStatus == "confirmed" || (invStatus == "corrected" && !corrInv) || invStatus == "correctionConfirmed")
+                if (invStatus == "confirmed" || (invStatus == "corrected" && !corrInv) || invStatus == "correctionConfirmed" || invStatus=="paper")
                 {
                     if (taxDateFromTaxJournal.HasValue)
                     {
@@ -7052,7 +7081,7 @@ namespace BDO_Localisation_AddOn
                 else
                 {
                     DateTime reg_dt = Convert.ToDateTime(responseDictionary["reg_dt"]);
-                    int f_number = Convert.ToInt32(responseDictionary["f_number"]);
+                    string f_number = responseDictionary["f_number"] == null ? "" : responseDictionary["f_number"].ToString();
                     string f_series = responseDictionary["f_series"] == null ? "" : responseDictionary["f_series"].ToString();
                     int statusRS = Convert.ToInt32(responseDictionary["status"]);
                     string seq_num_b = responseDictionary["seq_num_b"] == null ? "" : responseDictionary["seq_num_b"].ToString();
@@ -7073,7 +7102,7 @@ namespace BDO_Localisation_AddOn
                     oGeneralData.SetProperty("U_status", status);
                     oGeneralData.SetProperty("U_opDate", operation_dt);
                     oGeneralData.SetProperty("U_recvDate", reg_dt);
-                    oGeneralData.SetProperty("U_number", f_number == -1 ? "" : f_number.ToString());
+                    oGeneralData.SetProperty("U_number", f_number);
                     oGeneralData.SetProperty("U_series", f_series);
                     oGeneralData.SetProperty("U_declNumber", seq_num_b);
                     //oGeneralData.SetProperty("U_corrType", k_type == -1 ? "-1" : k_type.ToString());

@@ -1301,7 +1301,6 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
                 string wtCode = docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim();
 
-
                 bool physicalEntityTax = (docDBSources.Item("OCRD").GetValue("WTLiable", 0).Trim() == "Y" &&
                                             getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
 
@@ -1348,9 +1347,6 @@ namespace BDO_Localisation_AddOn
                 }
 
                 SAPbouiCOM.Matrix oMatrixWtax = oFormWtax.Items.Item("6").Specific;
-
-                string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value;
-
                 SAPbouiCOM.DBDataSource DBDataSourceTable = docDBSources.Item(tableDBSourcesName);
 
                 decimal totalTaxes = 0;
@@ -1370,9 +1366,7 @@ namespace BDO_Localisation_AddOn
                     GrossAmount = 0;
                     GrossAmountFC = 0;
 
-                    GrossAmount = Convert.ToDecimal(getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
-
-                    if (physicalEntityTax && DBDataSourceTable.GetValue("WtLiable", row).Trim() == "Y" && WTCode == wtCode)
+                    if (physicalEntityTax && DBDataSourceTable.GetValue("WtLiable", row).Trim() == "Y")
                     {
                         GrossAmount = Convert.ToDecimal(getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
 
@@ -1392,12 +1386,6 @@ namespace BDO_Localisation_AddOn
                             totalTaxes = totalTaxes + PensPhAm + WhtAmt;
                         }
                     }
-                    else
-                    {
-                        PensPhAm = 0;
-                        WhtAmt = GrossAmount * 20 / 100;
-                        PensCoAm = 0;
-                    }
 
                     int rowNumber = row + 1;//Convert.ToInt32(DBDataSourceTable.GetValue("LineNum", row));
 
@@ -1406,21 +1394,13 @@ namespace BDO_Localisation_AddOn
                     oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensCoAm);
                 }
 
-                if (objType != "204" && WTCode == wtCode) //A/P Reserve Invoice, A/P Invoice, A/P Credit Memo
+                if (objType != "204") //A/P Reserve Invoice, A/P Invoice, A/P Credit Memo
                 {
                     decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                     PensPhAm = roundAmountByGeneralSettings(taxableAmt * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
                     WhtAmt = roundAmountByGeneralSettings((taxableAmt - PensPhAm) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
                     totalTaxes = PensPhAm + WhtAmt;
                 }
-                if (objType != "204" && WTCode != wtCode)
-                {
-                    decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
-                    WhtAmt = taxableAmt * 20 / 100;
-                    totalTaxes = WhtAmt;
-                }
-
-                
 
                 if (physicalEntityTax)
                 {
@@ -1449,48 +1429,69 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void blockAssetInvoice(SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, string whsFieldName, out bool rejection)
+        public static void blockAssetInvoice(SAPbouiCOM.Form oForm, string oDBDataSourceName, out bool rejection)
         {
             rejection = false;
-            //--------------------------------------------------> 1434 task-ის ფარგლებში ჩაკომენტარდა <--------------------------------------------------
 
-            //SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(docDBSourcesName);
-            //SAPbouiCOM.DBDataSource DocDBSourceTable = oForm.DataSources.DBDataSources.Item(tableDBSourcesName);
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            try
+            {
+                if (BatchNumberSelection.SelectedBatches.Rows.Count > 0)
+                {
+                    SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item(oDBDataSourceName);
 
+                    SAPbobsCOM.SBObob objBridge = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                    DateTime docDate = objBridge.Format_StringToDate(oDBDataSource.GetValue("DocDaTe", 0)).Fields.Item(0).Value;
+                    docDate = new DateTime(docDate.Year, docDate.Month, 1).AddMonths(1).AddDays(-1);
+                    string docDateStr = objBridge.Format_DateToString(docDate).Fields.Item(0).Value;
+                    Marshal.FinalReleaseComObject(objBridge);
 
-            //DateTime DocDate = DateTime.ParseExact(DocDBSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
-            //DocDate = new DateTime(DocDate.Year, DocDate.Month, 1);
-            //DocDate = DocDate.AddMonths(1).AddDays(-1);
+                    StringBuilder dummyTable = new StringBuilder();
+                    foreach (DataRow dataRow in BatchNumberSelection.SelectedBatches.Select())
+                    {
+                        dummyTable.AppendLine($"SELECT '{dataRow["ItemCode"]}' AS \"ItemCode\", '{dataRow["DistNumber"]}' AS \"DistNumber\" ");
+                        if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
+                            dummyTable.Append(" FROM DUMMY ");
+                        if (BatchNumberSelection.SelectedBatches.Rows.IndexOf(dataRow) != (BatchNumberSelection.SelectedBatches.Rows.Count - 1))
+                            dummyTable.AppendLine(" UNION ALL ");
+                    }
 
-            //string ItemCodes = "";
+                    StringBuilder query = new StringBuilder();
+                    query.Append("SELECT T0.\"DocEntry\" AS \"DepreciationDocEntry\", \n");
+                    query.Append("       T1.\"U_Project\", \n");
+                    query.Append("       T1.\"U_DistNumber\", \n");
+                    query.Append("       T1.\"U_ItemCode\", \n");
+                    query.Append("       T1.\"U_DeprAmt\" \n");
+                    query.Append("FROM   \"@BDOSDEPAC1\" T1 \n");
+                    query.Append("       INNER JOIN \"@BDOSDEPACR\" T0 \n");
+                    query.Append("               ON T1.\"DocEntry\" = T0.\"DocEntry\" \n");
+                    query.Append($"      INNER JOIN ({dummyTable}) ITEMS \n");
+                    query.Append("               ON T1.\"U_ItemCode\" = ITEMS.\"ItemCode\" AND T1.\"U_DistNumber\" = ITEMS.\"DistNumber\" \n");
+                    query.Append("WHERE  T0.\"Canceled\" = 'N' \n");
+                    query.Append($"       AND T0.\"U_AccrMnth\" = '{docDateStr}'");
 
-            //for (int i = 0; i < DocDBSourceTable.Size; i++)
-            //{
-            //    ItemCodes = ItemCodes + "'" + DocDBSourceTable.GetValue("ItemCode", i).ToString() + "'";
-            //    ItemCodes = ItemCodes + (i == DocDBSourceTable.Size - 1 ? "" : ",");
-            //}
+                    oRecordSet.DoQuery(query.ToString());
+                    while (!oRecordSet.EoF)
+                    {
+                        rejection = true;
+                        string ItemCode = oRecordSet.Fields.Item("U_ItemCode").Value;
+                        string distNumber = oRecordSet.Fields.Item("U_DistNumber").Value;
 
-
-            //string query = BDOSDepreciationAccrualWizard.BatchDepreciaionQuery(DocDate, ItemCodes, "", "", false);
-            //SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
-
-            //oRecordSet.DoQuery(query);
-            //while (!oRecordSet.EoF)
-            //{
-            //    string ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
-            //    string DistNumber = oRecordSet.Fields.Item("DistNumber").Value;
-
-            //    decimal futureDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("FutureDeprAmt").Value, CultureInfo.InvariantCulture);
-            //    decimal CurrDeprAmt = Convert.ToDecimal(oRecordSet.Fields.Item("CurrDeprAmt").Value, CultureInfo.InvariantCulture);
-            //    if (CurrDeprAmt > 0 || futureDeprAmt > 0)
-            //    {
-            //        rejection = true;
-            //        Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem") + " " + ItemCode + ": " + DistNumber);
-            //    }
-
-            //    oRecordSet.MoveNext();
-            //}
+                        Program.uiApp.StatusBar.SetSystemMessage($"{BDOSResources.getTranslate("DepreciationIsAccrued")}", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error, "", "", $"{BDOSResources.getTranslate("ItemCode")}: {ItemCode}, {BDOSResources.getTranslate("DistNumber")}: {distNumber}");
+                        oRecordSet.MoveNext();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                rejection = true;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                BatchNumberSelection.SelectedBatches = null;
+                Marshal.FinalReleaseComObject(oRecordSet);
+            }
         }
 
         public static void blockNegativeStockByDocDate(SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, string whsFieldName, out bool rejection)
