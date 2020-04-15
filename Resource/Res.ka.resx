@@ -3505,4 +3505,7 @@
   <data name="CapDateError" xml:space="preserve">
     <value>ამ თარიღში ექსპლუატაციაში არ არის  ძ.ს - </value>
   </data>
+  <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
+    <value>დოკუმენტში არსებული პროდუქტების გადაფასება მოხდება გადაფასების საწყობზე.გსურთ დოკუმენტის გაფორმება?</value>
+  </data>
 </root>

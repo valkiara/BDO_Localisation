@@ -137,7 +137,16 @@ namespace BDO_Localisation_AddOn
 
                 oRecordSet.DoQuery(queryStockDoesNotExist);
 
+
                 SAPbouiCOM.ComboBox oCombobox = (SAPbouiCOM.ComboBox)oForm.Items.Item("1003").Specific;
+                //oForm.Items.Item("1003").Specific.Value = Program.oCompany.UserName;
+                oForm.Items.Item("1003").Click();
+                oForm.Items.Item("1003").Enabled = true;
+
+                //oCombobox.Item.Enabled = true;
+                oCombobox.Select("M");
+
+                //SAPbouiCOM.ComboBox oCombobox = (SAPbouiCOM.ComboBox)oForm.Items.Item("1003").Specific;
                 //oCombobox.Item.Specific.Select("M", SAPbouiCOM.BoSearchKey.psk_ByValue);
                 //oCombobox.Select("M", SAPbouiCOM.BoSearchKey.psk_ByValue);
                 //oCombobox.Item.Specific.Select("M");
@@ -148,11 +157,29 @@ namespace BDO_Localisation_AddOn
                 while (!oRecordSet.EoF)
                 {
                     itemCode = oRecordSet.Fields.Item("ItemCode").Value;
-                    oMatrix.Columns.Item("6").Cells.Item(1).Specific.Value = itemCode;
+                    //oMatrix.Columns.Item("6").Cells.Item(1).Specific.Value = itemCode;
                     //oMatrix.Columns.Item("1").Cells.Item(1).Specific.Value = oRecordSet.Fields.Item("Quantity").Value;
-                    oMatrix.Columns.Item("4").Cells.Item(1).Specific.Value = oRecordSet.Fields.Item("WhsCode").Value;
+                    //oMatrix.Columns.Item("4").Cells.Item(1).Specific.Value = oRecordSet.Fields.Item("WhsCode").Value;
 
-                    double allocCostVal = lastAllCostVal(itemCode, docEntLC);
+
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //es mgoni sul debit-shi tardeba da credit mkidia marto debit unda amovigo
+                    SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
+                    SAPbouiCOM.Matrix oMatrixLC = oFormLC.Items.Item("51").Specific;
+
+                    int rowCount = oMatrixLC.RowCount;
+                    string itemName = "";
+                    string debit = "";
+                    string credit = "";
+                    for (int rowMatrix = 1; row <= rowCount; row++)
+                    {
+                        itemName = oMatrixLC.Columns.Item("1").Cells.Item(rowMatrix).Specific.Value;
+                        LandedCosts.TtlCostLCFromJrnEntry(docEntLC, itemName, out debit, out credit);
+                    }
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                    double allocCostVal = Convert.ToDouble(debit);
+                        //lastAllCostVal(itemCode, docEntLC);
                     string query = "select \"TtlCostLC\", \"ItemCode\" " + "\n"
                      + "from IPF1 " + "\n"
                      + "where \"DocEntry\" = " + "\n"

@@ -3535,4 +3535,7 @@
   <data name="CapDateError" xml:space="preserve">
     <value>For This Date The Fixed Asset Is Not In Exploitation. Fixed Asset Code - </value>
   </data>
+  <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
+    <value>Stock Will be Revaluated on Default Revaluation Warehouse.Continue?</value>
+  </data>
 </root>

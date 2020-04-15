@@ -1116,10 +1116,10 @@ namespace BDO_Localisation_AddOn
                         string docEntry = "";
                         if (!stockExists(docEntLC))
                         {
-                            //BDOSResources.getTranslate("AfterChangeDateFormWillCloseReopen")
-                            int answer = Program.uiApp.MessageBox("დოკუმენტში არსებული პროდუქტების გადაფასება მოხდება გადაფასების საწყობზე გსურთ დოკუმენტის გაფოემება", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                            int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                             if (answer == 1)
                             {
+                                
                                 StockRevaluation.fillStockRevaluation(docEntLC, out docEntry);
                                 formDataLoad(oForm);
                                 if (docEntry != "")
@@ -1181,22 +1181,35 @@ namespace BDO_Localisation_AddOn
         }
 
         //im Landed cost-is DocNum da ItemCode unda gadavce romlidanac gaketda stock da daabrunebs mag LC-s stock account-ze ramdenia
-        public static void TtlCostLCFromJrnEntry(string docNum, string itemCode)
+        public static void TtlCostLCFromJrnEntry(string docNum, string itemName, out string debit, out string credit)
         {
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            debit = "";
+            credit = "";
 
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            /*
             string query = "select \"Debit\", \"Credit\" from JDT1 " + "\n"
             + "where \"BaseRef\" = '" + docNum + "' and \"TransType\" = '69' and \"Account\" = " + "\n"
             + "(select \"BalInvntAc\" from OITB " + "\n"
             + "where \"ItmsGrpCod\" = " + "\n"
             + "(select \"ItmsGrpCod\" from \"OITM\" " + "\n"
             + "where \"ItemCode\" = '" + itemCode + "'))";
+            */
+
+            string query = "select \"Debit\", \"Credit\" from JDT1 " + "\n"
+            + "where \"BaseRef\" = ( " + "\n"
+            + "select \"DocNum\" from \"OIPF\" " + "\n"
+            + "where \"DocEntry\" = '260' " + "\n"
+            + ") and \"TransType\" = '69' and \"Account\" = " + "\n"
+            + "(select \"OITB\".\"BalInvntAc\" from \"OITB\" " + "\n"
+            + "join \"OITM\" on \"OITB\".\"ItmsGrpCod\" = \"OITM\".\"ItmsGrpCod\" " + "\n"
+            + "where \"OITM\".\"ItemCode\" = '01 ბათუმი')";
 
             oRecordSet.DoQuery(query);
             if (!oRecordSet.EoF)
             {
-                string Debit =  oRecordSet.Fields.Item("Debit").Value.ToString();
-                string Credit = oRecordSet.Fields.Item("Credit").Value.ToString();
+                debit =  oRecordSet.Fields.Item("Debit").Value.ToString();
+                credit = oRecordSet.Fields.Item("Credit").Value.ToString();
             }
         }
         
