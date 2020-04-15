@@ -327,17 +327,7 @@ namespace BDO_Localisation_AddOn
 
             return PhysicalEntityPensionRates;
         }
-        /*
-        public static void openTaxTableFromAPDocs(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
-        {
-            BubbleEvent = true;
-            string errorText = null;
 
-            if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
-            {
-            }
-        }
-        */
         public static void openTaxTableFromAPDocs(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
@@ -363,7 +353,7 @@ namespace BDO_Localisation_AddOn
 
                 if (!oRecordSet.EoF) WTCodeDesc = oRecordSet.Fields.Item("WTName").Value;
 
-                if (pVal.ItemUID == "1" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & !pVal.BeforeAction)
                 {
                     decimal WhtAmt;
                     if (WTCode != wtCode || WTCodeDesc == "მომსახურება")
@@ -373,6 +363,7 @@ namespace BDO_Localisation_AddOn
                         oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
                         oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = 0;
                         oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = 0;
+                        oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
                     }
                     else
                     {
@@ -381,12 +372,13 @@ namespace BDO_Localisation_AddOn
                         decimal rate = Convert.ToDecimal(oMatrixWtax.Columns.Item("3").Cells.Item(1).Specific.Value);
                         decimal WTax = (taxableAmt - PensPhAm) * rate / 100;
 
+                        oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax + PensPhAm);
                         oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax);
                         oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
                         oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
                     }
                 }
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction)
                 {
                     SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
                     if (DocDBSource.GetValue("DocEntry", 0) == "" && DocDBSource.GetValue("CANCELED", 0) == "N")

@@ -4360,7 +4360,6 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
 
                 string wtCode = oForm.Items.Item("110").Specific.Value.ToString();
-                //oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WtCode", 0);
 
                 bool physicalEntityTax = (oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WTLiable", 0) == "Y" &&
                                 CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
@@ -4471,7 +4470,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                
+
                 SAPbouiCOM.Matrix oMatrix1 = oForm.Items.Item("20").Specific;
                 decimal WhtAmtt = 0;
                 decimal PnPhAmt = 0;
