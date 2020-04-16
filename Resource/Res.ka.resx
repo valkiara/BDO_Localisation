@@ -3502,4 +3502,10 @@
   <data name="DepreciationIsAccrued" xml:space="preserve">
     <value>ცვეთა დარიცხულია</value>
   </data>
+  <data name="CreateAPInvoice" xml:space="preserve">
+    <value>შეიქმნას შესყიდვა</value>
+  </data>
+  <data name="CreateAsDraft" xml:space="preserve">
+    <value>დრაფტის შექმნა</value>
+  </data>
 </root>

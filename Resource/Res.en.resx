@@ -3532,4 +3532,10 @@
   <data name="DepreciationIsAccrued" xml:space="preserve">
     <value>Depreciation is accrued</value>
   </data>
+  <data name="CreateAPInvoice" xml:space="preserve">
+    <value>Create AP Invoice</value>
+  </data>
+  <data name="CreateAsDraft" xml:space="preserve">
+    <value>As Draft</value>
+  </data>
 </root>
