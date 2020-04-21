@@ -698,7 +698,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     JDT1_BDO.Rows.Add();
-
+                    
                     for (int j = 0; j < JDT1.Fields.Count; j++)
                     {
                         if (JDT1.GetValue(j, i) != "")

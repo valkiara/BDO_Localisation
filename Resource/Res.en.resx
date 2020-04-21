@@ -3529,4 +3529,7 @@
   <data name="CapDateError" xml:space="preserve">
     <value>For This Date The Fixed Asset Is Not In Exploitation. Fixed Asset Code - </value>
   </data>
+  <data name="DepreciationIsAccrued" xml:space="preserve">
+    <value>Depreciation is accrued</value>
+  </data>
 </root>
