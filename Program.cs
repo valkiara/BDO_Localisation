@@ -1167,7 +1167,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Profit Tax Accural<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                         {
-                            BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
+                            BDO_ProfitTaxAccrual.formDataLoad(oForm);
                         }
 
                         //----------------------------->A/P Down Payment Request<-----------------------------
@@ -1315,7 +1315,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Profit Tax Accural<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                         {
-                            BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
+                            BDO_ProfitTaxAccrual.formDataLoad(oForm);
                         }
 
                         //----------------------------->Outgoing Payments<-----------------------------

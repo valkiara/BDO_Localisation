@@ -2,14 +2,7 @@
 {
     public class AccountDetails
     {
-        private string _name;
-
-        public string Name
-        {
-            get => _name.Replace("quot;",@"""").Replace("apos; apos;", "''").Replace("apos;", "'");
-            set => _name = value;
-        }
-
+        public string Name { get; set; }
         public string Inn { get; set; }
         public string AccountNumber { get; set; }
         public string BankCode { get; set; }
