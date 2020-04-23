@@ -1134,7 +1134,8 @@ namespace BDO_Localisation_AddOn
             if (pVal.BeforeAction && pVal.MenuUID == "1284")
             {
                 if (oForm.DataSources.DBDataSources.Item("OJDT").GetValue("DataSource", 0) == "O" &&
-                    oForm.DataSources.DBDataSources.Item("OJDT").GetValue("Ref2", 0) != "Reconcilation")
+                    oForm.DataSources.DBDataSources.Item("OJDT").GetValue("Ref2", 0) != "Reconcilation" &&
+                    string.IsNullOrEmpty(oForm.DataSources.DBDataSources.Item("OJDT").GetValue("VatDate", 0)))
                 {
                     BubbleEvent = false;
                     throw new Exception(BDOSResources.getTranslate("YouCantCancelJournalEntry") + "!");
