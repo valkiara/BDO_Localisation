@@ -1114,12 +1114,14 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
                         string docEntLC = DocDBSource.GetValue("DocEntry", 0);
                         string docEntry = "";
-                        if (!stockExists(docEntLC))
+                        
+                        string stockEnabled = CommonFunctions.getOADM("U_BDOSStock").ToString();
+
+                        if (!stockExists(docEntLC) && (stockEnabled == "Y"))//&& oFormGS.Items.Item("Stock").Specific.Checked)
                         {
                             int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                             if (answer == 1)
                             {
-                                
                                 StockRevaluation.fillStockRevaluation(docEntLC, out docEntry);
                                 formDataLoad(oForm);
                                 if (docEntry != "")

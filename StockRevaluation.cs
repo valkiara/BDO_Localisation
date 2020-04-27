@@ -120,10 +120,12 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSetCostVal = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             docEntry = getDocEntry(docEntLC);
+            Program.uiApp.ActivateMenuItem("3086");
 
-            Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_StockRevaluation, "162", docEntry);
+            //SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm("70001", 1);
+            SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+            oForm.Freeze(true);
 
-            SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm("70001", 1);
             SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
 
             try
@@ -136,31 +138,20 @@ namespace BDO_Localisation_AddOn
                   + "where \"DocEntry\" = (select \"DocEntry\" from OIPF where \"DocEntry\" = '" + docEntLC + "')";
 
                 oRecordSet.DoQuery(queryStockDoesNotExist);
+                
+                SAPbouiCOM.ComboBox ocomboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("1003").Specific;
+                ocomboBox.Select("M");
 
-
-                SAPbouiCOM.ComboBox oCombobox = (SAPbouiCOM.ComboBox)oForm.Items.Item("1003").Specific;
-                //oForm.Items.Item("1003").Specific.Value = Program.oCompany.UserName;
-                oForm.Items.Item("1003").Click();
-                oForm.Items.Item("1003").Enabled = true;
-
-                //oCombobox.Item.Enabled = true;
-                oCombobox.Select("M");
-
-                //SAPbouiCOM.ComboBox oCombobox = (SAPbouiCOM.ComboBox)oForm.Items.Item("1003").Specific;
-                //oCombobox.Item.Specific.Select("M", SAPbouiCOM.BoSearchKey.psk_ByValue);
-                //oCombobox.Select("M", SAPbouiCOM.BoSearchKey.psk_ByValue);
-                //oCombobox.Item.Specific.Select("M");
-                //oCombobox.Select("-1");
-
-                int row = 0;
+                int row = 1;
 
                 while (!oRecordSet.EoF)
                 {
                     itemCode = oRecordSet.Fields.Item("ItemCode").Value;
-                    //oMatrix.Columns.Item("6").Cells.Item(1).Specific.Value = itemCode;
-                    //oMatrix.Columns.Item("1").Cells.Item(1).Specific.Value = oRecordSet.Fields.Item("Quantity").Value;
-                    //oMatrix.Columns.Item("4").Cells.Item(1).Specific.Value = oRecordSet.Fields.Item("WhsCode").Value;
-
+                    string whs = CommonFunctions.getOADM("U_StockRevWh").ToString();
+                    oMatrix.Columns.Item("6").Cells.Item(row).Specific.Value = itemCode;
+                    oMatrix.Columns.Item("1").Cells.Item(row).Specific.Value = oRecordSet.Fields.Item("Quantity").Value;
+                    oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = whs;
+                    
 
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     //es mgoni sul debit-shi tardeba da credit mkidia marto debit unda amovigo
@@ -171,14 +162,17 @@ namespace BDO_Localisation_AddOn
                     string itemName = "";
                     string debit = "";
                     string credit = "";
-                    for (int rowMatrix = 1; row <= rowCount; row++)
+                    for (int rowMatrix = 1; rowMatrix <= rowCount; rowMatrix++)
                     {
                         itemName = oMatrixLC.Columns.Item("1").Cells.Item(rowMatrix).Specific.Value;
                         LandedCosts.TtlCostLCFromJrnEntry(docEntLC, itemName, out debit, out credit);
                     }
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                    double allocCostVal = Convert.ToDouble(debit);
+                    double allocCostVal = 0;
+                    if (debit != "")
+                    {
+                        allocCostVal = Convert.ToDouble(debit);
+                    }
                         //lastAllCostVal(itemCode, docEntLC);
                     string query = "select \"TtlCostLC\", \"ItemCode\" " + "\n"
                      + "from IPF1 " + "\n"
@@ -193,12 +187,15 @@ namespace BDO_Localisation_AddOn
                         lastItemCode = oRecordSetCostVal.Fields.Item("ItemCode").Value;
                         if(itemCode == lastItemCode)
                         {
-                            decimal sxvaoba = (decimal)(allCostValByDocEnt - allocCostVal);
-                            //oMatrix.Columns.Item("7").Cells.Item(1).Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(sxvaoba);
+                            double sxvaoba = (allCostValByDocEnt - allocCostVal);
+                            string str = sxvaoba.ToString();
+                            str = str.Replace('.', ',');
+                            oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = str;
                             
                         }
                         oRecordSetCostVal.MoveNext();
                     }
+                    
                     row += 1;
                     oRecordSet.MoveNext();
                 }
@@ -214,7 +211,9 @@ namespace BDO_Localisation_AddOn
                 //Marshal.FinalReleaseComObject(m_MaterialRevLines);
                 Marshal.FinalReleaseComObject(oRecordSetCostVal);
                 Marshal.FinalReleaseComObject(oRecordSet);
+                oForm.Freeze(false);
             }
+            
         }
 
         public static string getDocEntry(string docEntry)
@@ -223,7 +222,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 string query = "select \"DocEntry\" from \"OMRV\" " + "\n"
-            + "where \"U_BsDocEntry\" = '" + docEntry + "'";
+                + "where \"U_BsDocEntry\" = '" + docEntry + "'";
 
                 oRecordSet.DoQuery(query);
                 if (!oRecordSet.EoF)
@@ -247,26 +246,29 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item("LandCostE").Enabled = false;
 
             SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-            string DocEntry = DocDBSource.GetValue("DocEntry", 0);
+            string DocNum = DocDBSource.GetValue("DocNum", 0);
 
             SAPbouiCOM.EditText oEdit = oForm.Items.Item("LandCostE").Specific;
 
-            string docEntry = getBaseDocEntry(DocEntry);
+            string docEntry = getBaseDocEntry(DocNum);
 
             oEdit.Value = docEntry;
             oForm.Update();
         }
 
-        public static string getBaseDocEntry(string DocEntry)
+        public static string getBaseDocEntry(string DocNum)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try
             {
-                if (DocEntry == "") return string.Empty;
+                if (DocNum == "") return string.Empty;
 
-                string query = "select \"DocEntry\" from \"OIPF\" " + "\n"
-                + "where \"DocEntry\" = (select \"U_BsDocEntry\" from OMRV " + "\n"
-                + "where \"DocEntry\" = '" + DocEntry + "')";
+                string query ="select \"DocEntry\" from OIPF " + "\n"
+                + "where \"DocEntry\" = ( " + "\n"
+                + "select \"U_BsDocEntry\" from OMRV " + "\n"
+                + "where \"DocEntry\" = ( " + "\n"
+                + "select \"DocEntry\" from OMRV " + "\n"
+                + "where \"DocNum\" = '" + DocNum + "'))";
 
                 oRecordSet.DoQuery(query);
                 if (!oRecordSet.EoF)
@@ -361,25 +363,60 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.MaterialRevaluation_lines m_MaterialRevLines = m_MaterialRev.Lines;
 
             SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
-            SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+            SAPbouiCOM.DBDataSource DocDBSource = oFormLC.DataSources.DBDataSources.Item(0);
             string docEntLC = DocDBSource.GetValue("DocEntry", 0);
+            
+            string whsCode = CommonFunctions.getOADM("U_StockRevWh").ToString();
 
             try
             {
                 m_MaterialRev.DocDate = DateTime.Now;
                 m_MaterialRev.RevalType = "M";
-                m_MaterialRev.UserFields.Fields.Item("U_BasDocEntr").Value = docEntLC;
+                m_MaterialRev.UserFields.Fields.Item("U_BsDocEntry").Value = docEntLC;
 
                 m_MaterialRevLines.SetCurrentLine(0);
                 string itemCode = oMatrix.Columns.Item("6").Cells.Item(1).Specific.Value;
                 m_MaterialRevLines.Quantity = Convert.ToDouble(oMatrix.Columns.Item("1").Cells.Item(1).Specific.Value);
-                m_MaterialRevLines.WarehouseCode = oMatrix.Columns.Item("4").Cells.Item(1).Specific.Value;
+                m_MaterialRevLines.WarehouseCode = whsCode;
                 m_MaterialRevLines.ItemCode = itemCode;
 
                 string debCred = oMatrix.Columns.Item("7").Cells.Item(1).Specific.Value;
-                m_MaterialRevLines.DebitCredit = Convert.ToDouble(debCred.Substring(0, 4));
-
+                debCred = debCred.Substring(0, debCred.Length - 3);
+                //if (debCred.Contains("."))
+                //{
+                //    debCred = debCred.Replace('.', ',');
+                //}
+                //debCred = getNumber(debCred);
+                //FormsB1.StringToDecimalByGeneralSettingsSeparators(debCred);
+                //double a = Convert.ToDouble(debCred);
+                if (debCred.Contains("."))
+                {
+                    for (int i = debCred.Length; i >= 0; i--)
+                    {
+                        if (debCred.Substring(debCred.Length - 1) != "0" && debCred.Substring(debCred.Length - 1) != ".") break;
+                        if (debCred.Substring(debCred.Length - 1) == "0") debCred = debCred.Substring(0,debCred.Length - 1);
+                        if (debCred.Substring(debCred.Length - 1) == ".")
+                        {
+                            debCred = debCred.Substring(0,debCred.Length - 1);
+                            break;
+                        }
+                    }
+                }
+                if (debCred.Contains(".")) debCred.Replace(".", ",");
+                for(char ch = 'A'; ch<='Z'; ch++)
+                {
+                    if (debCred.Contains(ch))
+                    {
+                        debCred = debCred.Substring(0, debCred.IndexOf(ch)) + debCred.Substring(debCred.IndexOf(ch) + 1);
+                    }
+                }
+                //debCred = "7000,7";
+                m_MaterialRevLines.DebitCredit = Convert.ToDouble(debCred);
+                
+                m_MaterialRev.Add();
                 m_MaterialRevLines.Add();
+                formDataLoad(oForm);
+                LandedCosts.formDataLoad(oFormLC);
             }
             catch (Exception ex)
             {
@@ -390,6 +427,38 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(m_MaterialRev);
                 Marshal.FinalReleaseComObject(m_MaterialRevLines);
             }
+        }
+
+        public static string getNumber(string number)
+        {
+            int maxIndex = number.Length - 1;
+            int indexOfmdzime = 0;
+            int indexOfNumber = 0;
+            if (number.Contains(","))
+            {
+                indexOfmdzime = number.LastIndexOf(',');
+                //return number.Substring(0, index);
+            }
+            for (char ch = '1'; ch<='9'; ch++)
+            {
+                if (number.Contains(ch))
+                {
+                    if(indexOfNumber <= number.LastIndexOf(ch))
+                        indexOfNumber = number.LastIndexOf(ch);
+                }
+            }
+            if(indexOfmdzime > 0 || indexOfNumber > 0)
+            {
+                if (indexOfNumber > indexOfmdzime)
+                {
+                    return number.Substring(0, Math.Max(indexOfNumber, indexOfmdzime)+1);
+                } else
+                {
+                    return number.Substring(0, Math.Max(indexOfNumber, indexOfmdzime));
+                }
+                
+            }
+            return number;
         }
     }
 }

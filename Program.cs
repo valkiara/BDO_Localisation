@@ -1916,6 +1916,11 @@ namespace BDO_Localisation_AddOn
                     ChartOfAccounts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
+                else if (pVal.FormTypeEx == "70001" )
+                {
+                    StockRevaluation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
                 //----------------------------->AP correction invoice <------------------------------
                 else if (pVal.FormTypeEx== "70002" || pVal.FormTypeEx == "0")
                 {
