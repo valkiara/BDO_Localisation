@@ -495,7 +495,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             
-            var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "1" ? "paymentToEmployee" : "";
+            var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "paymentToEmployee" : "";
 
             string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType);
             string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(null, account, startDate, endDate, bankProgram, allDocuments);
@@ -2749,7 +2749,8 @@ namespace BDO_Localisation_AddOn
 
                     listValidValuesDict = new Dictionary<string, string>
                     {
-                        {"1", BDOSResources.getTranslate("Salary")}
+                        {"1", BDOSResources.getTranslate("All")},
+                        {"2", BDOSResources.getTranslate("Salary")}
                     };
 
                     formItems = new Dictionary<string, object>();
