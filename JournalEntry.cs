@@ -393,7 +393,7 @@ namespace BDO_Localisation_AddOn
             formItems = new Dictionary<string, object>();
             itemName = "BDOSAgrNoS"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", left + 18);
+            formItems.Add("Left", left + 20);
             formItems.Add("Width", width);
             formItems.Add("Top", top - height - 1);
             formItems.Add("Height", height);
@@ -419,7 +419,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_BDOSAgrNo");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left + 18);
+            formItems.Add("Left", left + 20);
             formItems.Add("Width", width);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
@@ -449,6 +449,40 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
+
+            #endregion
+
+            #region Use Blanket Agreement Rate Ranges
+
+            formItems = new Dictionary<string, object>();
+            itemName = "UsBlaAgRtS"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OJDT");
+            formItems.Add("Alias", "U_UseBlaAgRt");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 1);
+            formItems.Add("Left", left + width + 20);
+            formItems.Add("Width", 100);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("UseBlAgrRt"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("SetAutoManaged", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            GC.Collect();
+
 
             #endregion
 
