@@ -3550,4 +3550,10 @@
   <data name="Doyouwanttoupdatestatus" xml:space="preserve">
     <value>Do You Want to Update Status?</value>
   </data>
+  <data name="CreateAPInvoice" xml:space="preserve">
+    <value>Create AP Invoice</value>
+  </data>
+  <data name="CreateAsDraft" xml:space="preserve">
+    <value>As Draft</value>
+  </data>
 </root>
