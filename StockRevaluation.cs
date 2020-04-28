@@ -194,7 +194,6 @@ namespace BDO_Localisation_AddOn
                     row += 1;
                     oRecordSet.MoveNext();
                 }
-                //docEntry = getDocEntry(docEntLC);
             }
             catch (Exception ex)
             {
@@ -202,8 +201,6 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                //Marshal.FinalReleaseComObject(m_MaterialRev);
-                //Marshal.FinalReleaseComObject(m_MaterialRevLines);
                 Marshal.FinalReleaseComObject(oRecordSetCostVal);
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oForm.Freeze(false);

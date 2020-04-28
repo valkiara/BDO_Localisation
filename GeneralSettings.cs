@@ -592,7 +592,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_StockRevWh");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
             formItems.Add("Left", left);
             formItems.Add("Width", 100);
             formItems.Add("Top", top);
@@ -602,23 +601,12 @@ namespace BDO_Localisation_AddOn
             formItems.Add("ChooseFromListAlias", "WhsCode");
             formItems.Add("FromPane", pane);
             formItems.Add("ToPane", pane);
-            
-            //formItems.Add("Length", 30);
-            //formItems.Add("Size", 20);
-            
-            //
-
-            //formItems.Add("Editable", true);
-            //formItems.Add("Enabled", true);
-            
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
                 return;
             }
-            //oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
-            //oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 4, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
 
             formItems = new Dictionary<string, object>();
             itemName = "BDOSSRWLB"; //10 characters
@@ -853,16 +841,7 @@ namespace BDO_Localisation_AddOn
                         setValueCFLEvent(oForm, oCFLEvento, out errorText);
                     }
                 }
-            
-
-                    //if (pVal.ItemUID == "1" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
-                    //{
-                    //var w = Program.uiApp.Forms.ActiveForm.TypeEx;
-                    //    string StockWhs = "";
-                    //    StockWhs = oForm.Items.Item("StockRevWh").Specific.Value;
-
-                    //}
-                }
+            }
         }
     }
 }

@@ -689,6 +689,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Caption", caption);
             formItems.Add("TextStyle", 4);
             formItems.Add("FontSize", 10);
+            formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -720,6 +721,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Enabled", false);
             formItems.Add("ChooseFromListUID", uniqueID_WaybillCFL);
             formItems.Add("ChooseFromListAlias", "DocEntry");
+            formItems.Add("Visible", false);
             
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1109,24 +1111,27 @@ namespace BDO_Localisation_AddOn
                 }
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & !pVal.BeforeAction)
                 {
-                    if (pVal.ItemUID == "BDOSStRev")
+                    string stockEnabled = CommonFunctions.getOADM("U_BDOSStock").ToString();
+                    if (stockEnabled == "Y")
                     {
-                        SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                        string docEntLC = DocDBSource.GetValue("DocEntry", 0);
-                        string docEntry = "";
-                        
-                        string stockEnabled = CommonFunctions.getOADM("U_BDOSStock").ToString();
-
-                        if (!stockExists(docEntLC) && (stockEnabled == "Y"))
+                        oForm.Items.Item("BDOSStRev").Visible = true;
+                        oForm.Items.Item("StockRevE").Visible = true;
+                        if (pVal.ItemUID == "BDOSStRev")
                         {
-                            int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-                            if (answer == 1)
+                            SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+                            string docEntLC = DocDBSource.GetValue("DocEntry", 0);
+                            string docEntry = "";
+                            if (!stockExists(docEntLC) && (stockEnabled == "Y"))
                             {
-                                StockRevaluation.fillStockRevaluation(docEntLC, out docEntry);
-                                formDataLoad(oForm);
-                                if (docEntry != "")
+                                int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                if (answer == 1)
                                 {
-                                    Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_StockRevaluation, "162", docEntry);
+                                    StockRevaluation.fillStockRevaluation(docEntLC, out docEntry);
+                                    formDataLoad(oForm);
+                                    if (docEntry != "")
+                                    {
+                                        Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_StockRevaluation, "162", docEntry);
+                                    }
                                 }
                             }
                         }
@@ -1140,12 +1145,20 @@ namespace BDO_Localisation_AddOn
             try
             {
                 oForm.Freeze(true);
+                string stockEnabled = CommonFunctions.getOADM("U_BDOSStock").ToString();
+                if (stockEnabled == "Y")
+                {
+                    oForm.Items.Item("BDOSStRev").Visible = true;
+                    oForm.Items.Item("StockRevE").Visible = true;
+                    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+                    string docEntry = DocDBSource.GetValue("DocEntry", 0);
 
-                SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                string docEntry = DocDBSource.GetValue("DocEntry", 0);
-
-                oForm.Items.Item("StockRevE").Specific.Value = StockRevaluation.getDocEntry(docEntry);
-
+                    oForm.Items.Item("StockRevE").Specific.Value = StockRevaluation.getDocEntry(docEntry);
+                } else
+                {
+                    oForm.Items.Item("BDOSStRev").Visible = false;
+                    oForm.Items.Item("StockRevE").Visible = false;
+                }
                 oForm.Update();
             }
             catch (Exception ex)
