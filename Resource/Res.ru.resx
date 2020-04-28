@@ -3505,4 +3505,19 @@
   <data name="DepreciationIsAccrued" xml:space="preserve">
     <value>Depreciation is accrued</value>
   </data>
+  <data name="Doyouwantaddtothedeclaration" xml:space="preserve">
+    <value>Do You Want to Add to the Declaration?</value>
+  </data>
+  <data name="Doyouwanttoconfirmdocument" xml:space="preserve">
+    <value>Do You Want to Confirm Document?</value>
+  </data>
+  <data name="Doyouwanttodenydocument" xml:space="preserve">
+    <value>Do You Want to Deny Document?</value>
+  </data>
+  <data name="Doyouwanttoupdate" xml:space="preserve">
+    <value>Do You Want to Update?</value>
+  </data>
+  <data name="Doyouwanttoupdatestatus" xml:space="preserve">
+    <value>Do You Want to Update Status?</value>
+  </data>
 </root>
