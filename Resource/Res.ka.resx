@@ -3505,4 +3505,7 @@
   <data name="AccountIsNotCompleted" xml:space="preserve">
     <value>ანგარიში არ არის შევსებული</value>
   </data>
+  <data name="CantChooseBlaAgrForMultiBp" xml:space="preserve">
+    <value>საერთო შეთანხმების არჩევა რამოდენიმე ბიზნეს პარტნიორისთვის შეუძლებელია</value>
+  </data>
 </root>

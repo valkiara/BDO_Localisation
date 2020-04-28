@@ -427,6 +427,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("DisplayDesc", true);
             formItems.Add("ChooseFromListUID", "BlanketAgreement_Cfl");
             formItems.Add("ChooseFromListAlias", "AbsID");
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -701,8 +702,13 @@ namespace BDO_Localisation_AddOn
             oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_BDOSEmpID").DataBind.Alias);
         }
 
-        private static void ChooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.ChooseFromListEvent oCflEventO)
+        private static void ChooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.ChooseFromListEvent oCflEventO, out bool bubbleEvent)
         {
+            bubbleEvent = true;
+
+            var oCflId = oCflEventO.ChooseFromListUID;
+            var oCfl = oForm.ChooseFromLists.Item(oCflId);
+
             if (!pVal.BeforeAction)
             {
                 try
@@ -713,7 +719,7 @@ namespace BDO_Localisation_AddOn
 
                     if (oDataTable == null) return;
 
-                    if (oCflEventO.ChooseFromListUID == "BlanketAgreement_Cfl")
+                    if (oCflId == "BlanketAgreement_Cfl")
                     {
                         string blanketAgreementNumber = Convert.ToString(oDataTable.GetValue("AbsID", 0));
                         LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("BDOSAgrNoE").Specific.Value = blanketAgreementNumber); //ერორს აგდებს, რატო კაცმა არ იცის
@@ -727,6 +733,50 @@ namespace BDO_Localisation_AddOn
                 finally
                 {
                     oForm.Freeze(false);
+                }
+            }
+
+            else
+            {
+                if (oCflId == "BlanketAgreement_Cfl")
+                {
+                    var oMatrix = (SAPbouiCOM.Matrix) oForm.Items.Item("76").Specific;
+                    var bpCode = "";
+                    var bpCount = 0;
+
+                    for (var row = 1; row < oMatrix.RowCount; row++)
+                    {
+                        if (oMatrix.GetCellSpecific("1", row).Value.ToString() != oMatrix.GetCellSpecific("37", row).Value.ToString())
+                        {
+                            bpCode = oMatrix.GetCellSpecific("1", row).Value.ToString();
+                            bpCount++;
+                        }
+                         
+                        if (bpCount >1)
+                        {
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CantChooseBlaAgrForMultiBp"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                            bubbleEvent = false;
+                            return;
+                        }
+                    }
+
+                    var oCons = new SAPbouiCOM.Conditions();
+
+                    if (bpCode.Length != 0)
+                    {
+                        var oCon = oCons.Add();
+                        oCon.Alias = "BpCode";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = bpCode;
+                    }
+                    else
+                    {
+                        var oCon = oCons.Add();
+                        oCon.Alias = "AbsID";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = "";
+                    }
+                    oCfl.SetConditions(oCons);
                 }
             }
         }
@@ -1178,7 +1228,7 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
                     var oCflEventO = (SAPbouiCOM.ChooseFromListEvent)pVal;
-                    ChooseFromList(oForm, pVal, oCflEventO);
+                    ChooseFromList(oForm, pVal, oCflEventO, out BubbleEvent);
                 }
             }
         }

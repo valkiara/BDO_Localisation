@@ -3535,4 +3535,7 @@
   <data name="AccountIsNotCompleted" xml:space="preserve">
     <value>Account is not completed</value>
   </data>
+  <data name="CantChooseBlaAgrForMultiBp" xml:space="preserve">
+    <value>Can't choose Blanket Agreement for multiple Business Partners</value>
+  </data>
 </root>
