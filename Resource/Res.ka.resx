@@ -3502,6 +3502,9 @@
   <data name="DepreciationIsAccrued" xml:space="preserve">
     <value>ცვეთა დარიცხულია</value>
   </data>
+  <data name="AccountIsNotCompleted" xml:space="preserve">
+    <value>ანგარიში არ არის შევსებული</value>
+  </data>
   <data name="CreateAPInvoice" xml:space="preserve">
     <value>შეიქმნას შესყიდვა</value>
   </data>

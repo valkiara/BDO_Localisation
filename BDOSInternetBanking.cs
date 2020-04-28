@@ -1773,7 +1773,7 @@ namespace BDO_Localisation_AddOn
                     {
                         oDataTable.SetValue("PartnerAccountNumber", row, partnerAccountNumber);
                         oDataTable.SetValue("PartnerCurrency", row, (partnerCurrency == "RUR") ? "RUB" : partnerCurrency);
-                        oDataTable.SetValue("PartnerName", row, oStatementDetail[rowIndex].BeneficiaryDetails.Name);
+                        oDataTable.SetValue("PartnerName", row, CommonFunctions.RemoveSymbols(oStatementDetail[rowIndex].BeneficiaryDetails.Name));
                         oDataTable.SetValue("PartnerTaxCode", row, partnerTaxCode);
                         oDataTable.SetValue("PartnerBankCode", row, oStatementDetail[rowIndex].BeneficiaryDetails.BankCode);
                         oDataTable.SetValue("PartnerBank", row, oStatementDetail[rowIndex].BeneficiaryDetails.BankName);
@@ -1782,7 +1782,7 @@ namespace BDO_Localisation_AddOn
                     {
                         oDataTable.SetValue("PartnerAccountNumber", row, partnerAccountNumber);
                         oDataTable.SetValue("PartnerCurrency", row, (partnerCurrency == "RUR") ? "RUB" : partnerCurrency);
-                        oDataTable.SetValue("PartnerName", row, oStatementDetail[rowIndex].SenderDetails.Name);
+                        oDataTable.SetValue("PartnerName", row, CommonFunctions.RemoveSymbols(oStatementDetail[rowIndex].SenderDetails.Name));
                         oDataTable.SetValue("PartnerTaxCode", row, partnerTaxCode);
                         oDataTable.SetValue("PartnerBankCode", row, oStatementDetail[rowIndex].SenderDetails.BankCode);
                         oDataTable.SetValue("PartnerBank", row, oStatementDetail[rowIndex].SenderDetails.BankName);

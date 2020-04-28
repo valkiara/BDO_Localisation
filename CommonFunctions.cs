@@ -1300,7 +1300,7 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
                 string wtCode = docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim();
-                
+
                 bool physicalEntityTax = (docDBSources.Item("OCRD").GetValue("WTLiable", 0).Trim() == "Y" &&
                                             getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
 
@@ -1506,7 +1506,7 @@ namespace BDO_Localisation_AddOn
                 throw new Exception(ex.Message);
             }
             finally
-            {               
+            {
                 Marshal.FinalReleaseComObject(oRecordSet);
             }
         }
@@ -1973,6 +1973,13 @@ namespace BDO_Localisation_AddOn
             {
                 Marshal.FinalReleaseComObject(oRecordset);
             }
+        }
+
+        public static string RemoveSymbols(string text)
+        {
+            if (!string.IsNullOrEmpty(text))
+                return text.Replace("quot;", @"""").Replace("apos; apos;", "''").Replace("apos;", "'");
+            else return "";
         }
     }
 }

@@ -3532,6 +3532,9 @@
   <data name="DepreciationIsAccrued" xml:space="preserve">
     <value>Depreciation is accrued</value>
   </data>
+  <data name="AccountIsNotCompleted" xml:space="preserve">
+    <value>Account is not completed</value>
+  </data>
   <data name="CreateAPInvoice" xml:space="preserve">
     <value>Create AP Invoice</value>
   </data>
