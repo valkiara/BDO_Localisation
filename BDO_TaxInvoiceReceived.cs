@@ -3641,7 +3641,7 @@ namespace BDO_Localisation_AddOn
                                 return;
                             }
                             string statusRS = null;
-
+                            
                             if (selectedOperation == "updateStatus") //სტატუსების განახლება
                             {
                                 int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttoupdatestatus"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
