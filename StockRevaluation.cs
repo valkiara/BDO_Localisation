@@ -121,8 +121,7 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             docEntry = getDocEntry(docEntLC);
             Program.uiApp.ActivateMenuItem("3086");
-
-            //SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm("70001", 1);
+            
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
             oForm.Freeze(true);
 
@@ -152,9 +151,6 @@ namespace BDO_Localisation_AddOn
                     oMatrix.Columns.Item("1").Cells.Item(row).Specific.Value = oRecordSet.Fields.Item("Quantity").Value;
                     oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = whs;
                     
-
-                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    //es mgoni sul debit-shi tardeba da credit mkidia marto debit unda amovigo
                     SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
                     SAPbouiCOM.Matrix oMatrixLC = oFormLC.Items.Item("51").Specific;
 
@@ -167,13 +163,12 @@ namespace BDO_Localisation_AddOn
                         itemName = oMatrixLC.Columns.Item("1").Cells.Item(rowMatrix).Specific.Value;
                         LandedCosts.TtlCostLCFromJrnEntry(docEntLC, itemName, out debit, out credit);
                     }
-                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     double allocCostVal = 0;
                     if (debit != "")
                     {
                         allocCostVal = Convert.ToDouble(debit);
                     }
-                        //lastAllCostVal(itemCode, docEntLC);
+
                     string query = "select \"TtlCostLC\", \"ItemCode\" " + "\n"
                      + "from IPF1 " + "\n"
                      + "where \"DocEntry\" = " + "\n"
@@ -382,13 +377,6 @@ namespace BDO_Localisation_AddOn
 
                 string debCred = oMatrix.Columns.Item("7").Cells.Item(1).Specific.Value;
                 debCred = debCred.Substring(0, debCred.Length - 3);
-                //if (debCred.Contains("."))
-                //{
-                //    debCred = debCred.Replace('.', ',');
-                //}
-                //debCred = getNumber(debCred);
-                //FormsB1.StringToDecimalByGeneralSettingsSeparators(debCred);
-                //double a = Convert.ToDouble(debCred);
                 if (debCred.Contains("."))
                 {
                     for (int i = debCred.Length; i >= 0; i--)
@@ -410,7 +398,6 @@ namespace BDO_Localisation_AddOn
                         debCred = debCred.Substring(0, debCred.IndexOf(ch)) + debCred.Substring(debCred.IndexOf(ch) + 1);
                     }
                 }
-                //debCred = "7000,7";
                 m_MaterialRevLines.DebitCredit = Convert.ToDouble(debCred);
                 
                 m_MaterialRev.Add();
@@ -427,38 +414,6 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(m_MaterialRev);
                 Marshal.FinalReleaseComObject(m_MaterialRevLines);
             }
-        }
-
-        public static string getNumber(string number)
-        {
-            int maxIndex = number.Length - 1;
-            int indexOfmdzime = 0;
-            int indexOfNumber = 0;
-            if (number.Contains(","))
-            {
-                indexOfmdzime = number.LastIndexOf(',');
-                //return number.Substring(0, index);
-            }
-            for (char ch = '1'; ch<='9'; ch++)
-            {
-                if (number.Contains(ch))
-                {
-                    if(indexOfNumber <= number.LastIndexOf(ch))
-                        indexOfNumber = number.LastIndexOf(ch);
-                }
-            }
-            if(indexOfmdzime > 0 || indexOfNumber > 0)
-            {
-                if (indexOfNumber > indexOfmdzime)
-                {
-                    return number.Substring(0, Math.Max(indexOfNumber, indexOfmdzime)+1);
-                } else
-                {
-                    return number.Substring(0, Math.Max(indexOfNumber, indexOfmdzime));
-                }
-                
-            }
-            return number;
         }
     }
 }

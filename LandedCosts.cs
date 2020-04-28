@@ -1117,7 +1117,7 @@ namespace BDO_Localisation_AddOn
                         
                         string stockEnabled = CommonFunctions.getOADM("U_BDOSStock").ToString();
 
-                        if (!stockExists(docEntLC) && (stockEnabled == "Y"))//&& oFormGS.Items.Item("Stock").Specific.Checked)
+                        if (!stockExists(docEntLC) && (stockEnabled == "Y"))
                         {
                             int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                             if (answer == 1)
@@ -1181,23 +1181,14 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSet);
             }
         }
-
-        //im Landed cost-is DocNum da ItemCode unda gadavce romlidanac gaketda stock da daabrunebs mag LC-s stock account-ze ramdenia
+        
         public static void TtlCostLCFromJrnEntry(string docNum, string itemName, out string debit, out string credit)
         {
             debit = "";
             credit = "";
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            /*
-            string query = "select \"Debit\", \"Credit\" from JDT1 " + "\n"
-            + "where \"BaseRef\" = '" + docNum + "' and \"TransType\" = '69' and \"Account\" = " + "\n"
-            + "(select \"BalInvntAc\" from OITB " + "\n"
-            + "where \"ItmsGrpCod\" = " + "\n"
-            + "(select \"ItmsGrpCod\" from \"OITM\" " + "\n"
-            + "where \"ItemCode\" = '" + itemCode + "'))";
-            */
-
+           
             string query = "select \"Debit\", \"Credit\" from JDT1 " + "\n"
             + "where \"BaseRef\" = ( " + "\n"
             + "select \"DocNum\" from \"OIPF\" " + "\n"
