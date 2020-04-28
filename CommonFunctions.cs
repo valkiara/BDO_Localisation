@@ -1768,8 +1768,8 @@ namespace BDO_Localisation_AddOn
                 FROM ""SBOCOMMON"".""SEWH1"" 
                 WHERE ""SEWH1"".""CompDbNam"" = '" + Program.oCompany.CompanyDB + @"' 
                 AND LOCATE(""SEWH1"".""Name"",
-                	 'HR') > 0 
-                AND ""SEWH1"".""Status"" = 'Connected'";
+                	 'HR') > 0 ";
+                //AND ""SEWH1"".""Status"" = 'Connected'";
 
                 oRecordSet.DoQuery(query);
 

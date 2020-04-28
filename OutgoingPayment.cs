@@ -6319,7 +6319,7 @@ namespace BDO_Localisation_AddOn
             return result;
         }
 
-        public static string getQueryForImport(List<int> docEntryList, string account, string startDate, string endDate, string program, bool allDocuments)
+        public static string getQueryForImport(List<int> docEntryList, string account, string startDate, string endDate, string program, bool allDocuments, string docType = "")
         {
             string query = @"SELECT
             ""OVPM"".""DocEntry"" AS ""DocEntry"",
@@ -6436,6 +6436,12 @@ namespace BDO_Localisation_AddOn
             {
                 query = query + @" AND (""OVPM"".""U_status"" = 'readyToLoad' OR ""OVPM"".""U_status"" = 'resend')";
             }
+
+            if (!string.IsNullOrEmpty(docType)) //დოკუმენტის ტიპის მიხედვით ფილტრი
+            {
+                query = query + @" AND (""OVPM"".""U_opType"" = '" + docType + "')";
+            }
+
             if (docEntryList != null && docEntryList.Count > 0) //DocEntry-ის მიხედვით ფილტრი
             {
                 query = query + @" AND ""OVPM"".""DocEntry"" IN (" + string.Join(",", docEntryList) + ")";

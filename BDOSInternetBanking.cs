@@ -389,6 +389,9 @@ namespace BDO_Localisation_AddOn
                     oItem.Visible = false;
                 }
 
+                oForm.Items.Item("DocTypeS").Visible = CommonFunctions.isHRAddOnConnected();
+                oForm.Items.Item("DocTypeCB").Visible = CommonFunctions.isHRAddOnConnected();
+
                 oItem = oForm.Items.Item("rprtCodeS");
                 oItem.Visible = false;
 
@@ -491,8 +494,10 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, true);
                 return;
             }
+            
+            var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "paymentToEmployee" : "";
 
-            string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments);
+            string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType);
             string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(null, account, startDate, endDate, bankProgram, allDocuments);
             try
             {
@@ -2720,6 +2725,62 @@ namespace BDO_Localisation_AddOn
                     {
                         return;
                     }
+
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "DocTypeS"; //10 characters
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    formItems.Add("Left", left_s + 5);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top + height + 1);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("Caption", BDOSResources.getTranslate("DocType"));
+                    formItems.Add("Visible", false);
+                    formItems.Add("LinkTo", "DocTypeCB");
+                    formItems.Add("FromPane", 1);
+                    formItems.Add("ToPane", 1);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+                    listValidValuesDict = new Dictionary<string, string>
+                    {
+                        {"1", BDOSResources.getTranslate("All")},
+                        {"2", BDOSResources.getTranslate("Salary")}
+                    };
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "DocTypeCB"; //10 characters
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 30);
+                    formItems.Add("TableName", "");
+                    formItems.Add("Alias", itemName);
+                    formItems.Add("Bound", true);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    formItems.Add("Left", left_e);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top + height + 1);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("DisplayDesc", true);
+                    formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+                    formItems.Add("ValidValues", listValidValuesDict);
+                    formItems.Add("Visible", false);
+                    formItems.Add("FromPane", 1);
+                    formItems.Add("ToPane", 1);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
 
                     formItems = new Dictionary<string, object>();
                     itemName = "batchNameE"; //10 characters
