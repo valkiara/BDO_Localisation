@@ -155,7 +155,9 @@ namespace BDO_Localisation_AddOn
         public static string GetWhsByAddress(string address)
         {
             string whsCode = null;
-
+            if (address.Contains("'")){
+                address = address.Substring(0, address.IndexOf('\'')) + "''" + address.Substring(address.IndexOf("\'") + 1);
+            }
             SAPbobsCOM.Recordset oRecordSetWhsAddress = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             StringBuilder queryWhsAddress = new StringBuilder();
