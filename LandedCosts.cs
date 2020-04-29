@@ -1177,7 +1177,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 string query = "select \"DocEntry\" from OMRV " + "\n"
-                + "where \"U_BsDocEntry\" = '" + docEntry + "'";
+                + "where \"U_BsDocEntry\" = '" + docNum + "'";
 
                 oRecordSet.DoQuery(query);
 
