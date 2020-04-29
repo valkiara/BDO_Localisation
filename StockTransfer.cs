@@ -430,12 +430,18 @@ namespace BDO_Localisation_AddOn
                 }
 
                 if (BusinessObjectInfo.BeforeAction)
-                {
+                {                   
                     //ძირითადი საშუალებების შემოწმება
-                    bool rejectionAsset = false;
-                    CommonFunctions.blockAssetInvoice(oForm, "OWTR", "WTR1", "", out rejectionAsset);
-                    if (rejectionAsset)
-                        BubbleEvent = false;
+                    if (BatchNumberSelection.SelectedBatches != null)
+                    {
+                        bool rejectionAsset = false;
+                        CommonFunctions.blockAssetInvoice(oForm, "OWTR", out rejectionAsset);
+                        if (rejectionAsset)
+                        {
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
+                            BubbleEvent = false;
+                        }
+                    }
                 }
 
                 if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction)
@@ -459,7 +465,10 @@ namespace BDO_Localisation_AddOn
 
                         //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
                         if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction)
+                        {
                             CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                            BatchNumberSelection.SelectedBatches = null;
+                        }
                         else
                             CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
                     }
@@ -513,20 +522,19 @@ namespace BDO_Localisation_AddOn
             errorText = null;
             BubbleEvent = true;
 
-            //----------------------------->Cancel <-----------------------------
-            SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+            ////----------------------------->Cancel <-----------------------------
+            //SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
 
-            if (pVal.BeforeAction && pVal.MenuUID == "1284")
-            {
-                //ძირითადი საშუალებების შემოწმება
-                bool rejectionAsset = false;
-                CommonFunctions.blockAssetInvoice(oForm, "OWTR", "WTR1", "", out rejectionAsset);
-                if (rejectionAsset)
-                {
-                    BubbleEvent = false;
-                }
-            }
-
+            //if (pVal.BeforeAction && pVal.MenuUID == "1284")
+            //{
+            //    //ძირითადი საშუალებების შემოწმება
+            //    bool rejectionAsset = false;
+            //    CommonFunctions.blockAssetInvoice(oForm, "OWTR", out rejectionAsset);
+            //    if (rejectionAsset)
+            //    {
+            //        BubbleEvent = false;
+            //    }
+            //}
         }
 
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)

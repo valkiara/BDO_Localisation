@@ -1171,7 +1171,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static bool stockExists(string docEntry)
+        public static bool stockExists(string docNum)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try

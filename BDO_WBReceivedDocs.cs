@@ -532,6 +532,57 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static void GetDraftByWB(string wbId, out string docType, out int docEntry, out string errorText)
+        {
+            errorText = null;
+            docType = null;
+            docEntry = 0;
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            try
+            {
+                string query = @"SELECT
+	                                ""DocStatus"",
+	                                ""DocEntry"",
+	                                CASE WHEN ""ObjType"" = '18' THEN 'APInvoiceDraft' WHEN ""ObjType"" = '20' THEN 'GdsRcptDraft' END AS ""Type"",
+	                                ""CANCELED"",
+	                                ""DocNum"",
+	                                ""DocDate"",
+	                                ""DocEntry"" AS ""Entry"" 
+                                FROM ""ODRF"" 
+                                WHERE (""U_BDO_WBID""='" + wbId + @"') 
+                                AND (""CANCELED""='N') 
+                                ORDER BY ""DocDate"",
+	                                 ""Entry"" DESC";
+                oRecordSet.DoQuery(query);
+
+                if (!oRecordSet.EoF)
+                {
+                    docType = oRecordSet.Fields.Item("Type").Value;
+                    docEntry = oRecordSet.Fields.Item("Entry").Value;
+                }
+                else
+                {
+                    docType = "";
+                    docEntry = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                int errCode;
+                string errMsg;
+
+                Program.oCompany.GetLastError(out errCode, out errMsg);
+                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(oRecordSet);
+                GC.Collect();
+            }
+        }
+
         public static void getMemoByWB(  string WBID, out string DocType, out int DocEntry, out string errorText)
         {
             errorText = null;

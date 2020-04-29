@@ -3493,12 +3493,6 @@
   <data name="PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
     <value>Pay attention to the date of last existing depreciation accrual document</value>
   </data>
-  <data name="LandedCost" xml:space="preserve">
-    <value>Landed Cost</value>
-  </data>
-  <data name="StockRevaluation" xml:space="preserve">
-    <value>Stock Revaluation</value>
-  </data>
   <data name="Discount" xml:space="preserve">
     <value>Discount</value>
   </data>
@@ -3507,6 +3501,24 @@
   </data>
   <data name="CapDateError" xml:space="preserve">
     <value>For This Date The Fixed Asset Is Not In Exploitation. Fixed Asset Code -</value>
+  </data>
+  <data name="DepreciationIsAccrued" xml:space="preserve">
+    <value>Depreciation is accrued</value>
+  </data>
+  <data name="Doyouwantaddtothedeclaration" xml:space="preserve">
+    <value>Do You Want to Add to the Declaration?</value>
+  </data>
+  <data name="Doyouwanttoconfirmdocument" xml:space="preserve">
+    <value>Do You Want to Confirm Document?</value>
+  </data>
+  <data name="Doyouwanttodenydocument" xml:space="preserve">
+    <value>Do You Want to Deny Document?</value>
+  </data>
+  <data name="Doyouwanttoupdate" xml:space="preserve">
+    <value>Do You Want to Update?</value>
+  </data>
+  <data name="Doyouwanttoupdatestatus" xml:space="preserve">
+    <value>Do You Want to Update Status?</value>
   </data>
   <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
     <value>Stock Will be Revaluated on Default Revaluation Warehouse.Continue?</value>

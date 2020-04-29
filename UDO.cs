@@ -74,7 +74,7 @@ namespace BDO_Localisation_AddOn
                 BDOSFuelConsumptionAct.registerUDO();
             }
 
-            StockRevaluation.createUserFields(out errorText);
+            //StockRevaluation.createUserFields(out errorText);
 
             BDO_Vehicles.createMasterDataUDO(out errorText);
             if (oUserObjectsMD.GetByKey("UDO_F_BDO_VECL_D") == false)

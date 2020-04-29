@@ -106,7 +106,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> fieldskeysMap;
 
             fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "BsDocEntry");
+            fieldskeysMap.Add("Name", "BasDocEntr");
             fieldskeysMap.Add("TableName", "OMRV");
             fieldskeysMap.Add("Description", "Base Doc Entry");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);

@@ -54,8 +54,9 @@ namespace BDO_Localisation_AddOn
         public static bool localisationAddonLicensed = false;
         public static readonly string ExecutionDateISO = DateTime.UtcNow.ToString("o");
         public static bool selectItemsToCopyOkClick = false;
+        
 
-        static void Main(string[] args)
+    static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -1078,15 +1079,15 @@ namespace BDO_Localisation_AddOn
                         {
                             ARInvoice.formDataLoad(oForm, out errorText);
                         }
-                        if (oForm.TypeEx == "70001")
-                        {
-                            StockRevaluation.formDataLoad(oForm);
-                        }
+                        //if (oForm.TypeEx == "70001")
+                        //{
+                        //    StockRevaluation.formDataLoad(oForm);
+                        //}
 
-                        if (oForm.TypeEx == "992")
-                        {
-                            LandedCosts.formDataLoad(oForm);
-                        }
+                        //if (oForm.TypeEx == "992")
+                        //{
+                        //    LandedCosts.formDataLoad(oForm);
+                        //}
 
                         //----------------------------->Asset Master Data<-----------------------------
                         if (oForm.TypeEx == "1473000075")
@@ -1166,7 +1167,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Profit Tax Accural<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                         {
-                            BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
+                            BDO_ProfitTaxAccrual.formDataLoad(oForm);
                         }
 
                         //----------------------------->A/P Down Payment Request<-----------------------------
@@ -1236,15 +1237,15 @@ namespace BDO_Localisation_AddOn
                             ARInvoice.formDataLoad(oForm, out errorText);
                         }
 
-                        if (oForm.TypeEx == "70001")
-                        {
-                            StockRevaluation.formDataLoad(oForm);
-                        }
+                        //if (oForm.TypeEx == "70001")
+                        //{
+                        //    StockRevaluation.formDataLoad(oForm);
+                        //}
 
-                        if (oForm.TypeEx == "992")
-                        {
-                            LandedCosts.formDataLoad(oForm);
-                        }
+                        //if (oForm.TypeEx == "992")
+                        //{
+                        //    LandedCosts.formDataLoad(oForm);
+                        //}
 
                         //----------------------------->Depreciation Accrual Document<-----------------------------
                         if (oForm.TypeEx == "UDO_FT_UDO_F_BDOSDEPACR_D")
@@ -1314,7 +1315,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Profit Tax Accural<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                         {
-                            BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
+                            BDO_ProfitTaxAccrual.formDataLoad(oForm);
                         }
 
                         //----------------------------->Outgoing Payments<-----------------------------
@@ -1534,10 +1535,10 @@ namespace BDO_Localisation_AddOn
                     ARInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                else if (BusinessObjectInfo.FormTypeEx == "70001")
-                {
-                    StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
-                }
+                //else if (BusinessObjectInfo.FormTypeEx == "70001")
+                //{
+                //    StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                //}
 
                 //----------------------------->Asset Master Data<-----------------------------
                 else if (BusinessObjectInfo.Type == "4" && BusinessObjectInfo.FormTypeEx == "1473000075")
@@ -1586,11 +1587,6 @@ namespace BDO_Localisation_AddOn
                 else if (BusinessObjectInfo.Type == "UDO_F_BDO_WBLD_D")
                 {
                     BDO_Waybills.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
-                }
-
-                else if (BusinessObjectInfo.Type == "70001")
-                {
-                    StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
                 //----------------------------->Tax Invoice Received<-----------------------------
@@ -1944,11 +1940,11 @@ namespace BDO_Localisation_AddOn
                     LandedCosts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                //----------------------------->Stock Revaluation<-----------------------------
-                else if (pVal.FormTypeEx == "70001")
-                {
-                    StockRevaluation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
-                }
+                ////----------------------------->Stock Revaluation<-----------------------------
+                //else if (pVal.FormTypeEx == "70001")
+                //{
+                //    StockRevaluation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                //}
 
                 //----------------------------->TAX Groups<-----------------------------
                 else if (pVal.FormTypeEx == "895")
@@ -2501,6 +2497,12 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "70008" )
                 {
                     ArCorrectionInvoice.UiApp_ItemEvent(ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->Batch Number Selection<-----------------------------
+                else if (pVal.FormTypeEx == "42")
+                {
+                    BatchNumberSelection.UiApp_ItemEvent(ref pVal, out BubbleEvent);
                 }
             }
             catch (Exception ex)

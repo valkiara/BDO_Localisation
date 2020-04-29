@@ -3490,12 +3490,6 @@
   <data name="PayAttentionToTheDateOfLastExistingDepreciationAccrualDocument" xml:space="preserve">
     <value>ყურადღება მიაქციეთ ბოლო არსებული ცვეთის დარიცხვის დოკუმენტის თარიღს</value>
   </data>
-  <data name="LandedCost" xml:space="preserve">
-    <value>დამატებითი ხარჯები</value>
-  </data>
-  <data name="StockRevaluation" xml:space="preserve">
-    <value>მარაგის გადაფასება</value>
-  </data>
   <data name="Discount" xml:space="preserve">
     <value>ფასდაკლება</value>
   </data>
@@ -3504,6 +3498,33 @@
   </data>
   <data name="CapDateError" xml:space="preserve">
     <value>ამ თარიღში ექსპლუატაციაში არ არის  ძ.ს - </value>
+  </data>
+  <data name="DepreciationIsAccrued" xml:space="preserve">
+    <value>ცვეთა დარიცხულია</value>
+  </data>
+  <data name="AccountIsNotCompleted" xml:space="preserve">
+    <value>ანგარიში არ არის შევსებული</value>
+  </data>
+  <data name="Doyouwantaddtothedeclaration" xml:space="preserve">
+    <value>გსურთ თუ არა დეკლარაციაში დამატება?</value>
+  </data>
+  <data name="Doyouwanttoconfirmdocument" xml:space="preserve">
+    <value>გსურთ თუ არა ა/ფ-ს დადასტურება?</value>
+  </data>
+  <data name="Doyouwanttodenydocument" xml:space="preserve">
+    <value>გსურთ თუ არა ა/ფ-ს უარყოფა?</value>
+  </data>
+  <data name="Doyouwanttoupdate" xml:space="preserve">
+    <value>გსურთ თუ არა ა/ფ-ს განახლება?</value>
+  </data>
+  <data name="Doyouwanttoupdatestatus" xml:space="preserve">
+    <value>გსურთ თუ არა ა/ფ-ს სტატუსის განახლება?</value>
+  </data>
+  <data name="CreateAPInvoice" xml:space="preserve">
+    <value>შეიქმნას შესყიდვა</value>
+  </data>
+  <data name="CreateAsDraft" xml:space="preserve">
+    <value>დრაფტის შექმნა</value>
   </data>
   <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
     <value>დოკუმენტში არსებული პროდუქტების გადაფასება მოხდება გადაფასების საწყობზე.გსურთ დოკუმენტის გაფორმება?</value>

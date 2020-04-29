@@ -53,6 +53,17 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "Retirement");
+            fieldskeysMap.Add("TableName", "BDOSDEPACR");
+            fieldskeysMap.Add("Description", "Retirement");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+
             tableName = "BDOSDEPAC1";
             description = "Depreciation Accrual Child1";
 
@@ -121,23 +132,23 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "InvEntry");
-            fieldskeysMap.Add("TableName", "BDOSDEPAC1");
-            fieldskeysMap.Add("Description", "Invoice doc entry");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            fieldskeysMap.Add("EditSize", 150);
+            //fieldskeysMap = new Dictionary<string, object>();
+            //fieldskeysMap.Add("Name", "InvEntry");
+            //fieldskeysMap.Add("TableName", "BDOSDEPAC1");
+            //fieldskeysMap.Add("Description", "Invoice doc entry");
+            //fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            //fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields(fieldskeysMap, out errorText);
+            //UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "InvType");
-            fieldskeysMap.Add("TableName", "BDOSDEPAC1");
-            fieldskeysMap.Add("Description", "Invoice doc type");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            fieldskeysMap.Add("EditSize", 150);
+            //fieldskeysMap = new Dictionary<string, object>();
+            //fieldskeysMap.Add("Name", "InvType");
+            //fieldskeysMap.Add("TableName", "BDOSDEPAC1");
+            //fieldskeysMap.Add("Description", "Invoice doc type");
+            //fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            //fieldskeysMap.Add("EditSize", 150);
 
-            UDO.addUserTableFields(fieldskeysMap, out errorText);
+            //UDO.addUserTableFields(fieldskeysMap, out errorText);
         }
 
         public static void registerUDO(out string errorText)
@@ -531,6 +542,32 @@ namespace BDO_Localisation_AddOn
             top = top + height + 1;
 
             formItems = new Dictionary<string, object>();
+            itemName = "RtrmntCH"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "@BDOSDEPACR");
+            formItems.Add("Alias", "U_Retirement");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("Left", left_e);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("Retirement"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+
+            top = top + height + 1;
+
+            formItems = new Dictionary<string, object>();
             itemName = "No.S"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
             formItems.Add("Left", left_s2);
@@ -863,17 +900,17 @@ namespace BDO_Localisation_AddOn
             oColumn.Editable = false;
             oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_Project");
 
-            oColumn = oColumns.Add("InvEntry", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InvEntry");
-            oColumn.Editable = false;
-            oColumn.Visible = false;
-            oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_InvEntry");
+            //oColumn = oColumns.Add("InvEntry", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            //oColumn.TitleObject.Caption = BDOSResources.getTranslate("InvEntry");
+            //oColumn.Editable = false;
+            //oColumn.Visible = false;
+            //oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_InvEntry");
 
-            oColumn = oColumns.Add("InvType", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InvType");
-            oColumn.Editable = false;
-            oColumn.Visible = false;
-            oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_InvType");
+            //oColumn = oColumns.Add("InvType", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            //oColumn.TitleObject.Caption = BDOSResources.getTranslate("InvType");
+            //oColumn.Editable = false;
+            //oColumn.Visible = false;
+            //oColumn.DataBind.SetBound(true, "@BDOSDEPAC1", "U_InvType");
 
             top = top + oForm.Items.Item("DepAcrMTR").Height + 10;
 
@@ -1100,11 +1137,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static DataTable createAdditionalEntries(SAPbouiCOM.Form oForm, SAPbobsCOM.GeneralData oGeneralData, int docEntry, DateTime DocDate, string EmployeeCode, DataTable WTaxDefinitons, DataTable AccountTable)
+        public static DataTable createAdditionalEntries(SAPbouiCOM.Form oForm, SAPbobsCOM.GeneralData oGeneralData, int docEntry, DateTime DocDate, DataTable AccountTable = null)
         {
             DataTable jeLines = JournalEntry.JournalEntryTable();
             SAPbobsCOM.GeneralDataCollection oChild = null;
             SAPbouiCOM.DBDataSource oDBDataSource = null;
+            string isRetirement;
             if (AccountTable == null)
                 AccountTable = CommonFunctions.GetOACTTable();
 
@@ -1112,11 +1150,13 @@ namespace BDO_Localisation_AddOn
 
             if (oForm == null)
             {
+                isRetirement = oGeneralData.GetProperty("U_Retirement");
                 oChild = oGeneralData.Child("BDOSDEPAC1");
                 jeCount = oChild.Count;
             }
             else
             {
+                isRetirement = oForm.DataSources.DBDataSources.Item("@BDOSDEPACR").GetValue("U_Retirement", 0);
                 oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSDEPAC1");
                 jeCount = oDBDataSource.Size;
             }
@@ -1127,8 +1167,8 @@ namespace BDO_Localisation_AddOn
                 decimal accmDprAmt = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(oDBDataSource, oChild, null, "U_AccmDprAmt", i), CultureInfo.InvariantCulture);
                 string itemCode = ((string)CommonFunctions.getChildOrDbDataSourceValue(oDBDataSource, oChild, null, "U_ItemCode", i)).Trim();
                 string prjCode = ((string)CommonFunctions.getChildOrDbDataSourceValue(oDBDataSource, oChild, null, "U_Project", i)).Trim();
-                string invEntry = ((string)CommonFunctions.getChildOrDbDataSourceValue(oDBDataSource, oChild, null, "U_InvEntry", i)).Trim();
-                string invType = ((string)CommonFunctions.getChildOrDbDataSourceValue(oDBDataSource, oChild, null, "U_InvType", i)).Trim();
+                //string invEntry = ((string)CommonFunctions.getChildOrDbDataSourceValue(oDBDataSource, oChild, null, "U_InvEntry", i)).Trim();
+                //string invType = ((string)CommonFunctions.getChildOrDbDataSourceValue(oDBDataSource, oChild, null, "U_InvType", i)).Trim();
 
                 SAPbobsCOM.Items oItem;
                 oItem = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oItems);
@@ -1143,7 +1183,7 @@ namespace BDO_Localisation_AddOn
                 string SaleCostAc = oItemGroup.CostAccount;
                 JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", ExpDepAccount, AccDepAccount, deprAmt, 0, "", "", "", "", "", "", prjCode, "", "");
 
-                if (!string.IsNullOrEmpty(invEntry))
+                if (isRetirement == "Y")
                 {
                     JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", AccDepAccount, SaleCostAc, accmDprAmt, 0, "", "", "", "", "", "", prjCode, "", "");
                 }
