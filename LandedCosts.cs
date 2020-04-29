@@ -674,80 +674,82 @@ namespace BDO_Localisation_AddOn
             }
 
 
-            //oItem = oForm.Items.Item("BDOSACNumS");
-            //top = oItem.Top + height + 5;
+            oItem = oForm.Items.Item("BDOSACNumS");
+            top = oItem.Top + height + 5;
 
-            //string caption = BDOSResources.getTranslate("StockRevaluation");
-            //formItems = new Dictionary<string, object>();
-            //itemName = "BDOSStRev"; //10 characters
-            //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            //formItems.Add("Left", left_s);
-            //formItems.Add("Width", width_s * 1.5);
-            //formItems.Add("Top", top);
-            //formItems.Add("Height", height);
-            //formItems.Add("UID", itemName);
-            //formItems.Add("Caption", caption);
-            //formItems.Add("TextStyle", 4);
-            //formItems.Add("FontSize", 10);
+            string caption = BDOSResources.getTranslate("StockRevaluation");
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSStRev"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left_s);
+            formItems.Add("Width", width_s * 1.5);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", caption);
+            formItems.Add("TextStyle", 4);
+            formItems.Add("FontSize", 10);
+            formItems.Add("Visible", false);
 
-            //FormsB1.createFormItem(oForm, formItems, out errorText);
-            //if (errorText != null)
-            //{
-            //    return;
-            //}
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
 
-            //bool multiSelection = false;
-            //string objectType = "162"; //Waybill document
-            //string uniqueID_WaybillCFL = "UDO_F_BDO_STRV_D";
-            //FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_WaybillCFL);
+            bool multiSelection = false;
+            string objectType = "162"; //Waybill document
+            string uniqueID_WaybillCFL = "UDO_F_BDO_STRV_D";
+            FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_WaybillCFL);
 
-            //formItems = new Dictionary<string, object>();
-            //itemName = "StockRevE"; //10 characters
-            //formItems.Add("isDataSource", true);
-            //formItems.Add("DataSource", "UserDataSources");
-            //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-            //formItems.Add("Length", 11);
-            //formItems.Add("TableName", "");
-            //formItems.Add("Alias", itemName);
-            //formItems.Add("Bound", true);
-            //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            //formItems.Add("Left", left_e + width_e - 40);
-            //formItems.Add("Width", 40);
-            //formItems.Add("Top", top);
-            //formItems.Add("Height", height);
-            //formItems.Add("UID", itemName);
-            //formItems.Add("AffectsFormMode", false);
-            //formItems.Add("Enabled", false);
-            //formItems.Add("ChooseFromListUID", uniqueID_WaybillCFL);
-            //formItems.Add("ChooseFromListAlias", "DocEntry");
+            formItems = new Dictionary<string, object>();
+            itemName = "StockRevE"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "UserDataSources");
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 11);
+            formItems.Add("TableName", "");
+            formItems.Add("Alias", itemName);
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e + width_e - 40);
+            formItems.Add("Width", 40);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("AffectsFormMode", false);
+            formItems.Add("Enabled", false);
+            formItems.Add("ChooseFromListUID", uniqueID_WaybillCFL);
+            formItems.Add("ChooseFromListAlias", "DocEntry");
+            formItems.Add("Visible", false);
             
-            //FormsB1.createFormItem(oForm, formItems, out errorText);
-            //if (errorText != null)
-            //{
-            //    return;
-            //}
-            //oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+            oForm.Items.Item(itemName).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False);
 
 
-            //formItems = new Dictionary<string, object>();
-            //itemName = "BDO_WblLB"; //10 characters
-            //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
-            //formItems.Add("Left", left_e + width_e - 40 - 20);
-            //formItems.Add("Top", top);
-            //formItems.Add("Height", 13);
-            //formItems.Add("UID", itemName);
-            //formItems.Add("LinkTo", "StockRevE");
-            //formItems.Add("LinkedObjectType", "162");
+            formItems = new Dictionary<string, object>();
+            itemName = "BDO_WblLB"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            formItems.Add("Left", left_e + width_e - 40 - 20);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 13);
+            formItems.Add("UID", itemName);
+            formItems.Add("LinkTo", "StockRevE");
+            formItems.Add("LinkedObjectType", "162");
 
-            //FormsB1.createFormItem(oForm, formItems, out errorText);
-            //if (errorText != null)
-            //{
-            //    return;
-            //}
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
 
-            //oForm.DataSources.UserDataSources.Add("BDO_WblID", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 20);
-            //oForm.DataSources.UserDataSources.Add("BDO_WblNum", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 20);
-            //oForm.DataSources.UserDataSources.Add("BDO_WblSts", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
+            oForm.DataSources.UserDataSources.Add("BDO_WblID", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 20);
+            oForm.DataSources.UserDataSources.Add("BDO_WblNum", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 20);
+            oForm.DataSources.UserDataSources.Add("BDO_WblSts", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
 
             oItem = oForm.Items.Item("68");
             itemName = "BDOSFllAmt";
@@ -947,7 +949,7 @@ namespace BDO_Localisation_AddOn
 
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & !BusinessObjectInfo.BeforeAction)
                 {
-                    //formDataLoad(oForm);
+                    formDataLoad(oForm);
                     setVisibleFormItems(oForm);
                 } 
 
@@ -1107,57 +1109,75 @@ namespace BDO_Localisation_AddOn
                 {
                     setVisibleFormItems(oForm);
                 }
-                //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & !pVal.BeforeAction)
-                //{
-                //    if (pVal.ItemUID == "BDOSStRev")
-                //    {
-                //        SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-                //        string docNum = DocDBSource.GetValue("DocNum", 0);
-                //        string docEntry = "";
-                //        if (!stockExists(docNum))
-                //        {
-                //            StockRevaluation.fillStockRevaluation(docNum, out docEntry);
-                //            formDataLoad(oForm);                       
-                //            if (docEntry != "")
-                //            {
-                //                Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_StockRevaluation, "162", docEntry);
-                //            }
-                //        }
-                //    }
-                //}
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & !pVal.BeforeAction)
+                {
+                    string stockEnabled = CommonFunctions.getOADM("U_BDOSStock").ToString();
+                    if (stockEnabled == "Y")
+                    {
+                        oForm.Items.Item("BDOSStRev").Visible = true;
+                        oForm.Items.Item("StockRevE").Visible = true;
+                        if (pVal.ItemUID == "BDOSStRev")
+                        {
+                            SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+                            string docEntLC = DocDBSource.GetValue("DocEntry", 0);
+                            string docEntry = "";
+                            if (!stockExists(docEntLC) && (stockEnabled == "Y"))
+                            {
+                                int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                if (answer == 1)
+                                {
+                                    StockRevaluation.fillStockRevaluation(docEntLC, out docEntry);
+                                    formDataLoad(oForm);
+                                    if (docEntry != "")
+                                    {
+                                        Program.uiApp.OpenForm(SAPbouiCOM.BoFormObjectEnum.fo_StockRevaluation, "162", docEntry);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        //public static void formDataLoad(SAPbouiCOM.Form oForm)
-        //{
-        //    try
-        //    {
-        //        oForm.Freeze(true);
+        public static void formDataLoad(SAPbouiCOM.Form oForm)
+        {
+            try
+            {
+                oForm.Freeze(true);
+                string stockEnabled = CommonFunctions.getOADM("U_BDOSStock").ToString();
+                if (stockEnabled == "Y")
+                {
+                    oForm.Items.Item("BDOSStRev").Visible = true;
+                    oForm.Items.Item("StockRevE").Visible = true;
+                    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+                    string docEntry = DocDBSource.GetValue("DocEntry", 0);
 
-        //        SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-        //        string docNum = DocDBSource.GetValue("DocNum", 0);
-
-        //        oForm.Items.Item("StockRevE").Specific.Value = StockRevaluation.getDocEntry(docNum);
-
-        //        oForm.Update();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //    finally
-        //    {
-        //        oForm.Freeze(false);
-        //    }
-        //}
+                    oForm.Items.Item("StockRevE").Specific.Value = StockRevaluation.getDocEntry(docEntry);
+                } else
+                {
+                    oForm.Items.Item("BDOSStRev").Visible = false;
+                    oForm.Items.Item("StockRevE").Visible = false;
+                }
+                oForm.Update();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
+        }
 
         public static bool stockExists(string docNum)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try
             {
-                string query = "select \"DocNum\" from OMRV " + "\n"
-                + "where \"U_BaseDocNum\" = '" + docNum + "'";
+                string query = "select \"DocEntry\" from OMRV " + "\n"
+                + "where \"U_BsDocEntry\" = '" + docEntry + "'";
 
                 oRecordSet.DoQuery(query);
 
@@ -1172,6 +1192,30 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 Marshal.FinalReleaseComObject(oRecordSet);
+            }
+        }
+        
+        public static void TtlCostLCFromJrnEntry(string docNum, string itemName, out string debit, out string credit)
+        {
+            debit = "";
+            credit = "";
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+           
+            string query = "select \"Debit\", \"Credit\" from JDT1 " + "\n"
+            + "where \"BaseRef\" = ( " + "\n"
+            + "select \"DocNum\" from \"OIPF\" " + "\n"
+            + "where \"DocEntry\" = '260' " + "\n"
+            + ") and \"TransType\" = '69' and \"Account\" = " + "\n"
+            + "(select \"OITB\".\"BalInvntAc\" from \"OITB\" " + "\n"
+            + "join \"OITM\" on \"OITB\".\"ItmsGrpCod\" = \"OITM\".\"ItmsGrpCod\" " + "\n"
+            + "where \"OITM\".\"ItemCode\" = '01 ბათუმი')";
+
+            oRecordSet.DoQuery(query);
+            if (!oRecordSet.EoF)
+            {
+                debit =  oRecordSet.Fields.Item("Debit").Value.ToString();
+                credit = oRecordSet.Fields.Item("Credit").Value.ToString();
             }
         }
         

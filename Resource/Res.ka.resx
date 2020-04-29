@@ -3526,4 +3526,7 @@
   <data name="CreateAsDraft" xml:space="preserve">
     <value>დრაფტის შექმნა</value>
   </data>
+  <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
+    <value>დოკუმენტში არსებული პროდუქტების გადაფასება მოხდება გადაფასების საწყობზე.გსურთ დოკუმენტის გაფორმება?</value>
+  </data>
 </root>

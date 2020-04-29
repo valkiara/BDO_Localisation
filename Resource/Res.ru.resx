@@ -3520,4 +3520,7 @@
   <data name="Doyouwanttoupdatestatus" xml:space="preserve">
     <value>Do You Want to Update Status?</value>
   </data>
+  <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
+    <value>Stock Will be Revaluated on Default Revaluation Warehouse.Continue?</value>
+  </data>
 </root>
