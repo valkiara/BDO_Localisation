@@ -3538,4 +3538,7 @@
   <data name="CantChooseBlaAgrForMultiBp" xml:space="preserve">
     <value>Can't choose Blanket Agreement for multiple Business Partners</value>
   </data>
+  <data name="CantChooseMultiBp" xml:space="preserve">
+    <value>Can't choose different BPs for one Blanket Agreement</value>
+  </data>
 </root>

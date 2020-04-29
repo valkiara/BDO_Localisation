@@ -7,6 +7,7 @@ using System.Threading;
 using System.Data;
 using System.Globalization;
 using System.Xml;
+using DataTable = System.Data.DataTable;
 
 
 namespace BDO_Localisation_AddOn
@@ -740,24 +741,11 @@ namespace BDO_Localisation_AddOn
             {
                 if (oCflId == "BlanketAgreement_Cfl")
                 {
-                    var oMatrix = (SAPbouiCOM.Matrix) oForm.Items.Item("76").Specific;
-                    var bpCode = "";
-                    var bpCount = 0;
-
-                    for (var row = 1; row < oMatrix.RowCount; row++)
+                    if (IsMultiBp(oForm, out var bpCode))
                     {
-                        if (oMatrix.GetCellSpecific("1", row).Value.ToString() != oMatrix.GetCellSpecific("37", row).Value.ToString())
-                        {
-                            bpCode = oMatrix.GetCellSpecific("1", row).Value.ToString();
-                            bpCount++;
-                        }
-                         
-                        if (bpCount >1)
-                        {
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CantChooseBlaAgrForMultiBp"), SAPbouiCOM.BoMessageTime.bmt_Short);
-                            bubbleEvent = false;
-                            return;
-                        }
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CantChooseBlaAgrForMultiBp"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                        bubbleEvent = false;
+                        return;
                     }
 
                     var oCons = new SAPbouiCOM.Conditions();
@@ -1169,6 +1157,10 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
                     createFormItems(oForm);
+
+                    oForm.Items.Item("BDOSAgrNoE").Enabled = false;
+                    oForm.Items.Item("UsBlaAgRtS").Enabled = false;
+
                     Program.FORM_LOAD_FOR_VISIBLE = true;
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
@@ -1229,6 +1221,77 @@ namespace BDO_Localisation_AddOn
                 {
                     var oCflEventO = (SAPbouiCOM.ChooseFromListEvent)pVal;
                     ChooseFromList(oForm, pVal, oCflEventO, out BubbleEvent);
+                }
+
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE && !pVal.BeforeAction)
+                {
+                    if (pVal.ItemUID == "BDOSAgrNoE")
+                    {
+                        try
+                        {
+                            oForm.Freeze(true);
+
+                            if (oForm.Items.Item("BDOSAgrNoE").Specific.Value.Length != 0)
+                            {
+                                oForm.Items.Item("UsBlaAgRtS").Enabled = true;
+                            }
+                            else
+                            {
+                                var currentEventFilters = Program.uiApp.GetFilter();
+                                Program.uiApp.SetFilter(); //ივენთებს ჩახსნის რომ სხვა აითემზე დაჭერისას არ დააუსასრულლუპოს
+
+                                oForm.Items.Item("UsBlaAgRtS").Specific.Checked = false;
+                                oForm.Items.Item("7").Click();
+
+                                Program.uiApp.SetFilter(currentEventFilters); //აქ ვაბრუნებ ისევ
+
+                                oForm.Items.Item("UsBlaAgRtS").Enabled = false;
+                            }
+                        }
+                        finally
+                        {
+                            oForm.Freeze(false);
+                        }
+                    }
+
+                    else if (pVal.ItemUID == "76" && pVal.ColUID == "1" && !pVal.InnerEvent)
+                    {
+                        try
+                        {
+                            oForm.Freeze(true);
+
+                            var blaAgr = oForm.Items.Item("BDOSAgrNoE");
+                            var isMultiBp = IsMultiBp(oForm, out var bpCode);
+
+                            if (blaAgr.Specific.Value.Length > 0 && isMultiBp)
+                            {
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CantChooseMultiBp"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                                oForm.Items.Item(pVal.ItemUID).Specific.GetCellSpecific(pVal.ColUID,pVal.Row).Value = "";
+                            }
+
+                            else if (bpCode != BlanketAgreement.GetBPByBlAgreement(blaAgr.Specific.Value) && blaAgr.Specific.Value.Length > 0)
+                            {
+                                blaAgr.Specific.Value = "";
+                            }
+
+                            if (blaAgr.Enabled && blaAgr.Specific.Value.Length == 0 && bpCode.Length == 0)
+                            {
+                                blaAgr.Enabled = false;
+                            }
+
+                            else if(!blaAgr.Enabled && bpCode.Length > 0)
+                            {
+                                blaAgr.Enabled = true;
+                                blaAgr.Specific.ChooseFromListUID = "BlanketAgreement_Cfl";
+                                blaAgr.Specific.ChooseFromListAlias = "AbsID";
+                            }
+
+                        }
+                        finally
+                        {
+                            oForm.Freeze(false);
+                        }
+                    }
                 }
             }
         }
@@ -1321,5 +1384,34 @@ namespace BDO_Localisation_AddOn
                 Marshal.ReleaseComObject(oRecordSet);
             }
         }
+
+        private static bool IsMultiBp(SAPbouiCOM.Form oForm, out string bpCode)
+        {
+            var oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("76").Specific;
+            bpCode = "";
+            var bpCount = 0;
+
+            for (var row = 1; row < oMatrix.RowCount; row++)
+            {
+                if (oMatrix.GetCellSpecific("1", row).Value.ToString() != oMatrix.GetCellSpecific("37", row).Value.ToString())
+                {
+                    if (bpCode != oMatrix.GetCellSpecific("1", row).Value.ToString())
+                    {
+                        bpCode = oMatrix.GetCellSpecific("1", row).Value.ToString();
+                        bpCount++;
+                    }
+                }
+
+                if (bpCount > 1)
+                {
+                    bpCode = "";
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
     }
 }
