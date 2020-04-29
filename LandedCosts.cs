@@ -1176,8 +1176,10 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try
             {
-                string query = "select \"DocEntry\" from OMRV " + "\n"
-                + "where \"U_BsDocEntry\" = '" + docNum + "'";
+                string query ="select \"DocEntry\" from OMRV " + "\n"
+                + "where \"U_BsDocEntry\" = " + "\n"
+                + "(select \"DocEntry\" from OIPF " + "\n"
+                + "where \"DocNum\" = '" + docNum + "')";
 
                 oRecordSet.DoQuery(query);
 
