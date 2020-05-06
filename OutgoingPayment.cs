@@ -3079,7 +3079,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-
+                
                 if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction) //BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction
                 {
                     //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
@@ -3405,7 +3405,70 @@ namespace BDO_Localisation_AddOn
                                                         DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
                 }
             }
+            /*
+            string wtcode = oForm.Items.Item("110").Specific.Value;
+            if(wtcode == "მომსახურება")
+            {
+                int a = 7;
+            }
+            else
+            {
+                string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
+                string pensionPhWTCode = CommonFunctions.getOADM("U_BDOSPnPh").ToString();
 
+                string DebitAccount;
+                string CreditAccount;
+                string DistrRule1 = "";
+                string DistrRule2 = "";
+                string DistrRule3 = "";
+                string DistrRule4 = "";
+                string DistrRule5 = "";
+
+                string Project = CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "PrjCode", 0).ToString();
+
+                decimal WhtAmount = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSWhtAmt", 0).ToString());
+                decimal onAccount = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "NoDocSum", 0).ToString());
+                decimal WhtAmountFC = DocCurrency == "" ? 0 : WhtAmount / DocRate;
+
+                decimal PhysPensionAmount = 0;
+                decimal PhysPensionAmountFC = 0;
+
+                decimal CompanyPensionAmount = 0;
+                decimal CompanyPensionAmountFC = 0;
+
+                if (WhtAmount != 0 && PhysPensionAmount == 0)
+                {
+                    CreditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", pensionCoWTCode).ToString();
+                    DebitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", wtCode).ToString(); 
+
+                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", CreditAccount, "", WhtAmount, 0, DocCurrency,
+                                                        DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
+                    
+                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", CreditAccount, "", (onAccount - WhtAmount), 0, DocCurrency,
+                                                        DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
+
+                    
+                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", "", DebitAccount, onAccount, 0, DocCurrency,
+                                                        DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
+
+                    //CreditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", wtCode).ToString(); //BP-ს ძირითადი WTCode-ს ვალდებულების ანგარიში
+                    //JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", CreditAccount, WhtAmount * 4, WhtAmountFC, DocCurrency,
+                    //                                    DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
+
+                    //CreditAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionPhWTCode).ToString(); //U_BdgtDbtAcc დასაქმებულის საპენსიოს ვალდებულების ანგარიში
+                    //JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", CreditAccount, PhysPensionAmount, PhysPensionAmountFC, DocCurrency,
+                    //                DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
+                }
+
+                //if (CompanyPensionAmount != 0)
+                //{
+                //    DebitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ანგარიში
+                //    CreditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ვალდებულების ანგარიში
+                //    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", DebitAccount, CreditAccount, CompanyPensionAmount, CompanyPensionAmountFC, DocCurrency,
+                //                                        DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
+                //}
+            }
+            */
             // პენსია
 
             return jeLines;
@@ -3688,6 +3751,19 @@ namespace BDO_Localisation_AddOn
                         oForm.Freeze(false);
                     }
 
+                    if (pVal.ItemUID == "110" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && !pVal.BeforeAction)
+                    {
+                        double rate = 0;
+                        string wtCode = oForm.Items.Item("110").Specific.Value;
+                        if(isPension(wtCode, out rate))
+                        {
+                            decimal onAcct = Convert.ToDecimal(oForm.Items.Item("13").Specific.Value);
+                            decimal pens = onAcct * 2 / 100;
+                            decimal wtacAmount = pens + (onAcct - pens) * Convert.ToDecimal(rate) / 100;
+                            oForm.Items.Item("111").Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(wtacAmount);
+                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                        }
+                    }
                     if (Program.openPaymentMeans == true && pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && pVal.BeforeAction == false)
                     {
                         oForm.Freeze(false);
@@ -4349,7 +4425,7 @@ namespace BDO_Localisation_AddOn
                 oForm.Freeze(false);
             }
         }
-
+        
         public static void fillPhysicalEntityTaxes(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
@@ -4360,7 +4436,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
 
                 string wtCode = oForm.Items.Item("110").Specific.Value.ToString();
-
+                
                 bool physicalEntityTax = (oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WTLiable", 0) == "Y" &&
                                 CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
 
@@ -4394,6 +4470,62 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.Item oItemTxVal = oForm.Items.Item("13");
                 SAPbouiCOM.EditText oEditTxVal = ((SAPbouiCOM.EditText)(oItemTxVal.Specific));
                 string amtTxVal = oEditTxVal.Value;
+
+                SAPbouiCOM.DBDataSource BPDataSourceTable = null;
+                BPDataSourceTable = docDBSources.Item("OCRD");
+                DataTable DTSource = new DataTable();
+                DTSource.Columns.Add("WtCode");
+                DTSource.Columns.Add("WTLiable");
+                DTSource.Columns.Add("CardCode");
+                DTSource.Columns.Add("PrjCode");
+                DTSource.Columns.Add("U_liablePrTx");
+                DTSource.Columns.Add("U_prBase");
+                DTSource.Columns.Add("U_BDOSWhtAmt");
+                DTSource.Columns.Add("NoDocSum");
+                DTSource.Columns.Add("U_BDOSPnPhAm");
+                DTSource.Columns.Add("U_BDOSPnCoAm");
+
+                string WTCode = CommonFunctions.getChildOrDbDataSourceValue(BPDataSourceTable, null, DTSource, "WtCode", 0).ToString();
+                string wtCode2 = oForm.Items.Item("110").Specific.Value;
+                bool onAccount = oForm.Items.Item("37").Specific.Checked;
+                double rate = 0;
+                if (onAccount)
+                {
+                    if (isPension(wtCode2, out rate))
+                    {
+                        decimal payOnAcct = Convert.ToDecimal(oForm.Items.Item("13").Specific.Value);
+                        decimal PhEnPens = Convert.ToDecimal(payOnAcct * 2 / 100);
+                        decimal compPens = Convert.ToDecimal(payOnAcct * 2 / 100);
+                        decimal whtax = Convert.ToDecimal((payOnAcct - PhEnPens) * (decimal)(rate) / 100);
+
+                        TotalPensPhAm += PhEnPens;
+                        TotalWhtAmt += whtax;
+                        TotalPensCoAm += compPens;
+
+                        SAPbouiCOM.EditText oEdit1 = oForm.Items.Item("BDOSWhtAmt").Specific;
+                        oEdit1.Value = FormsB1.ConvertDecimalToString(whtax);
+
+                        oEdit1 = oForm.Items.Item("BDOSPnPhAm").Specific;
+                        oEdit1.Value = FormsB1.ConvertDecimalToString(PhEnPens);
+
+                        oEdit1 = oForm.Items.Item("BDOSPnCoAm").Specific;
+                        oEdit1.Value = FormsB1.ConvertDecimalToString(compPens);
+
+                        oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                    } else
+                    {
+                        decimal payOnAcct = Convert.ToDecimal(oForm.Items.Item("13").Specific.Value);
+                        decimal whtax = Convert.ToDecimal(payOnAcct * 20 / 100);
+
+                        SAPbouiCOM.EditText oEdit1 = oForm.Items.Item("BDOSWhtAmt").Specific;
+                        oEdit1.Value = FormsB1.ConvertDecimalToString(whtax);
+                        oEdit1 = oForm.Items.Item("BDOSPnPhAm").Specific;
+                        oEdit1.Value = FormsB1.ConvertDecimalToString(0);
+
+                        oEdit1 = oForm.Items.Item("BDOSPnCoAm").Specific;
+                        oEdit1.Value = FormsB1.ConvertDecimalToString(0);
+                    }
+                }
 
                 if (physicalEntityTax)
                 {
@@ -4496,6 +4628,10 @@ namespace BDO_Localisation_AddOn
                             PnPhAmt += (decimal)oRecordSet.Fields.Item("U_BDOSPnPhAm").Value;
                             PnCoAm += (decimal)oRecordSet.Fields.Item("U_BDOSPnCoAm").Value;
 
+                            TotalPensPhAm += PnPhAmt;
+                            TotalWhtAmt += WhtAmtt;
+                            TotalPensCoAm += PnCoAm;
+
                             SAPbouiCOM.EditText oEdit1 = oForm.Items.Item("BDOSWhtAmt").Specific;
                             oEdit1.Value = FormsB1.ConvertDecimalToString(WhtAmtt);
 
@@ -4511,7 +4647,6 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -5499,6 +5634,26 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static bool isPension(string wtcode, out double rate)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            rate = 0;
+
+            string query = "select \"U_BDOSPhisTx\", \"Rate\" from OWHT " + "\n"
+            + "where \"WTCode\" = '" + wtcode + "'";
+
+            oRecordSet.DoQuery(query);
+            if (!oRecordSet.EoF)
+            {
+                if (oRecordSet.Fields.Item("U_BDOSPhisTx").Value.ToString() == "Y")
+                {
+                    rate = oRecordSet.Fields.Item("Rate").Value;
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         //--------------------------------------------INTERNET BANK-------------------------------------------->
         public static List<string> importPaymentOrderTBC(PaymentService oPaymentService, List<int> docEntryList, bool importBatchPaymentOrders, string batchName, out string errorText)
