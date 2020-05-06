@@ -58,6 +58,20 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             #endregion
+
+            #region Use Blanket Agreement Rate Ranges
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "UseBlaAgRt");
+            fieldskeysMap.Add("TableName", "OJDT");
+            fieldskeysMap.Add("Description", "Use Blanket Agreement Rates");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            #endregion
         }
 
         public static void JrnEntry(string jeReference, string jeReference2, string remark, DateTime jeDate, DataTable jeLines, out string errorText)
