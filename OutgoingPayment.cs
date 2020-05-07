@@ -4470,26 +4470,82 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.Item oItemTxVal = oForm.Items.Item("13");
                 SAPbouiCOM.EditText oEditTxVal = ((SAPbouiCOM.EditText)(oItemTxVal.Specific));
                 string amtTxVal = oEditTxVal.Value;
-
-                SAPbouiCOM.DBDataSource BPDataSourceTable = null;
-                BPDataSourceTable = docDBSources.Item("OCRD");
-                DataTable DTSource = new DataTable();
-                DTSource.Columns.Add("WtCode");
-                DTSource.Columns.Add("WTLiable");
-                DTSource.Columns.Add("CardCode");
-                DTSource.Columns.Add("PrjCode");
-                DTSource.Columns.Add("U_liablePrTx");
-                DTSource.Columns.Add("U_prBase");
-                DTSource.Columns.Add("U_BDOSWhtAmt");
-                DTSource.Columns.Add("NoDocSum");
-                DTSource.Columns.Add("U_BDOSPnPhAm");
-                DTSource.Columns.Add("U_BDOSPnCoAm");
-
-                string WTCode = CommonFunctions.getChildOrDbDataSourceValue(BPDataSourceTable, null, DTSource, "WtCode", 0).ToString();
                 string wtCode2 = oForm.Items.Item("110").Specific.Value;
                 bool onAccount = oForm.Items.Item("37").Specific.Checked;
                 double rate = 0;
-                if (onAccount)
+                bool lineIsChecked = false;
+                SAPbouiCOM.Matrix oMatrix1 = oForm.Items.Item("20").Specific;
+                decimal WhtAmtt = 0;
+                decimal PnPhAmt = 0;
+                decimal PnCoAm = 0;
+                for (int row = 1; row <= oMatrix1.RowCount; row++)
+                {
+                    SAPbouiCOM.CheckBox Edtfield = oMatrix1.Columns.Item("10000127").Cells.Item(row).Specific;
+                    bool checkedLine = (Edtfield.Checked);
+                    if (checkedLine && onAccount)
+                    {
+                        lineIsChecked = true;
+                        int docNum = (int)FormsB1.cleanStringOfNonDigits(oMatrix1.Columns.Item("1").Cells.Item(row).Specific.Value);
+                        SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                        string query = "select \"PCH1\".\"U_BDOSWhtAmt\", \"PCH1\".\"U_BDOSPnPhAm\", \"PCH1\".\"U_BDOSPnCoAm\" From \"PCH1\" " + "\n"
+                        + "join \"OPCH\" on \"OPCH\".\"DocEntry\" = \"PCH1\".\"DocEntry\" " + "\n"
+                        + "where \"OPCH\".\"DocNum\" = '" + docNum + "'";
+
+                        oRecordSet.DoQuery(query);
+
+                        while (!oRecordSet.EoF)
+                        {
+                            WhtAmtt += Convert.ToDecimal((oRecordSet.Fields.Item("U_BDOSWhtAmt").Value));
+                            PnPhAmt += (decimal)oRecordSet.Fields.Item("U_BDOSPnPhAm").Value;
+                            PnCoAm += (decimal)oRecordSet.Fields.Item("U_BDOSPnCoAm").Value;
+
+                            TotalPensPhAm += PnPhAmt;
+                            TotalWhtAmt += WhtAmtt;
+                            TotalPensCoAm += PnCoAm;
+                            
+                            oRecordSet.MoveNext();
+                        }
+                        if (isPension(wtCode2, out rate))
+                        {
+                            decimal payOnAcct = Convert.ToDecimal(oForm.Items.Item("13").Specific.Value);
+                            decimal PhEnPens = Convert.ToDecimal(payOnAcct * 2 / 100);
+                            decimal compPens = Convert.ToDecimal(payOnAcct * 2 / 100);
+                            decimal whtax = Convert.ToDecimal((payOnAcct - PhEnPens) * (decimal)(rate) / 100);
+
+                            TotalPensPhAm += PhEnPens;
+                            TotalWhtAmt += whtax;
+                            TotalPensCoAm += compPens;
+
+                            SAPbouiCOM.EditText oEdit1 = oForm.Items.Item("BDOSWhtAmt").Specific;
+                            oEdit1.Value = FormsB1.ConvertDecimalToString(whtax);
+
+                            oEdit1 = oForm.Items.Item("BDOSPnPhAm").Specific;
+                            oEdit1.Value = FormsB1.ConvertDecimalToString(PhEnPens);
+
+                            oEdit1 = oForm.Items.Item("BDOSPnCoAm").Specific;
+                            oEdit1.Value = FormsB1.ConvertDecimalToString(compPens);
+
+                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                        }
+                        else
+                        {
+                            decimal payOnAcct = Convert.ToDecimal(oForm.Items.Item("13").Specific.Value);
+                            decimal whtax = Convert.ToDecimal(payOnAcct * 20 / 100);
+
+                            SAPbouiCOM.EditText oEdit1 = oForm.Items.Item("BDOSWhtAmt").Specific;
+                            oEdit1.Value = FormsB1.ConvertDecimalToString(whtax);
+                            oEdit1 = oForm.Items.Item("BDOSPnPhAm").Specific;
+                            oEdit1.Value = FormsB1.ConvertDecimalToString(0);
+
+                            oEdit1 = oForm.Items.Item("BDOSPnCoAm").Specific;
+                            oEdit1.Value = FormsB1.ConvertDecimalToString(0);
+                        }
+                    }
+                }
+
+                
+                if (onAccount && !lineIsChecked)
                 {
                     if (isPension(wtCode2, out rate))
                     {
@@ -4603,15 +4659,15 @@ namespace BDO_Localisation_AddOn
                 }
 
 
-                SAPbouiCOM.Matrix oMatrix1 = oForm.Items.Item("20").Specific;
-                decimal WhtAmtt = 0;
-                decimal PnPhAmt = 0;
-                decimal PnCoAm = 0;
+                //SAPbouiCOM.Matrix oMatrix1 = oForm.Items.Item("20").Specific;
+                //decimal WhtAmtt = 0;
+                //decimal PnPhAmt = 0;
+                //decimal PnCoAm = 0;
                 for (int row = 1; row <= oMatrix1.RowCount; row++)
                 {
                     SAPbouiCOM.CheckBox Edtfield = oMatrix1.Columns.Item("10000127").Cells.Item(row).Specific;
                     bool checkedLine = (Edtfield.Checked);
-                    if (checkedLine)
+                    if (checkedLine && !onAccount)
                     {
                         int docNum = (int)FormsB1.cleanStringOfNonDigits(oMatrix1.Columns.Item("1").Cells.Item(row).Specific.Value);
                         SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
