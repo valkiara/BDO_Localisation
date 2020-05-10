@@ -343,7 +343,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.Matrix oMatrixWtax = oForm.Items.Item("6").Specific;
                 string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value; //default
                 string WTCodeDesc = "";
-
+                double rate = 0;
                 string query = "select \"WTName\" from OWHT " + "\n"
                 + "where \"WTCode\" = '" + wtCode + "'";
 
@@ -356,7 +356,7 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & !pVal.BeforeAction)
                 {
                     decimal WhtAmt;
-                    if (WTCode != wtCode || WTCodeDesc == "მომსახურება")
+                    if (!OutgoingPayment.isPension(WTCode, out rate))
                     {
                         decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                         WhtAmt = taxableAmt * 20 / 100;
@@ -369,8 +369,8 @@ namespace BDO_Localisation_AddOn
                     {
                         decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                         decimal PensPhAm = CommonFunctions.roundAmountByGeneralSettings(taxableAmt * 2 / 100, "Sum");
-                        decimal rate = Convert.ToDecimal(oMatrixWtax.Columns.Item("3").Cells.Item(1).Specific.Value);
-                        decimal WTax = (taxableAmt - PensPhAm) * rate / 100;
+                        //decimal rate = Convert.ToDecimal(oMatrixWtax.Columns.Item("3").Cells.Item(1).Specific.Value);
+                        decimal WTax = (taxableAmt - PensPhAm) * Convert.ToDecimal(rate) / 100;
 
                         oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax + PensPhAm);
                         oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax);
