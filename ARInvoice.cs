@@ -773,6 +773,31 @@ namespace BDO_Localisation_AddOn
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
 
+                else if (pVal.EventType == BoEventTypes.et_FORM_DRAW && !pVal.BeforeAction)
+                {
+                    var matrix = (Matrix)oForm.Items.Item("38").Specific;
+
+                    var baseEntry = matrix.GetCellSpecific("45", 1).Value.Length > 0
+                        ? matrix.GetCellSpecific("45", 1).Value
+                        : string.Empty;
+
+                    if (!string.IsNullOrEmpty(baseEntry))
+                    {
+                        var baseType = matrix.GetCellSpecific("43", 1).Value;
+
+                        var roundAmount = CommonFunctions.GetBaseDocRoundingAmount(baseType, baseEntry);
+
+                        if (roundAmount != 0)
+                        {
+                            var roundingCheckbox = (CheckBox)oForm.Items.Item("105").Specific;
+                            roundingCheckbox.Checked = true;
+
+                            var roundingEditText = (EditText)oForm.Items.Item("103").Specific;
+                            roundingEditText.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(roundAmount);
+                        }
+                    }
+                }
+
                 else if (pVal.EventType == BoEventTypes.et_ITEM_PRESSED)
                 {
                     if (pVal.ItemUID == "1" && pVal.BeforeAction)

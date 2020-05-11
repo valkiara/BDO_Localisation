@@ -1981,5 +1981,42 @@ namespace BDO_Localisation_AddOn
                 return text.Replace("quot;", @"""").Replace("apos; apos;", "''").Replace("apos;", "'");
             else return "";
         }
+
+        public static decimal GetBaseDocRoundingAmount(string baseType, string baseKey)
+        {
+            var tableName = string.Empty;
+            var amount = 0M;
+
+            switch (baseType)
+            {
+                case "13": 
+                    tableName = "OINV";
+                    break;
+                case "15":
+                    tableName = "ODLN";
+                    break;
+                case "17":
+                    tableName = "ORDR";
+                    break;
+            }
+
+            if (string.IsNullOrEmpty(tableName)) return amount;
+
+            var query = new StringBuilder();
+            query.Append("SELECT \"RoundDif\", \"RoundDifFC\", \"DocCur\" \n");
+            query.Append("FROM \"" + tableName + "\" \n");
+            query.Append("WHERE \"DocEntry\" = '" + baseKey + "'");
+
+            var recordSet = (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            recordSet.DoQuery(query.ToString());
+            if (!recordSet.EoF)
+            {
+                amount = recordSet.Fields.Item("DocCur").Value == "GEL" ? (decimal) recordSet.Fields.Item("RoundDif").Value : (decimal) recordSet.Fields.Item("RoundDifFC").Value;
+
+            }
+
+            return amount;
+        }
     }
 }
