@@ -1990,13 +1990,13 @@ namespace BDO_Localisation_AddOn
             switch (baseType)
             {
                 case "13": 
-                    tableName = "OINV";
+                    tableName = "OINV"; //ar invoice
                     break;
                 case "15":
-                    tableName = "ODLN";
+                    tableName = "ODLN"; //delivery
                     break;
                 case "17":
-                    tableName = "ORDR";
+                    tableName = "ORDR"; //sales order
                     break;
             }
 
@@ -2017,6 +2017,27 @@ namespace BDO_Localisation_AddOn
             }
 
             return amount;
+        }
+
+        public static void SetBaseDocRoundingAmountIntoTargetDoc(SAPbouiCOM.Form oForm)
+        {
+            var matrix = (SAPbouiCOM.Matrix)oForm.Items.Item("38").Specific;
+
+            var baseEntry = matrix.GetCellSpecific("45", 1).Value.Length > 0
+                ? matrix.GetCellSpecific("45", 1).Value
+                : string.Empty;
+
+            if (string.IsNullOrEmpty(baseEntry)) return;
+            var baseType = matrix.GetCellSpecific("43", 1).Value;
+
+            var roundAmount = CommonFunctions.GetBaseDocRoundingAmount(baseType, baseEntry);
+
+            if (roundAmount == 0) return;
+            var roundingCheckbox = (SAPbouiCOM.CheckBox)oForm.Items.Item("105").Specific;
+            roundingCheckbox.Checked = true;
+
+            var roundingEditText = (SAPbouiCOM.EditText)oForm.Items.Item("103").Specific;
+            roundingEditText.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(roundAmount);
         }
     }
 }
