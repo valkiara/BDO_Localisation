@@ -1270,8 +1270,14 @@ namespace BDO_Localisation_AddOn
 
             //დამსაქმებლის საპენსიო გატარება
             string wtCode = BPDataSourceTable.GetValue("WTCode", 0);
+            string expAcct="";
             bool physicalEntityTax = (BPDataSourceTable.GetValue("WTLiable", 0) == "Y" &&
                                         docDBSources.Item("OWHT").GetValue("U_BDOSPhisTx", 0) == "Y");
+
+            string expQuery = "select \"U_BDOSExpAcc\" from OWHT where \"WTCode\"=wtCode";
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            oRecordSet.DoQuery(expQuery);
+            if(!oRecordSet.EoF) expAcct = oRecordSet.Fields.Item("U_BDOSExpAcc").Value;
             if (physicalEntityTax)
             {
                 string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
@@ -1296,6 +1302,7 @@ namespace BDO_Localisation_AddOn
                 DBDataSourceTable = docDBSources.Item("PCH1");
                 JEcount = DBDataSourceTable.Size;
 
+
                 for (int i = 0; i < JEcount; i++)
                 {
                     CompanyPensionAmount = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "U_BDOSPnCoAm", i), CultureInfo.InvariantCulture);
@@ -1314,13 +1321,15 @@ namespace BDO_Localisation_AddOn
                         CompanyPensionAmountFC = DocCurrency == "" ? 0 : CompanyPensionAmount / DocRate;
                         if (!wt_InvoiceType)
                         {
-                            DebitAccount = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
+                            if (i == 0 && expAcct != "") DebitAccount = expAcct;
+                            else DebitAccount = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
                             JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", DebitAccount, CreditAccount, CompanyPensionAmount, CompanyPensionAmountFC, DocCurrency, DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
                     }
                         //Invoice შემთხვევაში
                         else
-                        {                            
-                            DebitAccount = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
+                        {
+                            if (i == 0 && expAcct != "") DebitAccount = expAcct;
+                            else DebitAccount = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
                             CreditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ვალდებულების ანგარიში
                         JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", DebitAccount, CreditAccount, CompanyPensionAmount, CompanyPensionAmountFC, DocCurrency, DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
                         }
@@ -1331,8 +1340,8 @@ namespace BDO_Localisation_AddOn
                     {
                         PhysPensionAmountFC = DocCurrency == "" ? 0 : PhysPensionAmount / DocRate;
                         WhtAmountFC = DocCurrency == "" ? 0 : WhtAmount / DocRate;
-
-                        DebitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", wtCode).ToString(); //BP-ს ძირითადი WTCode-ს ანგარიში
+                        if (i == 0 && expAcct != "") DebitAccount = expAcct;
+                        else DebitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", wtCode).ToString(); //BP-ს ძირითადი WTCode-ს ანგარიში
                         JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", DebitAccount, "", (WhtAmount + PhysPensionAmount), (WhtAmountFC + PhysPensionAmountFC), DocCurrency,
                                                             DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
 
