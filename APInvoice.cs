@@ -1273,7 +1273,7 @@ namespace BDO_Localisation_AddOn
             string expAcct="";
             bool physicalEntityTax = (BPDataSourceTable.GetValue("WTLiable", 0) == "Y" &&
                                         docDBSources.Item("OWHT").GetValue("U_BDOSPhisTx", 0) == "Y");
-
+             
             string expQuery = "select \"U_BDOSExpAcc\" from OWHT where \"WTCode\"=wtCode";
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             oRecordSet.DoQuery(expQuery);
