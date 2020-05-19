@@ -1269,22 +1269,22 @@ namespace BDO_Localisation_AddOn
             }
 
             //დამსაქმებლის საპენსიო გატარება
-            string wtCode = BPDataSourceTable.GetValue("WTCode", 0);
-            string expAcct="";
+            string wtCode = BPDataSourceTable.GetValue("WTCode", 0);            
             bool physicalEntityTax = (BPDataSourceTable.GetValue("WTLiable", 0) == "Y" &&
-                                        docDBSources.Item("OWHT").GetValue("U_BDOSPhisTx", 0) == "Y");
-             
-            string expQuery = "select \"U_BDOSExpAcc\" from OWHT where \"WTCode\"=wtCode";
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            oRecordSet.DoQuery(expQuery);
-            if(!oRecordSet.EoF) expAcct = oRecordSet.Fields.Item("U_BDOSExpAcc").Value;
-            if (physicalEntityTax)
+                                       docDBSources.Item("OWHT").GetValue("U_BDOSPhisTx", 0) == "Y");
+            string expAcct = "";
+            if (physicalEntityTax) 
             {
                 string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
                 string pensionPhWTCode = CommonFunctions.getOADM("U_BDOSPnPh").ToString();
                 string CreditAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionCoWTCode).ToString();
                 bool wt_InvoiceType = CommonFunctions.getValue("OWHT", "Category", "WTCode", wtCode).ToString() == "I";
 
+
+                string expQuery = "select \"U_BDOSExpAcc\" from OWHT where \"WTCode\"='" + pensionCoWTCode + "'";
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                oRecordSet.DoQuery(expQuery);
+                if (!oRecordSet.EoF) expAcct = oRecordSet.Fields.Item("U_BDOSExpAcc").Value;
                 decimal CompanyPensionAmount;
                 decimal CompanyPensionAmountFC;
                 decimal PhysPensionAmount;
@@ -1321,8 +1321,7 @@ namespace BDO_Localisation_AddOn
                         CompanyPensionAmountFC = DocCurrency == "" ? 0 : CompanyPensionAmount / DocRate;
                         if (!wt_InvoiceType)
                         {
-                            if (i == 0 && expAcct != "") DebitAccount = expAcct;
-                            else DebitAccount = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
+                            DebitAccount = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
                             JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", DebitAccount, CreditAccount, CompanyPensionAmount, CompanyPensionAmountFC, DocCurrency, DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
                     }
                         //Invoice შემთხვევაში
@@ -1340,8 +1339,7 @@ namespace BDO_Localisation_AddOn
                     {
                         PhysPensionAmountFC = DocCurrency == "" ? 0 : PhysPensionAmount / DocRate;
                         WhtAmountFC = DocCurrency == "" ? 0 : WhtAmount / DocRate;
-                        if (i == 0 && expAcct != "") DebitAccount = expAcct;
-                        else DebitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", wtCode).ToString(); //BP-ს ძირითადი WTCode-ს ანგარიში
+                        DebitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", wtCode).ToString(); //BP-ს ძირითადი WTCode-ს ანგარიში
                         JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", DebitAccount, "", (WhtAmount + PhysPensionAmount), (WhtAmountFC + PhysPensionAmountFC), DocCurrency,
                                                             DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
 
