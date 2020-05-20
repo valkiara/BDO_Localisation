@@ -7522,6 +7522,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
+
                     errorText = BDOSResources.getTranslate("Operation") + " \"" + BDOSResources.getTranslate("RSAddDeclaration") + "\" " + BDOSResources.getTranslate("DoneWithErrors");
                 }
             }
