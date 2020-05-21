@@ -5632,8 +5632,8 @@ namespace BDO_Localisation_AddOn
                             return;
                         }
                         DateTime taxDate = DateTime.ParseExact(taxDat, "yyyyMMdd", CultureInfo.InvariantCulture);
-
-                        JrnEntry(docEntry, DocNum, taxDate, JrnLinesDT, out errorText);
+                        if(((SAPbouiCOM.Matrix)oForm.Items.Item("DPinvoices").Specific).RowCount >= 1) JrnEntry(docEntry, DocNum, taxDate, JrnLinesDT, out errorText);
+                        else JrnEntry(docEntry, DocNum, DocDate, JrnLinesDT, out errorText);
                         if (errorText != null)
                         {
                                 Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
