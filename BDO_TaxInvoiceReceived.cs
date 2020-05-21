@@ -5632,7 +5632,6 @@ namespace BDO_Localisation_AddOn
                             return;
                         }
                         DateTime taxDate = DateTime.ParseExact(taxDat, "yyyyMMdd", CultureInfo.InvariantCulture);
-
                         DateTime docDateJrn = oForm.DataSources.DBDataSources.Item("@BDO_TXR4").Size > 0 ? taxDate : DocDate;
                         JrnEntry(docEntry, DocNum, docDateJrn, JrnLinesDT, out errorText);
                         if (errorText != null)
