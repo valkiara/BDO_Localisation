@@ -1272,19 +1272,19 @@ namespace BDO_Localisation_AddOn
             string wtCode = BPDataSourceTable.GetValue("WTCode", 0);            
             bool physicalEntityTax = (BPDataSourceTable.GetValue("WTLiable", 0) == "Y" &&
                                        docDBSources.Item("OWHT").GetValue("U_BDOSPhisTx", 0) == "Y");
-            string expAcct = "";
             if (physicalEntityTax) 
             {
                 string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
                 string pensionPhWTCode = CommonFunctions.getOADM("U_BDOSPnPh").ToString();
                 string CreditAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionCoWTCode).ToString();
                 bool wt_InvoiceType = CommonFunctions.getValue("OWHT", "Category", "WTCode", wtCode).ToString() == "I";
+                string expAcct= CommonFunctions.getValue("OWHT", "U_BDOSExpAcc", "WTCode", pensionCoWTCode).ToString();
 
+                //    string expQuery = "select \"U_BDOSExpAcc\" from OWHT where \"WTCode\"='" + pensionCoWTCode + "'";
+                //    SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                //    oRecordSet.DoQuery(expQuery);
 
-                string expQuery = "select \"U_BDOSExpAcc\" from OWHT where \"WTCode\"='" + pensionCoWTCode + "'";
-                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                oRecordSet.DoQuery(expQuery);
-                if (!oRecordSet.EoF) expAcct = oRecordSet.Fields.Item("U_BDOSExpAcc").Value;
+                //    if (!oRecordSet.EoF) expAcct = oRecordSet.Fields.Item("U_BDOSExpAcc").Value;
                 decimal CompanyPensionAmount;
                 decimal CompanyPensionAmountFC;
                 decimal PhysPensionAmount;
@@ -1327,10 +1327,9 @@ namespace BDO_Localisation_AddOn
                         //Invoice შემთხვევაში
                         else
                         {
-                            if (i == 0 && expAcct != "") DebitAccount = expAcct;
-                            else DebitAccount = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
+                            DebitAccount= i == 0 && expAcct != "" ? expAcct : CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
                             CreditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ვალდებულების ანგარიში
-                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", DebitAccount, CreditAccount, CompanyPensionAmount, CompanyPensionAmountFC, DocCurrency, DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
+                            JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", DebitAccount, CreditAccount, CompanyPensionAmount, CompanyPensionAmountFC, DocCurrency, DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
                         }
                     }
 
@@ -1339,8 +1338,7 @@ namespace BDO_Localisation_AddOn
                     {
                         PhysPensionAmountFC = DocCurrency == "" ? 0 : PhysPensionAmount / DocRate;
                         WhtAmountFC = DocCurrency == "" ? 0 : WhtAmount / DocRate;
-                        if (i == 0 && expAcct != "")  DebitAccount = expAcct;
-                        else DebitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", wtCode).ToString(); //BP-ს ძირითადი WTCode-ს ანგარიში
+                        DebitAccount = i == 0 && expAcct != "" ? expAcct : CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();                        //BP-ს ძირითადი WTCode-ს ანგარიში
                         JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", DebitAccount, "", (WhtAmount + PhysPensionAmount), (WhtAmountFC + PhysPensionAmountFC), DocCurrency,
                                                             DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
 
