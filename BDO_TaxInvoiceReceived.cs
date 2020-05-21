@@ -4977,7 +4977,7 @@ namespace BDO_Localisation_AddOn
                         AND ""BDO_TAXR"".""U_cardCode"" = '" + cardCode + @"'
                         AND ""BDO_TAXR"".""DocEntry"" <> '" + docEntry + @"'                     
                         AND ""BDO_TAXR"".""U_opDate"" <= '" + opDate + @"'
-                        AND CASE WHEN ""BDO_TAXR"".""U_corrInv"" = 'Y' THEN ""BDO_TAXR"".""U_amtTXACr"" ELSE ""BDO_TAXR"".""U_amountTX"" END - IFNULL (""closedVatAmounts"".""closedVat"", 0)  > 0
+                        --AND CASE WHEN ""BDO_TAXR"".""U_corrInv"" = 'Y' THEN ""BDO_TAXR"".""U_amtTXACr"" ELSE ""BDO_TAXR"".""U_amountTX"" END - IFNULL (""closedVatAmounts"".""closedVat"", 0)  > 0
                         
                         ORDER bY ""BDO_TAXR"".""U_docDate"" DESC";
 
