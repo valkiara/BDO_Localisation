@@ -705,6 +705,33 @@ namespace BDO_Localisation_AddOn
                         else if (bankProgram == "BOG" && oStatementDetailStc != null)
                             fillExportMTR_BOG(oForm, oStatementDetailStc, true);
                     }
+                    else if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "TransType" && pVal.ItemChanged)
+                    {
+                        SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("exportMTR");
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("exportMTR").Specific;
+                        oMatrix.FlushToDataSource();
+
+                        int rowIndex = pVal.Row - 1;
+                        string treasuryCode = oDataTable.GetValue("TreasuryCode", rowIndex);
+                        string transactionType = oDataTable.GetValue("TransactionType", rowIndex);
+
+                        Enum.TryParse(transactionType, out OperationTypeFromIntBank oOperationTypeFromIntBank);
+
+                        oDataTable.SetValue("Project", rowIndex, "");
+                        oDataTable.SetValue("BlnkAgr", rowIndex, "");
+                        oDataTable.SetValue("UseBlaAgRt", rowIndex, "N");
+
+                        SAPbobsCOM.Recordset oRecordSet = BDOSInternetBankingIntegrationServicesRules.getRules(oOperationTypeFromIntBank, treasuryCode);
+                        if (oRecordSet != null)
+                        {
+                            oDataTable.SetValue("GLAccountCode", rowIndex, oRecordSet.Fields.Item("U_AcctCode").Value == null ? "" : oRecordSet.Fields.Item("U_AcctCode").Value);
+                            Marshal.FinalReleaseComObject(oRecordSet);
+                        }
+                        else
+                            oDataTable.SetValue("GLAccountCode", rowIndex, "");
+
+                        oMatrix.LoadFromDataSource();
+                    }
                 }
                 else
                 {
@@ -992,6 +1019,8 @@ namespace BDO_Localisation_AddOn
                     }
 
                     oMatrix.CommonSetting.SetCellEditable(i, 33, string.IsNullOrEmpty(docEntry));
+
+                    oMatrix.CommonSetting.SetCellEditable(i, 27, string.IsNullOrEmpty(docEntry)); //Transaction Type
                 }
             }
             catch (Exception ex)
@@ -3932,7 +3961,7 @@ namespace BDO_Localisation_AddOn
                         {
                             oColumn = oColumns.Add("TransType", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
-                            oColumn.Editable = false;
+                            //oColumn.Editable = false;
                             oColumn.DataBind.Bind(UID, columnName);
                             oColumn.DisplayDesc = true;
                             oColumn.TitleObject.Sortable = true;
@@ -4874,6 +4903,19 @@ namespace BDO_Localisation_AddOn
                             }
                             else if (pVal.ItemUID == "getDataB")
                             {
+                                //SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("exportMTR").Specific;
+                                //int i = 1;
+                                //foreach (OperationTypeFromIntBank foo in Enum.GetValues(typeof(OperationTypeFromIntBank)))
+                                //{
+                                //    oMatrix.AddRow();
+                                //    oMatrix.Columns.Item("TransType").Cells.Item(i).Specific.Select(foo.ToString(), SAPbouiCOM.BoSearchKey.psk_ByValue);
+                                //    oMatrix.Columns.Item("DocEntry").Cells.Item(1).Specific.Value = "3";
+                                //    setMTRCellEditableSetting(oForm, "exportMTR", 1);
+                                //    i++;
+                                //}
+                                //oMatrix.FlushToDataSource();
+
+                                
                                 getData(oForm);
                             }
                             else if (pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2")
