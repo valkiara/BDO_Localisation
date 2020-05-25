@@ -301,6 +301,7 @@ namespace BDO_Localisation_AddOn
             if (pVal.BeforeAction && pVal.MenuUID == "6005")
             {
                 SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
+                
 
                 if (oDocForm.TypeEx == "141" || oDocForm.TypeEx == "60092")
                 {

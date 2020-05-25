@@ -327,7 +327,54 @@ namespace BDO_Localisation_AddOn
 
             return PhysicalEntityPensionRates;
         }
+        public static void fillOnUpdate(string formUID, SAPbouiCOM.Matrix oMatrixWtax, string WTCode, double rate)
+        {
+            if (!OutgoingPayment.isPension(WTCode, out rate))
+            {
+                decimal WhtAmt;
+                SAPbouiCOM.DBDataSources docDBSources;
+                decimal taxableAmt;
+                try
+                {
+                    SAPbouiCOM.Form oFormApInv = Program.uiApp.Forms.GetForm(formUID, 1);
+                    docDBSources = oFormApInv.DataSources.DBDataSources;
+                    SAPbouiCOM.Matrix oMatrixApInv = oFormApInv.Items.Item("39").Specific;
+                    taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
+                    WhtAmt = taxableAmt * 20 / 100;
+                    oMatrixApInv.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
+                    oMatrixApInv.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = 0;
+                    oMatrixApInv.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = 0;
+                    oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
+                }
+                catch
+                {
 
+                }
+            } else
+            {
+                SAPbouiCOM.DBDataSources docDBSources;
+                decimal taxableAmt;
+                decimal PensPhAm;
+                decimal WTax;
+                try
+                {
+                    SAPbouiCOM.Form oFormApInv = Program.uiApp.Forms.GetForm(formUID, 1);
+                    docDBSources = oFormApInv.DataSources.DBDataSources;
+                    SAPbouiCOM.Matrix oMatrixApInv = oFormApInv.Items.Item("39").Specific;
+                    taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
+                    PensPhAm = CommonFunctions.roundAmountByGeneralSettings(taxableAmt * 2 / 100, "Sum");
+                    WTax = (taxableAmt - PensPhAm) * Convert.ToDecimal(rate) / 100;
+                    oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax + PensPhAm);
+                    oMatrixApInv.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax);
+                    oMatrixApInv.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
+                    oMatrixApInv.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
+                }
+                catch
+                {
+
+                }
+            }
+        }
         public static void openTaxTableFromAPDocs(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
@@ -335,48 +382,17 @@ namespace BDO_Localisation_AddOn
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
-                SAPbouiCOM.Form oFormApInv = Program.uiApp.Forms.GetForm("141", 1);
-                SAPbouiCOM.DBDataSources docDBSources = oFormApInv.DataSources.DBDataSources;
-                SAPbouiCOM.Matrix oMatrix = oFormApInv.Items.Item("39").Specific;
-                string wtCode = docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim(); //on ap invoice
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 SAPbouiCOM.Matrix oMatrixWtax = oForm.Items.Item("6").Specific;
                 string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value; //default
-                string WTCodeDesc = "";
                 double rate = 0;
-                string query = "select \"WTName\" from OWHT " + "\n"
-                + "where \"WTCode\" = '" + wtCode + "'";
-
-                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
-                oRecordSet.DoQuery(query);
-
-                if (!oRecordSet.EoF) WTCodeDesc = oRecordSet.Fields.Item("WTName").Value;
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & !pVal.BeforeAction)
                 {
-                    decimal WhtAmt;
-                    if (!OutgoingPayment.isPension(WTCode, out rate))
-                    {
-                        decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
-                        WhtAmt = taxableAmt * 20 / 100;
-                        oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
-                        oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = 0;
-                        oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = 0;
-                        oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
-                    }
-                    else
-                    {
-                        decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
-                        decimal PensPhAm = CommonFunctions.roundAmountByGeneralSettings(taxableAmt * 2 / 100, "Sum");
-                        //decimal rate = Convert.ToDecimal(oMatrixWtax.Columns.Item("3").Cells.Item(1).Specific.Value);
-                        decimal WTax = (taxableAmt - PensPhAm) * Convert.ToDecimal(rate) / 100;
-
-                        oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax + PensPhAm);
-                        oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax);
-                        oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
-                        oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
-                    }
+                    fillOnUpdate("141", oMatrixWtax, WTCode, rate); //ap invoice
+                    fillOnUpdate("65309", oMatrixWtax, WTCode, rate); //ap down payment request
+                    fillOnUpdate("181", oMatrixWtax, WTCode, rate); //ap credit memo
+                    fillOnUpdate("60092", oMatrixWtax, WTCode, rate); //ap reserve invoice
                 }
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction)
                 {
