@@ -341,10 +341,24 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.Matrix oMatrixApInv = oFormApInv.Items.Item("39").Specific;
                     taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                     WhtAmt = taxableAmt * 20 / 100;
-                    oMatrixApInv.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
-                    oMatrixApInv.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = 0;
-                    oMatrixApInv.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = 0;
-                    oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
+                    if (docDBSources.Item("OPCH").GetValue("DocCur", 0).Trim() != CommonFunctions.getLocalCurrency())
+                    {
+                        string total = oMatrixApInv.Columns.Item("14").Cells.Item(1).Specific.Value;
+                        total = total.Substring(0, total.Length - 3);
+                        if (total.Contains(",")) total = total.Replace(',', '.');
+                        decimal a = Convert.ToDecimal(total);
+                        oMatrixWtax.Columns.Item("28").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(a * 20 / 100);
+                        oMatrixApInv.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(a * 20 / 100);
+                        oMatrixApInv.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(0);
+                        oMatrixApInv.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(0);
+                    }
+                    else
+                    {
+                        oMatrixApInv.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
+                        oMatrixApInv.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = 0;
+                        oMatrixApInv.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = 0;
+                        oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
+                    }
                 }
                 catch
                 {
@@ -364,10 +378,24 @@ namespace BDO_Localisation_AddOn
                     taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                     PensPhAm = CommonFunctions.roundAmountByGeneralSettings(taxableAmt * 2 / 100, "Sum");
                     WTax = (taxableAmt - PensPhAm) * Convert.ToDecimal(rate) / 100;
-                    oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax + PensPhAm);
-                    oMatrixApInv.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax);
-                    oMatrixApInv.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
-                    oMatrixApInv.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
+                    
+                    if(docDBSources.Item("OPCH").GetValue("DocCur", 0).Trim() != CommonFunctions.getLocalCurrency())
+                    {
+                        string total = oMatrixApInv.Columns.Item("14").Cells.Item(1).Specific.Value;
+                        total = total.Substring(0, total.Length - 3);
+                        if (total.Contains(",")) total = total.Replace(',', '.');
+                        decimal a = Convert.ToDecimal(total);
+                        oMatrixWtax.Columns.Item("28").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(a*2/100 + a*98/100*Convert.ToDecimal(rate)/100);
+                        oMatrixApInv.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(a * 98 / 100 * Convert.ToDecimal(rate) / 100);
+                        oMatrixApInv.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(a * 2 / 100);
+                        oMatrixApInv.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(a * 2 / 100);
+                    } else
+                    {
+                        oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax + PensPhAm);
+                        oMatrixApInv.Columns.Item("U_BDOSWhtAmt").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WTax);
+                        oMatrixApInv.Columns.Item("U_BDOSPnPhAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
+                        oMatrixApInv.Columns.Item("U_BDOSPnCoAm").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
+                    }
                 }
                 catch
                 {

@@ -1311,6 +1311,7 @@ namespace BDO_Localisation_AddOn
                 string errorTextCheck;
                 string docDatestr = docDBSources.Item(docDBSourcesName).GetValue("DocDate", 0).Trim();
                 bool frgn = docDBSources.Item(docDBSourcesName).GetValue("DocCur", 0).Trim() != getLocalCurrency();
+                decimal GrossAmount;
                 if (physicalEntityTax)
                 {
                     if (string.IsNullOrEmpty(docDatestr))
@@ -1358,10 +1359,10 @@ namespace BDO_Localisation_AddOn
                 decimal PensPhAm;
                 decimal WhtAmt;
                 decimal PensCoAm;
-                decimal GrossAmount;
+                
                 decimal PensPhAmFC;
                 decimal WhtAmtFC;
-                decimal GrossAmountFC;
+                decimal GrossAmountFC=0;
 
                 for (int row = 0; row < DBDataSourceTable.Size; row++)
                 {
@@ -1387,6 +1388,11 @@ namespace BDO_Localisation_AddOn
                             PensPhAmFC = roundAmountByGeneralSettings(GrossAmountFC * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
                             WhtAmtFC = roundAmountByGeneralSettings((GrossAmountFC - PensPhAmFC) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
                             totalTaxes = totalTaxes + PensPhAmFC + WhtAmtFC;
+
+                            oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(row + 1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmtFC);
+                            oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(row + 1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAmFC);
+                            oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(row + 1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAmFC);
+                            //oForm.Items.Item("166").Specific.Value = "7";
                         }
                         else
                         {
@@ -1402,9 +1408,12 @@ namespace BDO_Localisation_AddOn
 
                     int rowNumber = row + 1;//Convert.ToInt32(DBDataSourceTable.GetValue("LineNum", row));
 
-                    oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
-                    oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
-                    oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensCoAm);
+                    if (!frgn)
+                    {
+                        oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
+                        oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
+                        oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensCoAm);
+                    }
                 }
 
                 if (objType != "204" && WTCode == wtCode) //A/P Reserve Invoice, A/P Invoice, A/P Credit Memo
@@ -1430,7 +1439,9 @@ namespace BDO_Localisation_AddOn
                     {
                         if (frgn)
                         {
-                            oMatrixWtax.Columns.Item("28").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(totalTaxes);
+                            double rate = 0;
+                            OutgoingPayment.isPension(WTCode, out rate);
+                            oMatrixWtax.Columns.Item("28").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(GrossAmountFC*98/100*Convert.ToDecimal(rate)/100);
                         }
                         else
                         {
