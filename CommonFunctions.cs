@@ -1302,7 +1302,7 @@ namespace BDO_Localisation_AddOn
 
                 SAPbouiCOM.Matrix oMatrixWtax = oFormWtax.Items.Item("6").Specific;
                 string wtCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value; // docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim();
-                
+
                 bool physicalEntityTax = (docDBSources.Item("OCRD").GetValue("WTLiable", 0).Trim() == "Y" &&
                                             getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
 
@@ -1311,7 +1311,6 @@ namespace BDO_Localisation_AddOn
                 string errorTextCheck;
                 string docDatestr = docDBSources.Item(docDBSourcesName).GetValue("DocDate", 0).Trim();
                 bool frgn = docDBSources.Item(docDBSourcesName).GetValue("DocCur", 0).Trim() != getLocalCurrency();
-                decimal GrossAmount;
                 if (physicalEntityTax)
                 {
                     if (string.IsNullOrEmpty(docDatestr))
@@ -1349,7 +1348,7 @@ namespace BDO_Localisation_AddOn
                     oMatrix = oForm.Items.Item("39").Specific;
                 }
 
-                
+
 
                 string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value;
 
@@ -1359,10 +1358,10 @@ namespace BDO_Localisation_AddOn
                 decimal PensPhAm;
                 decimal WhtAmt;
                 decimal PensCoAm;
-                
+                decimal GrossAmount;
                 decimal PensPhAmFC;
                 decimal WhtAmtFC;
-                decimal GrossAmountFC=0;
+                decimal GrossAmountFC;
 
                 for (int row = 0; row < DBDataSourceTable.Size; row++)
                 {
@@ -1388,11 +1387,6 @@ namespace BDO_Localisation_AddOn
                             PensPhAmFC = roundAmountByGeneralSettings(GrossAmountFC * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
                             WhtAmtFC = roundAmountByGeneralSettings((GrossAmountFC - PensPhAmFC) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
                             totalTaxes = totalTaxes + PensPhAmFC + WhtAmtFC;
-
-                            oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(row + 1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmtFC);
-                            oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(row + 1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAmFC);
-                            oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(row + 1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAmFC);
-                            //oForm.Items.Item("166").Specific.Value = "7";
                         }
                         else
                         {
@@ -1408,22 +1402,19 @@ namespace BDO_Localisation_AddOn
 
                     int rowNumber = row + 1;//Convert.ToInt32(DBDataSourceTable.GetValue("LineNum", row));
 
-                    if (!frgn)
-                    {
-                        oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
-                        oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
-                        oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensCoAm);
-                    }
+                    oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
+                    oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
+                    oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensCoAm);
                 }
 
-                if (objType != "204" && WTCode == wtCode) //A/P Reserve Invoice, A/P Invoice, A/P Credit Memo
+                if (objType != "204" && WTCode == wtCode && !frgn) //A/P Reserve Invoice, A/P Invoice, A/P Credit Memo
                 {
                     decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                     PensPhAm = roundAmountByGeneralSettings(taxableAmt * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
                     WhtAmt = roundAmountByGeneralSettings((taxableAmt - PensPhAm) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
                     totalTaxes = PensPhAm + WhtAmt;
                 }
-                if (objType != "204" && WTCode != wtCode)
+                if (objType != "204" && WTCode != wtCode && !frgn)
                 {
                     decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                     WhtAmt = taxableAmt * 20 / 100;
@@ -1439,9 +1430,7 @@ namespace BDO_Localisation_AddOn
                     {
                         if (frgn)
                         {
-                            double rate = 0;
-                            OutgoingPayment.isPension(WTCode, out rate);
-                            oMatrixWtax.Columns.Item("28").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(GrossAmountFC*98/100*Convert.ToDecimal(rate)/100);
+                            oMatrixWtax.Columns.Item("28").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(totalTaxes);
                         }
                         else
                         {
