@@ -3503,11 +3503,11 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("drgAmount").Editable = DPitemsEditable;
                 //SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("fullAmount");
                 //oColumn.Editable = (docJrnEntryIsEmpty) && elctrnic == "N";
-
+                SAPbouiCOM.Matrix oMatrixDp = (SAPbouiCOM.Matrix)oForm.Items.Item("DPinvoices").Specific;
                 oForm.Items.Item("dpInvS").Specific.Caption = downPmnt == "Y" ? BDOSResources.getTranslate("DownPaymentTaxInvoiceContent") : BDOSResources.getTranslate("LinkedDPMTaxInvoices");
-                oForm.Items.Item("taxDateS").Visible = downPmnt == "Y";
-                oForm.Items.Item("taxDateE").Visible = downPmnt == "Y";
-                if (downPmnt == "Y" && docJrnEntryIsEmpty)
+                oForm.Items.Item("taxDateS").Visible = oMatrixDp.RowCount >= 1;
+                oForm.Items.Item("taxDateE").Visible = oMatrixDp.RowCount >= 1;
+                if (oMatrixDp.RowCount >= 1 && docJrnEntryIsEmpty)
                 {
                     oForm.Items.Item("taxDateE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
                     oForm.Items.Item("postB").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
@@ -3641,7 +3641,7 @@ namespace BDO_Localisation_AddOn
                                 return;
                             }
                             string statusRS = null;
-                            
+
                             if (selectedOperation == "updateStatus") //სტატუსების განახლება
                             {
                                 int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttoupdatestatus"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
@@ -3720,20 +3720,20 @@ namespace BDO_Localisation_AddOn
                             }
                             else if (selectedOperation == "update") //განახლება
                             { int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttoupdate"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-                                if (answer == 1)
-                                {
-                                    int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                                    operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
-                                    if (errorText != null)
+                                    if (answer == 1)
                                     {
-                                        Program.uiApp.MessageBox(errorText);
-                                    }
-                                    else
-                                    {
-                                        Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSUpdate") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
+                                        int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
+                                        operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
+                                        if (errorText != null)
+                                        {
+                                            Program.uiApp.MessageBox(errorText);
+                                        }
+                                        else
+                                        {
+                                            Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSUpdate") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
+                                        }
                                     }
                                 }
-                            }
                             else if (selectedOperation == "receive") //ჩათვლა
                             {
                                 //int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
@@ -5623,73 +5623,80 @@ namespace BDO_Localisation_AddOn
 
                         Program.JrnLinesGlobal = new DataTable();
                         try
+                        { 
+                        DataTable JrnLinesDT = createAdditionalEntries(oForm, null);
+                        string taxDat = oDBDataSource.GetValue("U_taxDate", 0);
+                        if (string.IsNullOrEmpty(taxDat))
                         {
-                            DataTable JrnLinesDT = createAdditionalEntries(oForm, null);
-
-                            JrnEntry(docEntry, DocNum, DocDate, JrnLinesDT, out errorText);
-                            if (errorText != null)
-                            {
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PleaseFillTaxDate"), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            return;
+                        }
+                        DateTime taxDate = DateTime.ParseExact(taxDat, "yyyyMMdd", CultureInfo.InvariantCulture);
+                        DateTime docDateJrn = oForm.DataSources.DBDataSources.Item("@BDO_TXR4").Size > 0 ? taxDate : DocDate;
+                        JrnEntry(docEntry, DocNum, docDateJrn, JrnLinesDT, out errorText);
+                        if (errorText != null)
+                        {
                                 Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
                                 BubbleEvent = false;
+                        }
+                        else
+                        {
+                            if (!BusinessObjectInfo.ActionSuccess)
+                            {
+                                Program.JrnLinesGlobal = JrnLinesDT;
                             }
                             else
                             {
-                                if (!BusinessObjectInfo.ActionSuccess)
+                                // გატარებები
+                                string Ref1 = docEntry;
+                                string Ref2 = "UDO_F_BDO_TAXR_D";
+
+                                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                                string query = "SELECT " +
+                                                "*  " +
+                                                "FROM \"OJDT\"  " +
+                                                "WHERE \"StornoToTr\" IS NULL " +
+                                                "AND \"Ref1\" = '" + Ref1 + "' " +
+                                                "AND \"Ref2\" = '" + Ref2 + "' ";
+                                oRecordSet.DoQuery(query);
+                                int U_JrnEnt = 0;
+                                if (!oRecordSet.EoF)
                                 {
-                                    Program.JrnLinesGlobal = JrnLinesDT;
+                                    U_JrnEnt = oRecordSet.Fields.Item("TransId").Value;
+                                    oDBDataSource.SetValue("U_JrnEnt", 0, Convert.ToString(oRecordSet.Fields.Item("TransId").Value, CultureInfo.InvariantCulture));
                                 }
-                                else
+                                //else                                
+                                //{
+                                //    oDBDataSource.SetValue("U_JrnEnt", 0, "");
+                                //}                                    
+                                if (U_JrnEnt != 0)
                                 {
-                                    // გატარებები
-                                    string Ref1 = docEntry;
-                                    string Ref2 = "UDO_F_BDO_TAXR_D";
+                                    SAPbobsCOM.CompanyService oCompanyService = null;
+                                    SAPbobsCOM.GeneralService oGeneralService = null;
+                                    SAPbobsCOM.GeneralData oGeneralDataInv = null;
+                                    SAPbobsCOM.GeneralDataParams oGeneralParams = null;
 
-                                    SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                                    string query = "SELECT " +
-                                                    "*  " +
-                                                    "FROM \"OJDT\"  " +
-                                                    "WHERE \"StornoToTr\" IS NULL " +
-                                                    "AND \"Ref1\" = '" + Ref1 + "' " +
-                                                    "AND \"Ref2\" = '" + Ref2 + "' ";
-                                    oRecordSet.DoQuery(query);
-                                    int U_JrnEnt = 0;
-                                    if (!oRecordSet.EoF)
-                                    {
-                                        U_JrnEnt = oRecordSet.Fields.Item("TransId").Value;
-                                        oDBDataSource.SetValue("U_JrnEnt", 0, Convert.ToString(oRecordSet.Fields.Item("TransId").Value, CultureInfo.InvariantCulture));
-                                    }
-                                    //else                                
-                                    //{
-                                    //    oDBDataSource.SetValue("U_JrnEnt", 0, "");
-                                    //}                                    
-                                    if (U_JrnEnt != 0)
-                                    {
-                                        SAPbobsCOM.CompanyService oCompanyService = null;
-                                        SAPbobsCOM.GeneralService oGeneralService = null;
-                                        SAPbobsCOM.GeneralData oGeneralDataInv = null;
-                                        SAPbobsCOM.GeneralDataParams oGeneralParams = null;
+                                    oCompanyService = Program.oCompany.GetCompanyService();
+                                    oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
+                                    oGeneralDataInv = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
 
-                                        oCompanyService = Program.oCompany.GetCompanyService();
-                                        oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
-                                        oGeneralDataInv = ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData)));
+                                    oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
+                                    oGeneralParams.SetProperty("DocEntry", docEntry);
+                                    oGeneralDataInv = oGeneralService.GetByParams(oGeneralParams);
+                                    oGeneralDataInv.SetProperty("U_JrnEnt", Convert.ToString(U_JrnEnt, CultureInfo.InvariantCulture));
 
-                                        oGeneralParams = oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralDataParams);
-                                        oGeneralParams.SetProperty("DocEntry", docEntry);
-                                        oGeneralDataInv = oGeneralService.GetByParams(oGeneralParams);
-                                        oGeneralDataInv.SetProperty("U_JrnEnt", Convert.ToString(U_JrnEnt, CultureInfo.InvariantCulture));
+                                    oGeneralService.Update(oGeneralDataInv);
 
-                                        oGeneralService.Update(oGeneralDataInv);
-
-                                        Marshal.FinalReleaseComObject(oGeneralService);
-                                    }
+                                    Marshal.FinalReleaseComObject(oGeneralService);
                                 }
                             }
+                        }
                         }
                         catch (Exception ex)
                         {
                             Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
                             BubbleEvent = false;
-                        }
+                        }                  
                         if (Program.oCompany.InTransaction)
                         {
                             //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
@@ -6407,6 +6414,11 @@ namespace BDO_Localisation_AddOn
                     if (taxDateFromTaxJournal.HasValue)
                     {
                         oGeneralData.SetProperty("U_taxDate", taxDateFromTaxJournal.Value);
+                    }
+                    else
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PleaseFillTaxDate"), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                        return;
                     }
 
                     DateTime taxDate = oGeneralData.GetProperty("U_taxDate");
@@ -7510,6 +7522,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
+
                     errorText = BDOSResources.getTranslate("Operation") + " \"" + BDOSResources.getTranslate("RSAddDeclaration") + "\" " + BDOSResources.getTranslate("DoneWithErrors");
                 }
             }
