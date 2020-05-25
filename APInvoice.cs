@@ -1321,7 +1321,7 @@ namespace BDO_Localisation_AddOn
                         CompanyPensionAmountFC = DocCurrency == "" ? 0 : CompanyPensionAmount / DocRate;
                         if (!wt_InvoiceType)
                         {
-                            DebitAccount = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
+                            DebitAccount = expAcct;
                             JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", DebitAccount, CreditAccount, CompanyPensionAmount, CompanyPensionAmountFC, DocCurrency, DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
                     }
                         //Invoice შემთხვევაში
@@ -1338,7 +1338,8 @@ namespace BDO_Localisation_AddOn
                     {
                         PhysPensionAmountFC = DocCurrency == "" ? 0 : PhysPensionAmount / DocRate;
                         WhtAmountFC = DocCurrency == "" ? 0 : WhtAmount / DocRate;
-                        DebitAccount = i == 0 && expAcct != "" ? expAcct : CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();                        //BP-ს ძირითადი WTCode-ს ანგარიში
+                       //DebitAccount = i == 0 && expAcct != "" ? expAcct : CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();//BP-ს ძირითადი WTCode-ს ანგარიში
+                        DebitAccount= CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
                         JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", DebitAccount, "", (WhtAmount + PhysPensionAmount), (WhtAmountFC + PhysPensionAmountFC), DocCurrency,
                                                             DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
 
