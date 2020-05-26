@@ -1478,18 +1478,16 @@ namespace BDO_Localisation_AddOn
                     }
 
                     StringBuilder query = new StringBuilder();
-                    query.Append("SELECT T0.\"DocEntry\" AS \"DepreciationDocEntry\", \n");
-                    query.Append("       T1.\"U_Project\", \n");
+                    query.Append("SELECT DISTINCT \n");
                     query.Append("       T1.\"U_DistNumber\", \n");
-                    query.Append("       T1.\"U_ItemCode\", \n");
-                    query.Append("       T1.\"U_DeprAmt\" \n");
+                    query.Append("       T1.\"U_ItemCode\" \n");
                     query.Append("FROM   \"@BDOSDEPAC1\" T1 \n");
                     query.Append("       INNER JOIN \"@BDOSDEPACR\" T0 \n");
                     query.Append("               ON T1.\"DocEntry\" = T0.\"DocEntry\" \n");
                     query.Append($"      INNER JOIN ({dummyTable}) ITEMS \n");
                     query.Append("               ON T1.\"U_ItemCode\" = ITEMS.\"ItemCode\" AND T1.\"U_DistNumber\" = ITEMS.\"DistNumber\" \n");
                     query.Append("WHERE  T0.\"Canceled\" = 'N' \n");
-                    query.Append($"       AND T0.\"U_AccrMnth\" = '{docDateStr}'");
+                    query.Append($"       AND T0.\"U_AccrMnth\" >= '{docDateStr}'");
 
                     oRecordSet.DoQuery(query.ToString());
                     while (!oRecordSet.EoF)
@@ -1506,11 +1504,11 @@ namespace BDO_Localisation_AddOn
             catch (Exception ex)
             {
                 rejection = true;
+                BatchNumberSelection.SelectedBatches = null;
                 throw new Exception(ex.Message);
             }
             finally
             {
-                BatchNumberSelection.SelectedBatches = null;
                 Marshal.FinalReleaseComObject(oRecordSet);
             }
         }
@@ -1772,8 +1770,8 @@ namespace BDO_Localisation_AddOn
                 FROM ""SBOCOMMON"".""SEWH1"" 
                 WHERE ""SEWH1"".""CompDbNam"" = '" + Program.oCompany.CompanyDB + @"' 
                 AND LOCATE(""SEWH1"".""Name"",
-                	 'HR') > 0 
-                AND ""SEWH1"".""Status"" = 'Connected'";
+                	 'HR') > 0 ";
+                //AND ""SEWH1"".""Status"" = 'Connected'";
 
                 oRecordSet.DoQuery(query);
 
@@ -1977,6 +1975,71 @@ namespace BDO_Localisation_AddOn
             {
                 Marshal.FinalReleaseComObject(oRecordset);
             }
+        }
+
+        public static string RemoveSymbols(string text)
+        {
+            if (!string.IsNullOrEmpty(text))
+                return text.Replace("quot;", @"""").Replace("apos; apos;", "''").Replace("apos;", "'");
+            else return "";
+        }
+
+        public static decimal GetBaseDocRoundingAmount(string baseType, string baseKey)
+        {
+            var tableName = string.Empty;
+            var amount = 0M;
+
+            switch (baseType)
+            {
+                case "13": 
+                    tableName = "OINV"; //ar invoice
+                    break;
+                case "15":
+                    tableName = "ODLN"; //delivery
+                    break;
+                case "17":
+                    tableName = "ORDR"; //sales order
+                    break;
+            }
+
+            if (string.IsNullOrEmpty(tableName)) return amount;
+
+            var query = new StringBuilder();
+            query.Append("SELECT \"RoundDif\", \"RoundDifFC\", \"DocCur\" \n");
+            query.Append("FROM \"" + tableName + "\" \n");
+            query.Append("WHERE \"DocEntry\" = '" + baseKey + "'");
+
+            var recordSet = (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            recordSet.DoQuery(query.ToString());
+            if (!recordSet.EoF)
+            {
+                amount = recordSet.Fields.Item("DocCur").Value == "GEL" ? (decimal) recordSet.Fields.Item("RoundDif").Value : (decimal) recordSet.Fields.Item("RoundDifFC").Value;
+
+            }
+
+            return amount;
+        }
+
+        public static void SetBaseDocRoundingAmountIntoTargetDoc(SAPbouiCOM.Form oForm)
+        {
+            var matrix = (SAPbouiCOM.Matrix)oForm.Items.Item("38").Specific;
+
+            var baseEntry = matrix.GetCellSpecific("45", 1).Value.Length > 0
+                ? matrix.GetCellSpecific("45", 1).Value
+                : string.Empty;
+
+            if (string.IsNullOrEmpty(baseEntry)) return;
+            var baseType = matrix.GetCellSpecific("43", 1).Value;
+
+            var roundAmount = CommonFunctions.GetBaseDocRoundingAmount(baseType, baseEntry);
+
+            if (roundAmount == 0) return;
+            var roundingCheckbox = (SAPbouiCOM.CheckBox)oForm.Items.Item("105").Specific;
+            roundingCheckbox.Checked = true;
+
+            var roundingEditText = (SAPbouiCOM.EditText)oForm.Items.Item("103").Specific;
+            roundingEditText.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(roundAmount);
         }
     }
 }

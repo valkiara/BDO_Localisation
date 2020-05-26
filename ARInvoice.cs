@@ -686,6 +686,7 @@ namespace BDO_Localisation_AddOn
                                 if (BusinessObjectInfo.ActionSuccess && BusinessObjectInfo.BeforeAction == false)
                                 {
                                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                                    BatchNumberSelection.SelectedBatches = null;
                                 }
                                 else
                                 {
@@ -770,6 +771,11 @@ namespace BDO_Localisation_AddOn
                     SetVisibility(oForm);
                     oForm.Items.Item("4").Click();
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
+                }
+
+                else if (pVal.EventType == BoEventTypes.et_FORM_DRAW && !pVal.BeforeAction)
+                {
+                    CommonFunctions.SetBaseDocRoundingAmountIntoTargetDoc(oForm);
                 }
 
                 else if (pVal.EventType == BoEventTypes.et_ITEM_PRESSED)

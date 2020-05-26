@@ -3503,11 +3503,11 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("drgAmount").Editable = DPitemsEditable;
                 //SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("fullAmount");
                 //oColumn.Editable = (docJrnEntryIsEmpty) && elctrnic == "N";
-
+                SAPbouiCOM.Matrix oMatrixDp = (SAPbouiCOM.Matrix)oForm.Items.Item("DPinvoices").Specific;
                 oForm.Items.Item("dpInvS").Specific.Caption = downPmnt == "Y" ? BDOSResources.getTranslate("DownPaymentTaxInvoiceContent") : BDOSResources.getTranslate("LinkedDPMTaxInvoices");
-                oForm.Items.Item("taxDateS").Visible = downPmnt == "Y";
-                oForm.Items.Item("taxDateE").Visible = downPmnt == "Y";
-                if (downPmnt == "Y" && docJrnEntryIsEmpty)
+                oForm.Items.Item("taxDateS").Visible = oMatrixDp.RowCount >= 1;
+                oForm.Items.Item("taxDateE").Visible = oMatrixDp.RowCount >= 1;
+                if (oMatrixDp.RowCount >= 1 && docJrnEntryIsEmpty)
                 {
                     oForm.Items.Item("taxDateE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
                     oForm.Items.Item("postB").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
@@ -3644,39 +3644,8 @@ namespace BDO_Localisation_AddOn
 
                             if (selectedOperation == "updateStatus") //სტატუსების განახლება
                             {
-                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
-                                if (errorText != null)
-                                {
-                                    Program.uiApp.MessageBox(errorText);
-                                }
-                                else
-                                {
-                                    Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSUpdateStatus") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
-                                }
-                            }
-                            else if (selectedOperation == "deny") //უარყოფა
-                            {
-                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
-                                if (errorText != null)
-                                {
-                                    Program.uiApp.MessageBox(errorText);
-                                }
-                                else
-                                {
-                                    Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSDeny") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
-                                }
-                            }
-                            else if (selectedOperation == "confirmation") //დადასტურება
-                            {
-
-                                if (oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_docDate", 0) == "")
-                                {
-                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PostingDate") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
-                                    Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                                }
-                                else
+                                int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttoupdatestatus"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                if (answer == 1)
                                 {
                                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
                                     operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
@@ -3686,36 +3655,85 @@ namespace BDO_Localisation_AddOn
                                     }
                                     else
                                     {
-                                        Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSConfirm") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
+                                        Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSUpdateStatus") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
+                                    }
+                                }
+                            }
+                            else if (selectedOperation == "deny") //უარყოფა
+                            {
+                                int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttodenydocument"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                if (answer == 1)
+                                {
+                                    int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
+                                    operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
+                                    if (errorText != null)
+                                    {
+                                        Program.uiApp.MessageBox(errorText);
+                                    }
+                                    else
+                                    {
+                                        Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSDeny") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
+                                    }
+                                }
+                            }
+                            else if (selectedOperation == "confirmation") //დადასტურება
+                            {
+                                int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttoconfirmdocument"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                if (answer == 1)
+                                {
+                                    if (oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_docDate", 0) == "")
+                                    {
+                                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PostingDate") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
+                                        Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                                    }
+                                    else
+                                    {
+                                        int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
+                                        operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
+                                        if (errorText != null)
+                                        {
+                                            Program.uiApp.MessageBox(errorText);
+                                        }
+                                        else
+                                        {
+                                            Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSConfirm") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
+                                        }
                                     }
                                 }
                             }
                             else if (selectedOperation == "addToTheDeclaration") //დეკლარაციაში დამატება
                             {
-                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
-                                if (errorText != null)
+                                int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwantaddtothedeclaration"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                if (answer == 1)
                                 {
-                                    Program.uiApp.MessageBox(errorText);
-                                }
-                                else
-                                {
-                                    Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSAddDeclaration") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
+                                    int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
+                                    operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
+                                    if (errorText != null)
+                                    {
+                                        Program.uiApp.MessageBox(errorText);
+                                    }
+                                    else
+                                    {
+                                        Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSAddDeclaration") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
+                                    }
                                 }
                             }
                             else if (selectedOperation == "update") //განახლება
-                            {
-                                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                                operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
-                                if (errorText != null)
-                                {
-                                    Program.uiApp.MessageBox(errorText);
+                            { int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttoupdate"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                                    if (answer == 1)
+                                    {
+                                        int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
+                                        operationRS(oTaxInvoice, selectedOperation, docEntry, -1, new DateTime(), null, out statusRS, out errorText);
+                                        if (errorText != null)
+                                        {
+                                            Program.uiApp.MessageBox(errorText);
+                                        }
+                                        else
+                                        {
+                                            Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSUpdate") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
+                                        }
+                                    }
                                 }
-                                else
-                                {
-                                    Program.uiApp.MessageBox(BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("RSUpdate") + " " + BDOSResources.getTranslate("DoneSuccessfully"));
-                                }
-                            }
                             else if (selectedOperation == "receive") //ჩათვლა
                             {
                                 //int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
@@ -4955,11 +4973,11 @@ namespace BDO_Localisation_AddOn
 
                         WHERE ""BDO_TAXR"".""U_downPaymnt"" = 'Y'
                         AND ""BDO_TAXR"".""Canceled"" = 'N'
-                        AND (""BDO_TAXR"".""U_status"" = 'confirmed' OR ""BDO_TAXR"".""U_status"" = 'correctionConfirmed')
+                        AND (""BDO_TAXR"".""U_status"" = 'confirmed' OR ""BDO_TAXR"".""U_status"" = 'correctionConfirmed' OR ""BDO_TAXR"".""U_status"" = 'paper')
                         AND ""BDO_TAXR"".""U_cardCode"" = '" + cardCode + @"'
                         AND ""BDO_TAXR"".""DocEntry"" <> '" + docEntry + @"'                     
                         AND ""BDO_TAXR"".""U_opDate"" <= '" + opDate + @"'
-                        AND CASE WHEN ""BDO_TAXR"".""U_corrInv"" = 'Y' THEN ""BDO_TAXR"".""U_amtTXACr"" ELSE ""BDO_TAXR"".""U_amountTX"" END - IFNULL (""closedVatAmounts"".""closedVat"", 0)  > 0
+                        --AND CASE WHEN ""BDO_TAXR"".""U_corrInv"" = 'Y' THEN ""BDO_TAXR"".""U_amtTXACr"" ELSE ""BDO_TAXR"".""U_amountTX"" END - IFNULL (""closedVatAmounts"".""closedVat"", 0)  > 0
                         
                         ORDER bY ""BDO_TAXR"".""U_docDate"" DESC";
 
@@ -5604,13 +5622,22 @@ namespace BDO_Localisation_AddOn
                         CommonFunctions.StartTransaction();
 
                         Program.JrnLinesGlobal = new DataTable();
+                        try
+                        { 
                         DataTable JrnLinesDT = createAdditionalEntries(oForm, null);
-
-                        JrnEntry(docEntry, DocNum, DocDate, JrnLinesDT, out errorText);
+                        string taxDat = oDBDataSource.GetValue("U_taxDate", 0);
+                        if (string.IsNullOrEmpty(taxDat))
+                        {
+                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PleaseFillTaxDate"), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            return;
+                        }
+                        DateTime taxDate = DateTime.ParseExact(taxDat, "yyyyMMdd", CultureInfo.InvariantCulture);
+                        DateTime docDateJrn = oForm.DataSources.DBDataSources.Item("@BDO_TXR4").Size > 0 ? taxDate : DocDate;
+                        JrnEntry(docEntry, DocNum, docDateJrn, JrnLinesDT, out errorText);
                         if (errorText != null)
                         {
-                            Program.uiApp.MessageBox(errorText);
-                            BubbleEvent = false;
+                                Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
+                                BubbleEvent = false;
                         }
                         else
                         {
@@ -5664,7 +5691,12 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
                         }
-
+                        }
+                        catch (Exception ex)
+                        {
+                            Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+                            BubbleEvent = false;
+                        }                  
                         if (Program.oCompany.InTransaction)
                         {
                             //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
@@ -6297,7 +6329,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
+                    else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && !pVal.BeforeAction)
                     {
                         comboSelect(oForm, pVal);
                     }
@@ -6377,11 +6409,16 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                if (invStatus == "confirmed" || (invStatus == "corrected" && !corrInv) || invStatus == "correctionConfirmed" || invStatus=="paper")
+                if (invStatus == "confirmed" || (invStatus == "corrected" && !corrInv) || invStatus == "correctionConfirmed" || invStatus == "paper")
                 {
                     if (taxDateFromTaxJournal.HasValue)
                     {
                         oGeneralData.SetProperty("U_taxDate", taxDateFromTaxJournal.Value);
+                    }
+                    else
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PleaseFillTaxDate"), SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                        return;
                     }
 
                     DateTime taxDate = oGeneralData.GetProperty("U_taxDate");
@@ -6392,38 +6429,45 @@ namespace BDO_Localisation_AddOn
                     }
 
                     Program.JrnLinesGlobal = new DataTable();
-                    DataTable JrnLinesDT = createAdditionalEntries(null, oGeneralData);
-                    string DocNum = oGeneralData.GetProperty("DocNum").ToString();
-                    DateTime DocDate = downPaymnt ? taxDate : oGeneralData.GetProperty("U_docDate");
-                    string errorTextJrnEnt;
-                    JrnEntry(docEntry.ToString(), DocNum, DocDate, JrnLinesDT, out errorTextJrnEnt);
-
-                    if (errorTextJrnEnt != null)
+                    try
                     {
-                        errorText = BDOSResources.getTranslate("JournalEntryNotCreated") + "! " + BDOSResources.getTranslate("ReasonIs") + ": " + errorTextJrnEnt;
-                    }
-                    else
-                    {
-                        Program.JrnLinesGlobal = JrnLinesDT;
-                        string Ref1 = docEntry.ToString();
-                        string Ref2 = "UDO_F_BDO_TAXR_D";
+                        DataTable JrnLinesDT = createAdditionalEntries(null, oGeneralData);
+                        string DocNum = oGeneralData.GetProperty("DocNum").ToString();
+                        DateTime DocDate = downPaymnt ? taxDate : oGeneralData.GetProperty("U_docDate");
+                        string errorTextJrnEnt;
+                        JrnEntry(docEntry.ToString(), DocNum, DocDate, JrnLinesDT, out errorTextJrnEnt);
 
-                        SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                        string query = "SELECT " +
-                                        "*  " +
-                                        "FROM \"OJDT\"  " +
-                                        "WHERE \"StornoToTr\" IS NULL " +
-                                        "AND \"Ref1\" = '" + Ref1 + "' " +
-                                        "AND \"Ref2\" = '" + Ref2 + "' ";
-                        oRecordSet.DoQuery(query);
-
-                        if (!oRecordSet.EoF)
-                            oGeneralData.SetProperty("U_JrnEnt", Convert.ToString(oRecordSet.Fields.Item("TransId").Value, CultureInfo.InvariantCulture));
+                        if (errorTextJrnEnt != null)
+                        {
+                            errorText = BDOSResources.getTranslate("JournalEntryNotCreated") + "! " + BDOSResources.getTranslate("ReasonIs") + ": " + errorTextJrnEnt;
+                        }
                         else
-                            oGeneralData.SetProperty("U_JrnEnt", "");
+                        {
+                            Program.JrnLinesGlobal = JrnLinesDT;
+                            string Ref1 = docEntry.ToString();
+                            string Ref2 = "UDO_F_BDO_TAXR_D";
 
+                            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                            string query = "SELECT " +
+                                            "*  " +
+                                            "FROM \"OJDT\"  " +
+                                            "WHERE \"StornoToTr\" IS NULL " +
+                                            "AND \"Ref1\" = '" + Ref1 + "' " +
+                                            "AND \"Ref2\" = '" + Ref2 + "' ";
+                            oRecordSet.DoQuery(query);
+
+                            if (!oRecordSet.EoF)
+                                oGeneralData.SetProperty("U_JrnEnt", Convert.ToString(oRecordSet.Fields.Item("TransId").Value, CultureInfo.InvariantCulture));
+                            else
+                                oGeneralData.SetProperty("U_JrnEnt", "");
+
+                        }
+                        oGeneralService.Update(oGeneralData);
                     }
-                    oGeneralService.Update(oGeneralData);
+                    catch (Exception ex)
+                    {
+                        errorText = BDOSResources.getTranslate("JournalEntryNotCreated") + "! " + BDOSResources.getTranslate("ReasonIs") + ": " + ex.Message;
+                    }
                 }
                 else
                 {
@@ -7478,6 +7522,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
+
                     errorText = BDOSResources.getTranslate("Operation") + " \"" + BDOSResources.getTranslate("RSAddDeclaration") + "\" " + BDOSResources.getTranslate("DoneWithErrors");
                 }
             }

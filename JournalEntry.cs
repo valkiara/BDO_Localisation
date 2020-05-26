@@ -159,73 +159,97 @@ namespace BDO_Localisation_AddOn
             return jeLines;
         }
 
-        public static void AddJournalEntryRow(DataTable AccountCodes, DataTable jeLines, string EntryType, string DebAccount, string CredAccount, decimal Amount, decimal FCAmount, string Currency, string DistrRule1, string DistrRule2, string DistrRule3, string DistrRule4, string DistrRule5, string PrjCode, string VatGroup, string U_BDOSEmpID)
+        public static void AddJournalEntryRow(DataTable accountCodes, DataTable jeLines, string entryType, string debAccount, string credAccount, decimal amount, decimal fcAmount, string currency, string distrRule1, string distrRule2, string distrRule3, string distrRule4, string distrRule5, string prjCode, string vatGroup, string bdoSEmpID)
         {
+            string emptyAccountTxt = null;
+
+            if (entryType == "Full")
+            {
+                if (string.IsNullOrEmpty(debAccount) && string.IsNullOrEmpty(credAccount))
+                    emptyAccountTxt = $"{BDOSResources.getTranslate("Debit")}, {BDOSResources.getTranslate("Credit")}";
+                else if (string.IsNullOrEmpty(debAccount))
+                    emptyAccountTxt = $"{BDOSResources.getTranslate("Debit")}";
+                else if (string.IsNullOrEmpty(credAccount))
+                    emptyAccountTxt = $"{BDOSResources.getTranslate("Credit")}";
+            }
+            else if (entryType == "OnlyCredit")
+            {
+                if (string.IsNullOrEmpty(credAccount))
+                    emptyAccountTxt = $"{BDOSResources.getTranslate("Credit")}";
+            }
+            else if (entryType == "OnlyDebit")
+            {
+                if (string.IsNullOrEmpty(debAccount))
+                    emptyAccountTxt = $"{BDOSResources.getTranslate("Debit")}";
+            }
+
+            if (!string.IsNullOrEmpty(emptyAccountTxt))
+                throw new Exception($"{BDOSResources.getTranslate("AccountIsNotCompleted")} - {emptyAccountTxt}");
 
             DataRow jeLinesRow = null;
             DataRowCollection jeLinesRows = jeLines.Rows;
             //დებეტი
-            if (EntryType != "OnlyCredit")
+            if (entryType != "OnlyCredit")
             {
                 jeLinesRow = jeLinesRows.Add();
-                jeLinesRow["AccountCode"] = DebAccount;
-                jeLinesRow["ShortName"] = DebAccount;
-                jeLinesRow["ContraAccount"] = CredAccount;
-                jeLinesRow["Debit"] = Convert.ToDouble(Amount);
-                jeLinesRow["FCDebit"] = Convert.ToDouble(FCAmount);
-                jeLinesRow["FCCurrency"] = Currency;
-                jeLinesRow["VatGroup"] = VatGroup;
-                jeLinesRow["ProjectCode"] = PrjCode;
+                jeLinesRow["AccountCode"] = debAccount;
+                jeLinesRow["ShortName"] = debAccount;
+                jeLinesRow["ContraAccount"] = credAccount;
+                jeLinesRow["Debit"] = Convert.ToDouble(amount);
+                jeLinesRow["FCDebit"] = Convert.ToDouble(fcAmount);
+                jeLinesRow["FCCurrency"] = currency;
+                jeLinesRow["VatGroup"] = vatGroup;
+                jeLinesRow["ProjectCode"] = prjCode;
                 jeLinesRow["Credit"] = 0;
                 jeLinesRow["FCCredit"] = 0;
 
-                DataRow[] oAccountCode = AccountCodes.Select("AcctCode = '" + DebAccount + "'");
+                DataRow[] oAccountCode = accountCodes.Select("AcctCode = '" + debAccount + "'");
                 string AccountType = oAccountCode[0]["ActType"].ToString();
                 string U_BDOSEmpAct = oAccountCode[0]["U_BDOSEmpAct"].ToString();
 
                 if (AccountType != "N")
                 {
-                    jeLinesRow["CostingCode"] = DistrRule1;
-                    jeLinesRow["CostingCode2"] = DistrRule2;
-                    jeLinesRow["CostingCode3"] = DistrRule3;
-                    jeLinesRow["CostingCode4"] = DistrRule4;
-                    jeLinesRow["CostingCode5"] = DistrRule5;
+                    jeLinesRow["CostingCode"] = distrRule1;
+                    jeLinesRow["CostingCode2"] = distrRule2;
+                    jeLinesRow["CostingCode3"] = distrRule3;
+                    jeLinesRow["CostingCode4"] = distrRule4;
+                    jeLinesRow["CostingCode5"] = distrRule5;
                 }
                 if (U_BDOSEmpAct == "Y")
                 {
-                    jeLinesRow["U_BDOSEmpID"] = U_BDOSEmpID;
+                    jeLinesRow["U_BDOSEmpID"] = bdoSEmpID;
                 }
             }
 
             //კტ
-            if (EntryType != "OnlyDebit")
+            if (entryType != "OnlyDebit")
             {
                 jeLinesRow = jeLinesRows.Add();
-                jeLinesRow["AccountCode"] = CredAccount;
-                jeLinesRow["ShortName"] = CredAccount;
-                jeLinesRow["ContraAccount"] = DebAccount;
-                jeLinesRow["Credit"] = Convert.ToDouble(Amount);
-                jeLinesRow["FCCredit"] = Convert.ToDouble(FCAmount);
-                jeLinesRow["FCCurrency"] = Currency;
-                jeLinesRow["VatGroup"] = VatGroup;
-                jeLinesRow["ProjectCode"] = PrjCode;
+                jeLinesRow["AccountCode"] = credAccount;
+                jeLinesRow["ShortName"] = credAccount;
+                jeLinesRow["ContraAccount"] = debAccount;
+                jeLinesRow["Credit"] = Convert.ToDouble(amount);
+                jeLinesRow["FCCredit"] = Convert.ToDouble(fcAmount);
+                jeLinesRow["FCCurrency"] = currency;
+                jeLinesRow["VatGroup"] = vatGroup;
+                jeLinesRow["ProjectCode"] = prjCode;
                 jeLinesRow["Debit"] = 0;
                 jeLinesRow["FCDebit"] = 0;
 
-                DataRow[] oAccountCode = AccountCodes.Select("AcctCode = '" + CredAccount + "'");
+                DataRow[] oAccountCode = accountCodes.Select("AcctCode = '" + credAccount + "'");
                 string AccountType = oAccountCode[0]["ActType"].ToString();
                 string U_BDOSEmpAct = oAccountCode[0]["U_BDOSEmpAct"].ToString();
                 if (AccountType != "N")
                 {
-                    jeLinesRow["CostingCode"] = DistrRule1;
-                    jeLinesRow["CostingCode2"] = DistrRule2;
-                    jeLinesRow["CostingCode3"] = DistrRule3;
-                    jeLinesRow["CostingCode4"] = DistrRule4;
-                    jeLinesRow["CostingCode5"] = DistrRule5;
+                    jeLinesRow["CostingCode"] = distrRule1;
+                    jeLinesRow["CostingCode2"] = distrRule2;
+                    jeLinesRow["CostingCode3"] = distrRule3;
+                    jeLinesRow["CostingCode4"] = distrRule4;
+                    jeLinesRow["CostingCode5"] = distrRule5;
                 }
                 if (U_BDOSEmpAct == "Y")
                 {
-                    jeLinesRow["U_BDOSEmpID"] = U_BDOSEmpID;
+                    jeLinesRow["U_BDOSEmpID"] = bdoSEmpID;
                 }
             }
         }
@@ -698,7 +722,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     JDT1_BDO.Rows.Add();
-                    
+
                     for (int j = 0; j < JDT1.Fields.Count; j++)
                     {
                         if (JDT1.GetValue(j, i) != "")
@@ -1134,7 +1158,8 @@ namespace BDO_Localisation_AddOn
             if (pVal.BeforeAction && pVal.MenuUID == "1284")
             {
                 if (oForm.DataSources.DBDataSources.Item("OJDT").GetValue("DataSource", 0) == "O" &&
-                    oForm.DataSources.DBDataSources.Item("OJDT").GetValue("Ref2", 0) != "Reconcilation")
+                    oForm.DataSources.DBDataSources.Item("OJDT").GetValue("Ref2", 0) != "Reconcilation" &&
+                    string.IsNullOrEmpty(oForm.DataSources.DBDataSources.Item("OJDT").GetValue("VatDate", 0)))
                 {
                     BubbleEvent = false;
                     throw new Exception(BDOSResources.getTranslate("YouCantCancelJournalEntry") + "!");
@@ -1194,7 +1219,7 @@ namespace BDO_Localisation_AddOn
 
             var docEntry = Convert.ToInt32(objectKeyXmlDoc.InnerText);
 
-            var oRecordSet = (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            var oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             var updateQuery = new StringBuilder();
             try
             {

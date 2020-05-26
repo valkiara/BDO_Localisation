@@ -1168,7 +1168,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Profit Tax Accural<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                         {
-                            BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
+                            BDO_ProfitTaxAccrual.formDataLoad(oForm);
                         }
 
                         //----------------------------->A/P Down Payment Request<-----------------------------
@@ -1316,7 +1316,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Profit Tax Accural<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
                         {
-                            BDO_ProfitTaxAccrual.formDataLoad(oForm, out errorText);
+                            BDO_ProfitTaxAccrual.formDataLoad(oForm);
                         }
 
                         //----------------------------->Outgoing Payments<-----------------------------
@@ -1806,7 +1806,7 @@ namespace BDO_Localisation_AddOn
             string errorText = null;
 
             //----------------------------->ლიცენზირების ფორმა<-----------------------------
-            if (pVal.FormUID == "BDOSLocLicForm" && pVal.ItemUID == "3" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
+                if (pVal.FormUID == "BDOSLocLicForm" && pVal.ItemUID == "3" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
             {
                 SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 updateProgramLicense(oForm, out errorText);
@@ -1911,6 +1911,11 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormTypeEx == "804")
                 {
                     ChartOfAccounts.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                else if (pVal.FormTypeEx == "70001" )
+                {
+                    StockRevaluation.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->AP correction invoice <------------------------------
