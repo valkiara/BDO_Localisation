@@ -301,6 +301,7 @@ namespace BDO_Localisation_AddOn
             if (pVal.BeforeAction && pVal.MenuUID == "6005")
             {
                 SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
+                
 
                 if (oDocForm.TypeEx == "141" || oDocForm.TypeEx == "60092")
                 {
@@ -1805,7 +1806,7 @@ namespace BDO_Localisation_AddOn
             string errorText = null;
 
             //----------------------------->ლიცენზირების ფორმა<-----------------------------
-            if (pVal.FormUID == "BDOSLocLicForm" && pVal.ItemUID == "3" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
+                if (pVal.FormUID == "BDOSLocLicForm" && pVal.ItemUID == "3" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
             {
                 SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
                 updateProgramLicense(oForm, out errorText);
