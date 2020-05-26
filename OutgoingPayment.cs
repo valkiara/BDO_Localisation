@@ -1215,7 +1215,7 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
-
+            
             top = top + height + 1;
 
             formItems = new Dictionary<string, object>();
@@ -1306,7 +1306,40 @@ namespace BDO_Localisation_AddOn
 
 
             // -------------------- Use blanket agreement rates-----------------
-            
+
+            height = oForm.Items.Item("234000005").Height;
+            top = oForm.Items.Item("234000005").Top;
+            int left = left_e + width_e + 5;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "UsBlaAgRtS"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OVPM");
+            formItems.Add("Alias", "U_UseBlaAgRt");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 1);
+            formItems.Add("Left", left);
+            formItems.Add("Width", 100);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("UseBlAgrRt"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("SetAutoManaged", true);
+            formItems.Add("FromPane", 2);
+            formItems.Add("ToPane", 3);
+            formItems.Add("Enabled", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
 
             GC.Collect();
         }
@@ -4667,12 +4700,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-
-
-                //SAPbouiCOM.Matrix oMatrix1 = oForm.Items.Item("20").Specific;
-                //decimal WhtAmtt = 0;
-                //decimal PnPhAmt = 0;
-                //decimal PnCoAm = 0;
+                
                 for (int row = 1; row <= oMatrix1.RowCount; row++)
                 {
                     SAPbouiCOM.CheckBox Edtfield = oMatrix1.Columns.Item("10000127").Cells.Item(row).Specific;
