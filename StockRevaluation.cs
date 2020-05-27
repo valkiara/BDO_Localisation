@@ -93,19 +93,6 @@ namespace BDO_Localisation_AddOn
                     formDataLoad(oForm);
                 }
             }
-            /*
-            if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
-            {
-                SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm("70001", 1);
-                SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
-                
-                //createStockRevaluation(oForm, oMatrix);
-            }
-            if (pVal.FormTypeEx == "0")
-            {
-                int a = 7;
-            }
-            */
         }
         
         public static void createUserFields(out string errorText)
@@ -160,7 +147,6 @@ namespace BDO_Localisation_AddOn
                     else oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = oRecordSet.Fields.Item("WhsCode").Value;
                     oMatrix.Columns.Item("1").Cells.Item(row).Specific.Value = oRecordSet.Fields.Item("Quantity").Value;
                     
-                    
                     SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
                     SAPbouiCOM.Matrix oMatrixLC = oFormLC.Items.Item("51").Specific;
 
@@ -190,14 +176,7 @@ namespace BDO_Localisation_AddOn
                     {
                         allCostValByDocEnt = oRecordSetCostVal.Fields.Item("TtlCostLC").Value;
                         lastItemCode = oRecordSetCostVal.Fields.Item("ItemCode").Value;
-                        if(itemCode == lastItemCode)
-                        {
-                            //double sxvaoba = (allCostValByDocEnt - allocCostVal);
-                            //string str = sxvaoba.ToString();
-                            //str = str.Replace('.', ',');
-                            oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
-                            
-                        }
+                        if(itemCode == lastItemCode) oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
                         oRecordSetCostVal.MoveNext();
                     }
                     
