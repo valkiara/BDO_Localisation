@@ -57,6 +57,8 @@ namespace BDO_Localisation_AddOn
 
             StockTransferRequest.createUserFields(out errorText);
 
+            StockRevaluation.createUserFields(out errorText);
+
             GoodsReceiptPO.createUserFields(out errorText);
 
             APDownPayment.createUserFields(out errorText);

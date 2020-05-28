@@ -1171,15 +1171,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static bool stockExists(string docNum)
+        public static bool stockExists(string docEntryLC)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try
             {
-                string query ="select \"DocEntry\" from OMRV " + "\n"
-                + "where \"U_BsDocEntry\" = " + "\n"
-                + "(select \"DocEntry\" from OIPF " + "\n"
-                + "where \"DocNum\" = '" + docNum + "')";
+                string query = "select \"DocEntry\" from OMRV " + "\n"
+                + "where \"U_BsDocEntry\" = '" + docEntryLC + "'";
 
                 oRecordSet.DoQuery(query);
 

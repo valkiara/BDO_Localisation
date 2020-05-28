@@ -93,12 +93,6 @@ namespace BDO_Localisation_AddOn
                     formDataLoad(oForm);
                 }
             }
-            if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == true)
-            {
-                SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm("70001", 1);
-                SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
-                createStockRevaluation(oForm, oMatrix);
-            }
         }
         
         public static void createUserFields(out string errorText)
@@ -106,7 +100,7 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> fieldskeysMap;
 
             fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "BasDocEntr");
+            fieldskeysMap.Add("Name", "BsDocEntry");
             fieldskeysMap.Add("TableName", "OMRV");
             fieldskeysMap.Add("Description", "Base Doc Entry");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
@@ -145,11 +139,13 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
-                    itemCode = oRecordSet.Fields.Item("ItemCode").Value;
-                    string whs = CommonFunctions.getOADM("U_StockRevWh").ToString();
+                    string str = oForm.Items.Item("1003").Specific.Value;
+                    itemCode = oRecordSet.Fields.Item("ItemCode").Value; 
                     oMatrix.Columns.Item("6").Cells.Item(row).Specific.Value = itemCode;
+                    string whs = CommonFunctions.getOADM("U_StockRevWh").ToString();
+                    if (whs != "") oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = whs;
+                    else oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = oRecordSet.Fields.Item("WhsCode").Value;
                     oMatrix.Columns.Item("1").Cells.Item(row).Specific.Value = oRecordSet.Fields.Item("Quantity").Value;
-                    oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = whs;
                     
                     SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
                     SAPbouiCOM.Matrix oMatrixLC = oFormLC.Items.Item("51").Specific;
@@ -180,20 +176,15 @@ namespace BDO_Localisation_AddOn
                     {
                         allCostValByDocEnt = oRecordSetCostVal.Fields.Item("TtlCostLC").Value;
                         lastItemCode = oRecordSetCostVal.Fields.Item("ItemCode").Value;
-                        if(itemCode == lastItemCode)
-                        {
-                            double sxvaoba = (allCostValByDocEnt - allocCostVal);
-                            string str = sxvaoba.ToString();
-                            str = str.Replace('.', ',');
-                            oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = str;
-                            
-                        }
+                        if(itemCode == lastItemCode) oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
                         oRecordSetCostVal.MoveNext();
                     }
                     
                     row += 1;
                     oRecordSet.MoveNext();
                 }
+
+
             }
             catch (Exception ex)
             {
@@ -289,6 +280,11 @@ namespace BDO_Localisation_AddOn
             {
                 formDataLoad(oForm);
             }
+            if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
+            {
+                SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
+                createStockRevaluation(oForm, oMatrix);
+            }
         }
 
         public static double lastAllCostVal(string itemCode, string docEntLC)
@@ -368,26 +364,13 @@ namespace BDO_Localisation_AddOn
 
                 m_MaterialRevLines.SetCurrentLine(0);
                 string itemCode = oMatrix.Columns.Item("6").Cells.Item(1).Specific.Value;
-                m_MaterialRevLines.Quantity = Convert.ToDouble(oMatrix.Columns.Item("1").Cells.Item(1).Specific.Value);
+                string quantity = oMatrix.Columns.Item("1").Cells.Item(1).Specific.Value;
+                if (quantity.Contains(",")) quantity = quantity.Replace(',', '.');
+                m_MaterialRevLines.Quantity = Convert.ToDouble(quantity);
                 m_MaterialRevLines.WarehouseCode = whsCode;
                 m_MaterialRevLines.ItemCode = itemCode;
 
                 string debCred = oMatrix.Columns.Item("7").Cells.Item(1).Specific.Value;
-                debCred = debCred.Substring(0, debCred.Length - 3);
-                if (debCred.Contains("."))
-                {
-                    for (int i = debCred.Length; i >= 0; i--)
-                    {
-                        if (debCred.Substring(debCred.Length - 1) != "0" && debCred.Substring(debCred.Length - 1) != ".") break;
-                        if (debCred.Substring(debCred.Length - 1) == "0") debCred = debCred.Substring(0,debCred.Length - 1);
-                        if (debCred.Substring(debCred.Length - 1) == ".")
-                        {
-                            debCred = debCred.Substring(0,debCred.Length - 1);
-                            break;
-                        }
-                    }
-                }
-                if (debCred.Contains(".")) debCred.Replace(".", ",");
                 for(char ch = 'A'; ch<='Z'; ch++)
                 {
                     if (debCred.Contains(ch))
@@ -395,6 +378,7 @@ namespace BDO_Localisation_AddOn
                         debCred = debCred.Substring(0, debCred.IndexOf(ch)) + debCred.Substring(debCred.IndexOf(ch) + 1);
                     }
                 }
+                if (debCred.Contains(",")) debCred = debCred.Replace(',', '.');
                 m_MaterialRevLines.DebitCredit = Convert.ToDouble(debCred);
                 
                 m_MaterialRev.Add();
