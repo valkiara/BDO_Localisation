@@ -611,6 +611,8 @@ namespace BDO_Localisation_AddOn
             query.Append("T0.\"U_IntrstRate\", \n");
             query.Append("T0.\"U_ExpnsAcct\", \n");
             query.Append("T0.\"U_IntPblAcct\", \n");
+            query.Append("T0.\"U_Type\", \n");
+            query.Append("T0.\"U_NbrOfDays\", \n");
             query.Append("T1.\"U_StartDate\" AS \"U_EndDate\" \n");
             query.Append("FROM \"@BDOSCRLN\" AS T0 \n");
             query.Append("LEFT JOIN \"@BDOSCRLN\" AS T1 \n");
@@ -669,11 +671,11 @@ namespace BDO_Localisation_AddOn
                     else
                         accrualStartDate = creditLineStartDate;
 
-                    int numberOfDaysInYear = new DateTime(DateTime.Today.Year, 12, 31).DayOfYear;
+                    int numberOfDaysInYear = oRecordSet.Fields.Item("U_Type").Value == "F" ? Convert.ToInt32(oRecordSet.Fields.Item("U_NbrOfDays").Value) : new DateTime(DateTime.Today.Year, 12, 31).DayOfYear;
                     accrualDays = (accrualEndDate - accrualStartDate).Days;
                     accrualDays = accrualDays == 0 ? 1 : accrualDays;
 
-                    if (accrualDays <= 0)
+                    if (accrualDays <= 0 || numberOfDaysInYear == 0)
                     {
                         oRecordSet.MoveNext();
                         continue;

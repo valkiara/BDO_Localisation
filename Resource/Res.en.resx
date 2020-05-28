@@ -3559,4 +3559,7 @@
   <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
     <value>Stock Will be Revaluated on Default Revaluation Warehouse.Continue?</value>
   </data>
+  <data name="NumberOfDays" xml:space="preserve">
+    <value>Number of Days</value>
+  </data>
 </root>

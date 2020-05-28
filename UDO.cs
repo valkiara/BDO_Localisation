@@ -127,8 +127,9 @@ namespace BDO_Localisation_AddOn
             BDOSCreditLine.createMasterDataUDO(out errorText);
             if (!oUserObjectsMD.GetByKey("UDO_F_BDOSCRLN_D"))
             {
-                BDOSCreditLine.registerUDO();
+                BDOSCreditLine.registerUDO();                
             }
+            BDOSCreditLine.updateUDO();
 
             BDOSInterestAccrual.createDocumentUDO(out errorText);
             if (!oUserObjectsMD.GetByKey("UDO_F_BDOSINAC_D"))

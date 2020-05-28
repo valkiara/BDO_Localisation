@@ -3529,4 +3529,7 @@
   <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
     <value>დოკუმენტში არსებული პროდუქტების გადაფასება მოხდება გადაფასების საწყობზე.გსურთ დოკუმენტის გაფორმება?</value>
   </data>
+  <data name="NumberOfDays" xml:space="preserve">
+    <value>დღეების რაოდენობა</value>
+  </data>
 </root>
