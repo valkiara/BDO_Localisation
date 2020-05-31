@@ -3529,4 +3529,7 @@
   <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
     <value>დოკუმენტში არსებული პროდუქტების გადაფასება მოხდება გადაფასების საწყობზე.გსურთ დოკუმენტის გაფორმება?</value>
   </data>
+  <data name="SeparationOfCompanyPensionExpenses" xml:space="preserve">
+    <value>კომპანიის საპენსიო ხარჯის გამიჯვნა</value>
+  </data>
 </root>
