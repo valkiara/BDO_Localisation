@@ -3654,6 +3654,14 @@ namespace BDO_Localisation_AddOn
                         {
                             setVisibleFormItems(oForm, out errorText);
                         }
+
+                        else if (pVal.ItemUID == "20" && pVal.ColUID == "24" && !pVal.InnerEvent)
+                        {
+                            var oMatrix = ((SAPbouiCOM.Matrix) (oForm.Items.Item("20").Specific));
+                            if (!oMatrix.Columns.Item("10000127").Cells.Item(pVal.Row).Specific.Checked) return;
+
+                            fillWtax(oForm, false, out var _, out var _, out var _);
+                        }
                     }
 
                     if (pVal.ItemUID == "UsBlaAgRtS" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
@@ -3725,14 +3733,14 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && !pVal.BeforeAction && pVal.ItemUID == "20")
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && !pVal.BeforeAction && pVal.ItemUID == "20" && pVal.ColUID == "10000127")
                     {
                         decimal Wtax = 0;
                         decimal WtPh = 0;
                         decimal WtCo = 0;
                         fillWtax(oForm, false, out Wtax, out WtPh, out WtCo);
                     }
-                    
+
                     if (pVal.ItemUID == "13" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_LOST_FOCUS && !pVal.BeforeAction)
                     {
                         double rate = 0;
@@ -3811,8 +3819,8 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             string query = ""
-            + "select \"Rate\" from OWHT " + "\n"
-            + "where \"WTCode\" = 'WT13'";
+                           + "select \"Rate\" from OWHT " + "\n"
+                           + "where \"WTCode\" = '" + wtCode + "'";
 
             oRecordSet.DoQuery(query);
             if (!oRecordSet.EoF)
@@ -5759,9 +5767,9 @@ namespace BDO_Localisation_AddOn
             WtPh = 0;
             WtCo = 0;
 
-            double whtAmtAp = 0;
-            double whtPnAp = 0;
-            double whtCoAp = 0;
+            decimal whtAmtAp = 0;
+            decimal whtPnAp = 0;
+            decimal whtCoAp = 0;
             for (int i = 1; i < oMatrix.RowCount + 1; i++)
             {
                 if (oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Checked && oMatrix.Columns.Item("45").Cells.Item(i).Specific.Value == "18")
@@ -5770,34 +5778,43 @@ namespace BDO_Localisation_AddOn
                     string WTCode = "";
                     checkWTaxCodeFromMatrix(oMatrix, i, out WTCode, "OPCH", "PCH5", "18");
 
+                    var totalPayment = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("24").Cells.Item(i).Specific.String));
+                    CalculateWTax(WTCode, totalPayment, out decimal wTaxAmt, out decimal pensionAmt);
+
                     SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
                     string query = "select \"U_BDOSWhtAmt\", \"U_BDOSPnPhAm\", \"U_BDOSPnCoAm\" from PCH1 " + "\n"
-                    + "where \"DocEntry\" = " + "\n"
-                    + "(select \"DocEntry\" from OPCH " + "\n"
-                    + "where \"DocNum\" = '" + docNum + "')";
+                                    + "where \"DocEntry\" = " + "\n"
+                                    + "(select \"DocEntry\" from OPCH " + "\n"
+                                    + "where \"DocNum\" = '" + docNum + "')";
 
                     oRecordSet.DoQuery(query);
                     if (!oRecordSet.EoF)
                     {
-                        
                         if (!forAdditionalJE)
                         {
-                            whtAmtAp += oRecordSet.Fields.Item("U_BDOSWhtAmt").Value;
-                            whtPnAp += oRecordSet.Fields.Item("U_BDOSPnPhAm").Value;
-                            whtCoAp += oRecordSet.Fields.Item("U_BDOSPnCoAm").Value;
-                        } else if(forAdditionalJE && oRecordSet.Fields.Item("U_BDOSPnPhAm").Value != 0 && !isInvoiceType(WTCode))
+                            whtAmtAp += wTaxAmt;
+                            whtPnAp += pensionAmt;
+                            whtCoAp += pensionAmt;
+                        }
+                        else if (forAdditionalJE && oRecordSet.Fields.Item("U_BDOSPnPhAm").Value != 0 &&
+                                 !isInvoiceType(WTCode))
                         {
-                            whtAmtAp += oRecordSet.Fields.Item("U_BDOSWhtAmt").Value;
-                            whtPnAp += oRecordSet.Fields.Item("U_BDOSPnPhAm").Value;
-                            whtCoAp += oRecordSet.Fields.Item("U_BDOSPnCoAm").Value;
+                            whtAmtAp += wTaxAmt;
+                            whtPnAp += pensionAmt;
+                            whtCoAp += pensionAmt;
                         }
                     }
-                } else if(oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Checked && oMatrix.Columns.Item("45").Cells.Item(i).Specific.Value == "204")
+                } 
+                else if(oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Checked && oMatrix.Columns.Item("45").Cells.Item(i).Specific.Value == "204")
                 {
                     string docNum = oMatrix.Columns.Item("1").Cells.Item(i).Specific.Value;
                     string WTCode = "";
                     checkWTaxCodeFromMatrix(oMatrix, i, out WTCode, "ODPO", "DPO5", "18");
+
+                    var totalPayment = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("24").Cells.Item(i).Specific.String));
+                    CalculateWTax(WTCode, totalPayment, out decimal wTaxAmt, out decimal pensionAmt);
+
                     SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
                     string query = "select \"U_BDOSWhtAmt\", \"U_BDOSPnPhAm\", \"U_BDOSPnCoAm\" from DPO1 " + "\n"
@@ -5810,21 +5827,26 @@ namespace BDO_Localisation_AddOn
                     {
                         if (!forAdditionalJE)
                         {
-                            whtAmtAp += oRecordSet.Fields.Item("U_BDOSWhtAmt").Value;
-                            whtPnAp += oRecordSet.Fields.Item("U_BDOSPnPhAm").Value;
-                            whtCoAp += oRecordSet.Fields.Item("U_BDOSPnCoAm").Value;
+                            whtAmtAp += wTaxAmt;
+                            whtPnAp += pensionAmt;
+                            whtCoAp += pensionAmt;
                         } else if (forAdditionalJE && oRecordSet.Fields.Item("U_BDOSPnPhAm").Value != 0 && !isInvoiceType(WTCode))
                         {
-                            whtAmtAp += oRecordSet.Fields.Item("U_BDOSWhtAmt").Value;
-                            whtPnAp += oRecordSet.Fields.Item("U_BDOSPnPhAm").Value;
-                            whtCoAp += oRecordSet.Fields.Item("U_BDOSPnCoAm").Value;
+                            whtAmtAp += wTaxAmt;
+                            whtPnAp += pensionAmt;
+                            whtCoAp += pensionAmt;
                         }
                     }
-                } else if (oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Checked && oMatrix.Columns.Item("45").Cells.Item(i).Specific.Value == "19")
+                } 
+                else if (oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Checked && oMatrix.Columns.Item("45").Cells.Item(i).Specific.Value == "19")
                 {
                     string docNum = oMatrix.Columns.Item("1").Cells.Item(i).Specific.Value;
                     string WTCode = "";
                     checkWTaxCodeFromMatrix(oMatrix, i, out WTCode, "ORPC", "RPC5", "18");
+
+                    var totalPayment = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("24").Cells.Item(i).Specific.String));
+                    CalculateWTax(WTCode, totalPayment, out decimal wTaxAmt, out decimal pensionAmt);
+
                     SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
                     string query = "select \"U_BDOSWhtAmt\", \"U_BDOSPnPhAm\", \"U_BDOSPnCoAm\" from RPC1 " + "\n"
@@ -5837,15 +5859,15 @@ namespace BDO_Localisation_AddOn
                     {
                         if (!forAdditionalJE)
                         {
-                            whtAmtAp += oRecordSet.Fields.Item("U_BDOSWhtAmt").Value;
-                            whtPnAp += oRecordSet.Fields.Item("U_BDOSPnPhAm").Value;
-                            whtCoAp += oRecordSet.Fields.Item("U_BDOSPnCoAm").Value;
+                            whtAmtAp += wTaxAmt;
+                            whtPnAp += pensionAmt;
+                            whtCoAp += pensionAmt;
                         }
                         else if (forAdditionalJE && oRecordSet.Fields.Item("U_BDOSPnPhAm").Value != 0 && !isInvoiceType(WTCode))
                         {
-                            whtAmtAp += oRecordSet.Fields.Item("U_BDOSWhtAmt").Value;
-                            whtPnAp += oRecordSet.Fields.Item("U_BDOSPnPhAm").Value;
-                            whtCoAp += oRecordSet.Fields.Item("U_BDOSPnCoAm").Value;
+                            whtAmtAp += wTaxAmt;
+                            whtPnAp += pensionAmt;
+                            whtCoAp += pensionAmt;
                         }
                     }
                 }
@@ -5873,13 +5895,28 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            Wtax = whtAmtOnAcct + (decimal)whtAmtAp;
-            WtPh = whtPnOnAcct + (decimal)whtPnAp;
-            WtCo = whtCoOnAcct + (decimal)whtCoAp;
+            Wtax = whtAmtOnAcct + whtAmtAp;
+            WtPh = whtPnOnAcct + whtPnAp;
+            WtCo = whtCoOnAcct + whtCoAp;
             
             oForm.Items.Item("BDOSPnPhAm").Specific.Value = WtPh;
             oForm.Items.Item("BDOSPnCoAm").Specific.Value = WtCo;
             oForm.Items.Item("BDOSWhtAmt").Specific.Value = Wtax;
+
+            void CalculateWTax(string wTaxCode, decimal totalAmt, out decimal whtAmt, out decimal pension)
+            {
+                var wTaxrate = getRate(wTaxCode)/100;
+                if (!isPension(wTaxCode, out _))
+                {
+                    whtAmt = totalAmt / (1 - wTaxrate) * wTaxrate;
+                    pension = 0;
+                }
+                else
+                {
+                    whtAmt = totalAmt / 0.98M / (1 - wTaxrate) * 0.98M * wTaxrate;
+                    pension = totalAmt / 0.98M / (1 - wTaxrate) * 0.02M;
+                }
+            }
         }
 
         public static bool isInvoiceType(string WTCode)
