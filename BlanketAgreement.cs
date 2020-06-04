@@ -444,5 +444,35 @@ namespace BDO_Localisation_AddOn
                 Marshal.ReleaseComObject(oRecordSet);
             }
         }
+
+        public static string GetBPByBlAgreement(string absId)
+        {
+            if (absId.Length == 0) return "";
+
+            var recordset = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            var query = new StringBuilder();
+            query.Append("SELECT \"BpCode\" \n");
+            query.Append("FROM OOAT \n");
+            query.Append("WHERE \"AbsID\" = '" + absId + "'");
+
+            recordset.DoQuery(query.ToString());
+            return !recordset.EoF ? recordset.Fields.Item("BpCode").Value.ToString() : "";
+        }
+
+        public static string GetBPCurrByBlAgreement(string absId)
+        {
+            if (absId.Length == 0) return "";
+
+            var recordset = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            var query = new StringBuilder();
+            query.Append("SELECT \"BPCurr\" \n");
+            query.Append("FROM OOAT \n");
+            query.Append("WHERE \"AbsID\" = '" + absId + "'");
+
+            recordset.DoQuery(query.ToString());
+            return !recordset.EoF ? recordset.Fields.Item("BPCurr").Value.ToString() : "";
+        }
     }
 }
