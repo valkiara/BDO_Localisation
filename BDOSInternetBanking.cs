@@ -389,6 +389,9 @@ namespace BDO_Localisation_AddOn
                     oItem.Visible = false;
                 }
 
+                oForm.Items.Item("DocTypeS").Visible = CommonFunctions.isHRAddOnConnected();
+                oForm.Items.Item("DocTypeCB").Visible = CommonFunctions.isHRAddOnConnected();
+
                 oItem = oForm.Items.Item("rprtCodeS");
                 oItem.Visible = false;
 
@@ -491,8 +494,10 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, true);
                 return;
             }
+            
+            var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "paymentToEmployee" : "";
 
-            string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments);
+            string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType);
             string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(null, account, startDate, endDate, bankProgram, allDocuments);
             try
             {
@@ -699,6 +704,33 @@ namespace BDO_Localisation_AddOn
                             fillExportMTR_TBC(oForm, oBaseQueryResultIoStc, oAccountMovementDetailIoStc, true);
                         else if (bankProgram == "BOG" && oStatementDetailStc != null)
                             fillExportMTR_BOG(oForm, oStatementDetailStc, true);
+                    }
+                    else if (pVal.ItemUID == "exportMTR" && pVal.ColUID == "TransType" && pVal.ItemChanged)
+                    {
+                        SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("exportMTR");
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("exportMTR").Specific;
+                        oMatrix.FlushToDataSource();
+
+                        int rowIndex = pVal.Row - 1;
+                        string treasuryCode = oDataTable.GetValue("TreasuryCode", rowIndex);
+                        string transactionType = oDataTable.GetValue("TransactionType", rowIndex);
+
+                        Enum.TryParse(transactionType, out OperationTypeFromIntBank oOperationTypeFromIntBank);
+
+                        oDataTable.SetValue("Project", rowIndex, "");
+                        oDataTable.SetValue("BlnkAgr", rowIndex, "");
+                        oDataTable.SetValue("UseBlaAgRt", rowIndex, "N");
+
+                        SAPbobsCOM.Recordset oRecordSet = BDOSInternetBankingIntegrationServicesRules.getRules(oOperationTypeFromIntBank, treasuryCode);
+                        if (oRecordSet != null)
+                        {
+                            oDataTable.SetValue("GLAccountCode", rowIndex, oRecordSet.Fields.Item("U_AcctCode").Value == null ? "" : oRecordSet.Fields.Item("U_AcctCode").Value);
+                            Marshal.FinalReleaseComObject(oRecordSet);
+                        }
+                        else
+                            oDataTable.SetValue("GLAccountCode", rowIndex, "");
+
+                        oMatrix.LoadFromDataSource();
                     }
                 }
                 else
@@ -987,6 +1019,8 @@ namespace BDO_Localisation_AddOn
                     }
 
                     oMatrix.CommonSetting.SetCellEditable(i, 33, string.IsNullOrEmpty(docEntry));
+
+                    oMatrix.CommonSetting.SetCellEditable(i, 27, string.IsNullOrEmpty(docEntry)); //Transaction Type
                 }
             }
             catch (Exception ex)
@@ -2721,6 +2755,62 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "DocTypeS"; //10 characters
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    formItems.Add("Left", left_s + 5);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top + height + 1);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("Caption", BDOSResources.getTranslate("DocType"));
+                    formItems.Add("Visible", false);
+                    formItems.Add("LinkTo", "DocTypeCB");
+                    formItems.Add("FromPane", 1);
+                    formItems.Add("ToPane", 1);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+                    listValidValuesDict = new Dictionary<string, string>
+                    {
+                        {"1", BDOSResources.getTranslate("All")},
+                        {"2", BDOSResources.getTranslate("Salary")}
+                    };
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "DocTypeCB"; //10 characters
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 30);
+                    formItems.Add("TableName", "");
+                    formItems.Add("Alias", itemName);
+                    formItems.Add("Bound", true);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    formItems.Add("Left", left_e);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top + height + 1);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("DisplayDesc", true);
+                    formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+                    formItems.Add("ValidValues", listValidValuesDict);
+                    formItems.Add("Visible", false);
+                    formItems.Add("FromPane", 1);
+                    formItems.Add("ToPane", 1);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+
                     formItems = new Dictionary<string, object>();
                     itemName = "batchNameE"; //10 characters
                     formItems.Add("isDataSource", true);
@@ -3871,7 +3961,7 @@ namespace BDO_Localisation_AddOn
                         {
                             oColumn = oColumns.Add("TransType", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
-                            oColumn.Editable = false;
+                            //oColumn.Editable = false;
                             oColumn.DataBind.Bind(UID, columnName);
                             oColumn.DisplayDesc = true;
                             oColumn.TitleObject.Sortable = true;
@@ -4813,6 +4903,19 @@ namespace BDO_Localisation_AddOn
                             }
                             else if (pVal.ItemUID == "getDataB")
                             {
+                                //SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("exportMTR").Specific;
+                                //int i = 1;
+                                //foreach (OperationTypeFromIntBank foo in Enum.GetValues(typeof(OperationTypeFromIntBank)))
+                                //{
+                                //    oMatrix.AddRow();
+                                //    oMatrix.Columns.Item("TransType").Cells.Item(i).Specific.Select(foo.ToString(), SAPbouiCOM.BoSearchKey.psk_ByValue);
+                                //    oMatrix.Columns.Item("DocEntry").Cells.Item(1).Specific.Value = "3";
+                                //    setMTRCellEditableSetting(oForm, "exportMTR", 1);
+                                //    i++;
+                                //}
+                                //oMatrix.FlushToDataSource();
+
+                                
                                 getData(oForm);
                             }
                             else if (pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2")

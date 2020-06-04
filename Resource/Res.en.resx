@@ -3535,6 +3535,30 @@
   <data name="AccountIsNotCompleted" xml:space="preserve">
     <value>Account is not completed</value>
   </data>
+  <data name="Doyouwantaddtothedeclaration" xml:space="preserve">
+    <value>Do You Want to Add to the Declaration?</value>
+  </data>
+  <data name="Doyouwanttoconfirmdocument" xml:space="preserve">
+    <value>Do You Want to Confirm Document?</value>
+  </data>
+  <data name="Doyouwanttodenydocument" xml:space="preserve">
+    <value>Do You Want to Deny Document?</value>
+  </data>
+  <data name="Doyouwanttoupdate" xml:space="preserve">
+    <value>Do You Want to Update?</value>
+  </data>
+  <data name="Doyouwanttoupdatestatus" xml:space="preserve">
+    <value>Do You Want to Update Status?</value>
+  </data>
+  <data name="CreateAPInvoice" xml:space="preserve">
+    <value>Create AP Invoice</value>
+  </data>
+  <data name="CreateAsDraft" xml:space="preserve">
+    <value>As Draft</value>
+  </data>
+  <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
+    <value>Stock Will be Revaluated on Default Revaluation Warehouse.Continue?</value>
+  </data>
   <data name="CantChooseBlaAgrForMultiBp" xml:space="preserve">
     <value>Can't choose Blanket Agreement for multiple Business Partners</value>
   </data>

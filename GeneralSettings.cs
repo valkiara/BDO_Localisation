@@ -1,8 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
+using System.Globalization;
+using System.Reflection;
+using System.Resources;
+using System.Runtime.InteropServices;
+using System.Threading;
+using SAPbobsCOM;
+using static BDO_Localisation_AddOn.Program;
 
 namespace BDO_Localisation_AddOn
 {
@@ -46,6 +53,24 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Fixed Asset Dimension");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 100);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+            
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "StockRevWh");
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Stock Revaluation Whs");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 8);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSStock");
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Stock Revaluation");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -498,8 +523,109 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
+            pane = 8;
 
+            left = oForm.Items.Item("20").Left;
+            top = oForm.Items.Item("20").Top + 15;
 
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSStock";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_BDOSStock");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 1);
+            formItems.Add("Left", left);
+            formItems.Add("Width", 160);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 14);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("StockOnOff"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            top = oForm.Items.Item("BDOSStock").Top + 15;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "StRevWhST";
+            formItems.Add("Size", 20);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", left);
+            formItems.Add("Width", 120);
+            formItems.Add("Top", top);
+            formItems.Add("Caption", BDOSResources.getTranslate("Stock Revaluation Whs"));
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            multiSelection = false;
+            objectType = "64";
+            string uniqueID_Whs = "WhsFr_CFL";
+            FormsB1.addChooseFromList(oForm, true, objectType, uniqueID_Whs);
+
+            left = oForm.Items.Item("172").Left;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "StockRevWh";
+            
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_StockRevWh");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left);
+            formItems.Add("Width", 100);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 19);
+            formItems.Add("UID", itemName);
+            formItems.Add("ChooseFromListUID", uniqueID_Whs);
+            formItems.Add("ChooseFromListAlias", "WhsCode");
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSSRWLB"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            formItems.Add("Left", left - 20);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 19);
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+            formItems.Add("LinkTo", "StockRevWh");
+            formItems.Add("LinkedObjectType", objectType);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+            
 
 
             ////Batch Number ცხრილი
@@ -626,7 +752,14 @@ namespace BDO_Localisation_AddOn
                     GC.Collect();
                 }
             }
-
+            if (oCFL.ChooseFromListUID == "WhsFr_CFL")
+            {
+                SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFL.SelectedObjects;
+                string WhsCode = oDataTableSelectedObjects.GetValue("WhsCode", 0);
+                LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("StockRevWh").Specific.Value = WhsCode);
+                SAPbouiCOM.EditText oEdit = oForm.Items.Item("StockRevWh").Specific;
+                oEdit.Value = WhsCode;
+            }
         }
 
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
@@ -697,9 +830,18 @@ namespace BDO_Localisation_AddOn
                         oCFL.SetConditions(oCons);
                     }
                 }
+
+                if ((pVal.ItemUID == "StockRevWh") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                {
+                    if (pVal.BeforeAction == false)
+                    {
+                        SAPbouiCOM.ChooseFromListEvent oCFLEvento = null;
+                        oCFLEvento = ((SAPbouiCOM.ChooseFromListEvent)(pVal));
+
+                        setValueCFLEvent(oForm, oCFLEvento, out errorText);
+                    }
+                }
             }
         }
     }
 }
-
-

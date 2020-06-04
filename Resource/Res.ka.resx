@@ -3505,6 +3505,30 @@
   <data name="AccountIsNotCompleted" xml:space="preserve">
     <value>ანგარიში არ არის შევსებული</value>
   </data>
+  <data name="Doyouwantaddtothedeclaration" xml:space="preserve">
+    <value>გსურთ თუ არა დეკლარაციაში დამატება?</value>
+  </data>
+  <data name="Doyouwanttoconfirmdocument" xml:space="preserve">
+    <value>გსურთ თუ არა ა/ფ-ს დადასტურება?</value>
+  </data>
+  <data name="Doyouwanttodenydocument" xml:space="preserve">
+    <value>გსურთ თუ არა ა/ფ-ს უარყოფა?</value>
+  </data>
+  <data name="Doyouwanttoupdate" xml:space="preserve">
+    <value>გსურთ თუ არა ა/ფ-ს განახლება?</value>
+  </data>
+  <data name="Doyouwanttoupdatestatus" xml:space="preserve">
+    <value>გსურთ თუ არა ა/ფ-ს სტატუსის განახლება?</value>
+  </data>
+  <data name="CreateAPInvoice" xml:space="preserve">
+    <value>შეიქმნას შესყიდვა</value>
+  </data>
+  <data name="CreateAsDraft" xml:space="preserve">
+    <value>დრაფტის შექმნა</value>
+  </data>
+  <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
+    <value>დოკუმენტში არსებული პროდუქტების გადაფასება მოხდება გადაფასების საწყობზე.გსურთ დოკუმენტის გაფორმება?</value>
+  </data>
   <data name="CantChooseBlaAgrForMultiBp" xml:space="preserve">
     <value>საერთო შეთანხმების არჩევა რამოდენიმე ბიზნეს პარტნიორისთვის შეუძლებელია</value>
   </data>

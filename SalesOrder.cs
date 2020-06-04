@@ -104,6 +104,11 @@ namespace BDO_Localisation_AddOn
 
                     Program.FORM_LOAD_FOR_ACTIVATE = false;
                 }
+
+                else if (pVal.EventType == BoEventTypes.et_FORM_DRAW && !pVal.BeforeAction)
+                {
+                    CommonFunctions.SetBaseDocRoundingAmountIntoTargetDoc(oForm);
+                }
             }
         }
 
