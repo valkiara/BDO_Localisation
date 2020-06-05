@@ -3389,7 +3389,7 @@ namespace BDO_Localisation_AddOn
                 decimal WhtAmount = Wtax;//FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSWhtAmt", 0).ToString());
                 decimal WhtAmountFC = DocCurrency == "" ? 0 : WhtAmount / DocRate;
 
-                decimal PhysPensionAmount = WtPh;// FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnPhAm", 0).ToString());
+                decimal PhysPensionAmount = WtPh; // FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnPhAm", 0).ToString());
                 decimal PhysPensionAmountFC = DocCurrency == "" ? 0 : PhysPensionAmount / DocRate;
 
                 decimal CompanyPensionAmount = WtCo;// FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnCoAm", 0).ToString());
@@ -3750,7 +3750,7 @@ namespace BDO_Localisation_AddOn
                             decimal onAcct = Convert.ToDecimal(oForm.Items.Item("13").Specific.Value);
                             decimal pens = onAcct * 2 / 100;
                             decimal wtacAmount = pens + (onAcct - pens) * Convert.ToDecimal(rate) / 100;
-                            oForm.Items.Item("111").Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(wtacAmount);
+                            oForm.Items.Item("111").Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(Math.Round(wtacAmount, 2));
                             oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                         }
                         if (wtCode != "")
@@ -3771,7 +3771,7 @@ namespace BDO_Localisation_AddOn
                             decimal onAcct = Convert.ToDecimal(oForm.Items.Item("13").Specific.Value);
                             decimal pens = onAcct * 2 / 100;
                             decimal wtacAmount = pens + (onAcct - pens) * Convert.ToDecimal(rate) / 100;
-                            oForm.Items.Item("111").Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(wtacAmount);
+                            oForm.Items.Item("111").Specific.Value = FormsB1.ConvertDecimalToStringForEditboxStrings(Math.Round(wtacAmount, 2));
                             oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                         }
 
@@ -5810,7 +5810,7 @@ namespace BDO_Localisation_AddOn
                 {
                     string docNum = oMatrix.Columns.Item("1").Cells.Item(i).Specific.Value;
                     string WTCode = "";
-                    checkWTaxCodeFromMatrix(oMatrix, i, out WTCode, "ODPO", "DPO5", "18");
+                    checkWTaxCodeFromMatrix(oMatrix, i, out WTCode, "ODPO", "DPO5", "204");
 
                     var totalPayment = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("24").Cells.Item(i).Specific.String));
                     CalculateWTax(WTCode, totalPayment, out decimal wTaxAmt, out decimal pensionAmt);
@@ -5842,7 +5842,7 @@ namespace BDO_Localisation_AddOn
                 {
                     string docNum = oMatrix.Columns.Item("1").Cells.Item(i).Specific.Value;
                     string WTCode = "";
-                    checkWTaxCodeFromMatrix(oMatrix, i, out WTCode, "ORPC", "RPC5", "18");
+                    checkWTaxCodeFromMatrix(oMatrix, i, out WTCode, "ORPC", "RPC5", "19");
 
                     var totalPayment = Convert.ToDecimal(FormsB1.cleanStringOfNonDigits(oMatrix.Columns.Item("24").Cells.Item(i).Specific.String));
                     CalculateWTax(WTCode, totalPayment, out decimal wTaxAmt, out decimal pensionAmt);
@@ -5895,9 +5895,9 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            Wtax = whtAmtOnAcct + whtAmtAp;
-            WtPh = whtPnOnAcct + whtPnAp;
-            WtCo = whtCoOnAcct + whtCoAp;
+            Wtax = Math.Round(whtAmtOnAcct + whtAmtAp, 2);
+            WtPh = Math.Round(whtPnOnAcct + whtPnAp, 2);
+            WtCo = Math.Round(whtCoOnAcct + whtCoAp, 2);
             
             oForm.Items.Item("BDOSPnPhAm").Specific.Value = WtPh;
             oForm.Items.Item("BDOSPnCoAm").Specific.Value = WtCo;
