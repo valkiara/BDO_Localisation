@@ -3565,4 +3565,7 @@
   <data name="CantChooseMultiBp" xml:space="preserve">
     <value>Can't choose different BPs for one Blanket Agreement</value>
   </data>
+  <data name="NumberOfDays" xml:space="preserve">
+    <value>Number of Days</value>
+  </data>
 </root>
