@@ -1299,7 +1299,9 @@ namespace BDO_Localisation_AddOn
             try
             {
                 SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
-                string wtCode = docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim();
+
+                SAPbouiCOM.Matrix oMatrixWtax = oFormWtax.Items.Item("6").Specific;
+                string wtCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value; // docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim();
 
                 bool physicalEntityTax = (docDBSources.Item("OCRD").GetValue("WTLiable", 0).Trim() == "Y" &&
                                             getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
@@ -1346,7 +1348,7 @@ namespace BDO_Localisation_AddOn
                     oMatrix = oForm.Items.Item("39").Specific;
                 }
 
-                SAPbouiCOM.Matrix oMatrixWtax = oFormWtax.Items.Item("6").Specific;
+
 
                 string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value;
 
@@ -1405,14 +1407,14 @@ namespace BDO_Localisation_AddOn
                     oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensCoAm);
                 }
 
-                if (objType != "204" && WTCode == wtCode) //A/P Reserve Invoice, A/P Invoice, A/P Credit Memo
+                if (objType != "204" && WTCode == wtCode && !frgn) //A/P Reserve Invoice, A/P Invoice, A/P Credit Memo
                 {
                     decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                     PensPhAm = roundAmountByGeneralSettings(taxableAmt * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
                     WhtAmt = roundAmountByGeneralSettings((taxableAmt - PensPhAm) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
                     totalTaxes = PensPhAm + WhtAmt;
                 }
-                if (objType != "204" && WTCode != wtCode)
+                if (objType != "204" && WTCode != wtCode && !frgn)
                 {
                     decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
                     WhtAmt = taxableAmt * 20 / 100;
