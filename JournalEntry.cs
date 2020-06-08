@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Data;
 using System.Globalization;
+using System.Windows.Forms;
 using System.Xml;
+using DataTable = System.Data.DataTable;
 
 
 namespace BDO_Localisation_AddOn
@@ -52,6 +54,20 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "Blanket Agreement Number");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            #endregion
+
+            #region Use Blanket Agreement Rate Ranges
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "UseBlaAgRt");
+            fieldskeysMap.Add("TableName", "OJDT");
+            fieldskeysMap.Add("Description", "Use Blanket Agreement Rates");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -393,7 +409,7 @@ namespace BDO_Localisation_AddOn
             formItems = new Dictionary<string, object>();
             itemName = "BDOSAgrNoS"; //10 characters
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-            formItems.Add("Left", left + 18);
+            formItems.Add("Left", left + 20);
             formItems.Add("Width", width);
             formItems.Add("Top", top - height - 1);
             formItems.Add("Height", height);
@@ -419,7 +435,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_BDOSAgrNo");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-            formItems.Add("Left", left + 18);
+            formItems.Add("Left", left + 20);
             formItems.Add("Width", width);
             formItems.Add("Top", top);
             formItems.Add("Height", height);
@@ -427,6 +443,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("DisplayDesc", true);
             formItems.Add("ChooseFromListUID", "BlanketAgreement_Cfl");
             formItems.Add("ChooseFromListAlias", "AbsID");
+            formItems.Add("SetAutoManaged", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -449,6 +466,40 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
+
+            #endregion
+
+            #region Use Blanket Agreement Rate Ranges
+
+            formItems = new Dictionary<string, object>();
+            itemName = "UsBlaAgRtS"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OJDT");
+            formItems.Add("Alias", "U_UseBlaAgRt");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 1);
+            formItems.Add("Left", left + width + 20);
+            formItems.Add("Width", 100);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("UseBlAgrRt"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("SetAutoManaged", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            GC.Collect();
+
 
             #endregion
 
@@ -667,8 +718,13 @@ namespace BDO_Localisation_AddOn
             oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_BDOSEmpID").DataBind.Alias);
         }
 
-        private static void ChooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.ChooseFromListEvent oCflEventO)
+        private static void ChooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.ChooseFromListEvent oCflEventO, out bool bubbleEvent)
         {
+            bubbleEvent = true;
+
+            var oCflId = oCflEventO.ChooseFromListUID;
+            var oCfl = oForm.ChooseFromLists.Item(oCflId);
+
             if (!pVal.BeforeAction)
             {
                 try
@@ -679,7 +735,7 @@ namespace BDO_Localisation_AddOn
 
                     if (oDataTable == null) return;
 
-                    if (oCflEventO.ChooseFromListUID == "BlanketAgreement_Cfl")
+                    if (oCflId == "BlanketAgreement_Cfl")
                     {
                         string blanketAgreementNumber = Convert.ToString(oDataTable.GetValue("AbsID", 0));
                         LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("BDOSAgrNoE").Specific.Value = blanketAgreementNumber); //ერორს აგდებს, რატო კაცმა არ იცის
@@ -693,6 +749,37 @@ namespace BDO_Localisation_AddOn
                 finally
                 {
                     oForm.Freeze(false);
+                }
+            }
+
+            else
+            {
+                if (oCflId == "BlanketAgreement_Cfl")
+                {
+                    if (IsMultiBp(oForm, out var bpCode))
+                    {
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CantChooseBlaAgrForMultiBp"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                        bubbleEvent = false;
+                        return;
+                    }
+
+                    var oCons = new SAPbouiCOM.Conditions();
+
+                    if (bpCode.Length != 0)
+                    {
+                        var oCon = oCons.Add();
+                        oCon.Alias = "BpCode";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = bpCode;
+                    }
+                    else
+                    {
+                        var oCon = oCons.Add();
+                        oCon.Alias = "AbsID";
+                        oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                        oCon.CondVal = "";
+                    }
+                    oCfl.SetConditions(oCons);
                 }
             }
         }
@@ -1085,6 +1172,10 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
                     createFormItems(oForm);
+
+                    oForm.Items.Item("BDOSAgrNoE").Enabled = false;
+                    oForm.Items.Item("UsBlaAgRtS").Enabled = false;
+
                     Program.FORM_LOAD_FOR_VISIBLE = true;
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
@@ -1121,6 +1212,11 @@ namespace BDO_Localisation_AddOn
                     {
                         setVisibleFormItems(oForm);
                     }
+
+                    else if (pVal.ItemUID == "UsBlaAgRtS")
+                    {
+                        CorrectJERateWithBlanketAgreementRateRanges(oForm, true);
+                    }
                 }
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED && pVal.BeforeAction)
@@ -1144,7 +1240,96 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
                     var oCflEventO = (SAPbouiCOM.ChooseFromListEvent)pVal;
-                    ChooseFromList(oForm, pVal, oCflEventO);
+                    ChooseFromList(oForm, pVal, oCflEventO, out BubbleEvent);
+                }
+
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE && !pVal.BeforeAction)
+                {
+                    if (pVal.ItemUID == "BDOSAgrNoE")
+                    {
+                        try
+                        {
+                            oForm.Freeze(true);
+
+                            if (oForm.Items.Item("BDOSAgrNoE").Specific.Value.Length != 0)
+                            {
+                                oForm.Items.Item("UsBlaAgRtS").Enabled = true;
+                            }
+                            else
+                            {
+                                var currentEventFilters = Program.uiApp.GetFilter();
+                                Program.uiApp.SetFilter(); //ივენთებს ჩახსნის რომ სხვა აითემზე დაჭერისას არ დააუსასრულლუპოს
+
+                                oForm.Items.Item("UsBlaAgRtS").Specific.Checked = false;
+                                oForm.Items.Item("7").Click();
+
+                                Program.uiApp.SetFilter(currentEventFilters); //აქ ვაბრუნებ ისევ
+
+                                oForm.Items.Item("UsBlaAgRtS").Enabled = false;
+                            }
+
+                            if (!pVal.InnerEvent)
+                            {
+                                CorrectJERateWithBlanketAgreementRateRanges(oForm, true);
+                            }
+                        }
+                        finally
+                        {
+                            oForm.Freeze(false);
+                        }
+                    }
+
+                    else if (pVal.ItemUID == "76" && !pVal.InnerEvent)
+                    {
+                        if (pVal.ColUID == "1")
+                        {
+                            try
+                            {
+                                oForm.Freeze(true);
+
+                                var blaAgr = oForm.Items.Item("BDOSAgrNoE");
+                                var isMultiBp = IsMultiBp(oForm, out var bpCode);
+
+                                if (blaAgr.Specific.Value.Length > 0 && isMultiBp)
+                                {
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CantChooseMultiBp"), SAPbouiCOM.BoMessageTime.bmt_Short);
+                                    oForm.Items.Item(pVal.ItemUID).Specific.GetCellSpecific(pVal.ColUID,pVal.Row).Value = "";
+                                }
+
+                                else if (bpCode != BlanketAgreement.GetBPByBlAgreement(blaAgr.Specific.Value) && blaAgr.Specific.Value.Length > 0)
+                                {
+                                    blaAgr.Specific.Value = "";
+                                }
+
+                                if (blaAgr.Enabled && blaAgr.Specific.Value.Length == 0 && bpCode.Length == 0)
+                                {
+                                    blaAgr.Enabled = false;
+                                }
+
+                                else if(!blaAgr.Enabled && bpCode.Length > 0)
+                                {
+                                    blaAgr.Enabled = true;
+                                    blaAgr.Specific.ChooseFromListUID = "BlanketAgreement_Cfl";
+                                    blaAgr.Specific.ChooseFromListAlias = "AbsID";
+                                }
+
+                            }
+                            finally
+                            {
+                                oForm.Freeze(false);
+                            }
+                        }
+
+                        else if (pVal.ColUID == "3" || pVal.ColUID == "4")
+                        {
+                            CorrectJERateWithBlanketAgreementRateRanges(oForm);
+                        }
+                    }
+
+                    else if (pVal.ItemUID == "6")
+                    {
+                            CorrectJERateWithBlanketAgreementRateRanges(oForm);
+                    }
                 }
             }
         }
@@ -1236,6 +1421,100 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 Marshal.ReleaseComObject(oRecordSet);
+            }
+        }
+
+        private static bool IsMultiBp(SAPbouiCOM.Form oForm, out string bpCode)
+        {
+            var oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("76").Specific;
+            bpCode = "";
+            var bpCount = 0;
+
+            for (var row = 1; row < oMatrix.RowCount; row++)
+            {
+                if (oMatrix.GetCellSpecific("1", row).Value.ToString() != oMatrix.GetCellSpecific("37", row).Value.ToString())
+                {
+                    if (bpCode != oMatrix.GetCellSpecific("1", row).Value.ToString())
+                    {
+                        bpCode = oMatrix.GetCellSpecific("1", row).Value.ToString();
+                        bpCount++;
+                    }
+                }
+
+                if (bpCount > 1)
+                {
+                    bpCode = "";
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void CorrectJERateWithBlanketAgreementRateRanges(SAPbouiCOM.Form oForm, bool fromCheckBox = false)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                if (oForm.Items.Item("UsBlaAgRtS").Specific.Checked)
+                {
+                    var postDate = DateTime.ParseExact(oForm.Items.Item("6").Specific.Value, "yyyyMMdd", CultureInfo.InvariantCulture);
+                    var blanketAgreement = oForm.Items.Item("BDOSAgrNoE").Specific.Value;
+                    var oMatrix = (SAPbouiCOM.Matrix) oForm.Items.Item("76").Specific;
+                    var rate = BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blanketAgreement), out string _, postDate);
+
+                    for (var row = 1; row < oMatrix.RowCount; row++)
+                    {
+                        var debitFc = oMatrix.GetCellSpecific("3", row).Value.Length > 0
+                            ? FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("3", row).Value) : decimal.Zero;
+                        var creditFc = oMatrix.GetCellSpecific("4", row).Value.Length > 0
+                            ? FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("4", row).Value) : decimal.Zero;
+
+                        if (debitFc != decimal.Zero)
+                        {
+                            oMatrix.GetCellSpecific("5", row).Value = FormsB1.ConvertDecimalToStringForEditboxStrings(debitFc * rate); //Debit
+                        }
+                        else if (creditFc != decimal.Zero)
+                        {
+                            oMatrix.GetCellSpecific("6", row).Value = FormsB1.ConvertDecimalToStringForEditboxStrings(creditFc * rate); //Credit
+                        }
+                    }
+                }
+
+                else if (!oForm.Items.Item("UsBlaAgRtS").Specific.Checked && fromCheckBox)
+                {
+                    var postDate = DateTime.ParseExact(oForm.Items.Item("6").Specific.Value, "yyyyMMdd", CultureInfo.InvariantCulture);
+                    var oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("76").Specific;
+                    var isMultiBp = IsMultiBp(oForm, out var bpCode); 
+
+                    var currency = CommonFunctions.getBPBankInfo(bpCode)?.Fields.Item("Currency").Value;
+                    if(string.IsNullOrEmpty(currency) || currency == "##" || currency == "GEL") return;
+
+                    var oSboBob = (SAPbobsCOM.SBObob) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                    var rate = Convert.ToDecimal(oSboBob.GetCurrencyRate(currency, postDate).Fields.Item("CurrencyRate").Value);
+
+                    for (var row = 1; row < oMatrix.RowCount; row++)
+                    {
+                        var debitFc = oMatrix.GetCellSpecific("3", row).Value.Length > 0
+                            ? FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("3", row).Value) : decimal.Zero;
+                        var creditFc = oMatrix.GetCellSpecific("4", row).Value.Length > 0
+                            ? FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("4", row).Value) : decimal.Zero;
+
+                        if (debitFc != decimal.Zero)
+                        {
+                            oMatrix.GetCellSpecific("5", row).Value = FormsB1.ConvertDecimalToStringForEditboxStrings(debitFc * rate); //Debit
+                        }
+                        else if (creditFc != decimal.Zero)
+                        {
+                            oMatrix.GetCellSpecific("6", row).Value = FormsB1.ConvertDecimalToStringForEditboxStrings(creditFc * rate); //Credit
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
     }
