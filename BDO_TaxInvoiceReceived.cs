@@ -6320,7 +6320,7 @@ namespace BDO_Localisation_AddOn
                                     FormsB1.SimulateRefresh();
                                 }
                             }
-                        }
+                        }              
                         else
                         {
                             if (pVal.ItemUID == "operationB")
