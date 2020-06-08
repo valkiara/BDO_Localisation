@@ -1321,7 +1321,7 @@ namespace BDO_Localisation_AddOn
                         CompanyPensionAmountFC = DocCurrency == "" ? 0 : CompanyPensionAmount / DocRate;
                         if (!wt_InvoiceType)
                         {
-                            DebitAccount = expAcct;
+                            DebitAccount = i == 0 && expAcct != "" && U_BDOSPnAcc == "Y" ? expAcct : CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
                             JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", DebitAccount, CreditAccount, CompanyPensionAmount, CompanyPensionAmountFC, DocCurrency, DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
                     }
                         //Invoice შემთხვევაში
