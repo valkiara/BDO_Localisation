@@ -6318,6 +6318,7 @@ namespace BDO_Localisation_AddOn
                                         Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
 
                                     FormsB1.SimulateRefresh();
+
                                 }
                             }
                         }              
