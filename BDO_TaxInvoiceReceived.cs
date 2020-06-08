@@ -6312,7 +6312,11 @@ namespace BDO_Localisation_AddOn
                                 if (Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantToCreateJEForDownPayment") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "") == 1)
                                 {
                                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                                    postDocument(docEntry, out errorText);
+                                    SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item(0);
+                                    string taxDat = oDBDataSource.GetValue("U_taxDate", 0);
+                                    taxDat = taxDat.Substring(0, 4) + "-" + taxDat.Substring(4, 2) + "-" + taxDat.Substring(6);
+                                    DateTime dt = DateTime.Parse(taxDat);
+                                    postDocument(docEntry, out errorText, dt);
 
                                     if (!string.IsNullOrEmpty(errorText))
                                         Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
@@ -6414,6 +6418,7 @@ namespace BDO_Localisation_AddOn
 
                 if (invStatus == "confirmed" || (invStatus == "corrected" && !corrInv) || invStatus == "correctionConfirmed" || invStatus == "paper")
                 {
+                    
                     if (taxDateFromTaxJournal.HasValue)
                     {
                         oGeneralData.SetProperty("U_taxDate", taxDateFromTaxJournal.Value);
