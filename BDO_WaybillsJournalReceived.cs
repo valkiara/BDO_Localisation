@@ -3418,7 +3418,7 @@ namespace BDO_Localisation_AddOn
                     //Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>ItemCode</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, ItemCode);
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, ItemCode.Substring(0, Math.Min(ItemCode.Length, 20)));
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>ItemName</ColumnUid> <Value>");

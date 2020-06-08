@@ -92,6 +92,30 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            Dictionary<string, string> validValues = new Dictionary<string, string>();
+            validValues.Add("C", "Calendar Year");
+            validValues.Add("F", "Fixed");
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "Type");
+            fieldskeysMap.Add("TableName", "BDOSCRLN");
+            fieldskeysMap.Add("Description", "Type");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "C");
+            fieldskeysMap.Add("ValidValues", validValues); 
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "NbrOfDays");
+            fieldskeysMap.Add("TableName", "BDOSCRLN");
+            fieldskeysMap.Add("Description", "Number of Days");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Quantity);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             GC.Collect();
         }
 
@@ -154,6 +178,12 @@ namespace BDO_Localisation_AddOn
                 oUDOFind.ColumnAlias = "U_IntPblAcct";
                 oUDOFind.ColumnDescription = "Interest Payable Account Code";
                 oUDOFind.Add();
+                oUDOFind.ColumnAlias = "U_Type";
+                oUDOFind.ColumnDescription = "Type";
+                oUDOFind.Add();
+                oUDOFind.ColumnAlias = "U_NbrOfDays";
+                oUDOFind.ColumnDescription = "Number of Days";
+                oUDOFind.Add();
 
                 for (int i = 0; i < oUDOFind.Count - 1; i++)
                 {
@@ -182,6 +212,61 @@ namespace BDO_Localisation_AddOn
             }
             Marshal.ReleaseComObject(oUserObjectMD);
         }
+
+        public static void updateUDO()
+        {
+            SAPbobsCOM.UserObjectsMD oUserObjectMD = null;
+            SAPbobsCOM.UserObjectMD_FindColumns oUDOFind = null;
+            SAPbobsCOM.UserObjectMD_FormColumns oUDOForm = null;
+            SAPbobsCOM.UserObjectMD_EnhancedFormColumns oUDOEnhancedForm = null;
+            oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
+            Marshal.ReleaseComObject(oUserObjectMD);
+            oUserObjectMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
+
+            var retval = oUserObjectMD.GetByKey("UDO_F_BDOSCRLN_D");
+
+            if (retval)
+            {
+                oUDOFind = oUserObjectMD.FindColumns;
+                oUDOForm = oUserObjectMD.FormColumns;
+                oUDOEnhancedForm = oUserObjectMD.EnhancedFormColumns;
+
+                if (oUDOForm.Count < 11)
+                {
+                    int oldCount = oUDOFind.Count - 1;
+
+                    oUDOFind.SetCurrentLine(oldCount);
+                    oUDOForm.SetCurrentLine(oldCount);
+
+                    //Find
+                    oUDOFind.Add();
+                    oUDOFind.ColumnAlias = "U_Type";
+                    oUDOFind.ColumnDescription = "Type";
+                    oUDOFind.Add();
+                    oUDOFind.ColumnAlias = "U_NbrOfDays";
+                    oUDOFind.ColumnDescription = "Number of Days";
+                    oUDOFind.Add();
+
+                    //Form
+                    oUDOForm.Add();
+                    oUDOForm.FormColumnAlias = "U_Type";
+                    oUDOForm.FormColumnDescription = "Type";
+                    oUDOForm.Editable = SAPbobsCOM.BoYesNoEnum.tYES;
+                    oUDOForm.Add();
+                    oUDOForm.FormColumnAlias = "U_NbrOfDays";
+                    oUDOForm.FormColumnDescription = "Number of Days";
+                    oUDOForm.Editable = SAPbobsCOM.BoYesNoEnum.tYES;
+                    oUDOForm.Add();
+
+                    if (oUserObjectMD.Update() != 0)
+                    {
+                        Program.uiApp.MessageBox(Program.oCompany.GetLastErrorDescription());
+                    }
+                }
+            }
+            Marshal.ReleaseComObject(oUserObjectMD);
+        }
+
 
         public static void addMenus()
         {
@@ -309,6 +394,14 @@ namespace BDO_Localisation_AddOn
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("InterestPayableAccount");
             oColumn.ChooseFromListUID = "IntPblAcctCFL";
             oColumn.ChooseFromListAlias = "AcctCode";
+
+            oColumn = oColumns.Item("U_Type");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Type");
+            oColumn.DisplayDesc = true;
+            oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
+
+            oColumn = oColumns.Item("U_NbrOfDays");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("NumberOfDays");
         }
 
         public static void setVisibleFormItems(SAPbouiCOM.Form oForm)

@@ -301,6 +301,7 @@ namespace BDO_Localisation_AddOn
             if (pVal.BeforeAction && pVal.MenuUID == "6005")
             {
                 SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
+                
 
                 if (oDocForm.TypeEx == "141" || oDocForm.TypeEx == "60092")
                 {
@@ -1535,10 +1536,10 @@ namespace BDO_Localisation_AddOn
                     ARInvoice.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
                 }
 
-                //else if (BusinessObjectInfo.FormTypeEx == "70001")
-                //{
-                //    StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
-                //}
+                else if (BusinessObjectInfo.FormTypeEx == "70001")
+                {
+                    StockRevaluation.uiApp_FormDataEvent(ref BusinessObjectInfo, out BubbleEvent);
+                }
 
                 //----------------------------->Asset Master Data<-----------------------------
                 else if (BusinessObjectInfo.Type == "4" && BusinessObjectInfo.FormTypeEx == "1473000075")
