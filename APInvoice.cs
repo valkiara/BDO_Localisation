@@ -1195,7 +1195,7 @@ namespace BDO_Localisation_AddOn
             string CardCode = BPDataSourceTable.GetValue("CardCode", 0).Trim();
             string vatCode = BPDataSourceTable.GetValue("ECVatGroup", 0).Trim();
             string TaxType = BPDataSourceTable.GetValue("U_BDO_TaxTyp", 0).Trim();
-
+            string U_BDOSPnAcc = CommonFunctions.getOADM("U_BDOSPnAcc").ToString();
             //მოგების გადასახადის გატარება
             ProfitTaxTypeIsSharing = ProfitTax.ProfitTaxTypeIsSharing();
 
@@ -1327,7 +1327,7 @@ namespace BDO_Localisation_AddOn
                         //Invoice შემთხვევაში
                         else
                         {
-                            DebitAccount= i == 0 && expAcct != "" ? expAcct : CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
+                            DebitAccount= i == 0 && expAcct != "" && U_BDOSPnAcc=="Y"? expAcct : CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "AcctCode", i).ToString();
                             CreditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ვალდებულების ანგარიში
                             JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", DebitAccount, CreditAccount, CompanyPensionAmount, CompanyPensionAmountFC, DocCurrency, DistrRule1, DistrRule2, DistrRule3, DistrRule4, DistrRule5, Project, "", "");
                         }

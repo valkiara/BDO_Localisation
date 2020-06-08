@@ -3568,4 +3568,7 @@
   <data name="NumberOfDays" xml:space="preserve">
     <value>Number of Days</value>
   </data>
+  <data name="SeparationOfCompanyPensionExpenses" xml:space="preserve">
+    <value>Separation of company pension expenses</value>
+  </data>
 </root>

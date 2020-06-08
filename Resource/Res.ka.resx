@@ -3538,4 +3538,7 @@
   <data name="NumberOfDays" xml:space="preserve">
     <value>დღეების რაოდენობა</value>
   </data>
+  <data name="SeparationOfCompanyPensionExpenses" xml:space="preserve">
+    <value>კომპანიის საპენსიო ხარჯის გამიჯვნა</value>
+  </data>
 </root>
