@@ -3503,11 +3503,13 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("drgAmount").Editable = DPitemsEditable;
                 //SAPbouiCOM.Column oColumn = oMatrix.Columns.Item("fullAmount");
                 //oColumn.Editable = (docJrnEntryIsEmpty) && elctrnic == "N";
+
+     
                 SAPbouiCOM.Matrix oMatrixDp = (SAPbouiCOM.Matrix)oForm.Items.Item("DPinvoices").Specific;
                 oForm.Items.Item("dpInvS").Specific.Caption = downPmnt == "Y" ? BDOSResources.getTranslate("DownPaymentTaxInvoiceContent") : BDOSResources.getTranslate("LinkedDPMTaxInvoices");
-                oForm.Items.Item("taxDateS").Visible = oMatrixDp.RowCount >= 1;
-                oForm.Items.Item("taxDateE").Visible = oMatrixDp.RowCount >= 1;
-                if (oMatrixDp.RowCount >= 1 && docJrnEntryIsEmpty)
+                oForm.Items.Item("taxDateS").Visible = oMatrixDp.RowCount >= 1 || downPmnt == "Y";
+                oForm.Items.Item("taxDateE").Visible = oMatrixDp.RowCount >= 1 || downPmnt == "Y";
+                if ((oMatrixDp.RowCount >= 1 || downPmnt == "Y") && docJrnEntryIsEmpty)
                 {
                     oForm.Items.Item("taxDateE").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
                     oForm.Items.Item("postB").SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, 1, SAPbouiCOM.BoModeVisualBehavior.mvb_True);
@@ -6312,15 +6314,17 @@ namespace BDO_Localisation_AddOn
                                 if (Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantToCreateJEForDownPayment") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "") == 1)
                                 {
                                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                                    postDocument(docEntry, out errorText);
-
+                                    string taxDate=oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_taxDate", 0);
+                                    if (taxDate != null) postDocument(docEntry, out errorText, DateTime.ParseExact(taxDate, "yyyyMMdd", CultureInfo.InvariantCulture));
+                                    else postDocument(docEntry, out errorText);
                                     if (!string.IsNullOrEmpty(errorText))
                                         Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
 
                                     FormsB1.SimulateRefresh();
+
                                 }
                             }
-                        }
+                        }              
                         else
                         {
                             if (pVal.ItemUID == "operationB")
@@ -6414,6 +6418,7 @@ namespace BDO_Localisation_AddOn
 
                 if (invStatus == "confirmed" || (invStatus == "corrected" && !corrInv) || invStatus == "correctionConfirmed" || invStatus == "paper")
                 {
+                    
                     if (taxDateFromTaxJournal.HasValue)
                     {
                         oGeneralData.SetProperty("U_taxDate", taxDateFromTaxJournal.Value);

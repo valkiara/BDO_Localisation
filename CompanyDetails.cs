@@ -270,6 +270,17 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            //კომპანიის საპენსიო ხარჯის გამიჯვნა    
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSPnAcc");
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Separation ოf Company Pension Expenses");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             fieldskeysMap = new Dictionary<string, object>(); //Budget Cash Flow
             fieldskeysMap.Add("Name", "BDOSDefCf");
             fieldskeysMap.Add("TableName", "OADM");
@@ -1901,6 +1912,34 @@ namespace BDO_Localisation_AddOn
             formItems.Add("ChooseFromListAlias", "WTCode");
             formItems.Add("FromPane", pane);
             formItems.Add("ToPane", pane);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSPnAcc";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_BDOSPnAcc");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Left", left);
+            formItems.Add("Width", 300);
+            formItems.Add("Top", topTAX+15);
+            formItems.Add("Height", 14);
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", pane);
+            formItems.Add("ToPane", pane);
+            formItems.Add("Description", BDOSResources.getTranslate("SeparationOfCompanyPensionExpenses"));
+            formItems.Add("Caption", BDOSResources.getTranslate("SeparationOfCompanyPensionExpenses"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)

@@ -3529,4 +3529,16 @@
   <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
     <value>დოკუმენტში არსებული პროდუქტების გადაფასება მოხდება გადაფასების საწყობზე.გსურთ დოკუმენტის გაფორმება?</value>
   </data>
+  <data name="CantChooseBlaAgrForMultiBp" xml:space="preserve">
+    <value>საერთო შეთანხმების არჩევა რამოდენიმე ბიზნეს პარტნიორისთვის შეუძლებელია</value>
+  </data>
+  <data name="CantChooseMultiBp" xml:space="preserve">
+    <value>განსხვავებული ბიზნეს პარტნიორების არჩევა შეუძლებელია ერთი საერთო შეთანხმებისთვის</value>
+  </data>
+  <data name="NumberOfDays" xml:space="preserve">
+    <value>დღეების რაოდენობა</value>
+  </data>
+  <data name="SeparationOfCompanyPensionExpenses" xml:space="preserve">
+    <value>კომპანიის საპენსიო ხარჯის გამიჯვნა</value>
+  </data>
 </root>
