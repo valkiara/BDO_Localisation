@@ -3523,4 +3523,7 @@
   <data name="StockWillbeRevaluatedonDefaultRevaluationWarehouseContinue" xml:space="preserve">
     <value>Stock Will be Revaluated on Default Revaluation Warehouse.Continue?</value>
   </data>
+  <data name="InterestPercent" xml:space="preserve">
+    <value>Interest %</value>
+  </data>
 </root>
