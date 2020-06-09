@@ -96,6 +96,25 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
+
+            var cancelB = oForm.Items.Item("2");
+
+            formItems = new Dictionary<string, object>();
+            itemName = "WbButton";
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+            formItems.Add("Left", cancelB.Left + cancelB.Width + 5);
+            formItems.Add("Width", cancelB.Width);
+            formItems.Add("Top", cancelB.Top);
+            formItems.Add("Height", cancelB.Height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", itemName);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
             oForm.DataSources.UserDataSources.Add("BDO_WblID", BoDataType.dt_SHORT_TEXT, 20);
             oForm.DataSources.UserDataSources.Add("BDO_WblNum", BoDataType.dt_SHORT_TEXT, 20);
             oForm.DataSources.UserDataSources.Add("BDO_WblSts", BoDataType.dt_SHORT_TEXT, 50);
@@ -493,7 +512,7 @@ namespace BDO_Localisation_AddOn
                 string docType = oForm.DataSources.DBDataSources.Item("OINV").GetValue("DocType", 0).Trim();
                 string objectType = "13";
 
-                if (pVal.ItemUID == "BDO_WblTxt")
+                if (pVal.ItemUID == "BDO_WblTxt" || pVal.ItemUID == "WbButton")
                 {
                     string wblDoc = oForm.DataSources.UserDataSources.Item("BDO_WblDoc").ValueEx;
                     bstrUDOObjectType = "UDO_F_BDO_WBLD_D";
@@ -799,7 +818,7 @@ namespace BDO_Localisation_AddOn
                                 oForm.Items.Item("1980002192").Click();
                             }
                         }
-                        else if (pVal.ItemUID == "BDO_WblTxt" || pVal.ItemUID == "BDO_TaxTxt")
+                        else if (pVal.ItemUID == "BDO_WblTxt" || pVal.ItemUID == "BDO_TaxTxt" || pVal.ItemUID == "WbButton")
                         {
                             int newDocEntry = 0;
                             string bstrUDOObjectType = null;
