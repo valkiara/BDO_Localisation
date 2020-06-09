@@ -378,7 +378,7 @@ namespace BDO_Localisation_AddOn
             oColumn.ChooseFromListAlias = "AcctCode";
 
             oColumn = oColumns.Item("U_IntrstRate");
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InterestRate");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InterestPercent");
 
             oColumn = oColumns.Item("U_StartDate");
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("StartingDate");

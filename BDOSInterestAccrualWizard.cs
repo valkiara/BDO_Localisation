@@ -339,7 +339,7 @@ namespace BDO_Localisation_AddOn
                     oLink.LinkedObjectType = "1"; //G/L Accounts
 
                     oColumn = oColumns.Add("IntrstRate", SAPbouiCOM.BoFormItemTypes.it_EDIT); //Interest Rate
-                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("InterestRate");
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("InterestPercent");
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind(UID, "U_IntrstRate");
 
@@ -653,7 +653,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     string currency = oRecordSet.Fields.Item("U_CurrCode").Value;
-                    decimal interestRate = Convert.ToDecimal(oRecordSet.Fields.Item("U_IntrstRate").Value, CultureInfo.InvariantCulture);
+                    decimal interestRate = Convert.ToDecimal(oRecordSet.Fields.Item("U_IntrstRate").Value, CultureInfo.InvariantCulture) / 100;
                     bool foreignCurrency = (!string.IsNullOrEmpty(currency) && currency != Program.LocalCurrency);
                     decimal currencyRate = foreignCurrency ? Convert.ToDecimal(oSBOBob.GetCurrencyRate(currency, docDate).Fields.Item("CurrencyRate").Value, CultureInfo.InvariantCulture) : decimal.Zero;
 

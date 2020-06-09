@@ -3541,4 +3541,7 @@
   <data name="SeparationOfCompanyPensionExpenses" xml:space="preserve">
     <value>კომპანიის საპენსიო ხარჯის გამიჯვნა</value>
   </data>
+  <data name="InterestPercent" xml:space="preserve">
+    <value>საპროცენტო განაკვეთი</value>
+  </data>
 </root>
