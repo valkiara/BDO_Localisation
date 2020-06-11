@@ -3055,7 +3055,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
                 
-                if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction) //BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction
+                if (BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.EventType != SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE) //BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction
                 {
                     //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
                     SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item(0);
