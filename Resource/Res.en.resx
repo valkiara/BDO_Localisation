@@ -3571,4 +3571,7 @@
   <data name="SeparationOfCompanyPensionExpenses" xml:space="preserve">
     <value>Separation of company pension expenses</value>
   </data>
+  <data name="InterestPercent" xml:space="preserve">
+    <value>Interest %</value>
+  </data>
 </root>

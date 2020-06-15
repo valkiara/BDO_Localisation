@@ -968,7 +968,7 @@ namespace BDO_Localisation_AddOn
             oLink.LinkedObjectType = "1"; //G/L Accounts
 
             oColumn = oColumns.Add("IntrstRate", SAPbouiCOM.BoFormItemTypes.it_EDIT); //Interest Rate
-            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InterestRate");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("InterestPercent");
             oColumn.Editable = false;
             oColumn.DataBind.SetBound(true, "@BDOSINA1", "U_IntrstRate");
 
