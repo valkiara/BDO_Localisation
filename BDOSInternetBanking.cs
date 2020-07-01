@@ -1283,7 +1283,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     string payrollKeywordTemp = payrollKeyword;
-                    while (payrollKeywordTemp.IndexOf(";") > 0 || payrollKeywordTemp != "")
+                    while (payrollKeywordTemp.IndexOf(";") >= 0 || payrollKeywordTemp != "")
                     {
                         int iSep = payrollKeywordTemp.IndexOf(";");
                         string Sep = payrollKeywordTemp;
@@ -1298,7 +1298,7 @@ namespace BDO_Localisation_AddOn
                             payrollKeywordTemp = "";
                         }
 
-                        if (EntryComment.IndexOf(Sep) > 0)
+                        if (EntryComment.IndexOf(Sep) >= 0)
                         {
                             oOperationTypeFromIntBank = OperationTypeFromIntBank.Salary;
                         }
@@ -1679,7 +1679,7 @@ namespace BDO_Localisation_AddOn
                         partnerCurrency = "";
                     }
                     string payrollKeywordTemp = payrollKeyword;
-                    while (payrollKeywordTemp.IndexOf(";") > 0 || payrollKeywordTemp != "")
+                    while (payrollKeywordTemp.IndexOf(";") >= 0 || payrollKeywordTemp != "")
                     {
                         int iSep = payrollKeywordTemp.IndexOf(";");
                         string Sep = payrollKeywordTemp;
@@ -1694,7 +1694,7 @@ namespace BDO_Localisation_AddOn
                             payrollKeywordTemp = "";
                         }
 
-                        if (EntryComment.IndexOf(Sep) > 0)
+                        if (EntryComment.IndexOf(Sep) >= 0)
                         {
                             oOperationTypeFromIntBank = OperationTypeFromIntBank.Salary;
                         }
