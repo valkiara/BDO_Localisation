@@ -3574,4 +3574,10 @@
   <data name="InterestPercent" xml:space="preserve">
     <value>Interest %</value>
   </data>
+  <data name="realNew" xml:space="preserve">
+    <value>Real (New)</value>
+  </data>
+  <data name="testNew" xml:space="preserve">
+    <value>Test (New)</value>
+  </data>
 </root>

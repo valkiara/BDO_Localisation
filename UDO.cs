@@ -193,6 +193,8 @@ namespace BDO_Localisation_AddOn
             listValidValuesDict = new Dictionary<string, string>();
             listValidValuesDict.Add("test", "test");
             listValidValuesDict.Add("real", "real");
+            listValidValuesDict.Add("testNew", "test new");
+            listValidValuesDict.Add("realNew", "real new");
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "mode");
@@ -204,6 +206,9 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Mandatory", SAPbobsCOM.BoYesNoEnum.tYES);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            resultTmp = addNewValidValuesUserFieldsMD("@BDO_INTB", "mode", "testNew", "test new", out errorText);
+            resultTmp = addNewValidValuesUserFieldsMD("@BDO_INTB", "mode", "realNew", "real new", out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "WSDL");
