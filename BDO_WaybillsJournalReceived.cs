@@ -3334,7 +3334,7 @@ namespace BDO_Localisation_AddOn
                     {
                         SAPbobsCOM.Recordset orec = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                         ItemCode = CatalogEntry.Fields.Item("ItemCode").Value;
-                        string queryForName = "select \"ItemName\" from OITM " + "\n" + "where \"ItemCode\"='" + ItemCode + "'";
+                        string queryForName = "select \"ItemName\" from OITM " + "\n" + "where \"ItemCode\"= N'" + ItemCode + "'";
                         orec.DoQuery(queryForName);
                         if (!orec.EoF) ItemName = orec.Fields.Item("ItemName").Value;
                         WBGUntCode = CatalogEntry.Fields.Item("U_BDO_UoMCod").Value;
@@ -3377,9 +3377,9 @@ namespace BDO_Localisation_AddOn
                         oRecordSetBN.MoveNext();
                     }
                     String priceQuery = "select TOP 1 * from( " + "\n" + "select OPDN.\"CardCode\",PDN1.\"PriceAfVAT\" as \"Price\",PDN1.\"DocDate\" as \"DocDatee\" from OIVL " + "\n" + "left join OPDN on OIVL.\"CreatedBy\"=OPDN.\"DocEntry\" " + "\n"
-                    + "join PDN1 on OPDN.\"DocEntry\"=PDN1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='20' and OPDN.\"CardCode\"='" + Cardcode + "' and PDN1.\"ItemCode\"='" + ItemCode + "' " +
+                    + "join PDN1 on OPDN.\"DocEntry\"=PDN1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='20' and OPDN.\"CardCode\"= N'" + Cardcode + "' and PDN1.\"ItemCode\"= N'" + ItemCode + "' " +
                     "\n" + "union all " + "\n" + "select OPCH.\"CardCode\",PCH1.\"PriceAfVAT\"as \"Price\",PCH1.\"DocDate\" as \"DocDatee\" from OIVL " + "\n"
-                    + "left join OPCH on OIVL.\"CreatedBy\"=OPCH.\"DocEntry\" " + "\n" + "join PCH1 on OPCH.\"DocEntry\"=PCH1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='18' and OPCH.\"CardCode\"='" + Cardcode + "' and PCH1.\"ItemCode\"='" +
+                    + "left join OPCH on OIVL.\"CreatedBy\"=OPCH.\"DocEntry\" " + "\n" + "join PCH1 on OPCH.\"DocEntry\"=PCH1.\"DocEntry\" " + "\n" + "where OIVL.\"TransType\"='18' and OPCH.\"CardCode\"= N'" + Cardcode + "' and PCH1.\"ItemCode\"= N'" +
                     ItemCode + "' " + "\n" + "order by \"DocDatee\" desc)";
                     oRecordPrevPrice.DoQuery(priceQuery);
                     if (!oRecordPrevPrice.EoF) prevPrice = Convert.ToDecimal(oRecordPrevPrice.Fields.Item("Price").Value);
