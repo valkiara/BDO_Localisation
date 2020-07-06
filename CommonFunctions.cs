@@ -800,15 +800,15 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string getServiceUrlForInternetBanking(string program, out string clientID, out int port, out string errorText)
+        public static string getServiceUrlForInternetBanking(string program, out string clientID, out int port, out string mode, out string errorText)
         {
             errorText = null;
             clientID = null;
             port = 0;
+            mode = null;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-            string mode;
             string wsdl;
             string url;
 

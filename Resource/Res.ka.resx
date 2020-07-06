@@ -3544,4 +3544,10 @@
   <data name="InterestPercent" xml:space="preserve">
     <value>საპროცენტო განაკვეთი</value>
   </data>
+  <data name="realNew" xml:space="preserve">
+    <value>რეალური (ახალი)</value>
+  </data>
+  <data name="testNew" xml:space="preserve">
+    <value>სატესტო (ახალი)</value>
+  </data>
 </root>

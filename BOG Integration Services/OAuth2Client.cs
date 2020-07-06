@@ -70,7 +70,8 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
         public static string CreateAuthorizeUrl(Uri endpoint, Dictionary<string, string> values)
         {
-            var qs = string.Join("&", values.Select(kvp => String.Format("{0}={1}", WebUtility.UrlEncode(kvp.Key), WebUtility.UrlEncode(kvp.Value))).ToArray());
+            var qs = string.Join("&", values.Select(kvp => String.Format("{0}={1}", WebUtility.UrlEncode(kvp.Key), WebUtility.UrlEncode(kvp.Value).Replace("%3A", ":"))).ToArray());
+            //var qs = string.Join("&", values.Select(kvp => String.Format("{0}={1}", WebUtility.UrlEncode(kvp.Key), WebUtility.UrlEncode(kvp.Value))).ToArray());
             return string.Format("{0}?{1}", endpoint.AbsoluteUri, qs);
         }
 

@@ -2532,6 +2532,20 @@ namespace BDO_Localisation_AddOn
                                 id = "cbdab9e8-b834-474c-8b82-c56856fc3baf";
                             }
                         }
+                        else if (mode == "realNew" && program == "BOG")
+                        {
+                            wsdl = "https://api.businessonline.ge/";
+                            url = "https://account.bog.ge";
+                            port = 0;
+                            id = "d7313ff8-52b6-450f-bf5b-2fd9d98702ca";
+                        }
+                        else if(mode == "testNew" && program == "BOG")
+                        {
+                            wsdl = "https://cib-api-staging.bog.ge/";
+                            url = "https://account-test.bog.ge";//"https://account-test.bog.ge"; //https://cib-staging.bog.ge/
+                            port = 0;
+                            id = "b2f8b285-ea48-40a7-b64a-443f7104a0ec";
+                        }
                         else
                         {
                             wsdl = null;
