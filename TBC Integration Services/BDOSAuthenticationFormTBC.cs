@@ -712,14 +712,15 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                             string clientID;
                             int port;
                             string mode;
-                            string url = CommonFunctions.getServiceUrlForInternetBanking("TBC", out clientID, out port, out mode, out errorText);
+                            string url;
+                            string wsdl = CommonFunctions.getServiceWSDLForInternetBanking("TBC", out clientID, out port, out mode, out url, out errorText);
                             if (string.IsNullOrEmpty(errorText) == false)
                             {
                                 Program.uiApp.StatusBar.SetText("", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_None);
                                 Program.uiApp.StatusBar.SetText(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                                 return;
                             }
-                            serviceUrl = url;
+                            serviceUrl = wsdl;
 
                             ChangePasswordService oChangePasswordService = MainChangePasswordService.setChangePasswordService(serviceUrl, userName, password, nonce);
                             string result = MainChangePasswordService.changePassword(oChangePasswordService, newPassword, out errorText);
@@ -765,7 +766,8 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                         string clientID;
                         int port;
                         string mode;
-                        string url = CommonFunctions.getServiceUrlForInternetBanking("TBC", out clientID, out port, out mode, out errorText);
+                        string url;
+                        string wsdl = CommonFunctions.getServiceWSDLForInternetBanking("TBC", out clientID, out port, out mode, out url, out errorText);
 
                         if (string.IsNullOrEmpty(errorText) == false)
                         {
@@ -774,7 +776,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                             BubbleEvent = false;
                             return;
                         }
-                        serviceUrl = url;
+                        serviceUrl = wsdl;
                     }
 
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)

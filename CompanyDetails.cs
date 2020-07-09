@@ -2512,7 +2512,7 @@ namespace BDO_Localisation_AddOn
                             }
                             else
                             {
-                                wsdl = "api.businessonline.ge";
+                                wsdl = "https://api.businessonline.ge/api/";
                                 url = "https://businessonline.ge";
                                 port = 0;
                                 id = "d7313ff8-52b6-450f-bf5b-2fd9d98702ca";
@@ -2526,7 +2526,7 @@ namespace BDO_Localisation_AddOn
                             }
                             else
                             {
-                                wsdl = "https://cib2-web-dev.bog.ge"; //91.209.131.231
+                                wsdl = "https://cib2-web-dev.bog.ge/api/"; //91.209.131.231
                                 url = "https://cib2-web-dev.bog.ge"; //91.209.131.231
                                 port = 8090;
                                 id = "cbdab9e8-b834-474c-8b82-c56856fc3baf";
@@ -2534,15 +2534,15 @@ namespace BDO_Localisation_AddOn
                         }
                         else if (mode == "realNew" && program == "BOG")
                         {
-                            wsdl = "https://api.businessonline.ge/";
+                            wsdl = "https://api.businessonline.ge/api/";
                             url = "https://account.bog.ge";
                             port = 0;
                             id = "d7313ff8-52b6-450f-bf5b-2fd9d98702ca";
                         }
                         else if(mode == "testNew" && program == "BOG")
                         {
-                            wsdl = "https://cib-api-staging.bog.ge/";
-                            url = "https://account-test.bog.ge";//"https://account-test.bog.ge"; //https://cib-staging.bog.ge/
+                            wsdl = "https://cib-api-staging.bog.ge/api/";
+                            url = "https://account-test.bog.ge";
                             port = 0;
                             id = "b2f8b285-ea48-40a7-b64a-443f7104a0ec";
                         }
