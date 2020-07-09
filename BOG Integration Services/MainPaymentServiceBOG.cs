@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -313,7 +314,6 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
         public async static Task<Statement> getStatement(HttpClient client, string accountNumber, string currency, DateTime periodFrom, DateTime periodTo)
         {
-            string errorText = null;
             Statement statement = null;
 
             string format = "yyyy-MM-dd";
@@ -326,7 +326,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             }
             else
             {
-                errorText = await ShowErrorMessage(response);
+                throw new Exception(await ShowErrorMessage(response));
             }
             return statement;
         }

@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -41,7 +43,8 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             string clientIdTemp;
             int port;
             string mode;
-            string url = CommonFunctions.getServiceUrlForInternetBanking("BOG", out clientIdTemp, out port, out mode, out errorText);
+            string url;
+            string wsdl = CommonFunctions.getServiceWSDLForInternetBanking("BOG", out clientIdTemp, out port, out mode, out url, out errorText);
             string scope = "read write";
 
             if (string.IsNullOrEmpty(errorText) == false)
@@ -68,15 +71,13 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             }
             else if (mode == "testNew")
             {
-                //url = "https://account-test.bog.ge"
                 AuthorizeUrl = $"{url}/auth/realms/bog-test/protocol/openid-connect/auth";
                 CallbackUri = $"{url}/auth/realms/bog-test/protocol/openid-connect/token";
                 scope = "corp";
             }
 
             ClientId = clientIdTemp;
-            ApiBaseUrl = url + "/api/"; //https://cib2-web-dev.bog.ge
-            ApiBaseUrl = ApiBaseUrl.Replace("https://businessonline.ge", "https://api.businessonline.ge"); //?????????
+            ApiBaseUrl = wsdl;
             LocationURL = false;
 
             var client = new OAuth2Client(new Uri(AuthorizeUrl));
@@ -359,12 +360,12 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
+                //int errCode;
+                //string errMsg;
 
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
-                Program.uiApp.SetStatusBarMessage(errorText);
+                //Program.oCompany.GetLastError(out errCode, out errMsg);
+                //errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                Program.uiApp.SetStatusBarMessage($"{ex.Message} Inner Error: {ex.InnerException.Message}", SAPbouiCOM.BoMessageTime.bmt_Short);
             }
             finally
             {
@@ -374,12 +375,15 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
         private static HttpClient InitializeClient()
         {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri(ApiBaseUrl)
-            };
+            var client = new HttpClient();
 
-            client.SetBearerToken(AuthorizeResponse.AccessToken);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            client.BaseAddress = new Uri(ApiBaseUrl);         
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizeResponse.AccessToken);
+
+            //client.SetBearerToken(AuthorizeResponse.AccessToken);
             return client;
         }
 

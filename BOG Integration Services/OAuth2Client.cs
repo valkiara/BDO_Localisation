@@ -32,7 +32,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             {
                 throw new ArgumentNullException("innerHttpClientHandler");
             }
-
+            
             Client = new HttpClient(innerHttpClientHandler)
             {
                 BaseAddress = address
