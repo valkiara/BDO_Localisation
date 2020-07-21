@@ -3550,4 +3550,10 @@
   <data name="testNew" xml:space="preserve">
     <value>სატესტო (ახალი)</value>
   </data>
+  <data name="RestrictTaxWithoutWaybill" xml:space="preserve">
+    <value>ზედნადების გარეშე ანგარიშ-ფაქტურის გამოწერის შეზღუდვა</value>
+  </data>
+  <data name="PleaseCreateWaybillFirst" xml:space="preserve">
+    <value>მოცემულ დოკუმენტზე არ არის გამოწერილი ზედნადები. გთხოვთ თავდაპირველად შექმნათ ზედნადები</value>
+  </data>
 </root>
