@@ -528,6 +528,27 @@ namespace BDO_Localisation_AddOn
                     {
                         if (taxDoc == "" && cancelled == "N")
                         {
+                            var invoiceRestr = CommonFunctions.getOADM("U_BDOSInvoiceRestr").ToString();
+
+                            if (invoiceRestr == "Y")
+                            {
+                                var wblDoc = oForm.DataSources.UserDataSources.Item("BDO_WblDoc").ValueEx;
+
+                                var query = new StringBuilder();
+                                query.Append("SELECT \"INV1\".\"ItemCode\" \n");
+                                query.Append("FROM \"INV1\" \n");
+                                query.Append("INNER JOIN \"OITM\" on \"INV1\".\"ItemCode\" = \"OITM\".\"ItemCode\" \n");
+                                query.Append("WHERE \"OITM\".\"InvntItem\" = 'Y' AND \"INV1\".\"DocEntry\" = '" + docEntry + "'");
+
+                                var recordset = (Recordset) Program.oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+                                recordset.DoQuery(query.ToString());
+
+                                if (!recordset.EoF && string.IsNullOrEmpty(wblDoc))
+                                {
+                                    throw new Exception(BDOSResources.getTranslate("PleaseCreateWaybillFirst"));
+                                }
+                            }
+
                             BDO_TaxInvoiceSent.createDocument(objectType, docEntry, "", true, 0, null, false, null, null, out newDocEntry, out errorText);
                             if (string.IsNullOrEmpty(errorText) && newDocEntry != 0)
                             {

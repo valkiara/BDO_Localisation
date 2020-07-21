@@ -240,6 +240,16 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSInvoiceRestr"); //ზედნადების გარეშე ანგარიშ-ფაქტურის გამოწერის შეზღუდვა
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Restrict tax invoice creation without waybill");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             //საპენსიო
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSPnCoP");
@@ -807,6 +817,38 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             //რეზერვის ინვოისიდან ფაქტურის გამოწერა როგორც მომსახურებაზე
+
+            //ზედნადების გარეშე ანგარიშ-ფაქტურის გამოწერის შეზღუდვა
+            top = top + 25;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSInRstr";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_BDOSInvoiceRestr");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Left", 13);
+            formItems.Add("Width", 300);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 14);
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("Description", BDOSResources.getTranslate("RestrictTaxWithoutWaybill"));
+            formItems.Add("Caption", BDOSResources.getTranslate("RestrictTaxWithoutWaybill"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+            //ზედნადების გარეშე ანგარიშ-ფაქტურის გამოწერის შეზღუდვა
 
             top = top + 25;
 
