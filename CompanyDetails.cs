@@ -831,7 +831,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
             formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
             formItems.Add("Left", 13);
-            formItems.Add("Width", 300);
+            formItems.Add("Width", 400);
             formItems.Add("Top", top);
             formItems.Add("Height", 14);
             formItems.Add("UID", itemName);
