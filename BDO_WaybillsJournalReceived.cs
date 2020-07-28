@@ -3945,7 +3945,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.ChooseFromListEvent oCFLEvento = (SAPbouiCOM.ChooseFromListEvent)pVal;
                             chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, pVal.Row, out errorText);
 
-                            if (!pVal.BeforeAction && !pVal.InnerEvent)
+                            if (!pVal.BeforeAction)
                             {
                                 if (errorText != "noselectedobjects")
                                 {
