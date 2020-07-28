@@ -2246,8 +2246,9 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("TYPE", SAPbouiCOM.BoFieldsType.ft_Text, 20); //14
                     oDataTable.Columns.Add("WBBlankAgr", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //15
                     oDataTable.Columns.Add("WBCOMMENT", SAPbouiCOM.BoFieldsType.ft_Text, 20); //16
-                    oDataTable.Columns.Add("WBCheckb", SAPbouiCOM.BoFieldsType.ft_Text, 20);
+                    oDataTable.Columns.Add("WBCheckb", SAPbouiCOM.BoFieldsType.ft_Text, 20); //17
                     oDataTable.Columns.Add("WBWhs", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //18
+                    oDataTable.Columns.Add("WBProject", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //19
 
 
                     int rowCounter = 1;
@@ -2530,6 +2531,19 @@ namespace BDO_Localisation_AddOn
                     oColumn.ChooseFromListUID = "WBWarehouseCFL";
                     oColumn.ChooseFromListAlias = "WhsCode";
 
+                    //WBProject
+                    FormsB1.addChooseFromList(oForm, false, "63", "WBProjectCFL");
+                    oColumn = oColumns.Add("WBProject", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("Project");
+                    oColumn.Width = 50;
+                    oColumn.Editable = true;
+                    oColumn.DataBind.Bind("WBTable", "WBProject");
+
+                    oLink = oColumn.ExtendedObject;
+                    oLink.LinkedObjectType = "63";
+
+                    oColumn.ChooseFromListUID = "WBProjectCFL";
+                    oColumn.ChooseFromListAlias = "PrjCode";
 
 
                     //-----------
@@ -2837,6 +2851,8 @@ namespace BDO_Localisation_AddOn
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBMatrix").Specific));
                         LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBBlankAgr").Cells.Item(oCFLEvento.Row).Specific.Value = WBBPCode);
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = 
+                            oDataTableSelectedObjects.GetValue("Project", 0).ToString());
                     }
 
                     else if (oCFLEvento.ChooseFromListUID == "WBProject_CFLA")
@@ -2919,6 +2935,23 @@ namespace BDO_Localisation_AddOn
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBMatrix").Specific));
                         LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBWhs").Cells.Item(oCFLEvento.Row).Specific.Value = WBWhsCode);
+
+                        string blAgreement = oMatrix.Columns.Item("WBBlankAgr").Cells.Item(oCFLEvento.Row).Specific.Value.ToString();
+
+                        if (string.IsNullOrEmpty(blAgreement))
+                        {
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = 
+                                oDataTableSelectedObjects.GetValue("U_BDOSPrjCod", 0));
+                        }
+                    }
+
+                    else if (oCFLEvento.ChooseFromListUID == "WBProjectCFL")
+                    {
+                        SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
+                        string WBPrjCode = oDataTableSelectedObjects.GetValue("PrjCode", 0);
+
+                        SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBMatrix").Specific));
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = WBPrjCode);
                     }
 
                     //else if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
@@ -3867,6 +3900,41 @@ namespace BDO_Localisation_AddOn
 
                         oForm.Freeze(true);
                         fillWBGoods(oForm, row, false, out errorText);
+
+                        if (pVal.ColUID == "WBCheckbox")
+                        {
+                            var wbMatrix = (Matrix)oForm.Items.Item("WBMatrix").Specific;
+                            var goodsMatrix = (Matrix)oForm.Items.Item("WBGdMatrix").Specific;
+                            var isChecked = wbMatrix.GetCellSpecific("WBCheckbox", row).Checked;
+
+                            if (isChecked)
+                            {
+                                var wbProject = wbMatrix.GetCellSpecific("WBProject", pVal.Row).Value;
+                                var wbWarehouse = wbMatrix.GetCellSpecific("WBWhs", pVal.Row).Value;
+                                var project = oForm.Items.Item("PrjCode").Specific.Value;
+                                var warehouse = oForm.Items.Item("Whs").Specific.Value;
+
+                                if (string.IsNullOrEmpty(wbWarehouse) && !string.IsNullOrEmpty(warehouse))
+                                {
+                                    wbMatrix.GetCellSpecific("WBWhs", pVal.Row).Value = warehouse;
+                                }
+
+                                if (string.IsNullOrEmpty(wbProject) && !string.IsNullOrEmpty(project) && string.IsNullOrEmpty(warehouse))
+                                {
+                                    wbMatrix.GetCellSpecific("WBProject", pVal.Row).Value = project;
+                                }
+
+                                var wbProjectNew = wbMatrix.GetCellSpecific("WBProject", pVal.Row).Value;
+                                if (!string.IsNullOrEmpty(wbProjectNew))
+                                {
+                                    for (var goodsRow = 1; goodsRow <= goodsMatrix.RowCount; goodsRow++)
+                                    {
+                                        goodsMatrix.GetCellSpecific("WBPrjCode", goodsRow).Value = wbProjectNew;
+                                    }
+                                }
+                            }
+                        }
+
                         oForm.Freeze(false);
                     }
 
@@ -3877,7 +3945,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.ChooseFromListEvent oCFLEvento = (SAPbouiCOM.ChooseFromListEvent)pVal;
                             chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, pVal.Row, out errorText);
 
-                            if (!pVal.BeforeAction)
+                            if (!pVal.BeforeAction && !pVal.InnerEvent)
                             {
                                 if (errorText != "noselectedobjects")
                                 {
@@ -3975,7 +4043,7 @@ namespace BDO_Localisation_AddOn
                             MatrixColumnSetArrow(oForm, pVal);
                     }
 
-                    if (!pVal.BeforeAction && (pVal.ItemUID == "Whs" || pVal.ItemUID == "PrjCode" || (pVal.ItemUID == "WBMatrix" && (pVal.ColUID == "WBBlankAgr" || pVal.ColUID == "WBWhs"))) && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                    if (!pVal.BeforeAction && (pVal.ItemUID == "Whs" || pVal.ItemUID == "PrjCode" || (pVal.ItemUID == "WBMatrix" && (pVal.ColUID == "WBBlankAgr" || pVal.ColUID == "WBWhs" || pVal.ColUID == "WBProject"))) && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         SAPbouiCOM.ChooseFromListEvent oCFLEvento = (SAPbouiCOM.ChooseFromListEvent)pVal;
                         chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, pVal.Row, out errorText);
@@ -3988,6 +4056,7 @@ namespace BDO_Localisation_AddOn
                         optBtn.Selected = true;
                         oForm.Freeze(false);
                     }
+
 
                     //if (pVal.BeforeAction == false && pVal.ItemUID == "DocAttch" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.ItemChanged)
                     //{
@@ -4031,7 +4100,6 @@ namespace BDO_Localisation_AddOn
                 }
             }
         }
-
         private static void MatrixColumnSetArrow(Form oForm, ItemEvent pVal)
         {
             try
