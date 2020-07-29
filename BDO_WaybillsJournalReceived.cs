@@ -206,6 +206,7 @@ namespace BDO_Localisation_AddOn
                         string WBBlankAgr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBBlankAgr", row - 1);
                         string comment = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBCOMMENT", row - 1);
                         string wBWhs = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBWhs", row - 1);
+                        string wBProject = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBProject", row - 1);
                         string wBEndAdr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBEndAdd", row - 1);
 
                         if (!string.IsNullOrEmpty(wBWhs)) whs = wBWhs;
@@ -239,10 +240,9 @@ namespace BDO_Localisation_AddOn
                         if (PrjCode != "")
                         {
                             APInv.Project = PrjCode;
-
                         }
 
-
+                        var blanketProject = "";
                         if (WBBlankAgr != "")
                         {
                             APInv.BlanketAgreementNumber = Convert.ToInt32(WBBlankAgr);
@@ -254,10 +254,17 @@ namespace BDO_Localisation_AddOn
 
                             if (!oRecordSetBA.EoF)
                             {
-                                APInv.Project = oRecordSetBA.Fields.Item("Project").Value;
+                                blanketProject = oRecordSetBA.Fields.Item("Project").Value;
+                                APInv.Project = blanketProject;
                             }
 
                         }
+
+                        if (wBProject != "")
+                        {
+                            APInv.Project = wBProject;
+                        }
+
                         //APInv.PaymentGroupCode = PaymentGroupCode;
                         APInv.CardCode = CardCode;
                         APInv.DocDate = WBActDate;
@@ -432,6 +439,11 @@ namespace BDO_Localisation_AddOn
                                 APInv.Lines.ProjectCode = PrjCode;
                             }
 
+                            if (blanketProject != "")
+                            {
+                                APInv.Lines.ProjectCode = blanketProject;
+                            }
+
                             if (WBPrjCode != "")
                             {
                                 APInv.Lines.ProjectCode = WBPrjCode;
@@ -440,16 +452,6 @@ namespace BDO_Localisation_AddOn
                             if (WBBlankAgr != "")
                             {
                                 APInv.Lines.AgreementNo = Convert.ToInt32(WBBlankAgr);
-
-                                SAPbobsCOM.Recordset oRecordSetBA = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                                string queryP = @"SELECT ""Project"" FROM ""OOAT"" WHERE ""AbsID"" = '" + Convert.ToInt32(WBBlankAgr) + "'";
-
-                                oRecordSetBA.DoQuery(queryP);
-
-                                if (!oRecordSetBA.EoF)
-                                {
-                                    APInv.Lines.ProjectCode = oRecordSetBA.Fields.Item("Project").Value;
-                                }
                             }
 
                             SAPbobsCOM.Recordset oRecordSetVat = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -2848,11 +2850,12 @@ namespace BDO_Localisation_AddOn
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string WBBPCode = oDataTableSelectedObjects.GetValue("AbsID", 0).ToString();
-
-                        SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBMatrix").Specific));
+                        var WBPrjCode = oDataTableSelectedObjects.GetValue("Project", 0).ToString();
+                        SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix) (oForm.Items.Item("WBMatrix").Specific));
                         LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBBlankAgr").Cells.Item(oCFLEvento.Row).Specific.Value = WBBPCode);
-                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = 
-                            oDataTableSelectedObjects.GetValue("Project", 0).ToString());
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = WBPrjCode);
+
+                        FillGoodsProject(oForm, WBPrjCode);
                     }
 
                     else if (oCFLEvento.ChooseFromListUID == "WBProject_CFLA")
@@ -2940,8 +2943,10 @@ namespace BDO_Localisation_AddOn
 
                         if (string.IsNullOrEmpty(blAgreement))
                         {
-                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = 
-                                oDataTableSelectedObjects.GetValue("U_BDOSPrjCod", 0));
+                            var WBPrjCode = oDataTableSelectedObjects.GetValue("U_BDOSPrjCod", 0);
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = WBPrjCode);
+
+                            FillGoodsProject(oForm, WBPrjCode);
                         }
                     }
 
@@ -2952,6 +2957,8 @@ namespace BDO_Localisation_AddOn
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBMatrix").Specific));
                         LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = WBPrjCode);
+
+                        FillGoodsProject(oForm, WBPrjCode);
                     }
 
                     //else if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
@@ -3109,6 +3116,16 @@ namespace BDO_Localisation_AddOn
                 }
             }
         }
+
+        private static void FillGoodsProject(Form oForm, string wBPrjCode)
+        {
+            var goodsMatrix = (Matrix) oForm.Items.Item("WBGdMatrix").Specific;
+            for (var goodsRow = 1; goodsRow <= goodsMatrix.RowCount; goodsRow++)
+            {
+                LanguageUtils.IgnoreErrors<string>(() => goodsMatrix.GetCellSpecific("WBPrjCode", goodsRow).Value = wBPrjCode);
+            }
+        }
+
         public static void findItemCode(SAPbouiCOM.Form oForm, string WBItmName, string WBBarcode)
         {
             SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("WBMatrix").Specific;
@@ -3904,7 +3921,6 @@ namespace BDO_Localisation_AddOn
                         if (pVal.ColUID == "WBCheckbox")
                         {
                             var wbMatrix = (Matrix)oForm.Items.Item("WBMatrix").Specific;
-                            var goodsMatrix = (Matrix)oForm.Items.Item("WBGdMatrix").Specific;
                             var isChecked = wbMatrix.GetCellSpecific("WBCheckbox", row).Checked;
 
                             if (isChecked)
@@ -3922,15 +3938,6 @@ namespace BDO_Localisation_AddOn
                                 if (string.IsNullOrEmpty(wbProject) && !string.IsNullOrEmpty(project) && string.IsNullOrEmpty(warehouse))
                                 {
                                     wbMatrix.GetCellSpecific("WBProject", pVal.Row).Value = project;
-                                }
-
-                                var wbProjectNew = wbMatrix.GetCellSpecific("WBProject", pVal.Row).Value;
-                                if (!string.IsNullOrEmpty(wbProjectNew))
-                                {
-                                    for (var goodsRow = 1; goodsRow <= goodsMatrix.RowCount; goodsRow++)
-                                    {
-                                        goodsMatrix.GetCellSpecific("WBPrjCode", goodsRow).Value = wbProjectNew;
-                                    }
                                 }
                             }
                         }
@@ -4055,6 +4062,16 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.OptionBtn optBtn = oForm.Items.Item("APInv").Specific;
                         optBtn.Selected = true;
                         oForm.Freeze(false);
+                    }
+
+                    else if (pVal.EventType == BoEventTypes.et_VALIDATE && !pVal.BeforeAction)
+                    {
+                        if (pVal.ItemUID == "WBMatrix" && pVal.ColUID == "WBProject" && pVal.ItemChanged)
+                        {
+                            var wbMatrix = (Matrix)oForm.Items.Item("WBMatrix").Specific;
+                            var wbProject = wbMatrix.GetCellSpecific("WBProject", pVal.Row).Value;
+                            FillGoodsProject(oForm, wbProject);
+                        }
                     }
 
 
