@@ -3935,7 +3935,7 @@ namespace BDO_Localisation_AddOn
                                     wbMatrix.GetCellSpecific("WBWhs", pVal.Row).Value = warehouse;
                                 }
 
-                                if (string.IsNullOrEmpty(wbProject) && !string.IsNullOrEmpty(project) && string.IsNullOrEmpty(warehouse))
+                                if (string.IsNullOrEmpty(wbProject) && !string.IsNullOrEmpty(project))
                                 {
                                     wbMatrix.GetCellSpecific("WBProject", pVal.Row).Value = project;
                                 }
