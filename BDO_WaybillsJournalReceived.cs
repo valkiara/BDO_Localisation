@@ -2941,13 +2941,13 @@ namespace BDO_Localisation_AddOn
 
                         string blAgreement = oMatrix.Columns.Item("WBBlankAgr").Cells.Item(oCFLEvento.Row).Specific.Value.ToString();
 
-                        if (string.IsNullOrEmpty(blAgreement))
-                        {
-                            var WBPrjCode = oDataTableSelectedObjects.GetValue("U_BDOSPrjCod", 0);
-                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = WBPrjCode);
+                        //if (string.IsNullOrEmpty(blAgreement))
+                        //{
+                        //    var WBPrjCode = oDataTableSelectedObjects.GetValue("U_BDOSPrjCod", 0);
+                        //    LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = WBPrjCode);
 
-                            FillGoodsProject(oForm, WBPrjCode);
-                        }
+                        //    FillGoodsProject(oForm, WBPrjCode);
+                        //}
                     }
 
                     else if (oCFLEvento.ChooseFromListUID == "WBProjectCFL")
