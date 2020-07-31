@@ -3975,7 +3975,7 @@ namespace BDO_Localisation_AddOn
                             MatrixColumnSetArrow(oForm, pVal);
                     }
 
-                    if (!pVal.BeforeAction && (pVal.ItemUID == "Whs" || pVal.ItemUID == "PrjCode" || (pVal.ItemUID == "WBMatrix" && (pVal.ColUID == "WBBlankAgr" || pVal.ColUID == "WBWhs"))) && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                    if ((pVal.ItemUID == "Whs" || pVal.ItemUID == "PrjCode" || (pVal.ItemUID == "WBMatrix" && (pVal.ColUID == "WBBlankAgr" || pVal.ColUID == "WBWhs"))) && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         SAPbouiCOM.ChooseFromListEvent oCFLEvento = (SAPbouiCOM.ChooseFromListEvent)pVal;
                         chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, pVal.Row, out errorText);
