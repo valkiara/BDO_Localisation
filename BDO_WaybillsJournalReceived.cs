@@ -547,11 +547,11 @@ namespace BDO_Localisation_AddOn
                                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("GoodsRcptPO") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                                     if (!asDraft)
                                     {
-                                        BDO_WBReceivedDocs.getGoodsReceipePOByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
+                                        BDO_WBReceivedDocs.getGoodsReceipePOByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out var linkedWhsGoodsReceipePO, out var linkedProjectGoodsReceipePO, out errorText);
                                     }
                                     else
                                     {
-                                        BDO_WBReceivedDocs.GetDraftByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
+                                        BDO_WBReceivedDocs.GetDraftByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out var linkedWhsDraft, out var linkedProjectDraft, out errorText);
                                     }
                                     oMatrix.Columns.Item("GdsRcpPO").Cells.Item(row).Specific.Value = LinkedDocEnrty;
                                 }
@@ -560,11 +560,11 @@ namespace BDO_Localisation_AddOn
                                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("Purchase") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                                     if (!asDraft)
                                     {
-                                        BDO_WBReceivedDocs.getInvoiceByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
+                                        BDO_WBReceivedDocs.getInvoiceByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out var linkedWhsInvoice, out var linkedProjectInvoice, out errorText);
                                     }
                                     else
                                     {
-                                        BDO_WBReceivedDocs.GetDraftByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
+                                        BDO_WBReceivedDocs.GetDraftByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out var linkedWhsDraft, out var linkedProjectDraft, out errorText);
                                     }
                                     oMatrix.Columns.Item("APInvoice").Cells.Item(row).Specific.Value = LinkedDocEnrty;
                                 }
@@ -573,7 +573,7 @@ namespace BDO_Localisation_AddOn
                             if (TYPE == "Return")//1
                             {
                                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CreatedDocumentBasedOnWaybill") + " " + BDOSResources.getTranslate("Return") + ", " + BDOSResources.getTranslate("WaybillNumber") + ": " + WBNo + " ID:" + WBID, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
-                                BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out errorText);
+                                BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEnrty, out var linkedWhsMemo, out var linkedProjectMemo, out errorText);
                                 oMatrix.Columns.Item("CredMemo").Cells.Item(row).Specific.Value = LinkedDocEnrty;
                             }
 
@@ -652,15 +652,15 @@ namespace BDO_Localisation_AddOn
                 string LinkedDocType = "";
 
                 int LinkedDocEntryInvoice = 0;
-                BDO_WBReceivedDocs.getInvoiceByWB(WBID, out LinkedDocType, out LinkedDocEntryInvoice, out errorText);
+                BDO_WBReceivedDocs.getInvoiceByWB(WBID, out LinkedDocType, out LinkedDocEntryInvoice, out var linkedWhsInvoice, out var linkedProjectInvoice, out errorText);
 
                 int LinkedDocEntryGoodsReceipePO = 0;
-                BDO_WBReceivedDocs.getGoodsReceipePOByWB(WBID, out LinkedDocType, out LinkedDocEntryGoodsReceipePO, out errorText);
+                BDO_WBReceivedDocs.getGoodsReceipePOByWB(WBID, out LinkedDocType, out LinkedDocEntryGoodsReceipePO, out var linkedWhsGoodsReceipePO, out var linkedProjectGoodsReceipePO, out errorText);
                 
-                BDO_WBReceivedDocs.GetDraftByWB(WBID, out var linkedDocTypeDraft, out var linkedDocEntryDraft, out errorText);
+                BDO_WBReceivedDocs.GetDraftByWB(WBID, out var linkedDocTypeDraft, out var linkedDocEntryDraft, out var linkedWhsDraft, out var linkedProjectDraft, out errorText);
 
                 int LinkedDocEntryMemo = 0;
-                BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEntryMemo, out errorText);
+                BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEntryMemo, out var linkedWhsMemo, out var linkedProjectMemo, out errorText);
 
                 string attachFilter = oForm.DataSources.UserDataSources.Item("Attach").Value;
 
@@ -696,11 +696,15 @@ namespace BDO_Localisation_AddOn
                 if (LinkedDocEntryInvoice != 0)
                 {
                     oDataTable.SetValue(11, rowIndex, LinkedDocEntryInvoice.ToString());
+                    oDataTable.SetValue(18, rowIndex, linkedWhsInvoice);
+                    oDataTable.SetValue(19, rowIndex, linkedProjectInvoice);
                 }
 
                 if (LinkedDocEntryGoodsReceipePO != 0)
                 {
                     oDataTable.SetValue(12, rowIndex, LinkedDocEntryGoodsReceipePO.ToString());
+                    oDataTable.SetValue(18, rowIndex, linkedWhsGoodsReceipePO);
+                    oDataTable.SetValue(19, rowIndex, linkedProjectGoodsReceipePO);
                 }
 
                 if (linkedDocEntryDraft != 0)
@@ -713,11 +717,16 @@ namespace BDO_Localisation_AddOn
                     {
                         oDataTable.SetValue(12, rowIndex, linkedDocEntryDraft.ToString());
                     }
+
+                    oDataTable.SetValue(18, rowIndex, linkedWhsDraft);
+                    oDataTable.SetValue(19, rowIndex, linkedProjectDraft);
                 }
 
                 if (LinkedDocEntryMemo != 0)
                 {
                     oDataTable.SetValue(13, rowIndex, LinkedDocEntryMemo.ToString());
+                    oDataTable.SetValue(18, rowIndex, linkedWhsMemo);
+                    oDataTable.SetValue(19, rowIndex, linkedProjectMemo);
                 }
 
                 oDataTable.SetValue(16, rowIndex, WBCOM);
@@ -2315,24 +2324,28 @@ namespace BDO_Localisation_AddOn
                         string LinkedDocType = "";
 
                         int LinkedDocEntryInvoice = 0;
-                        BDO_WBReceivedDocs.getInvoiceByWB(WBID, out LinkedDocType, out LinkedDocEntryInvoice, out errorText);
+                        BDO_WBReceivedDocs.getInvoiceByWB(WBID, out LinkedDocType, out LinkedDocEntryInvoice, out var linkedWhsInvoice, out var linkedProjectInvoice, out errorText);
 
                         int LinkedDocEntryGoodsReceipePO = 0;
-                        BDO_WBReceivedDocs.getGoodsReceipePOByWB(WBID, out LinkedDocType, out LinkedDocEntryGoodsReceipePO, out errorText);
+                        BDO_WBReceivedDocs.getGoodsReceipePOByWB(WBID, out LinkedDocType, out LinkedDocEntryGoodsReceipePO, out var linkedWhsGoodsReceipePO, out var linkedProjectGoodsReceipePO, out errorText);
 
-                        BDO_WBReceivedDocs.GetDraftByWB(WBID, out var linkedDocTypeDraft, out var linkedDocEntryDraft, out errorText);
+                        BDO_WBReceivedDocs.GetDraftByWB(WBID, out var linkedDocTypeDraft, out var linkedDocEntryDraft, out var linkedWhsDraft, out var linkedProjectDraft, out errorText);
 
                         int LinkedDocEntryMemo = 0;
-                        BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEntryMemo, out errorText);
+                        BDO_WBReceivedDocs.getMemoByWB(WBID, out LinkedDocType, out LinkedDocEntryMemo, out var linkedWhsMemo, out var linkedProjectMemo, out errorText);
 
                         if (LinkedDocEntryInvoice != 0)
                         {
                             oDataTable.SetValue(11, rowIndex, LinkedDocEntryInvoice.ToString());
+                            oDataTable.SetValue(18, rowIndex, linkedWhsInvoice);
+                            oDataTable.SetValue(19, rowIndex, linkedProjectInvoice);
                         }
 
                         if (LinkedDocEntryGoodsReceipePO != 0)
                         {
                             oDataTable.SetValue(12, rowIndex, LinkedDocEntryGoodsReceipePO.ToString());
+                            oDataTable.SetValue(18, rowIndex, linkedWhsGoodsReceipePO);
+                            oDataTable.SetValue(19, rowIndex, linkedProjectGoodsReceipePO);
                         }
 
                         if (linkedDocEntryDraft != 0)
@@ -2345,11 +2358,16 @@ namespace BDO_Localisation_AddOn
                             {
                                 oDataTable.SetValue(12, rowIndex, linkedDocEntryDraft.ToString());
                             }
+
+                            oDataTable.SetValue(18, rowIndex, linkedWhsDraft);
+                            oDataTable.SetValue(19, rowIndex, linkedProjectDraft);
                         }
 
                         if (LinkedDocEntryMemo != 0)
                         {
                             oDataTable.SetValue(13, rowIndex, LinkedDocEntryMemo.ToString());
+                            oDataTable.SetValue(18, rowIndex, linkedWhsMemo);
+                            oDataTable.SetValue(19, rowIndex, linkedProjectMemo);
                         }
 
                         rowCounter++;
@@ -4050,7 +4068,7 @@ namespace BDO_Localisation_AddOn
                             MatrixColumnSetArrow(oForm, pVal);
                     }
 
-                    if ((pVal.ItemUID == "Whs" || pVal.ItemUID == "PrjCode" || (pVal.ItemUID == "WBMatrix" && (pVal.ColUID == "WBBlankAgr" || pVal.ColUID == "WBWhs"))) && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                    if ((pVal.ItemUID == "Whs" || pVal.ItemUID == "PrjCode" || (pVal.ItemUID == "WBMatrix" && (pVal.ColUID == "WBBlankAgr" || pVal.ColUID == "WBWhs" || pVal.ColUID == "WBProject"))) && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         SAPbouiCOM.ChooseFromListEvent oCFLEvento = (SAPbouiCOM.ChooseFromListEvent)pVal;
                         chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, pVal.Row, out errorText);
@@ -4124,7 +4142,7 @@ namespace BDO_Localisation_AddOn
                 var oMatrix = (Matrix) oForm.Items.Item("WBMatrix").Specific;
                 string wbId = oMatrix.Columns.Item("WBID").Cells.Item(pVal.Row).Specific.Value;
 
-                BDO_WBReceivedDocs.GetDraftByWB(wbId, out var linkedDocTypeDraft, out var linkedDocEntryDraft,
+                BDO_WBReceivedDocs.GetDraftByWB(wbId, out var linkedDocTypeDraft, out var linkedDocEntryDraft, out var linkedWhsDraft, out var linkedProjectDraft,
                     out var errorText);
                 Column oColumn;
 

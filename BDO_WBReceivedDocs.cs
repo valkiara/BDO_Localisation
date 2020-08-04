@@ -441,24 +441,29 @@ namespace BDO_Localisation_AddOn
             return WBCompares;
         }
 
-        public static void getInvoiceByWB(  string WBID, out string DocType, out int DocEntry, out string errorText)
+        public static void getInvoiceByWB(  string WBID, out string DocType, out int DocEntry, out string whs, out string project, out string errorText)
         {
             errorText = null;
             DocType = null;
             DocEntry = 0;
+            whs = "";
+            project = "";
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             try
             {
-                oRecordSet.DoQuery("SELECT \"DocStatus\",\"DocEntry\",'APInvoice' AS \"Type\",\"CANCELED\",\"DocNum\",\"DocDate\",\"DocEntry\" AS \"Entry\"" +
-                                  "FROM \"OPCH\"" + "WHERE  (\"U_BDO_WBID\"='" + WBID + "') AND (\"CANCELED\"='N')" +
-                                  "ORDER BY \"DocDate\", \"Entry\" DESC");
+                oRecordSet.DoQuery("SELECT TOP 1 \"DocStatus\",'APInvoice' AS \"Type\",\"CANCELED\",\"DocNum\",\"OPCH\".\"DocDate\",\"OPCH\".\"DocEntry\" AS \"Entry\",\"PCH1\".\"WhsCode\", \"OPCH\".\"Project\"" +
+                                  "FROM \"OPCH\" JOIN \"PCH1\" ON \"OPCH\".\"DocEntry\" = \"PCH1\".\"DocEntry\""
+                                  + "WHERE  (\"U_BDO_WBID\"='" + WBID + "') AND (\"CANCELED\"='N')" +
+                                  "ORDER BY \"OPCH\".\"DocDate\", \"Entry\" DESC");
 
                 if (!oRecordSet.EoF)
                 {
                     DocType = oRecordSet.Fields.Item("Type").Value;
                     DocEntry = oRecordSet.Fields.Item("Entry").Value;
+                    whs = oRecordSet.Fields.Item("WhsCode").Value;
+                    project = oRecordSet.Fields.Item("Project").Value;
                 }
                 else
                 {
@@ -481,28 +486,32 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void getGoodsReceipePOByWB(  string WBID, out string DocType, out int DocEntry, out string errorText)
+        public static void getGoodsReceipePOByWB(  string WBID, out string DocType, out int DocEntry, out string whs, out string project, out string errorText)
         {
             errorText = null;
             DocType = null;
             DocEntry = 0;
+            whs = "";
+            project = "";
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             try
             {
                 string query = @"SELECT
+                                    TOP 1
 	                                ""DocStatus"",
-	                                ""DocEntry"",
 	                                'APInvoice' AS ""Type"",
 	                                ""CANCELED"",
 	                                ""DocNum"",
-	                                ""DocDate"",
-	                                ""DocEntry"" AS ""Entry"" 
-                                FROM ""OPDN"" 
+	                                ""OPDN"".""DocDate"",
+	                                ""OPDN"".""DocEntry"" AS ""Entry"",
+                                    ""PDN1"".""WhsCode"",
+                                    ""OPDN"".""Project""
+                                FROM ""OPDN"" JOIN ""PDN1"" ON ""OPDN"".""DocEntry"" = ""PDN1"".""DocEntry""
                                 WHERE (""U_BDO_WBID""='" + WBID + @"') 
                                 AND (""CANCELED""='N') 
-                                ORDER BY ""DocDate"",
+                                ORDER BY ""OPDN"".""DocDate"",
 	                                 ""Entry"" DESC";
                 oRecordSet.DoQuery(query);
 
@@ -510,6 +519,8 @@ namespace BDO_Localisation_AddOn
                 {
                     DocType = oRecordSet.Fields.Item("Type").Value;
                     DocEntry = oRecordSet.Fields.Item("Entry").Value;
+                    whs = oRecordSet.Fields.Item("WhsCode").Value;
+                    project = oRecordSet.Fields.Item("Project").Value;
                 }
                 else
                 {
@@ -532,28 +543,32 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void GetDraftByWB(string wbId, out string docType, out int docEntry, out string errorText)
+        public static void GetDraftByWB(string wbId, out string docType, out int docEntry, out string whs, out string project, out string errorText)
         {
             errorText = null;
             docType = null;
             docEntry = 0;
+            whs = "";
+            project = "";
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             try
             {
                 string query = @"SELECT
+                                    TOP 1
 	                                ""DocStatus"",
-	                                ""DocEntry"",
-	                                CASE WHEN ""ObjType"" = '18' THEN 'APInvoiceDraft' WHEN ""ObjType"" = '20' THEN 'GdsRcptDraft' END AS ""Type"",
+	                                CASE WHEN ""ODRF"".""ObjType"" = '18' THEN 'APInvoiceDraft' WHEN ""ODRF"".""ObjType"" = '20' THEN 'GdsRcptDraft' END AS ""Type"",
 	                                ""CANCELED"",
 	                                ""DocNum"",
-	                                ""DocDate"",
-	                                ""DocEntry"" AS ""Entry"" 
-                                FROM ""ODRF"" 
+	                                ""ODRF"".""DocDate"",
+	                                ""ODRF"".""DocEntry"" AS ""Entry"",
+                                    ""DRF1"".""WhsCode"",
+                                    ""ODRF"".""Project""
+                                FROM ""ODRF"" JOIN ""DRF1"" ON ""ODRF"".""DocEntry"" = ""DRF1"".""DocEntry""
                                 WHERE (""U_BDO_WBID""='" + wbId + @"') 
                                 AND (""CANCELED""='N') 
-                                ORDER BY ""DocDate"",
+                                ORDER BY ""ODRF"".""DocDate"",
 	                                 ""Entry"" DESC";
                 oRecordSet.DoQuery(query);
 
@@ -561,6 +576,8 @@ namespace BDO_Localisation_AddOn
                 {
                     docType = oRecordSet.Fields.Item("Type").Value;
                     docEntry = oRecordSet.Fields.Item("Entry").Value;
+                    whs = oRecordSet.Fields.Item("WhsCode").Value;
+                    project = oRecordSet.Fields.Item("Project").Value;
                 }
                 else
                 {
@@ -583,23 +600,27 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void getMemoByWB(  string WBID, out string DocType, out int DocEntry, out string errorText)
+        public static void getMemoByWB(  string WBID, out string DocType, out int DocEntry, out string whs, out string project, out string errorText)
         {
             errorText = null;
             DocType = null;
             DocEntry = 0;
+            whs = "";
+            project = "";
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             try
             {
-                oRecordSet.DoQuery("SELECT \"DocStatus\",\"DocEntry\",'CredMemo' AS \"Type\",\"CANCELED\",\"DocNum\",\"DocDate\",\"DocEntry\"  AS \"Entry\"" +
-                                  "FROM \"ORPC\"" + "WHERE  (\"U_BDO_WBID\"='" + WBID + "') AND (\"CANCELED\"='N')" +
-                                  "ORDER BY \"DocDate\", \"Entry\" DESC");
+                oRecordSet.DoQuery("SELECT TOP 1 \"DocStatus\",'CredMemo' AS \"Type\",\"CANCELED\",\"DocNum\", \"ORPC\".\"DocDate\", \"ORPC\".\"DocEntry\" AS \"Entry\",\"RPC1\".\"WhsCode\", \"ORPC\".\"Project\"" +
+                                  "FROM \"ORPC\" JOIN \"RPC1\" ON \"ORPC\".\"DocEntry\" = \"RPC1\".\"DocEntry\" " + "WHERE  (\"U_BDO_WBID\"='" + WBID + "') AND (\"CANCELED\"='N')" +
+                                  "ORDER BY \"ORPC\".\"DocDate\", \"Entry\" DESC");
                 if (!oRecordSet.EoF)
                 {
                     DocType = oRecordSet.Fields.Item("Type").Value;
                     DocEntry = oRecordSet.Fields.Item("Entry").Value;
+                    whs = oRecordSet.Fields.Item("WhsCode").Value;
+                    project = oRecordSet.Fields.Item("Project").Value;
                 }
                 else
                 {
