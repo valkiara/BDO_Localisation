@@ -809,7 +809,7 @@ namespace BDO_Localisation_AddOn
             url = null;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-         
+
             string wsdl;
 
             try
@@ -1285,163 +1285,97 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void fillPhysicalEntityTaxes(string objType, SAPbouiCOM.Form oFormWtax, SAPbouiCOM.Form oForm, string docDBSourcesName, string tableDBSourcesName, out string errorText)
+        public static void fillPhysicalEntityTaxes(string objType, SAPbouiCOM.Form oFormWTax, SAPbouiCOM.Form oFormAPDoc, bool isNewAPDoc, string mainTable, string childTable, out decimal wTaxAmt, out bool isForeignCurrency)
         {
-            errorText = "";
+            wTaxAmt = decimal.Zero;
+            isForeignCurrency = false;
 
-            oForm.Freeze(true);
+            oFormAPDoc.Freeze(true);
 
+            SAPbouiCOM.Matrix oMatrixWTax = oFormWTax.Items.Item("6").Specific;
             try
             {
-                SAPbouiCOM.DBDataSources docDBSources = oForm.DataSources.DBDataSources;
+                SAPbouiCOM.DBDataSources docDBSources = oFormAPDoc.DataSources.DBDataSources;
+                bool isWTLiable = docDBSources.Item("OCRD").GetValue("WTLiable", 0).Trim() == "Y";
 
-                SAPbouiCOM.Matrix oMatrixWtax = oFormWtax.Items.Item("6").Specific;
-                string wtCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value; // docDBSources.Item("OCRD").GetValue("WTCode", 0).Trim();
-
-                bool physicalEntityTax = (docDBSources.Item("OCRD").GetValue("WTLiable", 0).Trim() == "Y" &&
-                                            getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
-
-                Dictionary<string, decimal> PhysicalEntityPensionRates;
-
-                string errorTextCheck;
-                string docDatestr = docDBSources.Item(docDBSourcesName).GetValue("DocDate", 0).Trim();
-                bool frgn = docDBSources.Item(docDBSourcesName).GetValue("DocCur", 0).Trim() != getLocalCurrency();
-                if (physicalEntityTax)
+                if (isWTLiable)
                 {
-                    if (string.IsNullOrEmpty(docDatestr))
+                    string docDateStr = docDBSources.Item(mainTable).GetValue("DocDate", 0).Trim();
+
+                    if (string.IsNullOrEmpty(docDateStr))
                     {
-                        errorText = BDOSResources.getTranslate("DocDate") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty");
-                        return;
+                        throw new Exception(BDOSResources.getTranslate("DocDate") + " " + BDOSResources.getTranslate("YouCantLeaveEmpty"));
                     }
+                    DateTime docDate = DateTime.ParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
 
-                    DateTime DocDate = DateTime.ParseExact(docDatestr, "yyyyMMdd", CultureInfo.InvariantCulture);
-                    PhysicalEntityPensionRates = WithholdingTax.getPhysicalEntityPensionRates(DocDate, wtCode, out errorTextCheck);
+                    string wTCode = oMatrixWTax.Columns.Item("1").Cells.Item(1).Specific.Value;
 
-                    if (!string.IsNullOrEmpty(errorTextCheck))
+                    string errorText;
+                    Dictionary<string, decimal> physicalEntityPensionRates = WithholdingTax.getPhysicalEntityPensionRates(docDate, wTCode, out errorText);
+                    if (!string.IsNullOrEmpty(errorText))
+                        throw new Exception(errorText);
+
+                    bool physicalEntityTax = getValue("OWHT", "U_BDOSPhisTx", "WTCode", wTCode).ToString() == "Y";
+                    decimal wtRate = physicalEntityPensionRates["WTRate"] / 100;
+                    decimal pensionWTaxRate = physicalEntityTax ? physicalEntityPensionRates["PensionWTaxRate"] / 100 : 0;
+                    decimal pensionCoWTaxRate = physicalEntityTax ? physicalEntityPensionRates["PensionCoWTaxRate"] / 100 : 0;
+
+                    isForeignCurrency = docDBSources.Item(mainTable).GetValue("DocCur", 0).Trim() != getLocalCurrency();
+
+                    string docType = docDBSources.Item(mainTable).GetValue("DocType", 0).Trim();
+                    SAPbouiCOM.Matrix oMatrix = docType == "I" ? oFormAPDoc.Items.Item("38").Specific : oFormAPDoc.Items.Item("39").Specific; //Item(I) or Service(S)
+
+                    SAPbouiCOM.DBDataSource oDBDataSourceTable = docDBSources.Item(childTable);
+
+                    decimal pensEmployer = 0; //დამსაქმებელი
+                    decimal pensEmployerFC = 0; //დამსაქმებელი FC
+                    decimal pensEmployed = 0; //დასაქმებული
+                    decimal pensEmployedFC = 0; //დასაქმებული FC
+                    decimal whTaxAmt = 0; //საშემოსავლო გადასახადი
+                    decimal whTaxAmtFC = 0; //საშემოსავლო გადასახადი FC
+                    decimal grossAmt = 0; //გროსი თანხა
+                    decimal grossAmtFC = 0; //გროსი თანხა FC
+                    decimal totalTaxes = 0;
+                    decimal totalTaxesFC = 0;
+
+                    for (int row = 0; row < oDBDataSourceTable.Size; row++)
                     {
-                        errorText = errorTextCheck;
-                        return;
-                    }
-                }
-                else
-                {
-                    PhysicalEntityPensionRates = new Dictionary<string, decimal>();
-                    PhysicalEntityPensionRates.Add("WTRate", 0);
-                    PhysicalEntityPensionRates.Add("PensionWTaxRate", 0);
-                    PhysicalEntityPensionRates.Add("PensionCoWTaxRate", 0);
-                }
+                        grossAmt = Convert.ToDecimal(getChildOrDbDataSourceValue(oDBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
 
-                string docType = docDBSources.Item(docDBSourcesName).GetValue("DocType", 0).Trim();
-                SAPbouiCOM.Matrix oMatrix;
+                        whTaxAmt = roundAmountByGeneralSettings(grossAmt * wtRate * (1 - pensionWTaxRate), "Sum");
+                        pensEmployed = roundAmountByGeneralSettings(grossAmt * pensionWTaxRate, "Sum");
+                        pensEmployer = roundAmountByGeneralSettings(grossAmt * pensionCoWTaxRate, "Sum");
 
-                if (docType == "I")
-                {
-                    oMatrix = oForm.Items.Item("38").Specific;
-                }
-                else
-                {
-                    oMatrix = oForm.Items.Item("39").Specific;
-                }
+                        totalTaxes += whTaxAmt + pensEmployed;
 
-
-
-                string WTCode = oMatrixWtax.Columns.Item("1").Cells.Item(1).Specific.Value;
-
-                SAPbouiCOM.DBDataSource DBDataSourceTable = docDBSources.Item(tableDBSourcesName);
-
-                decimal totalTaxes = 0;
-                decimal PensPhAm;
-                decimal WhtAmt;
-                decimal PensCoAm;
-                decimal GrossAmount;
-                decimal PensPhAmFC;
-                decimal WhtAmtFC;
-                decimal GrossAmountFC;
-
-                for (int row = 0; row < DBDataSourceTable.Size; row++)
-                {
-                    PensPhAm = 0;
-                    WhtAmt = 0;
-                    PensCoAm = 0;
-                    GrossAmount = 0;
-                    GrossAmountFC = 0;
-
-                    GrossAmount = Convert.ToDecimal(getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
-
-                    if (physicalEntityTax && DBDataSourceTable.GetValue("WtLiable", row).Trim() == "Y" && WTCode == wtCode)
-                    {
-                        GrossAmount = Convert.ToDecimal(getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
-
-                        PensPhAm = roundAmountByGeneralSettings(GrossAmount * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
-                        WhtAmt = roundAmountByGeneralSettings((GrossAmount - PensPhAm) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
-                        PensCoAm = roundAmountByGeneralSettings(GrossAmount * PhysicalEntityPensionRates["PensionCoWTaxRate"] / 100, "Sum");
-
-                        if (frgn)
+                        if (isForeignCurrency)
                         {
-                            GrossAmountFC = Convert.ToDecimal(getChildOrDbDataSourceValue(DBDataSourceTable, null, null, "TotalFrgn", row), CultureInfo.InvariantCulture);
-                            PensPhAmFC = roundAmountByGeneralSettings(GrossAmountFC * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
-                            WhtAmtFC = roundAmountByGeneralSettings((GrossAmountFC - PensPhAmFC) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
-                            totalTaxes = totalTaxes + PensPhAmFC + WhtAmtFC;
+                            grossAmtFC = Convert.ToDecimal(getChildOrDbDataSourceValue(oDBDataSourceTable, null, null, "TotalFrgn", row), CultureInfo.InvariantCulture);
+
+                            whTaxAmtFC = roundAmountByGeneralSettings(grossAmtFC * wtRate * (1 - pensionWTaxRate), "Sum");
+                            pensEmployedFC = roundAmountByGeneralSettings(grossAmtFC * pensionWTaxRate, "Sum");
+                            pensEmployerFC = roundAmountByGeneralSettings(grossAmtFC * pensionCoWTaxRate, "Sum");
+
+                            totalTaxesFC += whTaxAmtFC + pensEmployedFC;
                         }
-                        else
+
+                        if (isNewAPDoc)
                         {
-                            totalTaxes = totalTaxes + PensPhAm + WhtAmt;
+                            oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(row + 1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(whTaxAmt);
+                            oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(row + 1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(pensEmployed);
+                            oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(row + 1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(pensEmployer);
                         }
                     }
-                    else
-                    {
-                        PensPhAm = 0;
-                        WhtAmt = GrossAmount * 20 / 100;
-                        PensCoAm = 0;
-                    }
-
-                    int rowNumber = row + 1;//Convert.ToInt32(DBDataSourceTable.GetValue("LineNum", row));
-
-                    oMatrix.Columns.Item("U_BDOSWhtAmt").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(WhtAmt);
-                    oMatrix.Columns.Item("U_BDOSPnPhAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensPhAm);
-                    oMatrix.Columns.Item("U_BDOSPnCoAm").Cells.Item(rowNumber).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(PensCoAm);
-                }
-
-                if (objType != "204" && WTCode == wtCode && !frgn) //A/P Reserve Invoice, A/P Invoice, A/P Credit Memo
-                {
-                    decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
-                    PensPhAm = roundAmountByGeneralSettings(taxableAmt * PhysicalEntityPensionRates["PensionWTaxRate"] / 100, "Sum");
-                    WhtAmt = roundAmountByGeneralSettings((taxableAmt - PensPhAm) * PhysicalEntityPensionRates["WTRate"] / 100, "Sum");
-                    totalTaxes = PensPhAm + WhtAmt;
-                }
-                if (objType != "204" && WTCode != wtCode && !frgn)
-                {
-                    decimal taxableAmt = FormsB1.cleanStringOfNonDigits(oMatrixWtax.Columns.Item("7").Cells.Item(1).Specific.Value);
-                    WhtAmt = taxableAmt * 20 / 100;
-                    totalTaxes = WhtAmt;
-                }
-
-
-
-                if (physicalEntityTax)
-                {
-                    decimal oldWhtAmt = Convert.ToDecimal(getChildOrDbDataSourceValue(docDBSources.Item(docDBSourcesName), null, null, "WTSum", 0), CultureInfo.InvariantCulture);
-                    if (oldWhtAmt != totalTaxes)
-                    {
-                        if (frgn)
-                        {
-                            oMatrixWtax.Columns.Item("28").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(totalTaxes);
-                        }
-                        else
-                        {
-                            oMatrixWtax.Columns.Item("14").Cells.Item(1).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(totalTaxes);
-                        }
-                    }
+                    wTaxAmt = isForeignCurrency ? totalTaxesFC : totalTaxes;
                 }
             }
-
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw ex;
             }
             finally
             {
-                oForm.Freeze(false);
+                oFormAPDoc.Freeze(false);
             }
         }
 
@@ -1986,7 +1920,7 @@ namespace BDO_Localisation_AddOn
 
             switch (baseType)
             {
-                case "13": 
+                case "13":
                     tableName = "OINV"; //ar invoice
                     break;
                 case "15":
@@ -2004,12 +1938,12 @@ namespace BDO_Localisation_AddOn
             query.Append("FROM \"" + tableName + "\" \n");
             query.Append("WHERE \"DocEntry\" = '" + baseKey + "'");
 
-            var recordSet = (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            var recordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             recordSet.DoQuery(query.ToString());
             if (!recordSet.EoF)
             {
-                amount = recordSet.Fields.Item("DocCur").Value == "GEL" ? (decimal) recordSet.Fields.Item("RoundDif").Value : (decimal) recordSet.Fields.Item("RoundDifFC").Value;
+                amount = recordSet.Fields.Item("DocCur").Value == "GEL" ? (decimal)recordSet.Fields.Item("RoundDif").Value : (decimal)recordSet.Fields.Item("RoundDifFC").Value;
 
             }
 
