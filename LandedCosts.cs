@@ -1109,11 +1109,12 @@ namespace BDO_Localisation_AddOn
                 {
                     setVisibleFormItems(oForm);
                 }
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & !pVal.BeforeAction)
+                string stockEnabled = CommonFunctions.getOADM("U_BDOSStock").ToString();
+                if (stockEnabled == "Y")
                 {
-                    string stockEnabled = CommonFunctions.getOADM("U_BDOSStock").ToString();
-                    if (stockEnabled == "Y")
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED & !pVal.BeforeAction)
                     {
+
                         oForm.Items.Item("BDOSStRev").Visible = true;
                         oForm.Items.Item("StockRevE").Visible = true;
                         if (pVal.ItemUID == "BDOSStRev")

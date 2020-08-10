@@ -245,13 +245,16 @@ namespace BDO_Localisation_AddOn
             try
             {
                 if (DocNum == "") return string.Empty;
-
+                
                 string query ="select \"DocEntry\" from OIPF " + "\n"
                 + "where \"DocEntry\" = ( " + "\n"
                 + "select \"U_BsDocEntry\" from OMRV " + "\n"
                 + "where \"DocEntry\" = ( " + "\n"
                 + "select \"DocEntry\" from OMRV " + "\n"
                 + "where \"DocNum\" = '" + DocNum + "'))";
+                
+                //string query = "select \"DocEntry\" from OMRV " + "\n"
+                //+ "where \"DocNum\" = '" + DocNum + "'";
 
                 oRecordSet.DoQuery(query);
                 if (!oRecordSet.EoF)
@@ -280,7 +283,8 @@ namespace BDO_Localisation_AddOn
             {
                 formDataLoad(oForm);
             }
-            if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
+            if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess
+                && BusinessObjectInfo.EventType != SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD)
             {
                 SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
                 createStockRevaluation(oForm, oMatrix);
@@ -380,9 +384,10 @@ namespace BDO_Localisation_AddOn
                 }
                 if (debCred.Contains(",")) debCred = debCred.Replace(',', '.');
                 m_MaterialRevLines.DebitCredit = Convert.ToDouble(debCred);
-                
-                m_MaterialRev.Add();
+
+                //deleteRow();
                 m_MaterialRevLines.Add();
+                m_MaterialRev.Add();
                 formDataLoad(oForm);
                 LandedCosts.formDataLoad(oFormLC);
             }
@@ -395,6 +400,29 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(m_MaterialRev);
                 Marshal.FinalReleaseComObject(m_MaterialRevLines);
             }
+        }
+
+        public static void deleteRow()
+        {
+            SAPbobsCOM.Recordset oRecordSetDocEntry = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            string queryDocEntry = "select TOP 1 \"DocEntry\" from OMRV " + "\n"
+            + "order by \"DocEntry\" desc";
+
+            oRecordSetDocEntry.DoQuery(queryDocEntry);
+
+            string docEntry = "";
+            while (!oRecordSetDocEntry.EoF)
+            {
+                docEntry = oRecordSetDocEntry.Fields.Item("DocEntry").Value.ToString();
+                oRecordSetDocEntry.MoveNext();
+            }
+
+            SAPbobsCOM.Recordset oRecordSetDelete = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            string queryDelete = "DELETE FROM OMRV WHERE \"DocEntry\"='" + docEntry + "'";
+
+            oRecordSetDelete.DoQuery(queryDelete);
+
         }
     }
 }
