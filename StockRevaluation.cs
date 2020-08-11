@@ -283,8 +283,7 @@ namespace BDO_Localisation_AddOn
             {
                 formDataLoad(oForm);
             }
-            if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess
-                && BusinessObjectInfo.EventType != SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD)
+            if (!BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
             {
                 SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
                 createStockRevaluation(oForm, oMatrix);
