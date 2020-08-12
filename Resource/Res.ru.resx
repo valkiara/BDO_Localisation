@@ -3526,4 +3526,7 @@
   <data name="InterestPercent" xml:space="preserve">
     <value>Interest %</value>
   </data>
+  <data name="ARReserveInvoice" xml:space="preserve">
+    <value>AR Reserve Invoice</value>
+  </data>
 </root>

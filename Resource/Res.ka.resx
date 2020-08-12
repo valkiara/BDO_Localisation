@@ -3556,4 +3556,7 @@
   <data name="PleaseCreateWaybillFirst" xml:space="preserve">
     <value>მოცემულ დოკუმენტზე არ არის გამოწერილი ზედნადები. გთხოვთ თავდაპირველად შექმნათ ზედნადები</value>
   </data>
+  <data name="ARReserveInvoice" xml:space="preserve">
+    <value>რეალიზაციის რეზერვი</value>
+  </data>
 </root>
