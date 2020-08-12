@@ -631,8 +631,31 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                             else if (operation == "getData") //ჩამოტვირთვა
                             {
                                 MovementService oMovementService = MainMovementService.setMovementService(serviceUrl, userName, password, nonce);
-                                AccountMovementDetailIo[] oAccountMovementDetailIo = null;
-                                BaseQueryResultIo oBaseQueryResultIo = MainMovementService.getAccountMovements(oMovementService, oAccountMovementFilterIo, out oAccountMovementDetailIo, out errorText);
+
+                                List<AccountMovementDetailIo> totalAccountMovements = new List<AccountMovementDetailIo>();
+
+                                oAccountMovementFilterIo.pager = new BasePagerIo()
+                                {
+                                    pageIndex = 0,
+                                    pageSize = 700
+                                };
+
+                                BaseQueryResultIo oBaseQueryResultIo;
+
+                                while (true)
+                                {
+                                    AccountMovementDetailIo[] oAccountMovementDetailIo = null;
+
+                                    oBaseQueryResultIo = MainMovementService.getAccountMovements(oMovementService, oAccountMovementFilterIo, out oAccountMovementDetailIo, out errorText);
+
+                                    if (oBaseQueryResultIo == null) break;
+
+                                    if (oAccountMovementDetailIo != null && oAccountMovementDetailIo.Length > 0)
+                                        totalAccountMovements.AddRange(oAccountMovementDetailIo);
+                                    else break;
+
+                                    oAccountMovementFilterIo.pager.pageIndex++;
+                                }
 
                                 if (errorText != null)
                                 {
@@ -643,7 +666,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                                 }
                                 else
                                 {
-                                    BDOSInternetBanking.fillExportMTR_TBC(form, oBaseQueryResultIo, oAccountMovementDetailIo, false);
+                                    BDOSInternetBanking.fillExportMTR_TBC(form, oBaseQueryResultIo, totalAccountMovements.ToArray(), false);
                                 }
                             }
                             if (operation != null)

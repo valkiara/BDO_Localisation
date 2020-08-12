@@ -494,7 +494,7 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, true);
                 return;
             }
-            
+
             var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "paymentToEmployee" : "";
 
             string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType);
@@ -1034,7 +1034,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void getPaymentsDocument(string table, string paymentID, string ePaymentID, string docNumber, 
+        public static void getPaymentsDocument(string table, string paymentID, string ePaymentID, string docNumber,
             string transCode, string operationCode, out string docEntry, out string docNum, out string cFWId, out string cFWName)
         {
             docEntry = "";
@@ -1425,7 +1425,7 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue("CashFlowLineItemID", row, oRecordSet.Fields.Item("U_CFWId").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_CFWId").Value.ToString());
                         oDataTable.SetValue("CashFlowLineItemName", row, oRecordSet.Fields.Item("U_CFWName").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_CFWName").Value.ToString());
                     }
-                    
+
                     if (CommonFunctions.IsDevelopment())
                     {
                         if (oRecordSet != null)
@@ -1620,7 +1620,7 @@ namespace BDO_Localisation_AddOn
                     senderAccountNumber = CommonFunctions.accountParse(senderAccountNumber);
                     beneficiaryAccountNumber = CommonFunctions.accountParse(beneficiaryAccountNumber);
 
-                    if(transactionType == "CCO") //swap
+                    if (transactionType == "CCO") //swap
                     {
                         var tempAcc = senderAccountNumber;
                         senderAccountNumber = beneficiaryAccountNumber;
@@ -3798,6 +3798,85 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
+                    #region Pager
+
+                    //left_s = left_s + 5 + width_s;
+                    //itemName = "perPageTxt";
+                    //formItems = new Dictionary<string, object>();
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    //formItems.Add("Left", left_s + 3 * 65 + 5);
+                    //formItems.Add("Width", width_e * 1.26);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("Caption", " | " + BDOSResources.getTranslate("PerPage"));
+                    //formItems.Add("FromPane", pane);
+                    //formItems.Add("ToPane", pane);
+
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    return;
+                    //}
+
+                    //left_s = left_s + 5 + width_s;
+                    //itemName = "perPage";
+                    //formItems = new Dictionary<string, object>();
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    //formItems.Add("Left", left_s + 3 * 65 + 5);
+                    //formItems.Add("Width", width_e * 1.26);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("FromPane", pane);
+                    //formItems.Add("ToPane", pane);
+
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    return;
+                    //}
+
+                    //left_s = left_s + 5 + width_s;
+                    //itemName = "prevPerPage";
+                    //formItems = new Dictionary<string, object>();
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+                    //formItems.Add("Left", left_s + 3 * 65 + 5);
+                    //formItems.Add("Width", width_e * 1.26);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("Caption", BDOSResources.getTranslate("PrevPerPage"));
+                    //formItems.Add("FromPane", pane);
+                    //formItems.Add("ToPane", pane);
+
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    return;
+                    //}
+
+                    //left_s = left_s + 5 + width_s;
+                    //itemName = "nextPerPage";
+                    //formItems = new Dictionary<string, object>();
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+                    //formItems.Add("Left", left_s + 3 * 65 + 5);
+                    //formItems.Add("Width", width_e * 1.26);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("Caption", BDOSResources.getTranslate("NextPerPage"));
+                    //formItems.Add("FromPane", pane);
+                    //formItems.Add("ToPane", pane);
+
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    return;
+                    //}
+
+                    #endregion
+
                     //Automatic payment 
 
                     top = top + height + 1;
@@ -4915,7 +4994,7 @@ namespace BDO_Localisation_AddOn
                                 //}
                                 //oMatrix.FlushToDataSource();
 
-                                
+
                                 getData(oForm);
                             }
                             else if (pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2")
