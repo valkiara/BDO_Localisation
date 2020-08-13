@@ -535,17 +535,25 @@ namespace BDO_Localisation_AddOn
                 string baseDocType;
                 int baseDoc;
                 int row;
-
+                string docType = "";
+                
                 if (count > 0)
                 {
                     foreach (SAPbobsCOM.GeneralData oChild in oChildren)
                     {
                         baseDocType = oChild.GetProperty("U_baseDocT");
                         baseDoc = oChild.GetProperty("U_baseDoc");
-
+                        
                         for (int i = 0; i < oDataTable.Rows.Count; i++)
                         {
-                            if (baseDocType == oDataTable.GetValue("DocType", i) && baseDoc == Convert.ToInt32(oDataTable.GetValue("InvoiceEntry", i)))
+                            string docTypeFromTable = oDataTable.GetValue("DocType", i);
+                            //NOTE: This(next 4 lines) is temporary solution. Check task N764
+                            if (docTypeFromTable == "ARReserveInvoice")
+                                docType = "ARInvoice";
+                            else
+                                docType = docTypeFromTable;
+                            
+                            if (baseDocType == docType && baseDoc == Convert.ToInt32(oDataTable.GetValue("InvoiceEntry", i)))
                             {
                                 row = i + 1;
                                 oMatrix.Columns.Item("LineNum").Cells.Item(row).Specific.Value = row;
