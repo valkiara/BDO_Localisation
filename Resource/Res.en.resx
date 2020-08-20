@@ -3574,4 +3574,19 @@
   <data name="InterestPercent" xml:space="preserve">
     <value>Interest %</value>
   </data>
+  <data name="realNew" xml:space="preserve">
+    <value>Real (New)</value>
+  </data>
+  <data name="testNew" xml:space="preserve">
+    <value>Test (New)</value>
+  </data>
+  <data name="RestrictTaxWithoutWaybill" xml:space="preserve">
+    <value>Restrict tax invoice creation without waybill</value>
+  </data>
+  <data name="PleaseCreateWaybillFirst" xml:space="preserve">
+    <value>Waybill is not created on this document. Please create waybill first</value>
+  </data>
+  <data name="ARReserveInvoice" xml:space="preserve">
+    <value>AR Reserve Invoice</value>
+  </data>
 </root>

@@ -800,17 +800,17 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string getServiceUrlForInternetBanking(string program, out string clientID, out int port, out string errorText)
+        public static string getServiceWSDLForInternetBanking(string program, out string clientID, out int port, out string mode, out string url, out string errorText)
         {
             errorText = null;
             clientID = null;
             port = 0;
+            mode = null;
+            url = null;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
-            string mode;
+         
             string wsdl;
-            string url;
 
             try
             {
@@ -838,7 +838,7 @@ namespace BDO_Localisation_AddOn
                         errorText = "ინტერნეტბანკის გაცვლის რეჟიმი არ არის შევსებული" + "! (" + program + ")";
                         return null;
                     }
-                    if ((program == "TBC" && string.IsNullOrEmpty(wsdl)) || (program == "BOG" && string.IsNullOrEmpty(url)))
+                    if ((program == "TBC" && string.IsNullOrEmpty(wsdl)) || (program == "BOG" && (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(wsdl))))
                     {
                         errorText = "ინტერნეტბანკის გაცვლის მისამართი არ არის შევსებული" + "! (" + program + ")";
                         return null;
@@ -848,11 +848,6 @@ namespace BDO_Localisation_AddOn
                         errorText = "ინტერნეტბანკის გაცვლისთვის პორტი არ არის შევსებული" + "! (" + program + ")";
                         return null;
                     }
-                    if (program == "BOG")
-                    {
-                        return url;
-                    }
-
                     return wsdl;
                 }
                 return null;
@@ -1951,14 +1946,14 @@ namespace BDO_Localisation_AddOn
             {
                 string query = @"SELECT 
                 ""ItemCode"", 
-                ""Dscription"", 
+                --""Dscription"", 
                 ""Warehouse"",
                 SUM(""InQty"" - ""OutQty"") AS ""InStock""
                 FROM ""OINM""
                 WHERE
                 ""ItemCode"" = '" + itemCode + @"'
                 AND ""Warehouse"" = '" + warehouse + @"' AND ""DocDate"" <= '" + docDate + @"'
-                GROUP BY ""ItemCode"", ""Dscription"", ""Warehouse""";
+                GROUP BY ""ItemCode"", ""Warehouse""";
 
                 oRecordset.DoQuery(query);
                 if (!oRecordset.EoF)

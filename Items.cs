@@ -227,9 +227,22 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSHsUsLife");
+            fieldskeysMap.Add("TableName", "OITM");
+            fieldskeysMap.Add("Description", "Historical Useful life");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
 
-            GC.Collect();
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSAcqstn");
+            fieldskeysMap.Add("TableName", "OITM");
+            fieldskeysMap.Add("Description", "Acquisition Value");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
         }
 
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)

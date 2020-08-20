@@ -1356,7 +1356,7 @@ namespace BDO_Localisation_AddOn
         {
             errorText = "";
 
-            if (!string.IsNullOrEmpty(DocEntry) && !string.IsNullOrEmpty(TransType) && !string.IsNullOrEmpty(ACNumber))
+            if (!string.IsNullOrEmpty(DocEntry) && !string.IsNullOrEmpty(TransType))
             {
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
@@ -1377,6 +1377,8 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
+                    ACNumber = string.IsNullOrEmpty(ACNumber) ? "" : ACNumber;
+
                     SAPbobsCOM.JournalEntries oJounalEntry = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oJournalEntries);
                     oJounalEntry.GetByKey(oRecordSet.Fields.Item("TransId").Value);
                     oJounalEntry.UserFields.Fields.Item("U_BDOSACNum").Value = ACNumber.Trim();

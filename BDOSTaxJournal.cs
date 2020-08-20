@@ -69,7 +69,7 @@ namespace BDO_Localisation_AddOn
                         string docEntry = oMatrix.Columns.Item("Document").Cells.Item(row).Specific.Value;
                         string docType = oMatrix.Columns.Item("DocType").Cells.Item(row).Specific.Value;
 
-                        if (checkedLine && docEntry == "" && (docType == "ARInvoice" || docType == "ARCreditNote" || docType == "ARCorrectionInvoice"))
+                        if (checkedLine && docEntry == "" && (docType == "ARInvoice" || docType == "ARReserveInvoice" || docType == "ARCreditNote" || docType == "ARCorrectionInvoice"))
                         {
                             DataRow newRow = oDataTable.NewRow();
                             for (int col = 0; col <= oDataTable.Columns.Count - 1; col++)
@@ -149,7 +149,7 @@ namespace BDO_Localisation_AddOn
                                         {
                                             foreach (SAPbobsCOM.GeneralData oChild in oChildren)
                                             {
-                                                if (oChild.GetProperty("U_baseDocT") == "ARInvoice")
+                                                if (oChild.GetProperty("U_baseDocT") == "ARInvoice" || oChild.GetProperty("U_baseDocT") == "ARReserveInvoice")
                                                 {
                                                     amount = amount + Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
                                                     amountTX = amountTX + Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
@@ -207,7 +207,7 @@ namespace BDO_Localisation_AddOn
                             if (string.IsNullOrEmpty(errorText) && oGeneralData != null)
                             {
                                 errorText = null;
-                                if (docType == "ARInvoice")
+                                if (docType == "ARInvoice" || docType == "ARReserveInvoice")
                                 {
                                     BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), null, false, answer, oGeneralData, true, docEntryARCreditNoteList, docEntryARCorrectionInvoiceList, out newDocEntry, out errorText);
                                 }
@@ -241,7 +241,7 @@ namespace BDO_Localisation_AddOn
                                 {
                                     foreach (SAPbobsCOM.GeneralData oChild in oChildren)
                                     {
-                                        if (oChild.GetProperty("U_baseDocT") == "ARInvoice")
+                                        if (oChild.GetProperty("U_baseDocT") == "ARInvoice" || oChild.GetProperty("U_baseDocT") == "ARReserveInvoice")
                                         {
                                             amount = amount + Convert.ToDecimal(oChild.GetProperty("U_amtBsDc"));
                                             amountTX = amountTX + Convert.ToDecimal(oChild.GetProperty("U_tAmtBsDc"));
@@ -342,7 +342,7 @@ namespace BDO_Localisation_AddOn
                         string corrDoc = oMatrix.Columns.Item("CorrDoc").Cells.Item(row).Specific.Value;
                         string statusDoc = oMatrix.Columns.Item("StatusDoc").Cells.Item(row).Specific.Value;
 
-                        if ((oOperation == 0 || oOperation == 1) && (docType == "ARInvoice" || docType == "ARCreditNote" || docType == "ARCorrectionInvoice") && answer == 0)
+                        if ((oOperation == 0 || oOperation == 1) && (docType == "ARInvoice" || docType == "ARReserveInvoice" || docType == "ARCreditNote" || docType == "ARCorrectionInvoice") && answer == 0)
                         {
                             answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("ARCDocumentsOnARIDoYouWantToCreateUnitedTaxInvoiceIncludingTheseDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), ""); //არსებობს რეალიზაციის დოკუმენტზე რეალიზაციის კორექტირების დოკუმენტები, გსურთ შეიქმნას ერთიანი ფაქტურა ამ დოკუმენტების გათვალისწინებით                   
                         }
@@ -360,7 +360,7 @@ namespace BDO_Localisation_AddOn
                                 {
                                     errorText = BDOSResources.getTranslate("CorrectionReasonNotIndicated") + " " + BDOSResources.getTranslate(docType) + " : " + invEntry;
                                 }
-                                else if (docType == "ARInvoice")
+                                else if (docType == "ARInvoice" || docType == "ARReserveInvoice")
                                 {
                                     BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, null, out newDocEntry, out errorText);
                                 }
@@ -393,9 +393,9 @@ namespace BDO_Localisation_AddOn
                                 {
                                     errorText = BDOSResources.getTranslate("CorrectionReasonNotIndicated") + " " + BDOSResources.getTranslate(docType) + " : " + invEntry;
                                 }
-                                else if (docType == "ARInvoice")
+                                else if (docType == "ARInvoice" || docType == "ARReserveInvoice")
                                 {
-                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null,null, out newDocEntry, out errorText);
+                                    BDO_TaxInvoiceSent.createDocument("13", Convert.ToInt32(invEntry), corrType, false, answer, null, false, null, null, out newDocEntry, out errorText);
                                 }
                                 else if (docType == "ARCreditNote")
                                 {
@@ -740,7 +740,7 @@ namespace BDO_Localisation_AddOn
 	             ""OCRD"".""LicTradNum"",
                  ""OCRD"".""U_BDO_NotInv"" AS ""BDO_NotInv"",
                 ""OCRD"".""CardName"",
-	             'ARInvoice' as ""DocType"",
+	             CASE WHEN ""OINV"".""isIns""='N' THEN 'ARInvoice' ELSE 'ARReserveInvoice' END as ""DocType"",
 	             ""OINV"".""DocEntry"" as ""BaseDoc"" 
             FROM ""OINV"" 
             LEFT JOIN ""INV1"" ON ""OINV"".""DocEntry"" = ""INV1"".""DocEntry"" 
@@ -834,7 +834,8 @@ namespace BDO_Localisation_AddOn
                   ""OCRD"".""U_BDO_NotInv"",
                 ""OCRD"".""CardName"",
             	 ""OINV"".""DocDate"",
-            	 ""DocType""";
+            	 ""DocType"",
+                 ""OINV"".""isIns""";
 
             //დაბრუნებები
 
@@ -2136,7 +2137,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.ComboBox oComboBox = oMatrix.Columns.Item("DocType").Cells.Item(pVal.Row).Specific;
                             SAPbouiCOM.Column oColumn;
 
-                            if (oComboBox.Value == "ARInvoice") //რეალიზაცია
+                            if (oComboBox.Value == "ARInvoice" || oComboBox.Value == "ARReserveInvoice") //რეალიზაცია
                             {
                                 oColumn = oMatrix.Columns.Item(pVal.ColUID);
                                 SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
@@ -2196,7 +2197,7 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch 
+            catch
             {
 
             }
@@ -2217,7 +2218,7 @@ namespace BDO_Localisation_AddOn
 
                 menuItem = fatherMenuItem.SubMenus.AddEx(oCreationPackage);
             }
-            catch 
+            catch
             {
 
             }
@@ -3993,6 +3994,7 @@ namespace BDO_Localisation_AddOn
                     oColumn.ValidValues.Add("ARInvoice", BDOSResources.getTranslate("ARInvoice"));
                     oColumn.ValidValues.Add("ARCreditNote", BDOSResources.getTranslate("ARCreditNote"));
                     oColumn.ValidValues.Add("ARDownPaymentVAT", BDOSResources.getTranslate("ARDownPaymentVAT"));
+                    oColumn.ValidValues.Add("ARReserveInvoice", BDOSResources.getTranslate("ARReserveInvoice"));
 
                     oColumn = oColumns.Add("InvEntry", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("Invoice");

@@ -240,6 +240,16 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSInvoiceRestr"); //ზედნადების გარეშე ანგარიშ-ფაქტურის გამოწერის შეზღუდვა
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Restrict tax invoice creation without waybill");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             //საპენსიო
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSPnCoP");
@@ -807,6 +817,38 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             //რეზერვის ინვოისიდან ფაქტურის გამოწერა როგორც მომსახურებაზე
+
+            //ზედნადების გარეშე ანგარიშ-ფაქტურის გამოწერის შეზღუდვა
+            top = top + 25;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSInRstr";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_BDOSInvoiceRestr");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Left", 13);
+            formItems.Add("Width", 400);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 14);
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("Description", BDOSResources.getTranslate("RestrictTaxWithoutWaybill"));
+            formItems.Add("Caption", BDOSResources.getTranslate("RestrictTaxWithoutWaybill"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+            //ზედნადების გარეშე ანგარიშ-ფაქტურის გამოწერის შეზღუდვა
 
             top = top + 25;
 
@@ -2512,7 +2554,7 @@ namespace BDO_Localisation_AddOn
                             }
                             else
                             {
-                                wsdl = "api.businessonline.ge";
+                                wsdl = "https://api.businessonline.ge/api/";
                                 url = "https://businessonline.ge";
                                 port = 0;
                                 id = "d7313ff8-52b6-450f-bf5b-2fd9d98702ca";
@@ -2526,11 +2568,25 @@ namespace BDO_Localisation_AddOn
                             }
                             else
                             {
-                                wsdl = "https://cib2-web-dev.bog.ge"; //91.209.131.231
+                                wsdl = "https://cib2-web-dev.bog.ge/api/"; //91.209.131.231
                                 url = "https://cib2-web-dev.bog.ge"; //91.209.131.231
                                 port = 8090;
                                 id = "cbdab9e8-b834-474c-8b82-c56856fc3baf";
                             }
+                        }
+                        else if (mode == "realNew" && program == "BOG")
+                        {
+                            wsdl = "https://api.businessonline.ge/api/";
+                            url = "https://account.bog.ge";
+                            port = 0;
+                            id = "d7313ff8-52b6-450f-bf5b-2fd9d98702ca";
+                        }
+                        else if(mode == "testNew" && program == "BOG")
+                        {
+                            wsdl = "https://cib-api-staging.bog.ge/api/";
+                            url = "https://account-test.bog.ge";
+                            port = 0;
+                            id = "b2f8b285-ea48-40a7-b64a-443f7104a0ec";
                         }
                         else
                         {

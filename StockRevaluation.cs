@@ -245,13 +245,16 @@ namespace BDO_Localisation_AddOn
             try
             {
                 if (DocNum == "") return string.Empty;
-
+                
                 string query ="select \"DocEntry\" from OIPF " + "\n"
                 + "where \"DocEntry\" = ( " + "\n"
                 + "select \"U_BsDocEntry\" from OMRV " + "\n"
                 + "where \"DocEntry\" = ( " + "\n"
                 + "select \"DocEntry\" from OMRV " + "\n"
                 + "where \"DocNum\" = '" + DocNum + "'))";
+                
+                //string query = "select \"DocEntry\" from OMRV " + "\n"
+                //+ "where \"DocNum\" = '" + DocNum + "'";
 
                 oRecordSet.DoQuery(query);
                 if (!oRecordSet.EoF)
@@ -280,7 +283,7 @@ namespace BDO_Localisation_AddOn
             {
                 formDataLoad(oForm);
             }
-            if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
+            if (!BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
             {
                 SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
                 createStockRevaluation(oForm, oMatrix);
@@ -347,54 +350,22 @@ namespace BDO_Localisation_AddOn
 
         public static void createStockRevaluation(SAPbouiCOM.Form oForm, SAPbouiCOM.Matrix oMatrix)
         {
-            SAPbobsCOM.MaterialRevaluation m_MaterialRev = (MaterialRevaluation)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oMaterialRevaluation);
-            SAPbobsCOM.MaterialRevaluation_lines m_MaterialRevLines = m_MaterialRev.Lines;
 
             SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
             SAPbouiCOM.DBDataSource DocDBSource = oFormLC.DataSources.DBDataSources.Item(0);
             string docEntLC = DocDBSource.GetValue("DocEntry", 0);
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            string query = "UPDATE OMRV " + "\n"
+            + "SET \"U_BsDocEntry\" = '" + docEntLC + "' " + "\n"
+            + "where \"DocEntry\" = " + "\n"
+            + "(select top 1 \"DocEntry\" from OMRV " + "\n"
+            + "order by \"DocEntry\" desc)";
+
+            oRecordSet.DoQuery(query);
             
-            string whsCode = CommonFunctions.getOADM("U_StockRevWh").ToString();
-
-            try
-            {
-                m_MaterialRev.DocDate = DateTime.Now;
-                m_MaterialRev.RevalType = "M";
-                m_MaterialRev.UserFields.Fields.Item("U_BsDocEntry").Value = docEntLC;
-
-                m_MaterialRevLines.SetCurrentLine(0);
-                string itemCode = oMatrix.Columns.Item("6").Cells.Item(1).Specific.Value;
-                string quantity = oMatrix.Columns.Item("1").Cells.Item(1).Specific.Value;
-                if (quantity.Contains(",")) quantity = quantity.Replace(',', '.');
-                m_MaterialRevLines.Quantity = Convert.ToDouble(quantity);
-                m_MaterialRevLines.WarehouseCode = whsCode;
-                m_MaterialRevLines.ItemCode = itemCode;
-
-                string debCred = oMatrix.Columns.Item("7").Cells.Item(1).Specific.Value;
-                for(char ch = 'A'; ch<='Z'; ch++)
-                {
-                    if (debCred.Contains(ch))
-                    {
-                        debCred = debCred.Substring(0, debCred.IndexOf(ch)) + debCred.Substring(debCred.IndexOf(ch) + 1);
-                    }
-                }
-                if (debCred.Contains(",")) debCred = debCred.Replace(',', '.');
-                m_MaterialRevLines.DebitCredit = Convert.ToDouble(debCred);
-                
-                m_MaterialRev.Add();
-                m_MaterialRevLines.Add();
-                formDataLoad(oForm);
-                LandedCosts.formDataLoad(oFormLC);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                Marshal.FinalReleaseComObject(m_MaterialRev);
-                Marshal.FinalReleaseComObject(m_MaterialRevLines);
-            }
+            LandedCosts.formDataLoad(oFormLC);
         }
     }
 }

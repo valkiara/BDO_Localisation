@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,7 +29,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
         private static StatementFilter oStatementFilter { get; set; }
         //<--- BOG
 
-        public static void createForm(  SAPbouiCOM.Form formOutgoingPayment, string operationOutgoingPayment, List<int> docEntryListOutgoingPayment, bool importBatchPaymentOrdersOutgoingPayment, string batchNameOutgoingPayment, StatementFilter oStatementFilterTmp, out string errorText)
+        public static void createForm(SAPbouiCOM.Form formOutgoingPayment, string operationOutgoingPayment, List<int> docEntryListOutgoingPayment, bool importBatchPaymentOrdersOutgoingPayment, string batchNameOutgoingPayment, StatementFilter oStatementFilterTmp, out string errorText)
         {
             errorText = null;
             form = formOutgoingPayment;
@@ -40,30 +42,47 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             //---> BOG
             string clientIdTemp;
             int port;
-            string url = CommonFunctions.getServiceUrlForInternetBanking( "BOG", out clientIdTemp, out port, out errorText);
+            string mode;
+            string url;
+            string wsdl = CommonFunctions.getServiceWSDLForInternetBanking("BOG", out clientIdTemp, out port, out mode, out url, out errorText);
+            string scope = "read write";
+
             if (string.IsNullOrEmpty(errorText) == false)
             {
                 return;
             }
 
-            if (port > 0) //სატესტო გარემოში port შევსებული უნდა იყოს
+            if (mode == "test") //სატესტო გარემოში port შევსებული უნდა იყოს
             {
-                AuthorizeUrl = url + ":" + port + "/Oauth/Connect/Authorize.aspx";
-                CallbackUri = url + ":" + port + "/Oauth/Connect/Token.aspx";
+                AuthorizeUrl = $"{url}:{port}/Oauth/Connect/Authorize.aspx";
+                CallbackUri = $"{url}:{port}/Oauth/Connect/Token.aspx";
+
             }
-            else
+            else if (mode == "real")
             {
-                AuthorizeUrl = url + "/Oauth/Connect/Authorize.aspx";
-                CallbackUri = url + "/Oauth/Connect/Token.aspx";
+                AuthorizeUrl = $"{url}/Oauth/Connect/Authorize.aspx";
+                CallbackUri = $"{url}/Oauth/Connect/Token.aspx";
             }
+            else if (mode == "realNew")
+            {
+                AuthorizeUrl = $"{url}/auth/realms/bog/protocol/openid-connect/auth";
+                CallbackUri = $"{url}/auth/realms/bog/protocol/openid-connect/token";
+                scope = "corp";
+            }
+            else if (mode == "testNew")
+            {
+                AuthorizeUrl = $"{url}/auth/realms/bog-test/protocol/openid-connect/auth";
+                CallbackUri = $"{url}/auth/realms/bog-test/protocol/openid-connect/token";
+                scope = "corp";
+            }
+
             ClientId = clientIdTemp;
-            ApiBaseUrl = url + "/api/"; //https://cib2-web-dev.bog.ge
-            ApiBaseUrl = ApiBaseUrl.Replace("https://businessonline.ge", "https://api.businessonline.ge");
+            ApiBaseUrl = wsdl;
             LocationURL = false;
 
             var client = new OAuth2Client(new Uri(AuthorizeUrl));
             var state = Guid.NewGuid().ToString();
-            var startUrl = client.CreateAuthorizeUrl(ClientId, "token", "read write", CallbackUri, state);
+            var startUrl = client.CreateAuthorizeUrl(ClientId, "token", scope, CallbackUri, state);
             //---> BOG
 
             int formHeight = Program.uiApp.Desktop.Width;
@@ -81,7 +100,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
             SAPbouiCOM.Form oForm;
             bool newForm;
-            bool formExist = FormsB1.createForm( formProperties, out oForm, out newForm, out errorText);
+            bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
 
             if (errorText != null)
             {
@@ -94,24 +113,35 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                 {
                     errorText = null;
 
+                    //SAPbouiCOM.Item oBrowser = oForm.Items.Add("urlWB", SAPbouiCOM.BoFormItemTypes.it_WEB_BROWSER);
+                    //oBrowser.Top = 15;
+                    //oBrowser.Left = 15;
+                    //oBrowser.Width = oForm.Width - 60;
+                    //oBrowser.Height = oForm.Height - 120;
+                    //SAPbouiCOM.WebBrowser oActive = (SAPbouiCOM.WebBrowser)oBrowser.Specific;
+                    //oActive.Url = startUrl;
                     SAPbouiCOM.Item oBrowser = oForm.Items.Add("urlWB", SAPbouiCOM.BoFormItemTypes.it_ACTIVE_X);
                     oBrowser.Top = 15;
                     oBrowser.Left = 15;
                     oBrowser.Width = oForm.Width - 60;
                     oBrowser.Height = oForm.Height - 120;
-                    SAPbouiCOM.ActiveX oActive = ((SAPbouiCOM.ActiveX)(oBrowser.Specific));
+                    SAPbouiCOM.ActiveX oActive = (SAPbouiCOM.ActiveX)oBrowser.Specific;
                     oActive.ClassID = "Shell.Explorer.2";
+
                     SHDocVw.WebBrowser WebBrowserChen;
-                    WebBrowserChen = ((SHDocVw.WebBrowser)(oActive.Object));
-                    WebBrowserChen.Navigate2(startUrl);
-
-                    WebBrowserChen.NavigateComplete2 += new SHDocVw.DWebBrowserEvents2_NavigateComplete2EventHandler(myNavigateComplete2);
-                    WebBrowserChen.WindowClosing += new SHDocVw.DWebBrowserEvents2_WindowClosingEventHandler(myWindowClosing);
-                    WebBrowserChen.WebWorkerFinsihed += new SHDocVw.DWebBrowserEvents2_WebWorkerFinsihedEventHandler(myWebWorkerFinsihed);
-                    WebBrowserChen.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(myDocumentComplete);
-                    WebBrowserChen.OnQuit += new SHDocVw.DWebBrowserEvents2_OnQuitEventHandler(myOnQuit);
-                    WebBrowserChen.NewProcess += new SHDocVw.DWebBrowserEvents2_NewProcessEventHandler(myNewProcess);
-
+                    WebBrowserChen = (SHDocVw.WebBrowser)oActive.Object;
+                    WebBrowserChen.Silent = true;
+                    //if (!WebBrowserChen.Busy)
+                    //{
+                        WebBrowserChen.Navigate2(startUrl);
+                        WebBrowserChen.NavigateError += WebBrowserChen_NavigateError;
+                        WebBrowserChen.NavigateComplete2 += new SHDocVw.DWebBrowserEvents2_NavigateComplete2EventHandler(myNavigateComplete2);
+                        WebBrowserChen.WindowClosing += new SHDocVw.DWebBrowserEvents2_WindowClosingEventHandler(myWindowClosing);
+                        WebBrowserChen.WebWorkerFinsihed += new SHDocVw.DWebBrowserEvents2_WebWorkerFinsihedEventHandler(myWebWorkerFinsihed);
+                        WebBrowserChen.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(myDocumentComplete);
+                        WebBrowserChen.OnQuit += new SHDocVw.DWebBrowserEvents2_OnQuitEventHandler(myOnQuit);
+                        WebBrowserChen.NewProcess += new SHDocVw.DWebBrowserEvents2_NewProcessEventHandler(myNewProcess);
+                    //}
                     Dictionary<string, object> formItems;
                     string itemName = "";
 
@@ -163,6 +193,13 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             GC.Collect();
         }
 
+        private static void WebBrowserChen_NavigateError(object pDisp, ref object URL, ref object Frame, ref object StatusCode, ref bool Cancel)
+        {
+            string k;
+            k = "12343124";
+            string f = k + "235";
+        }
+
         private static void myNewProcess(int lCauseFlag, object pWB2, ref bool Cancel)
         {
             string k;
@@ -211,7 +248,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
         }
 
-        public static void formClose(  SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void formClose(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
             errorText = null;
 
@@ -229,7 +266,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                     {
                         HttpClient client = InitializeClient();
 
-                        List<string> infoList = OutgoingPayment.importPaymentOrderBOG( client, docEntryList, importBatchPaymentOrders, batchName, out errorText);
+                        List<string> infoList = OutgoingPayment.importPaymentOrderBOG(client, docEntryList, importBatchPaymentOrders, batchName, out errorText);
                         if (errorText != null)
                         {
                             Program.uiApp.MessageBox(errorText);
@@ -243,7 +280,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
                             if (form != null && form.UniqueID == "BDOSInternetBankingForm") //თუ დამუშავებიდან გამოიძახება
                             {
-                                BDOSInternetBanking.fillImportMTR( form, out errorText);
+                                BDOSInternetBanking.fillImportMTR(form, out errorText);
                             }
                         }
                     }
@@ -261,7 +298,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                     {
                         HttpClient client = InitializeClient();
 
-                        List<string> infoList = OutgoingPayment.updateStatusPaymentOrderBOG( client, docEntryList, out errorText);
+                        List<string> infoList = OutgoingPayment.updateStatusPaymentOrderBOG(client, docEntryList, out errorText);
                         if (errorText != null)
                         {
                             Program.uiApp.MessageBox(errorText);
@@ -274,7 +311,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                             }
                             if (form != null && form.UniqueID == "BDOSInternetBankingForm") //თუ დამუშავებიდან გამოიძახება
                             {
-                                BDOSInternetBanking.fillImportMTR( form, out errorText);
+                                BDOSInternetBanking.fillImportMTR(form, out errorText);
                             }
                         }
                     }
@@ -303,10 +340,10 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                         Program.uiApp.MessageBox(errorText);
                     }
                     else
-                    {                      
+                    {
                         if (oStatementDetail.Count > 0)
                         {
-                            BDOSInternetBanking.fillExportMTR_BOG( form, oStatementDetail, false);
+                            BDOSInternetBanking.fillExportMTR_BOG(form, oStatementDetail, false);
                         }
                     }
                 }
@@ -323,12 +360,12 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
+                //int errCode;
+                //string errMsg;
 
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
-                Program.uiApp.SetStatusBarMessage(errorText);
+                //Program.oCompany.GetLastError(out errCode, out errMsg);
+                //errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                Program.uiApp.SetStatusBarMessage($"{ex.Message} Inner Error: {ex.InnerException.Message}", SAPbouiCOM.BoMessageTime.bmt_Short);
             }
             finally
             {
@@ -338,12 +375,15 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
         private static HttpClient InitializeClient()
         {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri(ApiBaseUrl)
-            };
+            var client = new HttpClient();
 
-            client.SetBearerToken(AuthorizeResponse.AccessToken);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            client.BaseAddress = new Uri(ApiBaseUrl);         
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizeResponse.AccessToken);
+
+            //client.SetBearerToken(AuthorizeResponse.AccessToken);
             return client;
         }
 
@@ -356,7 +396,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -394,8 +434,22 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                 if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
                 {
                     oForm.Close();
-                    formClose( oForm, pVal, out errorText);
+                    formClose(oForm, pVal, out errorText);
                 }
+                //if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_WEBMESSAGE)
+                //{
+                //    SAPbouiCOM.Item oItem = oForm.Items.Item("urlWB");
+                //    SAPbouiCOM.WebBrowser oActive = (SAPbouiCOM.WebBrowser)oItem.Specific;
+
+                //    if (pVal.BeforeAction)
+                //    {
+                //        string d = "d";
+                //    }
+                //    else
+                //    {
+                //        string d = "d";
+                //    }
+                //}
             }
         }
     }

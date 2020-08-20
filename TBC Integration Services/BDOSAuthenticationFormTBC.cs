@@ -140,7 +140,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
             }
         }
 
-        public static void createForm( SAPbouiCOM.Form formOutgoingPayment, string operationOutgoingPayment, List<int> docEntryListOutgoingPayment, bool importBatchPaymentOrdersOutgoingPayment, string batchNameOutgoingPayment, AccountMovementFilterIo oAccountMovementFilter, out string errorText)
+        public static void createForm(SAPbouiCOM.Form formOutgoingPayment, string operationOutgoingPayment, List<int> docEntryListOutgoingPayment, bool importBatchPaymentOrdersOutgoingPayment, string batchNameOutgoingPayment, AccountMovementFilterIo oAccountMovementFilter, out string errorText)
         {
             errorText = null;
             form = formOutgoingPayment;
@@ -152,7 +152,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
 
             int formHeight = Program.uiApp.Desktop.Width / 9;
             int formWidth = Program.uiApp.Desktop.Width / 4;
-            
+
             //ფორმის აუცილებელი თვისებები
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
             formProperties.Add("UniqueID", "BDOSAuthenticationFormTBC");
@@ -165,7 +165,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
 
             SAPbouiCOM.Form oForm;
             bool newForm;
-            bool formExist = FormsB1.createForm( formProperties, out oForm, out newForm, out errorText);
+            bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
 
             if (errorText != null)
             {
@@ -247,7 +247,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     formItems.Add("Width", width_e);
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);                   
+                    formItems.Add("UID", itemName);
                     formItems.Add("IsPassword", true);
                     formItems.Add("AffectsFormMode", false);
                     //formItems.Add("Value", "Aa123456");
@@ -269,7 +269,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("Caption", BDOSResources.getTranslate("Digipass"));
-                    formItems.Add("LinkTo", "digipassE");                 
+                    formItems.Add("LinkTo", "digipassE");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -308,7 +308,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     formItems.Add("Width", width_s);
                     formItems.Add("Top", top);
                     formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);                 
+                    formItems.Add("UID", itemName);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -357,12 +357,12 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
             GC.Collect();
         }
 
-        public static void createFormChangePassword( out string errorText)
+        public static void createFormChangePassword(out string errorText)
         {
             errorText = null;
             int formHeight = Program.uiApp.Desktop.Width / 9;
             int formWidth = Program.uiApp.Desktop.Width / 4;
-            
+
             //ფორმის აუცილებელი თვისებები
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
             formProperties.Add("UniqueID", "BDOSChangePasswordFormTBC");
@@ -375,7 +375,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
 
             SAPbouiCOM.Form oForm;
             bool newForm;
-            bool formExist = FormsB1.createForm( formProperties, out oForm, out newForm, out errorText);
+            bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
 
             if (errorText != null)
             {
@@ -395,7 +395,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     int height = 15;
                     int top = 6;
                     int width_s = 121;
-                    int width_e = 148;                   
+                    int width_e = 148;
 
                     formItems = new Dictionary<string, object>();
                     itemName = "passwordS1"; //10 characters
@@ -512,7 +512,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
             GC.Collect();
         }
 
-        public static void clickBDOSAuthenticationFormTBC(  SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void clickBDOSAuthenticationFormTBC(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
             errorText = null;
 
@@ -549,7 +549,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                             userName = userNameValue;
                             password = passwordValue;
                             nonce = digipassValue;
-                            createFormChangePassword( out errorText); //პაროლის შეცვლის ფორმა
+                            createFormChangePassword(out errorText); //პაროლის შეცვლის ფორმა
                         }
                     }
                 }
@@ -562,7 +562,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                             //You can't leave empty
                             errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory") + " : \"" + userNameS + "\", \"" + passwordS + "\", \"" + digipassS + "\"";
                             Program.uiApp.StatusBar.SetText("", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_None);
-                            Program.uiApp.StatusBar.SetText(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);                        
+                            Program.uiApp.StatusBar.SetText(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                             return;
                         }
                         else
@@ -590,7 +590,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                                 }
 
                                 PaymentService oPaymentService = MainPaymentService.setPaymentService(serviceUrl, userName, password, nonce);
-                                List<string> infoList = OutgoingPayment.importPaymentOrderTBC( oPaymentService, docEntryList, importBatchPaymentOrders, batchName, out errorText);
+                                List<string> infoList = OutgoingPayment.importPaymentOrderTBC(oPaymentService, docEntryList, importBatchPaymentOrders, batchName, out errorText);
                                 if (errorText != null)
                                 {
                                     Program.uiApp.MessageBox(errorText);
@@ -601,17 +601,17 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                                     {
                                         Program.uiApp.SetStatusBarMessage(infoList[i], SAPbouiCOM.BoMessageTime.bmt_Short, false);
                                     }
-                                    
+
                                     if (form != null && form.UniqueID == "BDOSInternetBankingForm") //თუ დამუშავებიდან გამოიძახება
                                     {
-                                        BDOSInternetBanking.fillImportMTR( form, out errorText);
+                                        BDOSInternetBanking.fillImportMTR(form, out errorText);
                                     }
                                 }
                             }
                             else if (operation == "updateStatus") //სტატუსის განახლება
                             {
                                 PaymentService oPaymentService = MainPaymentService.setPaymentService(serviceUrl, userName, password, nonce);
-                                List<string> infoList = OutgoingPayment.updateStatusPaymentOrderTBC( oPaymentService, docEntryList, out errorText);
+                                List<string> infoList = OutgoingPayment.updateStatusPaymentOrderTBC(oPaymentService, docEntryList, out errorText);
                                 if (errorText != null)
                                 {
                                     Program.uiApp.MessageBox(errorText);
@@ -624,7 +624,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                                     }
                                     if (form != null && form.UniqueID == "BDOSInternetBankingForm") //თუ დამუშავებიდან გამოიძახება
                                     {
-                                        BDOSInternetBanking.fillImportMTR( form, out errorText);
+                                        BDOSInternetBanking.fillImportMTR(form, out errorText);
                                     }
                                 }
                             }
@@ -633,7 +633,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                                 MovementService oMovementService = MainMovementService.setMovementService(serviceUrl, userName, password, nonce);
                                 AccountMovementDetailIo[] oAccountMovementDetailIo = null;
                                 BaseQueryResultIo oBaseQueryResultIo = MainMovementService.getAccountMovements(oMovementService, oAccountMovementFilterIo, out oAccountMovementDetailIo, out errorText);
-                                
+
                                 if (errorText != null)
                                 {
                                     BDOSInternetBanking.oAccountMovementDetailIoStc = null;
@@ -643,7 +643,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                                 }
                                 else
                                 {
-                                    BDOSInternetBanking.fillExportMTR_TBC( form, oBaseQueryResultIo, oAccountMovementDetailIo, false);
+                                    BDOSInternetBanking.fillExportMTR_TBC(form, oBaseQueryResultIo, oAccountMovementDetailIo, false);
                                 }
                             }
                             if (operation != null)
@@ -668,7 +668,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
             }
         }
 
-        public static void clickBDOSChangePasswordFormTBC(  SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
+        public static void clickBDOSChangePasswordFormTBC(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
         {
             errorText = null;
 
@@ -691,7 +691,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                 else
                 {
                     if (pVal.ItemUID == "1") //OK
-                    {                    
+                    {
                         if (string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(confirmPassword))
                         {
                             //You can't leave empty
@@ -711,14 +711,16 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                         {
                             string clientID;
                             int port;
-                            string url = CommonFunctions.getServiceUrlForInternetBanking( "TBC", out clientID, out port, out errorText);
+                            string mode;
+                            string url;
+                            string wsdl = CommonFunctions.getServiceWSDLForInternetBanking("TBC", out clientID, out port, out mode, out url, out errorText);
                             if (string.IsNullOrEmpty(errorText) == false)
                             {
                                 Program.uiApp.StatusBar.SetText("", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_None);
                                 Program.uiApp.StatusBar.SetText(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                                 return;
                             }
-                            serviceUrl = url;
+                            serviceUrl = wsdl;
 
                             ChangePasswordService oChangePasswordService = MainChangePasswordService.setChangePasswordService(serviceUrl, userName, password, nonce);
                             string result = MainChangePasswordService.changePassword(oChangePasswordService, newPassword, out errorText);
@@ -748,7 +750,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
             }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -763,28 +765,30 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     {
                         string clientID;
                         int port;
-                        string url = CommonFunctions.getServiceUrlForInternetBanking( "TBC", out clientID, out port, out errorText);
+                        string mode;
+                        string url;
+                        string wsdl = CommonFunctions.getServiceWSDLForInternetBanking("TBC", out clientID, out port, out mode, out url, out errorText);
 
                         if (string.IsNullOrEmpty(errorText) == false)
-                            {
-                                Program.uiApp.StatusBar.SetText("", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_None);
-                                Program.uiApp.StatusBar.SetText(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
-                                BubbleEvent = false;
-                                return;
-                            }
-                        serviceUrl = url;
+                        {
+                            Program.uiApp.StatusBar.SetText("", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_None);
+                            Program.uiApp.StatusBar.SetText(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            BubbleEvent = false;
+                            return;
+                        }
+                        serviceUrl = wsdl;
                     }
 
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
                     {
-                        clickBDOSAuthenticationFormTBC( oForm, pVal, out errorText);
+                        clickBDOSAuthenticationFormTBC(oForm, pVal, out errorText);
                     }
                 }
                 else if (FormUID == "BDOSChangePasswordFormTBC") //პაროლის შეცვლის ფორმა
                 {
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
                     {
-                        clickBDOSChangePasswordFormTBC( oForm, pVal, out errorText);
+                        clickBDOSChangePasswordFormTBC(oForm, pVal, out errorText);
                     }
                 }
             }

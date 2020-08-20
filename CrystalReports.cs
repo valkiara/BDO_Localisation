@@ -169,6 +169,29 @@ namespace BDO_Localisation_AddOn
 
             addCrystalReport( reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
 
+            
+            // A/R invoice-ს საბეჭდი ფორმა
+            reportName = "A/R Invoice Layout";
+            reportTypeCode = "INV2"; 
+            rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_ARInvoice.rpt" : @"\CrystalReports_SQL\Report_ARInvoice_SQL.rpt");
+            menuID = ""; 
+            layoutCode = null;
+
+            layoutCode = getReportlayoutCode(reportName, reportTypeCode, out errorText);
+
+            addCrystalReport(reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+
+            // sales order-ის საბეჭდი ფორმა
+            reportName = "Proformal Invoice Layout";
+            reportTypeCode = "RDR2"; 
+            rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_ProformaInvoice.rpt" : @"\CrystalReports_SQL\Report_ProformaInvoice_SQL.rpt");
+            menuID = ""; 
+            layoutCode = null;
+
+            layoutCode = getReportlayoutCode(reportName, reportTypeCode, out errorText);
+
+            addCrystalReport(reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+
         }
 
         public static void addDocumentTypeCrystalReportForAddOn( string startupPath, out string errorText)
