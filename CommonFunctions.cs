@@ -1285,7 +1285,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void fillPhysicalEntityTaxes(string objType, SAPbouiCOM.Form oFormWTax, SAPbouiCOM.Form oFormAPDoc, bool isNewAPDoc, string mainTable, string childTable, out decimal wTaxAmt, out bool isForeignCurrency)
+        public static void FillPhysicalEntityTaxes(string objType, SAPbouiCOM.Form oFormWTax, SAPbouiCOM.Form oFormAPDoc, bool isNewAPDoc, string mainTable, string childTable, out decimal wTaxAmt, out bool isForeignCurrency)
         {
             wTaxAmt = decimal.Zero;
             isForeignCurrency = false;

@@ -4491,7 +4491,6 @@ namespace BDO_Localisation_AddOn
                 bool physicalEntityTax = (oForm.DataSources.DBDataSources.Item("OCRD").GetValue("WTLiable", 0) == "Y" &&
                                 CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
 
-                string errorTextCheck;
                 string docDatestr = docDBSources.Item("OVPM").GetValue("DocDate", 0);
                 if (physicalEntityTax && string.IsNullOrEmpty(docDatestr))
                 {
@@ -4500,7 +4499,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 DateTime DocDate = DateTime.ParseExact(docDatestr, "yyyyMMdd", CultureInfo.InvariantCulture);
-                Dictionary<string, decimal> PhysicalEntityPensionRates = WithholdingTax.getPhysicalEntityPensionRates(DocDate, wtCode, out errorTextCheck);
+                Dictionary<string, decimal> PhysicalEntityPensionRates = WithholdingTax.getPhysicalEntityPensionRates(DocDate, wtCode, out var errorTextCheck);
 
                 if (physicalEntityTax && !string.IsNullOrEmpty(errorTextCheck))
                 {
@@ -4519,7 +4518,7 @@ namespace BDO_Localisation_AddOn
                 decimal GrossAmountFC = 0;
 
                 SAPbouiCOM.Item oItemTxVal = oForm.Items.Item("13");
-                SAPbouiCOM.EditText oEditTxVal = ((SAPbouiCOM.EditText)(oItemTxVal.Specific));
+                SAPbouiCOM.EditText oEditTxVal = (SAPbouiCOM.EditText)oItemTxVal.Specific;
                 string amtTxVal = oEditTxVal.Value;
                 string wtCode2 = oForm.Items.Item("110").Specific.Value;
                 bool onAccount = oForm.Items.Item("37").Specific.Checked;

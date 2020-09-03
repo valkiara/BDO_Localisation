@@ -342,10 +342,7 @@ namespace BDO_Localisation_AddOn
 
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                     {
-                        decimal wTaxAmt;
-                        bool isForeignCurrency;
-
-                        CalcPhysicalEntityTax(oForm, out wTaxAmt, out isForeignCurrency);
+                        CalcPhysicalEntityTax(oForm, out var wTaxAmt, out var isForeignCurrency);
                         SetWTaxAmount(oForm, wTaxAmt, isForeignCurrency);
                     }
 
@@ -361,9 +358,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction && wasCalledCFLFromWTaxCode)
                     {
                         wasCalledCFLFromWTaxCode = false;
-                        decimal wTaxAmt;
-                        bool isForeignCurrency;
-                        CalcPhysicalEntityTax(oForm, out wTaxAmt, out isForeignCurrency);
+                        CalcPhysicalEntityTax(oForm, out var wTaxAmt, out var isForeignCurrency);
                         SetWTaxAmount(oForm, wTaxAmt, isForeignCurrency);
                     }
                 }
@@ -418,7 +413,7 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.Form oFormAPDoc = Program.uiApp.Forms.GetForm("181", Program.currentFormCount);
 
                     //საპენსიოს დათვლა
-                    CommonFunctions.fillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormAPDoc, isNewAPDoc, "ORPC", "RPC1", out wTaxAmt, out isForeignCurrency);
+                    CommonFunctions.FillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormAPDoc, isNewAPDoc, "ORPC", "RPC1", out wTaxAmt, out isForeignCurrency);
                 }
 
                 //A/P Invoice
@@ -427,7 +422,7 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.Form oFormAPDoc = Program.uiApp.Forms.GetForm("141", Program.currentFormCount);
 
                     //საპენსიოს დათვლა
-                    CommonFunctions.fillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormAPDoc, isNewAPDoc, "OPCH", "PCH1", out wTaxAmt, out isForeignCurrency);
+                    CommonFunctions.FillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormAPDoc, isNewAPDoc, "OPCH", "PCH1", out wTaxAmt, out isForeignCurrency);
                 }
 
                 //A/P Reserve Invoice
@@ -436,7 +431,7 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.Form oFormAPDoc = Program.uiApp.Forms.GetForm("60092", Program.currentFormCount);
 
                     //საპენსიოს დათვლა
-                    CommonFunctions.fillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormAPDoc, isNewAPDoc, "OPCH", "PCH1", out wTaxAmt, out isForeignCurrency);
+                    CommonFunctions.FillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormAPDoc, isNewAPDoc, "OPCH", "PCH1", out wTaxAmt, out isForeignCurrency);
                 }
 
                 //A/P Down Payment Request
@@ -445,7 +440,7 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.Form oFormAPDoc = Program.uiApp.Forms.GetForm("65309", Program.currentFormCount);
 
                     //საპენსიოს დათვლა
-                    CommonFunctions.fillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormAPDoc, isNewAPDoc, "ODPO", "DPO1", out wTaxAmt, out isForeignCurrency);
+                    CommonFunctions.FillPhysicalEntityTaxes(DocDBSource.GetValue("ObjType", 0).Trim(), oForm, oFormAPDoc, isNewAPDoc, "ODPO", "DPO1", out wTaxAmt, out isForeignCurrency);
                 }
             //}
         }
