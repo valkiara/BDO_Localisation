@@ -2858,7 +2858,7 @@ namespace BDO_Localisation_AddOn
                         if (isWTLiable)
                         {
                             DateTime date = oDataTable.GetValue("DocDate", i - 1);
-                            physicalEntityPensionRates = WithholdingTax.getPhysicalEntityPensionRates(date, wtCode, out errorText);
+                            physicalEntityPensionRates = WithholdingTax.GetPhysicalEntityPensionRates(date, wtCode, out errorText);
 
                             if (string.IsNullOrEmpty(errorText))
                             {
@@ -2872,9 +2872,10 @@ namespace BDO_Localisation_AddOn
 
                                 grossAmt = totalPaymentLC / (1 - wtRate) / (1 - pensionWTaxRate);
 
-                                whTaxAmt = grossAmt * wtRate * (1 - pensionWTaxRate);
-                                pensEmployed = grossAmt * pensionWTaxRate;
-                                pensEmployer = grossAmt * pensionCoWTaxRate;
+                                var physicalEntityTaxesAmt = CommonFunctions.CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
+                                whTaxAmt = physicalEntityTaxesAmt.whTaxAmt;
+                                pensEmployed = physicalEntityTaxesAmt.pensEmployedAmt;
+                                pensEmployer = physicalEntityTaxesAmt.pensEmployerAmt;
                             }
                             else
                             {

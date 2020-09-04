@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 using System.Data;
+using System.Runtime.InteropServices;
 
 namespace BDO_Localisation_AddOn
 {
@@ -212,11 +213,12 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static DataTable getWtaxCodeDefinitionByDate(DateTime date)
+        public static DataTable GetWtaxCodeDefinitionByDate(DateTime date)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
-            string query = @"SELECT
+            try
+            {
+                string query = @"SELECT
 	                         ""OWHT"".""U_BdgtDbtAcc"", 
                              ""WHT1"".""WTCode"",
                              ""WHT1"".""Rate"",
@@ -235,32 +237,40 @@ namespace BDO_Localisation_AddOn
                         AND (""UNIQUE-WTDef-PAIRS"".""EffecDate"" = ""WHT1"".""EffecDate"" ) 
                           LEFT JOIN  ""OWHT"" ON ""OWHT"".""WTCode"" = ""WHT1"".""WTCode""";
 
-            oRecordSet.DoQuery(query);
+                oRecordSet.DoQuery(query);
 
-            DataTable WhTaxTable = new DataTable();
+                DataTable whTaxTable = new DataTable();
 
-            WhTaxTable.Columns.Add("WTCode");
-            WhTaxTable.Columns.Add("Rate");
-            WhTaxTable.Columns.Add("BdgtDbtAcc");
-            WhTaxTable.Columns.Add("EffecDate");
+                whTaxTable.Columns.Add("WTCode");
+                whTaxTable.Columns.Add("Rate");
+                whTaxTable.Columns.Add("BdgtDbtAcc");
+                whTaxTable.Columns.Add("EffecDate");
 
-            while (!oRecordSet.EoF)
-            {
-                DataRow WhTaxRow = WhTaxTable.NewRow();
-                WhTaxRow["WTCode"] = oRecordSet.Fields.Item("WTCode").Value;
-                WhTaxRow["Rate"] = oRecordSet.Fields.Item("Rate").Value;
-                WhTaxRow["BdgtDbtAcc"] = oRecordSet.Fields.Item("U_BdgtDbtAcc").Value;
-                WhTaxRow["EffecDate"] = oRecordSet.Fields.Item("EffecDate").Value;
+                while (!oRecordSet.EoF)
+                {
+                    DataRow WhTaxRow = whTaxTable.NewRow();
+                    WhTaxRow["WTCode"] = oRecordSet.Fields.Item("WTCode").Value;
+                    WhTaxRow["Rate"] = oRecordSet.Fields.Item("Rate").Value;
+                    WhTaxRow["BdgtDbtAcc"] = oRecordSet.Fields.Item("U_BdgtDbtAcc").Value;
+                    WhTaxRow["EffecDate"] = oRecordSet.Fields.Item("EffecDate").Value;
 
-                WhTaxTable.Rows.Add(WhTaxRow);
+                    whTaxTable.Rows.Add(WhTaxRow);
 
-                oRecordSet.MoveNext();
+                    oRecordSet.MoveNext();
+                }
+                return whTaxTable;
             }
-
-            return WhTaxTable;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
+            }
         }
 
-        public static Dictionary<string, decimal> getPhysicalEntityPensionRates(DateTime docDate, string wTCode, out string errorText)
+        public static Dictionary<string, decimal> GetPhysicalEntityPensionRates(DateTime docDate, string wTCode, out string errorText)
         {
             errorText = "";
 
@@ -269,7 +279,7 @@ namespace BDO_Localisation_AddOn
             physicalEntityPensionRates.Add("PensionWTaxRate", 0);
             physicalEntityPensionRates.Add("PensionCoWTaxRate", 0);
 
-            DataTable wTaxDefinitons = getWtaxCodeDefinitionByDate(docDate);
+            DataTable wTaxDefinitons = GetWtaxCodeDefinitionByDate(docDate);
             string pensionWTCode = CommonFunctions.getOADM("U_BDOSPnPh").ToString();
             string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
 

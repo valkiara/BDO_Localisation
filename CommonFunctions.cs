@@ -1309,9 +1309,8 @@ namespace BDO_Localisation_AddOn
                     DateTime docDate = DateTime.ParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
 
                     string wTCode = oMatrixWTax.Columns.Item("1").Cells.Item(1).Specific.Value;
-
-                    string errorText;
-                    Dictionary<string, decimal> physicalEntityPensionRates = WithholdingTax.getPhysicalEntityPensionRates(docDate, wTCode, out errorText);
+                   
+                    Dictionary<string, decimal> physicalEntityPensionRates = WithholdingTax.GetPhysicalEntityPensionRates(docDate, wTCode, out var errorText);
                     if (!string.IsNullOrEmpty(errorText))
                         throw new Exception(errorText);
 
@@ -1342,9 +1341,11 @@ namespace BDO_Localisation_AddOn
                     {
                         grossAmt = Convert.ToDecimal(getChildOrDbDataSourceValue(oDBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
 
-                        whTaxAmt = roundAmountByGeneralSettings(grossAmt * wtRate * (1 - pensionWTaxRate), "Sum");
-                        pensEmployed = roundAmountByGeneralSettings(grossAmt * pensionWTaxRate, "Sum");
-                        pensEmployer = roundAmountByGeneralSettings(grossAmt * pensionCoWTaxRate, "Sum");
+                        var physicalEntityTaxesAmt = CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
+
+                        whTaxAmt = physicalEntityTaxesAmt.whTaxAmt;
+                        pensEmployed = physicalEntityTaxesAmt.pensEmployedAmt;
+                        pensEmployer = physicalEntityTaxesAmt.pensEmployerAmt;
 
                         totalTaxes += whTaxAmt + pensEmployed;
 
@@ -1352,9 +1353,11 @@ namespace BDO_Localisation_AddOn
                         {
                             grossAmtFC = Convert.ToDecimal(getChildOrDbDataSourceValue(oDBDataSourceTable, null, null, "TotalFrgn", row), CultureInfo.InvariantCulture);
 
-                            whTaxAmtFC = roundAmountByGeneralSettings(grossAmtFC * wtRate * (1 - pensionWTaxRate), "Sum");
-                            pensEmployedFC = roundAmountByGeneralSettings(grossAmtFC * pensionWTaxRate, "Sum");
-                            pensEmployerFC = roundAmountByGeneralSettings(grossAmtFC * pensionCoWTaxRate, "Sum");
+                            physicalEntityTaxesAmt = CalcPhysicalEntityTaxes((grossAmtFC, wtRate, pensionWTaxRate, pensionCoWTaxRate));
+
+                            whTaxAmtFC = physicalEntityTaxesAmt.whTaxAmt;
+                            pensEmployedFC = physicalEntityTaxesAmt.pensEmployedAmt;
+                            pensEmployerFC = physicalEntityTaxesAmt.pensEmployerAmt;
 
                             totalTaxesFC += whTaxAmtFC + pensEmployedFC;
                         }
@@ -1377,6 +1380,29 @@ namespace BDO_Localisation_AddOn
             {
                 oFormAPDoc.Freeze(false);
             }
+        }
+
+        public static (decimal whTaxAmt, decimal pensEmployedAmt, decimal pensEmployerAmt) CalcPhysicalEntityTaxes(decimal grossAmt, DateTime docDate, string wTCode)
+        {
+            Dictionary<string, decimal> physicalEntityPensionRates = WithholdingTax.GetPhysicalEntityPensionRates(docDate, wTCode, out var errorText);
+            if (!string.IsNullOrEmpty(errorText))
+                throw new Exception(errorText);
+
+            bool physicalEntityTax = getValue("OWHT", "U_BDOSPhisTx", "WTCode", wTCode).ToString() == "Y";
+            decimal wtRate = physicalEntityPensionRates["WTRate"] / 100;
+            decimal pensionWTaxRate = physicalEntityTax ? physicalEntityPensionRates["PensionWTaxRate"] / 100 : 0;
+            decimal pensionCoWTaxRate = physicalEntityTax ? physicalEntityPensionRates["PensionCoWTaxRate"] / 100 : 0;
+
+            return CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
+        }
+
+        public static (decimal whTaxAmt, decimal pensEmployedAmt, decimal pensEmployerAmt) CalcPhysicalEntityTaxes((decimal grossAmt, decimal wtRate, decimal pensionWTaxRate, decimal pensionCoWTaxRate) dataForCalcTaxes)
+        {
+            var whTaxAmt = roundAmountByGeneralSettings(dataForCalcTaxes.grossAmt * dataForCalcTaxes.wtRate * (1 - dataForCalcTaxes.pensionWTaxRate), "Sum");
+            var pensEmployedAmt = roundAmountByGeneralSettings(dataForCalcTaxes.grossAmt * dataForCalcTaxes.pensionWTaxRate, "Sum");
+            var pensEmployerAmt = roundAmountByGeneralSettings(dataForCalcTaxes.grossAmt * dataForCalcTaxes.pensionCoWTaxRate, "Sum");
+
+            return (whTaxAmt, pensEmployedAmt, pensEmployerAmt);
         }
 
         public static void blockAssetInvoice(SAPbouiCOM.Form oForm, string oDBDataSourceName, out bool rejection)
