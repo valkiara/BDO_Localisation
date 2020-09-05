@@ -2872,7 +2872,7 @@ namespace BDO_Localisation_AddOn
 
                                 grossAmt = totalPaymentLC / (1 - wtRate) / (1 - pensionWTaxRate);
 
-                                var physicalEntityTaxesAmt = CommonFunctions.CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
+                                (decimal whTaxAmt, decimal pensEmployedAmt, decimal pensEmployerAmt) physicalEntityTaxesAmt = CommonFunctions.CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
                                 whTaxAmt = physicalEntityTaxesAmt.whTaxAmt;
                                 pensEmployed = physicalEntityTaxesAmt.pensEmployedAmt;
                                 pensEmployer = physicalEntityTaxesAmt.pensEmployerAmt;

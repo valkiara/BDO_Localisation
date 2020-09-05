@@ -1341,7 +1341,7 @@ namespace BDO_Localisation_AddOn
                     {
                         grossAmt = Convert.ToDecimal(getChildOrDbDataSourceValue(oDBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
 
-                        var physicalEntityTaxesAmt = CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
+                        (decimal whTaxAmt, decimal pensEmployedAmt, decimal pensEmployerAmt) physicalEntityTaxesAmt = CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
 
                         whTaxAmt = physicalEntityTaxesAmt.whTaxAmt;
                         pensEmployed = physicalEntityTaxesAmt.pensEmployedAmt;
