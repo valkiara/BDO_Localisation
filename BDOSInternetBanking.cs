@@ -4471,8 +4471,11 @@ namespace BDO_Localisation_AddOn
 
                 if (changeRate)
                 {
-                    oNewPayments.DocRate = oSBOBob.GetCurrencyRate(oPayments.DocCurrency, oNewPayments.DocDate).Fields.Item("CurrencyRate").Value;
-                    correctedRate = oNewPayments.DocRate;
+                    if (oPayments.DocCurrency != localCurrency)
+                    {
+                        oNewPayments.DocRate = oSBOBob.GetCurrencyRate(oPayments.DocCurrency, oNewPayments.DocDate).Fields.Item("CurrencyRate").Value;
+                        correctedRate = oNewPayments.DocRate;
+                    }
 
                     if (oNewPayments.LocalCurrency == SAPbobsCOM.BoYesNoEnum.tYES)
                     {
