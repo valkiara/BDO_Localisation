@@ -3526,4 +3526,7 @@
   <data name="InterestPercent" xml:space="preserve">
     <value>Interest %</value>
   </data>
+  <data name="Calculate" xml:space="preserve">
+    <value>Calculate</value>
+  </data>
 </root>
