@@ -3639,10 +3639,10 @@ namespace BDO_Localisation_AddOn
 
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_LOST_FOCUS && !pVal.BeforeAction)
                     {
-                        if (pVal.ItemUID == "13") //Item - Payment On Account (EditText)
-                        {
-                            CalcPhysicalEntityTaxes(oForm, true);
-                        }
+                        //if (pVal.ItemUID == "13") //Item - Payment On Account (EditText)
+                        //{
+                        //    CalcPhysicalEntityTaxes(oForm, true);
+                        //}
                     }
 
                     if (pVal.ItemChanged)
