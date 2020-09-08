@@ -2839,10 +2839,16 @@ namespace BDO_Localisation_AddOn
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
                         string ItemCode = oDataTableSelectedObjects.GetValue("ItemCode", 0);
+                        SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        string query = "select \"OUOM\".\"UomCode\" from \"OITM\" left join \"OUOM\" on \"OITM\".\"UgpEntry\"=\"OUOM\".\"UomEntry\" " +" where \"OITM\".\"ItemCode\"='" + ItemCode + "'";
+                        oRecordSet.DoQuery(query);
+                        string UoMCode = "";
+                        if (!oRecordSet.EoF) UoMCode= oRecordSet.Fields.Item("UomCode").Value.ToString();
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBGdMatrix").Specific));
                         LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("ItemCode").Cells.Item(oCFLEvento.Row).Specific.Value = ItemCode);
                         LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("ItemName").Cells.Item(oCFLEvento.Row).Specific.Value = oDataTableSelectedObjects.GetValue("ItemName", 0));
+                        LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBUntCode").Cells.Item(oCFLEvento.Row).Specific.Value = UoMCode);
                     }
 
                     else if (oCFLEvento.ChooseFromListUID == "CFLUoMCdB")
