@@ -1183,7 +1183,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("WithhTax"));
+            formItems.Add("Caption", BDOSResources.getTranslate("WithhTax") + " (LC)");
             formItems.Add("LinkTo", "BDOSWhtAmt");
             formItems.Add("Visible", true);
 
@@ -1245,7 +1245,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("PhysEntityPension"));
+            formItems.Add("Caption", BDOSResources.getTranslate("PhysEntityPension") + " (LC)");
             formItems.Add("LinkTo", "BDOSPnPhAm");
             formItems.Add("Visible", true);
 
@@ -1288,7 +1288,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("Caption", BDOSResources.getTranslate("CompPension"));
+            formItems.Add("Caption", BDOSResources.getTranslate("CompPension") + " (LC)");
             formItems.Add("LinkTo", "BDOSPnCoAm");
             formItems.Add("Visible", true);
 
