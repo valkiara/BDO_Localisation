@@ -5971,7 +5971,7 @@ namespace BDO_Localisation_AddOn
                         int id = 0; //ანგარიშ-ფაქტურის საქონლის მონაცემის უნიკალური ნომერი
                         int inv_id = inv_ID; //ანგარიშ-ფაქტურის უნიკალური ნომერი
                         string goods = oRecordSet.Fields.Item("W_NAME").Value.ToString(); //საქონლის დასახელება
-                        string g_unit = oRecordSet.Fields.Item("InvntItem").Value == "N" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString(); //საქონლის ერთეული
+                        string g_unit = "მომსახურება"; //საქონლის ერთეული
                         if (g_unit == "")
                         {
                             g_unit = "სხვა";
