@@ -1547,14 +1547,14 @@ namespace BDO_Localisation_AddOn
             //    }
             //}
 
-            //if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess )
-            //{
-            //    if (Program.cancellationTrans  && Program.canceledDocEntry != 0)
-            //    {
-            //        cancellation( oForm, Program.canceledDocEntry, out errorText);
-            //        Program.canceledDocEntry = 0;
-            //    }
-            //}
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
+            {
+                if (Program.cancellationTrans && Program.canceledDocEntry != 0)
+                {
+                    cancellation(oForm, Program.canceledDocEntry, out errorText);
+                    Program.canceledDocEntry = 0;
+                }
+            }
 
             else if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
@@ -2973,6 +2973,24 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 Marshal.ReleaseComObject(oRecordSet);
+            }
+        }
+
+        public static void cancellation(SAPbouiCOM.Form oForm, int docEntry, out string errorText)
+        {
+            errorText = null;
+
+            try
+            {
+                JournalEntry.cancellation(oForm, docEntry, "24", out errorText);
+            }
+            catch (Exception ex)
+            {
+                errorText = ex.Message;
+            }
+            finally
+            {
+                GC.Collect();
             }
         }
     }
