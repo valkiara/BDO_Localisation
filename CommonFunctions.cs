@@ -1319,7 +1319,10 @@ namespace BDO_Localisation_AddOn
                     decimal pensionWTaxRate = physicalEntityTax ? physicalEntityPensionRates["PensionWTaxRate"] / 100 : 0;
                     decimal pensionCoWTaxRate = physicalEntityTax ? physicalEntityPensionRates["PensionCoWTaxRate"] / 100 : 0;
 
-                    isForeignCurrency = docDBSources.Item(mainTable).GetValue("DocCur", 0).Trim() != getLocalCurrency();
+                    if (docDBSources.Item(mainTable).GetValue("CurSource", 0) == "C")
+                        isForeignCurrency = docDBSources.Item(mainTable).GetValue("DocCur", 0).Trim() != getLocalCurrency();
+                    else
+                        isForeignCurrency = false;
 
                     string docType = docDBSources.Item(mainTable).GetValue("DocType", 0).Trim();
                     SAPbouiCOM.Matrix oMatrix = docType == "I" ? oFormAPDoc.Items.Item("38").Specific : oFormAPDoc.Items.Item("39").Specific; //Item(I) or Service(S)

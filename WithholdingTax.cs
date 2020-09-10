@@ -349,6 +349,8 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.Matrix oMatrixWTax = oForm.Items.Item("6").Specific;
                     oMatrixWTax.Columns.Item("7").Editable = false;
                     oMatrixWTax.Columns.Item("14").Editable = false;
+                    oMatrixWTax.Columns.Item("24").Editable = false;
+                    oMatrixWTax.Columns.Item("28").Editable = false;
 
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                     {
@@ -385,15 +387,23 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
 
             SAPbouiCOM.Matrix oMatrixWTax = oForm.Items.Item("6").Specific;
-            oMatrixWTax.Columns.Item("7").Editable = true;
-            oMatrixWTax.Columns.Item("14").Editable = true;
-
+            
             try
             {
                 if (isForeignCurrency)
+                {
+                    oMatrixWTax.Columns.Item("28").Editable = true;
                     LanguageUtils.IgnoreErrors<string>(() => oMatrixWTax.Columns.Item("28").Cells.Item(rowIndex).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(wTaxAmt));
+                    oMatrixWTax.Columns.Item("1").Cells.Item(rowIndex).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                    oMatrixWTax.Columns.Item("28").Editable = false;
+                }
                 else
+                {
+                    oMatrixWTax.Columns.Item("14").Editable = true;
                     LanguageUtils.IgnoreErrors<string>(() => oMatrixWTax.Columns.Item("14").Cells.Item(rowIndex).Specific.String = FormsB1.ConvertDecimalToStringForEditboxStrings(wTaxAmt));
+                    oMatrixWTax.Columns.Item("1").Cells.Item(rowIndex).Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                    oMatrixWTax.Columns.Item("14").Editable = false;
+                }
             }
             catch (Exception ex)
             {
@@ -401,9 +411,6 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                oMatrixWTax.Columns.Item("7").Editable = false;
-                oMatrixWTax.Columns.Item("14").Editable = false;
-
                 oForm.Freeze(false);
             }
         }
