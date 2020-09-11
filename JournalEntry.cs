@@ -955,7 +955,7 @@ namespace BDO_Localisation_AddOn
         {
 
             SAPbobsCOM.Recordset oRecordSetOACT = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string queryOACT = @"SELECT * FROM ""OACT""
+            string queryOACT = @"SELECT ""AcctName"" FROM ""OACT""
                                              WHERE ""AcctCode"" = '" + Account + "'";
 
             oRecordSetOACT.DoQuery(queryOACT);
@@ -999,7 +999,7 @@ namespace BDO_Localisation_AddOn
                 if (string.IsNullOrEmpty(StornoToTr))
                 {
                     query = @"SELECT 
-                            *  
+                            ""TransId""  
                             FROM ""OJDT"" 
                             WHERE ""StornoToTr"" IS NULL   
                             AND ""Ref1"" = '" + CreatedBy + @"'  
@@ -1008,7 +1008,7 @@ namespace BDO_Localisation_AddOn
                 else
                 {
                     query = @"SELECT 
-                            *  
+                            ""TransId""   
                             FROM ""OJDT"" 
                             WHERE ""StornoToTr"" IS NOT NULL   
                             AND ""Ref1"" = '" + CreatedBy + @"'
