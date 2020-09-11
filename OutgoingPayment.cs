@@ -3346,13 +3346,18 @@ namespace BDO_Localisation_AddOn
                 if (physicalEntityTax)
                 {
                     creditAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionPhWTCode).ToString(); //U_BdgtDbtAcc დასაქმებულის საპენსიოს ვალდებულების ანგარიში
-                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, pensEmployedAmt, pensEmployedAmtFC, docCurrency,
-                                    distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                    if (pensEmployedAmt > 0)
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, pensEmployedAmt, pensEmployedAmtFC, docCurrency,
+                                        distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
 
-                    debitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ანგარიში
-                    creditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ვალდებულების ანგარიში
-                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", debitAccount, creditAccount, pensEmployerAmt, pensEmployerAmtFC, docCurrency,
-                                                        distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                    if (pensEmployerAmt > 0)
+                    {
+                        debitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ანგარიში
+                        creditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ვალდებულების ანგარიში
+
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", debitAccount, creditAccount, pensEmployerAmt, pensEmployerAmtFC, docCurrency,
+                                                            distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                    }
                 }
             }
 
