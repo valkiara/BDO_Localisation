@@ -39,13 +39,11 @@ namespace BDO_Localisation_AddOn
             WBGUntCode = oMatrix.GetCellSpecific("WBUntCode", Row).Value;
 
             SAPbobsCOM.Recordset oRecordsetbyRSCODE = BDO_RSUoM.getUomByRSCode(ItemCode, WBUntCdRS, out errorText);
+            SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oMatrix.Columns.Item("WBUntCode").Cells.Item(Row).Specific;
 
             if (oRecordsetbyRSCODE != null)
             {
-                if (WBGUntCode == "")
-                {
                     WBGUntCode = oRecordsetbyRSCODE.Fields.Item("UomCode").Value;
-                    SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oMatrix.Columns.Item("WBUntCode").Cells.Item(Row).Specific;
 
                     try
                     {
@@ -55,8 +53,7 @@ namespace BDO_Localisation_AddOn
                     {
                     }
 
-                }
-
+        
                 //if (true)
                 //{
                 //    string WBUntName = oRecordsetbyRSCODE.Fields.Item("UomName").Value;
@@ -71,6 +68,8 @@ namespace BDO_Localisation_AddOn
                 //        {
                 //        }
                 //}
+            } else {
+                oEditText.Value = "";
             }
         }
         public static string DetectVATByRSCode(string RSVatCode, out string errorText)
@@ -2838,7 +2837,7 @@ namespace BDO_Localisation_AddOn
                     else if (oCFLEvento.ChooseFromListUID == "CFLItmCd")
                     {
                         SAPbouiCOM.DataTable oDataTableSelectedObjects = oCFLEvento.SelectedObjects;
-                        string ItemCode = oDataTableSelectedObjects.GetValue("ItemCode", 0);
+                        string ItemCode = oDataTableSelectedObjects.GetValue("ItemCode", 0);           
 
                         SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBGdMatrix").Specific));
                         LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("ItemCode").Cells.Item(oCFLEvento.Row).Specific.Value = ItemCode);
