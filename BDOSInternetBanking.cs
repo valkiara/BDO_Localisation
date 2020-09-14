@@ -4507,7 +4507,7 @@ namespace BDO_Localisation_AddOn
 
                 }
 
-                if (DiffCurr == "Y")
+                if (DiffCurr == "Y" && !string.IsNullOrEmpty(DocCurr) && DocCurr != localCurrency)
                 {
                     decimal DocRate = Convert.ToDecimal(oSBOBob.GetCurrencyRate(DocCurr, oNewPayments.DocDate).Fields.Item("CurrencyRate").Value);
                     TransferSumInCurrency = CommonFunctions.roundAmountByGeneralSettings(TransferSumInCurrency / DocRate, "Sum");
