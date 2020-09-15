@@ -5877,7 +5877,7 @@ namespace BDO_Localisation_AddOn
                 //ცხრილური ნაწილის წაშლა <---             
 
                 //ცხრილური ნაწილის დამატება --->
-                int baseDoc;
+                int baseDoc=-1;
                 string baseDocT;
 
                 int count = oGeneralData.Child("BDO_TXS1").Count;
@@ -5971,7 +5971,23 @@ namespace BDO_Localisation_AddOn
                         int id = 0; //ანგარიშ-ფაქტურის საქონლის მონაცემის უნიკალური ნომერი
                         int inv_id = inv_ID; //ანგარიშ-ფაქტურის უნიკალური ნომერი
                         string goods = oRecordSet.Fields.Item("W_NAME").Value.ToString(); //საქონლის დასახელება
-                        string g_unit = "მომსახურება"; //საქონლის ერთეული
+                        string g_unit = oRecordSet.Fields.Item("InvntItem").Value == "N" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString(); //საქონლის ერთეული
+                        //oRecordSet.Fields.Item("InvntItem").Value == "N" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString();
+                        //baseDoc
+                        //SAPbobsCOM.GeneralData InvoiceRow = oGeneralData.Child("BDO_TXS1").Item(0);
+                        //baseDoc = InvoiceRow.GetProperty("U_baseDoc");
+                        if (baseDoc != -1)
+                        {
+                            SAPbobsCOM.Recordset oRecordSetUnit = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                            string queryUnit = "select \"DocType\" from OINV " + "\n"
+                            + "where \"DocEntry\" = '" + baseDoc + "'";
+                            oRecordSetUnit.DoQuery(queryUnit);
+                            if (!oRecordSetUnit.EoF)
+                            {
+                                if (oRecordSetUnit.Fields.Item("DocType").Value.ToString() == "S")
+                                    g_unit = "მომსახურება";
+                            }
+                        }
                         if (g_unit == "")
                         {
                             g_unit = "სხვა";
