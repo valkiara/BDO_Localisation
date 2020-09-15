@@ -3312,20 +3312,6 @@ namespace BDO_Localisation_AddOn
 
             if (isWTLiable)
             {
-                bool physicalEntityTax = CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wTCode).ToString() == "Y";
-                string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
-                string pensionPhWTCode = CommonFunctions.getOADM("U_BDOSPnPh").ToString();
-
-                string debitAccount;
-                string creditAccount;
-                string distrRule1 = "";
-                string distrRule2 = "";
-                string distrRule3 = "";
-                string distrRule4 = "";
-                string distrRule5 = "";
-
-                string project = CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "PrjCode", 0).ToString();
-
                 decimal whTaxAmt = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSWhtAmt", 0).ToString());
                 decimal whTaxAmtFC = docCurrency == "" ? 0 : whTaxAmt / docRate;
 
@@ -3335,29 +3321,42 @@ namespace BDO_Localisation_AddOn
                 decimal pensEmployerAmt = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnCoAm", 0).ToString()); //დამსაქმებელი
                 decimal pensEmployerAmtFC = docCurrency == "" ? 0 : pensEmployerAmt / docRate;
 
-                debitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", wTCode).ToString(); //BP-ს ძირითადი WTCode-ს ანგარიში
-                JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", debitAccount, "", whTaxAmt + pensEmployedAmt, whTaxAmtFC + pensEmployedAmtFC, docCurrency,
-                                                    distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
-
-                creditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", wTCode).ToString(); //BP-ს ძირითადი WTCode-ს ვალდებულების ანგარიში
-                JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, whTaxAmt, whTaxAmtFC, docCurrency,
-                                                    distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
-
-                if (physicalEntityTax)
+                if (pensEmployedAmt > 0 && pensEmployerAmt > 0)
                 {
+                    bool physicalEntityTax = CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wTCode).ToString() == "Y";
+                    string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
+                    string pensionPhWTCode = CommonFunctions.getOADM("U_BDOSPnPh").ToString();
+
+                    string debitAccount;
+                    string creditAccount;
+                    string distrRule1 = "";
+                    string distrRule2 = "";
+                    string distrRule3 = "";
+                    string distrRule4 = "";
+                    string distrRule5 = "";
+
+                    string project = CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "PrjCode", 0).ToString();
+
+                    debitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", wTCode).ToString(); //BP-ს ძირითადი WTCode-ს ანგარიში
+                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", debitAccount, "", whTaxAmt + pensEmployedAmt, whTaxAmtFC + pensEmployedAmtFC, docCurrency,
+                                                        distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+
+                    creditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", wTCode).ToString(); //BP-ს ძირითადი WTCode-ს ვალდებულების ანგარიში
+                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, whTaxAmt, whTaxAmtFC, docCurrency,
+                                                        distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+
+                    //if (physicalEntityTax)
+                    //{
                     creditAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionPhWTCode).ToString(); //U_BdgtDbtAcc დასაქმებულის საპენსიოს ვალდებულების ანგარიში
-                    if (pensEmployedAmt > 0)
-                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, pensEmployedAmt, pensEmployedAmtFC, docCurrency,
-                                        distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, pensEmployedAmt, pensEmployedAmtFC, docCurrency,
+                                    distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
 
-                    if (pensEmployerAmt > 0)
-                    {
-                        debitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ანგარიში
-                        creditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ვალდებულების ანგარიში
+                    debitAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ანგარიში
+                    creditAccount = CommonFunctions.getValue("OWHT", "U_BdgtDbtAcc", "WTCode", pensionCoWTCode).ToString(); // დამსაქმებლის საპენსიოს ვალდებულების ანგარიში
 
-                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", debitAccount, creditAccount, pensEmployerAmt, pensEmployerAmtFC, docCurrency,
-                                                            distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
-                    }
+                    JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", debitAccount, creditAccount, pensEmployerAmt, pensEmployerAmtFC, docCurrency,
+                                                        distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                    //}
                 }
             }
 
@@ -3688,6 +3687,10 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
             try
             {
+                var docEntry = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0);
+                if (!string.IsNullOrEmpty(docEntry))
+                    return;
+
                 var oDBDataSource = oForm.DataSources.DBDataSources.Item("OVPM");
                 var oDBDataSourceBP = oForm.DataSources.DBDataSources.Item("OCRD");
 
@@ -4386,6 +4389,8 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
+                if (oForm.TypeEx == "196") return; //Payments Means
+
                 double AmountPr = 0;
 
                 SAPbouiCOM.Item oItemPrTx = oForm.Items.Item("AmtPrTxE");

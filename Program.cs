@@ -163,7 +163,7 @@ namespace BDO_Localisation_AddOn
 
                 UDO.allUDOForAddOn(out errorText);
                 FormsB1.allUserFieldsForAddOn(out errorText);
-
+            
                 BDOSInternetBankingIntegrationServicesRules.updateUDO();
                 BDO_TaxInvoiceReceived.updateUDO();
 
