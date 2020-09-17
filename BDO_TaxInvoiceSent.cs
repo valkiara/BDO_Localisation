@@ -5987,7 +5987,7 @@ namespace BDO_Localisation_AddOn
                                     g_unit = "მომსახურება";
                             }
                         }
-                        if (g_unit == "")
+                        if (g_unit == "") 
                         {
                             g_unit = "სხვა";
                         }
