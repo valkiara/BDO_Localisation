@@ -3097,7 +3097,7 @@ namespace BDO_Localisation_AddOn
                             }
                             else
                             {
-                                Program.uiApp.MessageBox("ტრანზაქციის დასრულებს შეცდომა");
+                                Program.uiApp.MessageBox("ტრანზაქციის დასრულების შეცდომა");
                                 BubbleEvent = false;
                             }
                         }
@@ -3345,8 +3345,6 @@ namespace BDO_Localisation_AddOn
                     JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, whTaxAmt, whTaxAmtFC, docCurrency,
                                                         distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
 
-                    //if (physicalEntityTax)
-                    //{
                     creditAccount = CommonFunctions.getValue("OWHT", "Account", "WTCode", pensionPhWTCode).ToString(); //U_BdgtDbtAcc დასაქმებულის საპენსიოს ვალდებულების ანგარიში
                     JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, pensEmployedAmt, pensEmployedAmtFC, docCurrency,
                                     distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
@@ -3356,7 +3354,6 @@ namespace BDO_Localisation_AddOn
 
                     JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", debitAccount, creditAccount, pensEmployerAmt, pensEmployerAmtFC, docCurrency,
                                                         distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
-                    //}
                 }
             }
 

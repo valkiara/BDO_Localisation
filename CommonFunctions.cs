@@ -1300,7 +1300,7 @@ namespace BDO_Localisation_AddOn
 
                 if (isWTLiable)
                 {
-                    bool isAPInvoice = mainTable == "OPCH" && docDBSources.Item(mainTable).GetValue("isIns", 0).Trim() != "Y";
+                    bool isAPInvoiceOrAPReserveInvoice = mainTable == "OPCH";
 
                     string docDateStr = docDBSources.Item(mainTable).GetValue("DocDate", 0).Trim();
 
@@ -1342,12 +1342,12 @@ namespace BDO_Localisation_AddOn
                     decimal totalTaxes = 0;
                     decimal totalTaxesFC = 0;
 
-                    decimal dpmAmnt = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DpmAmnt", 0), CultureInfo.InvariantCulture) : decimal.Zero;
-                    decimal dpmAmntFC = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DpmAmntFC", 0), CultureInfo.InvariantCulture) : decimal.Zero;
-                    decimal docTotal = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DocTotal", 0), CultureInfo.InvariantCulture) : decimal.Zero;
-                    decimal docTotalFC = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DocTotalFC", 0), CultureInfo.InvariantCulture) : decimal.Zero;
-                    decimal vatSum = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("VatSum", 0), CultureInfo.InvariantCulture) : decimal.Zero;
-                    decimal vatSumFC = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("VatSumFC", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal dpmAmnt = isAPInvoiceOrAPReserveInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DpmAmnt", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal dpmAmntFC = isAPInvoiceOrAPReserveInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DpmAmntFC", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal docTotal = isAPInvoiceOrAPReserveInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DocTotal", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal docTotalFC = isAPInvoiceOrAPReserveInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DocTotalFC", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal vatSum = isAPInvoiceOrAPReserveInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("VatSum", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal vatSumFC = isAPInvoiceOrAPReserveInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("VatSumFC", 0), CultureInfo.InvariantCulture) : decimal.Zero;
 
                     docTotal -= vatSum;
                     docTotalFC -= vatSumFC;
@@ -1355,7 +1355,7 @@ namespace BDO_Localisation_AddOn
                     for (int row = 0; row < oDBDataSourceTable.Size; row++)
                     {
                         grossAmt = Convert.ToDecimal(getChildOrDbDataSourceValue(oDBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
-                        if (dpmAmnt > decimal.Zero && docTotal == decimal.Zero)
+                        if (dpmAmnt > decimal.Zero && docTotal <= decimal.Zero)
                             grossAmt = decimal.Zero;
                         else
                             grossAmt = dpmAmnt > decimal.Zero ? grossAmt * dpmAmnt / (docTotal + dpmAmnt) : grossAmt;
@@ -1371,7 +1371,7 @@ namespace BDO_Localisation_AddOn
                         if (isForeignCurrency)
                         {
                             grossAmtFC = Convert.ToDecimal(getChildOrDbDataSourceValue(oDBDataSourceTable, null, null, "TotalFrgn", row), CultureInfo.InvariantCulture);
-                            if (dpmAmntFC > decimal.Zero && docTotalFC == decimal.Zero)
+                            if (dpmAmntFC > decimal.Zero && docTotalFC <= decimal.Zero)
                                 grossAmtFC = decimal.Zero;
                             else
                                 grossAmtFC = dpmAmntFC > decimal.Zero ? grossAmtFC * dpmAmntFC / (docTotalFC + dpmAmntFC) : grossAmtFC;
