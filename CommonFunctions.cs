@@ -1300,6 +1300,8 @@ namespace BDO_Localisation_AddOn
 
                 if (isWTLiable)
                 {
+                    bool isAPInvoice = mainTable == "OPCH" && docDBSources.Item(mainTable).GetValue("isIns", 0).Trim() != "Y";
+
                     string docDateStr = docDBSources.Item(mainTable).GetValue("DocDate", 0).Trim();
 
                     if (string.IsNullOrEmpty(docDateStr))
@@ -1309,7 +1311,7 @@ namespace BDO_Localisation_AddOn
                     DateTime docDate = DateTime.ParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
 
                     string wTCode = oMatrixWTax.Columns.Item("1").Cells.Item(1).Specific.Value;
-                   
+
                     Dictionary<string, decimal> physicalEntityPensionRates = WithholdingTax.GetPhysicalEntityPensionRates(docDate, wTCode, out var errorText);
                     if (!string.IsNullOrEmpty(errorText))
                         throw new Exception(errorText);
@@ -1340,9 +1342,23 @@ namespace BDO_Localisation_AddOn
                     decimal totalTaxes = 0;
                     decimal totalTaxesFC = 0;
 
+                    decimal dpmAmnt = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DpmAmnt", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal dpmAmntFC = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DpmAmntFC", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal docTotal = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DocTotal", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal docTotalFC = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("DocTotalFC", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal vatSum = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("VatSum", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+                    decimal vatSumFC = isAPInvoice ? Convert.ToDecimal(docDBSources.Item(mainTable).GetValue("VatSumFC", 0), CultureInfo.InvariantCulture) : decimal.Zero;
+
+                    docTotal -= vatSum;
+                    docTotalFC -= vatSumFC;
+
                     for (int row = 0; row < oDBDataSourceTable.Size; row++)
                     {
                         grossAmt = Convert.ToDecimal(getChildOrDbDataSourceValue(oDBDataSourceTable, null, null, "LineTotal", row), CultureInfo.InvariantCulture);
+                        if (dpmAmnt > decimal.Zero && docTotal == decimal.Zero)
+                            grossAmt = decimal.Zero;
+                        else
+                            grossAmt = dpmAmnt > decimal.Zero ? grossAmt * dpmAmnt / (docTotal + dpmAmnt) : grossAmt;
 
                         (decimal whTaxAmt, decimal pensEmployedAmt, decimal pensEmployerAmt) physicalEntityTaxesAmt = CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
 
@@ -1355,6 +1371,10 @@ namespace BDO_Localisation_AddOn
                         if (isForeignCurrency)
                         {
                             grossAmtFC = Convert.ToDecimal(getChildOrDbDataSourceValue(oDBDataSourceTable, null, null, "TotalFrgn", row), CultureInfo.InvariantCulture);
+                            if (dpmAmntFC > decimal.Zero && docTotalFC == decimal.Zero)
+                                grossAmtFC = decimal.Zero;
+                            else
+                                grossAmtFC = dpmAmntFC > decimal.Zero ? grossAmtFC * dpmAmntFC / (docTotalFC + dpmAmntFC) : grossAmtFC;
 
                             physicalEntityTaxesAmt = CalcPhysicalEntityTaxes((grossAmtFC, wtRate, pensionWTaxRate, pensionCoWTaxRate));
 
