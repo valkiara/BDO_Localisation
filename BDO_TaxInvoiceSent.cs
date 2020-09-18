@@ -5972,21 +5972,13 @@ namespace BDO_Localisation_AddOn
                         int inv_id = inv_ID; //ანგარიშ-ფაქტურის უნიკალური ნომერი
                         string goods = oRecordSet.Fields.Item("W_NAME").Value.ToString(); //საქონლის დასახელება
                         string g_unit = oRecordSet.Fields.Item("InvntItem").Value == "N" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString(); //საქონლის ერთეული
-                        
-                        if (baseDoc != -1)
+                        string docType = oRecordSet.Fields.Item("DocType").Value.ToString();
+
+                        if(docType == "S")
                         {
-                            SAPbobsCOM.Recordset oRecordSetUnit = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                            string queryUnit = "select \"DocType\" from OINV " + "\n"
-                            + "where \"DocEntry\" = '" + baseDoc + "'";
-
-                            oRecordSetUnit.DoQuery(queryUnit);
-
-                            if (!oRecordSetUnit.EoF)
-                            {
-                                if (oRecordSetUnit.Fields.Item("DocType").Value.ToString() == "S")
-                                    g_unit = "მომსახურება";
-                            }
+                            g_unit = "მომსახურება";
                         }
+
                         if (g_unit == "") 
                         {
                             g_unit = "სხვა";
@@ -6147,6 +6139,7 @@ namespace BDO_Localisation_AddOn
 
             string query = @"SELECT
 	                         ""W_NAME"",
+                             ""DocType"",
 	                         ""InvntItem"",
 	                         ""UNIT_TXT"",
 	                         SUM(""QUANTITY"") AS ""QUANTITY"",
@@ -6160,6 +6153,7 @@ namespace BDO_Localisation_AddOn
 	                         ""OITM"".""CodeBars"" AS ""CodeBars"",
 	                         ""OITM"".""SWW"" AS ""AdditionalIdentifier"",
 	                         ""MNTB"".""Dscription"" AS ""W_NAME"",
+                             ""MNTB"".""DocType"" AS ""DocType"",
                              CASE WHEN ""BDO_RSUOM"".""U_RSCode"" is null THEN '99' ELSE ""BDO_RSUOM"".""U_RSCode"" END AS ""UNIT_ID"", 
                              CASE WHEN ""MNTB"".""unitMsr"" = '' or ""MNTB"".""U_BDOSSrvDsc"" <> '' THEN 'სხვა' ELSE ""MNTB"".""unitMsr"" END  AS ""UNIT_TXT"",
 	                         ""MNTB"".""VatPrcnt"" AS ""VAT_TYPE"",
@@ -6176,6 +6170,7 @@ namespace BDO_Localisation_AddOn
 	                         ""MNTB"".""InvntItem"" AS ""InvntItem"" 
 	                        FROM (SELECT
 	                         ""ORIN"".""U_BDOSSrvDsc"" AS ""U_BDOSSrvDsc"",
+                             ""ORIN"".""DocType"" AS ""DocType"",
 	                         ""RIN1"".""DocEntry"" AS ""DocEntry"",
 	                         ""RIN1"".""BaseEntry"" AS ""BaseEntry"",
 	                         ""RIN1"".""BaseLine"" AS ""LineNum"",
@@ -6213,6 +6208,7 @@ namespace BDO_Localisation_AddOn
                                 
                                  SELECT
 	                         ""OCSI"".""U_BDOSSrvDsc"" AS ""U_BDOSSrvDsc"",
+                             ""OCSI"".""DocType"" AS ""DocType"",
 	                         ""CSI1"".""DocEntry"" AS ""DocEntry"",
 	                         ""CSI1"".""BaseEntry"" AS ""BaseEntry"",
 	                         ""CSI1"".""BaseLine"" AS ""LineNum"",
@@ -6253,6 +6249,7 @@ namespace BDO_Localisation_AddOn
 	                         ""MNTB"".""LineNum"",
 	                         ""MNTB"".""ItemCode"",
 	                         ""MNTB"".""Dscription"",
+                             ""MNTB"".""DocType"",
 	                         ""OITM"".""CodeBars"",
 	                         ""OITM"".""SWW"",
 	                         ""BDO_RSUOM"".""U_RSCode"",
@@ -6269,6 +6266,7 @@ namespace BDO_Localisation_AddOn
 	                         ""OITM"".""CodeBars"" AS ""CodeBars"",
 	                         ""OITM"".""SWW"" AS ""AdditionalIdentifier"",
 	                         ""MNTB"".""Dscription"" AS ""W_NAME"",
+                             ""MNTB"".""DocType"" AS ""DocType"",
                              CASE WHEN ""BDO_RSUOM"".""U_RSCode"" is null THEN '99' ELSE ""BDO_RSUOM"".""U_RSCode"" END AS ""UNIT_ID"", 
                              CASE WHEN ""MNTB"".""unitMsr"" = '' or ""MNTB"".""U_BDOSSrvDsc"" <> '' THEN 'სხვა' ELSE ""MNTB"".""unitMsr"" END  AS ""UNIT_TXT"",
 	                         ""MNTB"".""VatPrcnt"" AS ""VAT_TYPE"",
@@ -6285,6 +6283,7 @@ namespace BDO_Localisation_AddOn
                         	 ""MNTB"".""InvntItem"" AS ""InvntItem"" 
                         	FROM (SELECT
                         	 ""OINV"".""U_BDOSSrvDsc"",
+                             ""OINV"".""DocType"",
                         	 ""INV1"".""DocEntry"",
                         	 ""INV1"".""LineNum"",
 --""INV1"".""ItemCode"",
@@ -6325,6 +6324,7 @@ namespace BDO_Localisation_AddOn
 	                         ""MNTB"".""LineNum"",
 	                         ""MNTB"".""ItemCode"",
 	                         ""MNTB"".""Dscription"",
+                             ""MNTB"".""DocType"",
 	                         ""OITM"".""CodeBars"",
 	                         ""OITM"".""SWW"",
 	                         ""BDO_RSUOM"".""U_RSCode"",
@@ -6334,6 +6334,7 @@ namespace BDO_Localisation_AddOn
 	                         ""MNTB"".""ItemType"",
 	                         ""MNTB"".""InvntItem"" HAVING SUM(""MNTB"".""Quantity"") > 0 ) AS ""MNTB_DATA""
                         GROUP BY ""W_NAME"",
+                             ""DocType"",
                         	 ""InvntItem"",
 	                         ""UNIT_TXT""";
 
@@ -6345,6 +6346,7 @@ namespace BDO_Localisation_AddOn
             string query = @"SELECT
             	 ""MNTB"".""ID"" AS ""ID"",
             	 ""MNTB"".""DocEntry"" AS ""DocEntry"",
+                 ""MNTB"".""DocType"" AS ""DocType"",
             	 ""MNTB"".""LineId"" AS ""LineNum"",
             	 ""MNTB"".""U_ItemCode"" AS ""ItemCode"",
             	 ""MNTB"".""U_Dscptn"" AS ""W_NAME"",
@@ -6367,6 +6369,7 @@ namespace BDO_Localisation_AddOn
             FROM (SELECT " + " " +
                  @"'" + inv_ID + @"' AS ""ID"",
             	 ""@BDOSRDV1"".""DocEntry"",
+                 '' AS ""DocType"",
             	 ""@BDOSRDV1"".""LineId"",
             	 ""@BDOSRDV1"".""U_ItemCode"",
             	 ""@BDOSRDV1"".""U_Dscptn"",
@@ -6389,6 +6392,7 @@ namespace BDO_Localisation_AddOn
             	WHERE ""@BDOSRDV1"".""DocEntry"" IN ('" + baseDocEntry + @"')) AS ""MNTB"" 
             GROUP BY ""MNTB"".""ID"",
             	 ""MNTB"".""DocEntry"",
+                 ""MNTB"".""DocType"",
             	 ""MNTB"".""LineId"",
             	 ""MNTB"".""U_ItemCode"",
             	 ""MNTB"".""U_Dscptn"",
