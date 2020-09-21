@@ -5971,18 +5971,9 @@ namespace BDO_Localisation_AddOn
                         int id = 0; //ანგარიშ-ფაქტურის საქონლის მონაცემის უნიკალური ნომერი
                         int inv_id = inv_ID; //ანგარიშ-ფაქტურის უნიკალური ნომერი
                         string goods = oRecordSet.Fields.Item("W_NAME").Value.ToString(); //საქონლის დასახელება
-                        string g_unit = oRecordSet.Fields.Item("InvntItem").Value == "N" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString(); //საქონლის ერთეული
                         string docType = oRecordSet.Fields.Item("DocType").Value.ToString();
-
-                        if(docType == "S")
-                        {
-                            g_unit = "მომსახურება";
-                        }
-
-                        if (g_unit == "") 
-                        {
-                            g_unit = "სხვა";
-                        }
+                        string g_unit = oRecordSet.Fields.Item("InvntItem").Value == "N" || docType == "S" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString(); //საქონლის ერთეული
+                        g_unit = g_unit == "" ? "სხვა" : g_unit;
 
                         decimal g_number = Convert.ToDecimal(oRecordSet.Fields.Item("QUANTITY").Value); //რაოდენობა
                         decimal full_amount = Convert.ToDecimal(oRecordSet.Fields.Item("AMOUNT").Value); //თანხა დღგ-ის და აქციზის ჩათვლლით
