@@ -3307,7 +3307,7 @@ namespace BDO_Localisation_AddOn
 
                     if (baseDocTable == "OCSI")
                     {
-                        connectedDocList = ArCorrectionInvoice.getAllConnectedDoc(primaryBaseDocList,"13");
+                        connectedDocList = ArCorrectionInvoice.getAllConnectedDoc(primaryBaseDocList, "13");
                     }
                 }
             }
@@ -3413,7 +3413,7 @@ namespace BDO_Localisation_AddOn
             string baseDocStr = null;
 
             SAPbobsCOM.Recordset oRecordSet =
-                (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string query = @"SELECT 
             ""BDO_TAXS"".""CreateDate"" AS ""createDate"",
             ""BDO_TAXS"".""DocEntry"" AS ""docEntry"",
@@ -3719,7 +3719,7 @@ namespace BDO_Localisation_AddOn
                     oChild.SetProperty("U_tAmtBsDc", oRecordSet.Fields.Item("VatSum").Value); //დღგ-ის თანხა
                     oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
 
-                    
+
                     List<int> connectedDocList = ARInvoice.getAllConnectedDoc(new List<int>() { baseDocEntry }, "13", docDate, new DateTime(), 0, out errorText);
                     int rowCountCN = connectedDocList.Count();
 
@@ -4527,7 +4527,7 @@ namespace BDO_Localisation_AddOn
                         oCompanyService = Program.oCompany.GetCompanyService();
                         oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXS_D");
                         oGeneralData =
-                            ((SAPbobsCOM.GeneralData) (oGeneralService.GetDataInterface(SAPbobsCOM
+                            ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM
                                 .GeneralServiceDataInterfaces.gsGeneralData)));
 
                         oGeneralData.SetProperty("U_opDate", new DateTime(docDate.Year, docDate.Month, 1));
@@ -4643,7 +4643,7 @@ namespace BDO_Localisation_AddOn
                         oGeneralData.SetProperty("U_corrType", corrType);
 
                         //კორექტირების დოკუმენტები                    
-                        List<int> connectedDocList = ARInvoice.getAllConnectedARCorrectionDoc(new List<int>() {ARInvoiceDocEntry},
+                        List<int> connectedDocList = ARInvoice.getAllConnectedARCorrectionDoc(new List<int>() { ARInvoiceDocEntry },
                             "13", docDate, docDate, docTime, out errorText);
                         int rowCount = connectedDocList.Count();
 
@@ -5877,7 +5877,7 @@ namespace BDO_Localisation_AddOn
                 //ცხრილური ნაწილის წაშლა <---             
 
                 //ცხრილური ნაწილის დამატება --->
-                int baseDoc=-1;
+                int baseDoc = -1;
                 string baseDocT;
 
                 int count = oGeneralData.Child("BDO_TXS1").Count;
@@ -5975,7 +5975,7 @@ namespace BDO_Localisation_AddOn
                         string g_unit = oRecordSet.Fields.Item("InvntItem").Value == "N" || docType == "S" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString(); //საქონლის ერთეული
                         g_unit = g_unit == "" ? "სხვა" : g_unit;
 
-                        decimal g_number = Convert.ToDecimal(oRecordSet.Fields.Item("QUANTITY").Value); //რაოდენობა
+                        decimal g_number = g_unit == "მომსახურება" ? decimal.Zero : Convert.ToDecimal(oRecordSet.Fields.Item("QUANTITY").Value); //რაოდენობა
                         decimal full_amount = Convert.ToDecimal(oRecordSet.Fields.Item("AMOUNT").Value); //თანხა დღგ-ის და აქციზის ჩათვლლით
                         decimal drg_amount = Convert.ToDecimal(oRecordSet.Fields.Item("LineVat").Value); //დღგ
                         decimal aqcizi_amount = 0; //აქციზი
