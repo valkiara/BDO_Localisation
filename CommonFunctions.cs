@@ -1358,7 +1358,7 @@ namespace BDO_Localisation_AddOn
                         if (dpmAmnt > decimal.Zero && docTotal <= decimal.Zero)
                             grossAmt = decimal.Zero;
                         else
-                            grossAmt = dpmAmnt > decimal.Zero ? grossAmt * dpmAmnt / (docTotal + dpmAmnt) : grossAmt;
+                            grossAmt = dpmAmnt > decimal.Zero ? grossAmt - (grossAmt * dpmAmnt / (docTotal + dpmAmnt)) : grossAmt;
 
                         (decimal whTaxAmt, decimal pensEmployedAmt, decimal pensEmployerAmt) physicalEntityTaxesAmt = CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
 
@@ -1374,7 +1374,7 @@ namespace BDO_Localisation_AddOn
                             if (dpmAmntFC > decimal.Zero && docTotalFC <= decimal.Zero)
                                 grossAmtFC = decimal.Zero;
                             else
-                                grossAmtFC = dpmAmntFC > decimal.Zero ? grossAmtFC * dpmAmntFC / (docTotalFC + dpmAmntFC) : grossAmtFC;
+                                grossAmtFC = dpmAmntFC > decimal.Zero ? grossAmtFC - (grossAmtFC * dpmAmntFC / (docTotalFC + dpmAmntFC)) : grossAmtFC;
 
                             physicalEntityTaxesAmt = CalcPhysicalEntityTaxes((grossAmtFC, wtRate, pensionWTaxRate, pensionCoWTaxRate));
 
