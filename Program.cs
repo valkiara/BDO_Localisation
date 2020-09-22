@@ -163,7 +163,7 @@ namespace BDO_Localisation_AddOn
 
                 UDO.allUDOForAddOn(out errorText);
                 FormsB1.allUserFieldsForAddOn(out errorText);
-
+            
                 BDOSInternetBankingIntegrationServicesRules.updateUDO();
                 BDO_TaxInvoiceReceived.updateUDO();
 
@@ -1150,7 +1150,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Outgoing Payments<-----------------------------
                         else if (oForm.TypeEx == "426")
                         {
-                            OutgoingPayment.formDataLoad(oForm, out errorText);
+                            OutgoingPayment.formDataLoad(oForm);
                         }
 
                         //----------------------------->Blanket agreement<-----------------------------
@@ -1322,7 +1322,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Outgoing Payments<-----------------------------
                         else if (oForm.TypeEx == "426")
                         {
-                            OutgoingPayment.formDataLoad(oForm, out errorText);
+                            OutgoingPayment.formDataLoad(oForm);
                         }
 
                         //----------------------------->Blanket agreement<-----------------------------

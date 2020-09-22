@@ -2839,6 +2839,7 @@ namespace BDO_Localisation_AddOn
 
                 string errorText;
                 string cardCode = oForm.DataSources.UserDataSources.Item("BPCode").ValueEx;
+                bool isWTLiable = BusinessPartners.isWTLiable(cardCode);
                 Dictionary<string, decimal> physicalEntityPensionRates;
 
                 for (; i <= rowCount; i++)
@@ -2854,14 +2855,14 @@ namespace BDO_Localisation_AddOn
                     {
                         bool physicalEntityTax = CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y";
 
-                        if (BusinessPartners.isWTLiable(cardCode))
+                        if (isWTLiable)
                         {
                             DateTime date = oDataTable.GetValue("DocDate", i - 1);
-                            physicalEntityPensionRates = WithholdingTax.getPhysicalEntityPensionRates(date, wtCode, out errorText);
+                            physicalEntityPensionRates = WithholdingTax.GetPhysicalEntityPensionRates(date, wtCode, out errorText);
 
                             if (string.IsNullOrEmpty(errorText))
                             {
-                                string docType = oDataTable.GetValue("DocType", i - 1);
+                                //string docType = oDataTable.GetValue("DocType", i - 1);
                                 decimal totalPaymentLC = Convert.ToDecimal(oDataTable.GetValue("TotalPaymentLC", i - 1), CultureInfo.InvariantCulture);
                                 decimal totalPaymentFC = Convert.ToDecimal(oDataTable.GetValue("TotalPaymentFC", i - 1), CultureInfo.InvariantCulture);
 
@@ -2871,9 +2872,10 @@ namespace BDO_Localisation_AddOn
 
                                 grossAmt = totalPaymentLC / (1 - wtRate) / (1 - pensionWTaxRate);
 
-                                whTaxAmt = grossAmt * wtRate * (1 - pensionWTaxRate);
-                                pensEmployed = grossAmt * pensionWTaxRate;
-                                pensEmployer = grossAmt * pensionCoWTaxRate;
+                                (decimal whTaxAmt, decimal pensEmployedAmt, decimal pensEmployerAmt) physicalEntityTaxesAmt = CommonFunctions.CalcPhysicalEntityTaxes((grossAmt, wtRate, pensionWTaxRate, pensionCoWTaxRate));
+                                whTaxAmt = physicalEntityTaxesAmt.whTaxAmt;
+                                pensEmployed = physicalEntityTaxesAmt.pensEmployedAmt;
+                                pensEmployer = physicalEntityTaxesAmt.pensEmployerAmt;
                             }
                             else
                             {
