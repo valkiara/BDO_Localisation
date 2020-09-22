@@ -4471,8 +4471,11 @@ namespace BDO_Localisation_AddOn
 
                 if (changeRate)
                 {
-                    oNewPayments.DocRate = oSBOBob.GetCurrencyRate(oPayments.DocCurrency, oNewPayments.DocDate).Fields.Item("CurrencyRate").Value;
-                    correctedRate = oNewPayments.DocRate;
+                    if (oPayments.DocCurrency != localCurrency)
+                    {
+                        oNewPayments.DocRate = oSBOBob.GetCurrencyRate(oPayments.DocCurrency, oNewPayments.DocDate).Fields.Item("CurrencyRate").Value;
+                        correctedRate = oNewPayments.DocRate;
+                    }
 
                     if (oNewPayments.LocalCurrency == SAPbobsCOM.BoYesNoEnum.tYES)
                     {
@@ -4504,7 +4507,7 @@ namespace BDO_Localisation_AddOn
 
                 }
 
-                if (DiffCurr == "Y")
+                if (DiffCurr == "Y" && !string.IsNullOrEmpty(DocCurr) && DocCurr != localCurrency)
                 {
                     decimal DocRate = Convert.ToDecimal(oSBOBob.GetCurrencyRate(DocCurr, oNewPayments.DocDate).Fields.Item("CurrencyRate").Value);
                     TransferSumInCurrency = CommonFunctions.roundAmountByGeneralSettings(TransferSumInCurrency / DocRate, "Sum");

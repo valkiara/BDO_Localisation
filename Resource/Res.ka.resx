@@ -3559,4 +3559,7 @@
   <data name="Calculate" xml:space="preserve">
     <value>გამოთვლა</value>
   </data>
+  <data name="ARReserveInvoice" xml:space="preserve">
+    <value>რეალიზაციის რეზერვი</value>
+  </data>
 </root>

@@ -3529,4 +3529,7 @@
   <data name="Calculate" xml:space="preserve">
     <value>Calculate</value>
   </data>
+  <data name="ARReserveInvoice" xml:space="preserve">
+    <value>AR Reserve Invoice</value>
+  </data>
 </root>

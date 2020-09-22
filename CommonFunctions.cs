@@ -1929,14 +1929,14 @@ namespace BDO_Localisation_AddOn
             {
                 string query = @"SELECT 
                 ""ItemCode"", 
-                ""Dscription"", 
+                --""Dscription"", 
                 ""Warehouse"",
                 SUM(""InQty"" - ""OutQty"") AS ""InStock""
                 FROM ""OINM""
                 WHERE
                 ""ItemCode"" = '" + itemCode + @"'
                 AND ""Warehouse"" = '" + warehouse + @"' AND ""DocDate"" <= '" + docDate + @"'
-                GROUP BY ""ItemCode"", ""Dscription"", ""Warehouse""";
+                GROUP BY ""ItemCode"", ""Warehouse""";
 
                 oRecordset.DoQuery(query);
                 if (!oRecordset.EoF)

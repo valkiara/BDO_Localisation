@@ -873,7 +873,7 @@ namespace BDO_Localisation_AddOn
                         JDT1_BDO.SetValue("SYSDeb", GlCount, SYSRate > 0 ? Convert.ToDouble(dtRow["Debit"]) / SYSRate : 0);
                         JDT1_BDO.SetValue("FCCredit", GlCount, dtRow["FCCredit"]);
                         JDT1_BDO.SetValue("FCDebit", GlCount, dtRow["FCDebit"]);
-                        JDT1_BDO.SetValue("FCCurrency", GlCount, dtRow["FCCurrency"]);
+                        JDT1_BDO.SetValue("FCCurrency", GlCount, dtRow["FCCurrency"].ToString());
                         JDT1_BDO.SetValue("AcctName", GlCount, getAcctName(JDT1_BDO.GetValue("Account", GlCount)));
                         JDT1_BDO.SetValue("ProfitCode", GlCount, dtRow["CostingCode"].ToString());
                         JDT1_BDO.SetValue("OcrCode2", GlCount, dtRow["CostingCode2"].ToString());
