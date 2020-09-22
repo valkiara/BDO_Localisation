@@ -1024,7 +1024,6 @@ namespace BDO_Localisation_AddOn
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
-
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DRAW)
                 {
                     if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
@@ -1149,8 +1148,10 @@ namespace BDO_Localisation_AddOn
                     oForm.Items.Item("StockRevE").Visible = true;
                     SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
                     string docEntry = DocDBSource.GetValue("DocEntry", 0);
-
-                    oForm.Items.Item("StockRevE").Specific.Value = StockRevaluation.getDocEntry(docEntry);
+                    if (docEntry != "")
+                        oForm.Items.Item("StockRevE").Specific.Value = StockRevaluation.getDocEntry(docEntry);
+                    else
+                        oForm.Items.Item("StockRevE").Specific.Value = "";
                 } else
                 {
                     oForm.Items.Item("BDOSStRev").Visible = false;

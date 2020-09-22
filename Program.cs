@@ -1371,6 +1371,18 @@ namespace BDO_Localisation_AddOn
                         {
                             Warehouses.formDataLoad(oForm, out errorText);
                         }
+
+                        //-----------------------------Landed Cost<-----------------------------
+                        else if (oForm.TypeEx == "992")
+                        {
+                            LandedCosts.formDataLoad(oForm);
+                        }
+
+                        //-----------------------------Stock Revaluation<-----------------------------
+                        else if (oForm.TypeEx == "70001")
+                        {
+                            StockRevaluation.formDataLoad(oForm);
+                        }
                     }
                 }
                 catch (Exception ex)
