@@ -163,7 +163,7 @@ namespace BDO_Localisation_AddOn
 
                 UDO.allUDOForAddOn(out errorText);
                 FormsB1.allUserFieldsForAddOn(out errorText);
-
+            
                 BDOSInternetBankingIntegrationServicesRules.updateUDO();
                 BDO_TaxInvoiceReceived.updateUDO();
 
@@ -1150,7 +1150,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Outgoing Payments<-----------------------------
                         else if (oForm.TypeEx == "426")
                         {
-                            OutgoingPayment.formDataLoad(oForm, out errorText);
+                            OutgoingPayment.formDataLoad(oForm);
                         }
 
                         //----------------------------->Blanket agreement<-----------------------------
@@ -1322,7 +1322,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Outgoing Payments<-----------------------------
                         else if (oForm.TypeEx == "426")
                         {
-                            OutgoingPayment.formDataLoad(oForm, out errorText);
+                            OutgoingPayment.formDataLoad(oForm);
                         }
 
                         //----------------------------->Blanket agreement<-----------------------------
@@ -1370,6 +1370,18 @@ namespace BDO_Localisation_AddOn
                         else if (oForm.TypeEx == "62")
                         {
                             Warehouses.formDataLoad(oForm, out errorText);
+                        }
+
+                        //-----------------------------Landed Cost<-----------------------------
+                        else if (oForm.TypeEx == "992")
+                        {
+                            LandedCosts.formDataLoad(oForm);
+                        }
+
+                        //-----------------------------Stock Revaluation<-----------------------------
+                        else if (oForm.TypeEx == "70001")
+                        {
+                            StockRevaluation.formDataLoad(oForm);
                         }
                     }
                 }

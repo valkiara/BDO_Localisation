@@ -3307,7 +3307,7 @@ namespace BDO_Localisation_AddOn
 
                     if (baseDocTable == "OCSI")
                     {
-                        connectedDocList = ArCorrectionInvoice.getAllConnectedDoc(primaryBaseDocList,"13");
+                        connectedDocList = ArCorrectionInvoice.getAllConnectedDoc(primaryBaseDocList, "13");
                     }
                 }
             }
@@ -3413,7 +3413,7 @@ namespace BDO_Localisation_AddOn
             string baseDocStr = null;
 
             SAPbobsCOM.Recordset oRecordSet =
-                (SAPbobsCOM.Recordset) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string query = @"SELECT 
             ""BDO_TAXS"".""CreateDate"" AS ""createDate"",
             ""BDO_TAXS"".""DocEntry"" AS ""docEntry"",
@@ -3719,7 +3719,7 @@ namespace BDO_Localisation_AddOn
                     oChild.SetProperty("U_tAmtBsDc", oRecordSet.Fields.Item("VatSum").Value); //დღგ-ის თანხა
                     oChild.SetProperty("U_wbNumber", wblDocInfo["number"]);
 
-                    
+
                     List<int> connectedDocList = ARInvoice.getAllConnectedDoc(new List<int>() { baseDocEntry }, "13", docDate, new DateTime(), 0, out errorText);
                     int rowCountCN = connectedDocList.Count();
 
@@ -4527,7 +4527,7 @@ namespace BDO_Localisation_AddOn
                         oCompanyService = Program.oCompany.GetCompanyService();
                         oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXS_D");
                         oGeneralData =
-                            ((SAPbobsCOM.GeneralData) (oGeneralService.GetDataInterface(SAPbobsCOM
+                            ((SAPbobsCOM.GeneralData)(oGeneralService.GetDataInterface(SAPbobsCOM
                                 .GeneralServiceDataInterfaces.gsGeneralData)));
 
                         oGeneralData.SetProperty("U_opDate", new DateTime(docDate.Year, docDate.Month, 1));
@@ -4643,7 +4643,7 @@ namespace BDO_Localisation_AddOn
                         oGeneralData.SetProperty("U_corrType", corrType);
 
                         //კორექტირების დოკუმენტები                    
-                        List<int> connectedDocList = ARInvoice.getAllConnectedARCorrectionDoc(new List<int>() {ARInvoiceDocEntry},
+                        List<int> connectedDocList = ARInvoice.getAllConnectedARCorrectionDoc(new List<int>() { ARInvoiceDocEntry },
                             "13", docDate, docDate, docTime, out errorText);
                         int rowCount = connectedDocList.Count();
 
@@ -5877,7 +5877,7 @@ namespace BDO_Localisation_AddOn
                 //ცხრილური ნაწილის წაშლა <---             
 
                 //ცხრილური ნაწილის დამატება --->
-                int baseDoc;
+                int baseDoc = -1;
                 string baseDocT;
 
                 int count = oGeneralData.Child("BDO_TXS1").Count;
@@ -5971,12 +5971,11 @@ namespace BDO_Localisation_AddOn
                         int id = 0; //ანგარიშ-ფაქტურის საქონლის მონაცემის უნიკალური ნომერი
                         int inv_id = inv_ID; //ანგარიშ-ფაქტურის უნიკალური ნომერი
                         string goods = oRecordSet.Fields.Item("W_NAME").Value.ToString(); //საქონლის დასახელება
-                        string g_unit = oRecordSet.Fields.Item("InvntItem").Value == "N" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString(); //საქონლის ერთეული
-                        if (g_unit == "")
-                        {
-                            g_unit = "სხვა";
-                        }
-                        decimal g_number = Convert.ToDecimal(oRecordSet.Fields.Item("QUANTITY").Value); //რაოდენობა
+                        string docType = oRecordSet.Fields.Item("DocType").Value.ToString();
+                        string g_unit = oRecordSet.Fields.Item("InvntItem").Value == "N" || docType == "S" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString(); //საქონლის ერთეული
+                        g_unit = g_unit == "" ? "სხვა" : g_unit;
+
+                        decimal g_number = g_unit == "მომსახურება" ? decimal.Zero : Convert.ToDecimal(oRecordSet.Fields.Item("QUANTITY").Value); //რაოდენობა
                         decimal full_amount = Convert.ToDecimal(oRecordSet.Fields.Item("AMOUNT").Value); //თანხა დღგ-ის და აქციზის ჩათვლლით
                         decimal drg_amount = Convert.ToDecimal(oRecordSet.Fields.Item("LineVat").Value); //დღგ
                         decimal aqcizi_amount = 0; //აქციზი
@@ -6131,6 +6130,7 @@ namespace BDO_Localisation_AddOn
 
             string query = @"SELECT
 	                         ""W_NAME"",
+                             ""DocType"",
 	                         ""InvntItem"",
 	                         ""UNIT_TXT"",
 	                         SUM(""QUANTITY"") AS ""QUANTITY"",
@@ -6144,6 +6144,7 @@ namespace BDO_Localisation_AddOn
 	                         ""OITM"".""CodeBars"" AS ""CodeBars"",
 	                         ""OITM"".""SWW"" AS ""AdditionalIdentifier"",
 	                         ""MNTB"".""Dscription"" AS ""W_NAME"",
+                             ""MNTB"".""DocType"" AS ""DocType"",
                              CASE WHEN ""BDO_RSUOM"".""U_RSCode"" is null THEN '99' ELSE ""BDO_RSUOM"".""U_RSCode"" END AS ""UNIT_ID"", 
                              CASE WHEN ""MNTB"".""unitMsr"" = '' or ""MNTB"".""U_BDOSSrvDsc"" <> '' THEN 'სხვა' ELSE ""MNTB"".""unitMsr"" END  AS ""UNIT_TXT"",
 	                         ""MNTB"".""VatPrcnt"" AS ""VAT_TYPE"",
@@ -6160,6 +6161,7 @@ namespace BDO_Localisation_AddOn
 	                         ""MNTB"".""InvntItem"" AS ""InvntItem"" 
 	                        FROM (SELECT
 	                         ""ORIN"".""U_BDOSSrvDsc"" AS ""U_BDOSSrvDsc"",
+                             ""ORIN"".""DocType"" AS ""DocType"",
 	                         ""RIN1"".""DocEntry"" AS ""DocEntry"",
 	                         ""RIN1"".""BaseEntry"" AS ""BaseEntry"",
 	                         ""RIN1"".""BaseLine"" AS ""LineNum"",
@@ -6197,6 +6199,7 @@ namespace BDO_Localisation_AddOn
                                 
                                  SELECT
 	                         ""OCSI"".""U_BDOSSrvDsc"" AS ""U_BDOSSrvDsc"",
+                             ""OCSI"".""DocType"" AS ""DocType"",
 	                         ""CSI1"".""DocEntry"" AS ""DocEntry"",
 	                         ""CSI1"".""BaseEntry"" AS ""BaseEntry"",
 	                         ""CSI1"".""BaseLine"" AS ""LineNum"",
@@ -6237,6 +6240,7 @@ namespace BDO_Localisation_AddOn
 	                         ""MNTB"".""LineNum"",
 	                         ""MNTB"".""ItemCode"",
 	                         ""MNTB"".""Dscription"",
+                             ""MNTB"".""DocType"",
 	                         ""OITM"".""CodeBars"",
 	                         ""OITM"".""SWW"",
 	                         ""BDO_RSUOM"".""U_RSCode"",
@@ -6253,6 +6257,7 @@ namespace BDO_Localisation_AddOn
 	                         ""OITM"".""CodeBars"" AS ""CodeBars"",
 	                         ""OITM"".""SWW"" AS ""AdditionalIdentifier"",
 	                         ""MNTB"".""Dscription"" AS ""W_NAME"",
+                             ""MNTB"".""DocType"" AS ""DocType"",
                              CASE WHEN ""BDO_RSUOM"".""U_RSCode"" is null THEN '99' ELSE ""BDO_RSUOM"".""U_RSCode"" END AS ""UNIT_ID"", 
                              CASE WHEN ""MNTB"".""unitMsr"" = '' or ""MNTB"".""U_BDOSSrvDsc"" <> '' THEN 'სხვა' ELSE ""MNTB"".""unitMsr"" END  AS ""UNIT_TXT"",
 	                         ""MNTB"".""VatPrcnt"" AS ""VAT_TYPE"",
@@ -6269,6 +6274,7 @@ namespace BDO_Localisation_AddOn
                         	 ""MNTB"".""InvntItem"" AS ""InvntItem"" 
                         	FROM (SELECT
                         	 ""OINV"".""U_BDOSSrvDsc"",
+                             ""OINV"".""DocType"",
                         	 ""INV1"".""DocEntry"",
                         	 ""INV1"".""LineNum"",
 --""INV1"".""ItemCode"",
@@ -6309,6 +6315,7 @@ namespace BDO_Localisation_AddOn
 	                         ""MNTB"".""LineNum"",
 	                         ""MNTB"".""ItemCode"",
 	                         ""MNTB"".""Dscription"",
+                             ""MNTB"".""DocType"",
 	                         ""OITM"".""CodeBars"",
 	                         ""OITM"".""SWW"",
 	                         ""BDO_RSUOM"".""U_RSCode"",
@@ -6318,6 +6325,7 @@ namespace BDO_Localisation_AddOn
 	                         ""MNTB"".""ItemType"",
 	                         ""MNTB"".""InvntItem"" HAVING SUM(""MNTB"".""Quantity"") > 0 ) AS ""MNTB_DATA""
                         GROUP BY ""W_NAME"",
+                             ""DocType"",
                         	 ""InvntItem"",
 	                         ""UNIT_TXT""";
 
@@ -6329,6 +6337,7 @@ namespace BDO_Localisation_AddOn
             string query = @"SELECT
             	 ""MNTB"".""ID"" AS ""ID"",
             	 ""MNTB"".""DocEntry"" AS ""DocEntry"",
+                 ""MNTB"".""DocType"" AS ""DocType"",
             	 ""MNTB"".""LineId"" AS ""LineNum"",
             	 ""MNTB"".""U_ItemCode"" AS ""ItemCode"",
             	 ""MNTB"".""U_Dscptn"" AS ""W_NAME"",
@@ -6351,6 +6360,7 @@ namespace BDO_Localisation_AddOn
             FROM (SELECT " + " " +
                  @"'" + inv_ID + @"' AS ""ID"",
             	 ""@BDOSRDV1"".""DocEntry"",
+                 '' AS ""DocType"",
             	 ""@BDOSRDV1"".""LineId"",
             	 ""@BDOSRDV1"".""U_ItemCode"",
             	 ""@BDOSRDV1"".""U_Dscptn"",
@@ -6373,6 +6383,7 @@ namespace BDO_Localisation_AddOn
             	WHERE ""@BDOSRDV1"".""DocEntry"" IN ('" + baseDocEntry + @"')) AS ""MNTB"" 
             GROUP BY ""MNTB"".""ID"",
             	 ""MNTB"".""DocEntry"",
+                 ""MNTB"".""DocType"",
             	 ""MNTB"".""LineId"",
             	 ""MNTB"".""U_ItemCode"",
             	 ""MNTB"".""U_Dscptn"",

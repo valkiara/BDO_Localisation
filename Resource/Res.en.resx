@@ -3586,6 +3586,9 @@
   <data name="PleaseCreateWaybillFirst" xml:space="preserve">
     <value>Waybill is not created on this document. Please create waybill first</value>
   </data>
+  <data name="Calculate" xml:space="preserve">
+    <value>Calculate</value>
+  </data>
   <data name="ARReserveInvoice" xml:space="preserve">
     <value>AR Reserve Invoice</value>
   </data>

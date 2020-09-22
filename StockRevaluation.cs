@@ -86,6 +86,10 @@ namespace BDO_Localisation_AddOn
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+                if (!Program.FORM_LOAD_FOR_ACTIVATE && pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
+                {
+                    oForm.Items.Item("LandCostE").Specific.Value = "";
+                }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction)
                 {
@@ -234,8 +238,10 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.EditText oEdit = oForm.Items.Item("LandCostE").Specific;
 
             string docEntry = getBaseDocEntry(DocNum);
-
-            oEdit.Value = docEntry;
+            if (docEntry != "")
+                oEdit.Value = docEntry;
+            else
+                oEdit.Value = "";
             oForm.Update();
         }
 
