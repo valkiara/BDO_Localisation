@@ -2378,7 +2378,9 @@ namespace BDO_Localisation_AddOn
             }
 
             string query = @"SELECT
-            	 T0.""DocEntry"" AS ""DocEntry"",
+
+                 T0.""AgrNo"" as ""BlanketAgreement"",
+                 T0.""DocEntry"" AS ""DocEntry"",
                  T0.""Project"",
 	             T0.""DocNum"" AS ""DocNum"",
                  T0.""DocCur"" AS ""DocCur"",
@@ -2401,6 +2403,7 @@ namespace BDO_Localisation_AddOn
                    betweenDays
                 + @"AS ""OverdueDays"" 
             FROM ( SELECT
+                 TT0.""AgrNo"",
             	 TT0.""DocEntry"",
                  TT0.""Project"",
             	 TT0.""DocNum"" AS ""DocNum"",
@@ -2429,7 +2432,9 @@ namespace BDO_Localisation_AddOn
             	AND (TT0.""DocStatus"" = 'O' 
             		OR (TT1.""Status"" = 'O' 
             			AND TT0.""CANCELED"" = 'N')) 
-            	GROUP BY TT0.""DocEntry"",
+            	GROUP BY 
+                 TT0.""AgrNo"",
+                 TT0.""DocEntry"",
             	 TT0.""Project"",
             	 TT0.""DocNum"",
                  TT0.""DocCur"",
@@ -2442,6 +2447,7 @@ namespace BDO_Localisation_AddOn
                  TT1.""InstlmntID"", 
                  TT2.""WTCode""
             	UNION ALL SELECT
+                 TT0.""AgrNo"",
             	 TT0.""DocEntry"",
             	 TT0.""Project"",
             	 TT0.""DocNum"" AS ""DocNum"",
@@ -2470,7 +2476,9 @@ namespace BDO_Localisation_AddOn
             	AND (TT0.""DocStatus"" = 'O' 
             		OR (TT1.""Status"" = 'O' 
             			AND TT0.""CANCELED"" = 'N')) 
-            	GROUP BY TT0.""DocEntry"",
+            	GROUP BY 
+                 TT0.""AgrNo"",
+                 TT0.""DocEntry"",
             	 TT0.""Project"",
             	 TT0.""DocNum"",
                  TT0.""DocCur"",
@@ -2483,6 +2491,7 @@ namespace BDO_Localisation_AddOn
                  TT1.""InstlmntID"",
                  TT2.""WTCode""
                  UNION ALL SELECT
+                 TT0.""AgrNo"",
             	 TT0.""DocEntry"",
             	 TT0.""Project"",
             	 TT0.""DocNum"" AS ""DocNum"",
@@ -2512,7 +2521,9 @@ namespace BDO_Localisation_AddOn
             	AND (TT0.""DocStatus"" = 'O' 
             		OR (TT1.""Status"" = 'O' 
             			AND TT0.""CANCELED"" = 'N')) 
-            	GROUP BY TT0.""DocEntry"",
+            	GROUP BY 
+                 TT0.""AgrNo"",
+                 TT0.""DocEntry"",
             	 TT0.""Project"",
             	 TT0.""DocNum"",
                  TT0.""DocCur"",
@@ -2541,6 +2552,7 @@ namespace BDO_Localisation_AddOn
                 int docEntry;
                 int docNum;
                 int installmentID;
+                int blanketAgreement;
                 string docType;
                 DateTime dueDate;
                 decimal openAmount;
@@ -2556,6 +2568,7 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
+                    blanketAgreement = oRecordSet.Fields.Item("BlanketAgreement").Value;
                     docEntry = Convert.ToInt32(oRecordSet.Fields.Item("DocEntry").Value);
                     docNum = Convert.ToInt32(oRecordSet.Fields.Item("DocNum").Value);
                     installmentID = Convert.ToInt32(oRecordSet.Fields.Item("InstallmentID").Value);
@@ -2604,6 +2617,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.SetValue("TotalPaymentFC", rowIndex, Convert.ToDouble(totalPaymentFC));
                     oDataTable.SetValue("Currency", rowIndex, docCur);
                     oDataTable.SetValue("Project", rowIndex, oRecordSet.Fields.Item("Project").Value);
+                    oDataTable.SetValue("BlnktAgr", rowIndex, blanketAgreement != 0 ? blanketAgreement.ToString() : "");
 
                     if (CommonFunctions.IsDevelopment())
                     {
