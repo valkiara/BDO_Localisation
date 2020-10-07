@@ -349,6 +349,11 @@ namespace BDO_Localisation_AddOn
                     oForm.Freeze(false);
                 }
 
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS & pVal.ItemUID == "BDOSACNumE" & !pVal.BeforeAction)
+                {
+                    BDO_WBReceivedDocs.setwaybillText(oForm, out errorText);
+                }
+
             }
         }
 
