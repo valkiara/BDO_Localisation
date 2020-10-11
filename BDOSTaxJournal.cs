@@ -4396,6 +4396,7 @@ namespace BDO_Localisation_AddOn
 
                 if ((pVal.ItemUID == "StrtDatOp2" || pVal.ItemUID == "EndDateOp2") && (pVal.ItemChanged) && pVal.BeforeAction == false)
                 {
+                    /*
                     string startDateStr = oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx.ToString();
 
                     DateTime startDate = DateTime.ParseExact(startDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
@@ -4410,6 +4411,7 @@ namespace BDO_Localisation_AddOn
                     oForm.DataSources.UserDataSources.Item("EndDateOp2").ValueEx = OperationPeriodEnd.ToString("yyyyMMdd");
 
                     oForm.Freeze(false);
+                    */
                 }
 
                 if ((pVal.ItemUID == "StrtDatOp" || pVal.ItemUID == "EndDateOp") && (pVal.ItemChanged) && pVal.BeforeAction == false)
@@ -4428,6 +4430,7 @@ namespace BDO_Localisation_AddOn
                     oForm.DataSources.UserDataSources.Item("EndDateOp").ValueEx = OperationPeriodEnd.ToString("yyyyMMdd");
 
                     oForm.Freeze(false);
+                    
                 }
 
                 //ბიზნეს პარტნიორის არჩევა
