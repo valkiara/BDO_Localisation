@@ -159,15 +159,15 @@ namespace BDO_Localisation_AddOn
                     return false;
                 }
 
-                //CompanyDetails.createUserFields(out errorText);
+                CompanyDetails.createUserFields(out errorText);
 
-                //UDO.allUDOForAddOn(out errorText);
-                //FormsB1.allUserFieldsForAddOn(out errorText);
-            
-                //BDOSInternetBankingIntegrationServicesRules.updateUDO();
-                //BDO_TaxInvoiceReceived.updateUDO();
+                UDO.allUDOForAddOn(out errorText);
+                FormsB1.allUserFieldsForAddOn(out errorText);
 
-                //updateAddonVersion(version);
+                BDOSInternetBankingIntegrationServicesRules.updateUDO();
+                BDO_TaxInvoiceReceived.updateUDO();
+
+                updateAddonVersion(version);
 
                 FormsB1.addMenusForAddOn();
 
