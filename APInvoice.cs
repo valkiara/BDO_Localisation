@@ -1124,7 +1124,7 @@ namespace BDO_Localisation_AddOn
                     chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS  & pVal.ItemUID=="BDO_TaxDoc" & !pVal.BeforeAction)
+                if (pVal.ItemUID == "BDO_TaxDoc" & !pVal.BeforeAction & pVal.EventType == SAPbouiCOM.BoEventTypes.et_DOUBLE_CLICK)
                 {
                     formDataLoad(oForm, out errorText);
                 }
