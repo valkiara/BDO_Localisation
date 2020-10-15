@@ -438,7 +438,7 @@ namespace BDO_Localisation_AddOn
                         CommonFunctions.blockAssetInvoice(oForm, "OWTR", out rejectionAsset);
                         if (rejectionAsset)
                         {
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded") + " : " + BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem"), SAPbouiCOM.BoMessageTime.bmt_Long);
+                            Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentCannotBeAdded") + " : " + BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem"));
                             BubbleEvent = false;
                         }
                     }
