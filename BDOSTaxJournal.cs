@@ -4401,24 +4401,26 @@ namespace BDO_Localisation_AddOn
                         oForm.PaneLevel = Convert.ToInt32(pVal.ItemUID.Substring(6, 1));
                     }
                 }
+                 
+                //if ((pVal.ItemUID == "StrtDatOp2" || pVal.ItemUID == "EndDateOp2") && (pVal.ItemChanged) && pVal.BeforeAction == false)
+                //{
+                    
+                //    string startDateStr = oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx.ToString();
 
-                if ((pVal.ItemUID == "StrtDatOp2" || pVal.ItemUID == "EndDateOp2") && (pVal.ItemChanged) && pVal.BeforeAction == false)
-                {
-                    string startDateStr = oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx.ToString();
+                //    DateTime startDate = DateTime.ParseExact(startDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
+                //    DateTime OperationPeriodStart = new DateTime(startDate.Year, startDate.Month, 1);
+                //    oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx = OperationPeriodStart.ToString("yyyyMMdd");
 
-                    DateTime startDate = DateTime.ParseExact(startDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
-                    DateTime OperationPeriodStart = new DateTime(startDate.Year, startDate.Month, 1);
-                    oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx = OperationPeriodStart.ToString("yyyyMMdd");
+                //    string endDateStr = oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx.ToString();
+                //    DateTime endDate = DateTime.ParseExact(startDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
+                //    DateTime OperationPeriodEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+                //    OperationPeriodEnd = OperationPeriodEnd.AddSeconds(24 * 3600 - 1);
 
-                    string endDateStr = oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx.ToString();
-                    DateTime endDate = DateTime.ParseExact(startDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
-                    DateTime OperationPeriodEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
-                    OperationPeriodEnd = OperationPeriodEnd.AddSeconds(24 * 3600 - 1);
+                //    oForm.DataSources.UserDataSources.Item("EndDateOp2").ValueEx = OperationPeriodEnd.ToString("yyyyMMdd");
 
-                    oForm.DataSources.UserDataSources.Item("EndDateOp2").ValueEx = OperationPeriodEnd.ToString("yyyyMMdd");
-
-                    oForm.Freeze(false);
-                }
+                //    oForm.Freeze(false);
+                    
+                //}
 
                 if ((pVal.ItemUID == "StrtDatOp" || pVal.ItemUID == "EndDateOp") && (pVal.ItemChanged) && pVal.BeforeAction == false)
                 {

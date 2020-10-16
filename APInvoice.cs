@@ -1124,6 +1124,11 @@ namespace BDO_Localisation_AddOn
                     chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                 }
 
+                if (pVal.ItemUID == "BDO_TaxDoc" & !pVal.BeforeAction & pVal.EventType == SAPbouiCOM.BoEventTypes.et_DOUBLE_CLICK)
+                {
+                    formDataLoad(oForm, out errorText);
+                }
+
                 if (pVal.ItemUID == "BDO_TaxCan" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
                     int taxDocEntry = Convert.ToInt32(oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx);

@@ -661,7 +661,7 @@ namespace BDO_Localisation_AddOn
                             CommonFunctions.blockAssetInvoice(oForm, "OINV", out rejectionAsset);
                             if (rejectionAsset)
                             {
-                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DocumentCannotBeAdded"));
+                                Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentCannotBeAdded") + " : " + BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem"));
                                 BubbleEvent = false;
                             }
                         }

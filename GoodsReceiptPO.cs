@@ -165,6 +165,7 @@ namespace BDO_Localisation_AddOn
             //try
             //{
 
+
             //}
             //catch (Exception ex)
             //{
@@ -347,6 +348,11 @@ namespace BDO_Localisation_AddOn
                     oForm.Freeze(true);
                     BDO_WBReceivedDocs.comboSelect(  oForm, Program.oIncWaybDocFormGdsRecpPO, pVal.ItemUID, "GoodsReceiptPO", out errorText);
                     oForm.Freeze(false);
+                }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS & pVal.ItemUID == "BDOSACNumE" & !pVal.BeforeAction)
+                {
+                    BDO_WBReceivedDocs.setwaybillText(oForm, out errorText);
                 }
 
             }
