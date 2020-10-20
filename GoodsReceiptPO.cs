@@ -10,18 +10,18 @@ namespace BDO_Localisation_AddOn
 {
     class GoodsReceiptPO
     {
-        public static void createUserFields( out string errorText)
+        public static void createUserFields(out string errorText)
         {
             errorText = null;
             //BDO_WBReceivedDocs.createUserFields( "OPDN", out errorText);
         }
 
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
-            BDO_WBReceivedDocs.createFormItems( oForm, "OPDN", out errorText);
-            
+            BDO_WBReceivedDocs.createFormItems(oForm, "OPDN", out errorText);
+
             Dictionary<string, object> formItems = null;
             string itemName = "";
 
@@ -76,27 +76,25 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void attachWBToDoc(  SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
+        public static void attachWBToDoc(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
         {
             errorText = null;
-            BDO_WBReceivedDocs.attachWBToDoc( oForm, oIncWaybDocForm, out errorText);
+            BDO_WBReceivedDocs.attachWBToDoc(oForm, oIncWaybDocForm, out errorText);
         }
 
-        public static void formDataLoad( SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             oForm.Freeze(true);
             try
             {
-                setVisibleFormItems(oForm, out errorText);
-
                 //-------------------------------------------სასაქონლო ზედნადები----------------------------------->              
-                BDO_WBReceivedDocs.setwaybillText( oForm, out errorText);
+                BDO_WBReceivedDocs.setwaybillText(oForm, out errorText);
                 //<-------------------------------------------სასაქონლო ზედნადები-----------------------------------
 
                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPDN").GetValue("DocEntry", 0));
                 string cardCode = oForm.DataSources.DBDataSources.Item("OPDN").GetValue("CardCode", 0).Trim();
-                
+
             }
             catch (Exception ex)
             {
@@ -136,29 +134,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void setVisibleFormItems(SAPbouiCOM.Form oForm, out string errorText)
-        {
-            errorText = null;
-            //oForm.Freeze(true);
-
-            //try
-            //{
-            //    string docEntrySTR = oForm.DataSources.DBDataSources.Item("OPDN").GetValue("DocEntry", 0).Trim();
-                
-            //}
-            //catch (Exception ex)
-            //{
-            //    errorText = ex.Message;
-            //}
-            //finally
-            //{
-            //    oForm.Freeze(false);
-            //    oForm.Update();
-            //    GC.Collect();
-            //}
-        }
-
-        public static void formDataAddUpdate( SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataAddUpdate(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -177,7 +153,7 @@ namespace BDO_Localisation_AddOn
             //}
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -231,7 +207,7 @@ namespace BDO_Localisation_AddOn
                                     // SAPbouiCOM.EditText Edtfieldtxt = oMatrix.Columns.Item("ItemCode").Cells.Item(row).Specific;
                                     string formItemCode = oMatrix.GetCellSpecific("1", row).Value;
 
-                                    if (Items.isStockItem( formItemCode))
+                                    if (Items.isStockItem(formItemCode))
                                     {
                                         isStock = true;
                                         break;
@@ -262,7 +238,7 @@ namespace BDO_Localisation_AddOn
                                 }
                                 try
                                 {
-                                    bool continuePosting = BDO_WBReceivedDocs.waybillsCompare( WBID, oForm, RSControlType, Doctype, out errorText);
+                                    bool continuePosting = BDO_WBReceivedDocs.waybillsCompare(WBID, oForm, RSControlType, Doctype, out errorText);
 
                                     if (continuePosting == false)
                                     {
@@ -305,27 +281,22 @@ namespace BDO_Localisation_AddOn
             {
                 if (BusinessObjectInfo.BeforeAction == true)
                 {
-                    formDataAddUpdate( oForm, out errorText);
+                    formDataAddUpdate(oForm, out errorText);
                     if (string.IsNullOrEmpty(errorText) == false)
                     {
                         Program.uiApp.MessageBox(errorText);
                         BubbleEvent = false;
                     }
                 }
-                else if (BusinessObjectInfo.BeforeAction == false && BusinessObjectInfo.ActionSuccess == true)
-                {
-                    setVisibleFormItems(oForm, out errorText);
-                }
             }
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
             {
-                formDataLoad( oForm, out errorText);
-                setVisibleFormItems(oForm, out errorText);
-            }            
+                formDataLoad(oForm, out errorText);
+            }
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -336,9 +307,8 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
                 {
-                    createFormItems( oForm, out errorText);
-                    formDataLoad( oForm, out errorText);
-                    setVisibleFormItems(oForm, out errorText);
+                    createFormItems(oForm, out errorText);
+                    formDataLoad(oForm, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.ItemUID == "WBOper" & pVal.BeforeAction == false)
@@ -346,7 +316,7 @@ namespace BDO_Localisation_AddOn
                     Program.oIncWaybDocFormGdsRecpPO = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
                     oForm.Freeze(true);
-                    BDO_WBReceivedDocs.comboSelect(  oForm, Program.oIncWaybDocFormGdsRecpPO, pVal.ItemUID, "GoodsReceiptPO", out errorText);
+                    BDO_WBReceivedDocs.comboSelect(oForm, Program.oIncWaybDocFormGdsRecpPO, pVal.ItemUID, "GoodsReceiptPO", out errorText);
                     oForm.Freeze(false);
                 }
 
@@ -357,7 +327,5 @@ namespace BDO_Localisation_AddOn
 
             }
         }
-
-
     }
 }

@@ -159,13 +159,13 @@ namespace BDO_Localisation_AddOn
                     return false;
                 }
 
-                CompanyDetails.createUserFields(out errorText);
+                //CompanyDetails.createUserFields(out errorText);
 
-                UDO.allUDOForAddOn(out errorText);
-                FormsB1.allUserFieldsForAddOn(out errorText);
+                //UDO.allUDOForAddOn(out errorText);
+                //FormsB1.allUserFieldsForAddOn(out errorText);
 
-                BDOSInternetBankingIntegrationServicesRules.updateUDO();
-                BDO_TaxInvoiceReceived.updateUDO();
+                //BDOSInternetBankingIntegrationServicesRules.updateUDO();
+                //BDO_TaxInvoiceReceived.updateUDO();
 
                 updateAddonVersion(version);
 
@@ -1137,7 +1137,6 @@ namespace BDO_Localisation_AddOn
                         else if (oForm.TypeEx == "143")
                         {
                             GoodsReceiptPO.formDataLoad(oForm, out errorText);
-                            GoodsReceiptPO.setVisibleFormItems(oForm, out errorText);
                         }
 
                         //----------------------------->A/P Credit Memo<-----------------------------
