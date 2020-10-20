@@ -159,13 +159,13 @@ namespace BDO_Localisation_AddOn
                     return false;
                 }
 
-                //CompanyDetails.createUserFields(out errorText);
+                CompanyDetails.createUserFields(out errorText);
 
-                //UDO.allUDOForAddOn(out errorText);
-                //FormsB1.allUserFieldsForAddOn(out errorText);
+                UDO.allUDOForAddOn(out errorText);
+                FormsB1.allUserFieldsForAddOn(out errorText);
 
-                //BDOSInternetBankingIntegrationServicesRules.updateUDO();
-                //BDO_TaxInvoiceReceived.updateUDO();
+                BDOSInternetBankingIntegrationServicesRules.updateUDO();
+                BDO_TaxInvoiceReceived.updateUDO();
 
                 updateAddonVersion(version);
 
@@ -1126,17 +1126,25 @@ namespace BDO_Localisation_AddOn
                             ArCorrectionInvoice.FormDataLoad(oForm, out errorText);
                         }
 
+
+                        //----------------------------->A/P Correction Invoice<-----------------------------
+                        else if (oForm.TypeEx == "70002")
+                        {
+                            BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
+                        }
+                        
                         //----------------------------->A/P Invoice<-----------------------------
                         else if (oForm.TypeEx == "141")
                         {
                             APInvoice.formDataLoad(oForm, out errorText);
                             APInvoice.setVisibleFormItems(oForm, out errorText);
+                            BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
                         //----------------------------->Goods Receipt PO<-----------------------------
                         else if (oForm.TypeEx == "143")
                         {
-                            GoodsReceiptPO.formDataLoad(oForm, out errorText);
+                            BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
                         //----------------------------->A/P Credit Memo<-----------------------------
@@ -1144,6 +1152,7 @@ namespace BDO_Localisation_AddOn
                         {
                             APCreditMemo.formDataLoad(oForm, out errorText);
                             APCreditMemo.setVisibleFormItems(oForm, out errorText);
+                            BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
                         //----------------------------->Outgoing Payments<-----------------------------
@@ -1289,22 +1298,30 @@ namespace BDO_Localisation_AddOn
                             ArCorrectionInvoice.FormDataLoad(oForm, out errorText);
                         }
 
+                        //----------------------------->A/P Correction Invoice<-----------------------------
+                        else if (oForm.TypeEx == "70002")
+                        {
+                            BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
+                        }
+
                         //----------------------------->A/P Invoice<-----------------------------
                         else if (oForm.TypeEx == "141")
                         {
                             APInvoice.formDataLoad(oForm, out errorText);
+                            BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
                         //----------------------------->Goods Receipt PO<-----------------------------
                         else if (oForm.TypeEx == "143")
                         {
-                            GoodsReceiptPO.formDataLoad(oForm, out errorText);
+                            BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
                         //----------------------------->A/P Credit Memo<-----------------------------
                         else if (oForm.TypeEx == "181")
                         {
                             APCreditMemo.formDataLoad(oForm, out errorText);
+                            BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
                         //----------------------------->Tax Invoice Sent<-----------------------------
@@ -2211,7 +2228,7 @@ namespace BDO_Localisation_AddOn
                 //----------------------------->GoodsReceiptPO<-----------------------------
                 else if (pVal.FormTypeEx == "143")
                 {
-                    GoodsReceiptPO.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                    GoodsReceiptPO.uiApp_ItemEvent(ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->A/P Reserve Invoice<-----------------------------
