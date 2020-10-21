@@ -10,7 +10,7 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_WBReceivedDocs
     {
-        public static void cancel_wb(  string WBID, SAPbouiCOM.Form oDocForm, string Type, out string errorText)
+        public static void cancel_wb(string WBID, SAPbouiCOM.Form oDocForm, string Type, out string errorText)
         {
             errorText = null;
 
@@ -22,7 +22,7 @@ namespace BDO_Localisation_AddOn
 
                 if (Type == "Invoice")
                 {
-                APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
+                    APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
                 }
                 else if (Type == "GoodsReceiptPO")
                 {
@@ -50,13 +50,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void confirm_wb(  string WBID, SAPbouiCOM.Form oDocForm, out string errorText)
+        public static void confirm_wb(string WBID, SAPbouiCOM.Form oDocForm, out string errorText)
         {
             errorText = null;
 
             WBID = WBID.Trim();
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 oDocForm.Freeze(false);
@@ -94,7 +94,7 @@ namespace BDO_Localisation_AddOn
                     if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
                     {
                         query = query.Replace("ISNULL", "IFNULL");
-                    } 
+                    }
                     //ინვოისებზე სტატუსების განახლება
                     oRecordSet.DoQuery(query);
                     while (!oRecordSet.EoF)
@@ -108,7 +108,7 @@ namespace BDO_Localisation_AddOn
                         {
                             int errCode;
                             string errMSG;
-                            Program.oCompany.GetLastError(out  errCode, out  errMSG);
+                            Program.oCompany.GetLastError(out errCode, out errMSG);
                             Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("Error") + " " + errMSG);
                         }
 
@@ -124,7 +124,7 @@ namespace BDO_Localisation_AddOn
                     if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
                     {
                         query = query.Replace("ISNULL", "IFNULL");
-                    } 
+                    }
                     oRecordSet.DoQuery(query);
 
                     while (!oRecordSet.EoF)
@@ -154,7 +154,7 @@ namespace BDO_Localisation_AddOn
                     if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
                     {
                         query = query.Replace("ISNULL", "IFNULL");
-                    } 
+                    }
                     oRecordSet.DoQuery(query);
 
                     while (!oRecordSet.EoF)
@@ -194,7 +194,7 @@ namespace BDO_Localisation_AddOn
             return "0";
         }
 
-        public static bool waybillsCompare(  string WBID, SAPbouiCOM.Form oDocForm, string RSControlType, string DocType, out string errorText)
+        public static bool waybillsCompare(string WBID, SAPbouiCOM.Form oDocForm, string RSControlType, string DocType, out string errorText)
         {
             errorText = null;
             bool WBCompares = true;
@@ -225,14 +225,14 @@ namespace BDO_Localisation_AddOn
                 // SAPbouiCOM.EditText Edtfieldtxt = oMatrix.Columns.Item("ItemCode").Cells.Item(row).Specific;
                 string formItemCode = oMatrix.GetCellSpecific("1", row).Value;
 
-                if (Items.isStockItem( formItemCode) == false)
+                if (Items.isStockItem(formItemCode) == false)
                 {
                     continue;
                 }
 
                 //Edtfieldtxt = oMatrix.Columns.Item(21).Cells.Item(row).Specific;
                 string localAmounttxt = oMatrix.GetCellSpecific("288", row).Value;
-                localAmounttxt = FormsB1.cleanStringOfNonDigits( localAmounttxt).ToString();
+                localAmounttxt = FormsB1.cleanStringOfNonDigits(localAmounttxt).ToString();
 
                 double formItemAmount = 0;
 
@@ -314,7 +314,7 @@ namespace BDO_Localisation_AddOn
             string WBGUntCode;
             double ItemAmnt;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return false;
@@ -398,7 +398,7 @@ namespace BDO_Localisation_AddOn
                 ItemCode = oRecordSet.Fields.Item("ItemCode").Value;
                 ItemAmnt = oRecordSet.Fields.Item("GTotal").Value;
 
-                if (Items.isStockItem( ItemCode) == false)
+                if (Items.isStockItem(ItemCode) == false)
                 {
                     oRecordSet.MoveNext();
                     continue;
@@ -441,7 +441,7 @@ namespace BDO_Localisation_AddOn
             return WBCompares;
         }
 
-        public static void getInvoiceByWB(  string WBID, out string DocType, out int DocEntry, out string whs, out string project, out string errorText)
+        public static void getInvoiceByWB(string WBID, out string DocType, out int DocEntry, out string whs, out string project, out string errorText)
         {
             errorText = null;
             DocType = null;
@@ -486,7 +486,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void getGoodsReceipePOByWB(  string WBID, out string DocType, out int DocEntry, out string whs, out string project, out string errorText)
+        public static void getGoodsReceipePOByWB(string WBID, out string DocType, out int DocEntry, out string whs, out string project, out string errorText)
         {
             errorText = null;
             DocType = null;
@@ -600,7 +600,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void getMemoByWB(  string WBID, out string DocType, out int DocEntry, out string whs, out string project, out string errorText)
+        public static void getMemoByWB(string WBID, out string DocType, out int DocEntry, out string whs, out string project, out string errorText)
         {
             errorText = null;
             DocType = null;
@@ -643,7 +643,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void attachWBToDoc(  SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
+        public static void attachWBToDoc(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
         {
             errorText = null;
 
@@ -660,13 +660,13 @@ namespace BDO_Localisation_AddOn
 
                 oEditText = (SAPbouiCOM.EditText)oIncWaybDocForm.Items.Item("actDate").Specific;
                 //oEditText.Value = Convert.ToDateTime(oForm.DataSources.UserDataSources.Item("CurrDate").Value).ToString("yyyyMMdd");
-                oEditText.Value = oForm.DataSources.UserDataSources.Item("CurrDate").Value; 
+                oEditText.Value = oForm.DataSources.UserDataSources.Item("CurrDate").Value;
 
                 try
                 {
                     oEditText = (SAPbouiCOM.EditText)oIncWaybDocForm.Items.Item("10").Specific;
                     //oEditText.Value = Convert.ToDateTime(oForm.DataSources.UserDataSources.Item("CurrDate").Value).ToString("yyyyMMdd");
-                    oEditText.Value = oForm.DataSources.UserDataSources.Item("CurrDate").Value; 
+                    oEditText.Value = oForm.DataSources.UserDataSources.Item("CurrDate").Value;
 
                     oEditText = (SAPbouiCOM.EditText)oIncWaybDocForm.Items.Item("4").Specific;
                     oEditText.Value = oForm.DataSources.UserDataSources.Item("CurrBP").Value;
@@ -679,7 +679,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.ComboBox oComboBox = (SAPbouiCOM.ComboBox)oIncWaybDocForm.Items.Item("BDO_WBSt").Specific;
                 string status = oForm.DataSources.UserDataSources.Item("CurrWBSt").Value;
 
-                setwaybillText( oIncWaybDocForm, out errorText);
+                setwaybillText(oIncWaybDocForm);
                 oForm.Close();
 
                 oIncWaybDocForm.Freeze(false);
@@ -715,7 +715,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void createUserFields( string DocType, out string errorText)
+        public static void createUserFields(string DocType, out string errorText)
         {
             errorText = null;
             Dictionary<string, object> fieldskeysMap;
@@ -727,7 +727,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDO_WBSt");
@@ -746,7 +746,7 @@ namespace BDO_Localisation_AddOn
             statusValues.Add("Sent To Transporter"); //6
             fieldskeysMap.Add("ValidValues", statusValues);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDO_WBID");
@@ -755,7 +755,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "actDate");
@@ -764,7 +764,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
             fieldskeysMap.Add("Visible", false);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "WBrec");
@@ -774,12 +774,12 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("DefaultValue", "N");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             GC.Collect();
         }
 
-        public static void createFormItems( SAPbouiCOM.Form oForm, string Doctype, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, string Doctype, out string errorText)
         {
             oForm.Freeze(true);
             errorText = null;
@@ -862,7 +862,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", Height);
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("NotLinked"));
-            formItems.Add("Visible", true);
             formItems.Add("TextStyle", 4);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -934,7 +933,8 @@ namespace BDO_Localisation_AddOn
 
             SAPbouiCOM.Item itemDocDate = oForm.Items.Item("46");
             left = itemDocDate.Left;
-            Top = itemDocDate.Top + itemDocDate.Height + 2;
+            //Top = itemDocDate.Top + itemDocDate.Height + 2;
+            Top = itemDocDate.Top;
             Width = itemDocDate.Width;
             Height = itemDocDate.Height;
 
@@ -951,8 +951,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", Top);
             formItems.Add("Height", Height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            //formItems.Add("Enabled", false);
             formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -961,7 +959,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            Top = Top + Height + 2;
+            //Top = Top + Height + 2;
 
             List<string> statusValues = new List<string>();
             statusValues.Add(""); //-1
@@ -997,7 +995,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            Top = Top + Height + 2;
+            //Top = Top + Height + 2;
 
             formItems = new Dictionary<string, object>();
             itemName = "BDO_WBID";
@@ -1012,10 +1010,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", Top);
             formItems.Add("Height", Height);
             formItems.Add("UID", itemName);
-            //formItems.Add("Enabled", false);
-
-            // formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
-            formItems.Add("DisplayDesc", true);
             formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -1024,7 +1018,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            Top = Top + Height + 2;
+            //Top = Top + Height + 2;
 
             formItems = new Dictionary<string, object>();
             itemName = "actDate";
@@ -1039,9 +1033,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", Top);
             formItems.Add("Height", Height);
             formItems.Add("UID", itemName);
-            //formItems.Add("Enabled", false);
-            // formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
-            formItems.Add("DisplayDesc", true);
             formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -1053,7 +1044,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            Top = Top + Height + 2;
+            //Top = Top + Height + 2;
 
             formItems = new Dictionary<string, object>();
             itemName = "WBrec";
@@ -1071,8 +1062,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", Top);
             formItems.Add("Height", Height);
             formItems.Add("UID", itemName);
-            //formItems.Add("Enabled", false);
-            formItems.Add("DisplayDesc", true);
             formItems.Add("Visible", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -1082,95 +1071,109 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
-
-            //setWaybillText( oForm, out errorText);
-
-            GC.Collect();
         }
 
-        public static void comboSelect(  SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybForm, string itemUID,string Type, out string errorText)
+        public static void comboSelect(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybForm, string Type, out string errorText)
         {
             errorText = null;
 
-            if (itemUID == "WBOper")
+            string operationRS = "";
+            SAPbouiCOM.ButtonCombo oButtonCombo = (SAPbouiCOM.ButtonCombo)oForm.Items.Item("WBOper").Specific;
+            if (oButtonCombo.Selected != null)
             {
-                string operationRS = "";
-                SAPbouiCOM.ButtonCombo oButtonCombo = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("WBOper").Specific));
-                if (oButtonCombo.Selected != null)
+                operationRS = oButtonCombo.Selected.Value;
+            }
+            oForm.Freeze(false);
+            oButtonCombo.Caption = BDOSResources.getTranslate("Operations");
+            string WBID = oForm.DataSources.DBDataSources.Item(0).GetValue("U_BDO_WBID", 0);
+
+            if (operationRS == "0")
+            {
+                SAPbobsCOM.BusinessPartners oBP;
+                oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
+                oBP.GetByKey(oForm.DataSources.DBDataSources.Item(0).GetValue("CardCode", 0).Trim());
+                if (oBP.UserFields.Fields.Item("LicTradNum").Value.Trim() == "")
                 {
-                    operationRS = oButtonCombo.Selected.Value;
+                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CheckBPTin"));
+                    return;
                 }
-                oForm.Freeze(false);
-                oButtonCombo.Caption = BDOSResources.getTranslate("Operations");               
-                string WBID = oForm.DataSources.DBDataSources.Item(0).GetValue("U_BDO_WBID", 0);
-              
-                if (operationRS == "0")
+
+                if (Type == "Invoice")
                 {
-                    SAPbobsCOM.BusinessPartners oBP;
-                    oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
-                    oBP.GetByKey(oForm.DataSources.DBDataSources.Item(0).GetValue("CardCode", 0).Trim());
-                    if (oBP.UserFields.Fields.Item("LicTradNum").Value.Trim() == "")
+                    if (oForm.DataSources.DBDataSources.Item("PCH1").GetValue("BaseType", 0) == "20")
                     {
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CheckBPTin"));
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("APInvoiceIsCreatedFromGoodsReceiptPO"));
                         return;
                     }
-
-                    if (Type == "Invoice")
-                    {
-                        if (oForm.DataSources.DBDataSources.Item("PCH1").GetValue("BaseType", 0) == "20")
-                {
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("APInvoiceIsCreatedFromGoodsReceiptPO"));
-                            return;
-                        }
-                    }
-                    
-                    BDO_WaybillsJournalReceived.createForm( oIncWaybForm, out errorText);
-
                 }
-                else if (operationRS == "1")
+                BDO_WaybillsJournalReceived.createForm(oIncWaybForm, out errorText);
+            }
+            else if (operationRS == "1")
+            {
+                if (WBID == "")
                 {
-                    if (WBID == "")
-                    {
-                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("LinkWaybilToDocument"));
-                        return;
-                    }
-                    confirm_wb( WBID, oForm, out errorText);
-                    FormsB1.SimulateRefresh();
+                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("LinkWaybilToDocument"));
+                    return;
                 }
-                else if (operationRS == "2")
-                {
-                    cancel_wb( WBID, oForm, Type, out errorText);
-                    FormsB1.SimulateRefresh();
-                }
-                //FormsB1.SimulateRefresh();
+                confirm_wb(WBID, oForm, out errorText);
+                FormsB1.SimulateRefresh();
+            }
+            else if (operationRS == "2")
+            {
+                cancel_wb(WBID, oForm, Type, out errorText);
+                FormsB1.SimulateRefresh();
             }
         }
 
-        public static void setwaybillText( SAPbouiCOM.Form oForm, out string errorText)
+        public static void setwaybillText(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
-            string WBID = oForm.DataSources.DBDataSources.Item(0).GetValue("U_BDO_WBID", 0).Trim();
-            string WBNo = oForm.DataSources.DBDataSources.Item(0).GetValue("U_BDO_WBNo", 0).Trim();
-            string U_WBrec = oForm.DataSources.DBDataSources.Item(0).GetValue("U_WBrec", 0).Trim();
-            string WBSt = "";
-            string Received = U_WBrec == "Y" ? BDOSResources.getTranslate("Received") : "";
+            string waybillId = oForm.DataSources.DBDataSources.Item(0).GetValue("U_BDO_WBID", 0).Trim();
+            string waybillNo = oForm.DataSources.DBDataSources.Item(0).GetValue("U_BDO_WBNo", 0).Trim();
+            string waybillStatus = oForm.Items.Item("BDO_WBSt").Specific.Selected?.Description;
+            string received = oForm.DataSources.DBDataSources.Item(0).GetValue("U_WBrec", 0).Trim() == "Y" ? BDOSResources.getTranslate("Received") : "";
             string caption = BDOSResources.getTranslate("NotLinked");
 
-            SAPbouiCOM.ComboBox oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_WBSt").Specific;
+            if (!string.IsNullOrEmpty(waybillId))
+                caption = BDOSResources.getTranslate("Wb") + ": " + waybillStatus + " ID " + waybillId + (!string.IsNullOrEmpty(waybillNo) ? " № " + waybillNo : "") + " " + received;
 
-            if (oComboBox.Selected != null)
-            {
-                WBSt = oComboBox.Selected.Description;
-            }
-
-            if (WBID != "")
-            {
-                caption = BDOSResources.getTranslate("Wb") + ": " + WBSt + " ID " + WBID + (WBNo != "" ? " № " + WBNo : "") + " " + Received;
-            }
-            SAPbouiCOM.StaticText WBInfoSt = (SAPbouiCOM.StaticText)oForm.Items.Item("WBInfoST").Specific;
-            WBInfoSt.Caption = caption;
+            oForm.Items.Item("WBInfoST").Specific.Caption = caption;
         }
 
+        public static void ClearWaybillItemsValues(SAPbouiCOM.Form oForm)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                oForm.Items.Item("BDO_WBNo").Visible = true;
+                oForm.Items.Item("BDO_WBID").Visible = true;
+                oForm.Items.Item("actDate").Visible = true;
+                oForm.Items.Item("BDO_WBSt").Visible = true;
+                oForm.Items.Item("WBrec").Visible = true;
+
+                oForm.Items.Item("BDO_WBNo").Specific.Value = string.Empty;
+                oForm.Items.Item("BDO_WBID").Specific.Value = string.Empty;
+                oForm.Items.Item("actDate").Specific.Value = "00010101";
+                oForm.Items.Item("BDO_WBSt").Specific.Select("-1");
+                oForm.Items.Item("WBrec").Specific.Checked = false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                oForm.ActiveItem = "16";
+                oForm.Items.Item("BDO_WBNo").Visible = false;
+                oForm.Items.Item("BDO_WBID").Visible = false;
+                oForm.Items.Item("actDate").Visible = false;
+                oForm.Items.Item("BDO_WBSt").Visible = false;
+                oForm.Items.Item("WBrec").Visible = false;
+
+                setwaybillText(oForm);
+
+                oForm.Freeze(false);
+            }
+        }
     }
 }
