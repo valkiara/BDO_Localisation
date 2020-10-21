@@ -112,7 +112,41 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            GC.Collect();
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "PrjCode");
+            fieldskeysMap.Add("TableName", "BDOSAPRT");
+            fieldskeysMap.Add("Description", "Project Code");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 20);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "Amount");
+            fieldskeysMap.Add("TableName", "BDOSAPRT");
+            fieldskeysMap.Add("Description", "Amount");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "AccrTyp");
+            fieldskeysMap.Add("TableName", "BDOSAPRT");
+            fieldskeysMap.Add("Description", "Accrual Type");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "Owner");
+            fieldskeysMap.Add("TableName", "BDOSAPRT");
+            fieldskeysMap.Add("Description", "Owner");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
         }
     }
 }
