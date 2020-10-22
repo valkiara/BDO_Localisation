@@ -206,11 +206,7 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                //-------------------------------------------სასაქონლო ზედნადები----------------------------------->              
-                BDO_WBReceivedDocs.setwaybillText(oForm, out errorText);
-                //<-------------------------------------------სასაქონლო ზედნადები-----------------------------------
-
-                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OCPI").GetValue("DocEntry", 0));
+                var docEntry = oForm.DataSources.DBDataSources.Item("OCPI").GetValue("DocEntry", 0);
                 string cardCode = oForm.DataSources.DBDataSources.Item("OCPI").GetValue("CardCode", 0).Trim();
                 string caption = BDOSResources.getTranslate("ChooseTaxInvoice");
                 int taxDocEntry = 0;
@@ -220,9 +216,9 @@ namespace BDO_Localisation_AddOn
                 string taxStatus = "";
                 string taxCreateDate = "";
 
-                if (docEntry != 0)
+                if (!string.IsNullOrEmpty(docEntry))
                 {
-                    Dictionary<string, object> taxDocInfo = BDO_TaxInvoiceReceived.getTaxInvoiceReceivedDocumentInfo(docEntry, "1", cardCode, out errorText);
+                    Dictionary<string, object> taxDocInfo = BDO_TaxInvoiceReceived.getTaxInvoiceReceivedDocumentInfo(Convert.ToInt32(docEntry), "1", cardCode, out errorText);
                     if (taxDocInfo != null)
                     {
                         taxDocEntry = Convert.ToInt32(taxDocInfo["docEntry"]);
@@ -251,7 +247,7 @@ namespace BDO_Localisation_AddOn
                     taxDocEntry = 0;
                 }
 
-              //  oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = taxDocEntry == 0 ? "" : taxDocEntry.ToString();
+                //  oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = taxDocEntry == 0 ? "" : taxDocEntry.ToString();
                 oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = "";
                 oForm.DataSources.UserDataSources.Item("BDO_TaxSer").ValueEx = taxSeries;
                 oForm.DataSources.UserDataSources.Item("BDO_TaxNum").ValueEx = taxNumber;
@@ -262,63 +258,20 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE && oForm.DataSources.DBDataSources.Item("OCPI").GetValue("U_BDO_WBID", 0).Trim() == "") //
-                {
-                }
-                else
-                {
-                    SAPbouiCOM.EditText oEditTxt = (SAPbouiCOM.EditText)oForm.Items.Item("4").Specific;
-
-                    string CCode = "";
-
-                    try
-                    {
-                        CCode = oEditTxt.Value;
-                    }
-                    catch
-                    {
-                    }
-
-                    if (CCode == "") //ანუ დუბლირებაა
-                    {
-                        SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBNo").Specific;
-                        oEditText.Value = " ";
-
-                        oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBID").Specific;
-                        oEditText.Value = " ";
-
-                        oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("actDate").Specific;
-                        oEditText.Value = "00010101";
-
-                        SAPbouiCOM.ComboBox oCombobox = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_WBSt").Specific;
-                        oCombobox.Select("-1");
-
-                        SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("WBrec").Specific;
-                        oCheckBox.Checked = false;
-
-                        SAPbouiCOM.StaticText oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("WBInfoST").Specific;
-                        oStaticText.Caption = BDOSResources.getTranslate("NotLinked");
-
-                    }
-                }
-
                 oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = "";
                 oForm.DataSources.UserDataSources.Item("BDO_TaxSer").ValueEx = "";
                 oForm.DataSources.UserDataSources.Item("BDO_TaxNum").ValueEx = "";
                 oForm.DataSources.UserDataSources.Item("BDO_TaxDat").ValueEx = "";
 
-                SAPbouiCOM.StaticText oStaticTextTx = (SAPbouiCOM.StaticText)oForm.Items.Item("BDO_TaxTxt").Specific;
-                oStaticTextTx.Caption = BDOSResources.getTranslate("ChooseTaxInvoice");
-                SAPbouiCOM.Item oItem = oForm.Items.Item("BDO_TaxCan");
-                
-                oItem.Visible = false;
+                SAPbouiCOM.StaticText oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("BDO_TaxTxt").Specific;
+                oStaticText.Caption = BDOSResources.getTranslate("ChooseTaxInvoice");
+                oForm.Items.Item("BDO_TaxCan").Visible = false;
 
                 errorText = ex.Message;
             }
             finally
             {
                 oForm.Freeze(false);
-                GC.Collect();
             }
         }
         public static void setValues(SAPbouiCOM.Form oForm, out string errorText)
@@ -522,7 +475,6 @@ namespace BDO_Localisation_AddOn
         {
             BubbleEvent = true;
             string errorText;
-            SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
             if (pVal.FormTypeEx == "0")
             {
 
@@ -531,45 +483,38 @@ namespace BDO_Localisation_AddOn
             {
                 if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
                 {
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
+                    SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD)
                     {
-                        createFormItems(oForm, out errorText);
-                        formDataLoad(oForm, out errorText);
+                        if (pVal.BeforeAction)
+                        {
+                            createFormItems(oForm, out errorText);
+                            formDataLoad(oForm, out errorText);
+                        }
+                        else
+                            setValues(oForm, out errorText);
                     }
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && !pVal.BeforeAction)
-                    {
-                        setValues(oForm, out errorText);
-                    }
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.ItemUID == "WBOper" & !pVal.BeforeAction)
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.ItemUID == "WBOper" && !pVal.BeforeAction)
                     {
                         Program.oIncWaybDocFormAPCorInv = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
                         SAPbouiCOM.DBDataSource DocDBSourceOPCH = Program.oIncWaybDocFormAPCorInv.DataSources.DBDataSources.Item(0);
                         oForm.Freeze(true);
-                        BDO_WBReceivedDocs.comboSelect(oForm, Program.oIncWaybDocFormAPCorInv, pVal.ItemUID, "APcorrectionInvoice", out errorText);
+                        BDO_WBReceivedDocs.comboSelect(oForm, Program.oIncWaybDocFormAPCorInv, "APcorrectionInvoice", out errorText);
                         oForm.Freeze(false);
-
                     }
-
-                    if ((pVal.ItemUID == "BDO_TaxDoc") & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
+                    if ((pVal.ItemUID == "BDO_TaxDoc") && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
                         SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                         oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
                         chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                     }
-                    if (!pVal.BeforeAction && pVal.ActionSuccess &&  oForm.Items.Item("BDO_CNTp").Specific.Value.ToString()=="1")
-                    {
-                        
-
-                    }
-
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS & pVal.ItemUID == "BDO_TaxDoc" & !pVal.BeforeAction)
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS && pVal.ItemUID == "BDO_TaxDoc" && !pVal.BeforeAction)
                     {
                         formDataLoad(oForm, out errorText);
                     }
-
-
-                    if (pVal.ItemUID == "BDO_TaxCan" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & !pVal.BeforeAction )
+                    if (pVal.ItemUID == "BDO_TaxCan" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                     {
                         int taxDocEntry = Convert.ToInt32(oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx.Trim());
                         int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OCPI").GetValue("DocEntry", 0));
@@ -590,12 +535,8 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             }
-
-
-
-
         }
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
 
@@ -603,7 +544,7 @@ namespace BDO_Localisation_AddOn
 
             if (oForm.TypeEx == "70011")
             {
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD & BusinessObjectInfo.BeforeAction)
+                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD && BusinessObjectInfo.BeforeAction)
                 {
                     oForm.Freeze(true);
                     int panelLevel = oForm.PaneLevel;
@@ -639,31 +580,31 @@ namespace BDO_Localisation_AddOn
                         if ((RSControlType == "2" || RSControlType == "3") && (DocType == "I"))
                         {
                             SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBID").Specific;
-                            string WBID = oEditText.Value;  
-                                string Doctype = "";
+                            string WBID = oEditText.Value;
+                            string Doctype = "";
 
-                                if (BusinessObjectInfo.Type == "18")
-                                {
-                                    Doctype = "APInvoice";
-                                }
-                                else if (BusinessObjectInfo.Type == "163")
-                                {
-                                    Doctype = "APCorrectionInvoice";
-                                }
-                                try
-                                {
-                                    bool continuePosting = BDO_WBReceivedDocs.waybillsCompare(WBID, oForm, RSControlType, Doctype,out string errorText);
-
-                                    if (!continuePosting)
-                                    {
-                                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("GoodsTableNotMatchedESTable"));
-                                        Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                                        BubbleEvent = !(BubbleEvent);
-                                    }
-                                }
-                                catch { }
+                            if (BusinessObjectInfo.Type == "18")
+                            {
+                                Doctype = "APInvoice";
                             }
-                        }                    
+                            else if (BusinessObjectInfo.Type == "163")
+                            {
+                                Doctype = "APCorrectionInvoice";
+                            }
+                            try
+                            {
+                                bool continuePosting = BDO_WBReceivedDocs.waybillsCompare(WBID, oForm, RSControlType, Doctype, out string errorText);
+
+                                if (!continuePosting)
+                                {
+                                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("GoodsTableNotMatchedESTable"));
+                                    Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                                    BubbleEvent = !(BubbleEvent);
+                                }
+                            }
+                            catch { }
+                        }
+                    }
                 }
                 if (BusinessObjectInfo.ActionSuccess != BusinessObjectInfo.BeforeAction)
                 {
@@ -700,7 +641,7 @@ namespace BDO_Localisation_AddOn
                         if (Program.oCompany.InTransaction)
                         {
                             //თუ დოკუმენტი გატარდა, მერე ვაკეთებს ბუღალტრულ გატარებას
-                            if (BusinessObjectInfo.ActionSuccess == true & !BusinessObjectInfo.BeforeAction )
+                            if (BusinessObjectInfo.ActionSuccess == true && !BusinessObjectInfo.BeforeAction)
                             {
                                 CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
                             }
@@ -716,7 +657,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-            }       
+            }
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
             {
@@ -735,22 +676,22 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & !BusinessObjectInfo.BeforeAction )
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
                 formDataLoad(oForm, out string errorText);
                 setVisibleFormItems(oForm, out errorText);
+                BDO_WBReceivedDocs.setwaybillText(oForm);
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD & !BusinessObjectInfo.BeforeAction & BusinessObjectInfo.ActionSuccess)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD && !BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
             {
                 if (Program.canceledDocEntry != 0)
                 {
                     cancellation(oForm, Program.canceledDocEntry, out string errorText);
                     Program.canceledDocEntry = 0;
                 }
+            }
         }
-    }
-
         public static DataTable createAdditionalEntries(SAPbouiCOM.Form oForm, SAPbobsCOM.GeneralData oGeneralData, DataTable DTSource, string DocCurrency, decimal DocRate)
         {
             DataTable jeLines = JournalEntry.JournalEntryTable();

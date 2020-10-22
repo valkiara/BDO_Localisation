@@ -10,20 +10,20 @@ namespace BDO_Localisation_AddOn
 {
     class GoodsReceiptPO
     {
-        public static void createUserFields( out string errorText)
+        public static void createUserFields(out string errorText)
         {
             errorText = null;
             //BDO_WBReceivedDocs.createUserFields( "OPDN", out errorText);
         }
 
-        public static void createFormItems(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
-            BDO_WBReceivedDocs.createFormItems( oForm, "OPDN", out errorText);
-            
-            Dictionary<string, object> formItems = null;
-            string itemName = "";
+            BDO_WBReceivedDocs.createFormItems(oForm, "OPDN", out errorText);
+
+            Dictionary<string, object> formItems;
+            string itemName;
 
             SAPbouiCOM.Item oItem = oForm.Items.Item("70");
             int height = oItem.Height;
@@ -64,129 +64,29 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
             {
                 return;
             }
-
-            GC.Collect();
         }
 
-        public static void attachWBToDoc(  SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
+        public static void attachWBToDoc(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
         {
-            errorText = null;
-            BDO_WBReceivedDocs.attachWBToDoc( oForm, oIncWaybDocForm, out errorText);
+            BDO_WBReceivedDocs.attachWBToDoc(oForm, oIncWaybDocForm, out errorText);
         }
 
-        public static void formDataLoad( SAPbouiCOM.Form oForm, out string errorText)
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool bubbleEvent)
         {
-            errorText = null;
-            oForm.Freeze(true);
-            try
-            {
-                setVisibleFormItems(oForm, out errorText);
-
-                //-------------------------------------------სასაქონლო ზედნადები----------------------------------->              
-                BDO_WBReceivedDocs.setwaybillText( oForm, out errorText);
-                //<-------------------------------------------სასაქონლო ზედნადები-----------------------------------
-
-                int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPDN").GetValue("DocEntry", 0));
-                string cardCode = oForm.DataSources.DBDataSources.Item("OPDN").GetValue("CardCode", 0).Trim();
-                
-            }
-            catch (Exception ex)
-            {
-                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE && oForm.DataSources.DBDataSources.Item("OPDN").GetValue("U_BDO_WBID", 0).Trim() == "")
-                {
-
-                }
-                else
-                {
-                    SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBNo").Specific;
-                    oEditText.Value = " ";
-
-                    oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBID").Specific;
-                    oEditText.Value = " ";
-
-                    oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("actDate").Specific;
-                    oEditText.Value = "00010101";
-
-                    SAPbouiCOM.ComboBox oCombobox = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_WBSt").Specific;
-                    oCombobox.Select("-1");
-
-                    SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("WBrec").Specific;
-                    oCheckBox.Checked = false;
-
-                }
-
-                SAPbouiCOM.StaticText oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("WBInfoST").Specific;
-                oStaticText.Caption = BDOSResources.getTranslate("NotLinked");
-
-                errorText = ex.Message;
-
-            }
-            finally
-            {
-                oForm.Freeze(false);
-                GC.Collect();
-            }
-        }
-
-        public static void setVisibleFormItems(SAPbouiCOM.Form oForm, out string errorText)
-        {
-            errorText = null;
-            //oForm.Freeze(true);
-
-            //try
-            //{
-            //    string docEntrySTR = oForm.DataSources.DBDataSources.Item("OPDN").GetValue("DocEntry", 0).Trim();
-                
-            //}
-            //catch (Exception ex)
-            //{
-            //    errorText = ex.Message;
-            //}
-            //finally
-            //{
-            //    oForm.Freeze(false);
-            //    oForm.Update();
-            //    GC.Collect();
-            //}
-        }
-
-        public static void formDataAddUpdate( SAPbouiCOM.Form oForm, out string errorText)
-        {
-            errorText = null;
-
-            //try
-            //{
-
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    errorText = ex.Message;
-            //}
-            //finally
-            //{
-            //    GC.Collect();
-            //}
-        }
-
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
-        {
-            BubbleEvent = true;
-            string errorText = null;
+            bubbleEvent = true;
+            string errorText;
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
             {
-                if (BusinessObjectInfo.BeforeAction == true)
+                if (BusinessObjectInfo.BeforeAction)
                 {
                     SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
                     if (DocDBSource.GetValue("CANCELED", 0) == "N")
@@ -220,7 +120,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBID").Specific;
                             string WBID = oEditText.Value;
 
-                            if (WBID == "" & NeedWB == "Y")
+                            if (WBID == "" && NeedWB == "Y")
                             {
                                 bool isStock = false;
 
@@ -231,7 +131,7 @@ namespace BDO_Localisation_AddOn
                                     // SAPbouiCOM.EditText Edtfieldtxt = oMatrix.Columns.Item("ItemCode").Cells.Item(row).Specific;
                                     string formItemCode = oMatrix.GetCellSpecific("1", row).Value;
 
-                                    if (Items.isStockItem( formItemCode))
+                                    if (Items.isStockItem(formItemCode))
                                     {
                                         isStock = true;
                                         break;
@@ -241,7 +141,7 @@ namespace BDO_Localisation_AddOn
                                 if (isStock)
                                 {
                                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("BPControledOnRSLinkWaybillDocument"));
-                                    BubbleEvent = !(BubbleEvent);
+                                    bubbleEvent = !(bubbleEvent);
                                 }
                             }
                             else
@@ -262,13 +162,13 @@ namespace BDO_Localisation_AddOn
                                 }
                                 try
                                 {
-                                    bool continuePosting = BDO_WBReceivedDocs.waybillsCompare( WBID, oForm, RSControlType, Doctype, out errorText);
+                                    bool continuePosting = BDO_WBReceivedDocs.waybillsCompare(WBID, oForm, RSControlType, Doctype, out errorText);
 
                                     if (continuePosting == false)
                                     {
                                         Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("GoodsTableNotMatchedESTable"));
                                         Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                                        BubbleEvent = !(BubbleEvent);
+                                        bubbleEvent = !(bubbleEvent);
                                     }
                                 }
                                 catch { }
@@ -280,7 +180,7 @@ namespace BDO_Localisation_AddOn
 
             //A/C Number Update
             if ((BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
-                && BusinessObjectInfo.ActionSuccess == true && BusinessObjectInfo.BeforeAction == false)
+                && BusinessObjectInfo.ActionSuccess && !BusinessObjectInfo.BeforeAction)
             {
                 CommonFunctions.StartTransaction();
 
@@ -301,63 +201,43 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
-                if (BusinessObjectInfo.BeforeAction == true)
-                {
-                    formDataAddUpdate( oForm, out errorText);
-                    if (string.IsNullOrEmpty(errorText) == false)
-                    {
-                        Program.uiApp.MessageBox(errorText);
-                        BubbleEvent = false;
-                    }
-                }
-                else if (BusinessObjectInfo.BeforeAction == false && BusinessObjectInfo.ActionSuccess == true)
-                {
-                    setVisibleFormItems(oForm, out errorText);
-                }
+                BDO_WBReceivedDocs.setwaybillText(oForm);
             }
-
-            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
-            {
-                formDataLoad( oForm, out errorText);
-                setVisibleFormItems(oForm, out errorText);
-            }            
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(ref SAPbouiCOM.ItemEvent pVal, out bool bubbleEvent)
         {
-            BubbleEvent = true;
-            string errorText = null;
+            bubbleEvent = true;
+            string errorText;
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD)
                 {
-                    createFormItems( oForm, out errorText);
-                    formDataLoad( oForm, out errorText);
-                    setVisibleFormItems(oForm, out errorText);
+                    if (pVal.BeforeAction)
+                    {
+                        createFormItems(oForm, out errorText);
+                    }
                 }
-
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.ItemUID == "WBOper" & pVal.BeforeAction == false)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
                 {
-                    Program.oIncWaybDocFormGdsRecpPO = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+                    if (!pVal.BeforeAction)
+                    {
+                        if (pVal.ItemUID == "WBOper")
+                        {
+                            Program.oIncWaybDocFormGdsRecpPO = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                    oForm.Freeze(true);
-                    BDO_WBReceivedDocs.comboSelect(  oForm, Program.oIncWaybDocFormGdsRecpPO, pVal.ItemUID, "GoodsReceiptPO", out errorText);
-                    oForm.Freeze(false);
-                }
-
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS & pVal.ItemUID == "BDOSACNumE" & !pVal.BeforeAction)
-                {
-                    BDO_WBReceivedDocs.setwaybillText(oForm, out errorText);
-                }
-
+                            oForm.Freeze(true);
+                            BDO_WBReceivedDocs.comboSelect(oForm, Program.oIncWaybDocFormGdsRecpPO, "GoodsReceiptPO", out errorText);
+                            oForm.Freeze(false);
+                        }
+                    }
+                }               
             }
         }
-
-
     }
 }
