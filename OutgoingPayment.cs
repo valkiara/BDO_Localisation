@@ -1943,7 +1943,21 @@ namespace BDO_Localisation_AddOn
                     {
 
                     }
-                }
+                    else if (sCFL_ID == "1")
+                    {
+                        string project = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("PrjCode", 0).Trim();
+                        if (project != "")
+                        {
+                            SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+                            SAPbouiCOM.Condition oCon;
+                            oCon = oCons.Add();
+                            oCon.Alias = "Project";
+                            oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                            oCon.CondVal = project;
+                            oCFL.SetConditions(oCons);
+                        }
+                    }       
+            }
                 else
                 {
                     SAPbouiCOM.DataTable oDataTable = null;
@@ -3574,8 +3588,65 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                             chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction);
                         }
-                    }
+                        else if (pVal.ItemUID == "95" && !pVal.BeforeAction)
+                        {
+                            SAPbouiCOM.Item itm = oForm.Items.Item("95");
+                            SAPbouiCOM.IChooseFromListEvent oCFL = (SAPbouiCOM.IChooseFromListEvent)pVal;
+                            SAPbouiCOM.DataTable oDataTable = oCFL.SelectedObjects;
+                            string PrjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
 
+                            if (PrjCode != "")
+                            {
+                                filterTable(oForm, PrjCode, "ProjectCode");
+                                itm = oForm.Items.Item("22");
+                                itm.Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                                itm = oForm.Items.Item("95");
+                                itm.Enabled = false;
+                            }
+                        }
+
+                        else if (pVal.ItemUID == "234000005")
+                        {
+                            if (!pVal.BeforeAction)
+                            {
+                                SAPbouiCOM.IChooseFromListEvent oCFL = (SAPbouiCOM.IChooseFromListEvent)pVal;
+                                SAPbouiCOM.DataTable oDataTable = oCFL.SelectedObjects;
+                                string blAgr = Convert.ToString(oDataTable.GetValue("AbsID", 0));
+
+                                if (blAgr != "")
+                                {
+                                    string project = filterTable(oForm, blAgr, "BlanketAgreement");
+                                    SAPbouiCOM.EditText itm = oForm.Items.Item("95").Specific;
+                                    try
+                                    {
+                                        itm.Value = project;
+                                    }
+                                    catch { }
+                                    SAPbouiCOM.Item item = oForm.Items.Item("22");
+                                    item.Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                                    item = oForm.Items.Item("234000005");
+                                    item.Enabled = false;
+                                    item = oForm.Items.Item("95");
+                                    item.Enabled = false;
+                                }
+                            }
+                            else
+                            {
+                                SAPbouiCOM.IChooseFromListEvent oCFL = (SAPbouiCOM.IChooseFromListEvent)pVal;
+                                chooseFromList(oForm, oCFL,pVal.ItemUID,pVal.BeforeAction);
+                            }
+                        }
+
+                        //როცა user ახლიდან აირჩევს ბპ-ს , დაფრიზული როარ დახვდეს ეს ველები 
+                        else if (pVal.ItemUID == "5" && !pVal.BeforeAction)
+                        {
+                            SAPbouiCOM.Item oItem = oForm.Items.Item("95");
+                            oItem.Enabled = true;
+                            oItem = oForm.Items.Item("234000005");
+                            oItem.Enabled = true;
+                        }
+
+                    }
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
                     {
                         if (pVal.BeforeAction)
@@ -7697,8 +7768,45 @@ namespace BDO_Localisation_AddOn
             }
             return dtPmtInvoices;
         }
+        public static string filterTable(SAPbouiCOM.Form oForm, string chosen, string filterBy)
+        {
+            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("20").Specific));
+            string returnThing = "";
+            for (int i = 1; i <= oMatrix.RowCount; i++)
 
-        public enum PaymentType
+                if (filterBy == "ProjectCode")
+                {
+                    string ColId = "540000141";
+                    SAPbouiCOM.EditText oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item(ColId).Cells.Item(i).Specific;
+                    string sValue = oEdit.Value;
+                    if (sValue != chosen)
+                    {
+                        oMatrix.DeleteRow(i);
+                        i--;
+                    }
+                }
+                else if (filterBy == "BlanketAgreement")
+                {
+                    string ColId = "234000060";
+                    SAPbouiCOM.EditText oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item(ColId).Cells.Item(i).Specific;
+                    string sValue = oEdit.Value;
+
+                    if (sValue != chosen)
+                    {
+                        oMatrix.DeleteRow(i);
+                        i--;
+                    }
+                    else
+                    {
+                        ColId = "540000141";
+                        oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item(ColId).Cells.Item(i).Specific;
+                        returnThing = oEdit.Value;
+                    }
+                }
+            return returnThing;
+        }
+
+    public enum PaymentType
         {
             Draft = 1,
             Payment = 2
