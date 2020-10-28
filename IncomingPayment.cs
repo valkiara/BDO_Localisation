@@ -1338,7 +1338,7 @@ namespace BDO_Localisation_AddOn
                             string currency;
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("creditActE").Specific.Value = account);
                             try
-                            {                               
+                            {
                                 CommonFunctions.accountParse(account, out currency);
                                 oForm.Items.Item("crdActCuCB").Specific.Select(currency, SAPbouiCOM.BoSearchKey.psk_ByValue);
                             }
@@ -1622,7 +1622,7 @@ namespace BDO_Localisation_AddOn
                         setVisibleFormItems(oForm);
                     }
                 }
-                
+
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
                     if (pVal.ItemUID == "creditActE" || pVal.ItemUID == "outDocE")
@@ -1631,16 +1631,16 @@ namespace BDO_Localisation_AddOn
                         chooseFromList(oForm, pVal, oCFLEvento, ref BubbleEvent);
                     }
 
-                    else if(pVal.ItemUID=="95" && !pVal.BeforeAction)
+                    else if (pVal.ItemUID == "95" && !pVal.BeforeAction)
                     {
                         SAPbouiCOM.Item itm = oForm.Items.Item("95");
-                        SAPbouiCOM.IChooseFromListEvent oCFL= (SAPbouiCOM.IChooseFromListEvent)pVal;
+                        SAPbouiCOM.IChooseFromListEvent oCFL = (SAPbouiCOM.IChooseFromListEvent)pVal;
                         SAPbouiCOM.DataTable oDataTable = oCFL.SelectedObjects;
                         string PrjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
 
                         if (PrjCode != "")
                         {
-                            filterTable(oForm,PrjCode,"ProjectCode");
+                            filterTable(oForm, PrjCode, "ProjectCode");
                             itm = oForm.Items.Item("22");
                             itm.Click(SAPbouiCOM.BoCellClickType.ct_Regular);
                             itm = oForm.Items.Item("95");
@@ -1648,7 +1648,7 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    else if(pVal.ItemUID=="234000005")
+                    else if (pVal.ItemUID == "234000005")
                     {
                         if (!pVal.BeforeAction)
                         {
@@ -1683,13 +1683,13 @@ namespace BDO_Localisation_AddOn
                     //როცა user ახლიდან აირჩევს ბპ-ს , დაფრიზული როარ დახვდეს ეს ველები 
                     else if (pVal.ItemUID == "5" && !pVal.BeforeAction)
                     {
-                       SAPbouiCOM.Item oItem = oForm.Items.Item("95");
-                       oItem.Enabled = true;
-                       oItem = oForm.Items.Item("234000005");
-                       oItem.Enabled = true;
+                        SAPbouiCOM.Item oItem = oForm.Items.Item("95");
+                        oItem.Enabled = true;
+                        oItem = oForm.Items.Item("234000005");
+                        oItem.Enabled = true;
                     }
 
-                }          
+                }
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
                 {
                     comboSelect(oForm, pVal);
@@ -1701,7 +1701,7 @@ namespace BDO_Localisation_AddOn
                                 return;
                             setVisibleFormItems(oForm);
                         }
-                    }                   
+                    }
                 }
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
@@ -3068,7 +3068,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string filterTable(SAPbouiCOM.Form oForm,string chosen,string filterBy)
+        public static string filterTable(SAPbouiCOM.Form oForm, string chosen, string filterBy)
         {
             SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("20").Specific));
             string returnThing = "";
@@ -3084,11 +3084,13 @@ namespace BDO_Localisation_AddOn
                         oMatrix.DeleteRow(i);
                         i--;
                     }
-                } else if (filterBy == "BlanketAgreement"){
+                }
+                else if (filterBy == "BlanketAgreement")
+                {
                     string ColId = "234000060";
                     SAPbouiCOM.EditText oEdit = (SAPbouiCOM.EditText)oMatrix.Columns.Item(ColId).Cells.Item(i).Specific;
                     string sValue = oEdit.Value;
-                    
+
                     if (sValue != chosen)
                     {
                         oMatrix.DeleteRow(i);
@@ -3102,6 +3104,6 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             return returnThing;
-            }
         }
+    }
 }

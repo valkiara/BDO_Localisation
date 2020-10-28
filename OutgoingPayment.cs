@@ -1956,8 +1956,8 @@ namespace BDO_Localisation_AddOn
                             oCon.CondVal = project;
                             oCFL.SetConditions(oCons);
                         }
-                    }       
-            }
+                    }
+                }
                 else
                 {
                     SAPbouiCOM.DataTable oDataTable = null;
@@ -3633,7 +3633,7 @@ namespace BDO_Localisation_AddOn
                             else
                             {
                                 SAPbouiCOM.IChooseFromListEvent oCFL = (SAPbouiCOM.IChooseFromListEvent)pVal;
-                                chooseFromList(oForm, oCFL,pVal.ItemUID,pVal.BeforeAction);
+                                chooseFromList(oForm, oCFL, pVal.ItemUID, pVal.BeforeAction);
                             }
                         }
 
@@ -3820,7 +3820,7 @@ namespace BDO_Localisation_AddOn
                         if (wTaxBaseSum > 0)
                         {
                             (decimal whTaxAmt, decimal pensEmployedAmt, decimal pensEmployerAmt) physicalEntityTaxesWTaxBaseSum = CommonFunctions.CalcPhysicalEntityTaxes(wTaxBaseSum, docDate, wTCode);
-                          
+
                             double wTaxAmtDoc = Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(physicalEntityTaxesWTaxBaseSum.whTaxAmt + physicalEntityTaxesWTaxBaseSum.pensEmployedAmt, "Sum"));
                             oForm.Items.Item("111").Specific.Value = oSBOBob.Format_MoneyToString(wTaxAmtDoc, SAPbobsCOM.BoMoneyPrecisionTypes.mpt_Sum).Fields.Item(0).Value;
 
@@ -3845,7 +3845,7 @@ namespace BDO_Localisation_AddOn
                 throw ex;
             }
             finally
-            {               
+            {
                 Marshal.ReleaseComObject(oSBOBob);
                 oForm.Freeze(false);
             }
@@ -7806,7 +7806,7 @@ namespace BDO_Localisation_AddOn
             return returnThing;
         }
 
-    public enum PaymentType
+        public enum PaymentType
         {
             Draft = 1,
             Payment = 2
