@@ -3562,4 +3562,7 @@
   <data name="ARReserveInvoice" xml:space="preserve">
     <value>რეალიზაციის რეზერვი</value>
   </data>
+  <data name="FillItemSearchParameterOnTheBP" xml:space="preserve">
+    <value>გთხოვთ შეავსეთ საქონლის ძიების პარამეტრი ბიზნეს პარტნიორის ფორმაზე</value>
+  </data>
 </root>

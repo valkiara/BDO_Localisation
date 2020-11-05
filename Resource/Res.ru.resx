@@ -3532,4 +3532,7 @@
   <data name="ARReserveInvoice" xml:space="preserve">
     <value>AR Reserve Invoice</value>
   </data>
+  <data name="FillItemSearchParameterOnTheBP" xml:space="preserve">
+    <value>Please fill item search parameter on the business partner form</value>
+  </data>
 </root>
