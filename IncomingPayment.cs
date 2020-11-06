@@ -1048,8 +1048,6 @@ namespace BDO_Localisation_AddOn
                 string agrNo = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("AgrNo", 0);
                 oForm.Items.Item("UsBlaAgRtS").Enabled = !string.IsNullOrEmpty(agrNo);
 
-                //oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-
                 oForm.Items.Item("statusCB").Enabled = false;
                 string docEntry = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("DocEntry", 0).Trim();
                 string opType = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("U_opType", 0).Trim();
