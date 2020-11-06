@@ -1712,14 +1712,8 @@ namespace BDO_Localisation_AddOn
                     catch { }
                 }
 
-                oItem = oForm.Items.Item("234000005");
-                SAPbouiCOM.EditText oEdit = oItem.Specific;
-                oItem = oForm.Items.Item("UsBlaAgRtS");
-                if (oEdit.Value != "")
-                {
-                    oItem.Enabled = true;
-                }
-                else oItem.Enabled = false;
+                string agrNo = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("AgrNo", 0);
+                oForm.Items.Item("UsBlaAgRtS").Enabled = !string.IsNullOrEmpty(agrNo);
 
                 Dictionary<string, string> dataForTransferType = getDataForTransferType(oForm);
                 string transferType = getTransferType(dataForTransferType, out var errorText);
@@ -3600,7 +3594,7 @@ namespace BDO_Localisation_AddOn
                         { }
                         else
                         {
-                            if (pVal.ItemUID == "5" || pVal.ItemUID == "234000005")
+                            if ((pVal.ItemUID == "5" || pVal.ItemUID == "234000005") && !pVal.InnerEvent)
                             {
                                 setVisibleFormItems(oForm);
 

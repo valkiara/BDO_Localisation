@@ -1038,19 +1038,17 @@ namespace BDO_Localisation_AddOn
 
         public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
         {
+            SAPbouiCOM.Item oItem;
+            oForm.Freeze(true);
+
             try
             {
-                oForm.Freeze(true);
-
-                SAPbouiCOM.Item oItem = oForm.Items.Item("234000005");
-                SAPbouiCOM.EditText oEdit = oItem.Specific;
-                oItem = oForm.Items.Item("UsBlaAgRtS");
-                if (oEdit.Value != "")
-                    oItem.Enabled = true;
-                else
-                    oItem.Enabled = false;
-
                 oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+
+                string agrNo = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("AgrNo", 0);
+                oForm.Items.Item("UsBlaAgRtS").Enabled = !string.IsNullOrEmpty(agrNo);
+
+                //oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
 
                 oForm.Items.Item("statusCB").Enabled = false;
                 string docEntry = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("DocEntry", 0).Trim();
@@ -1062,23 +1060,21 @@ namespace BDO_Localisation_AddOn
                 //string CardCode = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("CardCode", 0).Trim();
 
                 bool docEntryIsEmpty = string.IsNullOrEmpty(docEntry);
-
+               
                 if (!docEntryIsEmpty)
                 {
-                    oItem = oForm.Items.Item("opTypeCB");
-                    oItem.Enabled = false;
+                    oForm.Items.Item("opTypeCB").Enabled = false;
                 }
                 else
                 {
-                    oItem = oForm.Items.Item("opTypeCB");
-                    oItem.Enabled = true;
+                    oForm.Items.Item("opTypeCB").Enabled = true;
                 }
 
                 if (string.IsNullOrEmpty(opType) || opType == "transferToOwnAccount" || opType == "currencyExchange" || opType == "treasuryTransfer")
                 {
                     try
                     {
-                        SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("71").Specific));
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("71").Specific;
 
                         SAPbouiCOM.Columns oColumns = oMatrix.Columns;
                         SAPbouiCOM.Column oColumn;
@@ -1663,7 +1659,7 @@ namespace BDO_Localisation_AddOn
                         if (pVal.ItemUID == "opTypeCB" || pVal.ItemUID == "18" || pVal.ItemUID == "107")
                         {
                             if (pVal.ItemUID == "107" && oForm.DataSources.DBDataSources.Item("ORCT").GetValue("IsPaytoBnk", 0).Trim() != "Y")
-                                return;
+                                return;                            
                             setVisibleFormItems(oForm);
                         }
                     }
@@ -1689,6 +1685,9 @@ namespace BDO_Localisation_AddOn
                         else if (pVal.ItemUID == "57" || pVal.ItemUID == "56" || pVal.ItemUID == "58")
                         {
                             setVisibleFormItems(oForm);
+
+                            oForm.Items.Item("95").Enabled = true;
+                            oForm.Items.Item("234000005").Enabled = true;
                         }
                     }
                 }
@@ -1698,9 +1697,9 @@ namespace BDO_Localisation_AddOn
                     { }
                     else
                     {
-                        if (pVal.ItemUID == "5" || pVal.ItemUID == "234000005")
+                        if ((pVal.ItemUID == "5" || pVal.ItemUID == "234000005") && !pVal.InnerEvent)
                         {
-                            //setVisibleFormItems(oForm);
+                            setVisibleFormItems(oForm);
 
                             if (pVal.ItemUID == "5") //Business Partner
                             {
@@ -1714,7 +1713,7 @@ namespace BDO_Localisation_AddOn
                 }
                 if (pVal.ItemChanged)
                 {
-                    if (pVal.ItemUID == "10" && pVal.BeforeAction) //Item - Posting Date
+                    if (pVal.ItemUID == "10") //Item - Posting Date
                     {
                         string docEntry = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("DocEntry", 0);
                         if (!string.IsNullOrEmpty(docEntry))
@@ -1727,10 +1726,8 @@ namespace BDO_Localisation_AddOn
                             oForm.Items.Item("234000005").Enabled = true;
                         }
                     }
-
                 }
             }
-            
         }
 
         public static void attachOutgoingPayments(string paymentID, string documentNumber, string ePaymentID, string outDoc, string opType)
