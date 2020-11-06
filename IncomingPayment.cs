@@ -1368,7 +1368,7 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
                         }
-                        if(oCFLEvento.ChooseFromListUID =="23")
+                        if (oCFLEvento.ChooseFromListUID == "23")
                         {
                             SAPbouiCOM.Item itm = oForm.Items.Item("95");
                             string PrjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
@@ -1728,18 +1728,18 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                    //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE)
-                    //{
-                    //    if (!pVal.BeforeAction)
-                    //    {
-                    //        if (pVal.ItemUID == "5")
-                    //            setVisibleFormItems(oForm);
-                    //        else if (pVal.ItemUID == "234000005")
-                    //            setVisibleFormItems(oForm);
-                    //    }
-                    //}
-                }
+                //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE)
+                //{
+                //    if (!pVal.BeforeAction)
+                //    {
+                //        if (pVal.ItemUID == "5")
+                //            setVisibleFormItems(oForm);
+                //        else if (pVal.ItemUID == "234000005")
+                //            setVisibleFormItems(oForm);
+                //    }
+                //}
             }
+        }
 
         public static void attachOutgoingPayments(string paymentID, string documentNumber, string ePaymentID, string outDoc, string opType)
         {
