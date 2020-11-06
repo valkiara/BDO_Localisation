@@ -1368,6 +1368,56 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
                         }
+                        if(oCFLEvento.ChooseFromListUID =="23")
+                        {
+                            SAPbouiCOM.Item itm = oForm.Items.Item("95");
+                            string PrjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
+                            if (PrjCode != "")
+                            {
+                                filterTable(oForm, PrjCode, "ProjectCode");
+                                itm = oForm.Items.Item("22");
+                                itm.Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                                itm = oForm.Items.Item("95");
+                                itm.Enabled = false;
+                            }
+                            return;
+                        }
+                        if (oCFLEvento.ChooseFromListUID == "1")
+                        {
+                            string blAgr = Convert.ToString(oDataTable.GetValue("AbsID", 0));
+
+                            if (blAgr != "")
+                            {
+                                string project = filterTable(oForm, blAgr, "BlanketAgreement");
+                                SAPbouiCOM.EditText itm = oForm.Items.Item("95").Specific;
+                                try
+                                {
+                                    itm.Value = project;
+                                }
+                                catch { }
+                                SAPbouiCOM.Item item = oForm.Items.Item("22");
+                                item.Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                                item = oForm.Items.Item("234000005");
+                                item.Enabled = false;
+                                item = oForm.Items.Item("95");
+                                item.Enabled = false;
+                            }
+                            return;
+                        }
+
+                        if (oCFLEvento.ChooseFromListUID == "15" || oCFLEvento.ChooseFromListUID == "16")
+                        {
+                            string oldBp = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("CardCode", 0);
+                            string newBp = Convert.ToString(oDataTable.GetValue("CardCode", 0));
+                            if (newBp != oldBp)
+                            {
+                                SAPbouiCOM.Item oItem = oForm.Items.Item("95");
+                                oItem.Enabled = true;
+                                oItem = oForm.Items.Item("234000005");
+                                oItem.Enabled = true;
+                            }
+                            return;
+                        }
                     }
                     setVisibleFormItems(oForm);
                 }
@@ -1622,74 +1672,24 @@ namespace BDO_Localisation_AddOn
                         setVisibleFormItems(oForm);
                     }
                 }
+                else if (pVal.ItemUID == "10" && !pVal.BeforeAction)
+                {
+                    SAPbouiCOM.Item oItem = oForm.Items.Item("95");
+                    oItem.Enabled = true;
+                    oItem = oForm.Items.Item("234000005");
+                    oItem.Enabled = true;
 
+                }
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
-                    if (pVal.ItemUID == "creditActE" || pVal.ItemUID == "outDocE")
+                    if (pVal.ItemUID == "creditActE" || pVal.ItemUID == "outDocE" || pVal.ItemUID == "95" || pVal.ItemUID == "234000005" || pVal.ItemUID == "5" || pVal.ItemUID == "32")
                     {
                         SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                         chooseFromList(oForm, pVal, oCFLEvento, ref BubbleEvent);
                     }
 
-                    else if (pVal.ItemUID == "95" && !pVal.BeforeAction)
-                    {
-                        SAPbouiCOM.Item itm = oForm.Items.Item("95");
-                        SAPbouiCOM.IChooseFromListEvent oCFL = (SAPbouiCOM.IChooseFromListEvent)pVal;
-                        SAPbouiCOM.DataTable oDataTable = oCFL.SelectedObjects;
-                        string PrjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
-
-                        if (PrjCode != "")
-                        {
-                            filterTable(oForm, PrjCode, "ProjectCode");
-                            itm = oForm.Items.Item("22");
-                            itm.Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                            itm = oForm.Items.Item("95");
-                            itm.Enabled = false;
-                        }
-                    }
-
-                    else if (pVal.ItemUID == "234000005")
-                    {
-                        if (!pVal.BeforeAction)
-                        {
-                            SAPbouiCOM.IChooseFromListEvent oCFL = (SAPbouiCOM.IChooseFromListEvent)pVal;
-                            SAPbouiCOM.DataTable oDataTable = oCFL.SelectedObjects;
-                            string blAgr = Convert.ToString(oDataTable.GetValue("AbsID", 0));
-
-                            if (blAgr != "")
-                            {
-                                string project = filterTable(oForm, blAgr, "BlanketAgreement");
-                                SAPbouiCOM.EditText itm = oForm.Items.Item("95").Specific;
-                                try
-                                {
-                                    itm.Value = project;
-                                }
-                                catch { }
-                                SAPbouiCOM.Item item = oForm.Items.Item("22");
-                                item.Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-                                item = oForm.Items.Item("234000005");
-                                item.Enabled = false;
-                                item = oForm.Items.Item("95");
-                                item.Enabled = false;
-                            }
-                        }
-                        else
-                        {
-                            SAPbouiCOM.IChooseFromListEvent oCFL = (SAPbouiCOM.IChooseFromListEvent)pVal;
-                            chooseFromList(oForm, pVal, oCFL, ref BubbleEvent);
-                        }
-                    }
-
-                    //როცა user ახლიდან აირჩევს ბპ-ს , დაფრიზული როარ დახვდეს ეს ველები 
-                    else if (pVal.ItemUID == "5" && !pVal.BeforeAction)
-                    {
-                        SAPbouiCOM.Item oItem = oForm.Items.Item("95");
-                        oItem.Enabled = true;
-                        oItem = oForm.Items.Item("234000005");
-                        oItem.Enabled = true;
-                    }
-
                 }
+
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
                 {
                     comboSelect(oForm, pVal);
@@ -1728,18 +1728,18 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE)
-                //{
-                //    if (!pVal.BeforeAction)
-                //    {
-                //        if (pVal.ItemUID == "5")
-                //            setVisibleFormItems(oForm);
-                //        else if (pVal.ItemUID == "234000005")
-                //            setVisibleFormItems(oForm);
-                //    }
-                //}
+                    //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE)
+                    //{
+                    //    if (!pVal.BeforeAction)
+                    //    {
+                    //        if (pVal.ItemUID == "5")
+                    //            setVisibleFormItems(oForm);
+                    //        else if (pVal.ItemUID == "234000005")
+                    //            setVisibleFormItems(oForm);
+                    //    }
+                    //}
+                }
             }
-        }
 
         public static void attachOutgoingPayments(string paymentID, string documentNumber, string ePaymentID, string outDoc, string opType)
         {
