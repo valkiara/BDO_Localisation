@@ -1058,7 +1058,7 @@ namespace BDO_Localisation_AddOn
                 //string CardCode = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("CardCode", 0).Trim();
 
                 bool docEntryIsEmpty = string.IsNullOrEmpty(docEntry);
-               
+
                 if (!docEntryIsEmpty)
                 {
                     oForm.Items.Item("opTypeCB").Enabled = false;
@@ -1657,7 +1657,7 @@ namespace BDO_Localisation_AddOn
                         if (pVal.ItemUID == "opTypeCB" || pVal.ItemUID == "18" || pVal.ItemUID == "107")
                         {
                             if (pVal.ItemUID == "107" && oForm.DataSources.DBDataSources.Item("ORCT").GetValue("IsPaytoBnk", 0).Trim() != "Y")
-                                return;                            
+                                return;
                             setVisibleFormItems(oForm);
                         }
                     }
@@ -1704,7 +1704,9 @@ namespace BDO_Localisation_AddOn
                                 var prjCode = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("PrjCode", 0);
                                 var agrNo = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("AgrNo", 0);
                                 oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
+                                oForm.Items.Item("95").Specific.Value = "";
                                 oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
+                                oForm.Items.Item("234000005").Specific.Value = "";
                             }
                         }
                     }
@@ -1721,7 +1723,9 @@ namespace BDO_Localisation_AddOn
                         else
                         {
                             oForm.Items.Item("95").Enabled = true;
+                            oForm.Items.Item("95").Specific.Value = "";
                             oForm.Items.Item("234000005").Enabled = true;
+                            oForm.Items.Item("234000005").Specific.Value = "";
                         }
                     }
                 }

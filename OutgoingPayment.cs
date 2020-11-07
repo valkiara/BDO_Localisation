@@ -1942,11 +1942,11 @@ namespace BDO_Localisation_AddOn
                         string project = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("PrjCode", 0);
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
                         if (project != "")
-                        {                            
+                        {
                             SAPbouiCOM.Condition oCon = oCons.Add();
                             oCon.Alias = "Project";
                             oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
-                            oCon.CondVal = project;                          
+                            oCon.CondVal = project;
                         }
                         oCFL.SetConditions(oCons);
                     }
@@ -3603,7 +3603,9 @@ namespace BDO_Localisation_AddOn
                                     var prjCode = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("PrjCode", 0);
                                     var agrNo = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("AgrNo", 0);
                                     oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
+                                    oForm.Items.Item("95").Specific.Value = "";
                                     oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
+                                    oForm.Items.Item("234000005").Specific.Value = "";
                                 }
                             }
                         }
@@ -3708,7 +3710,9 @@ namespace BDO_Localisation_AddOn
                             else
                             {
                                 oForm.Items.Item("95").Enabled = true;
+                                oForm.Items.Item("95").Specific.Value = "";
                                 oForm.Items.Item("234000005").Enabled = true;
+                                oForm.Items.Item("234000005").Specific.Value = "";
                             }
                         }
                         else if (pVal.ItemUID == "13" && !pVal.BeforeAction) //Item - Payment on Account (EditText)
