@@ -1038,19 +1038,15 @@ namespace BDO_Localisation_AddOn
 
         public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
         {
+            SAPbouiCOM.Item oItem;
+            oForm.Freeze(true);
+
             try
             {
-                oForm.Freeze(true);
-
-                SAPbouiCOM.Item oItem = oForm.Items.Item("234000005");
-                SAPbouiCOM.EditText oEdit = oItem.Specific;
-                oItem = oForm.Items.Item("UsBlaAgRtS");
-                if (oEdit.Value != "")
-                    oItem.Enabled = true;
-                else
-                    oItem.Enabled = false;
-
                 oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+
+                string agrNo = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("AgrNo", 0);
+                oForm.Items.Item("UsBlaAgRtS").Enabled = !string.IsNullOrEmpty(agrNo);
 
                 oForm.Items.Item("statusCB").Enabled = false;
                 string docEntry = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("DocEntry", 0).Trim();
@@ -1065,20 +1061,18 @@ namespace BDO_Localisation_AddOn
 
                 if (!docEntryIsEmpty)
                 {
-                    oItem = oForm.Items.Item("opTypeCB");
-                    oItem.Enabled = false;
+                    oForm.Items.Item("opTypeCB").Enabled = false;
                 }
                 else
                 {
-                    oItem = oForm.Items.Item("opTypeCB");
-                    oItem.Enabled = true;
+                    oForm.Items.Item("opTypeCB").Enabled = true;
                 }
 
                 if (string.IsNullOrEmpty(opType) || opType == "transferToOwnAccount" || opType == "currencyExchange" || opType == "treasuryTransfer")
                 {
                     try
                     {
-                        SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("71").Specific));
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("71").Specific;
 
                         SAPbouiCOM.Columns oColumns = oMatrix.Columns;
                         SAPbouiCOM.Column oColumn;
@@ -1283,14 +1277,13 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.BeforeAction)
                 {
+                    SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
                     if (oCFLEvento.ChooseFromListUID == "HouseBankAccount_CFL")
                     {
 
                     }
                     else if (oCFLEvento.ChooseFromListUID == "OutgoingPayment_CFL")
                     {
-                        SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(oCFLEvento.ChooseFromListUID);
-
                         string opType = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("U_opType", 0).Trim();
 
                         SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
@@ -1309,6 +1302,19 @@ namespace BDO_Localisation_AddOn
 
                         oCFL.SetConditions(oCons);
                     }
+                    else if (oCFLEvento.ChooseFromListUID == "1") //Blanket Agreement
+                    {
+                        string project = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("PrjCode", 0);
+                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+                        if (project != "")
+                        {
+                            SAPbouiCOM.Condition oCon = oCons.Add();
+                            oCon.Alias = "Project";
+                            oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                            oCon.CondVal = project;
+                        }
+                        oCFL.SetConditions(oCons);
+                    }
                 }
                 else
                 {
@@ -1322,7 +1328,7 @@ namespace BDO_Localisation_AddOn
                             string currency;
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("creditActE").Specific.Value = account);
                             try
-                            {                               
+                            {
                                 CommonFunctions.accountParse(account, out currency);
                                 oForm.Items.Item("crdActCuCB").Specific.Select(currency, SAPbouiCOM.BoSearchKey.psk_ByValue);
                             }
@@ -1351,6 +1357,33 @@ namespace BDO_Localisation_AddOn
                                     }
                                 }
                             }
+                        }
+                        else if (oCFLEvento.ChooseFromListUID == "1") //Blanket Agreement
+                        {
+                            var agrNo = Convert.ToString(oDataTable.GetValue("AbsID", 0));
+                            var prjCode = Convert.ToString(oDataTable.GetValue("Project", 0));
+
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("95").Specific.Value = prjCode);
+
+                            FilterInvoiceMatrix(oForm, agrNo, prjCode);
+
+                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular); //Remark
+
+                            oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
+                            oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
+                        }
+
+                        else if (oCFLEvento.ChooseFromListUID == "23") //Project
+                        {
+                            var prjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("234000005").Specific.Value = string.Empty);
+
+                            FilterInvoiceMatrix(oForm, null, prjCode);
+
+                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular); //Remark
+
+                            oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
+                            oForm.Items.Item("234000005").Enabled = true;
                         }
                     }
                     setVisibleFormItems(oForm);
@@ -1609,13 +1642,13 @@ namespace BDO_Localisation_AddOn
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                 {
-                    if (pVal.ItemUID == "creditActE" || pVal.ItemUID == "outDocE")
+                    if (pVal.ItemUID == "creditActE" || pVal.ItemUID == "outDocE" || pVal.ItemUID == "95" || pVal.ItemUID == "234000005" || pVal.ItemUID == "5")
                     {
                         SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                         chooseFromList(oForm, pVal, oCFLEvento, ref BubbleEvent);
                     }
-                }
 
+                }
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
                 {
                     comboSelect(oForm, pVal);
@@ -1627,7 +1660,7 @@ namespace BDO_Localisation_AddOn
                                 return;
                             setVisibleFormItems(oForm);
                         }
-                    }                   
+                    }
                 }
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
@@ -1650,20 +1683,52 @@ namespace BDO_Localisation_AddOn
                         else if (pVal.ItemUID == "57" || pVal.ItemUID == "56" || pVal.ItemUID == "58")
                         {
                             setVisibleFormItems(oForm);
+
+                            oForm.Items.Item("95").Enabled = true;
+                            oForm.Items.Item("234000005").Enabled = true;
                         }
                     }
                 }
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE)
+                {
+                    if (pVal.BeforeAction)
+                    { }
+                    else
+                    {
+                        if ((pVal.ItemUID == "5" || pVal.ItemUID == "234000005") && !pVal.InnerEvent)
+                        {
+                            setVisibleFormItems(oForm);
 
-                //else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE)
-                //{
-                //    if (!pVal.BeforeAction)
-                //    {
-                //        if (pVal.ItemUID == "5")
-                //            setVisibleFormItems(oForm);
-                //        else if (pVal.ItemUID == "234000005")
-                //            setVisibleFormItems(oForm);
-                //    }
-                //}
+                            if (pVal.ItemUID == "5") //Business Partner
+                            {
+                                var prjCode = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("PrjCode", 0);
+                                var agrNo = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("AgrNo", 0);
+                                oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
+                                oForm.Items.Item("95").Specific.Value = "";
+                                oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
+                                oForm.Items.Item("234000005").Specific.Value = "";
+                            }
+                        }
+                    }
+                }
+                if (pVal.ItemChanged)
+                {
+                    if (pVal.ItemUID == "10") //Item - Posting Date
+                    {
+                        string docEntry = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("DocEntry", 0);
+                        if (!string.IsNullOrEmpty(docEntry))
+                        {
+
+                        }
+                        else
+                        {
+                            oForm.Items.Item("95").Enabled = true;
+                            oForm.Items.Item("95").Specific.Value = "";
+                            oForm.Items.Item("234000005").Enabled = true;
+                            oForm.Items.Item("234000005").Specific.Value = "";
+                        }
+                    }
+                }
             }
         }
 
@@ -2991,6 +3056,43 @@ namespace BDO_Localisation_AddOn
             finally
             {
                 GC.Collect();
+            }
+        }
+
+        public static void FilterInvoiceMatrix(SAPbouiCOM.Form oForm, string agrNo, string prjCode)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                if (string.IsNullOrEmpty(prjCode) && string.IsNullOrEmpty(agrNo))
+                    return;
+
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("20").Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var prjCodeMtr = oMatrix.Columns.Item("540000141").Cells.Item(i).Specific.Value;
+                    var agrNoMtr = oMatrix.Columns.Item("234000060").Cells.Item(i).Specific.Value;
+
+                    if (!string.IsNullOrEmpty(prjCode) && prjCode != prjCodeMtr)
+                    {
+                        oMatrix.DeleteRow(i);
+                        i--;
+                    }
+                    else if (!string.IsNullOrEmpty(agrNo) && agrNo != agrNoMtr)
+                    {
+                        oMatrix.DeleteRow(i);
+                        i--;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
     }
