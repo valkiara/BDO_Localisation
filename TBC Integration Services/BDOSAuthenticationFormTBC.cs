@@ -213,7 +213,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     formItems.Add("Height", height);
                     formItems.Add("UID", itemName);
                     formItems.Add("AffectsFormMode", false);
-                    //formItems.Add("Value", "B941646");
+                    //formItems.Add("Value", "226_11");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -250,7 +250,7 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                     formItems.Add("UID", itemName);
                     formItems.Add("IsPassword", true);
                     formItems.Add("AffectsFormMode", false);
-                    //formItems.Add("Value", "Aa123456");
+                    //formItems.Add("Value", "Aa123123");
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -632,7 +632,42 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                             {
                                 MovementService oMovementService = MainMovementService.setMovementService(serviceUrl, userName, password, nonce);
                                 AccountMovementDetailIo[] oAccountMovementDetailIo = null;
+                                AccountMovementDetailIo[] oAccountMovementDetailIoPage = null;
+
                                 BaseQueryResultIo oBaseQueryResultIo = MainMovementService.getAccountMovements(oMovementService, oAccountMovementFilterIo, out oAccountMovementDetailIo, out errorText);
+
+                                int totalCount = oBaseQueryResultIo.totalCount;
+                                int pageSize = oBaseQueryResultIo.pager.pageSize;
+
+                                if (totalCount > pageSize)
+                                {
+                                    double count700 = totalCount / pageSize;
+                                    double Page = 1;
+
+                                    while (Page <= count700)
+                                    {
+                                        BasePagerIo pager = new BasePagerIo();
+                                        pager.pageIndex = Convert.ToInt32(Page);
+                                        pager.pageSize = pageSize;
+                                        oAccountMovementFilterIo.pager = pager;
+
+                                        oBaseQueryResultIo = MainMovementService.getAccountMovements(oMovementService, oAccountMovementFilterIo, out oAccountMovementDetailIoPage, out errorText);
+
+                                        AccountMovementDetailIo oAccountMovementDetailIoItem = null;
+                                        int oldCount = oAccountMovementDetailIo.Count();
+                                        int newCount = oldCount + oAccountMovementDetailIoPage.Count();
+
+                                        Array.Resize(ref oAccountMovementDetailIo, newCount);
+
+                                        for (int ind = 0; ind < oAccountMovementDetailIoPage.Count(); ind++)
+                                        {
+                                            oAccountMovementDetailIoItem = (AccountMovementDetailIo)oAccountMovementDetailIoPage[ind];
+                                            oAccountMovementDetailIo.SetValue(oAccountMovementDetailIoItem, oldCount + ind);
+                                        }
+
+                                        Page++;
+                                    }
+                                }
 
                                 if (errorText != null)
                                 {

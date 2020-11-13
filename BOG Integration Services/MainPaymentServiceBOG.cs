@@ -1,4 +1,5 @@
 ﻿using BDO_Localisation_AddOn.BOG_Integration_Services.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -329,6 +330,24 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                 throw new Exception(await ShowErrorMessage(response));
             }
             return statement;
+        }
+
+        public async static Task<List<StatementDetail>> getStatementByID(HttpClient client, string accountNumber, string currency, int ID, int Page)
+        {
+            List<StatementDetail> statementDet = null;
+                                 
+            var response = await client.GetAsync(string.Format("statement/{0}/{1}/{2}/{3}", accountNumber, currency, ID, Page));
+            if (response.IsSuccessStatusCode)
+            {
+                string statementString = await response.Content.ReadAsStringAsync();
+                statementDet =  JsonConvert.DeserializeObject<List<StatementDetail>>(statementString);
+            }
+            else
+            {
+                throw new Exception(await ShowErrorMessage(response));
+            }
+
+            return statementDet;
         }
 
         private static async Task<string> ShowErrorMessage(HttpResponseMessage response)
