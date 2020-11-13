@@ -1,4 +1,5 @@
 ﻿using BDO_Localisation_AddOn.BOG_Integration_Services.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -321,18 +322,93 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                 {
                     HttpClient client = InitializeClient();
                     Task<Statement> oStatement = null;
+                    
                     List<StatementDetail> oStatementDetail = null;
+                    Task<List<StatementDetail>> oStatementDetailIdTask = null;
+                    List<StatementDetail> oStatementDetailId = null;
 
                     if (oStatementFilter.Page == 0)
                     {
                         oStatement = MainPaymentServiceBOG.getStatement(client, oStatementFilter.AccountNumber, oStatementFilter.Currency, oStatementFilter.PeriodFrom, oStatementFilter.PeriodTo);
                         if (oStatement != null)
+                        {
                             oStatementDetail = oStatement.Result.Records;
+
+                            int id = Convert.ToInt32(oStatement.Result.Id);
+                            int count = oStatement.Result.Count;
+
+                           
+
+                            if (count > 1000)
+                            {
+
+                                double count10000 = count / 1000;
+                                double Page = 2;
+                                while (Page <= count10000+1)
+                                {
+
+                                    oStatementDetailIdTask = MainPaymentServiceBOG.getStatementByID(client, oStatementFilter.AccountNumber, oStatementFilter.Currency, id, Convert.ToInt32(Page));
+                                    if (oStatementDetailIdTask != null)
+                                    {
+                                        oStatementDetailId = oStatementDetailIdTask.Result;
                     }
-                    //else
-                    //{
-                    //    summary = MainPaymentServiceBOG.getStatement(client, oStatementFilter.AccountNumber, oStatementFilter.Currency, oStatementFilter.PeriodFrom, oStatementFilter.PeriodTo, oStatementFilter.Page);
-                    //}
+
+                                    for (int rowIndex = 0; rowIndex < oStatementDetailId.Count; rowIndex++)
+                                    {
+                                        StatementDetail newRow = new StatementDetail();
+
+                                        newRow.BeneficiaryDetails = oStatementDetailId[rowIndex].BeneficiaryDetails;
+                                        newRow.DocumentActualDate = oStatementDetailId[rowIndex].DocumentActualDate;
+                                        newRow.DocumentBeneficiaryInstitution = oStatementDetailId[rowIndex].DocumentBeneficiaryInstitution;
+                                        newRow.DocumentBranch = oStatementDetailId[rowIndex].DocumentBranch;
+                                        newRow.DocumentCorrespondentAccountNumber = oStatementDetailId[rowIndex].DocumentCorrespondentAccountNumber;
+                                        newRow.DocumentCorrespondentBankCode = oStatementDetailId[rowIndex].DocumentCorrespondentBankCode;
+                                        newRow.DocumentCorrespondentBankName = oStatementDetailId[rowIndex].DocumentCorrespondentBankName;
+                                        newRow.DocumentDestinationAmount = oStatementDetailId[rowIndex].DocumentDestinationAmount;
+                                        newRow.DocumentDestinationCurrency = oStatementDetailId[rowIndex].DocumentDestinationCurrency;
+                                        newRow.DocumentExpiryDate = oStatementDetailId[rowIndex].DocumentExpiryDate;
+                                        newRow.DocumentInformation = oStatementDetailId[rowIndex].DocumentInformation;
+                                        newRow.DocumentIntermediaryInstitution = oStatementDetailId[rowIndex].DocumentIntermediaryInstitution;
+                                        newRow.DocumentNomination = oStatementDetailId[rowIndex].DocumentNomination;
+                                        newRow.DocumentPayee = oStatementDetailId[rowIndex].DocumentPayee;
+                                        newRow.DocumentProductGroup = oStatementDetailId[rowIndex].DocumentProductGroup;
+                                        newRow.DocumentRate = oStatementDetailId[rowIndex].DocumentRate;
+                                        newRow.DocumentRateLimit = oStatementDetailId[rowIndex].DocumentRateLimit;
+                                        newRow.DocumentReceiveDate = oStatementDetailId[rowIndex].DocumentReceiveDate;
+                                        newRow.DocumentRegistrationRate = oStatementDetailId[rowIndex].DocumentRegistrationRate;
+                                        newRow.DocumentSenderInstitution = oStatementDetailId[rowIndex].DocumentSenderInstitution;
+                                        newRow.DocumentSourceAmount = oStatementDetailId[rowIndex].DocumentSourceAmount;
+                                        newRow.DocumentSourceCurrency = oStatementDetailId[rowIndex].DocumentSourceCurrency;
+                                        newRow.DocumentTreasuryCode = oStatementDetailId[rowIndex].DocumentTreasuryCode;
+                                        newRow.DocumentValueDate = oStatementDetailId[rowIndex].DocumentValueDate;
+
+                                        newRow.EntryAccountPoint = oStatementDetailId[rowIndex].EntryAccountPoint;
+                                        newRow.EntryAmountBase = oStatementDetailId[rowIndex].EntryAmountBase;
+                                        newRow.EntryAmountCredit = oStatementDetailId[rowIndex].EntryAmountCredit;
+                                        newRow.EntryAmountCreditBase = oStatementDetailId[rowIndex].EntryAmountCreditBase;
+                                        newRow.EntryAmountDebit = oStatementDetailId[rowIndex].EntryAmountDebit;
+                                        newRow.EntryAmountDebitBase = oStatementDetailId[rowIndex].EntryAmountDebitBase;
+                                        newRow.EntryComment = oStatementDetailId[rowIndex].EntryComment;
+                                        newRow.EntryDate = oStatementDetailId[rowIndex].EntryDate;
+
+                                        newRow.EntryDepartment = oStatementDetailId[rowIndex].EntryDepartment;
+                                        newRow.EntryDocumentNumber = oStatementDetailId[rowIndex].EntryDocumentNumber;
+                                        newRow.EntryId = oStatementDetailId[rowIndex].EntryId;
+                                        newRow.Rate = oStatementDetailId[rowIndex].Rate;
+                                        newRow.SenderDetails = oStatementDetailId[rowIndex].SenderDetails;
+
+
+                                        oStatementDetail.Add(newRow);
+                                    }
+
+
+                                    Page++;
+                                }
+                            }
+                        }
+                    }
+                    
+
                     if (errorText != null)
                     {
                         BDOSInternetBanking.oStatementDetailStc = null;
