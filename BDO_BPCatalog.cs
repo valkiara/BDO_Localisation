@@ -170,11 +170,12 @@ namespace BDO_Localisation_AddOn
             {
                 CardCode = CardCode.Trim();
                 string searchingParam = oBP.UserFields.Fields.Item("U_BDO_ItmPrm").Value;
+                /*
                 if (string.IsNullOrEmpty(searchingParam) || searchingParam == "-1")
                 {
                     throw new Exception(BDOSResources.getTranslate("FillItemSearchParameterOnTheBP"));
                 }
-
+                */
                 if (searchingParam == "1") //დასახელებით
                 {
                     if (ItemName.Length > 254)

@@ -3535,4 +3535,10 @@
   <data name="FillItemSearchParameterOnTheBP" xml:space="preserve">
     <value>Please fill item search parameter on the business partner form</value>
   </data>
+  <data name="ItemCodeWasNotSpecified" xml:space="preserve">
+    <value>Item Code Was Not Specified</value>
+  </data>
+  <data name="PleaseChangeSearchParameter:ItIsNotPossibleToFindProductInBPCatalogUsingThisSearchingParameter" xml:space="preserve">
+    <value>Please Change Search Parameter:It is not Possible to Find Product in BP Catalog Using This Searching Parameter</value>
+  </data>
 </root>
