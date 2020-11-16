@@ -3562,4 +3562,13 @@
   <data name="ARReserveInvoice" xml:space="preserve">
     <value>რეალიზაციის რეზერვი</value>
   </data>
+  <data name="FillItemSearchParameterOnTheBP" xml:space="preserve">
+    <value>გთხოვთ შეავსეთ საქონლის ძიების პარამეტრი ბიზნეს პარტნიორის ფორმაზე</value>
+  </data>
+  <data name="ItemCodeWasNotSpecified" xml:space="preserve">
+    <value>ვერ მოხდა დოკუმენტში პროდუქტის კოდის შევსება</value>
+  </data>
+  <data name="PleaseChangeSearchParameter:ItIsNotPossibleToFindProductInBPCatalogUsingThisSearchingParameter" xml:space="preserve">
+    <value>გთხოვთ შეცვალოთ ძიების პარამეტრი: მოცემულ ბიზნეს პარტნიორზე(ებზე) მითითებული ძიების პარამეტრით შეუძლებელია პროდუქტის მოძებნა ბიზნეს პარტნიორის კატალოგში.</value>
+  </data>
 </root>
