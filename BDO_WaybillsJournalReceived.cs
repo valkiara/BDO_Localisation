@@ -1138,7 +1138,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (newForm)
                 {
-                    oForm.DataSources.UserDataSources.Add("DocEntry", SAPbouiCOM.BoDataType.dt_LONG_NUMBER, 50);
+                    oForm.DataSources.UserDataSources.Add("DocEntry", SAPbouiCOM.BoDataType.dt_LONG_NUMBER);
                     oForm.DataSources.UserDataSources.Add("DocType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
                     oForm.DataSources.UserDataSources.Add("CurrWBNo", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
                     oForm.DataSources.UserDataSources.Add("CurrWBID", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
