@@ -1148,7 +1148,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (newForm)
                 {
-                    oForm.DataSources.UserDataSources.Add("DocEntry", SAPbouiCOM.BoDataType.dt_SHORT_NUMBER, 50);
+                    oForm.DataSources.UserDataSources.Add("DocEntry", SAPbouiCOM.BoDataType.dt_LONG_NUMBER);
                     oForm.DataSources.UserDataSources.Add("DocType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
                     oForm.DataSources.UserDataSources.Add("CurrWBNo", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
                     oForm.DataSources.UserDataSources.Add("CurrWBID", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 50);
@@ -2225,16 +2225,16 @@ namespace BDO_Localisation_AddOn
                         }
                     }
 
-                    oForm.DataSources.UserDataSources.Item("WBNo").Value = oCNTp == "1" ? "" : WbNo;
-                    oForm.DataSources.UserDataSources.Item("WaybType").Value = oCNTp == "1" ? "1" : "";
-                    oForm.DataSources.UserDataSources.Item("WBSuplNo").Value = WBTIN;
+                    oForm.DataSources.UserDataSources.Item("WBNo").ValueEx = oCNTp == "1" ? "" : WbNo;
+                    oForm.DataSources.UserDataSources.Item("WaybType").ValueEx = oCNTp == "1" ? "1" : "";
+                    oForm.DataSources.UserDataSources.Item("WBSuplNo").ValueEx = WBTIN;
                     if (DocEntry > 0)
                     {
-                        oForm.DataSources.UserDataSources.Item("DocEntry").Value = DocEntry.ToString();
+                        oForm.DataSources.UserDataSources.Item("DocEntry").ValueEx = DocEntry.ToString();
                     }
-                    oForm.DataSources.UserDataSources.Item("DocType").Value = DocType;
-                    oForm.DataSources.UserDataSources.Item("StartDate").Value = docDate;
-                    oForm.DataSources.UserDataSources.Item("EndDate").Value = docDate;
+                    oForm.DataSources.UserDataSources.Item("DocType").ValueEx = DocType;
+                    oForm.DataSources.UserDataSources.Item("StartDate").ValueEx = docDate;
+                    oForm.DataSources.UserDataSources.Item("EndDate").ValueEx = docDate;
 
                     WayBill oWayBill;
                     Dictionary<string, Dictionary<string, string>> waybills_map = getDataFromRS(oForm, out oWayBill, out errorText);

@@ -4456,7 +4456,7 @@ namespace BDO_Localisation_AddOn
                 {
                     AmountPr = AmountPr + Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(Convert.ToDecimal(noDocSum / (100 - profitTaxRate) * profitTaxRate), "Sum"));
                 }
-
+                
                 SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("20").Specific;
                 for (int i = 1; i < oMatrix.RowCount + 1; i++)
                 {
