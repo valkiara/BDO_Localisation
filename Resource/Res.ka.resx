@@ -3571,4 +3571,10 @@
   <data name="PleaseChangeSearchParameter:ItIsNotPossibleToFindProductInBPCatalogUsingThisSearchingParameter" xml:space="preserve">
     <value>გთხოვთ შეცვალოთ ძიების პარამეტრი: მოცემულ ბიზნეს პარტნიორზე(ებზე) მითითებული ძიების პარამეტრით შეუძლებელია პროდუქტის მოძებნა ბიზნეს პარტნიორის კატალოგში.</value>
   </data>
+  <data name="ARCorrectionInvoice" xml:space="preserve">
+    <value>რეალიზაციის კორექტირება</value>
+  </data>
+  <data name="ARDownPaymentVat" xml:space="preserve">
+    <value>ავანსის დღგ</value>
+  </data>
 </root>

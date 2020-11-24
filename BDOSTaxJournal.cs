@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Data;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace BDO_Localisation_AddOn
 {
@@ -536,14 +536,14 @@ namespace BDO_Localisation_AddOn
                 int baseDoc;
                 int row;
                 string docType = "";
-                
+
                 if (count > 0)
                 {
                     foreach (SAPbobsCOM.GeneralData oChild in oChildren)
                     {
                         baseDocType = oChild.GetProperty("U_baseDocT");
                         baseDoc = oChild.GetProperty("U_baseDoc");
-                        
+
                         for (int i = 0; i < oDataTable.Rows.Count; i++)
                         {
                             string docTypeFromTable = oDataTable.GetValue("DocType", i);
@@ -552,7 +552,7 @@ namespace BDO_Localisation_AddOn
                                 docType = "ARInvoice";
                             else
                                 docType = docTypeFromTable;
-                            
+
                             if (baseDocType == docType && baseDoc == Convert.ToInt32(oDataTable.GetValue("InvoiceEntry", i)))
                             {
                                 row = i + 1;
@@ -722,6 +722,9 @@ namespace BDO_Localisation_AddOn
             string Attach = oForm.DataSources.UserDataSources.Item("Attach2").ValueEx;
 
             string needTax = oForm.DataSources.UserDataSources.Item("needTax").ValueEx;
+
+            List<string> ls = new List<string>() { "WithoutFilter", "ARInvoice", "ARReserveInvoice", "ARCreditNote", "ARCorrectionInvoice", "ARDownPaymentVAT" };
+            string docTypeE = ls[Int32.Parse(oForm.DataSources.UserDataSources.Item("docTypeE").ValueEx)];
 
             string query;
 
@@ -1279,6 +1282,7 @@ namespace BDO_Localisation_AddOn
                     corrDocEntry = corrDocEntry == "0" ? "" : corrDocEntry;
                     number = oRecordSet.Fields.Item("U_number").Value;
 
+
                     if (download == false & String.IsNullOrEmpty(number) == false)
                     {
                         BDO_TaxInvoiceSent.operationRS(oTaxInvoice, "checkSync", Convert.ToInt32(docEntry), -1, new DateTime(), out errorText, out errorTextWb, out errorTextGoods);
@@ -1291,6 +1295,11 @@ namespace BDO_Localisation_AddOn
                     string CreditMemoEntry = oRecordSet.Fields.Item("CreditMemoEntry").Value;
                     string DocType = oRecordSet.Fields.Item("DocType").Value;
 
+                    if (DocType != docTypeE && docTypeE != "WithoutFilter")
+                    {
+                        oRecordSet.MoveNext();
+                        continue;
+                    }
                     if (CreditMemoEntry != "" && DocType != "ARDownPaymentVAT")
                     {
                         string BaseDoc = oRecordSet.Fields.Item("BaseDoc").Value.ToString();
@@ -3018,11 +3027,72 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("FromPane", 2);
                     formItems.Add("ToPane", 2);
 
+
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
                     {
                         return;
                     }
+
+                    //დოკუმენტის ტიპი წარწერა- გაცემული Pane 2
+                    formItems = new Dictionary<string, object>();
+                    itemName = "docTypeS";
+                    formItems.Add("Size", 20);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    formItems.Add("Left", left + 100 + 10 + 100 + 40);
+                    formItems.Add("Width", 130);
+                    formItems.Add("Top", Top);
+                    formItems.Add("Caption", BDOSResources.getTranslate("DocType"));
+                    formItems.Add("UID", itemName);
+                    formItems.Add("FromPane", 2);
+                    formItems.Add("ToPane", 2);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+                    //დოკუმენტის ტიპი კომბო- გაცემული Pane 2
+                    List<string> ValidValues = new List<string>();
+                    ValidValues.Add(BDOSResources.getTranslate("WithoutFilter"));
+                    ValidValues.Add(BDOSResources.getTranslate("ARInvoice"));
+                    ValidValues.Add(BDOSResources.getTranslate("ARReserveInvoice"));
+                    ValidValues.Add(BDOSResources.getTranslate("ARCreditNote"));
+                    ValidValues.Add(BDOSResources.getTranslate("ARCorrectionInvoice"));
+                    ValidValues.Add(BDOSResources.getTranslate("ARDownPaymentVat"));
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "docTypeE";
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 30);
+                    formItems.Add("Size", 20);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    formItems.Add("TableName", "");
+                    formItems.Add("Alias", itemName);
+                    formItems.Add("Bound", true);
+                    formItems.Add("Left", left + 100 + 10 + 100 + 30 + 120);
+                    formItems.Add("Width", 100);
+                    formItems.Add("Top", Top);
+                    formItems.Add("Height", 19);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("ValidValues", ValidValues);
+                    formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+                    formItems.Add("DisplayDesc", true);
+                    formItems.Add("FromPane", 2);
+                    formItems.Add("ToPane", 2);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+                    oCombobox = (SAPbouiCOM.ComboBox)oForm.Items.Item("docTypeE").Specific;
+                    oCombobox.Select("0");
+
                     //ბიზნეს პარტნიორი წარწერა  - გაცემული - Pane 2
 
                     left = left + 130 + 10;
@@ -3210,7 +3280,7 @@ namespace BDO_Localisation_AddOn
 
                     left = left + 130 + 10;
 
-                    List<string> ValidValues = new List<string>();
+                    ValidValues = new List<string>();
                     ValidValues.Add(BDOSResources.getTranslate("WithoutFilter"));
                     ValidValues.Add(BDOSResources.getTranslate("NotLinked"));
                     ValidValues.Add(BDOSResources.getTranslate("Linked"));
@@ -4401,10 +4471,10 @@ namespace BDO_Localisation_AddOn
                         oForm.PaneLevel = Convert.ToInt32(pVal.ItemUID.Substring(6, 1));
                     }
                 }
-                 
+
                 //if ((pVal.ItemUID == "StrtDatOp2" || pVal.ItemUID == "EndDateOp2") && (pVal.ItemChanged) && pVal.BeforeAction == false)
                 //{
-                    
+
                 //    string startDateStr = oForm.DataSources.UserDataSources.Item("StrtDatOp2").ValueEx.ToString();
 
                 //    DateTime startDate = DateTime.ParseExact(startDateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
@@ -4419,7 +4489,7 @@ namespace BDO_Localisation_AddOn
                 //    oForm.DataSources.UserDataSources.Item("EndDateOp2").ValueEx = OperationPeriodEnd.ToString("yyyyMMdd");
 
                 //    oForm.Freeze(false);
-                    
+
                 //}
 
                 if ((pVal.ItemUID == "StrtDatOp" || pVal.ItemUID == "EndDateOp") && (pVal.ItemChanged) && pVal.BeforeAction == false)
