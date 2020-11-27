@@ -3601,4 +3601,10 @@
   <data name="PleaseChangeSearchParameter:ItIsNotPossibleToFindProductInBPCatalogUsingThisSearchingParameter" xml:space="preserve">
     <value>Please Change Search Parameter:It is not Possible to Find Product in BP Catalog Using This Searching Parameter</value>
   </data>
+  <data name="ARCorrectionInvoice" xml:space="preserve">
+    <value>AR Correction Invoice</value>
+  </data>
+  <data name="ARDownPaymentVat" xml:space="preserve">
+    <value>AR Down Payment VAT</value>
+  </data>
 </root>
