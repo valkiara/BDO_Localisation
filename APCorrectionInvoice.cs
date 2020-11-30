@@ -10,6 +10,10 @@ namespace BDO_Localisation_AddOn
 {
     static partial class APCorrectionInvoice
     {
+
+        public static string WBAUT = null;
+        public static string TXAUT = null;
+
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
 
@@ -17,6 +21,19 @@ namespace BDO_Localisation_AddOn
             BDO_WBReceivedDocs.createFormItems(oForm, "OCPI", out errorText);
 
             Dictionary<string, object> formItems = null;
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
 
             string itemName = "";
 
@@ -459,6 +476,8 @@ namespace BDO_Localisation_AddOn
                     oEditText.ChooseFromListUID = "TaxInvoiceReceived_CFL";
                     oEditText.ChooseFromListAlias = "DocEntry";
                 }
+
+               
             }
             catch (Exception ex)
             {
@@ -470,6 +489,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
         }
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
@@ -491,6 +512,7 @@ namespace BDO_Localisation_AddOn
                         {
                             createFormItems(oForm, out errorText);
                             formDataLoad(oForm, out errorText);
+                            setVisibleFormItems(oForm, out errorText);
                         }
                         else
                             setValues(oForm, out errorText);

@@ -11,6 +11,9 @@ namespace BDO_Localisation_AddOn
 {
     static partial class ARCreditNote
     {
+        public static string WBAUT = null;
+        public static string TXAUT = null;
+
         public static bool ReserveInvoiceAsService = false;
 
         public static void createUserFields(out string errorText)
@@ -51,6 +54,21 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formItems = null;
 
             string itemName = "";
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
+
+
 
             SAPbouiCOM.Item oItem = oForm.Items.Item("15");
             double height = oItem.Height;
@@ -121,7 +139,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Caption", caption);
             formItems.Add("TextStyle", 4);
             formItems.Add("FontSize", 10);
-            formItems.Add("Enabled", true);
+            formItems.Add("Visible", WBAUT != "0");
+            formItems.Add("Enabled", WBAUT == "2");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -151,9 +170,10 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("AffectsFormMode", false);
             formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", false);
             formItems.Add("ChooseFromListUID", uniqueID_WaybillCFL);
             formItems.Add("ChooseFromListAlias", "DocEntry");
+            formItems.Add("Visible", WBAUT != "0");
+            formItems.Add("Enabled", WBAUT == "2");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -170,6 +190,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("LinkTo", "BDO_WblDoc");
             formItems.Add("LinkedObjectType", objectType);
+            formItems.Add("Visible", WBAUT != "0");
+            formItems.Add("Enabled", WBAUT == "2");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -196,7 +218,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Caption", BDOSResources.getTranslate("CreateTaxInvoice"));
             formItems.Add("TextStyle", 4);
             formItems.Add("FontSize", 10);
-            formItems.Add("Enabled", true);
+            formItems.Add("Visible", TXAUT != "0");
+            formItems.Add("Enabled", TXAUT == "2");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -226,9 +249,10 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("AffectsFormMode", false);
             formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", false);
             formItems.Add("ChooseFromListUID", uniqueID_TaxInvoiceSentCFL);
             formItems.Add("ChooseFromListAlias", "DocEntry");
+            formItems.Add("Visible", TXAUT != "0");
+            formItems.Add("Enabled", TXAUT == "2");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -245,6 +269,8 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("LinkTo", "BDO_TaxDoc");
             formItems.Add("LinkedObjectType", objectType);
+            formItems.Add("Visible", TXAUT != "0");
+            formItems.Add("Enabled", TXAUT == "2");
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -348,6 +374,8 @@ namespace BDO_Localisation_AddOn
                     oItem = oForm.Items.Item("BDO_TaxDoc");
                     oItem.Visible = true;
                 }
+
+                
             }
             catch (Exception ex)
             {
@@ -357,6 +385,8 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
         }
 
         public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)

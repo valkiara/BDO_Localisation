@@ -92,19 +92,40 @@ namespace BDO_Localisation_AddOn
 
         public static void addMenusForAddOn()
         {
+
+            string errorText = "";
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            string WBAUT = rsSettings["WBAUT"];
+            string TXAUT = rsSettings["TXAUT"];
+
             BDO_ProfitTaxBase.addMenus();
 
             BDO_ProfitTaxBaseType.addMenus();
 
-            BDO_WaybillsJournalSent.addMenus();
-
-            BDO_WaybillsJournalReceived.addMenus();
+            if (WBAUT != "0")
+            {
+                BDO_WaybillsJournalSent.addMenus();
+                BDO_WaybillsJournalReceived.addMenus();
+                BDO_Waybills.addMenus();
+                BDOSWaybillsAnalysisSent.addMenus();
+                BDOSWaybillsAnalysisReceived.addMenus();
+            }
 
             BDOSDepreciationAccrualWizard.addMenus();
 
             BDOSFuelWriteOffWizard.addMenus();
 
-            BDOSTaxJournal.addMenus();
+            if (TXAUT != "0")
+            {
+                BDOSTaxJournal.addMenus();
+                BDO_TaxInvoiceSent.addMenus();
+                BDO_TaxInvoiceReceived.addMenus();
+            }
 
             BDO_Drivers.addMenus();
 
@@ -118,21 +139,11 @@ namespace BDO_Localisation_AddOn
 
             BDOSFuelConsumptionAct.addMenus();
 
-            BDO_Waybills.addMenus();
-
-            BDO_TaxInvoiceSent.addMenus();
-
             BDOSARDownPaymentVATAccrual.addMenus();
 
             BDO_ProfitTaxAccrual.addMenus();
 
-            BDO_TaxInvoiceReceived.addMenus();
-
             BDOSInternetBanking.addMenus();
-
-            BDOSWaybillsAnalysisSent.addMenus();
-
-            BDOSWaybillsAnalysisReceived.addMenus();
 
             BDOSDeleteUDF.addMenus();
 
@@ -1101,6 +1112,255 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public static void WB_TAX_AuthorizationsItems(SAPbouiCOM.Form oForm, string WBAUT, string TXAUT, bool DECAUT = false)
+        {
+            ///////////////WB
+
+            try
+            {
+                oForm.Items.Item("CreateDocs").Visible = oForm.Items.Item("CreateDocs").Visible && (WBAUT != "0");
+                oForm.Items.Item("CreateDocs").Enabled = oForm.Items.Item("CreateDocs").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("WbSentRS").Visible = oForm.Items.Item("WbSentRS").Visible && (WBAUT != "0");
+                oForm.Items.Item("WbSentRS").Enabled = oForm.Items.Item("WbSentRS").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("33_U_BC").Visible = oForm.Items.Item("33_U_BC").Visible && (WBAUT != "0");
+                oForm.Items.Item("33_U_BC").Enabled = oForm.Items.Item("33_U_BC").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WblTxt").Visible = oForm.Items.Item("BDO_WblTxt").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WblTxt").Enabled = oForm.Items.Item("BDO_WblTxt").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WblDoc").Visible = oForm.Items.Item("BDO_WblDoc").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WblDoc").Enabled = oForm.Items.Item("BDO_WblDoc").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("WBOpBDO_WblLBer").Visible = oForm.Items.Item("BDO_WblLB").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WblLB").Enabled = oForm.Items.Item("BDO_WblLB").Enabled && (WBAUT != "1");
+            }
+            catch { }
+
+            try
+            {
+                oForm.Items.Item("WBOper").Visible = oForm.Items.Item("WBOper").Visible && (WBAUT != "0");
+                oForm.Items.Item("WBOper").Enabled = oForm.Items.Item("WBOper").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WBNo").Visible = oForm.Items.Item("BDO_WBNo").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WBNo").Enabled = oForm.Items.Item("BDO_WBNo").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WBNoST").Visible = oForm.Items.Item("BDO_WBNoST").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WBNoST").Enabled = oForm.Items.Item("BDO_WBNoST").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("WBInfoST").Visible = oForm.Items.Item("WBInfoST").Visible && (WBAUT != "0");
+                oForm.Items.Item("WBInfoST").Enabled = oForm.Items.Item("WBInfoST").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WBStST").Visible = oForm.Items.Item("BDO_WBStST").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WBStST").Enabled = oForm.Items.Item("BDO_WBStST").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WBIDT").Visible = oForm.Items.Item("BDO_WBIDT").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WBIDT").Enabled = oForm.Items.Item("BDO_WBIDT").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("actDateT").Visible = oForm.Items.Item("actDateT").Visible && (WBAUT != "0");
+                oForm.Items.Item("actDateT").Enabled = oForm.Items.Item("actDateT").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WBNo").Visible = oForm.Items.Item("actDateT").Enabled && (WBAUT != "0");
+                oForm.Items.Item("BDO_WBNo").Enabled = oForm.Items.Item("BDO_WBNo").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WBSt").Visible = oForm.Items.Item("BDO_WBSt").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WBSt").Enabled = oForm.Items.Item("BDO_WBSt").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WBSt").Visible = oForm.Items.Item("BDO_WBSt").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WBSt").Enabled = oForm.Items.Item("BDO_WBSt").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_WBID").Visible = oForm.Items.Item("BDO_WBID").Visible && (WBAUT != "0");
+                oForm.Items.Item("BDO_WBID").Enabled = oForm.Items.Item("BDO_WBID").Enabled && (WBAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("actDate").Visible = oForm.Items.Item("actDate").Visible && (WBAUT != "0");
+                oForm.Items.Item("actDate").Enabled = oForm.Items.Item("actDate").Enabled && (WBAUT != "1");
+            }
+            catch { }
+
+
+
+            ///////////////TAX
+            try
+            {
+                oForm.Items.Item("updtTax").Visible = oForm.Items.Item("updtTax").Visible && (TXAUT != "0");
+                oForm.Items.Item("updtTax").Enabled = oForm.Items.Item("updtTax").Enabled && (TXAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("TxOperRS").Visible = oForm.Items.Item("TxOperRS").Visible && (TXAUT != "0");
+                oForm.Items.Item("TxOperRS").Enabled = oForm.Items.Item("TxOperRS").Enabled && (TXAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("TxOperRS2").Visible = oForm.Items.Item("TxOperRS2").Visible && (TXAUT != "0");
+                oForm.Items.Item("TxOperRS2").Enabled = oForm.Items.Item("TxOperRS2").Enabled && (TXAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("postB").Visible = oForm.Items.Item("postB").Visible && (TXAUT != "0");
+                oForm.Items.Item("postB").Enabled = oForm.Items.Item("postB").Enabled && (TXAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_TaxCan").Visible = oForm.Items.Item("BDO_TaxCan").Visible && (TXAUT != "0");
+                oForm.Items.Item("BDO_TaxCan").Enabled = oForm.Items.Item("BDO_TaxCan").Enabled && (TXAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_TaxTxt").Visible = oForm.Items.Item("BDO_TaxTxt").Visible && (TXAUT != "0");
+                oForm.Items.Item("BDO_TaxTxt").Enabled = oForm.Items.Item("BDO_TaxTxt").Enabled && (TXAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_TaxDoc").Visible = oForm.Items.Item("BDO_TaxDoc").Visible && (TXAUT != "0");
+                oForm.Items.Item("BDO_TaxDoc").Enabled = oForm.Items.Item("BDO_TaxDoc").Enabled && (TXAUT != "1");
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("BDO_TaxLB").Visible = oForm.Items.Item("BDO_TaxLB").Visible && (TXAUT != "0");
+                oForm.Items.Item("BDO_TaxLB").Enabled = oForm.Items.Item("BDO_TaxLB").Enabled && (TXAUT != "1");
+            }
+            catch { }
+
+            ///////////////DEC
+            try
+            {
+                oForm.Items.Item("addDecl").Enabled = oForm.Items.Item("addDecl").Enabled && DECAUT;
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("addDecl2").Enabled = oForm.Items.Item("addDecl2").Enabled && DECAUT;
+            }
+            catch { }
+
+            
+
+        }
+
+        public static void WB_TAX_AuthorizationsOperations(string DocType, SAPbouiCOM.BoEventTypes EventType, out string errorText)
+        {
+            
+            errorText = null;
+            string errorTextWB = null;
+            string WBAUT = "";
+            string TXAUT = "";
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
+
+            if(EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE
+            || EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_DELETE ) 
+            {
+                if (DocType == "UDO_FT_UDO_F_BDO_WBLD_D")
+                {
+                    if (WBAUT != "2")
+                    {
+                        errorText = BDOSResources.getTranslate("UserAuthError");
+                    }
+                }
+                else if (DocType == "UDO_FT_UDO_F_BDO_TAXR_D" || DocType == "UDO_FT_UDO_F_BDO_TAXS_D")
+                {
+                    if (TXAUT != "2")
+                    {
+                        errorText = BDOSResources.getTranslate("UserAuthError");
+                    }
+                }
+            }
+        }
+
+        public static void TAXDeclaration_AuthorizationsOperations(out string errorText)
+        {
+
+            errorText = null;
+            string errorTextWB = null;
+            string DCAT = "";
+
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                DCAT = "1";
+
+            }
+            else
+            {
+                DCAT = rsSettings["DCAT"];
+
+            }
+
+
+            if (DCAT != "2")
+            {
+                errorText = BDOSResources.getTranslate("UserAuthError");
+            }
+
+
         }
     }
 }

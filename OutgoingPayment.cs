@@ -4971,7 +4971,18 @@ namespace BDO_Localisation_AddOn
                 string partnerTaxCode = oDataTable.GetValue("PartnerTaxCode", i);
                 string blnkAgr = oDataTable.GetValue("BlnkAgr", i);
                 string useBlaAgRt = oDataTable.GetValue("UseBlaAgRt", i);
-                SAPbobsCOM.Recordset oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, "S");
+
+                SAPbobsCOM.Recordset oRecordSet = null;
+                if (transactionType == OperationTypeFromIntBank.ReturnToCustomer.ToString())
+                {
+                    oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, "C");
+                }
+                else
+                {
+                    oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, "S");
+                }
+               
+
                 if (oRecordSet == null)
                 {
                     errorText = BDOSResources.getTranslate("CouldNotFindBusinessPartner") + "! " + BDOSResources.getTranslate("Account") + " \"" + partnerAccountNumber + currency + "\"";
@@ -5000,7 +5011,16 @@ namespace BDO_Localisation_AddOn
                 oRecordSet = null;
 
                 oPayments.DocObjectCode = SAPbobsCOM.BoPaymentsObjectType.bopot_OutgoingPayments;
+
+                if (transactionType == OperationTypeFromIntBank.ReturnToCustomer.ToString())
+                {
+                    oPayments.DocTypte = SAPbobsCOM.BoRcptTypes.rCustomer;
+                }
+                else
+                {
                 oPayments.DocTypte = SAPbobsCOM.BoRcptTypes.rSupplier;
+                }
+                
                 oPayments.DocDate = docDate;
                 oPayments.TaxDate = docDate;
 
@@ -6727,6 +6747,8 @@ namespace BDO_Localisation_AddOn
         {
             string query = @"SELECT
             ""OVPM"".""DocEntry"" AS ""DocEntry"",
+            ""OVPM"".""PrjCode"" AS ""Project"",
+
             ""OVPM"".""DocNum"" AS ""DocNum"",
             ""OVPM"".""DocType"" AS ""DocType"",
             ""OVPM"".""DocDate"" AS ""DocDate"",

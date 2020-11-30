@@ -13,6 +13,8 @@ namespace BDO_Localisation_AddOn
 {
     static class ArCorrectionInvoice
     {
+        public static string WBAUT = null;
+        public static string TXAUT = null;
         public static void CreateUserFields(out string errorText)
         {
             #region Correction Invoice Type
@@ -38,6 +40,20 @@ namespace BDO_Localisation_AddOn
 
         private static void CreateFormItems(Form oForm, out string errorText)
         {
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
+
 
             #region Waybill
 
@@ -294,6 +310,7 @@ namespace BDO_Localisation_AddOn
                 {
                     CreateFormItems(oForm, out _);
                     FormDataLoad(oForm, out _);
+                    FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
                 }
                 else
                 {
@@ -476,6 +493,8 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(false);
             }
+
+            
         }
 
         public static void GetBaseDoc(int docEntry, out int baseEntry)

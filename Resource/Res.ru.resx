@@ -3532,4 +3532,37 @@
   <data name="ARReserveInvoice" xml:space="preserve">
     <value>AR Reserve Invoice</value>
   </data>
+  <data name="MaxRate" xml:space="preserve">
+    <value>Max Rate</value>
+  </data>
+  <data name="MinRate" xml:space="preserve">
+    <value>Min Rate</value>
+  </data>
+  <data name="ReturnFromSupplier" xml:space="preserve">
+    <value>Return From Supplier</value>
+  </data>
+  <data name="ReturnToCustomer" xml:space="preserve">
+    <value>Return To Customer</value>
+  </data>
+  <data name="NoIncomingPaymentCanBeCreated" xml:space="preserve">
+    <value>ou can not add incoming payment, because document type is output</value>
+  </data>
+  <data name="NoOutgoingPaymentCanBeCreated" xml:space="preserve">
+    <value>ou can not add outgoing ing payment, because document type is input</value>
+  </data>
+  <data name="SplitAndPullFromDocuments" xml:space="preserve">
+    <value>Split And Pull From Documents</value>
+  </data>
+  <data name="TransportationSide" xml:space="preserve">
+    <value>Transportation cost payer</value>
+  </data>
+  <data name="UserAuthError" xml:space="preserve">
+    <value>User has no authorization to execute operation</value>
+  </data>
+  <data name="TransportDate" xml:space="preserve">
+    <value>Transportaion date</value>
+  </data>
+  <data name="WBAutError" xml:space="preserve">
+    <value>User has no authorization to execute operation</value>
+  </data>
 </root>

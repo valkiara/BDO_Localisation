@@ -91,50 +91,75 @@ namespace BDO_Localisation_AddOn
 
             addCrystalReport(reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
 
-            //მიღებული ა/ფ ანალიზი
-            reportName = "Tax Invoice Received Analysis";
-            reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report
-            rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_TaxInvoiceReceivedAnalysis.rpt" : @"\CrystalReports_SQL\Report_TaxInvoiceReceivedAnalysis_SQL.rpt");
-            menuID = "43534"; //Purchasing Reports/Purchasing
-            layoutCode = null;
+            //string WBAUT;
+            //string TXAUT;
+            //string errorTextWB = null;
+            //Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            //if (errorTextWB != null)
+            //{
+            //    WBAUT = "2";
+            //    TXAUT = "2";
+            //}
+            //else
+            //{
+            //    WBAUT = rsSettings["WBAUT"];
+            //    TXAUT = rsSettings["TXAUT"];
+            //}
 
-            layoutCode = getReportlayoutCode( reportName, reportTypeCode, out errorText);
+            //if (TXAUT != "0")
+            //{
 
-            addCrystalReport( reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+                //მიღებული ა/ფ ანალიზი
+                reportName = "Tax Invoice Received Analysis";
+                reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report
+                rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_TaxInvoiceReceivedAnalysis.rpt" : @"\CrystalReports_SQL\Report_TaxInvoiceReceivedAnalysis_SQL.rpt");
+                menuID = "43534"; //Purchasing Reports/Purchasing
+                layoutCode = null;
 
-            //შესყიდვის ფაქტურების ანგარიშგება
-            reportName = "Purchase Tax Invoice Analysis";
-            reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report
-            rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_PurchaseTaxInvoiceAnalysis.rpt" : @"\CrystalReports_SQL\Report_PurchaseTaxInvoiceAnalysis_SQL.rpt");
-            menuID = "43534"; //Purchasing Reports/Purchasing
-            layoutCode = null;
+                layoutCode = getReportlayoutCode(reportName, reportTypeCode, out errorText);
 
-            layoutCode = getReportlayoutCode(reportName, reportTypeCode, out errorText);
+                addCrystalReport(reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+                                             
+                //შესყიდვის ფაქტურების ანგარიშგება
+                reportName = "Purchase Tax Invoice Analysis";
+                reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report
+                rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_PurchaseTaxInvoiceAnalysis.rpt" : @"\CrystalReports_SQL\Report_PurchaseTaxInvoiceAnalysis_SQL.rpt");
+                menuID = "43534"; //Purchasing Reports/Purchasing
+                layoutCode = null;
 
-            addCrystalReport(reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+                layoutCode = getReportlayoutCode(reportName, reportTypeCode, out errorText);
 
-            //მიღებული ავანსის ა/ფ ანალიზი
-            reportName = "Down Payment Tax Invoice Received Analysis";
-            reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report
-            rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_DPTaxInvoiceReceivedAnalysis.rpt" : @"\CrystalReports_SQL\Report_DPTaxInvoiceReceivedAnalysis_SQL.rpt");
-            menuID = "43534"; //Purchasing Reports/Purchasing
-            layoutCode = null;
-
-            layoutCode = getReportlayoutCode( reportName, reportTypeCode, out errorText);
-
-            addCrystalReport( reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+                addCrystalReport(reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
 
 
-            //გაცემული ა/ფ ანალიზი
-            reportName = "Tax Invoice Sent Analysis";
-            reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report
-            rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_TaxInvoiceSentAnalysis.rpt" : @"\CrystalReports_SQL\Report_TaxInvoiceSentAnalysis_SQL.rpt");
-            menuID = "12800"; //Sales Reports/Sales
-            layoutCode = null;
+                //გაცემული ა/ფ ანალიზი
+                reportName = "Tax Invoice Sent Analysis";
+                reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report
+                rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_TaxInvoiceSentAnalysis.rpt" : @"\CrystalReports_SQL\Report_TaxInvoiceSentAnalysis_SQL.rpt");
+                menuID = "12800"; //Sales Reports/Sales
+                layoutCode = null;
 
-            layoutCode = getReportlayoutCode( reportName, reportTypeCode, out errorText);
+                layoutCode = getReportlayoutCode(reportName, reportTypeCode, out errorText);
 
-            addCrystalReport( reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+                addCrystalReport(reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+
+
+                //მიღებული ავანსის ა/ფ ანალიზი
+                reportName = "Down Payment Tax Invoice Received Analysis";
+                reportTypeCode = "RCRI"; //Use TypeCode "RCRI" to specify a Crystal Report
+                rptFilePath = startupPath + (hanaDB ? @"\CrystalReports\Report_DPTaxInvoiceReceivedAnalysis.rpt" : @"\CrystalReports_SQL\Report_DPTaxInvoiceReceivedAnalysis_SQL.rpt");
+                menuID = "43534"; //Purchasing Reports/Purchasing
+                layoutCode = null;
+
+                layoutCode = getReportlayoutCode(reportName, reportTypeCode, out errorText);
+
+                addCrystalReport(reportName, reportTypeCode, rptFilePath, menuID, SAPbobsCOM.ReportLayoutCategoryEnum.rlcCrystal, ref layoutCode, out errorText);
+
+
+
+            //}
+
+
 
             //მარაგების მოძრაობა
             reportName = "Stock Turnover";

@@ -13,6 +13,10 @@ namespace BDO_Localisation_AddOn
 {
     static partial class ARInvoice
     {
+
+        public static string WBAUT = null;
+        public static string TXAUT = null;
+
         private static Dictionary<int,decimal> InitialLineNetTotals = new Dictionary<int, decimal>();
         public static void createFormItems(Form oForm, out string errorText)
         {
@@ -20,6 +24,21 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formItems = null;
 
             string itemName = "";
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
+
+
 
             //<-------------------------------------------სასაქონლო ზედნადები----------------------------------->
             double height = oForm.Items.Item("86").Height;
@@ -318,6 +337,9 @@ namespace BDO_Localisation_AddOn
 
             StaticText oStaticText = null;
             oForm.Freeze(true);
+
+            SetVisibility(oForm);
+
             try
             {
                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OINV").GetValue("DocEntry", 0));
@@ -1031,6 +1053,8 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item("283").Visible = !isDiscountUsed;
             oForm.Items.Item("42").Visible = !isDiscountUsed;
             oForm.Items.Item("DiscountE").Visible = isDiscountUsed;
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
         }
 
         private static void SetInitialLineNetTotals(Form oForm, string column, int row)

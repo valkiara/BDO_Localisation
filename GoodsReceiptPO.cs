@@ -10,6 +10,9 @@ namespace BDO_Localisation_AddOn
 {
     class GoodsReceiptPO
     {
+                public static string WBAUT = null;
+                public static string TXAUT = null;
+
         public static void createUserFields(out string errorText)
         {
             errorText = null;
@@ -22,8 +25,21 @@ namespace BDO_Localisation_AddOn
 
             BDO_WBReceivedDocs.createFormItems(oForm, "OPDN", out errorText);
 
-            Dictionary<string, object> formItems;
-            string itemName;
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
+
+            Dictionary<string, object> formItems = null;
+            string itemName = "";
 
             SAPbouiCOM.Item oItem = oForm.Items.Item("70");
             int height = oItem.Height;
@@ -221,6 +237,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.BeforeAction)
                     {
                         createFormItems(oForm, out errorText);
+                        FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
                     }
                 }
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)

@@ -9,6 +9,9 @@ namespace BDO_Localisation_AddOn
 {
     static partial class StockTransfer
     {
+        public static string WBAUT = null;
+        public static string TXAUT = null;
+
         public static bool ReserveInvoiceAsService = false;
 
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
@@ -22,6 +25,21 @@ namespace BDO_Localisation_AddOn
             int left_s = oForm.Items.Item("33").Left;
             int left_e = oItem.Left;
             int width = oItem.Width;
+
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
+
 
             string caption = BDOSResources.getTranslate("CreateWaybill");
             itemName = "BDO_WblTxt"; //10 characters
@@ -413,6 +431,8 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
         }
 
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
@@ -553,6 +573,7 @@ namespace BDO_Localisation_AddOn
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
 
                     formDataLoad(oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & pVal.BeforeAction == false)

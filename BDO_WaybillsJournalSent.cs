@@ -9,9 +9,24 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_WaybillsJournalSent
     {
+        public static string WBAUT = null;
+        public static string TXAUT = null;
         public static void createForm(out string errorText)
         {
             errorText = null;
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
 
             //ფორმის აუცილებელი თვისებები
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
@@ -775,6 +790,8 @@ namespace BDO_Localisation_AddOn
 
                 oForm.Visible = true;
                 oForm.Select();
+
+                FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
             }
 
             GC.Collect();

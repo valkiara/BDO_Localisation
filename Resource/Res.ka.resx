@@ -3562,4 +3562,37 @@
   <data name="ARReserveInvoice" xml:space="preserve">
     <value>რეალიზაციის რეზერვი</value>
   </data>
+  <data name="MaxRate" xml:space="preserve">
+    <value>მაქს. კურსი</value>
+  </data>
+  <data name="MinRate" xml:space="preserve">
+    <value>მინ. კურსი</value>
+  </data>
+  <data name="ReturnFromSupplier" xml:space="preserve">
+    <value>დაბრუნება მომწოდებლისგან</value>
+  </data>
+  <data name="ReturnToCustomer" xml:space="preserve">
+    <value>დაბრუნება მყიდველისთვის</value>
+  </data>
+  <data name="NoIncomingPaymentCanBeCreated" xml:space="preserve">
+    <value>არ შეიძლება ჩარიცხვის დოკუმენტის შექმნა, როდესაც ტიპი არის გასავალი!</value>
+  </data>
+  <data name="NoOutgoingPaymentCanBeCreated" xml:space="preserve">
+    <value>არ შეიძლება გადარიცხვის  დოკუმენტის შექმნა, როდესაც ტიპი არის შემოსავალი!</value>
+  </data>
+  <data name="SplitAndPullFromDocuments" xml:space="preserve">
+    <value>Split And Pull From Documents</value>
+  </data>
+  <data name="TransportationSide" xml:space="preserve">
+    <value>ტრანსპორტირების ხარჯის გამწევი</value>
+  </data>
+  <data name="UserAuthError" xml:space="preserve">
+    <value>თქვენს მომხმარებელს არ აქვს ოპერაციის შესრულების უფლება</value>
+  </data>
+  <data name="TransportDate" xml:space="preserve">
+    <value>ტრასნპორტირების თარიღი</value>
+  </data>
+  <data name="WBAutError" xml:space="preserve">
+    <value>მომხმარებელს არ აქვს ოპერაციის განხორციელების უფლება</value>
+  </data>
 </root>

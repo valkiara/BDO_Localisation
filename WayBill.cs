@@ -1176,8 +1176,56 @@ namespace BDO_Localisation_AddOn
 
                     if (StartAddress == "blank" && START_ADDRESS != "") continue;                    
                     if (EndAddress == "blank" && END_ADDRESS != "") continue;
-                    if (StartAddress != "" && StartAddress!="blank" && StartAddress != START_ADDRESS) continue;
-                    if (EndAddress != "" && EndAddress!="blank" && EndAddress != END_ADDRESS) continue;
+
+                    if (StartAddress != "" && StartAddress != "blank")
+                    {
+                        if (StartAddress.StartsWith("*") && StartAddress.EndsWith("*"))
+                        {                            
+                            if (!START_ADDRESS.Contains(StartAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else if (StartAddress.StartsWith("*"))
+                        {                            
+                            if (!START_ADDRESS.EndsWith(StartAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else if (StartAddress.EndsWith("*"))
+                        {                            
+                            if (!START_ADDRESS.StartsWith(StartAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else
+                        {                            
+                            if (StartAddress.Replace("*", "") != START_ADDRESS)
+                                continue;
+                        }
+                    }
+                    if (EndAddress != "" && EndAddress != "blank")
+                    {
+                        if (EndAddress.StartsWith("*") && EndAddress.EndsWith("*"))
+                        {
+                            if (!END_ADDRESS.Contains(EndAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else if (EndAddress.StartsWith("*"))
+                        {
+                            if (!END_ADDRESS.EndsWith(EndAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else if (EndAddress.EndsWith("*"))
+                        {
+                            if (!END_ADDRESS.StartsWith(EndAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else
+                        {
+                            if (EndAddress.Replace("*", "") != END_ADDRESS)
+                                continue;
+                        }
+                    }
+
+                           
+                   
 
                     waybill_map = new Dictionary<string, string>();
 

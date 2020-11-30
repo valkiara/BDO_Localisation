@@ -8,8 +8,12 @@ using System.Data;
 
 namespace BDO_Localisation_AddOn
 {
+   
     static partial class APInvoice
     {
+        public static string WBAUT = null;
+        public static string TXAUT = null;
+
         public static bool ProfitTaxTypeIsSharing = false;
 
         public static void createUserFields(out string errorText)
@@ -99,6 +103,20 @@ namespace BDO_Localisation_AddOn
             double left_s = oForm.Items.Item("86").Left;
             double left_e = oForm.Items.Item("46").Left;
             double width_e = oForm.Items.Item("46").Width;
+
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
 
             //-------------------------------------------ანგარიშ-ფაქტურა----------------------------------->
             top = top + height * 1.5 + 1;
@@ -682,7 +700,7 @@ namespace BDO_Localisation_AddOn
                     oEditText.ChooseFromListAlias = "DocEntry";
                 }
 
-
+                
 
             }
             catch (Exception ex)
@@ -695,6 +713,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
         }
 
         public static List<int> getDocListAPCreditMemo(string docEntryAPInvoice)

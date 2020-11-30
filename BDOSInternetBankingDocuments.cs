@@ -20,7 +20,7 @@ namespace BDO_Localisation_AddOn
         public static bool automaticPaymentInternetBanking;
         public static bool openFromBlnkAgr = false;
 
-        public static void createForm(  SAPbouiCOM.Form FormBDOSInternetBanking, DateTime docDate, string cardCode, string cardName, string BPCurrency, decimal amount, string currency, decimal downPaymentAmount, decimal invoicesAmount, decimal paymentOnAccount, decimal addDPAmount, decimal docRateIN, out SAPbouiCOM.Form oForm, out string errorText)
+        public static void createForm(  SAPbouiCOM.Form FormBDOSInternetBanking, DateTime docDate, string cardCode, string cardName, string BPCurrency, decimal amount, string currency, decimal downPaymentAmount, decimal invoicesAmount, decimal paymentOnAccount, decimal addDPAmount, decimal docRateIN, string transactionType,out SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -822,7 +822,26 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("Currency", SAPbouiCOM.BoFieldsType.ft_Text, 50); //დოკუმენტის ვალუტა
                     oDataTable.Columns.Add("TotalPaymentLocal", SAPbouiCOM.BoFieldsType.ft_Sum); //Default - Balance Due
 
+                    
+                    oDataTable.Columns.Add("Project", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
+                    oDataTable.Columns.Add("BlnkAgr", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20);
+                    oDataTable.Columns.Add("UseBlaAgRt", SAPbouiCOM.BoFieldsType.ft_Text, 1); 
+                    
+
                     oDataTable.Columns.Add("Test", SAPbouiCOM.BoFieldsType.ft_Text, 100);
+
+
+                    bool multiSelectionAgr = false;
+                    string objectTypeAgr = "1250000025"; //Blanket Agreement
+                    string uniqueID_BlnkAgrCFL = "BlnkAgr_CFL";
+                    FormsB1.addChooseFromList(oForm, multiSelectionAgr, objectTypeAgr, uniqueID_BlnkAgrCFL);
+
+                    bool multiSelectionPr = false;
+                    string objectTypePr = "63"; //Project
+                    string uniqueID_lf_Project = "Project_CFLA";
+                    FormsB1.addChooseFromList(oForm, multiSelectionPr, objectTypePr, uniqueID_lf_Project);
+
+
 
                     SAPbouiCOM.LinkedButton oLink;
 
@@ -856,7 +875,14 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.Editable = false;
                             oLink = oColumn.ExtendedObject;
+                            if(transactionType == OperationTypeFromIntBank.ReturnFromSupplier.ToString())
+                            {
+                                oLink.LinkedObjectType = "163"; 
+                            }
+                            else
+                            {
                             oLink.LinkedObjectType = "13"; // - A/R Invoice, "14" - A/R Credit Note, A/R Down Payment Request - "203", Journal Entry - "30"
+                            }
                             oColumn.DataBind.Bind(UID, columnName);
                             oColumn.AffectsFormMode = false;
                         }
@@ -892,6 +918,7 @@ namespace BDO_Localisation_AddOn
                             //"13" - A/R Invoice, "14" - A/R Credit Note, A/R Down Payment Request - "203", Journal Entry - "30"
 
                             oColumn.ValidValues.Add("13", "IN"); //BDOSResources.getTranslate("ARInvoice")
+                            oColumn.ValidValues.Add("163", "AP"); //BDOSResources.getTranslate("ARInvoice")
                             oColumn.ValidValues.Add("14", "CN"); //BDOSResources.getTranslate("ARCreditNote")
                             oColumn.ValidValues.Add("203", "DT"); //BDOSResources.getTranslate("ARDownPaymentRequest")
                             oColumn.ValidValues.Add("30", "JE"); //BDOSResources.getTranslate("JournalEntry")
@@ -935,6 +962,28 @@ namespace BDO_Localisation_AddOn
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind(UID, columnName);
                             oColumn.AffectsFormMode = false;
+                        }
+                        else if (columnName == "BlnkAgr")
+                        {
+                            oColumn = oColumns.Add("BlnkAgr", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
+                            oColumn.Editable = false;
+                            oColumn.DataBind.Bind(UID, columnName);
+                            oColumn.ChooseFromListUID = uniqueID_BlnkAgrCFL;
+                            oColumn.ChooseFromListAlias = "AbsID";
+                            oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = "1250000025";
+                        }
+                        else if (columnName == "Project")
+                        {
+                            oColumn = oColumns.Add("Project", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
+                            oColumn.Editable = false;
+                            oColumn.DataBind.Bind(UID, columnName);
+                            oColumn.ChooseFromListUID = uniqueID_lf_Project;
+                            oColumn.ChooseFromListAlias = "PrjCode";
+                            oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = "63";
                         }
                         else
                         {
@@ -1140,6 +1189,12 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = docType; //ARCreditNote
                         }
+                        else if (docType == "163")
+                        {
+                            oColumn = oMatrix.Columns.Item(pVal.ColUID);
+                            SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = docType; //ARCreditNote
+                        }
                         else if (docType == "203")
                         {
                             oColumn = oMatrix.Columns.Item(pVal.ColUID);
@@ -1236,6 +1291,7 @@ namespace BDO_Localisation_AddOn
                         string docType = oDataTable.GetValue("DocType", i);
                         decimal totalPayment = Convert.ToDecimal(oDataTable.GetValue("TotalPayment", i));
                         decimal totalPaymentLocal = Convert.ToDecimal(oDataTable.GetValue("TotalPaymentLocal", i));
+                        totalPaymentLocal = CommonFunctions.roundAmountByGeneralSettings(totalPaymentLocal, "Sum");
                         string docCur = Convert.ToString(oDataTable.GetValue("Currency", i));
 
                         if (selected == true)
@@ -1247,7 +1303,7 @@ namespace BDO_Localisation_AddOn
                                 totalPayment = totalPaymentLocal;
                             }
 
-                            if (docType == "13" || docType == "14" || docType == "30")
+                            if (docType == "13" || docType == "163" || docType == "14" || docType == "30")
                             {
                                 if (selected == true)
                                     invAmt = invAmt + totalPayment;
@@ -1331,7 +1387,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void fillInvoicesMTR(  SAPbouiCOM.Form oForm, string blnkAgr, out string errorText)
+        public static void fillInvoicesMTR(  SAPbouiCOM.Form oForm, string blnkAgr, string transactionType, out string errorText)
         {
             errorText = null;
 
@@ -1348,9 +1404,15 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, true);
                 return;
             }
-
-            string query = GetInvoicesMTRQuery(dateE, cardCodeE, blnkAgr);
-
+            string query = "";
+            if (transactionType == OperationTypeFromIntBank.ReturnFromSupplier.ToString())
+            {
+                query = GetInvoicesMTRQuerySupplier(dateE, cardCodeE, blnkAgr);
+            }
+            else
+            {
+                query = GetInvoicesMTRQuery(dateE, cardCodeE, blnkAgr);
+            }
             oRecordSet.DoQuery(query);
 
             oDataTable.Rows.Clear();
@@ -1359,6 +1421,8 @@ namespace BDO_Localisation_AddOn
             {
                 int rowIndex = 0;
                 int DocEntry;
+                int AgrNo;
+                string PrjCode;
                 int DocNum;
                 int InstallmentID;
                 string DocType;
@@ -1366,14 +1430,18 @@ namespace BDO_Localisation_AddOn
                 string expression;
                 DataRow[] foundRows;
                 int OverdueDays;
+                string UseBlaAgRt;
 
                 while (!oRecordSet.EoF)
                 {
                     DocEntry = Convert.ToInt32(oRecordSet.Fields.Item("DocEntry").Value);
+                    AgrNo = Convert.ToInt32(oRecordSet.Fields.Item("AgrNo").Value);
+                    PrjCode = Convert.ToString(oRecordSet.Fields.Item("Project").Value);
                     DocNum = Convert.ToInt32(oRecordSet.Fields.Item("DocNum").Value);
                     InstallmentID = Convert.ToInt32(oRecordSet.Fields.Item("InstallmentID").Value);
                     DocType = Convert.ToString(oRecordSet.Fields.Item("ObjType").Value);
                     DueDate = oRecordSet.Fields.Item("DueDate").Value;
+                    UseBlaAgRt =  Convert.ToString(oRecordSet.Fields.Item("UseBlaAgRt").Value);
 
                     expression = "DocEntry = '" + DocEntry + "' and DocNum = '" + DocNum + "' and DocType = '" + DocType + "'" + " and LineNumExportMTR = '" + BDOSInternetBanking.CurrentRowExportMTRForDetail + "' and DueDate = '" + DueDate + "' and InstallmentID = '" + InstallmentID + "'";
                     foundRows = BDOSInternetBanking.TableExportMTRForDetail.Select(expression);
@@ -1400,6 +1468,11 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue("TotalPayment", rowIndex, Convert.ToDouble(foundRows[0]["TotalPayment"]));
                         oDataTable.SetValue("Currency", rowIndex, foundRows[0]["Currency"]);
                         oDataTable.SetValue("TotalPaymentLocal", rowIndex, Convert.ToDouble(foundRows[0]["TotalPaymentLocal"]));
+                        oDataTable.SetValue("BlnkAgr", rowIndex, AgrNo);
+                        oDataTable.SetValue("Project", rowIndex, PrjCode);
+                        oDataTable.SetValue("UseBlaAgRt", rowIndex, UseBlaAgRt);
+                        
+
                     }
                     else
                     {
@@ -1411,6 +1484,7 @@ namespace BDO_Localisation_AddOn
                         decimal TotalPayment = 0;
                         decimal TotalPaymentLocal = 0;
                         decimal InsTotal = 0;
+                        decimal rate = 0;
                         string DocCur = Convert.ToString(oRecordSet.Fields.Item("DocCur").Value);
 
                         if (string.IsNullOrEmpty(DocCur))
@@ -1427,7 +1501,7 @@ namespace BDO_Localisation_AddOn
                         {
                             NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator, NumberGroupSeparator = CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator };
 
-                            decimal rate = Convert.ToDecimal(oForm.DataSources.UserDataSources.Item("docRateINE").ValueEx, Nfi);
+                            rate = Convert.ToDecimal(oForm.DataSources.UserDataSources.Item("docRateINE").ValueEx, Nfi);
 
                             OpenAmount = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmountFC").Value);
                             TotalPayment = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmountFC").Value);
@@ -1442,11 +1516,21 @@ namespace BDO_Localisation_AddOn
                             }
                         }
 
+                        if (AgrNo != 0 && UseBlaAgRt == "Y" && DocCur!= Program.MainCurrency)
+                        {
+                            rate = BlanketAgreement.GetBlAgremeentCurrencyRate(AgrNo, out DocCur, date);
+                        }
+
                         if (foundRows.Count() > 0)
                         {
                             TotalPayment = TotalPayment - foundRows.Sum(row => row.Field<decimal>("TotalPayment"));
-                            TotalPaymentLocal = TotalPaymentLocal - foundRows.Sum(row => row.Field<decimal>("TotalPaymentLocal"));
+                            //TotalPaymentLocal = TotalPaymentLocal - foundRows.Sum(row => row.Field<decimal>("TotalPaymentLocal"));
+                            TotalPaymentLocal = TotalPayment * rate;
                         }
+
+                       
+
+                        
 
                         OverdueDays = Convert.ToInt32(oRecordSet.Fields.Item("OverdueDays").Value);
                         oDataTable.SetValue("LineNum", rowIndex, rowIndex + 1);
@@ -1466,6 +1550,10 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue("TotalPayment", rowIndex, Convert.ToDouble(TotalPayment));
                         oDataTable.SetValue("Currency", rowIndex, DocCur);
                         oDataTable.SetValue("TotalPaymentLocal", rowIndex, Convert.ToDouble(TotalPaymentLocal));
+                        oDataTable.SetValue("BlnkAgr", rowIndex, AgrNo);
+                        oDataTable.SetValue("Project", rowIndex, PrjCode);
+                        oDataTable.SetValue("UseBlaAgRt", rowIndex, UseBlaAgRt);
+                        
                     }
                     oRecordSet.MoveNext();
                     rowIndex++;
@@ -1509,6 +1597,9 @@ namespace BDO_Localisation_AddOn
             //WHERE TT0.""isIns"" = 'N' - moixsna filtri Reserve invoice
             string str = @"SELECT
             	 T0.""DocEntry"" AS ""DocEntry"",
+                 T0.""AgrNo""  AS ""AgrNo"",
+                 T0.""U_UseBlaAgRt""  AS ""UseBlaAgRt"", 
+                 T0.""Project""  AS ""Project"",
 	             T0.""DocNum"" AS ""DocNum"",
                  T0.""DocCur"" AS ""DocCur"",
             	 T0.""CardCode"" AS ""CardCode"",
@@ -1526,6 +1617,9 @@ namespace BDO_Localisation_AddOn
                  T0.""LineID"" AS ""LineID""," + betweenDays + @"             
             FROM ( SELECT
             	 TT0.""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                 TT0.""AgrNo"",
+                 TT0.""Project"",
             	 TT0.""DocNum"" AS ""DocNum"",
                  TT0.""DocCur"" AS ""DocCur"",
             	 T3.""CardCode"" AS ""CardCode"",
@@ -1552,6 +1646,9 @@ namespace BDO_Localisation_AddOn
             		OR (TT1.""Status"" = 'O' 
             			AND TT0.""CANCELED"" = 'N')) 
             	GROUP BY TT0.""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                 TT0.""AgrNo"",
+                 TT0.""Project"",
             	 TT0.""DocNum"",
                  TT0.""DocCur"",
             	 T3.""CardCode"",
@@ -1564,6 +1661,9 @@ namespace BDO_Localisation_AddOn
                  TT1.""InstlmntID"" 
             	UNION ALL SELECT
             	 TT0.""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                 TT0.""AgrNo"",
+                 TT0.""Project"",
             	 TT0.""DocNum"" AS ""DocNum"",
                  TT0.""DocCur"" AS ""DocCur"",
             	 T3.""CardCode"" AS ""CardCode"",
@@ -1589,6 +1689,9 @@ namespace BDO_Localisation_AddOn
             		OR (TT1.""Status"" = 'O' 
             			AND TT0.""CANCELED"" = 'N')) 
             	GROUP BY TT0.""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                TT0.""AgrNo"",
+                 TT0.""Project"",
             	 TT0.""DocNum"",
                  TT0.""DocCur"",
             	 T3.""CardCode"",
@@ -1600,6 +1703,9 @@ namespace BDO_Localisation_AddOn
                  TT1.""InstlmntID"" 
             	UNION ALL SELECT
             	 TT0.""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                 TT0.""AgrNo"",
+                 TT0.""Project"",
             	 TT0.""DocNum"" AS ""DocNum"",
                  TT0.""DocCur"" AS ""DocCur"",
             	 T3.""CardCode"" AS ""CardCode"",
@@ -1625,6 +1731,9 @@ namespace BDO_Localisation_AddOn
             		OR (TT1.""Status"" = 'O' 
             			AND TT0.""CANCELED"" = 'N')) 
             	GROUP BY TT0.""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                TT0.""AgrNo"",
+                 TT0.""Project"",
             	 TT0.""DocNum"",
                  TT0.""DocCur"",
             	 T3.""CardCode"",
@@ -1636,6 +1745,9 @@ namespace BDO_Localisation_AddOn
                  TT1.""InstlmntID"" 
                 UNION ALL SELECT
             	 TT0.""TransId"" AS ""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                 TT0.""AgrNo"",
+                 TT0.""Project"",
             	 TT0.""Number"" AS ""DocNum"",
                  TT0.""TransCurr"" AS ""DocCur"",
             	 T3.""CardCode"" AS ""CardCode"",
@@ -1659,6 +1771,9 @@ namespace BDO_Localisation_AddOn
             	 AND TT0.""TransType"" IN ('30', '24', '46')  
             	 AND TT0.""BtfStatus"" = 'O' AND (""TT1"".""BalDueDeb"" > '0' OR ""TT1"".""BalDueCred"" > '0') AND ""TT1"".""DprId"" IS NULL
             	 GROUP BY TT0.""TransId"",
+                 TT0.""U_UseBlaAgRt"",
+                     TT0.""AgrNo"",
+                 TT0.""Project"",
 	             	 TT0.""Number"",
                      TT0.""TransCurr"",
 	             	 T3.""CardCode"",
@@ -1668,7 +1783,139 @@ namespace BDO_Localisation_AddOn
 	             	 TT0.""ObjType"",
 	             	 TT1.""LineMemo"",
                      TT1.""Line_ID"") T0 
+            
+            ORDER BY T0.""LoanOperationType"" DESC,
+                     T0.""DueDate"",
+            	 T0.""DocNum""";
+
+            return str;
+        }
+
+        public static string GetInvoicesMTRQuerySupplier(string dateE, string cardCodeE, string blnkAgr)
+        {
+            DateTime date = FormsB1.DateFormats(dateE, "yyyyMMdd");
+            string betweenDays = "";
+
+            if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
+            {
+                betweenDays = @"DAYS_BETWEEN(T0.""DueDate"",'" + dateE + @"') AS ""OverdueDays"""; //date.ToString("yyyy-MM-dd")
+            }
+            else
+            {
+
+                betweenDays = @"DATEDIFF(DAY, T0.""DueDate"", '" + dateE + @"')  AS ""OverdueDays"" "; //date.ToString("yyyy-MM-dd")
+            }
+
+            //WHERE TT0.""isIns"" = 'N' - moixsna filtri Reserve invoice
+            string str = @"SELECT
+            	 T0.""DocEntry"" AS ""DocEntry"",
+                 T0.""U_UseBlaAgRt"" as ""UseBlaAgRt"",                 
+                 T0.""AgrNo""  AS ""AgrNo"",
+                 
+                 T0.""Project""  AS ""Project"",
+	             T0.""DocNum"" AS ""DocNum"",
+                 T0.""DocCur"" AS ""DocCur"",
+            	 T0.""CardCode"" AS ""CardCode"",
+            	 T0.""CardName"" AS ""CardName"",
+            	 T0.""DocDate"" AS ""DocDate"",
+            	 T0.""DueDate"" AS ""DueDate"",
+                 T0.""LoanOperationType"",
+            	 T0.""OpenAmount"" AS ""OpenAmount"",
+            	 T0.""InsTotal""  AS ""InsTotal"",
+            	 T0.""OpenAmountFC""  AS ""OpenAmountFC"",
+            	 T0.""InsTotalFC""  AS ""InsTotalFC"",
+            	 T0.""ObjType"" AS ""ObjType"",
+            	 T0.""Comments"" AS ""Comments"",
+                 T0.""InstlmntID"" AS ""InstallmentID"",
+                 T0.""LineID"" AS ""LineID""," + betweenDays + @"             
+            FROM ( SELECT
+            	 TT0.""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                 TT0.""AgrNo"",
+                 TT0.""Project"",
+            	 TT0.""DocNum"" AS ""DocNum"",
+                 TT0.""DocCur"" AS ""DocCur"",
+            	 T3.""CardCode"" AS ""CardCode"",
+            	 T3.""CardName"" AS ""CardName"",
+            	 TT0.""DocDate"" AS ""DocDate"",
+	             TT1.""DueDate"" AS ""DueDate""," +
+                (CommonFunctions.IsDevelopment() ? @"TT0.""U_BDOSLnOpTp""" : "''") + @" AS ""LoanOperationType"",            
+            	 TT0.""ObjType"" AS ""ObjType"",
+            	 TT0.""Comments"" AS ""Comments"",
+                 TT1.""InstlmntID"" AS ""InstlmntID"", 
+                 '0' AS ""LineID"",           	 
+            	 SUM((TT1.""InsTotal"" - TT1.""PaidToDate"")*-1 ) AS ""OpenAmount"",
+            	 SUM(TT1.""InsTotal""*-1) AS ""InsTotal"",
+                 SUM((TT1.""InsTotalFC"" - TT1.""PaidFC"")*-1) AS ""OpenAmountFC"",
+            	 SUM(TT1.""InsTotalFC""*-1) AS ""InsTotalFC"" 
+            	FROM OCPI TT0 
+            	INNER JOIN CPI6 TT1 ON TT0.""DocEntry"" = TT1.""DocEntry"" 
+            	INNER JOIN OCRD T3 ON TT0.""CardCode"" = T3.""CardCode""" +
+
+                (string.IsNullOrEmpty(blnkAgr) ? "" : @"AND TT0.""AgrNo"" = '" + blnkAgr.Trim() + "'") +
+                @"AND TT0.""DocDate"" <= '" + dateE + @"' 
+	            AND TT0.""CardCode"" = N'" + cardCodeE + @"' 
+            	AND (TT0.""DocStatus"" = 'O' 
+            		OR (TT1.""Status"" = 'O' 
+            			AND TT0.""CANCELED"" = 'N')) 
+            	GROUP BY TT0.""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                 TT0.""AgrNo"",
+                 TT0.""Project"",
+            	 TT0.""DocNum"",
+                 TT0.""DocCur"",
+            	 T3.""CardCode"",
+            	 T3.""CardName"",
+            	 TT0.""DocDate"",
+            	 TT1.""DueDate""," +
+                (CommonFunctions.IsDevelopment() ? @" TT0.""U_BDOSLnOpTp"", " : "") + @"
+	             TT0.""ObjType"",
+            	 TT0.""Comments"",
+                 TT1.""InstlmntID"" 
+            	 
+                UNION ALL SELECT
+            	 TT0.""TransId"" AS ""DocEntry"",
+                 TT0.""U_UseBlaAgRt"",
+                 TT0.""AgrNo"",
+                 TT0.""Project"",
+            	 TT0.""Number"" AS ""DocNum"",
+                 TT0.""TransCurr"" AS ""DocCur"",
+            	 T3.""CardCode"" AS ""CardCode"",
+            	 T3.""CardName"" AS ""CardName"",
+            	 TT0.""RefDate"" AS ""DocDate"",
+            	 TT1.""DueDate"" AS ""DueDate"",
+                 '' AS ""LoanOperationType"",
+            	 TT0.""ObjType"" AS ""ObjType"",
+            	 TT1.""LineMemo"" AS ""Comments"",
+                 '1' AS ""InstlmntID"",
+                 TT1.""Line_ID"" AS ""LineID"",
+            	 SUM(TT1.""BalDueDeb"" - TT1.""BalDueCred"") AS ""OpenAmount"",
+            	 SUM(TT1.""Debit"" - TT1.""Credit"" ) AS ""InsTotal"",
+                 SUM(TT1.""BalFcDeb"" - TT1.""BalFcCred"") AS ""OpenAmountFC"",
+            	 SUM(TT1.""FCDebit"" - TT1.""FCCredit"" ) AS ""InsTotalFC"" 
+            	 FROM OJDT TT0 
+            	 INNER JOIN JDT1 TT1 ON TT0.""TransId"" = TT1.""TransId"" 
+            	 INNER JOIN OCRD T3 ON TT1.""ShortName"" = T3.""CardCode"" 
+            	 WHERE TT0.""RefDate"" <= '" + dateE + @"'
+            	 AND TT1.""ShortName"" = N'" + cardCodeE + @"'
+            	 AND TT0.""TransType"" IN ('30', '24', '46')  
+            	 AND TT0.""BtfStatus"" = 'O' AND (""TT1"".""BalDueDeb"" > '0' OR ""TT1"".""BalDueCred"" > '0') AND ""TT1"".""DprId"" IS NULL
+            	 GROUP BY TT0.""TransId"",
+                 TT0.""U_UseBlaAgRt"",
+                     TT0.""AgrNo"",
+                 TT0.""Project"",
+	             	 TT0.""Number"",
+                     TT0.""TransCurr"",
+	             	 T3.""CardCode"",
+	             	 T3.""CardName"",
+	             	 TT0.""RefDate"",
+	             	 TT1.""DueDate"",
+	             	 TT0.""ObjType"",
+	             	 TT1.""LineMemo"",
+                     TT1.""Line_ID"") T0 
+            
             WHERE (ROUND (T0.""OpenAmount"", 2) <> '0' OR ROUND (T0.""OpenAmountFC"", 2) <> '0')
+            
             ORDER BY T0.""LoanOperationType"" DESC,
                      T0.""DueDate"",
             	 T0.""DocNum""";
@@ -1682,8 +1929,11 @@ namespace BDO_Localisation_AddOn
 
             decimal totalPayment = Convert.ToDecimal(oDataTable.GetValue("TotalPayment", row));
             decimal totalPaymentLocal = Convert.ToDecimal(oDataTable.GetValue("TotalPaymentLocal", row));
+            string blnkAgr = oDataTable.GetValue("BlnkAgr", row);
             string docCur = Convert.ToString(oDataTable.GetValue("Currency", row));
             decimal rate = Convert.ToDecimal(oForm.DataSources.UserDataSources.Item("docRateINE").ValueEx, Nfi);
+            string UseBlaAgRt = oDataTable.GetValue("UseBlaAgRt", row);
+
 
             if (docCur != Program.MainCurrency)
             {
@@ -1696,6 +1946,10 @@ namespace BDO_Localisation_AddOn
                     docRate = Convert.ToDecimal(oSBOBob.GetCurrencyRate(docCur, docDate).Fields.Item("CurrencyRate").Value);
                 else
                     docRate = rate;
+
+                if ( blnkAgr!="" && blnkAgr!="0" && UseBlaAgRt=="Y")
+                    docRate = BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blnkAgr), out docCur, docDate);
+
 
                 if (colUID == "TotalPymnt")
                 {
@@ -2054,6 +2308,11 @@ namespace BDO_Localisation_AddOn
                                     dataRow["TotalPayment"] = Convert.ToDecimal(oDataTable.GetValue("TotalPayment", i));
                                     dataRow["Currency"] = oDataTable.GetValue("Currency", i).ToString();
                                     dataRow["TotalPaymentLocal"] = Convert.ToDecimal(oDataTable.GetValue("TotalPaymentLocal", i));
+                                    dataRow["Project"] = oDataTable.GetValue("Project", i).ToString();
+                                    dataRow["BlnkAgr"] = oDataTable.GetValue("BlnkAgr", i).ToString();
+                                    dataRow["UseBlaAgRt"] = oDataTable.GetValue("UseBlaAgRt", i);
+                                    
+
                                 }
                             }
 

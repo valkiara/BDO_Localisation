@@ -6,11 +6,14 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using SAPbobsCOM;
+using static BDO_Localisation_AddOn.Program;
 
 namespace BDO_Localisation_AddOn
 {
     static partial class BDO_TaxInvoiceSent
     {
+        public static string WBAUT = null;
+        public static string TXAUT = null;
         const int clientHeight = 650;
         const int clientWidth = 800;
 
@@ -497,6 +500,19 @@ namespace BDO_Localisation_AddOn
             errorText = null;
             Dictionary<string, object> formItems;
             string itemName = "";
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
 
             int left_s = 6;
             int left_e = 127;
@@ -2332,6 +2348,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
         }
 
         public static void comboSelect(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, out string errorText)
@@ -2400,6 +2418,25 @@ namespace BDO_Localisation_AddOn
                         else
                         {
                             return;
+                        }
+
+                        if (selectedOperation == "addToTheDeclaration")
+                        {
+                            FormsB1.TAXDeclaration_AuthorizationsOperations(out errorText);
+                            if (errorText != null)
+                            {
+                                uiApp.MessageBox(errorText);
+
+                            }
+                        }
+                        else
+                        {
+                            FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                            if (errorText != null)
+                            {
+                                uiApp.MessageBox(errorText);
+                                
+                            }
                         }
 
                         oForm.Freeze(false);
@@ -5212,6 +5249,16 @@ namespace BDO_Localisation_AddOn
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction)
             {
                 return;
+            }
+
+            if (BusinessObjectInfo.BeforeAction)
+            {
+                FormsB1.WB_TAX_AuthorizationsOperations(BusinessObjectInfo.FormTypeEx, BusinessObjectInfo.EventType, out errorText);
+                if (errorText != null)
+                {
+                    uiApp.MessageBox(errorText);
+                    BubbleEvent = false;
+                }
             }
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);

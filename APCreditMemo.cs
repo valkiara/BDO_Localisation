@@ -10,6 +10,10 @@ namespace BDO_Localisation_AddOn
 {
     static partial class APCreditMemo
     {
+
+        public static string WBAUT = null;
+        public static string TXAUT = null;
+
         public static void JrnEntry(string DocEntry, string DocNum, DateTime DocDate, Decimal rate, string currency, out string errorText)
         {
             errorText = null;
@@ -35,6 +39,19 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formItems = null;
 
             string itemName = "";
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
 
             double height = oForm.Items.Item("86").Height;
             double top = oForm.Items.Item("86").Top + height * 1.5 + 1;
@@ -492,6 +509,7 @@ namespace BDO_Localisation_AddOn
                     oEditText.ChooseFromListUID = "TaxInvoiceReceived_CFL";
                     oEditText.ChooseFromListAlias = "DocEntry";
                 }
+               
             }
             catch (Exception ex)
             {
@@ -503,6 +521,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
         }
 
         public static void formDataAddUpdate(SAPbouiCOM.Form oForm, out string errorText)
@@ -744,6 +764,7 @@ namespace BDO_Localisation_AddOn
                 {
                     createFormItems(oForm, out errorText);
                     formDataLoad(oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && !pVal.BeforeAction)
                 {

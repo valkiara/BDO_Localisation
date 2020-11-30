@@ -14,6 +14,9 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_Waybills
     {
+        public static string WBAUT = null;
+        public static string TXAUT = null;
+
         public static void createDocumentUDO(out string errorText)
         {
             errorText = null;
@@ -479,6 +482,19 @@ namespace BDO_Localisation_AddOn
         {
             errorText = null;
             Dictionary<string, object> formItems;
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
 
             string addonName = "BDOS Localisation AddOn";
             string addonFormType = "UDO_FT_UDO_F_BDO_WBLD_D";
@@ -4363,6 +4379,9 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(false);
             }
+            
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
+
         }
 
         public static void formDataLoad(SAPbouiCOM.Form oForm)
@@ -4862,8 +4881,18 @@ namespace BDO_Localisation_AddOn
             BubbleEvent = true;
             SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, currentFormCount);
 
-            //if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_WBLD_D")
-            //{
+
+           if (BusinessObjectInfo.BeforeAction)
+            {
+                string errorText = null;
+                FormsB1.WB_TAX_AuthorizationsOperations(BusinessObjectInfo.FormTypeEx, BusinessObjectInfo.EventType ,  out errorText);
+                if (errorText!=null)
+                {
+                    uiApp.MessageBox(errorText);
+                    BubbleEvent = false;
+                }
+            }
+
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
                 formDataLoad(oForm);

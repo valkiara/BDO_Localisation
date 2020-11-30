@@ -17,7 +17,8 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_WaybillsJournalReceived
     {
-
+        public static string WBAUT = null;
+        public static string TXAUT = null;
         public static Dictionary<string, string[][]> wbTempLines = new Dictionary<string, string[][]>();
         public static int WBGdMatrixRow = 0;
         public static decimal WBGdMatrixMaxQty = 0;
@@ -202,6 +203,7 @@ namespace BDO_Localisation_AddOn
                         }
                         //Edtfieldtxt = oMatrix.Columns.Item("WBActDate").Cells.Item(row).Specific;
                         DateTime WBActDate = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBActDate", row - 1);
+                        DateTime WBStartDat = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBStartDat", row - 1);
                         string WBBlankAgr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBBlankAgr", row - 1);
                         string comment = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBCOMMENT", row - 1);
                         string wBWhs = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBWhs", row - 1);
@@ -266,9 +268,9 @@ namespace BDO_Localisation_AddOn
 
                         //APInv.PaymentGroupCode = PaymentGroupCode;
                         APInv.CardCode = CardCode;
-                        APInv.DocDate = WBActDate;
-                        APInv.VatDate = WBActDate;
-                        APInv.TaxDate = WBActDate;
+                        APInv.DocDate = WBStartDat;
+                        APInv.VatDate = WBStartDat;
+                        APInv.TaxDate = WBStartDat;
                         APInv.Comments = comment;
                         //APInv.DocCurrency = Program.LocalCurrency;
 
@@ -640,7 +642,7 @@ namespace BDO_Localisation_AddOn
                 string WBSupName = Waybill_Header["SELLER_NAME"];
                 string WBSupTIN = Waybill_Header["SELLER_TIN"];
                 string WBActDate = Waybill_Header["ACTIVATE_DATE"].Replace("T", " ");
-                string WBActDat = Waybill_Header["ACTIVATE_DATE"];
+                string WBStartDat = Waybill_Header["BEGIN_DATE"].Replace("T", " ");
                 string WBStartAdd = Waybill_Header["START_ADDRESS"];
                 string WBEndAdd = Waybill_Header["END_ADDRESS"];
                 string WBtype = Waybill_Header["TYPE"];
@@ -678,6 +680,15 @@ namespace BDO_Localisation_AddOn
                 {
                     ActDt = new DateTime(1, 1, 1);
                 }
+
+
+                DateTime StartDt = new DateTime(1, 1, 1);
+
+                if (DateTime.TryParseExact(WBStartDat, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out StartDt) == false)
+                {
+                    StartDt = new DateTime(1, 1, 1);
+                }
+
                 oDataTable.Rows.Add();
                 oDataTable.SetValue(2, rowIndex, WBID);
                 oDataTable.SetValue(0, rowIndex, rowCounter);
@@ -691,6 +702,9 @@ namespace BDO_Localisation_AddOn
                 oDataTable.SetValue(9, rowIndex, WBSupTIN);
                 oDataTable.SetValue(10, rowIndex, "0");
                 oDataTable.SetValue(14, rowIndex, TYPE);
+                oDataTable.SetValue("WBStartDat", rowIndex, StartDt);
+
+                
 
                 if (LinkedDocEntryInvoice != 0)
                 {
@@ -991,6 +1005,9 @@ namespace BDO_Localisation_AddOn
         }
         public static bool AddressesMatch(string reqStartAddress, string reqEndAddress, KeyValuePair<string, Dictionary<string, string>> keyvalue)
         {
+            reqStartAddress = reqStartAddress.Replace("*", "");
+            reqEndAddress = reqEndAddress.Replace("*", "");
+
             keyvalue.Value.TryGetValue("START_ADDRESS", out string rsStartAddress);
             keyvalue.Value.TryGetValue("END_ADDRESS", out string rsEndAddress);
 
@@ -1119,6 +1136,19 @@ namespace BDO_Localisation_AddOn
         public static void createForm(SAPbouiCOM.Form oDocForm, out string errorText)
         {
             errorText = null;
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
 
             //ფორმის აუცილებელი თვისებები
             Dictionary<string, object> formProperties = new Dictionary<string, object>();
@@ -1271,7 +1301,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("isDataSource", true);
                     formItems.Add("DataSource", "UserDataSources");
                     formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("Length", 30);
+                    formItems.Add("Length", 100);
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     formItems.Add("TableName", "");
@@ -1489,7 +1519,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("isDataSource", true);
                     formItems.Add("DataSource", "UserDataSources");
                     formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("Length", 30);
+                    formItems.Add("Length", 100);
                     formItems.Add("Size", 20);
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     formItems.Add("TableName", "");
@@ -2259,7 +2289,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("WBCheckb", SAPbouiCOM.BoFieldsType.ft_Text, 20); //17
                     oDataTable.Columns.Add("WBWhs", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //18
                     oDataTable.Columns.Add("WBProject", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 20); //19
-
+                    oDataTable.Columns.Add("WBStartDat", SAPbouiCOM.BoFieldsType.ft_Date, 20); //5
 
                     int rowCounter = 1;
                     int rowIndex = 0;
@@ -2274,6 +2304,7 @@ namespace BDO_Localisation_AddOn
                         string WBStat = Waybill_Header["STATUS"];
                         string WBSupName = Waybill_Header["SELLER_NAME"];
                         string WBActDate = Waybill_Header["ACTIVATE_DATE"].Replace("T", " ");
+                        string WBStartDat = Waybill_Header["BEGIN_DATE"].Replace("T", " ");
                         string WBStartAdd = Waybill_Header["START_ADDRESS"];
                         string WBEndAdd = Waybill_Header["END_ADDRESS"];
                         string WBSupTIN = Waybill_Header["SELLER_TIN"];
@@ -2282,12 +2313,16 @@ namespace BDO_Localisation_AddOn
                         string WBCOM = Waybill_Header["WAYBILL_COMMENT"];
 
                         DateTime ActDt = new DateTime(1, 1, 1);
+                        DateTime StartDt = new DateTime(1, 1, 1);
 
                         if (DateTime.TryParseExact(WBActDate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out ActDt) == false)
                         {
                             ActDt = new DateTime(1, 1, 1);
                         }
-
+                        if (DateTime.TryParseExact(WBStartDat, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out StartDt) == false)
+                        {
+                            StartDt = new DateTime(1, 1, 1);
+                        }
                         if (TYPE == "5")
                         {
                             TYPE = "Return";
@@ -2311,6 +2346,9 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue(10, rowIndex, "0");
                         oDataTable.SetValue(14, rowIndex, TYPE);
                         oDataTable.SetValue(16, rowIndex, WBCOM);
+                        oDataTable.SetValue("WBStartDat", rowIndex, StartDt);
+
+                        
 
                         if (!string.IsNullOrEmpty(WBEndAdd))
                         {
@@ -2498,6 +2536,13 @@ namespace BDO_Localisation_AddOn
                     oColumn.Width = 100;
                     oColumn.Editable = false;
                     oColumn.DataBind.Bind("WBTable", "WBActDate");
+
+                    oColumn = oColumns.Add("WBStartDat", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    oColumn.TitleObject.Caption = BDOSResources.getTranslate("TransportDate");
+                    oColumn.Width = 100;
+                    oColumn.Editable = false;
+                    oColumn.DataBind.Bind("WBTable", "WBStartDat");
+
 
                     oColumn = oColumns.Add("WBStartAdd", SAPbouiCOM.BoFormItemTypes.it_EDIT);
                     oColumn.TitleObject.Caption = BDOSResources.getTranslate("StartAddress");
@@ -2748,6 +2793,9 @@ namespace BDO_Localisation_AddOn
                 // oForm.Settings.MatrixUID = "WBMatrix";
                 oForm.Visible = true;
                 oForm.Select();
+
+                FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
+
             }
             GC.Collect();
         }
@@ -3912,6 +3960,16 @@ namespace BDO_Localisation_AddOn
 
                         else if (pVal.ItemUID == "CreateDocs")
                         {
+                            if(WBAUT!="2")
+                            {
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("WBAutError"));
+                                return;
+
+                            }
+
+
+
+
                             int answer = 0;
 
                             answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("CreatePurchaseDocuments") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");

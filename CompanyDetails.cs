@@ -79,6 +79,50 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            /////////////////
+            fieldskeysMap = new Dictionary<string, object>();
+            listValidValues = new List<string>();
+            listValidValues.Add("No Authorization"); 
+            listValidValues.Add("Read Only");
+            listValidValues.Add("Full");
+
+            fieldskeysMap.Add("Name", "BDOSWblAut");
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Waybill Authorization");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+            fieldskeysMap.Add("ValidValues", listValidValues);
+            fieldskeysMap.Add("DefaultValue", "2");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            listValidValues = new List<string>();
+            listValidValues.Add("No Authorization");
+            listValidValues.Add("Read Only");
+            listValidValues.Add("Approval ");
+
+            fieldskeysMap.Add("Name", "BDOSTaxAut");
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Tax Authorization");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+            fieldskeysMap.Add("ValidValues", listValidValues);
+            fieldskeysMap.Add("DefaultValue", "2");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSDecAtt"); 
+            fieldskeysMap.Add("TableName", "OADM");
+            fieldskeysMap.Add("Description", "Attach Tax Invoice Declaration");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "Y");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+            //////////////////////
+
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDO_SU");
             fieldskeysMap.Add("TableName", "OADM");
@@ -894,7 +938,9 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            top = top + 30;
+            top = top + 25;
+
+            
 
             //სერვის მომხმარებლის სახელი (RS.GE)
             formItems = new Dictionary<string, object>();
@@ -987,6 +1033,151 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
+            /////////////////
+            
+
+            top = top + 15;
+
+            //ზედნადების ავტორიზაცია
+            formItems = new Dictionary<string, object>();
+            itemName = "WblAut";
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", 13);
+            formItems.Add("Width", 207);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 15);
+            formItems.Add("Caption", BDOSResources.getTranslate("WaybillAuthorization"));
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("LinkTo", "BDOSWblAut");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            listValidValues = new List<string>();
+            listValidValues.Add("No Authorization");
+            listValidValues.Add("Read Only");
+            listValidValues.Add("Full");
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSWblAut";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_BDOSWblAut");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            formItems.Add("Left", 230);
+            formItems.Add("Width", 250);
+            formItems.Add("Top", top + 1);
+            formItems.Add("Height", 14);
+            formItems.Add("UID", itemName);
+            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("Description", BDOSResources.getTranslate("WaybillAuthorization"));
+            formItems.Add("ValidValues", listValidValues);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            top = top + 15;
+
+            //ზედნადების ავტორიზაცია
+            formItems = new Dictionary<string, object>();
+            itemName = "TaxAut";
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", 13);
+            formItems.Add("Width", 207);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 15);
+            formItems.Add("Caption", BDOSResources.getTranslate("TaxAuthorization"));
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("LinkTo", "BDOSTaxAut");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            listValidValues = new List<string>();
+            listValidValues.Add("No Authorization");
+            listValidValues.Add("Read Only");
+            listValidValues.Add("Approval");
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSTaxAut";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_BDOSTaxAut");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            formItems.Add("Left", 230);
+            formItems.Add("Width", 250);
+            formItems.Add("Top", top + 1);
+            formItems.Add("Height", 14);
+            formItems.Add("UID", itemName);
+            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+            formItems.Add("DisplayDesc", true);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("Description", BDOSResources.getTranslate("TaxAuthorization"));
+            formItems.Add("ValidValues", listValidValues);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            top = top + 15;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "BDOSDecAtt";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OADM");
+            formItems.Add("Alias", "U_BDOSDecAtt");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_CHECK_BOX);
+            formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Left", 13);
+            formItems.Add("Width", 400);
+            formItems.Add("Top", top);
+            formItems.Add("Height", 14);
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", 12);
+            formItems.Add("ToPane", 12);
+            formItems.Add("Description", BDOSResources.getTranslate("AttachTaxInvoiceOnDeclaration"));
+            formItems.Add("Caption", BDOSResources.getTranslate("AttachTaxInvoiceOnDeclaration"));
+            formItems.Add("ValOff", "N");
+            formItems.Add("ValOn", "Y");
+            formItems.Add("DisplayDesc", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            top = top + 15;
+            /////////////////
+
+
+
+
             SAPbouiCOM.Item oItemOK = oForm.Items.Item("1");
             formItems = new Dictionary<string, object>();
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
@@ -1057,7 +1248,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("FromPane", 12);
             formItems.Add("ToPane", 12);
             formItems.Add("DisplayDesc", true);
-            formItems.Add("AffectsFormMode", false);
+            formItems.Add("AffectsFormMode", true);
             formItems.Add("Description", BDOSResources.getTranslate("UserTable"));
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -1100,12 +1291,51 @@ namespace BDO_Localisation_AddOn
             oColumn.AffectsFormMode = false;
             oColumn.TitleObject.Sortable = true;
 
+
             oColumn = oColumns.Add("DSSP", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("Password");
             oColumn.Width = 40;
             oColumn.Editable = true;
             oColumn.Visible = false;
             oColumn.AffectsFormMode = false;
+
+            oColumn = oColumns.Add("WBAUT", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("WaybillAuthorization");
+            oColumn.Width = 40;
+            oColumn.Editable = true;
+            oColumn.AffectsFormMode = true;
+            oColumn.TitleObject.Sortable = true;
+            oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
+            oColumn.ValidValues.Add("0", BDOSResources.getTranslate("NoAuthorization"));
+            oColumn.ValidValues.Add("1", BDOSResources.getTranslate("ReadOnly"));
+            oColumn.ValidValues.Add("2", BDOSResources.getTranslate("Full"));
+            oColumn.DisplayDesc = true;
+
+            oColumn = oColumns.Add("TXAUT", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("TaxAuthorization");
+            oColumn.Width = 40;
+            oColumn.Editable = true;
+            oColumn.AffectsFormMode = true;
+            oColumn.TitleObject.Sortable = true;
+            oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
+            oColumn.ValidValues.Add("0", BDOSResources.getTranslate("NoAuthorization"));
+            oColumn.ValidValues.Add("1", BDOSResources.getTranslate("ReadOnly"));
+            oColumn.ValidValues.Add("2", BDOSResources.getTranslate("Approval"));
+            oColumn.DisplayDesc = true;
+
+            oColumn = oColumns.Add("DCAT", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("AttachTaxInvoiceOnDeclaration");
+            oColumn.Width = 40;
+            oColumn.Editable = true;
+            oColumn.AffectsFormMode = true;
+            oColumn.TitleObject.Sortable = true;
+            oColumn.TitleObject.Sortable = true;
+            oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
+            oColumn.ValidValues.Add("N", BDOSResources.getTranslate("No"));
+            oColumn.ValidValues.Add("Y", BDOSResources.getTranslate("Yes"));
+            oColumn.DisplayDesc = true;
+
+
 
             SAPbouiCOM.DBDataSource oDBDataSource;
             oDBDataSource = oForm.DataSources.DBDataSources.Add("OUSR");
@@ -1120,6 +1350,16 @@ namespace BDO_Localisation_AddOn
             oColumn.DataBind.SetBound(true, "OUSR", "U_BDO_SU");
             oColumn = oColumns.Item("DSSP");
             oColumn.DataBind.SetBound(true, "OUSR", "U_BDO_SP");
+
+            oColumn = oColumns.Item("WBAUT");
+            oColumn.DataBind.SetBound(true, "OUSR", "U_BDOSWblAut");
+            oColumn = oColumns.Item("TXAUT");
+            oColumn.DataBind.SetBound(true, "OUSR", "U_BDOSTaxAut");
+            oColumn = oColumns.Item("DCAT");
+            oColumn.DataBind.SetBound(true, "OUSR", "U_BDOSDecAtt");
+
+
+
 
             oMatrix.Clear();
             oDBDataSource.Query();
@@ -2168,10 +2408,15 @@ namespace BDO_Localisation_AddOn
             rsSettingsFromDB.Add("UserType", "");
             rsSettingsFromDB.Add("ProtocolType", "");
             rsSettingsFromDB.Add("WaybillType", "");
+            rsSettingsFromDB.Add("WBAUT", "");
+            rsSettingsFromDB.Add("TXAUT", "");
+            rsSettingsFromDB.Add("DCAUT", "");
+            
+
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-            string query = @"SELECT ""U_BDO_SU"", ""U_BDO_SP"", ""U_BDO_ItmCod"", ""U_BDO_UsrTyp"", ""U_BDO_PrtTyp"", ""U_BDO_WblTyp"" FROM ""OADM""";
+            string query = @"SELECT * FROM ""OADM""";
 
             try
             {
@@ -2181,6 +2426,10 @@ namespace BDO_Localisation_AddOn
                 {
                     rsSettingsFromDB["SU"] = oRecordSet.Fields.Item("U_BDO_SU").Value.ToString();
                     rsSettingsFromDB["SP"] = oRecordSet.Fields.Item("U_BDO_SP").Value.ToString();
+                    rsSettingsFromDB["WBAUT"] = oRecordSet.Fields.Item("U_BDOSWblAut").Value.ToString();
+                    rsSettingsFromDB["TXAUT"] = oRecordSet.Fields.Item("U_BDOSTaxAut").Value.ToString();
+                    rsSettingsFromDB["DCAUT"] = oRecordSet.Fields.Item("U_BDOSDecAtt").Value.ToString();
+                    
                     rsSettingsFromDB["ItemCode"] = oRecordSet.Fields.Item("U_BDO_ItmCod").Value.ToString();
                     rsSettingsFromDB["UserType"] = oRecordSet.Fields.Item("U_BDO_UsrTyp").Value.ToString();
                     rsSettingsFromDB["ProtocolType"] = oRecordSet.Fields.Item("U_BDO_PrtTyp").Value.ToString() == "0" ? "HTTP" : "HTTPS";
@@ -2191,13 +2440,19 @@ namespace BDO_Localisation_AddOn
 
                 if (rsSettingsFromDB["UserType"] == "1") //მომხმარებლის მიხედვით
                 {
-                    query = @"SELECT ""U_BDO_SU"", ""U_BDO_SP"" FROM ""OUSR"" WHERE ""USER_CODE"" = '" + Program.oCompany.UserName + "'";
+                    query = @"SELECT * FROM ""OUSR"" WHERE ""USER_CODE"" = '" + Program.oCompany.UserName + "'";
                     oRecordSet.DoQuery(query);
 
                     while (!oRecordSet.EoF)
                     {
                         rsSettingsFromDB["SU"] = oRecordSet.Fields.Item("U_BDO_SU").Value.ToString();
                         rsSettingsFromDB["SP"] = oRecordSet.Fields.Item("U_BDO_SP").Value.ToString();
+                        rsSettingsFromDB["WBAUT"] = oRecordSet.Fields.Item("U_BDOSWblAut").Value.ToString();
+                        rsSettingsFromDB["TXAUT"] = oRecordSet.Fields.Item("U_BDOSTaxAut").Value.ToString();
+                        rsSettingsFromDB["WBAUT"] = oRecordSet.Fields.Item("U_BDOSWblAut").Value.ToString();
+                        rsSettingsFromDB["TXAUT"] = oRecordSet.Fields.Item("U_BDOSTaxAut").Value.ToString();
+                        rsSettingsFromDB["DCAUT"] = oRecordSet.Fields.Item("U_BDOSDecAtt").Value.ToString();
+
                         oRecordSet.MoveNext();
                         break;
                     }
@@ -2235,6 +2490,15 @@ namespace BDO_Localisation_AddOn
                         oForm.Items.Item("BDO_SU").Visible = true;
                         oForm.Items.Item("SP").Visible = true;
                         oForm.Items.Item("BDO_SP").Visible = true;
+
+                        oForm.Items.Item("WblAut").Visible = true;
+                        oForm.Items.Item("BDOSWblAut").Visible = true;
+                        oForm.Items.Item("TaxAut").Visible = true;
+                        oForm.Items.Item("BDOSTaxAut").Visible = true;
+                        oForm.Items.Item("BDOSDecAtt").Visible = true;
+                        
+
+
                         oForm.Items.Item("BDO_UsrMtx").Visible = false;
                         oForm.Items.Item("BDO_SetPas").Visible = false;
                     }
@@ -2244,6 +2508,11 @@ namespace BDO_Localisation_AddOn
                         oForm.Items.Item("BDO_SU").Visible = false;
                         oForm.Items.Item("SP").Visible = false;
                         oForm.Items.Item("BDO_SP").Visible = false;
+                        oForm.Items.Item("WblAut").Visible = false;
+                        oForm.Items.Item("BDOSWblAut").Visible = false;
+                        oForm.Items.Item("BDOSDecAtt").Visible = false;
+                        oForm.Items.Item("TaxAut").Visible = false;
+                        oForm.Items.Item("BDOSTaxAut").Visible = false;
                         oForm.Items.Item("BDO_UsrMtx").Visible = true;
                         oForm.Items.Item("BDO_SetPas").Visible = true;
                     }
@@ -2253,6 +2522,11 @@ namespace BDO_Localisation_AddOn
                         oForm.Items.Item("BDO_SU").Visible = false;
                         oForm.Items.Item("SP").Visible = false;
                         oForm.Items.Item("BDO_SP").Visible = false;
+                        oForm.Items.Item("WblAut").Visible = false;
+                        oForm.Items.Item("BDOSWblAut").Visible = false;
+                        oForm.Items.Item("BDOSDecAtt").Visible = false;
+                        oForm.Items.Item("TaxAut").Visible = false;
+                        oForm.Items.Item("BDOSTaxAut").Visible = false;
                         oForm.Items.Item("BDO_UsrMtx").Visible = false;
                         oForm.Items.Item("BDO_SetPas").Visible = false;
                     }
@@ -2643,6 +2917,48 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        public static void updateUsers(SAPbouiCOM.Form oForm, out string errorText)
+        {
+            errorText = null;
+
+            oForm.Freeze(true);
+            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("BDO_UsrMtx").Specific));
+            CommonFunctions.StartTransaction();
+
+            try
+            {
+                SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    string WBAUT = oMatrix.Columns.Item("WBAUT").Cells.Item(i).Specific.Value;
+                    string TAXAUT = oMatrix.Columns.Item("TXAUT").Cells.Item(i).Specific.Value;
+                    string DECAUT = oMatrix.Columns.Item("DCAT").Cells.Item(i).Specific.Value;
+                    string USERID = oMatrix.Columns.Item("DSUserID").Cells.Item(i).Specific.Value;
+    
+                    string updateQuery = @"UPDATE ""OUSR""
+                                            SET ""U_BDOSWblAut"" = N'" + WBAUT + @"',
+                                            ""U_BDOSTaxAut"" = N'" + TAXAUT + @"',
+                                            ""U_BDOSDecAtt"" = N'" + DECAUT + @"'
+                                        WHERE ""OUSR"".""USERID"" = N'" + USERID + "'";
+
+                    oRecordSet.DoQuery(updateQuery);
+                }
+
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+
+                oForm.Freeze(false);
+            }
+            catch (Exception ex)
+            {
+                CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                oForm.Freeze(false);
+                errorText = ex.Message;
+                return;
+            }
+        }
+
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
         {
             BubbleEvent = true;
@@ -2664,6 +2980,17 @@ namespace BDO_Localisation_AddOn
                     {
                         Program.uiApp.MessageBox(errorText);
                     }
+
+                    string typeUser = oForm.DataSources.DBDataSources.Item("OADM").GetValue("U_BDO_UsrTyp", 0).Trim();
+                    if (typeUser == "1") //თანამშრომლების მიხედვით
+                    {
+                        updateUsers(oForm, out errorText);
+                        if (errorText != null)
+                        {
+                            Program.uiApp.MessageBox(errorText);
+                        }
+                    }
+
                 }
             }
         }
