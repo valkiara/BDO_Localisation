@@ -1712,14 +1712,8 @@ namespace BDO_Localisation_AddOn
                     catch { }
                 }
 
-                oItem = oForm.Items.Item("234000005");
-                SAPbouiCOM.EditText oEdit = oItem.Specific;
-                oItem = oForm.Items.Item("UsBlaAgRtS");
-                if (oEdit.Value != "")
-                {
-                    oItem.Enabled = true;
-                }
-                else oItem.Enabled = false;
+                string agrNo = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("AgrNo", 0);
+                oForm.Items.Item("UsBlaAgRtS").Enabled = !string.IsNullOrEmpty(agrNo);
 
                 Dictionary<string, string> dataForTransferType = getDataForTransferType(oForm);
                 string transferType = getTransferType(dataForTransferType, out var errorText);
@@ -1943,6 +1937,19 @@ namespace BDO_Localisation_AddOn
                     {
 
                     }
+                    else if (sCFL_ID == "1") //Blanket Agreement
+                    {
+                        string project = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("PrjCode", 0);
+                        SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
+                        if (project != "")
+                        {
+                            SAPbouiCOM.Condition oCon = oCons.Add();
+                            oCon.Alias = "Project";
+                            oCon.Operation = SAPbouiCOM.BoConditionOperation.co_EQUAL;
+                            oCon.CondVal = project;
+                        }
+                        oCFL.SetConditions(oCons);
+                    }
                 }
                 else
                 {
@@ -1971,7 +1978,7 @@ namespace BDO_Localisation_AddOn
                             //}
                         }
 
-                        if (sCFL_ID == "CFL_ProfitBase")
+                        else if (sCFL_ID == "CFL_ProfitBase")
                         {
                             string ProfitBaseCode = Convert.ToString(oDataTable.GetValue("Code", 0));
                             string ProfitBaseName = Convert.ToString(oDataTable.GetValue("Name", 0));
@@ -1990,6 +1997,34 @@ namespace BDO_Localisation_AddOn
                             }
                             catch { }
                         }
+
+                        else if (sCFL_ID == "1") //Blanket Agreement
+                        {
+                            var agrNo = Convert.ToString(oDataTable.GetValue("AbsID", 0));
+                            var prjCode = Convert.ToString(oDataTable.GetValue("Project", 0));
+
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("95").Specific.Value = prjCode);
+
+                            FilterInvoiceMatrix(oForm, agrNo, prjCode);
+
+                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular); //Remark
+
+                            oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
+                            oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
+                        }
+
+                        else if (sCFL_ID == "23") //Project
+                        {
+                            var prjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("234000005").Specific.Value = string.Empty);
+
+                            FilterInvoiceMatrix(oForm, null, prjCode);
+
+                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular); //Remark
+
+                            oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
+                            oForm.Items.Item("234000005").Enabled = true;
+                        }
                     }
                     setVisibleFormItems(oForm);
                 }
@@ -1997,10 +2032,6 @@ namespace BDO_Localisation_AddOn
             catch (Exception ex)
             {
                 throw ex;
-            }
-            finally
-            {
-                GC.Collect();
             }
         }
 
@@ -3520,6 +3551,9 @@ namespace BDO_Localisation_AddOn
                             if (pVal.ItemUID == "57" || pVal.ItemUID == "56" || pVal.ItemUID == "58")
                             {
                                 setVisibleFormItems(oForm);
+
+                                oForm.Items.Item("95").Enabled = true;
+                                oForm.Items.Item("234000005").Enabled = true;
                             }
 
                             else if (pVal.ItemUID == "ChngDcDt")
@@ -3560,22 +3594,31 @@ namespace BDO_Localisation_AddOn
                         { }
                         else
                         {
-                            if (pVal.ItemUID == "5" || pVal.ItemUID == "234000005")
+                            if ((pVal.ItemUID == "5" || pVal.ItemUID == "234000005") && !pVal.InnerEvent)
                             {
                                 setVisibleFormItems(oForm);
+
+                                if (pVal.ItemUID == "5") //Business Partner
+                                {
+                                    var prjCode = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("PrjCode", 0);
+                                    var agrNo = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("AgrNo", 0);
+                                    oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
+                                    oForm.Items.Item("95").Specific.Value = "";
+                                    oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
+                                    oForm.Items.Item("234000005").Specific.Value = "";
+                                }
                             }
                         }
                     }
 
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST)
                     {
-                        if (pVal.ItemUID == "creditActE" || pVal.ItemUID == "PrBaseE")
+                        if (pVal.ItemUID == "creditActE" || pVal.ItemUID == "PrBaseE" || pVal.ItemUID == "95" || pVal.ItemUID == "234000005" || pVal.ItemUID == "5")
                         {
                             SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                             chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction);
                         }
                     }
-
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
                     {
                         if (pVal.BeforeAction)
@@ -3664,6 +3707,13 @@ namespace BDO_Localisation_AddOn
                                     }
                                 }
                             }
+                            else
+                            {
+                                oForm.Items.Item("95").Enabled = true;
+                                oForm.Items.Item("95").Specific.Value = "";
+                                oForm.Items.Item("234000005").Enabled = true;
+                                oForm.Items.Item("234000005").Specific.Value = "";
+                            }
                         }
                         else if (pVal.ItemUID == "13" && !pVal.BeforeAction) //Item - Payment on Account (EditText)
                         {
@@ -3749,7 +3799,7 @@ namespace BDO_Localisation_AddOn
                         if (wTaxBaseSum > 0)
                         {
                             (decimal whTaxAmt, decimal pensEmployedAmt, decimal pensEmployerAmt) physicalEntityTaxesWTaxBaseSum = CommonFunctions.CalcPhysicalEntityTaxes(wTaxBaseSum, docDate, wTCode);
-                          
+
                             double wTaxAmtDoc = Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(physicalEntityTaxesWTaxBaseSum.whTaxAmt + physicalEntityTaxesWTaxBaseSum.pensEmployedAmt, "Sum"));
                             oForm.Items.Item("111").Specific.Value = oSBOBob.Format_MoneyToString(wTaxAmtDoc, SAPbobsCOM.BoMoneyPrecisionTypes.mpt_Sum).Fields.Item(0).Value;
 
@@ -3774,7 +3824,7 @@ namespace BDO_Localisation_AddOn
                 throw ex;
             }
             finally
-            {               
+            {
                 Marshal.ReleaseComObject(oSBOBob);
                 oForm.Freeze(false);
             }
@@ -4406,7 +4456,7 @@ namespace BDO_Localisation_AddOn
                 {
                     AmountPr = AmountPr + Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(Convert.ToDecimal(noDocSum / (100 - profitTaxRate) * profitTaxRate), "Sum"));
                 }
-
+                
                 SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("20").Specific;
                 for (int i = 1; i < oMatrix.RowCount + 1; i++)
                 {
@@ -7719,13 +7769,48 @@ namespace BDO_Localisation_AddOn
             }
             return dtPmtInvoices;
         }
+        public static void FilterInvoiceMatrix(SAPbouiCOM.Form oForm, string agrNo, string prjCode)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                if (string.IsNullOrEmpty(prjCode) && string.IsNullOrEmpty(agrNo))
+                    return;
+
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("20").Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var prjCodeMtr = oMatrix.Columns.Item("540000141").Cells.Item(i).Specific.Value;
+                    var agrNoMtr = oMatrix.Columns.Item("234000060").Cells.Item(i).Specific.Value;
+
+                    if (!string.IsNullOrEmpty(prjCode) && prjCode != prjCodeMtr)
+                    {
+                        oMatrix.DeleteRow(i);
+                        i--;
+                    }
+                    else if (!string.IsNullOrEmpty(agrNo) && agrNo != agrNoMtr)
+                    {
+                        oMatrix.DeleteRow(i);
+                        i--;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                oForm.Freeze(false);
+            }
+        }
 
         public enum PaymentType
         {
             Draft = 1,
             Payment = 2
         }
-
         //<--------------------------------------------INTERNET BANK--------------------------------------------
     }
 }

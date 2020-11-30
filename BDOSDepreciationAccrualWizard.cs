@@ -999,7 +999,7 @@ namespace BDO_Localisation_AddOn
             query.Append($"                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" = '{dateStr}') AS T2 \n");
             query.Append("                      ON T2.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
             query.Append("                         AND T2.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("                         AND T2.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
+            query.Append("                        -- AND T2.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
             query.Append("               LEFT JOIN (SELECT MAX(\"@BDOSDEPACR\".\"U_DocDate\") AS \"LastDeprDocDate\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_Project\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
@@ -1012,7 +1012,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_Project\", \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T3 \n");
             query.Append("                      ON T3.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
             query.Append("                         AND T3.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("                         AND T3.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
+            query.Append("                         --AND T3.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
             query.Append("               LEFT JOIN (SELECT Count(DISTINCT \"@BDOSDEPAC1\".\"DocEntry\") AS \"DocEntry\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_DistNumber\", \n");
             query.Append("                                 \"@BDOSDEPAC1\".\"U_ItemCode\" \n");

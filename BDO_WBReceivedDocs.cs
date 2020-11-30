@@ -357,7 +357,7 @@ namespace BDO_Localisation_AddOn
                 string WBBarcode = goodsRow[6] == null ? "" : Regex.Replace(goodsRow[6], @"\t|\n|\r|'", "").Trim();
                 string WBItmName = goodsRow[1];
 
-                SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(CardCode, WBItmName, WBBarcode, out errorText);
+                SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(CardCode, WBItmName, WBBarcode);
 
                 if (CatalogEntry != null)
                 {

@@ -3592,6 +3592,21 @@
   <data name="ARReserveInvoice" xml:space="preserve">
     <value>AR Reserve Invoice</value>
   </data>
+  <data name="FillItemSearchParameterOnTheBP" xml:space="preserve">
+    <value>Please fill item search parameter on the business partner form</value>
+  </data>
+  <data name="ItemCodeWasNotSpecified" xml:space="preserve">
+    <value>Item Code Was Not Specified</value>
+  </data>
+  <data name="PleaseChangeSearchParameter:ItIsNotPossibleToFindProductInBPCatalogUsingThisSearchingParameter" xml:space="preserve">
+    <value>Please Change Search Parameter:It is not Possible to Find Product in BP Catalog Using This Searching Parameter</value>
+  </data>
+  <data name="ARCorrectionInvoice" xml:space="preserve">
+    <value>AR Correction Invoice</value>
+  </data>
+  <data name="ARDownPaymentVat" xml:space="preserve">
+    <value>AR Down Payment VAT</value>
+  </data>
   <data name="MaxRate" xml:space="preserve">
     <value>Max Rate</value>
   </data>

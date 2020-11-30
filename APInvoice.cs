@@ -1021,6 +1021,7 @@ namespace BDO_Localisation_AddOn
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
                 formDataLoad(oForm, out errorText);
+                setVisibleFormItems(oForm, out errorText);
                 BDO_WBReceivedDocs.setwaybillText(oForm);
             }
 
@@ -1110,6 +1111,11 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.IChooseFromListEvent oCFLEvento = null;
                     oCFLEvento = ((SAPbouiCOM.IChooseFromListEvent)(pVal));
                     chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
+                }
+
+                if (pVal.ItemUID == "16" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)
+                {
+                    setVisibleFormItems(oForm, out errorText);
                 }
 
                 if (pVal.ItemUID == "BDO_TaxDoc" && !pVal.BeforeAction && pVal.EventType == SAPbouiCOM.BoEventTypes.et_DOUBLE_CLICK)

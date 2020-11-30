@@ -157,23 +157,25 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static SAPbobsCOM.Recordset getCatalogEntryByBPBarcode(string CardCode, string ItemName, string Barcode, out string errorText)
+        public static SAPbobsCOM.Recordset getCatalogEntryByBPBarcode(string CardCode, string ItemName, string Barcode)
         {
-            errorText = null;
-
             SAPbobsCOM.BusinessPartners oBP;
             oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
             oBP.GetByKey(CardCode);
-
-            string searchingParam = oBP.UserFields.Fields.Item("U_BDO_ItmPrm").Value;
-
+           
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             string query;
             try
             {
                 CardCode = CardCode.Trim();
-
+                string searchingParam = oBP.UserFields.Fields.Item("U_BDO_ItmPrm").Value;
+                /*
+                if (string.IsNullOrEmpty(searchingParam) || searchingParam == "-1")
+                {
+                    throw new Exception(BDOSResources.getTranslate("FillItemSearchParameterOnTheBP"));
+                }
+                */
                 if (searchingParam == "1") //დასახელებით
                 {
                     if (ItemName.Length > 254)
@@ -201,17 +203,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
-                return null;
-            }
-            finally
-            {
-                //Marshal.FinalReleaseComObject(oRecordSet);
-                GC.Collect();
+                throw ex;
             }
         }
 
@@ -222,8 +214,6 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.BusinessPartners oBP;
             oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
             oBP.GetByKey(CardCode);
-
-            string searchingParam = oBP.UserFields.Fields.Item("U_BDO_ItmPrm").Value;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
