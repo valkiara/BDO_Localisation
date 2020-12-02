@@ -827,10 +827,11 @@ namespace BDO_Localisation_AddOn
                     int i = 0;
                     int size = itemNodes.Count;
                     array_GOODS = new string[size][];
+                    Dictionary<string, string> activeDimensionsList = CommonFunctions.getActiveDimensionsList(out errorText); // array-ს ზომა რომ სწორად დავსვათ იმისთვის
 
                     foreach (XmlNode itemNode in itemNodes)
                     {
-                        array_GOODS[i] = new string[14];
+                        array_GOODS[i] = new string[14+activeDimensionsList.Count];
                         array_GOODS[i][0] = (itemNode.SelectSingleNode("ID") == null) ? "" : itemNode.SelectSingleNode("ID").InnerText;
                         array_GOODS[i][1] = (itemNode.SelectSingleNode("W_NAME") == null) ? "" : itemNode.SelectSingleNode("W_NAME").InnerText;
                         array_GOODS[i][2] = (itemNode.SelectSingleNode("UNIT_ID") == null) ? "" : itemNode.SelectSingleNode("UNIT_ID").InnerText;
