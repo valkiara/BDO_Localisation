@@ -3577,4 +3577,10 @@
   <data name="ARDownPaymentVat" xml:space="preserve">
     <value>ავანსის დღგ</value>
   </data>
+  <data name="PleaseFillProject" xml:space="preserve">
+    <value>შეავსეთ პროექტის ველი</value>
+  </data>
+  <data name="UnableToCreateDocument" xml:space="preserve">
+    <value>დოკუმენტის შექმნა შეუძლებელია</value>
+  </data>
 </root>

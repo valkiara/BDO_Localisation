@@ -578,6 +578,13 @@ namespace BDO_Localisation_AddOn
 
                 if (depreciationLines.GetValue("DepreciationDocEntry", i) == 0)
                 {
+                    if (string.IsNullOrEmpty(project))
+                    {
+                        string text = BDOSResources.getTranslate("PleaseFillProject");
+                        Program.uiApp.StatusBar.SetSystemMessage($"{BDOSResources.getTranslate("UnableToCreateDocument") +" :"}", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error, "", "", $"{text}! {BDOSResources.getTranslate("TableRow")}: {lineNum}");
+                        continue;
+                    }
+
                     if (!isRetirement)
                     {
                         DateTime inDate = depreciationLines.GetValue("InDate", i);
