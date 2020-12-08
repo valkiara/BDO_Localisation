@@ -3577,4 +3577,10 @@
   <data name="ARDownPaymentVat" xml:space="preserve">
     <value>ავანსის დღგ</value>
   </data>
+  <data name="PleaseFillWarehouse" xml:space="preserve">
+    <value>გთხოვთ შეავსეთ საწყობი</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>სტრიქონი</value>
+  </data>
 </root>

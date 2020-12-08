@@ -3607,4 +3607,10 @@
   <data name="ARDownPaymentVat" xml:space="preserve">
     <value>AR Down Payment VAT</value>
   </data>
+  <data name="PleaseFillWarehouse" xml:space="preserve">
+    <value>Please fill warehouse</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Row</value>
+  </data>
 </root>

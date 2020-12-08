@@ -210,7 +210,16 @@ namespace BDO_Localisation_AddOn
                         string wBProject = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBProject", row - 1);
                         string wBEndAdr = oForm.DataSources.DataTables.Item("WBTable").GetValue("WBEndAdd", row - 1);
 
-                        if (!string.IsNullOrEmpty(wBWhs)) whs = wBWhs;
+                        if (!string.IsNullOrEmpty(wBWhs))
+                        {
+                            whs = wBWhs;
+                        }
+                        else if(!string.IsNullOrEmpty(wBProject))
+                        {
+                            errorText = BDOSResources.getTranslate("PleaseFillWarehouse")+". "+BDOSResources.getTranslate("Row") +": " + row;
+                            Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            return;
+                        }
 
                         if (saveWhs) BDOSWarehouseAddresses.AddWhsByAddress(wBEndAdr, whs);
 
