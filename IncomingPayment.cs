@@ -1098,16 +1098,15 @@ namespace BDO_Localisation_AddOn
                 //Dictionary<string, string> dataForTransferType = getDataForTransferType( oForm);
                 //string transferType = getTransferType( dataForTransferType, out errorText);
 
+                oForm.Items.Item("outDocS").Visible = oForm.Items.Item("outDocE").Visible = opType == "currencyExchange" && docType == "A";
+
                 if (docType == "A")
                 {
                     oItem = oForm.Items.Item("opTypeS");
                     oItem.Visible = true;
                     oItem = oForm.Items.Item("opTypeCB");
                     oItem.Visible = true;
-                    oItem = oForm.Items.Item("outDocS");
-                    oItem.Visible = true;
-                    oItem = oForm.Items.Item("outDocE");
-                    oItem.Visible = true;
+
                     if (!string.IsNullOrEmpty(outDoc))
                     {
                         oItem = oForm.Items.Item("outDocE");
