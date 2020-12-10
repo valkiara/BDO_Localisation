@@ -3607,4 +3607,7 @@
   <data name="ARDownPaymentVat" xml:space="preserve">
     <value>AR Down Payment VAT</value>
   </data>
+  <data name="PleaseFillSearchingParameterOnThisBusinessPartner" xml:space="preserve">
+    <value>Please Fill Searching Parameter on This Business Partner</value>
+  </data>
 </root>
