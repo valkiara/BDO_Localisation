@@ -488,12 +488,14 @@ namespace BDO_Localisation_AddOn
 
                             APInv.Lines.Quantity = Convert.ToDouble(WBQty, CultureInfo.InvariantCulture);
                             //APInv.Lines.LineTotal = WBSum;
-
-                            APInv.Lines.CostingCode = goodsRow[14] == null ? "" : goodsRow[14];
-                            APInv.Lines.CostingCode2 = goodsRow[15] == null ? "" : goodsRow[15];
-                            APInv.Lines.CostingCode3 = goodsRow[16] == null ? "" : goodsRow[16];
-                            APInv.Lines.CostingCode4 = goodsRow[17] == null ? "" : goodsRow[17];
-                            APInv.Lines.CostingCode5 = goodsRow[18] == null ? "" : goodsRow[18];
+                            Dictionary<string, string> activeDimensionsList = CommonFunctions.getActiveDimensionsList(out errorText);                      
+                            int activeDimensions=activeDimensionsList.Count; 
+                            
+                            if(activeDimensions>=1) APInv.Lines.CostingCode = goodsRow[14] == null ? "" : goodsRow[14];
+                            if (activeDimensions >= 2) APInv.Lines.CostingCode2 = goodsRow[15] == null ? "" : goodsRow[15];
+                            if (activeDimensions >= 3) APInv.Lines.CostingCode3 = goodsRow[16] == null ? "" : goodsRow[16];
+                            if (activeDimensions >= 4) APInv.Lines.CostingCode4 = goodsRow[17] == null ? "" : goodsRow[17];
+                            if (activeDimensions >= 5) APInv.Lines.CostingCode5 = goodsRow[18] == null ? "" : goodsRow[18];
                             oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
                             oBP.GetByKey(CardCode);
 
