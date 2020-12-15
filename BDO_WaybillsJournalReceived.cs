@@ -2611,7 +2611,7 @@ namespace BDO_Localisation_AddOn
 
                     for (int i = 1; i <= activeDimensionsList.Count; i++)
                     {
-                        oDataTable.Columns.Add("DistrRul" +  i.ToString(), SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 100);
+                        oDataTable.Columns.Add("DistrRul" +  i.ToString(), SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 8);
                     }
 
                     oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("WBGdMatrix").Specific));
@@ -3122,7 +3122,6 @@ namespace BDO_Localisation_AddOn
 
                 else if (oCFLEvento.ChooseFromListUID.Length > 1 && oCFLEvento.ChooseFromListUID.Substring(0, oCFLEvento.ChooseFromListUID.Length - 2) == "Rule_CFL")
                 {
-                    SAPbouiCOM.DBDataSources oDBDataSources = oForm.DataSources.DBDataSources;
                     oForm.Freeze(true);
                     string dimensionCode = oCFLEvento.ChooseFromListUID.Substring(oCFLEvento.ChooseFromListUID.Length - 2, 1);
                     SAPbouiCOM.Conditions oCons = new SAPbouiCOM.Conditions();
