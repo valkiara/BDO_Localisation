@@ -3580,4 +3580,10 @@
   <data name="PleaseFillSearchingParameterOnThisBusinessPartner" xml:space="preserve">
     <value>გთხოვთ შეავსოთ ძებნის პარამეტრი ბიზნეს პარტნიორისთვის</value>
   </data>
+  <data name="PleaseFillProject" xml:space="preserve">
+    <value>შეავსეთ პროექტის ველი</value>
+  </data>
+  <data name="UnableToCreateDocument" xml:space="preserve">
+    <value>დოკუმენტის შექმნა შეუძლებელია</value>
+  </data>
 </root>

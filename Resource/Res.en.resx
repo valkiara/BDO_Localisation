@@ -3610,4 +3610,10 @@
   <data name="PleaseFillSearchingParameterOnThisBusinessPartner" xml:space="preserve">
     <value>Please Fill Searching Parameter on This Business Partner</value>
   </data>
+  <data name="PleaseFillProject" xml:space="preserve">
+    <value>Please Fill Project</value>
+  </data>
+  <data name="UnableToCreateDocument" xml:space="preserve">
+    <value>Unable to create document</value>
+  </data>
 </root>
