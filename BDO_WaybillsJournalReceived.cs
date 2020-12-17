@@ -4019,7 +4019,7 @@ namespace BDO_Localisation_AddOn
                                 {
                                     updateBPCatalog(oForm, pVal.Row);
 
-                                    if (pVal.ColUID != "WBUntCode")
+                                    if (pVal.ColUID != "WBUntCode" && oCFLEvento.ChooseFromListUID.Substring(0, oCFLEvento.ChooseFromListUID.Length - 2) != "Rule_CFL")
                                     {
                                         setUomCodeBtRSCode(oForm, pVal.Row, out errorText);
                                     }
