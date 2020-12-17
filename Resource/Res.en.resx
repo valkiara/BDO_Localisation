@@ -3616,4 +3616,7 @@
   <data name="PleaseFillTheProject" xml:space="preserve">
     <value>Please fill the project</value>
   </data>
+  <data name="PleaseFillSearchingParameterOnThisBusinessPartner" xml:space="preserve">
+    <value>Please Fill Searching Parameter on This Business Partner</value>
+  </data>
 </root>

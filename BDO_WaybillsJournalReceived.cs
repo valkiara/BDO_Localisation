@@ -3664,6 +3664,7 @@ namespace BDO_Localisation_AddOn
                 string searchingParam = oBP.UserFields.Fields.Item("U_BDO_ItmPrm").Value;
                 if (string.IsNullOrEmpty(searchingParam) || searchingParam == "-1")
                 {
+                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PleaseFillSearchingParameterOnThisBusinessPartner"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                     throw new Exception(BDOSResources.getTranslate("FillItemSearchParameterOnTheBP"));
                 }
 

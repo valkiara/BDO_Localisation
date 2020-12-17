@@ -3577,6 +3577,9 @@
   <data name="ARDownPaymentVat" xml:space="preserve">
     <value>ავანსის დღგ</value>
   </data>
+  <data name="PleaseFillSearchingParameterOnThisBusinessPartner" xml:space="preserve">
+    <value>გთხოვთ შეავსოთ ძებნის პარამეტრი ბიზნეს პარტნიორისთვის</value>
+  </data>
   <data name="PleaseFillWarehouse" xml:space="preserve">
     <value>გთხოვთ შეავსეთ საწყობი</value>
   </data>
