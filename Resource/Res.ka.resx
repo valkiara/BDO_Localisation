@@ -3583,4 +3583,7 @@
   <data name="Row" xml:space="preserve">
     <value>სტრიქონი</value>
   </data>
+  <data name="PleaseFillTheProject" xml:space="preserve">
+    <value>გთხოვთ შეავსოთ პროექტი</value>
+  </data>
 </root>

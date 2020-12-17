@@ -220,6 +220,7 @@ namespace BDO_Localisation_AddOn
                             Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                             return;
                         }
+                            
 
                         if (saveWhs) BDOSWarehouseAddresses.AddWhsByAddress(wBEndAdr, whs);
 
@@ -273,6 +274,12 @@ namespace BDO_Localisation_AddOn
                         if (wBProject != "")
                         {
                             APInv.Project = wBProject;
+                        }
+                        else
+                        {                          
+                            errorText = BDOSResources.getTranslate("PleaseFillTheProject") + ". " + BDOSResources.getTranslate("Row") + ": " + row;
+                            Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            return;
                         }
 
                         //APInv.PaymentGroupCode = PaymentGroupCode;
