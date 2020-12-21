@@ -790,7 +790,6 @@ namespace BDO_Localisation_AddOn
                     createFormItems(oForm, out errorText);
                     formDataLoad(oForm, out errorText);
                     SetVisibility(oForm);
-                    oForm.Items.Item("4").Click();
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
                 }
 
