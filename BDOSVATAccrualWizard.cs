@@ -460,6 +460,21 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatAmount");
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind(UID, columnName);
+
+                        }
+                        else if (columnName == "VatGrp")
+                        {
+                            oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatGroup");
+                            oColumn.Editable = false;
+                            oColumn.DataBind.Bind(UID, columnName);
+                        }
+                        else if (columnName == "Descrpt")
+                        {
+                            oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Description");
+                            oColumn.Editable = false;
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else
                         {
@@ -1084,8 +1099,8 @@ namespace BDO_Localisation_AddOn
                 query.Append("                  GROUP  BY \"IncomingPayment\".\"DownPmntEntry\") AS \"ITR1\" \n");
                 query.Append("              ON \"ITR1\".\"DocEntry\" = \"ODPI\".\"DocEntry\" \n");
 
-                query.Append("              left join(select \"DocEntry\", Max(\"VatGroup\") as \"VatGroup\", Max(\"Dscription\") as \"Dscription\" from \"DPI1\" group by \"DocEntry\" ) as \"DPI1\" \n");
-                query.Append("              on \"DPI1\".\"DocEntry\" = \"ODPI\".\"DocEntry\" \n");
+                query.Append("              left join(select \"DocEntry\", \"VatGroup\" as \"VatGroup\", \"Dscription\" as \"Dscription\" from \"DPI1\" where \"LineNum\"=0   ) as \"DPI1\" \n");
+                query.Append("              on \"DPI1\".\"DocEntry\" = \"ODPI\".\"DocEntry\"   \n");
 
 
 

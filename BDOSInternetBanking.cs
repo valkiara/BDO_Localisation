@@ -2282,18 +2282,22 @@ namespace BDO_Localisation_AddOn
                 debitCredit = Convert.ToInt32(oDataTable.GetValue("DebitCredit", i));
                 transactionType = oDataTable.GetValue("TransactionType", i);
 
-
-               
-
                 if (checkBox == "Y" && string.IsNullOrEmpty(docEntryStr))
                 {
                     if (CheckCreatedDcocument(oDataTable, i))
                     {
-                        Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TableRow") + " #" + i + ". " + BDOSResources.getTranslate("DocumentAlreadyExists"));
-                        continue;
+
+                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentAlreadyExistWithAmount") + " " + oDataTable.GetValue("Amount", i) + ". "
+                            + BDOSResources.getTranslate("CreateAnyway") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+
+                        if (answer != 1)
+                        {
+                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TableRow") + " #" + (i + 1) + ". " + BDOSResources.getTranslate("DocumentAlreadyExists"));
+                            continue;
+                        }
                     }
 
-                                                                          
+
                     if (transactionType == OperationTypeFromIntBank.None.ToString() || string.IsNullOrEmpty(transactionType))
                     {
                         continue;
@@ -2343,96 +2347,128 @@ namespace BDO_Localisation_AddOn
                             if (splitPul)
                             {
                                 CommonFunctions.StartTransaction();
-                                
-                                DataTable oDataTableDetail = TableExportMTRForDetail.AsEnumerable().GroupBy(row => new
+                                try
                                 {
-                                    LineNumExportMTR = row.Field<int>("LineNumExportMTR"),
-                                    Project = row.Field<string>("Project"),
-                                    Currency = row.Field<string>("Currency"),
-                                    BlnkAgr = row.Field<string>("BlnkAgr"),
-                                    UseBlaAgRt = row.Field<string>("UseBlaAgRt"),
-
-
-                                }).Select(g =>
-                                {
-                                    var row = TableExportMTRForDetail.NewRow();
-                                    row["LineNumExportMTR"] = g.Key.LineNumExportMTR;
-                                    row["Project"] = g.Key.Project;
-                                    row["Currency"] = g.Key.Currency;
-                                    row["BlnkAgr"] = g.Key.BlnkAgr;
-                                    row["UseBlaAgRt"] = g.Key.UseBlaAgRt;
-                                    row["TotalPaymentLocal"] = g.Sum(r => r.Field<decimal>("TotalPaymentLocal"));
-                                    row["TotalPayment"] = g.Sum(r => r.Field<decimal>("TotalPayment"));
-
-
-                                    return row;
-                                }).CopyToDataTable();
-
-                                oDataTableDetail.Columns.Add("Amount", typeof(decimal));
-                                oDataTableDetail.Columns.Add("InvoicesAmount", typeof(decimal));
-                                decimal PaymentOnAccount = Convert.ToDecimal(oDataTable.GetValue("PaymentOnAccount", i));
-
-                                string MultDocEntry = "";
-                                
-
-                                foreach (DataRow dr in oDataTableDetail.Rows)
-                                {
-                                    if (Convert.ToInt32(dr["LineNumExportMTR"])!= i+1)
+                                    DataTable oDataTableDetail = TableExportMTRForDetail.AsEnumerable().GroupBy(row => new
                                     {
-                                        continue;
+                                        LineNumExportMTR = row.Field<int>("LineNumExportMTR"),
+                                        Project = row.Field<string>("Project"),
+                                        Currency = row.Field<string>("Currency"),
+                                        BlnkAgr = row.Field<string>("BlnkAgr"),
+                                        UseBlaAgRt = row.Field<string>("UseBlaAgRt"),
+
+
+                                    }).Select(g =>
+                                    {
+                                        var row = TableExportMTRForDetail.NewRow();
+                                        row["LineNumExportMTR"] = g.Key.LineNumExportMTR;
+                                        row["Project"] = g.Key.Project;
+                                        row["Currency"] = g.Key.Currency;
+                                        row["BlnkAgr"] = g.Key.BlnkAgr;
+                                        row["UseBlaAgRt"] = g.Key.UseBlaAgRt;
+                                        row["TotalPaymentLocal"] = g.Sum(r => r.Field<decimal>("TotalPaymentLocal"));
+                                        row["TotalPayment"] = g.Sum(r => r.Field<decimal>("TotalPayment"));
+
+
+                                        return row;
+                                    }).CopyToDataTable();
+
+                                    oDataTableDetail.Columns.Add("Amount", typeof(decimal));
+                                    oDataTableDetail.Columns.Add("InvoicesAmount", typeof(decimal));
+                                    decimal PaymentOnAccount = Convert.ToDecimal(oDataTable.GetValue("PaymentOnAccount", i));
+
+                                    string MultDocEntry = "";
+
+
+                                    foreach (DataRow dr in oDataTableDetail.Rows)
+                                    {
+                                        if (Convert.ToInt32(dr["LineNumExportMTR"]) != i + 1)
+                                        {
+                                            continue;
+                                        }
+
+                                        dr["Amount"] = dr["TotalPayment"];
+                                        dr["InvoicesAmount"] = dr["TotalPayment"];
+
+                                        info = IncomingPayment.createDocumentTransferFromBPType(oDataTable, dr, false, oForm, i, out docEntry, out docNum, out errorText, transactionType);
+                                        infoList.Add(String.IsNullOrEmpty(errorText) ? info : errorText);
+
+                                        if (errorText != null)
+                                        {
+                                            isError = true;
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            MultDocEntry = MultDocEntry + docEntry + ",";
+                                        }
                                     }
 
-                                    dr["Amount"] = dr["TotalPayment"];
-                                    dr["InvoicesAmount"] = dr["TotalPayment"];
-
-                                    info = IncomingPayment.createDocumentTransferFromBPType(oDataTable, dr, false, oForm, i, out docEntry, out docNum, out errorText, transactionType);
-                        infoList.Add(String.IsNullOrEmpty(errorText) ? info : errorText);
-
-                                    if (errorText != null)
+                                    if (PaymentOnAccount > 0 && isError != true)
                                     {
-                                        isError = true;
-                                        break;
-                    }
+                                        info = IncomingPayment.createDocumentTransferFromBPType(oDataTable, null, true, oForm, i, out docEntry, out docNum, out errorText, transactionType);
+                                        infoList.Add(String.IsNullOrEmpty(errorText) ? info : errorText);
+                                        if (errorText != null)
+                                        {
+                                            isError = true;
+                                        }
+                                        else
+                                        {
+                                            MultDocEntry = MultDocEntry + docEntry + ",";
+
+
+
+                                        }
+                                    }
+
+                                    if (isError)
+                                    {
+                                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                                    }
                                     else
                                     {
-                                        MultDocEntry = MultDocEntry + docEntry + ",";
+                                        MultDocEntry = MultDocEntry.Substring(0, MultDocEntry.Length - 1);
+                                        oDataTable.SetValue("DocEntry", i, MultDocEntry);
+
+                                        //მონიშნული ინვოისების წაშლა
+                                        string expression = "LineNumExportMTR = '" + (i + 1) + "'";
+                                        DataRow[] foundRows;
+                                        foundRows = TableExportMTRForDetail.Select(expression);
+                                        for (int j = 0; j < foundRows.Count(); j++)
+                                        {
+                                            foundRows[j].Delete();
+                                        }
+                                        TableExportMTRForDetail.AcceptChanges();
+
+
+                                        CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
                                     }
                                 }
-
-                                if (PaymentOnAccount > 0 && isError!=true)
-                                {
-                                    info = IncomingPayment.createDocumentTransferFromBPType(oDataTable, null, true, oForm, i, out docEntry, out docNum, out errorText, transactionType);
-                                    infoList.Add(String.IsNullOrEmpty(errorText) ? info : errorText);
-                                    if (errorText != null)
-                                    {
-                                        isError = true;
-                                    }
-                                    else
-                                    {
-                                        MultDocEntry = MultDocEntry + docEntry + ",";
-                                    }
-                                }
-
-                                if (isError)
+                                catch (Exception ex)
                                 {
                                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                                }
-                                else
-                                {
-                                    MultDocEntry = MultDocEntry.Substring(0, MultDocEntry.Length - 1);
-                                    oDataTable.SetValue("DocEntry", i, MultDocEntry);
-                                    CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                                }
-
+                                    infoList.Add(String.IsNullOrEmpty(ex.Message) ? info : ex.Message);
+                                }                           
                             }
                             else
                             {
                                 info = IncomingPayment.createDocumentTransferFromBPType(oDataTable, null, false, oForm, i, out docEntry, out docNum, out errorText, transactionType);
                                 infoList.Add(String.IsNullOrEmpty(errorText) ? info : errorText);
 
-
-
+                                //მონიშნული ინვოისების წაშლა
+                                if (errorText == null)
+                                {
+                                    string expression = "LineNumExportMTR = '" + (i + 1) + "'";
+                                    DataRow[] foundRows;
+                                    foundRows = TableExportMTRForDetail.Select(expression);
+                                    for (int j = 0; j < foundRows.Count(); j++)
+                                    {
+                                        foundRows[j].Delete();
+                                    }
+                                    TableExportMTRForDetail.AcceptChanges();
+                                }
                             }
+
 
                         }
                     }
@@ -2444,10 +2480,10 @@ namespace BDO_Localisation_AddOn
                             infoList.Add(errorText == null ? info : errorText);
                         }
                         else
-                    {
-                        info = OutgoingPayment.createDocumentTransferToBPType(oDataTable, i, out docEntry, out docNum, out errorText, transactionType);
-                        infoList.Add(errorText == null ? info : errorText);
-                    }
+                        {
+                            info = OutgoingPayment.createDocumentTransferToBPType(oDataTable, i, out docEntry, out docNum, out errorText, transactionType);
+                            infoList.Add(errorText == null ? info : errorText);
+                        }
 
                     }
                     else if (transactionType == OperationTypeFromIntBank.TransferToOwnAccount.ToString())

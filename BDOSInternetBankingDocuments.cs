@@ -1515,22 +1515,20 @@ namespace BDO_Localisation_AddOn
                                 TotalPaymentLocal = TotalPayment * rate;
                             }
                         }
-
-                        if (AgrNo != 0 && UseBlaAgRt == "Y" && DocCur!= Program.MainCurrency)
-                        {
-                            rate = BlanketAgreement.GetBlAgremeentCurrencyRate(AgrNo, out DocCur, date);
-                        }
+                                                
 
                         if (foundRows.Count() > 0)
                         {
                             TotalPayment = TotalPayment - foundRows.Sum(row => row.Field<decimal>("TotalPayment"));
-                            //TotalPaymentLocal = TotalPaymentLocal - foundRows.Sum(row => row.Field<decimal>("TotalPaymentLocal"));
+                            TotalPaymentLocal = TotalPaymentLocal - foundRows.Sum(row => row.Field<decimal>("TotalPaymentLocal"));
+                        }
+
+                        if (AgrNo != 0 && UseBlaAgRt == "Y" && DocCur != Program.MainCurrency)
+                        {
+                            rate = BlanketAgreement.GetBlAgremeentCurrencyRate(AgrNo, out DocCur, date);
                             TotalPaymentLocal = TotalPayment * rate;
                         }
 
-                       
-
-                        
 
                         OverdueDays = Convert.ToInt32(oRecordSet.Fields.Item("OverdueDays").Value);
                         oDataTable.SetValue("LineNum", rowIndex, rowIndex + 1);
