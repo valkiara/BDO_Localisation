@@ -12,6 +12,8 @@ namespace BDO_Localisation_AddOn
     static partial class ARReserveInvoice
     {
         public static bool ReserveInvoiceAsService = false;
+        public static string WBAUT = null;
+        public static string TXAUT = null;
 
         private static Dictionary<int, decimal> InitialLineNetTotals = new Dictionary<int, decimal>();
 
@@ -36,6 +38,19 @@ namespace BDO_Localisation_AddOn
         {
             errorText = null;
             Dictionary<string, object> formItems = null;
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
 
             string itemName = "";
 
@@ -342,6 +357,7 @@ namespace BDO_Localisation_AddOn
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
                 {
                     formDataLoad( oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
             }
           
@@ -525,6 +541,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
             }
 
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
+
         }
 
         private static void SetVisibility(Form oForm)
@@ -534,6 +552,8 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item("283").Visible = !isDiscountUsed;
             oForm.Items.Item("42").Visible = !isDiscountUsed;
             oForm.Items.Item("DiscountE").Visible = isDiscountUsed;
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm, WBAUT, TXAUT);
         }
 
         private static void SetInitialLineNetTotals(Form oForm, string column, int row)

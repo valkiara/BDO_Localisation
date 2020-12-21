@@ -176,6 +176,21 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, object> formItems;
             string itemName = "";
 
+
+            string errorTextWB = null;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
+
+
             SAPbouiCOM.Item oItem = oForm.Items.Item("20");
             int left = oItem.Left;
             int height = oItem.Height;

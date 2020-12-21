@@ -1345,17 +1345,17 @@ namespace BDO_Localisation_AddOn
             Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
             if (errorTextWB != null)
             {
-                DCAT = "1";
+                DCAT = "Y";
 
             }
             else
             {
-                DCAT = rsSettings["DCAT"];
+                DCAT = rsSettings["DCAUT"];
 
             }
 
 
-            if (DCAT != "2")
+            if (DCAT != "Y")
             {
                 errorText = BDOSResources.getTranslate("UserAuthError");
             }

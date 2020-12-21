@@ -4888,6 +4888,7 @@ namespace BDO_Localisation_AddOn
                 FormsB1.WB_TAX_AuthorizationsOperations(BusinessObjectInfo.FormTypeEx, BusinessObjectInfo.EventType ,  out errorText);
                 if (errorText!=null)
                 {
+                    uiApp.SetStatusBarMessage(errorText);
                     uiApp.MessageBox(errorText);
                     BubbleEvent = false;
                 }

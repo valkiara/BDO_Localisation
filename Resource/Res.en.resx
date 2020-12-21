@@ -3640,4 +3640,34 @@
   <data name="WBAutError" xml:space="preserve">
     <value>User has no authorization to execute operation</value>
   </data>
+  <data name="AttachTaxInvoiceOnDeclaration" xml:space="preserve">
+    <value>Attach tax on declaration</value>
+  </data>
+  <data name="TaxAuthorization" xml:space="preserve">
+    <value>Tax Authorization</value>
+  </data>
+  <data name="WaybillAuthorization" xml:space="preserve">
+    <value>Waybill authorization</value>
+  </data>
+  <data name="CreateAnyway" xml:space="preserve">
+    <value>Create anyway</value>
+  </data>
+  <data name="DocumentAlreadyExists" xml:space="preserve">
+    <value>Document already exists</value>
+  </data>
+  <data name="DocumentAlreadyExistWithAmount" xml:space="preserve">
+    <value>Document already exists with this amount</value>
+  </data>
+  <data name="APDocuments" xml:space="preserve">
+    <value>AP Documents</value>
+  </data>
+  <data name="DocTtlFC" xml:space="preserve">
+    <value>Doc Total (FC)</value>
+  </data>
+  <data name="DocVatFC" xml:space="preserve">
+    <value>Doc VAT (FC)</value>
+  </data>
+  <data name="TotalFC" xml:space="preserve">
+    <value>Total (FC)</value>
+  </data>
 </root>

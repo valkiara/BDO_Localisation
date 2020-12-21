@@ -1243,7 +1243,7 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Left", 13);
             formItems.Add("Width", oForm.ClientWidth);
             formItems.Add("Top", top + 1);
-            formItems.Add("Height", oForm.ClientHeight * 3 / 4);
+            formItems.Add("Height", oForm.ClientHeight * 3 / 4-40);
             formItems.Add("UID", itemName);
             formItems.Add("FromPane", 12);
             formItems.Add("ToPane", 12);

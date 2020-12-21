@@ -11,11 +11,16 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_TaxInvoiceReceivedDetailed
     {
-        private static string LicTradNum = "";
+        private static string CardCodeG;
+        private static string opDateG;
+
         private static SAPbouiCOM.Form FormBDOSInternetBanking;
-        public static void createForm(SAPbouiCOM.Form FormBDOSInternetBanking1, out SAPbouiCOM.Form oForm, out string errorText)
+        public static void createForm(SAPbouiCOM.Form FormBDOSInternetBanking1, out SAPbouiCOM.Form oForm, string CardCode, string opDate, out string errorText)
         {
             FormBDOSInternetBanking = FormBDOSInternetBanking1;
+
+            CardCodeG = CardCode;
+            opDateG = opDate;
 
             oForm = null;
 
@@ -314,10 +319,10 @@ namespace BDO_Localisation_AddOn
 
 
 
-        public static void fillInvoicesMTR(SAPbouiCOM.Form oForm, string Tin, out string errorText)
+        public static void fillInvoicesMTR(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
-            LicTradNum = Tin;
+           
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
@@ -325,7 +330,7 @@ namespace BDO_Localisation_AddOn
             string Filter = oForm.Items.Item("Filtr").Specific.Value;
             Filter = Filter == "" ? "0" : Filter;
 
-            query = GetInvoicesMTRQuery(Tin, Filter);
+            query = GetInvoicesMTRQuery(Filter);
             oRecordSet.DoQuery(query);
 
             oDataTable.Rows.Clear();
@@ -385,8 +390,13 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string GetInvoicesMTRQuery(string Tin, string Filter = "0")
+        public static string GetInvoicesMTRQuery( string Filter = "0")
         {
+
+            DateTime opDateDt = Convert.ToDateTime(DateTime.ParseExact(opDateG, "yyyyMMdd", CultureInfo.InvariantCulture));
+            DateTime firstDayMonth = new DateTime(opDateDt.Year, opDateDt.Month, 1);
+            DateTime lastDayMonth = firstDayMonth.AddMonths(1).AddDays(-1);
+
             string str = @"
                         select ""Inv"".* from
                         (select 
@@ -396,8 +406,10 @@ namespace BDO_Localisation_AddOn
                         OPCH.""DocDate"",
                         OPCH.""DocCur"",
                         OPCH.""DocTotal"" from OPCH
-                        inner join OCRD on
-                        OPCH.""CANCELED""= 'N' and OPCH.""CardCode"" = OCRD.""CardCode"" and OCRD.""LicTradNum"" = N'" + Tin + @"'
+                        where
+                        OPCH.""CANCELED""= 'N'
+                        AND ""OPCH"".""CardCode"" = N'" + CardCodeG + @"'
+                        AND ""OPCH"".""DocDate"" >= '" + firstDayMonth.ToString("yyyyMMdd") + @"' AND ""OPCH"".""DocDate"" <= '" + lastDayMonth.ToString("yyyyMMdd") + @"'
 
                         union all
 
@@ -408,13 +420,19 @@ namespace BDO_Localisation_AddOn
                         ORPC.""DocDate"",
                         ORPC.""DocCur"",
                         ORPC.""DocTotal"" from ORPC
-                        inner join OCRD on
-                        ORPC.""CANCELED""= 'N' and ORPC.""CardCode"" = OCRD.""CardCode"" and OCRD.""LicTradNum"" = N'" + Tin + @"') as ""Inv""
+                        where
+                        ORPC.""CANCELED""= 'N'
+                        AND ""ORPC"".""CardCode"" = N'" + CardCodeG + @"'
+                        AND ""ORPC"".""DocDate"" >= '" + firstDayMonth.ToString("yyyyMMdd") + @"' AND ""ORPC"".""DocDate"" <= '" + lastDayMonth.ToString("yyyyMMdd") + @"'
+                        ) as ""Inv""
                         left join ""@BDO_TXR1"" on 
                         ""@BDO_TXR1"".""U_baseDocT"" = ""Inv"".""DocType"" and ""@BDO_TXR1"".""U_baseDoc"" = ""Inv"".""DocEntry""
                         where ""@BDO_TXR1"".""DocEntry"" is null" + (Filter != "0" ? @" and ""Inv"".""DocType""='" + Convert.ToString(Convert.ToInt32(Filter) - 1) + "'" : "") +
                         @" order by ""Inv"".""DocDate"" 
                         ";
+
+                        
+            
 
             return str;
         }
@@ -441,11 +459,36 @@ namespace BDO_Localisation_AddOn
                 {
                     if (pVal.ItemUID == "Filtr")
                     {
-                        fillInvoicesMTR(oForm, LicTradNum, out errorText);
+                        fillInvoicesMTR(oForm, out errorText);
                     }
                 }
 
-                if (pVal.ItemUID == "InvoiceMTR")
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED)
+                {
+                    if (pVal.BeforeAction)
+                    {
+
+
+                        SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("InvoiceMTR").Specific));
+                        SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
+                        string DocType = oDataTable.GetValue("DocType", pVal.Row - 1).ToString();
+
+                        SAPbouiCOM.Column oColumn;
+                        oColumn = oMatrix.Columns.Item(pVal.ColUID);
+                        if (DocType == "0")
+                        {
+                            SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = "18"; 
+                        }
+                        else
+                        {
+                            SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
+                            oLink.LinkedObjectType = "19"; //SAPbouiCOM.BoLinkedObject.lf_Employee}
+
+                        }
+                    }
+                }
+                    if (pVal.ItemUID == "InvoiceMTR")
                 {
 
                     if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED && pVal.ColUID == "CheckBox")

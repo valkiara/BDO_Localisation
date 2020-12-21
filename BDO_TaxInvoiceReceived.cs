@@ -16,6 +16,7 @@ namespace BDO_Localisation_AddOn
         public static string TXAUT = null;
         const int clientHeight = 730;
         const int clientWidth = 600;
+        private static bool noChoose = true;
 
         public static void createDocumentUDO(out string errorText)
         {
@@ -3650,8 +3651,9 @@ namespace BDO_Localisation_AddOn
                             FormsB1.TAXDeclaration_AuthorizationsOperations(out errorText);
                             if (errorText != null)
                             {
+                                uiApp.SetStatusBarMessage(errorText);
                                 uiApp.MessageBox(errorText);
-
+                                return;
                             }
                         }
                         else
@@ -3660,8 +3662,9 @@ namespace BDO_Localisation_AddOn
                             FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
                             if (errorText != null)
                             {
+                                uiApp.SetStatusBarMessage(errorText);
                                 uiApp.MessageBox(errorText);
-
+                                return;
                             }
                         }
 
@@ -4939,10 +4942,11 @@ namespace BDO_Localisation_AddOn
                             wbNumber = oBaseDoc.UserFields.Fields.Item("U_BDO_WBNo").Value;
                         }
                     }
-                }
 
-                oMatrix.Columns.Item("U_baseDoc").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
-                oMatrix.Columns.Item("U_baseDTxt").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
+                    oMatrix.Columns.Item("U_baseDoc").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
+                    noChoose = true;
+                    oMatrix.Columns.Item("U_baseDTxt").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
+                }
                 oMatrix.Columns.Item("U_amtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = gTotal;
                 oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = lineVat;
                 oMatrix.Columns.Item("U_wbNumber").Cells.Item(oMatrix.RowCount).Specific.Value = wbNumber;
@@ -5602,6 +5606,7 @@ namespace BDO_Localisation_AddOn
                 FormsB1.WB_TAX_AuthorizationsOperations(BusinessObjectInfo.FormTypeEx, BusinessObjectInfo.EventType, out errorText);
                 if (errorText != null)
                 {
+                    uiApp.SetStatusBarMessage(errorText);
                     uiApp.MessageBox(errorText);
                     BubbleEvent = false;
                 }
@@ -6394,10 +6399,11 @@ namespace BDO_Localisation_AddOn
                                 addMatrixRow(oForm);
                             else if (pVal.ItemUID == "addMult")
                             {
-                                string Tin = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_cardCodeT", 0);
+                                string CardCode = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_cardCode", 0);
+                                string opDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_opDate", 0);
                                 SAPbouiCOM.Form oFormIncomingFormDocuments;
-                                BDO_TaxInvoiceReceivedDetailed.createForm(oForm, out oFormIncomingFormDocuments, out errorText);
-                                BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments, Tin, out errorText);
+                                BDO_TaxInvoiceReceivedDetailed.createForm(oForm, out oFormIncomingFormDocuments, CardCode, opDate, out errorText);
+                                BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments,  out errorText);
                             }
                             else if (pVal.ItemUID == "addDPinv")
                                 chooseInvoiceDoc(oForm, "DownPaymentInvoice");

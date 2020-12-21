@@ -2425,7 +2425,9 @@ namespace BDO_Localisation_AddOn
                             FormsB1.TAXDeclaration_AuthorizationsOperations(out errorText);
                             if (errorText != null)
                             {
+                                uiApp.SetStatusBarMessage(errorText);
                                 uiApp.MessageBox(errorText);
+                                return;
 
                             }
                         }
@@ -2434,6 +2436,7 @@ namespace BDO_Localisation_AddOn
                             FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
                             if (errorText != null)
                             {
+                                uiApp.SetStatusBarMessage(errorText);
                                 uiApp.MessageBox(errorText);
                                 
                             }
@@ -5256,6 +5259,7 @@ namespace BDO_Localisation_AddOn
                 FormsB1.WB_TAX_AuthorizationsOperations(BusinessObjectInfo.FormTypeEx, BusinessObjectInfo.EventType, out errorText);
                 if (errorText != null)
                 {
+                    uiApp.SetStatusBarMessage(errorText);
                     uiApp.MessageBox(errorText);
                     BubbleEvent = false;
                 }

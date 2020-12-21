@@ -4597,6 +4597,7 @@ namespace BDO_Localisation_AddOn
                     FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
                     if (errorText != null)
                     {
+                        Program.uiApp.SetStatusBarMessage(errorText);
                         Program.uiApp.MessageBox(errorText);
                         return;
                     }
@@ -4633,6 +4634,15 @@ namespace BDO_Localisation_AddOn
                 {
                     SAPbouiCOM.Button oaddDecl = ((SAPbouiCOM.Button)(oForm.Items.Item("addDecl").Specific));
                     oaddDecl.Caption = BDOSResources.getTranslate("RSAddDeclaration");
+
+                    FormsB1.TAXDeclaration_AuthorizationsOperations(out errorText);
+                    if (errorText != null)
+                    {
+                        Program.uiApp.SetStatusBarMessage(errorText);
+                        Program.uiApp.MessageBox(errorText);
+                        return;
+                    }
+
                     addDeclTaxInvoiceReceived(oForm, out errorText);
                 }
 
@@ -4683,6 +4693,15 @@ namespace BDO_Localisation_AddOn
 
                         if (oOperation == 0)
                         {
+                            FormsB1.TAXDeclaration_AuthorizationsOperations(out errorText);
+                            if (errorText != null)
+                            {
+                                Program.uiApp.SetStatusBarMessage(errorText);
+                                Program.uiApp.MessageBox(errorText);
+                                return;
+
+                            }
+
                             addDeclTaxInvoiceSent(oForm, out errorText);
                         }
                     }
@@ -4710,6 +4729,14 @@ namespace BDO_Localisation_AddOn
                 {
                     if (Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantToCreateJEForDownPayment") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "") == 1)
                     {
+                        FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                        if (errorText != null)
+                        {
+                            Program.uiApp.SetStatusBarMessage(errorText);
+                            Program.uiApp.MessageBox(errorText);
+                            return;
+                        }
+
                         postDocuments(oForm);
                     }
                 }

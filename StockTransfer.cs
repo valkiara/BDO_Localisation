@@ -317,7 +317,7 @@ namespace BDO_Localisation_AddOn
                 oStaticText.Caption = wblSts != "" ? BDOSResources.getTranslate("Status") + " : " + wblSts : "";
 
 
-                oForm.Items.Item("BDO_WblDoc").Enabled = (oForm.DataSources.DBDataSources.Item(0).GetValue("CANCELED", 0) == "N");
+                //oForm.Items.Item("BDO_WblDoc").Enabled = (oForm.DataSources.DBDataSources.Item(0).GetValue("CANCELED", 0) == "N");
             }
             catch (Exception ex)
             {
