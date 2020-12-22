@@ -3586,4 +3586,67 @@
   <data name="UnableToCreateDocument" xml:space="preserve">
     <value>დოკუმენტის შექმნა შეუძლებელია</value>
   </data>
+  <data name="MaxRate" xml:space="preserve">
+    <value>მაქს. კურსი</value>
+  </data>
+  <data name="MinRate" xml:space="preserve">
+    <value>მინ. კურსი</value>
+  </data>
+  <data name="ReturnFromSupplier" xml:space="preserve">
+    <value>დაბრუნება მომწოდებლისგან</value>
+  </data>
+  <data name="ReturnToCustomer" xml:space="preserve">
+    <value>დაბრუნება მყიდველისთვის</value>
+  </data>
+  <data name="NoIncomingPaymentCanBeCreated" xml:space="preserve">
+    <value>არ შეიძლება ჩარიცხვის დოკუმენტის შექმნა, როდესაც ტიპი არის გასავალი!</value>
+  </data>
+  <data name="NoOutgoingPaymentCanBeCreated" xml:space="preserve">
+    <value>არ შეიძლება გადარიცხვის  დოკუმენტის შექმნა, როდესაც ტიპი არის შემოსავალი!</value>
+  </data>
+  <data name="SplitAndPullFromDocuments" xml:space="preserve">
+    <value>Split And Pull From Documents</value>
+  </data>
+  <data name="TransportationSide" xml:space="preserve">
+    <value>ტრანსპორტირების ხარჯის გამწევი</value>
+  </data>
+  <data name="UserAuthError" xml:space="preserve">
+    <value>თქვენს მომხმარებელს არ აქვს ოპერაციის შესრულების უფლება</value>
+  </data>
+  <data name="TransportDate" xml:space="preserve">
+    <value>ტრასნპორტირების თარიღი</value>
+  </data>
+  <data name="WBAutError" xml:space="preserve">
+    <value>მომხმარებელს არ აქვს ოპერაციის განხორციელების უფლება</value>
+  </data>
+  <data name="AttachTaxInvoiceOnDeclaration" xml:space="preserve">
+    <value>ფაქტურის  დეკლარაციაზე მიბმა</value>
+  </data>
+  <data name="TaxAuthorization" xml:space="preserve">
+    <value>ფაქტურის ავტორიზაცია</value>
+  </data>
+  <data name="WaybillAuthorization" xml:space="preserve">
+    <value>ზედნადების ავტორიზაცია</value>
+  </data>
+  <data name="CreateAnyway" xml:space="preserve">
+    <value>მაინც შეიქმნას</value>
+  </data>
+  <data name="DocumentAlreadyExists" xml:space="preserve">
+    <value>დოკუმენტი უკვე არსებობს</value>
+  </data>
+  <data name="DocumentAlreadyExistWithAmount" xml:space="preserve">
+    <value>დოკუმენტი უკვე არსებობს თანხით</value>
+  </data>
+  <data name="AP Documents" xml:space="preserve">
+    <value>AP დოკუმენტები</value>
+  </data>
+  <data name="DocTtlFC" xml:space="preserve">
+    <value>თანხა (FC)</value>
+  </data>
+  <data name="DocVatFC" xml:space="preserve">
+    <value>დღგ (FC)</value>
+  </data>
+  <data name="TotalFC" xml:space="preserve">
+    <value>ჯამი (FC)</value>
+  </data>
 </root>
