@@ -318,6 +318,9 @@ namespace BDO_Localisation_AddOn
 
             StaticText oStaticText = null;
             oForm.Freeze(true);
+
+            SetVisibility(oForm);
+
             try
             {
                 int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OINV").GetValue("DocEntry", 0));
@@ -1031,6 +1034,8 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item("283").Visible = !isDiscountUsed;
             oForm.Items.Item("42").Visible = !isDiscountUsed;
             oForm.Items.Item("DiscountE").Visible = isDiscountUsed;
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
 
         private static void SetInitialLineNetTotals(Form oForm, string column, int row)

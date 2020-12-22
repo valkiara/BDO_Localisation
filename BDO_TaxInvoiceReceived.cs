@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Runtime.InteropServices;
+using static BDO_Localisation_AddOn.Program;
 
 
 namespace BDO_Localisation_AddOn
@@ -2485,6 +2486,22 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
+            formItems = new Dictionary<string, object>();
+            itemName = "addMult"; //10 characters
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_BUTTON);
+            formItems.Add("Left", left_s + 200 + 2);
+            formItems.Add("Width", 100);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", "[...]");
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
             top += top + 1;
 
             formItems = new Dictionary<string, object>();
@@ -3529,6 +3546,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Freeze(false);
                 oForm.Update();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
 
         public static void comboSelect(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
@@ -3607,6 +3626,30 @@ namespace BDO_Localisation_AddOn
                         else
                         {
                             return;
+                        }
+
+
+                        if (selectedOperation == "addToTheDeclaration")
+                        {
+                            string errorText = null;
+                            FormsB1.TAXDeclaration_AuthorizationsOperations(out errorText);
+                            if (errorText != null)
+                            {
+                                uiApp.SetStatusBarMessage(errorText);
+                                uiApp.MessageBox(errorText);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            string errorText = null;
+                            FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                            if (errorText != null)
+                            {
+                                uiApp.SetStatusBarMessage(errorText);
+                                uiApp.MessageBox(errorText);
+                                return;
+                            }
                         }
 
                         oButtonCombo.Caption = BDOSResources.getTranslate("Operations");
@@ -3721,7 +3764,8 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
                             else if (selectedOperation == "update") //განახლება
-                            { int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttoupdate"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                            {
+                                int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttoupdate"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                                     if (answer == 1)
                                     {
                                         int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
@@ -4821,7 +4865,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void addMatrixRow(SAPbouiCOM.Form oForm)
+        public static void addMatrixRow(SAPbouiCOM.Form oForm, string docType = "0", int docEntry = 0)
         {
             try
             {
@@ -4846,19 +4890,49 @@ namespace BDO_Localisation_AddOn
                 string downPaymnt = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_downPaymnt", 0).Trim();
                 string corrInv = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_corrInv", 0).Trim();
                 if (downPaymnt == "Y")
-                    //oMatrix.Columns.Item("U_baseDocT").Cells.Item(oMatrix.RowCount).Specific.Value = "2";
+                   
                     oComboBox.Select("2", SAPbouiCOM.BoSearchKey.psk_ByValue);
                 else if (corrInv == "Y")
-                    //oMatrix.Columns.Item("U_baseDocT").Cells.Item(oMatrix.RowCount).Specific.Value = "1";
+                
                     oComboBox.Select("1", SAPbouiCOM.BoSearchKey.psk_ByValue);
                 else
-                    //oMatrix.Columns.Item("U_baseDocT").Cells.Item(oMatrix.RowCount).Specific.Value = "0";
-                    oComboBox.Select("0", SAPbouiCOM.BoSearchKey.psk_ByValue);
-                oMatrix.Columns.Item("U_baseDoc").Cells.Item(oMatrix.RowCount).Specific.Value = 0;
-                oMatrix.Columns.Item("U_baseDTxt").Cells.Item(oMatrix.RowCount).Specific.Value = "";
-                oMatrix.Columns.Item("U_amtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = 0;
-                oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = 0;
-                oMatrix.Columns.Item("U_wbNumber").Cells.Item(oMatrix.RowCount).Specific.Value = "";
+
+                    oComboBox.Select(docType, SAPbouiCOM.BoSearchKey.psk_ByValue);
+
+                //გადმოცემული დოკუმენტის ინფორმაციის მიღება
+                double gTotal =0 ;
+                double lineVat = 0;
+                string errorText = null;
+                string wbNumber = "";
+                SAPbobsCOM.Documents oBaseDoc = null;
+
+                if (docEntry > 0)
+                {
+                    if (docType == "0")
+                    {
+                        APInvoice.getAmount(docEntry, out gTotal, out lineVat, out errorText);
+                        oBaseDoc = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
+                        if (oBaseDoc.GetByKey(docEntry))
+                        {
+                            wbNumber = oBaseDoc.UserFields.Fields.Item("U_BDO_WBNo").Value;
+                        }
+                    }
+                    else if (docType == "1")
+                    {
+                        APCreditMemo.getAmount(docEntry, out gTotal, out lineVat, out errorText);
+                        oBaseDoc = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseCreditNotes);
+                        if (oBaseDoc.GetByKey(docEntry))
+                        {
+                            wbNumber = oBaseDoc.UserFields.Fields.Item("U_BDO_WBNo").Value;
+                        }
+                    }
+
+                    oMatrix.Columns.Item("U_baseDoc").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
+                    oMatrix.Columns.Item("U_baseDTxt").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
+                }
+                oMatrix.Columns.Item("U_amtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = gTotal;
+                oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = lineVat;
+                oMatrix.Columns.Item("U_wbNumber").Cells.Item(oMatrix.RowCount).Specific.Value = wbNumber;
                 oMatrix.CommonSetting.SetRowBackColor(oMatrix.RowCount, -1);
             }
             catch (Exception ex)
@@ -5508,6 +5582,17 @@ namespace BDO_Localisation_AddOn
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && BusinessObjectInfo.BeforeAction)
             {
                 return;
+            }
+
+            if (BusinessObjectInfo.BeforeAction)
+            {
+                FormsB1.WB_TAX_AuthorizationsOperations(BusinessObjectInfo.FormTypeEx, BusinessObjectInfo.EventType, out errorText);
+                if (errorText != null)
+                {
+                    uiApp.SetStatusBarMessage(errorText);
+                    uiApp.MessageBox(errorText);
+                    BubbleEvent = false;
+                }
             }
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
@@ -6295,6 +6380,14 @@ namespace BDO_Localisation_AddOn
                         {
                             if (pVal.ItemUID == "addMTRB")
                                 addMatrixRow(oForm);
+                            else if (pVal.ItemUID == "addMult")
+                            {
+                                string CardCode = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_cardCode", 0);
+                                string opDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_opDate", 0);
+                                SAPbouiCOM.Form oFormIncomingFormDocuments;
+                                BDO_TaxInvoiceReceivedDetailed.createForm(oForm, out oFormIncomingFormDocuments, CardCode, opDate, out errorText);
+                                BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments,  out errorText);
+                            }
                             else if (pVal.ItemUID == "addDPinv")
                                 chooseInvoiceDoc(oForm, "DownPaymentInvoice");
                             else if (pVal.ItemUID == "delMTRB" || pVal.ItemUID == "delDPinv")
@@ -6340,6 +6433,31 @@ namespace BDO_Localisation_AddOn
                     {
                         comboSelect(oForm, pVal);
                     }
+                }
+            }
+        }
+
+        public static void AddMult(SAPbouiCOM.Form oForm, DataTable NewRowsTable)
+        {
+            foreach (DataRow dr in NewRowsTable.Rows)
+            {
+                bool isInTable = false;
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    string U_baseDoc = oMatrix.Columns.Item("U_baseDoc").Cells.Item(i).Specific.Value;
+                    string U_baseDocT = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i).Specific.Value;
+                    if (Convert.ToString(dr["DocEntry"]) == U_baseDoc && Convert.ToString(dr["DocType"]) == U_baseDocT)
+                    {
+                        isInTable = true;
+                        break;
+                    }
+                }
+
+                if (isInTable != true)
+                {
+                    addMatrixRow(oForm, Convert.ToString(dr["DocType"]), Convert.ToInt32(dr["DocEntry"]));
                 }
             }
         }

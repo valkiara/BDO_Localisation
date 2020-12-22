@@ -294,6 +294,7 @@ namespace BDO_Localisation_AddOn
                 {
                     CreateFormItems(oForm, out _);
                     FormDataLoad(oForm, out _);
+                    FormsB1.WB_TAX_AuthorizationsItems(oForm);
                 }
                 else
                 {

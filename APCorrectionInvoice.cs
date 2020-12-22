@@ -470,6 +470,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
@@ -491,6 +493,7 @@ namespace BDO_Localisation_AddOn
                         {
                             createFormItems(oForm, out errorText);
                             formDataLoad(oForm, out errorText);
+                            setVisibleFormItems(oForm, out errorText);
                         }
                         else
                             setValues(oForm, out errorText);
