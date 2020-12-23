@@ -341,7 +341,7 @@ namespace BDO_Localisation_AddOn
 
                         SAPbouiCOM.Column oColumn;
 
-                        if (opType == "paymentToEmployee")
+                        if (opType == "paymentToEmployee" || opType == "SL")
                         {
                             oColumn = oMatrix.Columns.Item(pVal.ColUID);
                             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
