@@ -163,7 +163,7 @@
     <value>აპრილი</value>
   </data>
   <data name="ARCreditMemo" xml:space="preserve">
-    <value>რეალიზაციის კორექტირება</value>
+    <value>რეალიზაციის კორ/დაბრ</value>
   </data>
   <data name="ARInvoice" xml:space="preserve">
     <value>რეალიზაცია</value>
@@ -1360,7 +1360,7 @@
     <value>კორექტირების თანხა</value>
   </data>
   <data name="ARCreditNote" xml:space="preserve">
-    <value>რეალიზაციის კორექტირება</value>
+    <value>რეალიზაციის კორ/დაბრ</value>
   </data>
   <data name="EndsWithErrorCheckMessageLog" xml:space="preserve">
     <value>დასრულდა შეცდომებით. გადაამოწმეთ ლოგი!</value>
