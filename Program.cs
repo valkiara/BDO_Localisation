@@ -54,6 +54,9 @@ namespace BDO_Localisation_AddOn
         public static bool localisationAddonLicensed = false;
         public static readonly string ExecutionDateISO = DateTime.UtcNow.ToString("o");
         public static bool selectItemsToCopyOkClick = false;
+        public static string WBAUT = null;
+        public static string TXAUT = null;
+        public static bool DECAUT = false;
         
 
     static void Main(string[] args)
@@ -122,6 +125,22 @@ namespace BDO_Localisation_AddOn
                 LocalCurrency = CommonFunctions.getCurrencyInternationalCode(oSBOBob.GetLocalCurrency().Fields.Item("LocalCurrency").Value);
 
                 MainCurrency = CurrencyB1.getMainCurrency(out errorText);
+
+                string errorTextWB = null;
+                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+                if (errorTextWB != null)
+                {
+                    WBAUT = "2";
+                    TXAUT = "2";
+                    DECAUT = true;
+                }
+                else
+                {
+                    WBAUT = rsSettings["WBAUT"];
+                    TXAUT = rsSettings["TXAUT"];
+                    DECAUT = rsSettings["DCAUT"] == "Y";
+
+                }
 
                 return connectResult;
             }

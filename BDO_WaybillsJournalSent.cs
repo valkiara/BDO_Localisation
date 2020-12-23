@@ -775,6 +775,8 @@ namespace BDO_Localisation_AddOn
 
                 oForm.Visible = true;
                 oForm.Select();
+
+                FormsB1.WB_TAX_AuthorizationsItems(oForm);
             }
 
             GC.Collect();
