@@ -95,9 +95,27 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "GrsAmntFC"); //საფუძველი დოკუმენტის დღგ-ის თანხა
+            fieldskeysMap.Add("TableName", "BDOSARDV");
+            fieldskeysMap.Add("Description", "Gross Amount (FC)");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "VatAmount"); //საფუძველი დოკუმენტის დღგ-ის თანხა
             fieldskeysMap.Add("TableName", "BDOSARDV");
             fieldskeysMap.Add("Description", "VAT Amount");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "VatAmtFC"); //საფუძველი დოკუმენტის დღგ-ის თანხა
+            fieldskeysMap.Add("TableName", "BDOSARDV");
+            fieldskeysMap.Add("Description", "VAT Amount (FC)");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
