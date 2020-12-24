@@ -2416,7 +2416,7 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-            string query = @"SELECT * FROM ""OADM""";
+            string query = @"SELECT ""U_BDO_SU"", ""U_BDO_SP"", ""U_BDO_ItmCod"", ""U_BDO_UsrTyp"", ""U_BDO_PrtTyp"", ""U_BDO_WblTyp"", ""U_BDOSWblAut"", ""U_BDOSTaxAut"", ""U_BDOSDecAtt"" FROM ""OADM""";
 
             try
             {
@@ -2440,7 +2440,7 @@ namespace BDO_Localisation_AddOn
 
                 if (rsSettingsFromDB["UserType"] == "1") //მომხმარებლის მიხედვით
                 {
-                    query = @"SELECT * FROM ""OUSR"" WHERE ""USER_CODE"" = '" + Program.oCompany.UserName + "'";
+                    query = @"SELECT ""U_BDO_SU"", ""U_BDO_SP"", ""U_BDOSWblAut"", ""U_BDOSTaxAut"", ""U_BDOSDecAtt"" FROM ""OUSR"" WHERE ""USER_CODE"" = '" + Program.oCompany.UserName + "'";
                     oRecordSet.DoQuery(query);
 
                     while (!oRecordSet.EoF)

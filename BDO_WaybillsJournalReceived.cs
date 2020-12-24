@@ -3001,6 +3001,15 @@ namespace BDO_Localisation_AddOn
                         LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBWhs").Cells.Item(oCFLEvento.Row).Specific.Value = WBWhsCode);
 
                         string blAgreement = oMatrix.Columns.Item("WBBlankAgr").Cells.Item(oCFLEvento.Row).Specific.Value.ToString();
+                        string prjCode = oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value.ToString();
+
+                        if (string.IsNullOrEmpty(prjCode))
+                        {
+                            var WBPrjCode = oDataTableSelectedObjects.GetValue("U_BDOSPrjCod", 0);
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("WBProject").Cells.Item(oCFLEvento.Row).Specific.Value = WBPrjCode);
+
+                            FillGoodsProject(oForm, WBPrjCode);
+                        }
 
                         //if (string.IsNullOrEmpty(blAgreement))
                         //{
@@ -3682,6 +3691,7 @@ namespace BDO_Localisation_AddOn
                 string searchingParam = oBP.UserFields.Fields.Item("U_BDO_ItmPrm").Value;
                 if (string.IsNullOrEmpty(searchingParam) || searchingParam == "-1")
                 {
+                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PleaseFillSearchingParameterOnThisBusinessPartner"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                     throw new Exception(BDOSResources.getTranslate("FillItemSearchParameterOnTheBP"));
                 }
 
@@ -3787,6 +3797,7 @@ namespace BDO_Localisation_AddOn
                 string searchingParam = oBP.UserFields.Fields.Item("U_BDO_ItmPrm").Value;
                 if (string.IsNullOrEmpty(searchingParam) || searchingParam == "-1")
                 {
+                    Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("PleaseFillSearchingParameterOnThisBusinessPartner"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                     throw new Exception(BDOSResources.getTranslate("FillItemSearchParameterOnTheBP"));
                 }
 
