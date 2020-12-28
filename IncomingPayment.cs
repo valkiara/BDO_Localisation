@@ -833,6 +833,7 @@ namespace BDO_Localisation_AddOn
                     {
                         accountCodeOUT = oPayments.CardCode;
                         DocCurrencyOUT = oPayments.DocCurrency;
+                        string DocCurrencyForConvert = oPayments.DocCurrency;
                         DocRateOUT = (decimal)oPayments.DocRate;
                         trsfrSumOUT = Convert.ToDecimal(oPayments.TransferSum);
 
@@ -903,6 +904,34 @@ namespace BDO_Localisation_AddOn
                             jeLinesRow["ProjectCode"] = U_PrjCode;
 
                             J++;
+                        }
+
+
+                        if(DocCurrencyForConvert != "")
+                        {
+                            trsfrSumOUTFC = DocRateOUT == 0 ? 0 : trsfrSumOUT / DocRateOUT;
+
+                            jeLinesRow = jeLines.Rows.Add(J);
+                            jeLinesRow["AccountCode"] = accountCodeOUT; //Credit
+                            jeLinesRow["ShortName"] = accountCodeOUT;
+                            jeLinesRow["ContraAccount"] = accountCodeOUT;
+                            jeLinesRow["Credit"] = 0;
+                            jeLinesRow["Debit"] = Convert.ToDouble(trsfrSumOUT);
+                            jeLinesRow["ProjectCode"] = U_PrjCode;
+                            J++;
+
+                            jeLinesRow = jeLines.Rows.Add(J);
+                            jeLinesRow["AccountCode"] = accountCodeOUT; //Credit
+                            jeLinesRow["ShortName"] = accountCodeOUT;
+                            jeLinesRow["ContraAccount"] = accountCodeOUT;
+                            jeLinesRow["Credit"] = Convert.ToDouble(trsfrSumOUT); ;
+                            jeLinesRow["FCCredit"] = Convert.ToDouble(trsfrSumOUTFC);
+                            jeLinesRow["Debit"] = 0;
+                            jeLinesRow["FCDebit"] = 0;
+                            jeLinesRow["FCCurrency"] = DocCurrencyForConvert;
+                            jeLinesRow["ProjectCode"] = U_PrjCode;
+                            J++;
+
                         }
                     }
                 }
@@ -2689,6 +2718,27 @@ namespace BDO_Localisation_AddOn
                     {
                         docEntry = oPaymentsNew.DocEntry;
                         docNum = oPaymentsNew.DocNum;
+
+                        decimal DocRate = Convert.ToDecimal(oPaymentsNew.DocRate);
+                        string DocCurrency = oPaymentsNew.DocCurrency;
+                        DateTime DocDate = oPaymentsNew.DocDate;
+
+                        Dictionary<string, object> oDictionary = new Dictionary<string, object>();
+                        oDictionary.Add("CardCode", oPaymentsNew.CardCode);
+                        oDictionary.Add("TrsfrSum", oPaymentsNew.TransferSum);
+                        oDictionary.Add("U_outDoc", oPaymentsNew.UserFields.Fields.Item("U_outDoc").Value.Trim());
+                        oDictionary.Add("DocType", "A");
+                        oDictionary.Add("PrjCode", oPaymentsNew.ProjectCode);
+
+                        DataTable JrnLinesDT = createAdditionalEntries(oDictionary, DocCurrency, DocRate, DocDate, out errorText);
+                        if (errorText != null)
+                        {
+                            throw new Exception(errorText);
+                        }
+
+                        JrnEntry(docEntry.ToString(), docNum.ToString(), DocDate, JrnLinesDT, out errorText);
+
+
                         oDataTable.SetValue("DocEntry", i, docEntry.ToString());
                         oDataTable.SetValue("DocNum", i, docNum.ToString());
 
