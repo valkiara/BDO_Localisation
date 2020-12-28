@@ -2260,6 +2260,20 @@ namespace BDO_Localisation_AddOn
 
                 if (checkBox == "Y" && string.IsNullOrEmpty(docEntryStr))
                 {
+                    if (CheckCreatedDcocument(oDataTable, i))
+                    {
+
+                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentAlreadyExistWithAmount") + " " + oDataTable.GetValue("Amount", i) + ". "
+                            + BDOSResources.getTranslate("CreateAnyway") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+
+                        if (answer != 1)
+                        {
+                            Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TableRow") + " #" + (i + 1) + ". " + BDOSResources.getTranslate("DocumentAlreadyExists"));
+                            continue;
+                        }
+                    }
+
+
                     if (transactionType == OperationTypeFromIntBank.None.ToString() || string.IsNullOrEmpty(transactionType))
                     {
                         continue;
@@ -5200,6 +5214,46 @@ namespace BDO_Localisation_AddOn
                 }
             }
         }
+        private static bool CheckCreatedDcocument(SAPbouiCOM.DataTable oDataTable, int i)
+        {
+
+            string DocDate = oDataTable.GetValue("DocumentDate", i).ToString("yyyyMMdd");
+            string BPCode = oDataTable.GetValue("BPCode", i);
+            string Currency = oDataTable.GetValue("Currency", i);
+            string DebitCredit = oDataTable.GetValue("DebitCredit", i);
+            double Amount = oDataTable.GetValue("Amount", i);
+            
+
+            string query = @"Select * from
+                        (Select ""CardCode"", 
+                        Sum(""DocTotal"") as ""DocTotal"", 
+                        Sum(""DocTotalFC"") as ""DocTotalFC"" from #Table#
+                        where  ""CardCode"" = '#CardCode#' and 
+                        ""DocCurr"" = '#DocCurr#' and 
+                        ""DocDate"" = '#DocDate#' and
+                        ""Canceled"" = 'N'
+                        Group By ""CardCode"")   as ""Docs""
+                        where ""DocTotal"" = '#DocTotal#'";
+            query = query.Replace("#CardCode#", BPCode);
+            query = query.Replace("#DocCurr#", Currency);
+            query = query.Replace("#DocDate#", DocDate);
+            query = query.Replace("#DocTotal#", Amount.ToString());
+
+            query = query.Replace("#Table#", DebitCredit=="1"?"ORCT":"OVPM");
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            oRecordSet.DoQuery(query);
+
+            if (!oRecordSet.EoF)
+            {
+                return true;
+            }
+
+                return false;
+        }
+
+
 
         public static void createFolder(SAPbouiCOM.Form oForm, out string errorText)
         {
