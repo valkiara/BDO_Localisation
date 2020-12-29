@@ -1931,7 +1931,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string createDocumentTransferFromBPType(SAPbouiCOM.DataTable oDataTable, SAPbouiCOM.Form oForm, int i, out int docEntry, out int docNum, out string errorText)
+        public static string createDocumentTransferFromBPType(SAPbouiCOM.DataTable oDataTable, DataRow oDataTableDetail, bool onAccount, SAPbouiCOM.Form oForm, int i, out int docEntry, out int docNum, out string errorText, string transactionType = null)
         {
             errorText = null;
             docEntry = 0;
@@ -1953,19 +1953,27 @@ namespace BDO_Localisation_AddOn
                 DateTime docDate = oDataTable.GetValue("DocumentDate", i);
                 DateTime valueDate = oDataTable.GetValue("ValueDate", i);
                 string GLAccountCode = oDataTable.GetValue("GLAccountCode", i);
-                string projectCod = oDataTable.GetValue("Project", i);
+                string projectCod = oDataTableDetail == null ? oDataTable.GetValue("Project", i) : oDataTableDetail["Project"].ToString();
 
                 if (string.IsNullOrEmpty(GLAccountCode))
                     errorText = BDOSResources.getTranslate("TheFollowingFieldIsMandatory") + " : \"" + BDOSResources.getTranslate("GLAccountCode") + "\"! ";
                 string cashFlowLineItemName = oDataTable.GetValue("CashFlowLineItemName", i);
                 string accountNumber = oDataTable.GetValue("AccountNumber", i);
                 string currency = oDataTable.GetValue("Currency", i);
+                string InvCurrency = oDataTableDetail == null ? oDataTable.GetValue("Currency", i) : oDataTableDetail["Currency"].ToString();
+
                 string currencySapCode = CommonFunctions.getCurrencySapCode(currency);
                 if (string.IsNullOrEmpty(currencySapCode))
                     errorText = errorText + BDOSResources.getTranslate("CouldNotFindCurrency") + " \"" + currency + "\"! ";
                 string partnerAccountNumber = oDataTable.GetValue("PartnerAccountNumber", i);
                 string partnerCurrency = oDataTable.GetValue("PartnerCurrency", i);
                 string partnerCurrencySapCode = CommonFunctions.getCurrencySapCode(partnerCurrency);
+
+                if (oDataTableDetail != null)
+                {
+                    partnerCurrencySapCode = InvCurrency;
+                }
+
                 if (string.IsNullOrEmpty(partnerCurrencySapCode))
                     errorText = errorText + BDOSResources.getTranslate("CouldNotFindCurrency") + " \"" + partnerCurrencySapCode + "\"! ";
                 string transferAccount = CommonFunctions.getTransferAccount(accountNumber + currency);
@@ -1976,9 +1984,21 @@ namespace BDO_Localisation_AddOn
                 if (cashFlowRelevant && string.IsNullOrEmpty(cashFlowLineItemID))
                     errorText = errorText + BDOSResources.getTranslate("TheFollowingFieldIsMandatory") + " : \"" + BDOSResources.getTranslate("CashFlowLineItemID") + "\"! ";
                 string partnerTaxCode = oDataTable.GetValue("PartnerTaxCode", i);
-                string blnkAgr = oDataTable.GetValue("BlnkAgr", i);
-                string useBlaAgRt = oDataTable.GetValue("UseBlaAgRt", i);
-                SAPbobsCOM.Recordset oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, "C");
+
+                string blnkAgr = oDataTableDetail == null ? oDataTable.GetValue("BlnkAgr", i) : oDataTableDetail["BlnkAgr"].ToString();
+
+                string useBlaAgRt = oDataTableDetail == null ? oDataTable.GetValue("UseBlaAgRt", i) : oDataTableDetail["UseBlaAgRt"].ToString();
+
+                SAPbobsCOM.Recordset oRecordSet = null;
+                if (transactionType == OperationTypeFromIntBank.ReturnFromSupplier.ToString())
+                {
+                    oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, "S");
+                }
+                else
+                {
+                    oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, "C");
+                }
+
                 if (oRecordSet == null)
                 {
                     errorText = BDOSResources.getTranslate("CouldNotFindBusinessPartner") + "! " + BDOSResources.getTranslate("Account") + " \"" + partnerAccountNumber + currency + "\"";
@@ -2006,7 +2026,16 @@ namespace BDO_Localisation_AddOn
 
                 oPayments.ProjectCode = projectCod;
                 oPayments.DocObjectCode = SAPbobsCOM.BoPaymentsObjectType.bopot_IncomingPayments;
+
+                if (transactionType == OperationTypeFromIntBank.ReturnFromSupplier.ToString())
+                {
+                    oPayments.DocTypte = SAPbobsCOM.BoRcptTypes.rSupplier;
+                }
+                else
+                {
                 oPayments.DocTypte = SAPbobsCOM.BoRcptTypes.rCustomer;
+                }
+
                 oPayments.DocDate = docDate;
                 oPayments.TaxDate = docDate;
 
@@ -2031,21 +2060,28 @@ namespace BDO_Localisation_AddOn
 
                 decimal transferSumLC = 0;
                 decimal transferSumFC = 0;
-                decimal amount = Convert.ToDecimal(oDataTable.GetValue("Amount", i), NumberFormatInfo.InvariantInfo);
-                decimal invoicesamount = Convert.ToDecimal(oDataTable.GetValue("InvoicesAmount", i), NumberFormatInfo.InvariantInfo);
+
+                decimal amount = oDataTableDetail == null ? Convert.ToDecimal(oDataTable.GetValue("Amount", i), NumberFormatInfo.InvariantInfo) : Convert.ToDecimal(oDataTableDetail["Amount"], NumberFormatInfo.InvariantInfo);
+
+                if (onAccount)
+                {
+                    amount = Convert.ToDecimal(oDataTable.GetValue("PaymentOnAccount", i), NumberFormatInfo.InvariantInfo);
+                }
+
+
                 decimal addDPAmt = 0;
                 decimal addDPamtLocal = 0;
-                if (automaticPaymentInternetBanking)
+                if (automaticPaymentInternetBanking && oDataTableDetail == null)
                 {
                     addDPAmt = Convert.ToDecimal(oDataTable.GetValue("AddDownPaymentAmount", i), NumberFormatInfo.InvariantInfo);
 
-                    /*if (invoicesamount > 0)
+                }
+                if(amount == 0)
                     {
-                        amount = amount - addDPAmt;
-                    }*/
+                    amount = addDPAmt;
                 }
 
-                if (currencySapCode == partnerCurrencySapCode)
+                if (currencySapCode == partnerCurrencySapCode || oDataTableDetail != null)
                 {
                     if (BPCurrency != "##" && BPCurrency != localCurrency)
                     {
@@ -2137,8 +2173,20 @@ namespace BDO_Localisation_AddOn
                 oPayments.TransferAccount = transferAccount;
                 oPayments.TransferDate = docDate;
                 oPayments.TransferSum = Convert.ToDouble(amount, NumberFormatInfo.InvariantInfo);
+                if (onAccount == false)
+                {
+                    string expression = "LineNumExportMTR = '" + oDataTable.GetValue("LineNum", i) + "'";
 
-                string expression = "LineNumExportMTR = '" + oDataTable.GetValue("LineNum", i) + "'";
+                    if (oDataTableDetail != null)
+                    {
+
+                        expression = expression + " and Project = '" + oDataTableDetail["Project"] + "'"
+                        + "and BlnkAgr = '" + oDataTableDetail["BlnkAgr"] + "'"
+                        + "and useBlaAgRt = '" + oDataTableDetail["useBlaAgRt"] + "'"
+                        + "and Currency = '" + oDataTableDetail["Currency"] + "'";
+
+                    }
+
                 DataRow[] foundRows = BDOSInternetBanking.TableExportMTRForDetail.Select(expression);
                 string docType;
                 if (foundRows.Count() > 0)
@@ -2155,6 +2203,8 @@ namespace BDO_Localisation_AddOn
                             oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_CredItnote;
                         else if (docType == "203")
                             oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_DownPayment;
+                            else if (docType == "163")
+                                oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_APCorrectionInvoice;
                         else if (docType == "30")
                         {
                             oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_JournalEntry;
@@ -2167,116 +2217,38 @@ namespace BDO_Localisation_AddOn
                         oPayments.Invoices.Add();
                     }
                 }
-                else
-                {
+                    
+
                     if (automaticPaymentInternetBanking)
                     {
-                        //Jer vxuravt invoisebs qronologiurad
-                        string dataInv = docDate.ToString("yyyyMMdd");
+                        //Tu Tanxa darcha iqmneba avansi da emateba cxrilshi invoisebtan ertad
+                        int dpdocEntry;
+                        int dpdocNum;
 
-                        string query = BDOSInternetBankingDocuments.GetInvoicesMTRQuery(dataInv, cardCode, blnkAgr);
-
-                        oRecordSet.DoQuery(query);
-
-                        decimal OpenAmount = 0;
-                        decimal TotalPayment = 0;
-                        decimal TotalPaymentLocal = 0;
-                        decimal InsTotal = 0;
-
-                        string DocCur = "";
-
-                        while (!oRecordSet.EoF)
+                        if (addDPAmt > 0)
                         {
-                            if (addDPAmt == 0)
-                            {
-                                break;
+                            oDataTable.SetValue("AddDownPaymentAmount", i, Convert.ToDouble(addDPAmt));
+                            dpTxt = ARDownPaymentRequest.createDocumentTransferFromBPType(oDataTable, oForm, i, "", "", out dpdocEntry, out dpdocNum, out errorText);
+
+                            oPayments.Invoices.DocEntry = dpdocEntry;
+                            oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_DownPayment;
+
+                            oPayments.Invoices.SumApplied = Convert.ToDouble(addDPAmt);
                             }
 
-                            DocCur = Convert.ToString(oRecordSet.Fields.Item("DocCur").Value);
-
-                            int DocEntry = Convert.ToInt32(oRecordSet.Fields.Item("DocEntry").Value);
-                            int DocNum = Convert.ToInt32(oRecordSet.Fields.Item("DocNum").Value);
-                            int InstallmentID = Convert.ToInt32(oRecordSet.Fields.Item("InstallmentID").Value);
-                            string DocType = Convert.ToString(oRecordSet.Fields.Item("ObjType").Value);
-                            string DueDate = oRecordSet.Fields.Item("DueDate").Value.ToString("yyyyMMdd") == "18991230" ? "" : oRecordSet.Fields.Item("DueDate").Value.ToString("yyyyMMdd");
-
-                            if (string.IsNullOrEmpty(DocCur))
-                                DocCur = Program.MainCurrency;
-
-                            TotalPaymentLocal = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmount").Value);
-                            addDPamtLocal = addDPAmt;
-                            if (Program.MainCurrency == DocCur)
-                            {
-                                OpenAmount = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmount").Value);
-                                TotalPayment = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmount").Value);
-                                InsTotal = Convert.ToDecimal(oRecordSet.Fields.Item("InsTotal").Value);
-                            }
-                            else
-                            {
-                                NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator, NumberGroupSeparator = CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator };
-
-                                // decimal rate = Convert.ToDecimal(oForm.DataSources.UserDataSources.Item("docRateINE").ValueEx, Nfi);
-
-                                OpenAmount = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmountFC").Value);
-                                TotalPayment = Convert.ToDecimal(oRecordSet.Fields.Item("OpenAmountFC").Value);
-                                InsTotal = Convert.ToDecimal(oRecordSet.Fields.Item("InsTotalFC").Value);
-                                /*if (rate != 0)
+                        if (!string.IsNullOrEmpty(errorText))
                                 {
-                                    TotalPaymentLocal = TotalPayment * rate;
-                                    addDPamtLocal = addDPAmt * rate;
+                            return null;
                                 }
-                                else
-                                {*/
-                                decimal rate = System.Convert.ToDecimal(Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge).GetCurrencyRate(DocCur, docDate).Fields.Item("CurrencyRate").Value);
-                                TotalPaymentLocal = TotalPayment * rate;
-                                addDPamtLocal = addDPAmt * rate;
-                                //}
                             }
-
-                            //currency - gadaxdis valuta
-                            if (currency == Program.MainCurrency)
+                            }
+                else
                             {
-                                TotalPayment = TotalPaymentLocal;
-                            }
-
-                            decimal amountForDocCreating = Math.Min(TotalPayment, addDPAmt);
-                            decimal amountForDocCreatingLC = Math.Min(TotalPaymentLocal, addDPamtLocal);
-
-                            oPayments.Invoices.DocEntry = DocEntry;
-                            oPayments.Invoices.InstallmentId = InstallmentID;
-
-                            if (DocType == "13")
-                                oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_Invoice;
-                            else if (DocType == "14")
-                                oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_CredItnote;
-                            else if (DocType == "203")
-                                oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_DownPayment;
-                            else if (DocType == "30")
-                            {
-                                oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_JournalEntry;
-                                oPayments.Invoices.DocLine = oRecordSet.Fields.Item("LineID").Value;
-                            }
-
-                            oPayments.Invoices.SumApplied = Convert.ToDouble(amountForDocCreatingLC);
-                            if (DocCur != localCurrency)
-                                oPayments.Invoices.AppliedFC = Convert.ToDouble(amountForDocCreating);
-                            oPayments.Invoices.Add();
-
-                            addDPAmt = addDPAmt - amountForDocCreating;
-
-                            oRecordSet.MoveNext();
-                        }
-                    }
-                }
-
-                if (automaticPaymentInternetBanking)
+                    if (addDPAmt > 0)
                 {
-                    //Tu Tanxa darcha iqmneba avansi da emateba cxrilshi invoisebtan ertad
                     int dpdocEntry;
                     int dpdocNum;
 
-                    if (addDPAmt > 0)
-                    {
                         oDataTable.SetValue("AddDownPaymentAmount", i, Convert.ToDouble(addDPAmt));
                         dpTxt = ARDownPaymentRequest.createDocumentTransferFromBPType(oDataTable, oForm, i, "", "", out dpdocEntry, out dpdocNum, out errorText);
 
@@ -2291,6 +2263,7 @@ namespace BDO_Localisation_AddOn
                         return null;
                     }
                 }
+
 
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oRecordSet = null;

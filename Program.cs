@@ -2434,7 +2434,12 @@ namespace BDO_Localisation_AddOn
                 {
                     BDOSInternetBankingDocuments.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
-
+                
+                //----------------------------->Incomig documents<-----------------------------
+                else if (pVal.FormUID == "BDOSINCDOC")
+                {
+                    BDOSIncomingDocuments.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
                 //----------------------------->Payment Means from Outgoing Paymentss<-----------------------------
                 else if (pVal.FormTypeEx == "196")
                 {
