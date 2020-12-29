@@ -221,6 +221,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.BeforeAction)
                     {
                         createFormItems(oForm, out errorText);
+                        FormsB1.WB_TAX_AuthorizationsItems(oForm);
                     }
                 }
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)

@@ -331,7 +331,7 @@ namespace BDO_Localisation_AddOn
 
             try
             {
-                Parallel.ForEach(TaxDataTable.AsEnumerable(), TaxDataRow =>
+                foreach(DataRow TaxDataRow in TaxDataTable.AsEnumerable())
                 {
                     DataTable k_invoiceTableLines = new DataTable();
                     decimal TANXA_First = 0;
@@ -348,8 +348,8 @@ namespace BDO_Localisation_AddOn
                         }
 
                         DataTable k_taxDataTable = oTaxInvoice.get_invoice_desc(Convert.ToInt32(k_ID));
-
-                        Parallel.ForEach(k_taxDataTable.AsEnumerable(), k_taxDeclRow =>
+                        
+                        foreach (DataRow k_taxDeclRow in k_taxDataTable.AsEnumerable())
                         {
 
                             if (k_taxDataTable.Columns.Contains("full_amount"))
@@ -366,7 +366,7 @@ namespace BDO_Localisation_AddOn
                                     VAT_First = VAT_First + drg_amount;
                                 }
                             }
-                        });
+                        };
                     }
 
                     string inv_ID = TaxDataRow["ID"].ToString();
@@ -379,7 +379,7 @@ namespace BDO_Localisation_AddOn
                     {
                         int quantityAddRows = 0;
 
-                        Parallel.ForEach(invoiceTableLines.AsEnumerable(), currDataRow =>
+                        foreach(DataRow currDataRow in invoiceTableLines.AsEnumerable())
                            {
                                string overhead_no = currDataRow["overhead_no"].ToString();
                                DataRow[] foundRows = k_invoiceTableLines.Select(@"overhead_no = '" + overhead_no + "'");
@@ -388,7 +388,7 @@ namespace BDO_Localisation_AddOn
                                    fillValues( ref  insertquery, TaxDataRow, overhead_no, TANXA_First, VAT_First);
                                    quantityAddRows++;
                                }
-                           });
+                           };
 
                         if (quantityAddRows == 0)
                         {
@@ -412,7 +412,7 @@ namespace BDO_Localisation_AddOn
                         Program.oCompany.GetLastError(out errCode, out errMsg);
                         string erText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
                     }
-                });
+                };
 
             }
             catch (Exception ex)

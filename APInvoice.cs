@@ -695,6 +695,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
 
         public static List<int> getDocListAPCreditMemo(string docEntryAPInvoice)

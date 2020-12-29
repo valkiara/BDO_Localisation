@@ -357,6 +357,8 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
 
         public static void formDataLoad(SAPbouiCOM.Form oForm, out string errorText)

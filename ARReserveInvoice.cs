@@ -342,6 +342,7 @@ namespace BDO_Localisation_AddOn
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
                 {
                     formDataLoad( oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
             }
           
@@ -525,6 +526,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
             }
 
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
+
         }
 
         private static void SetVisibility(Form oForm)
@@ -534,6 +537,8 @@ namespace BDO_Localisation_AddOn
             oForm.Items.Item("283").Visible = !isDiscountUsed;
             oForm.Items.Item("42").Visible = !isDiscountUsed;
             oForm.Items.Item("DiscountE").Visible = isDiscountUsed;
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
 
         private static void SetInitialLineNetTotals(Form oForm, string column, int row)

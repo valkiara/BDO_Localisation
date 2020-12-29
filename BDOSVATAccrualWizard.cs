@@ -102,58 +102,58 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    formItems = new Dictionary<string, object>();
-                    itemName = "VatGrpS"; //10 characters
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left_s2);
-                    formItems.Add("Width", width_s);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("VatGroup"));
+                    //formItems = new Dictionary<string, object>();
+                    //itemName = "VatGrpS"; //10 characters
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    //formItems.Add("Left", left_s2);
+                    //formItems.Add("Width", width_s);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("Caption", BDOSResources.getTranslate("VatGroup"));
 
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    return;
+                    //}
 
-                    formItems = new Dictionary<string, object>();
-                    itemName = "VatGrp"; //10 characters
-                    formItems.Add("isDataSource", true);
-                    formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("TableName", "");
-                    formItems.Add("Length", 20);
-                    formItems.Add("Alias", "VatGrp");
-                    formItems.Add("Bound", true);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
-                    formItems.Add("Left", left_e2);
-                    formItems.Add("Width", width_e);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("DisplayDesc", true);
+                    //formItems = new Dictionary<string, object>();
+                    //itemName = "VatGrp"; //10 characters
+                    //formItems.Add("isDataSource", true);
+                    //formItems.Add("DataSource", "UserDataSources");
+                    //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    //formItems.Add("TableName", "");
+                    //formItems.Add("Length", 20);
+                    //formItems.Add("Alias", "VatGrp");
+                    //formItems.Add("Bound", true);
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    //formItems.Add("Left", left_e2);
+                    //formItems.Add("Width", width_e);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("DisplayDesc", true);
 
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    return;
+                    //}
 
-                    SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                    string query = "SELECT \"Code\" " +
-                    "FROM  \"OVTG\" " +
-                    "WHERE \"Category\" = 'O'";
-                    oRecordSet.DoQuery(query);
+                    //SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                    //string query = "SELECT \"Code\" " +
+                    //"FROM  \"OVTG\" " +
+                    //"WHERE \"Category\" = 'O'";
+                    //oRecordSet.DoQuery(query);
 
-                    while (!oRecordSet.EoF)
-                    {
-                        oForm.Items.Item("VatGrp").Specific.ValidValues.Add(oRecordSet.Fields.Item("Code").Value, oRecordSet.Fields.Item("Code").Value);
-                        oRecordSet.MoveNext();
-                    }
+                    //while (!oRecordSet.EoF)
+                    //{
+                    //    oForm.Items.Item("VatGrp").Specific.ValidValues.Add(oRecordSet.Fields.Item("Code").Value, oRecordSet.Fields.Item("Code").Value);
+                    //    oRecordSet.MoveNext();
+                    //}
 
-                    oForm.Items.Item("VatGrp").Specific.Select(CommonFunctions.getOADM("DfSVatItem"));
+                    //oForm.Items.Item("VatGrp").Specific.Select(CommonFunctions.getOADM("DfSVatItem"));
 
                     top += height + 1;
 
@@ -213,44 +213,44 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    formItems = new Dictionary<string, object>();
-                    itemName = "DescrptS"; //10 characters
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
-                    formItems.Add("Left", left_s2);
-                    formItems.Add("Width", width_s);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
-                    formItems.Add("Caption", BDOSResources.getTranslate("Description"));
+                    //formItems = new Dictionary<string, object>();
+                    //itemName = "DescrptS"; //10 characters
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    //formItems.Add("Left", left_s2);
+                    //formItems.Add("Width", width_s);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
+                    //formItems.Add("Caption", BDOSResources.getTranslate("Description"));
 
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    return;
+                    //}
 
-                    formItems = new Dictionary<string, object>();
-                    itemName = "Descrpt";
-                    formItems.Add("isDataSource", true);
-                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
-                    formItems.Add("DataSource", "UserDataSources");
-                    formItems.Add("Length", 20);
-                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
-                    formItems.Add("TableName", "");
-                    formItems.Add("Alias", itemName);
-                    formItems.Add("Bound", true);
-                    formItems.Add("Left", left_e2);
-                    formItems.Add("Width", width_e);
-                    formItems.Add("Top", top);
-                    formItems.Add("Height", height);
-                    formItems.Add("UID", itemName);
+                    //formItems = new Dictionary<string, object>();
+                    //itemName = "Descrpt";
+                    //formItems.Add("isDataSource", true);
+                    //formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    //formItems.Add("DataSource", "UserDataSources");
+                    //formItems.Add("Length", 20);
+                    //formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                    //formItems.Add("TableName", "");
+                    //formItems.Add("Alias", itemName);
+                    //formItems.Add("Bound", true);
+                    //formItems.Add("Left", left_e2);
+                    //formItems.Add("Width", width_e);
+                    //formItems.Add("Top", top);
+                    //formItems.Add("Height", height);
+                    //formItems.Add("UID", itemName);
 
-                    FormsB1.createFormItem(oForm, formItems, out errorText);
-                    if (errorText != null)
-                    {
-                        return;
-                    }
-                    oForm.Items.Item("Descrpt").Specific.Value = "Service";
+                    //FormsB1.createFormItem(oForm, formItems, out errorText);
+                    //if (errorText != null)
+                    //{
+                    //    return;
+                    //}
+                    //oForm.Items.Item("Descrpt").Specific.Value = "Service";
 
                     top += 2 * height + 1;
 
@@ -359,10 +359,16 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("CardName", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ნომერი
                     oDataTable.Columns.Add("LicTradNum", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
                     oDataTable.Columns.Add("Total", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
+                    oDataTable.Columns.Add("TotalFC", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
+                    oDataTable.Columns.Add("DocRate", SAPbouiCOM.BoFieldsType.ft_Rate); //თანხა
                     oDataTable.Columns.Add("DocEntVT", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
                     oDataTable.Columns.Add("DocTotal", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
                     oDataTable.Columns.Add("DocVtTotal", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
+                    oDataTable.Columns.Add("DocTtlFC", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
+                    oDataTable.Columns.Add("DocVatFC", SAPbouiCOM.BoFieldsType.ft_Sum); //თანხა
                     oDataTable.Columns.Add("InDetail", SAPbouiCOM.BoFieldsType.ft_Text, 20);
+                    oDataTable.Columns.Add("VatGrp", SAPbouiCOM.BoFieldsType.ft_Text, 20);
+                    oDataTable.Columns.Add("Descrpt", SAPbouiCOM.BoFieldsType.ft_Text, 20);
                     oDataTable.Columns.Add("Error", SAPbouiCOM.BoFieldsType.ft_Text, 50); //ენთრი
 
                     string UID = "InvoiceMTR";
@@ -454,6 +460,21 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatAmount");
                             oColumn.Editable = false;
                             oColumn.DataBind.Bind(UID, columnName);
+
+                        }
+                        else if (columnName == "VatGrp")
+                        {
+                            oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("VatGroup");
+                            oColumn.Editable = false;
+                            oColumn.DataBind.Bind(UID, columnName);
+                        }
+                        else if (columnName == "Descrpt")
+                        {
+                            oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn.TitleObject.Caption = BDOSResources.getTranslate("Description");
+                            oColumn.Editable = false;
+                            oColumn.DataBind.Bind(UID, columnName);
                         }
                         else
                         {
@@ -493,6 +514,16 @@ namespace BDO_Localisation_AddOn
                 oGeneralData.SetProperty("U_GrsAmnt", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture));
                 oGeneralData.SetProperty("U_VatAmount", Convert.ToDouble(headerLine["Total"], CultureInfo.InvariantCulture) * 18 / 118);
                 
+                decimal DocRate = Convert.ToDecimal(headerLine["DocRate"], CultureInfo.InvariantCulture);
+                decimal Total = Convert.ToDecimal(headerLine["Total"], CultureInfo.InvariantCulture);
+
+                decimal GrsAmntFC = CommonFunctions.roundAmountByGeneralSettings(DocRate == 0 ? 0 : Total / DocRate, "Sum");
+                decimal VatAmtFC = CommonFunctions.roundAmountByGeneralSettings((DocRate == 0 ? 0 : Total / DocRate) * 18 / 118, "Sum"); 
+
+                oGeneralData.SetProperty("U_GrsAmntFC", Convert.ToDouble(GrsAmntFC));
+                oGeneralData.SetProperty("U_VatAmtFC", Convert.ToDouble(VatAmtFC));
+
+
                 double U_VatAmount = 0;
 
                 for (int row = 0; row < ItemsDT.Rows.Count; row++)
@@ -920,6 +951,7 @@ namespace BDO_Localisation_AddOn
             AccountHeader.Columns.Add("DocDate");
             AccountHeader.Columns.Add("CardName");
             AccountHeader.Columns.Add("Total");
+            AccountHeader.Columns.Add("DocRate");
 
             for (int row = 1; row <= oMatrix.RowCount; row++)
             {
@@ -932,12 +964,13 @@ namespace BDO_Localisation_AddOn
                     string CardCode = oMatrix.GetCellSpecific("CardCode", row).Value;
                     string CardName = oMatrix.GetCellSpecific("CardName", row).Value;
                     string Total = oMatrix.GetCellSpecific("Total", row).Value;
-
+                    string DocRate = oMatrix.GetCellSpecific("DocRate", row).Value;
                     headerLine["DocEntry"] = InvDocEntry;
                     headerLine["CardCode"] = CardCode;
                     headerLine["CardName"] = CardName;
                     headerLine["Total"] = Total;
                     headerLine["DocDate"] = docDateStr;
+                    headerLine["DocRate"] = DocRate;
 
                     createPaymentDocument(oForm, headerLine);
                 }
@@ -1007,15 +1040,21 @@ namespace BDO_Localisation_AddOn
 
                 StringBuilder query = new StringBuilder();
                 query.Append("SELECT \"ODPI\".\"DocEntry\", \n");
+                query.Append("       \"DPI1\".\"VatGroup\", \n");
+                query.Append("       \"DPI1\".\"Dscription\", \n");
                 query.Append("       \"ODPI\".\"CANCELED\", \n");
                 query.Append("       \"ODPI\".\"DocNum\", \n");
                 query.Append("       \"ODPI\".\"DocDate\", \n");
                 query.Append("       \"ODPI\".\"CardCode\", \n");
                 query.Append("       \"ODPI\".\"CardName\", \n");
+                query.Append("       \"ODPI\".\"DocRate\", \n");
                 query.Append("       IFNULL(\"OCRD\".\"LicTradNum\", '')             AS \"LicTradNum\", \n");
                 query.Append("       \"SumApplied\" - IFNULL(\"ITR1\".\"ReconSum\", 0) AS \"Total\", \n");
+                query.Append("       \"SumAppliedFC\" - IFNULL(\"ITR1\".\"ReconSumFC\", 0) AS \"TotalFC\", \n");
                 query.Append("       \"@BDOSARDV\".\"U_GrsAmnt\"                     AS \"DocTotal\", \n");
                 query.Append("       \"@BDOSARDV\".\"U_VatAmount\"                   AS \"DocVAtTotal\", \n");
+                query.Append("       \"@BDOSARDV\".\"U_GrsAmntFC\"                     AS \"DocTotalFC\", \n");
+                query.Append("       \"@BDOSARDV\".\"U_VatAmtFC\"                   AS \"DocVAtTotalFC\", \n");
                 query.Append("       IFNULL(\"@BDOSARDV\".\"DocEntry\", 0)           AS \"DocEntVT\", \n");
                 query.Append("       IFNULL(\"@BDOSARDV\".\"DocNum\", 0)             AS \"DocNumVT\" \n");
                 query.Append("FROM   \"ODPI\" \n");
@@ -1027,9 +1066,12 @@ namespace BDO_Localisation_AddOn
                 query.Append("               ON \"ODPI\".\"CardCode\" = \"OCRD\".\"CardCode\" \n");
                 query.Append("       LEFT JOIN (SELECT \"IncomingPayment\".\"DownPmntEntry\"        AS \"DocEntry\", \n");
                 query.Append("                         Sum(\"IncomingPayment\".\"SumApplied\")      AS \"SumApplied\", \n");
-                query.Append("                         Sum(\"InternalReconciliation\".\"ReconSum\") AS \"ReconSum\" \n");
+                query.Append("                         Sum(\"IncomingPayment\".\"SumAppliedFC\")      AS \"SumAppliedFC\", \n");
+                query.Append("                         Sum(\"InternalReconciliation\".\"ReconSum\") AS \"ReconSum\", \n");
+                query.Append("                         Sum(\"InternalReconciliation\".\"ReconSumFC\") AS \"ReconSumFC\" \n");
                 query.Append("                  FROM   (SELECT \"SrcObjAbs\"            AS \"IncPmntEntry\", \n");
-                query.Append("                                 Sum(\"ITR1\".\"ReconSum\") AS \"ReconSum\" \n");
+                query.Append("                                 Sum(\"ITR1\".\"ReconSum\") AS \"ReconSum\", \n");
+                query.Append("                                 Sum(\"ITR1\".\"ReconSumFC\") AS \"ReconSumFC\" \n");
                 query.Append("                          FROM   \"ITR1\" \n");
                 query.Append("                                 INNER JOIN \"OITR\" \n");
                 query.Append("                                         ON \"ITR1\".\"ReconNum\" = \n");
@@ -1043,7 +1085,8 @@ namespace BDO_Localisation_AddOn
                 query.Append("                          GROUP  BY \"SrcObjAbs\") AS \"InternalReconciliation\" \n");
                 query.Append("                         RIGHT JOIN (SELECT \"RCT2\".\"DocNum\"     AS\"IncPmntEntry\", \n");
                 query.Append("                                            \"RCT2\".\"DocEntry\"   AS \"DownPmntEntry\", \n");
-                query.Append("                                            \"RCT2\".\"SumApplied\" AS \"SumApplied\" \n");
+                query.Append("                                            \"RCT2\".\"SumApplied\" AS \"SumApplied\", \n");
+                query.Append("                                            \"RCT2\".\"AppliedFC\" AS \"SumAppliedFC\" \n");
                 query.Append("                                     FROM   \"RCT2\" \n");
                 query.Append("                                            INNER JOIN \"ORCT\" \n");
                 query.Append("                                                    ON \"ORCT\".\"DocEntry\" = \n");
@@ -1055,6 +1098,12 @@ namespace BDO_Localisation_AddOn
                 query.Append("                                 ON \"InternalReconciliation\".\"IncPmntEntry\" = \"IncomingPayment\".\"IncPmntEntry\" \n");
                 query.Append("                  GROUP  BY \"IncomingPayment\".\"DownPmntEntry\") AS \"ITR1\" \n");
                 query.Append("              ON \"ITR1\".\"DocEntry\" = \"ODPI\".\"DocEntry\" \n");
+
+                query.Append("              left join(select \"DocEntry\", \"VatGroup\" as \"VatGroup\", \"Dscription\" as \"Dscription\" from \"DPI1\" where \"LineNum\"=0   ) as \"DPI1\" \n");
+                query.Append("              on \"DPI1\".\"DocEntry\" = \"ODPI\".\"DocEntry\"   \n");
+
+
+
                 query.Append("WHERE  \"DocStatus\" = 'C' \n");
                 query.Append("   AND ( \"DocTotal\" > \"DpmAppl\" \n");
                 query.Append("          OR IFNULL(\"@BDOSARDV\".\"DocEntry\", 0) <> 0 ) \n");
@@ -1081,13 +1130,18 @@ namespace BDO_Localisation_AddOn
                 string DocDate;
                 string DocEntVT;
                 string CardCode;
+                string VatGroup;
+                string Dscription;
                 string CardName;
                 string LicTradNum;
                 decimal TotalPayment = 0;
                 decimal DocTotal = 0;
                 decimal DocVatTotal = 0;
                 string CANCELED = "";
-
+                decimal DocRate = 0;
+                decimal TotalFC = 0;
+                decimal DocTotalFC = 0;
+                decimal DocVAtTotalFC = 0;
                 ItemsDT = new DataTable();
 
                 ItemsDT.Columns.Add("DocEntry");
@@ -1106,11 +1160,19 @@ namespace BDO_Localisation_AddOn
                     DocDate = oRecordSet.Fields.Item("DocDate").Value.ToString("yyyyMMdd");
                     DocEntVT = oRecordSet.Fields.Item("DocEntVT").Value == 0 ? "" : oRecordSet.Fields.Item("DocEntVT").Value.ToString();
                     TotalPayment = Convert.ToDecimal(oRecordSet.Fields.Item("Total").Value, CultureInfo.InvariantCulture);
+                    TotalFC = Convert.ToDecimal(oRecordSet.Fields.Item("TotalFC").Value, CultureInfo.InvariantCulture);
+                    DocRate = Convert.ToDecimal(oRecordSet.Fields.Item("DocRate").Value, CultureInfo.InvariantCulture);
                     DocTotal = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotal").Value, CultureInfo.InvariantCulture);
                     DocVatTotal = Convert.ToDecimal(oRecordSet.Fields.Item("DocVatTotal").Value, CultureInfo.InvariantCulture);
+                    DocTotalFC = Convert.ToDecimal(oRecordSet.Fields.Item("DocTotalFC").Value, CultureInfo.InvariantCulture);
+                    DocVAtTotalFC = Convert.ToDecimal(oRecordSet.Fields.Item("DocVAtTotalFC").Value, CultureInfo.InvariantCulture);
+
                     CardCode = oRecordSet.Fields.Item("CardCode").Value;
                     CardName = oRecordSet.Fields.Item("CardName").Value;
                     LicTradNum = oRecordSet.Fields.Item("LicTradNum").Value;
+
+                    VatGroup = oRecordSet.Fields.Item("VatGroup").Value;
+                    Dscription = oRecordSet.Fields.Item("Dscription").Value;
 
                     if (CANCELED == "Y" && DocEntVT == "")
                     {
@@ -1129,25 +1191,33 @@ namespace BDO_Localisation_AddOn
                     oDataTable.SetValue("CardCode", rowIndex, CardCode);
                     oDataTable.SetValue("CardName", rowIndex, CardName);
                     oDataTable.SetValue("LicTradNum", rowIndex, LicTradNum);
+                    oDataTable.SetValue("VatGrp", rowIndex, VatGroup);
+                    oDataTable.SetValue("Descrpt", rowIndex, Dscription);
                     if (DocEntVT == "")
                         oDataTable.SetValue("InDetail", rowIndex, "SPI_INFO");
                     else
                         oDataTable.SetValue("InDetail", rowIndex, "");
 
                     oDataTable.SetValue("Total", rowIndex, Convert.ToDouble(TotalPayment));
+                    oDataTable.SetValue("TotalFC", rowIndex, Convert.ToDouble(TotalFC));
+                    oDataTable.SetValue("DocRate", rowIndex, Convert.ToDouble(DocRate));
                     oDataTable.SetValue("DocTotal", rowIndex, Convert.ToDouble(DocTotal));
                     oDataTable.SetValue("DocVtTotal", rowIndex, Convert.ToDouble(DocVatTotal));
+                    oDataTable.SetValue("DocTtlFC", rowIndex, Convert.ToDouble(DocTotalFC));
+                    oDataTable.SetValue("DocVatFC", rowIndex, Convert.ToDouble(DocVAtTotalFC));
 
-                    string VatGrp = oForm.Items.Item("VatGrp").Specific.Value;
-                    decimal VatRate = CommonFunctions.GetVatGroupRate(VatGrp, "");
+                   
+
+                    // string VatGrp = oForm.Items.Item("VatGrp").Specific.Value;
+                    decimal VatRate = CommonFunctions.GetVatGroupRate(VatGroup, "");
 
                     DataRow ItemsDTRow = ItemsDT.Rows.Add();
                     ItemsDTRow["DocEntry"] = DocEntry;
                     ItemsDTRow["ItemCode"] = "";
-                    ItemsDTRow["Dscptn"] = oForm.Items.Item("Descrpt").Specific.Value;
+                    ItemsDTRow["Dscptn"] = Dscription;
                     //ItemsDTRow["Qnty"] = 1;
                     ItemsDTRow["GrsAmnt"] = TotalPayment.ToString(CultureInfo.InvariantCulture);
-                    ItemsDTRow["VatGrp"] = VatGrp;
+                    ItemsDTRow["VatGrp"] = VatGroup;
                     ItemsDTRow["VatAmnt"] = CommonFunctions.roundAmountByGeneralSettings(Convert.ToDecimal(TotalPayment * VatRate / (100 + VatRate), CultureInfo.InvariantCulture), "Sum").ToString(CultureInfo.InvariantCulture);
 
                     oRecordSet.MoveNext();

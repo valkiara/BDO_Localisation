@@ -69,6 +69,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("DocDate", SAPbouiCOM.BoFieldsType.ft_Date, 50);//18
                     oDataTable.Columns.Add("DocNum", SAPbouiCOM.BoFieldsType.ft_Text, 50);//19
                     oDataTable.Columns.Add("BaseDoc", SAPbouiCOM.BoFieldsType.ft_Text, 50);//20
+                    
                     oDataTable.Columns.Add("WhsTo", SAPbouiCOM.BoFieldsType.ft_Text, 50);//21
                     oDataTable.Columns.Add("WhsFrom", SAPbouiCOM.BoFieldsType.ft_Text, 50);//22               
 
@@ -86,6 +87,7 @@ namespace BDO_Localisation_AddOn
                     //დეტალური როცა არის
 
                     oDataTable.Columns.Add("BaseType", SAPbouiCOM.BoFieldsType.ft_Text, 50);//32 - საფუძველი დოკუმენტის ტიპი
+                    oDataTable.Columns.Add("DocCanld", SAPbouiCOM.BoFieldsType.ft_Text, 50);//33
 
                     string itemName = "";
                     int left = 6;
@@ -515,6 +517,60 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.ComboBox oComboBox_Option = (SAPbouiCOM.ComboBox)oForm.Items.Item("Option").Specific;
                     oComboBox_Option.Select("1", SAPbouiCOM.BoSearchKey.psk_ByValue);
 
+                    left = left + 100 + 10;
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "CancelSt";
+                    formItems.Add("Size", 20);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    formItems.Add("Left", left);
+                    formItems.Add("Width", 50);
+                    formItems.Add("Top", Top);
+                    formItems.Add("Caption", BDOSResources.getTranslate("Cancel"));
+                    formItems.Add("UID", itemName);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+                   
+                    left = left + 50 + 10;
+
+                    listValidValuesDict = new Dictionary<string, string>();
+                    listValidValuesDict.Add("A", BDOSResources.getTranslate("All"));
+                    listValidValuesDict.Add("Y", BDOSResources.getTranslate("Yes"));
+                    listValidValuesDict.Add("N", BDOSResources.getTranslate("No"));
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "Cancel";
+                    formItems.Add("Size", 20);
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 30);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+                    formItems.Add("DisplayDesc", true);
+                    formItems.Add("Left", left);
+                    formItems.Add("Width", 100);
+                    formItems.Add("Top", Top);
+                    formItems.Add("Height", 19);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("ValidValues", listValidValuesDict);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
+
+                    SAPbouiCOM.ComboBox oComboBox_Canc = (SAPbouiCOM.ComboBox)oForm.Items.Item("Cancel").Specific;
+                    oComboBox_Canc.Select("A", SAPbouiCOM.BoSearchKey.psk_ByValue);
+
+
                     //Grid
                     Top = Top + 30;
                     left = 6;
@@ -639,8 +695,9 @@ namespace BDO_Localisation_AddOn
 
             string statuses = oForm.DataSources.UserDataSources.Item("WBStatus").ValueEx;
             string FOption = oForm.DataSources.UserDataSources.Item("option").ValueEx;
+            string COption = oForm.DataSources.UserDataSources.Item("Cancel").ValueEx;
 
-            string query = getQueryText(BeginDate, EndDate, cardCode, itypes, statuses, FOption);
+            string query = getQueryText(BeginDate, EndDate, cardCode, itypes, COption, statuses, FOption);
 
 
             if (itypes == "0" || itypes == "")
@@ -816,6 +873,7 @@ namespace BDO_Localisation_AddOn
             int WBLD_Doc;
             int BaseDocNum;
             int DocEntry;
+            string DocCanld;
             string WBNum;
             string U_wbID;
             string wbtype;
@@ -1017,6 +1075,12 @@ namespace BDO_Localisation_AddOn
                 Sbuilder.Append("<Cell> <ColumnUid>BaseDoc</ColumnUid> <Value>");
                 Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DocEntry == 0 ? "" : DocEntry.ToString()));
                 Sbuilder.Append("</Value></Cell>");
+
+                DocCanld = (string)oRecordSet.Fields.Item("CANCELED").Value;
+                Sbuilder.Append("<Cell> <ColumnUid>DocCanld</ColumnUid> <Value>");
+                Sbuilder = CommonFunctions.AppendXML(Sbuilder, DocCanld=="N"?"No":"YES");
+                Sbuilder.Append("</Value></Cell>");
+
 
                 Sbuilder.Append("<Cell> <ColumnUid>WhsTo</ColumnUid> <Value>");
                 Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("WhsTo").Value);
@@ -1299,6 +1363,7 @@ namespace BDO_Localisation_AddOn
             oGrid.Columns.Item("DocDate").TitleObject.Caption = BDOSResources.getTranslate("Date");
             oGrid.Columns.Item("DocNum").TitleObject.Caption = BDOSResources.getTranslate("DocNum");
             oGrid.Columns.Item("BaseDoc").TitleObject.Caption = BDOSResources.getTranslate("BaseDocument");
+            oGrid.Columns.Item("DocCanld").TitleObject.Caption = BDOSResources.getTranslate("Canceled");
             oGrid.Columns.Item("WhsTo").TitleObject.Caption = BDOSResources.getTranslate("ToWarehouse");
             oGrid.Columns.Item("WhsFrom").TitleObject.Caption = BDOSResources.getTranslate("FromWarehouse");
 
@@ -1654,7 +1719,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string getQueryText(DateTime startDate, DateTime endDate, string cardCode, string itypes, string statuses, string foption)
+        public static string getQueryText(DateTime startDate, DateTime endDate, string cardCode, string itypes, string COption, string statuses, string foption)
         {
             string tempQuery = @"
          SELECT
@@ -1683,7 +1748,8 @@ WHEN ""BaseType"" = '165' THEN '165'
 	        THEN '-1' WHEN ""U_status"" = '5' 
 	        THEN '-2' 
 	        ELSE '8' 
-	        END) AS ""WB_Status"" 
+	        END) AS ""WB_Status"",
+            ""BASEDOCS"".""CANCELED"" AS CANCELED
         FROM 
 	         (SELECT
 	         ""OCRD"".""CardName"",
@@ -1965,7 +2031,7 @@ UNION ALL
 	         ) AS ""BASEDOCS"" 
 	       		    LEFT JOIN ""@BDO_WBLD"" ON (""BASEDOCS"".""DocEntry"" = ""@BDO_WBLD"".""U_baseDoc""
 	        AND  ""BASEDOCS"".""BaseType"" = ""@BDO_WBLD"".""U_baseDocT"" AND ""@BDO_WBLD"".""Status"" != 'C') 
-        WHERE 1 = 1 " +
+        WHERE 1 = 1 " + (COption == "A" ? "" : @" AND ""BASEDOCS"".""CANCELED""=  '" + COption+"'") +
        ((itypes != "" && itypes != "0") ? @" AND 
         (CASE 
             WHEN ""BaseType"" = '13' 

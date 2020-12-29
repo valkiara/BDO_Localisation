@@ -3175,6 +3175,9 @@ namespace BDO_Localisation_AddOn
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
+                //when "Keep Visible" is not selected Program.uiApp.Forms.ActiveForm = List of Outgoing Payments form (Type = 10045), so we need check
+                if (Program.uiApp.Forms.ActiveForm.Type == 426) //Keep Visible Case!!!
+                    oForm = Program.uiApp.Forms.ActiveForm;
                 formDataLoad(oForm);
             }
         }
