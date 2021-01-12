@@ -294,7 +294,7 @@ namespace BDO_Localisation_AddOn
                 {
                     CreateFormItems(oForm, out _);
                     FormDataLoad(oForm, out _);
-                    FormsB1.WB_TAX_AuthorizationsItems(oForm);
+                    
                 }
                 else
                 {
@@ -477,6 +477,8 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(false);
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
 
         public static void GetBaseDoc(int docEntry, out int baseEntry)
