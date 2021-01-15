@@ -3715,7 +3715,7 @@ namespace BDO_Localisation_AddOn
                                 oForm.Items.Item("234000005").Specific.Value = "";
                             }
                         }
-                        else if (pVal.ItemUID == "13" && !pVal.BeforeAction) //Item - Payment on Account (EditText)
+                        else if (pVal.ItemUID == "13" && !pVal.BeforeAction && !pVal.InnerEvent) //Item - Payment on Account (EditText)
                         {
                             CalcPhysicalEntityTaxes(oForm, true);
                         }
