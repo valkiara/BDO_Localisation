@@ -180,15 +180,24 @@ namespace BDO_Localisation_AddOn
                     {
                         allCostValByDocEnt = oRecordSetCostVal.Fields.Item("TtlCostLC").Value;
                         lastItemCode = oRecordSetCostVal.Fields.Item("ItemCode").Value;
-                        if(itemCode == lastItemCode) oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
+                        if (itemCode == lastItemCode)
+                        {
+                            double debitCredit = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
+                            if(debitCredit > 0)
+                            {
+                                oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
+                            } else
+                            {
+                                oMatrix.DeleteRow(row);
+                                Program.uiApp.StatusBar.SetSystemMessage("debet krediti gaq uaryofiti chemo dzmao", SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            }
+                        }
                         oRecordSetCostVal.MoveNext();
                     }
                     
                     row += 1;
                     oRecordSet.MoveNext();
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -200,7 +209,16 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oForm.Freeze(false);
             }
-            
+        }
+
+        private static void deleteRowFromMatrix(SAPbouiCOM.Matrix oMatrix, int row)
+        {
+            oMatrix.DeleteRow(row);
+            for(int i=0; i<oMatrix.RowCount; i++)
+            {
+                oMatrix.Columns.Item("0").Cells.Item(i+1).Specific.Value = (i + 1).ToString();
+                //oMatrix.SetCellWithoutValidation(i + 1, "0", (i + 1).ToString());
+            }
         }
 
         public static string getDocEntry(string docEntry)
