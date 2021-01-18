@@ -91,6 +91,23 @@ namespace BDO_Localisation_AddOn
             bool connectResult = ConnectB1.connectShared(out errorText);
             if (connectResult)
             {
+                string errorTextWB = null;
+                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+                if (errorTextWB != null)
+                {
+                    WBAUT = "2";
+                    TXAUT = "2";
+                    DECAUT = true;
+                }
+                else
+                {
+                    WBAUT = rsSettings["WBAUT"];
+                    TXAUT = rsSettings["TXAUT"];
+                    DECAUT = rsSettings["DCAUT"] == "Y";
+
+                }
+
+
                 //SAPbouiCOM.ProgressBar ProgressBarForm;
                 //ProgressBarForm = uiApp.StatusBar.CreateProgressBar("", 20, true);
                 //ProgressBarForm.Value = 0;
@@ -126,21 +143,7 @@ namespace BDO_Localisation_AddOn
 
                 MainCurrency = CurrencyB1.getMainCurrency(out errorText);
 
-                string errorTextWB = null;
-                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
-                if (errorTextWB != null)
-                {
-                    WBAUT = "2";
-                    TXAUT = "2";
-                    DECAUT = true;
-                }
-                else
-                {
-                    WBAUT = rsSettings["WBAUT"];
-                    TXAUT = rsSettings["TXAUT"];
-                    DECAUT = rsSettings["DCAUT"] == "Y";
-
-                }
+                
 
                 return connectResult;
             }
@@ -2433,6 +2436,12 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.FormUID == "BDOSINBDOC")
                 {
                     BDOSInternetBankingDocuments.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
+                }
+
+                //----------------------------->BDO_TaxInvoiceReceivedDetailed<-----------------------------
+                else if (pVal.FormUID == "BDOSAPDOC")
+                {
+                    BDO_TaxInvoiceReceivedDetailed.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
                 //----------------------------->Payment Means from Outgoing Paymentss<-----------------------------

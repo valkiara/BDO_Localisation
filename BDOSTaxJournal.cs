@@ -4571,7 +4571,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "updtTax" & pVal.BeforeAction == false)
                 {
-                    
+
                     FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
                     if (errorText != null)
                     {
@@ -4622,6 +4622,34 @@ namespace BDO_Localisation_AddOn
                     }
 
                     addDeclTaxInvoiceReceived(oForm, out errorText);
+                }
+
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "addDecl2" & pVal.BeforeAction == false)
+                {
+                    SAPbouiCOM.Button oaddDecl = ((SAPbouiCOM.Button)(oForm.Items.Item("addDecl").Specific));
+                    oaddDecl.Caption = BDOSResources.getTranslate("RSAddDeclaration");
+
+                    FormsB1.TAXDeclaration_AuthorizationsOperations(out errorText);
+                    if (errorText != null)
+                    {
+                        Program.uiApp.SetStatusBarMessage(errorText);
+                        Program.uiApp.MessageBox(errorText);
+                        return;
+                    }
+
+
+                }
+
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && (pVal.ItemUID == "TxOperRS" || pVal.ItemUID == "TxOperRS2") && pVal.BeforeAction == false)
+                {
+                    FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                    if (errorText != null)
+                    {
+                        Program.uiApp.SetStatusBarMessage(errorText);
+                        Program.uiApp.MessageBox(errorText);
+
+                    }
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT & pVal.BeforeAction == false)
