@@ -61,7 +61,9 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
             fieldskeysMap.Add("ValidValues", listValidValues);
             fieldskeysMap.Add("DefaultValue", "2");
-                       
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "BDOSDecAtt");
             fieldskeysMap.Add("TableName", "OUSR");
