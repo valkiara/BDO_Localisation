@@ -1111,169 +1111,65 @@ namespace BDO_Localisation_AddOn
             string TXAUT = Program.TXAUT;
             bool DECAUT = Program.DECAUT;
 
-            ///////////////WB
 
-            try
-            {
-                oForm.Items.Item("CreateDocs").Visible = oForm.Items.Item("CreateDocs").Visible && (WBAUT != "0");
-                oForm.Items.Item("CreateDocs").Enabled = oForm.Items.Item("CreateDocs").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("WbSentRS").Visible = oForm.Items.Item("WbSentRS").Visible && (WBAUT != "0");
-                oForm.Items.Item("WbSentRS").Enabled = oForm.Items.Item("WbSentRS").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("33_U_BC").Visible = oForm.Items.Item("33_U_BC").Visible && (WBAUT != "0");
-                oForm.Items.Item("33_U_BC").Enabled = oForm.Items.Item("33_U_BC").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WblTxt").Visible = oForm.Items.Item("BDO_WblTxt").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WblTxt").Enabled = oForm.Items.Item("BDO_WblTxt").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WblDoc").Visible = oForm.Items.Item("BDO_WblDoc").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WblDoc").Enabled = oForm.Items.Item("BDO_WblDoc").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("WBOpBDO_WblLBer").Visible = oForm.Items.Item("BDO_WblLB").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WblLB").Enabled = oForm.Items.Item("BDO_WblLB").Enabled && (WBAUT != "1");
-            }
-            catch { }
+            List<string> ItemsList = new List<string>();
 
+            ItemsList.Add("CreateDocs");
+            ItemsList.Add("WbSentRS");
+            ItemsList.Add("33_U_BC");
+            ItemsList.Add("BDO_WblTxt");
+            ItemsList.Add("BDO_WblDoc");
+            ItemsList.Add("BDO_WblLB");
+            ItemsList.Add("WBOper");
+            ItemsList.Add("BDO_WBNo");
+            ItemsList.Add("BDO_WBNoST");
+            ItemsList.Add("WBInfoST");
+            ItemsList.Add("BDO_WBStST");
+            ItemsList.Add("BDO_WBIDT");
+            ItemsList.Add("actDateT");
+            ItemsList.Add("BDO_WBNo");
+            ItemsList.Add("BDO_WBSt");
+            ItemsList.Add("BDO_WBID");
+            ItemsList.Add("actDate");
+
+            List<string> TaxItemsList = new List<string>();
+            TaxItemsList.Add("updtTax");
+            TaxItemsList.Add("TxOperRS");
+            TaxItemsList.Add("TxOperRS2");
+            TaxItemsList.Add("postB");
+            TaxItemsList.Add("BDO_TaxCan");
+            TaxItemsList.Add("BDO_TaxTxt");
+            TaxItemsList.Add("BDO_TaxDoc");
+            TaxItemsList.Add("BDO_TaxLB");
+
+            foreach(string Item in ItemsList)
+            {
             try
             {
-                oForm.Items.Item("WBOper").Visible = oForm.Items.Item("WBOper").Visible && (WBAUT != "0");
-                oForm.Items.Item("WBOper").Enabled = oForm.Items.Item("WBOper").Enabled && (WBAUT != "1");
+                    oForm.Items.Item(Item).Visible = oForm.Items.Item(Item).Visible && (TXAUT != "0");
+                    oForm.Items.Item(Item).Enabled = oForm.Items.Item(Item).Enabled && (TXAUT != "1");
+                    if (TXAUT == "1")
+                        oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+                    else
+                        oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_Default); //All modes
             }
             catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WBNo").Visible = oForm.Items.Item("BDO_WBNo").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WBNo").Enabled = oForm.Items.Item("BDO_WBNo").Enabled && (WBAUT != "1");
             }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WBNoST").Visible = oForm.Items.Item("BDO_WBNoST").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WBNoST").Enabled = oForm.Items.Item("BDO_WBNoST").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("WBInfoST").Visible = oForm.Items.Item("WBInfoST").Visible && (WBAUT != "0");
-                oForm.Items.Item("WBInfoST").Enabled = oForm.Items.Item("WBInfoST").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WBStST").Visible = oForm.Items.Item("BDO_WBStST").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WBStST").Enabled = oForm.Items.Item("BDO_WBStST").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WBIDT").Visible = oForm.Items.Item("BDO_WBIDT").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WBIDT").Enabled = oForm.Items.Item("BDO_WBIDT").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("actDateT").Visible = oForm.Items.Item("actDateT").Visible && (WBAUT != "0");
-                oForm.Items.Item("actDateT").Enabled = oForm.Items.Item("actDateT").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WBNo").Visible = oForm.Items.Item("actDateT").Enabled && (WBAUT != "0");
-                oForm.Items.Item("BDO_WBNo").Enabled = oForm.Items.Item("BDO_WBNo").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WBSt").Visible = oForm.Items.Item("BDO_WBSt").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WBSt").Enabled = oForm.Items.Item("BDO_WBSt").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WBSt").Visible = oForm.Items.Item("BDO_WBSt").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WBSt").Enabled = oForm.Items.Item("BDO_WBSt").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_WBID").Visible = oForm.Items.Item("BDO_WBID").Visible && (WBAUT != "0");
-                oForm.Items.Item("BDO_WBID").Enabled = oForm.Items.Item("BDO_WBID").Enabled && (WBAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("actDate").Visible = oForm.Items.Item("actDate").Visible && (WBAUT != "0");
-                oForm.Items.Item("actDate").Enabled = oForm.Items.Item("actDate").Enabled && (WBAUT != "1");
-            }
-            catch { }
 
 
-
-            ///////////////TAX
+            foreach (string Item in TaxItemsList)
+            {
             try
             {
-                oForm.Items.Item("updtTax").Visible = oForm.Items.Item("updtTax").Visible && (TXAUT != "0");
-                oForm.Items.Item("updtTax").Enabled = oForm.Items.Item("updtTax").Enabled && (TXAUT != "1");
+                    oForm.Items.Item(Item).Visible = oForm.Items.Item(Item).Visible && (WBAUT != "0");
+                    oForm.Items.Item(Item).Enabled = oForm.Items.Item(Item).Enabled && (WBAUT != "1");
+                    if (WBAUT == "1")
+                        oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+                    else
+                        oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_Default); //All modes
             }
             catch { }
-            try
-            {
-                oForm.Items.Item("TxOperRS").Visible = oForm.Items.Item("TxOperRS").Visible && (TXAUT != "0");
-                oForm.Items.Item("TxOperRS").Enabled = oForm.Items.Item("TxOperRS").Enabled && (TXAUT != "1");
             }
-            catch { }
-            try
-            {
-                oForm.Items.Item("TxOperRS2").Visible = oForm.Items.Item("TxOperRS2").Visible && (TXAUT != "0");
-                oForm.Items.Item("TxOperRS2").Enabled = oForm.Items.Item("TxOperRS2").Enabled && (TXAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("postB").Visible = oForm.Items.Item("postB").Visible && (TXAUT != "0");
-                oForm.Items.Item("postB").Enabled = oForm.Items.Item("postB").Enabled && (TXAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_TaxCan").Visible = oForm.Items.Item("BDO_TaxCan").Visible && (TXAUT != "0");
-                oForm.Items.Item("BDO_TaxCan").Enabled = oForm.Items.Item("BDO_TaxCan").Enabled && (TXAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_TaxTxt").Visible = oForm.Items.Item("BDO_TaxTxt").Visible && (TXAUT != "0");
-                oForm.Items.Item("BDO_TaxTxt").Enabled = oForm.Items.Item("BDO_TaxTxt").Enabled && (TXAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_TaxDoc").Visible = oForm.Items.Item("BDO_TaxDoc").Visible && (TXAUT != "0");
-                oForm.Items.Item("BDO_TaxDoc").Enabled = oForm.Items.Item("BDO_TaxDoc").Enabled && (TXAUT != "1");
-            }
-            catch { }
-            try
-            {
-                oForm.Items.Item("BDO_TaxLB").Visible = oForm.Items.Item("BDO_TaxLB").Visible && (TXAUT != "0");
-                oForm.Items.Item("BDO_TaxLB").Enabled = oForm.Items.Item("BDO_TaxLB").Enabled && (TXAUT != "1");
-            }
-            catch { }
 
             ///////////////DEC
             try
@@ -1286,8 +1182,6 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("addDecl2").Enabled = oForm.Items.Item("addDecl2").Enabled && DECAUT;
             }
             catch { }
-
-            
 
         }
 
