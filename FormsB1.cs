@@ -1146,9 +1146,9 @@ namespace BDO_Localisation_AddOn
             {
             try
             {
-                    oForm.Items.Item(Item).Visible = oForm.Items.Item(Item).Visible && (TXAUT != "0");
-                    oForm.Items.Item(Item).Enabled = oForm.Items.Item(Item).Enabled && (TXAUT != "1");
-                    if (TXAUT == "1")
+                    oForm.Items.Item(Item).Visible = oForm.Items.Item(Item).Visible && (WBAUT != "0");
+                    oForm.Items.Item(Item).Enabled = oForm.Items.Item(Item).Enabled && (WBAUT != "1");
+                    if (WBAUT == "1")
                         oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
                     else
                         oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_Default); //All modes
@@ -1161,9 +1161,9 @@ namespace BDO_Localisation_AddOn
             {
             try
             {
-                    oForm.Items.Item(Item).Visible = oForm.Items.Item(Item).Visible && (WBAUT != "0");
-                    oForm.Items.Item(Item).Enabled = oForm.Items.Item(Item).Enabled && (WBAUT != "1");
-                    if (WBAUT == "1")
+                    oForm.Items.Item(Item).Visible = oForm.Items.Item(Item).Visible && (TXAUT != "0");
+                    oForm.Items.Item(Item).Enabled = oForm.Items.Item(Item).Enabled && (TXAUT != "1");
+                    if (TXAUT == "1")
                         oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
                     else
                         oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_Default); //All modes
