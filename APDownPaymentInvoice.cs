@@ -352,6 +352,12 @@ namespace BDO_Localisation_AddOn
                 }
                 if (pVal.ItemUID == "BDO_TaxCan" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
                 {
+                    FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
                     int taxDocEntry = Convert.ToInt32(oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx.Trim());
                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ODPO").GetValue("DocEntry", 0));
                     if (taxDocEntry != 0)
