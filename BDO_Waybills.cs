@@ -4984,6 +4984,20 @@ namespace BDO_Localisation_AddOn
 
                     chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction);
                 }
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
+                {
+                    if (pVal.ItemUID == "33_U_BC")
+                    {
+                        FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_WBLD_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                        if (errorText != null)
+                        {
+                            Program.uiApp.SetStatusBarMessage(errorText);
+                            Program.uiApp.MessageBox(errorText);
+                            return;
+                        }
+                    }
+
+                }
             }
         }
 
