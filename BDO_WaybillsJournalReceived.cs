@@ -217,11 +217,11 @@ namespace BDO_Localisation_AddOn
                         }
                         else if(!string.IsNullOrEmpty(wBProject))
                         {
+                            oForm.Freeze(false);
                             errorText = BDOSResources.getTranslate("PleaseFillWarehouse")+". "+BDOSResources.getTranslate("Row") +": " + row;
                             Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                             return;
-                        }
-                            
+                        }                           
 
                         if (saveWhs) BDOSWarehouseAddresses.AddWhsByAddress(wBEndAdr, whs);
 
@@ -277,7 +277,8 @@ namespace BDO_Localisation_AddOn
                             APInv.Project = wBProject;
                         }
                         else
-                        {                          
+                        {
+                            oForm.Freeze(false);
                             errorText = BDOSResources.getTranslate("PleaseFillTheProject") + ". " + BDOSResources.getTranslate("Row") + ": " + row;
                             Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                             return;
@@ -312,6 +313,7 @@ namespace BDO_Localisation_AddOn
                         bool chek_service_user = oWayBill.chek_service_user(su, sp, out errorText);
                         if (chek_service_user == false)
                         {
+                            oForm.Freeze(false);
                             errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
                             return;
                         }
