@@ -503,6 +503,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
 
         public static void formDataAddUpdate(SAPbouiCOM.Form oForm, out string errorText)
@@ -744,6 +746,7 @@ namespace BDO_Localisation_AddOn
                 {
                     createFormItems(oForm, out errorText);
                     formDataLoad(oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && !pVal.BeforeAction)
                 {
@@ -774,6 +777,12 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.ItemUID == "BDO_TaxCan" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                 {
+                    FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
                     int taxDocEntry = Convert.ToInt32(oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx.Trim());
                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("ORPC").GetValue("DocEntry", 0));
                     if (taxDocEntry != 0)

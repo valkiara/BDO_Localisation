@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BDO_Localisation_AddOn
 {
@@ -124,82 +121,28 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void reArrangeFormItems(SAPbouiCOM.Form oForm)
-        {
-            SAPbouiCOM.Item oItem;
-            int height = 15;
-
-            int top = oForm.Items.Item("123").Top;
-            top = top + height + 1;
-
-            oItem = oForm.Items.Item("BDOSFxAs");
-            oItem.FromPane = 1;
-            oItem.ToPane = 1;
-            top = top + height + 1;
-            oItem.Top = top;
-
-            oItem = oForm.Items.Item("BDOSFuel");
-            oItem.FromPane = 1;
-            oItem.ToPane = 1;
-            oItem.Top = top;
-
-            oItem = oForm.Items.Item("AccDepS");
-            oItem.FromPane = 1;
-            oItem.ToPane = 1; top = top + height + 1;
-            oItem.Top = top;
-
-            oItem = oForm.Items.Item("AccDep");
-            oItem.FromPane = 1;
-            oItem.ToPane = 1;
-            oItem.Top = top;
-
-            oItem = oForm.Items.Item("ExpDepS");
-            oItem.FromPane = 1;
-            oItem.ToPane = 1;
-            top = top + height + 1;
-            oItem.Top = top;
-
-            oItem = oForm.Items.Item("ExpDep");
-            oItem.FromPane = 1;
-            oItem.ToPane = 1;
-            oItem.Top = top;
-
-            oItem = oForm.Items.Item("UsLifeS");
-            oItem.FromPane = 1;
-            oItem.ToPane = 1;
-            top = top + height + 1;
-            oItem.Top = top;
-
-            oItem = oForm.Items.Item("UsLife");
-            oItem.FromPane = 1;
-            oItem.ToPane = 1;
-            oItem.Top = top;
-        }
-
         public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
         {
             oForm.Freeze(true);
             try
             {
                 bool visibleProperties = oForm.DataSources.DBDataSources.Item("OITB").GetValue("U_BDOSFxAs", 0) == "Y";
-                oForm.Items.Item("AccDep").Visible = visibleProperties;
-                oForm.Items.Item("AccDep").FromPane = 1;
-                oForm.Items.Item("AccDep").ToPane = 1;
-                oForm.Items.Item("AccDepS").Visible = visibleProperties;
-                oForm.Items.Item("AccDepS").FromPane = 1;
-                oForm.Items.Item("AccDepS").ToPane = 1;
-                oForm.Items.Item("ExpDep").Visible = visibleProperties;
-                oForm.Items.Item("ExpDep").FromPane = 1;
-                oForm.Items.Item("ExpDep").ToPane = 1;
-                oForm.Items.Item("ExpDepS").Visible = visibleProperties;
-                oForm.Items.Item("ExpDepS").FromPane = 1;
-                oForm.Items.Item("ExpDepS").ToPane = 1;
-                oForm.Items.Item("UsLife").Visible = visibleProperties;
-                oForm.Items.Item("UsLife").FromPane = 1;
-                oForm.Items.Item("UsLife").ToPane = 1;
-                oForm.Items.Item("UsLifeS").Visible = visibleProperties;
-                oForm.Items.Item("UsLifeS").FromPane = 1;
-                oForm.Items.Item("UsLifeS").ToPane = 1;
+                int fromPane = 1;
+                int toPane = 1;
+
+                List<string> itemNames = new List<string>
+                {
+                    "AccDep",
+                    "AccDepS",
+                    "AccDepLB",
+                    "ExpDep",
+                    "ExpDepS",
+                    "ExpDepLB",
+                    "UsLife",
+                    "UsLifeS"
+                };
+
+                itemNames.ForEach(itemName => setItemVisibility(oForm, itemName, visibleProperties, fromPane, toPane));
 
                 string enableFuelMng = (string)CommonFunctions.getOADM("U_BDOSEnbFlM");
                 if (enableFuelMng == "Y" && oForm.PaneLevel == 1)
@@ -207,12 +150,10 @@ namespace BDO_Localisation_AddOn
                     oForm.Items.Item("BDOSFuel").Visible = true;
                 }
             }
-
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-
             finally
             {
                 oForm.Freeze(false);
@@ -224,7 +165,27 @@ namespace BDO_Localisation_AddOn
             oForm.Freeze(true);
             try
             {
-                reArrangeFormItems(oForm);
+                int height = 15;
+                int fromPane = 1;
+                int toPane = 1;
+                int top = oForm.Items.Item("123").Top + height + 1;
+
+                rearrangeItem(oForm, "BDOSFxAs", fromPane, toPane, top);
+                rearrangeItem(oForm, "BDOSFuel", fromPane, toPane, top);
+
+                top += height + 1;
+                rearrangeItem(oForm, "AccDepS", fromPane, toPane, top);
+                rearrangeItem(oForm, "AccDep", fromPane, toPane, top);
+                rearrangeItem(oForm, "AccDepLB", fromPane, toPane, top);
+
+                top += height + 1;
+                rearrangeItem(oForm, "ExpDepS", fromPane, toPane, top);
+                rearrangeItem(oForm, "ExpDep", fromPane, toPane, top);
+                rearrangeItem(oForm, "ExpDepLB", fromPane, toPane, top);
+
+                top += height + 1;
+                rearrangeItem(oForm, "UsLifeS", fromPane, toPane, top);
+                rearrangeItem(oForm, "UsLife", fromPane, toPane, top);
             }
             catch (Exception ex)
             {
@@ -327,7 +288,7 @@ namespace BDO_Localisation_AddOn
 
             Left = oForm.Items.Item("124").Left;
 
-            string objectType = "1"; //SAPbouiCOM.BoLinkedObject.lf_GLAccounts, Business Partner object 
+            string objectType = "1"; //SAPbouiCOM.BoLinkedObject.lf_GLAccounts, Business Partner object
             bool multiSelection = false;
             string uniqueID_lf_GLAccCFL_D = "acc_CFL_D";
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_GLAccCFL_D);
@@ -358,6 +319,22 @@ namespace BDO_Localisation_AddOn
                 throw new Exception(errorText);
             }
 
+            formItems = new Dictionary<string, object>();
+            itemName = "AccDepLB"; // Golden arrow
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            formItems.Add("Left", Left - 20);
+            formItems.Add("Top", Top);
+            formItems.Add("Height", Height);
+            formItems.Add("UID", itemName);
+            formItems.Add("LinkTo", "AccDep");
+            formItems.Add("LinkedObjectType", objectType);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
             Top = Top + Height + 1;
             Left = oForm.Items.Item("123").Left;
 
@@ -383,7 +360,7 @@ namespace BDO_Localisation_AddOn
 
             Left = oForm.Items.Item("124").Left;
 
-            objectType = "1"; //SAPbouiCOM.BoLinkedObject.lf_GLAccounts, Business Partner object 
+            objectType = "1"; //SAPbouiCOM.BoLinkedObject.lf_GLAccounts, Business Partner object
             multiSelection = false;
             uniqueID_lf_GLAccCFL_D = "Exp_CFL_D";
             FormsB1.addChooseFromList(oForm, multiSelection, objectType, uniqueID_lf_GLAccCFL_D);
@@ -412,6 +389,22 @@ namespace BDO_Localisation_AddOn
             if (errorText != null)
             {
                 throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "ExpDepLB"; // Golden arrow
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_LINKED_BUTTON);
+            formItems.Add("Left", Left - 20);
+            formItems.Add("Top", Top);
+            formItems.Add("Height", Height);
+            formItems.Add("UID", itemName);
+            formItems.Add("LinkTo", "ExpDep");
+            formItems.Add("LinkedObjectType", objectType);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
             }
 
             Top = Top + Height + 1;
@@ -484,7 +477,6 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.EditText oAccDep = oForm.Items.Item("AccDep").Specific;
                             oAccDep.Value = AcctCode;
                         }
-
                         else if (sCFL_ID == "Exp_CFL_D")
                         {
                             string AcctCode = Convert.ToString(oDataTable.GetValue("AcctCode", 0));
@@ -492,7 +484,6 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.EditText oExpDep = oForm.Items.Item("ExpDep").Specific;
                             oExpDep.Value = AcctCode;
                         }
-
                     }
                 }
             }
@@ -553,6 +544,24 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(false);
             }
+        }
+
+        private static void setItemVisibility(SAPbouiCOM.Form oForm, string itemName, bool visibleProperties, int fromPane, int toPane)
+        {
+            SAPbouiCOM.Item oItem = oForm.Items.Item(itemName);
+
+            oItem.Visible = visibleProperties;
+            oItem.FromPane = fromPane;
+            oItem.ToPane = toPane;
+        }
+
+        private static void rearrangeItem(SAPbouiCOM.Form oForm, string itemName, int fromPane, int toPane, int top)
+        {
+            SAPbouiCOM.Item oItem = oForm.Items.Item(itemName);
+
+            oItem.FromPane = fromPane;
+            oItem.ToPane = toPane;
+            oItem.Top = top;
         }
     }
 }

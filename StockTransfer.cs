@@ -299,7 +299,7 @@ namespace BDO_Localisation_AddOn
                 oStaticText.Caption = wblSts != "" ? BDOSResources.getTranslate("Status") + " : " + wblSts : "";
 
 
-                oForm.Items.Item("BDO_WblDoc").Enabled = (oForm.DataSources.DBDataSources.Item(0).GetValue("CANCELED", 0) == "N");
+                //oForm.Items.Item("BDO_WblDoc").Enabled = (oForm.DataSources.DBDataSources.Item(0).GetValue("CANCELED", 0) == "N");
             }
             catch (Exception ex)
             {
@@ -413,6 +413,8 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
 
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
@@ -553,6 +555,7 @@ namespace BDO_Localisation_AddOn
                     Program.FORM_LOAD_FOR_ACTIVATE = true;
 
                     formDataLoad(oForm, out errorText);
+                    setVisibleFormItems(oForm, out errorText);
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE & pVal.BeforeAction == false)

@@ -775,6 +775,8 @@ namespace BDO_Localisation_AddOn
 
                 oForm.Visible = true;
                 oForm.Select();
+
+                FormsB1.WB_TAX_AuthorizationsItems(oForm);
             }
 
             GC.Collect();
@@ -2219,6 +2221,18 @@ namespace BDO_Localisation_AddOn
                     {
                         printWaybill(oForm);
                     }
+
+                    if (pVal.ItemUID == "WbSentRS")
+                    {
+                        FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_WBLD_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                        if (errorText != null)
+                        {
+                            Program.uiApp.SetStatusBarMessage(errorText);
+                            Program.uiApp.MessageBox(errorText);
+                            return;
+                        }
+                    }
+
                 }
             }
         }

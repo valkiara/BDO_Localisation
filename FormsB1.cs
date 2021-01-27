@@ -92,19 +92,30 @@ namespace BDO_Localisation_AddOn
 
         public static void addMenusForAddOn()
         {
+
             BDO_ProfitTaxBase.addMenus();
 
             BDO_ProfitTaxBaseType.addMenus();
 
+            if (Program.WBAUT != "0")
+            {
             BDO_WaybillsJournalSent.addMenus();
-
             BDO_WaybillsJournalReceived.addMenus();
+                BDO_Waybills.addMenus();
+                BDOSWaybillsAnalysisSent.addMenus();
+                BDOSWaybillsAnalysisReceived.addMenus();
+            }
 
             BDOSDepreciationAccrualWizard.addMenus();
 
             BDOSFuelWriteOffWizard.addMenus();
 
+            if (Program.TXAUT != "0")
+            {
             BDOSTaxJournal.addMenus();
+                BDO_TaxInvoiceSent.addMenus();
+                BDO_TaxInvoiceReceived.addMenus();
+            }
 
             BDO_Drivers.addMenus();
 
@@ -118,21 +129,11 @@ namespace BDO_Localisation_AddOn
 
             BDOSFuelConsumptionAct.addMenus();
 
-            BDO_Waybills.addMenus();
-
-            BDO_TaxInvoiceSent.addMenus();
-
             BDOSARDownPaymentVATAccrual.addMenus();
 
             BDO_ProfitTaxAccrual.addMenus();
 
-            BDO_TaxInvoiceReceived.addMenus();
-
             BDOSInternetBanking.addMenus();
-
-            BDOSWaybillsAnalysisSent.addMenus();
-
-            BDOSWaybillsAnalysisReceived.addMenus();
 
             BDOSDeleteUDF.addMenus();
 
@@ -1101,6 +1102,154 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public static void WB_TAX_AuthorizationsItems(SAPbouiCOM.Form oForm)
+        {
+
+            string WBAUT = Program.WBAUT;
+            string TXAUT = Program.TXAUT;
+            bool DECAUT = Program.DECAUT;
+
+
+            List<string> ItemsList = new List<string>();
+
+            ItemsList.Add("CreateDocs");
+            ItemsList.Add("WbSentRS");
+            ItemsList.Add("33_U_BC");
+            ItemsList.Add("BDO_WblTxt");
+            ItemsList.Add("BDO_WblDoc");
+            ItemsList.Add("BDO_WblLB");
+            ItemsList.Add("WBOper");
+            ItemsList.Add("BDO_WBNo");
+            ItemsList.Add("BDO_WBNoST");
+            ItemsList.Add("WBInfoST");
+            ItemsList.Add("BDO_WBStST");
+            ItemsList.Add("BDO_WBIDT");
+            ItemsList.Add("actDateT");
+            ItemsList.Add("BDO_WBNo");
+            ItemsList.Add("BDO_WBSt");
+            ItemsList.Add("BDO_WBID");
+            ItemsList.Add("actDate");
+
+            List<string> TaxItemsList = new List<string>();
+            TaxItemsList.Add("updtTax");
+            TaxItemsList.Add("TxOperRS");
+            TaxItemsList.Add("TxOperRS2");
+            TaxItemsList.Add("postB");
+            TaxItemsList.Add("BDO_TaxCan");
+            TaxItemsList.Add("BDO_TaxTxt");
+            TaxItemsList.Add("BDO_TaxDoc");
+            TaxItemsList.Add("BDO_TaxLB");
+
+            foreach(string Item in ItemsList)
+            {
+            try
+            {
+                    oForm.Items.Item(Item).Visible = oForm.Items.Item(Item).Visible && (WBAUT != "0");
+                    oForm.Items.Item(Item).Enabled = oForm.Items.Item(Item).Enabled && (WBAUT != "1");
+                    if (WBAUT == "1")
+                        oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+                    else
+                        oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_Default); //All modes
+            }
+            catch { }
+            }
+
+
+            foreach (string Item in TaxItemsList)
+            {
+            try
+            {
+                    oForm.Items.Item(Item).Visible = oForm.Items.Item(Item).Visible && (TXAUT != "0");
+                    oForm.Items.Item(Item).Enabled = oForm.Items.Item(Item).Enabled && (TXAUT != "1");
+                    if (TXAUT == "1")
+                        oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_False); //All modes
+                    else
+                        oForm.Items.Item(Item).SetAutoManagedAttribute(SAPbouiCOM.BoAutoManagedAttr.ama_Editable, -1, SAPbouiCOM.BoModeVisualBehavior.mvb_Default); //All modes
+            }
+            catch { }
+            }
+
+            ///////////////DEC
+            try
+            {
+                oForm.Items.Item("addDecl").Enabled = oForm.Items.Item("addDecl").Enabled && DECAUT;
+            }
+            catch { }
+            try
+            {
+                oForm.Items.Item("addDecl2").Enabled = oForm.Items.Item("addDecl2").Enabled && DECAUT;
+            }
+            catch { }
+
+        }
+
+        public static void WB_TAX_AuthorizationsOperations(string DocType, SAPbouiCOM.BoEventTypes EventType, out string errorText)
+        {
+            
+            errorText = null;
+            string errorTextWB = null;
+            string WBAUT = "";
+            string TXAUT = "";
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                WBAUT = "2";
+                TXAUT = "2";
+            }
+            else
+            {
+                WBAUT = rsSettings["WBAUT"];
+                TXAUT = rsSettings["TXAUT"];
+            }
+
+            if(EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD || EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE
+            || EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_DELETE ) 
+            {
+                if (DocType == "UDO_FT_UDO_F_BDO_WBLD_D")
+                {
+                    if (WBAUT != "2")
+                    {
+                        errorText = BDOSResources.getTranslate("UserAuthError");
+                    }
+                }
+                else if (DocType == "UDO_FT_UDO_F_BDO_TAXR_D" || DocType == "UDO_FT_UDO_F_BDO_TAXS_D")
+                {
+                    if (TXAUT != "2")
+                    {
+                        errorText = BDOSResources.getTranslate("UserAuthError");
+                    }
+                }
+            }
+        }
+
+        public static void TAXDeclaration_AuthorizationsOperations(out string errorText)
+        {
+
+            errorText = null;
+            string errorTextWB = null;
+            string DCAT = "";
+
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
+            if (errorTextWB != null)
+            {
+                DCAT = "Y";
+
+            }
+            else
+            {
+                DCAT = rsSettings["DCAUT"];
+
+            }
+
+
+            if (DCAT != "Y")
+            {
+                errorText = BDOSResources.getTranslate("UserAuthError");
+            }
+
+
         }
     }
 }

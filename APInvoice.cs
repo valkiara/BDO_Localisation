@@ -682,7 +682,7 @@ namespace BDO_Localisation_AddOn
                     oEditText.ChooseFromListAlias = "DocEntry";
                 }
 
-
+                
 
             }
             catch (Exception ex)
@@ -695,6 +695,8 @@ namespace BDO_Localisation_AddOn
                 oForm.Update();
                 GC.Collect();
             }
+
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
         }
 
         public static List<int> getDocListAPCreditMemo(string docEntryAPInvoice)
@@ -1001,6 +1003,7 @@ namespace BDO_Localisation_AddOn
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
                 formDataLoad(oForm, out errorText);
+                setVisibleFormItems(oForm, out errorText);
                 BDO_WBReceivedDocs.setwaybillText(oForm);
             }
 
@@ -1092,6 +1095,11 @@ namespace BDO_Localisation_AddOn
                     chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out errorText);
                 }
 
+                if (pVal.ItemUID == "16" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)
+                {
+                    setVisibleFormItems(oForm, out errorText);
+                }
+
                 if (pVal.ItemUID == "BDO_TaxDoc" && !pVal.BeforeAction && pVal.EventType == SAPbouiCOM.BoEventTypes.et_DOUBLE_CLICK)
                 {
                     formDataLoad(oForm, out errorText);
@@ -1099,6 +1107,12 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.ItemUID == "BDO_TaxCan" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction == false)
                 {
+                    FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                    if (errorText != null)
+                    {
+                        return;
+                    }
+
                     int taxDocEntry = Convert.ToInt32(oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx);
                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocEntry", 0));
                     if (taxDocEntry != 0)

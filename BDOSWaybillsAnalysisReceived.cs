@@ -99,7 +99,8 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("RSName", SAPbouiCOM.BoFieldsType.ft_Text, 50);//35
                     //დეტალური როცა არის
                     oDataTable.Columns.Add("BaseDType", SAPbouiCOM.BoFieldsType.ft_Text, 50);//36----
-                    
+                    oDataTable.Columns.Add("WB_trnsSide", SAPbouiCOM.BoFieldsType.ft_Text, 50);//37
+                    oDataTable.Columns.Add("DocCanld", SAPbouiCOM.BoFieldsType.ft_Text, 50);//38
                     string itemName;
 
                     int left_s = 6;
@@ -480,6 +481,53 @@ namespace BDO_Localisation_AddOn
                     top3 += height + 1;
 
                     formItems = new Dictionary<string, object>();
+                    itemName = "TranSideS";
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+                    formItems.Add("Left", left_s3);
+                    formItems.Add("Width", width_s);
+                    formItems.Add("Top", top3);
+                    formItems.Add("Caption", BDOSResources.getTranslate("TransportationSide"));
+                    formItems.Add("UID", itemName);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    listValidValuesDict = new Dictionary<string, string>();
+                    listValidValuesDict.Add("0", BDOSResources.getTranslate("All"));
+                    listValidValuesDict.Add("1", BDOSResources.getTranslate("Buyer"));
+                    listValidValuesDict.Add("2", BDOSResources.getTranslate("Seller"));
+
+                    formItems = new Dictionary<string, object>();
+                    itemName = "TranSide";
+                    formItems.Add("isDataSource", true);
+                    formItems.Add("DataSource", "UserDataSources");
+                    formItems.Add("DataType", SAPbouiCOM.BoDataType.dt_SHORT_TEXT);
+                    formItems.Add("Length", 30);
+                    formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+                    formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+                    formItems.Add("DisplayDesc", true);
+                    formItems.Add("Left", left_e3);
+                    formItems.Add("Width", width_e);
+                    formItems.Add("Top", top3);
+                    formItems.Add("Height", height);
+                    formItems.Add("UID", itemName);
+                    formItems.Add("ValidValues", listValidValuesDict);
+
+                    FormsB1.createFormItem(oForm, formItems, out errorText);
+                    if (errorText != null)
+                    {
+                        throw new Exception(errorText);
+                    }
+
+                    oComboBox_Option = (SAPbouiCOM.ComboBox)oForm.Items.Item("TranSide").Specific;
+                    oComboBox_Option.Select("0", SAPbouiCOM.BoSearchKey.psk_ByValue);
+
+                    top3 += height + 1;
+
+                    formItems = new Dictionary<string, object>();
                     itemName = "WBNumberS"; //10 characters
                     formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
                     formItems.Add("Left", left_s3);
@@ -654,6 +702,7 @@ namespace BDO_Localisation_AddOn
                 //string Fstatus = oForm.DataSources.UserDataSources.Item("WBStatus").ValueEx;
                 string FOption = oForm.DataSources.UserDataSources.Item("option").ValueEx;
                 string FNUMBER = oForm.DataSources.UserDataSources.Item("WBNumber").ValueEx;
+                string TranSide = oForm.DataSources.UserDataSources.Item("TranSide").ValueEx;
 
                 List<string> buyerTinsList = new List<string>();
                 List<string> cardCodesList = new List<string>();
@@ -700,6 +749,7 @@ namespace BDO_Localisation_AddOn
                 RSDataTable.Columns.Add("RSUom", typeof(string));
                 RSDataTable.Columns.Add("PrjCode", typeof(string));
                 RSDataTable.Columns.Add("PrjName", typeof(string));
+                RSDataTable.Columns.Add("TRAN_COST_PAYER", typeof(string));
 
                 string car_number = "";
                 DateTime begin_date_s = startDate;
@@ -754,6 +804,15 @@ namespace BDO_Localisation_AddOn
 
                                 if (FOption != "0")
                                 {
+                                    string[] array_HEADER;
+                                    string[][] array_GOODS, array_SUB_WAYBILLS;
+                                    int returnCode = oWayBill.get_waybill(Convert.ToInt32(WBID), out array_HEADER, out array_GOODS, out array_SUB_WAYBILLS, out errorText);
+
+                                    //ხარჯის გამწევით ფილტრი
+                                    if (TranSide != "0" && array_HEADER[26] != TranSide)
+                                        continue;
+
+
                                     DataRow taxDataRow = RSDataTable.Rows.Add();
                                     taxDataRow["RowLinked"] = "N";
                                     taxDataRow["ID"] = WBID;
@@ -771,6 +830,8 @@ namespace BDO_Localisation_AddOn
                                     taxDataRow["CAR_NUMBER"] = Waybill_Header["CAR_NUMBER"];
                                     taxDataRow["DRIVER_TIN"] = Waybill_Header["DRIVER_TIN"];
                                     taxDataRow["TRANSPORT_COAST"] = Waybill_Header["TRANSPORT_COAST"];
+                                    taxDataRow["TRAN_COST_PAYER"] = array_HEADER[26];
+                                    
                                 }
                                 else
                                 {
@@ -778,6 +839,10 @@ namespace BDO_Localisation_AddOn
                                     string[] array_HEADER;
                                     string[][] array_GOODS, array_SUB_WAYBILLS;
                                     int returnCode = oWayBill.get_waybill(Convert.ToInt32(WBID), out array_HEADER, out array_GOODS, out array_SUB_WAYBILLS, out errorText);
+
+                                    //ხარჯის გამწევით ფილტრი
+                                    if (TranSide != "0" && array_HEADER[26] != TranSide)
+                                        continue;
 
                                     int rowCounter = 1;
                                     int rowIndex = 0;
@@ -795,7 +860,7 @@ namespace BDO_Localisation_AddOn
                                             ItmCode = BDO_WaybillsJournalReceived.findItemByNameOITM(WBItmName, WBBarcode, Cardcode, out ItemName);
                                             if (ItemName == null) ItemName = "";
 
-                                            SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode, out errorText);
+                                            SAPbobsCOM.Recordset CatalogEntry = BDO_BPCatalog.getCatalogEntryByBPBarcode(Cardcode, WBItmName, WBBarcode);
 
                                             if (CatalogEntry != null)
                                             {
@@ -833,6 +898,7 @@ namespace BDO_Localisation_AddOn
                                         taxDataRow["CAR_NUMBER"] = Waybill_Header["CAR_NUMBER"];
                                         taxDataRow["DRIVER_TIN"] = Waybill_Header["DRIVER_TIN"];
                                         taxDataRow["TRANSPORT_COAST"] = Waybill_Header["TRANSPORT_COAST"];
+                                        taxDataRow["TRAN_COST_PAYER"] = array_HEADER[26];
                                         taxDataRow["ItemCode"] = ItmCode;
                                         taxDataRow["W_NAME"] = WBItmName;
                                         taxDataRow["BAR_CODE"] = WBBarcode;
@@ -875,6 +941,7 @@ namespace BDO_Localisation_AddOn
                 int BaseDocNum;
                 string BaseDType;
                 int DocEntry;
+                string DocCanld;
                 string ItemCode;
                 decimal Amount;
                 decimal Amount_Full;
@@ -890,6 +957,7 @@ namespace BDO_Localisation_AddOn
                 string CAR_NUMBER;
                 string DRIVER_TIN;
                 decimal TRANSPORT_COAST = 0;
+                string TRAN_COST_PAYER;
                 bool foundonRS;
                 DateTime DeliveryDate;
                 DateTime BegDate;
@@ -937,6 +1005,7 @@ namespace BDO_Localisation_AddOn
                     CAR_NUMBER = "";
                     DRIVER_TIN = "";
                     TRANSPORT_COAST = 0;
+                    TRAN_COST_PAYER = "";
                     strDELIVERY_DATE = "";
                     strACTIVATE_DATE = "";
                     strBEGIN_DATE = "";
@@ -979,6 +1048,8 @@ namespace BDO_Localisation_AddOn
                                         TRANSPORT_COAST = 0;
                                     else
                                         TRANSPORT_COAST = FormsB1.cleanStringOfNonDigits(foundRows[i]["TRANSPORT_COAST"].ToString());
+
+                                    TRAN_COST_PAYER = foundRows[i]["TRAN_COST_PAYER"].ToString();
 
                                     strDELIVERY_DATE = foundRows[i]["DELIVERY_DATE"].ToString();
                                     strACTIVATE_DATE = foundRows[i]["ACTIVATE_DATE"].ToString();
@@ -1099,6 +1170,11 @@ namespace BDO_Localisation_AddOn
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, TRANSPORT_COAST == 0 ? "" : FormsB1.ConvertDecimalToString(TRANSPORT_COAST));
                     Sbuilder.Append("</Value></Cell>");
 
+                    Sbuilder.Append("<Cell> <ColumnUid>WB_trnsSide</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, TRAN_COST_PAYER=="1"? BDOSResources.getTranslate("Buyer") : BDOSResources.getTranslate("Buyer"));
+                    Sbuilder.Append("</Value></Cell>");
+                                        
+
                     Sbuilder.Append("<Cell> <ColumnUid>WB_begDate</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, oRecordSet.Fields.Item("BaseDocDate").Value.ToString("yyyyMMdd") == "18991230" ? "" : oRecordSet.Fields.Item("BaseDocDate").Value.ToString("yyyyMMdd"));
                     Sbuilder.Append("</Value></Cell>");
@@ -1115,6 +1191,11 @@ namespace BDO_Localisation_AddOn
                     DocEntry = (int)oRecordSet.Fields.Item("DocEntry").Value;
                     Sbuilder.Append("<Cell> <ColumnUid>BaseDoc</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, (DocEntry == 0 ? "" : DocEntry.ToString()));
+                    Sbuilder.Append("</Value></Cell>");
+
+                    DocCanld = (string)oRecordSet.Fields.Item("CANCELED").Value;
+                    Sbuilder.Append("<Cell> <ColumnUid>DocCanld</ColumnUid> <Value>");
+                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, DocCanld == "N" ? "No" : "YES");
                     Sbuilder.Append("</Value></Cell>");
 
                     Sbuilder.Append("<Cell> <ColumnUid>Whs</ColumnUid> <Value>");
@@ -1212,6 +1293,7 @@ namespace BDO_Localisation_AddOn
                     string rsType;
                     decimal fullAmount;
                     decimal transportCoast;
+                    //string TRAN_COST_PAYER;
                     decimal amount;
                     decimal quantity;
 
@@ -1220,6 +1302,7 @@ namespace BDO_Localisation_AddOn
                         rsType = RemainingRows[i]["TYPE"].ToString();
                         fullAmount = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["FULL_AMOUNT"].ToString());
                         transportCoast = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["TRANSPORT_COAST"].ToString());
+                        TRAN_COST_PAYER = RemainingRows[i]["TRAN_COST_PAYER"].ToString();
                         amount = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["AMOUNT"].ToString());
                         quantity = FormsB1.cleanStringOfNonDigits(RemainingRows[i]["Quantity"].ToString());
                         WAYBILL_NUMBER = RemainingRows[i]["WAYBILL_NUMBER"].ToString();
@@ -1325,6 +1408,13 @@ namespace BDO_Localisation_AddOn
                         Sbuilder = CommonFunctions.AppendXML(Sbuilder, transportCoast == 0 ? "" : FormsB1.ConvertDecimalToString(transportCoast));
                         Sbuilder.Append("</Value></Cell>");
 
+                        Sbuilder.Append("<Cell> <ColumnUid>WB_trnsSide</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, TRAN_COST_PAYER == "1" ? BDOSResources.getTranslate("Buyer") : BDOSResources.getTranslate("Seller"));
+                        Sbuilder.Append("</Value></Cell>");
+
+
+                        
+
                         Sbuilder.Append("<Cell> <ColumnUid>RS_Status</ColumnUid> <Value>");
                         Sbuilder = CommonFunctions.AppendXML(Sbuilder, RemainingRows[i]["STATUS"].ToString());
                         Sbuilder.Append("</Value></Cell>");
@@ -1407,11 +1497,13 @@ namespace BDO_Localisation_AddOn
                 oGrid.Columns.Item("WB_vehicNum").TitleObject.Caption = BDOSResources.getTranslate("Vehicle");
                 oGrid.Columns.Item("WB_drivTin").TitleObject.Caption = BDOSResources.getTranslate("TransporterTin");
                 oGrid.Columns.Item("WB_trnsExpn").TitleObject.Caption = BDOSResources.getTranslate("TransportationExpense");
+                oGrid.Columns.Item("WB_trnsSide").TitleObject.Caption = BDOSResources.getTranslate("TransportationSide");
                 oGrid.Columns.Item("WBLD_Doc").TitleObject.Caption = BDOSResources.getTranslate("WaybillDocEntry");
 
                 oGrid.Columns.Item("DocDate").TitleObject.Caption = BDOSResources.getTranslate("Date");
                 oGrid.Columns.Item("DocNum").TitleObject.Caption = BDOSResources.getTranslate("DocNum");
                 oGrid.Columns.Item("BaseDoc").TitleObject.Caption = BDOSResources.getTranslate("BaseDocument");
+                oGrid.Columns.Item("DocCanld").TitleObject.Caption = BDOSResources.getTranslate("Canceled");                    
                 oGrid.Columns.Item("Whs").TitleObject.Caption = BDOSResources.getTranslate("Warehouse");
                 oGrid.Columns.Item("PrjCode").TitleObject.Caption = BDOSResources.getTranslate("PrjCode");
                 oGrid.Columns.Item("PrjName").TitleObject.Caption = BDOSResources.getTranslate("PrjName");
@@ -1534,7 +1626,7 @@ namespace BDO_Localisation_AddOn
 
                 oColumns.Item(3).Visible = false;
                 oColumns.Item(8).Visible = false;
-                oColumns.Item(17).Visible = false;
+                //oColumns.Item(17).Visible = false;
                 oColumns.Item(24).Visible = false;
                 oColumns.Item(31).Visible = false;
                 oColumns.Item(36).Visible = false;

@@ -827,10 +827,11 @@ namespace BDO_Localisation_AddOn
                     int i = 0;
                     int size = itemNodes.Count;
                     array_GOODS = new string[size][];
+                    Dictionary<string, string> activeDimensionsList = CommonFunctions.getActiveDimensionsList(out errorText); // array-ს ზომა რომ სწორად დავსვათ იმისთვის
 
                     foreach (XmlNode itemNode in itemNodes)
                     {
-                        array_GOODS[i] = new string[14];
+                        array_GOODS[i] = new string[14+activeDimensionsList.Count];
                         array_GOODS[i][0] = (itemNode.SelectSingleNode("ID") == null) ? "" : itemNode.SelectSingleNode("ID").InnerText;
                         array_GOODS[i][1] = (itemNode.SelectSingleNode("W_NAME") == null) ? "" : itemNode.SelectSingleNode("W_NAME").InnerText;
                         array_GOODS[i][2] = (itemNode.SelectSingleNode("UNIT_ID") == null) ? "" : itemNode.SelectSingleNode("UNIT_ID").InnerText;
@@ -1176,8 +1177,56 @@ namespace BDO_Localisation_AddOn
 
                     if (StartAddress == "blank" && START_ADDRESS != "") continue;                    
                     if (EndAddress == "blank" && END_ADDRESS != "") continue;
-                    if (StartAddress != "" && StartAddress!="blank" && StartAddress != START_ADDRESS) continue;
-                    if (EndAddress != "" && EndAddress!="blank" && EndAddress != END_ADDRESS) continue;
+
+                    if (StartAddress != "" && StartAddress != "blank")
+                    {
+                        if (StartAddress.StartsWith("*") && StartAddress.EndsWith("*"))
+                        {                            
+                            if (!START_ADDRESS.Contains(StartAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else if (StartAddress.StartsWith("*"))
+                        {                            
+                            if (!START_ADDRESS.EndsWith(StartAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else if (StartAddress.EndsWith("*"))
+                        {                            
+                            if (!START_ADDRESS.StartsWith(StartAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else
+                        {                            
+                            if (StartAddress.Replace("*", "") != START_ADDRESS)
+                                continue;
+                        }
+                    }
+                    if (EndAddress != "" && EndAddress != "blank")
+                    {
+                        if (EndAddress.StartsWith("*") && EndAddress.EndsWith("*"))
+                        {
+                            if (!END_ADDRESS.Contains(EndAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else if (EndAddress.StartsWith("*"))
+                        {
+                            if (!END_ADDRESS.EndsWith(EndAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else if (EndAddress.EndsWith("*"))
+                        {
+                            if (!END_ADDRESS.StartsWith(EndAddress.Replace("*", "")))
+                                continue;
+                        }
+                        else
+                        {
+                            if (EndAddress.Replace("*", "") != END_ADDRESS)
+                                continue;
+                        }
+                    }
+
+                           
+                   
 
                     waybill_map = new Dictionary<string, string>();
 

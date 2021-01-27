@@ -4363,6 +4363,9 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(false);
             }
+            
+            FormsB1.WB_TAX_AuthorizationsItems(oForm);
+
         }
 
         public static void formDataLoad(SAPbouiCOM.Form oForm)
@@ -4862,8 +4865,19 @@ namespace BDO_Localisation_AddOn
             BubbleEvent = true;
             SAPbouiCOM.Form oForm = uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, currentFormCount);
 
-            //if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_WBLD_D")
-            //{
+
+           if (BusinessObjectInfo.BeforeAction)
+            {
+                string errorText = null;
+                FormsB1.WB_TAX_AuthorizationsOperations(BusinessObjectInfo.FormTypeEx, BusinessObjectInfo.EventType ,  out errorText);
+                if (errorText!=null)
+                {
+                    uiApp.SetStatusBarMessage(errorText);
+                    uiApp.MessageBox(errorText);
+                    BubbleEvent = false;
+                }
+            }
+
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
                 formDataLoad(oForm);
@@ -4969,6 +4983,20 @@ namespace BDO_Localisation_AddOn
                     oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
 
                     chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction);
+                }
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == false)
+                {
+                    if (pVal.ItemUID == "33_U_BC")
+                    {
+                        FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_WBLD_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                        if (errorText != null)
+                        {
+                            Program.uiApp.SetStatusBarMessage(errorText);
+                            Program.uiApp.MessageBox(errorText);
+                            return;
+                        }
+                    }
+
                 }
             }
         }

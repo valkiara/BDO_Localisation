@@ -578,6 +578,13 @@ namespace BDO_Localisation_AddOn
 
                 if (depreciationLines.GetValue("DepreciationDocEntry", i) == 0)
                 {
+                    if (string.IsNullOrEmpty(project))
+                    {
+                        string text = BDOSResources.getTranslate("PleaseFillProject");
+                        Program.uiApp.StatusBar.SetSystemMessage($"{BDOSResources.getTranslate("UnableToCreateDocument") +" :"}", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error, "", "", $"{text}! {BDOSResources.getTranslate("TableRow")}: {lineNum}");
+                        continue;
+                    }
+
                     if (!isRetirement)
                     {
                         DateTime inDate = depreciationLines.GetValue("InDate", i);
@@ -837,7 +844,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                          FROM   \"@BDOSDEPAC1\" \n");
             query.Append("                                 INNER JOIN \"@BDOSDEPACR\" \n");
             query.Append("                                         ON \"@BDOSDEPAC1\".\"DocEntry\" = \"@BDOSDEPACR\".\"DocEntry\" \n");
-            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' AND \"@BDOSDEPACR\".\"U_Retirement\" = 'Y' \n");
+            query.Append("                          WHERE  \"@BDOSDEPACR\".\"Canceled\" = 'N' /*AND \"@BDOSDEPACR\".\"U_Retirement\" = 'Y'*/ \n");
             query.Append($"                                 AND \"@BDOSDEPACR\".\"U_AccrMnth\" <= '{dateStr}' \n");
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T1 \n");
             query.Append("                      ON T1.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");

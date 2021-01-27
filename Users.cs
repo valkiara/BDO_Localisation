@@ -31,6 +31,52 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields( fieldskeysMap, out errorText);
 
+            /////////////////
+            fieldskeysMap = new Dictionary<string, object>();
+            List<string> listValidValues = new List<string>();
+            listValidValues.Add("No Authorization");
+            listValidValues.Add("Read Only");
+            listValidValues.Add("Full");
+
+            fieldskeysMap.Add("Name", "BDOSWblAut");
+            fieldskeysMap.Add("TableName", "OUSR");
+            fieldskeysMap.Add("Description", "Waybill Authorization");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+            fieldskeysMap.Add("ValidValues", listValidValues);
+            fieldskeysMap.Add("DefaultValue", "2");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            listValidValues = new List<string>();
+            listValidValues.Add("No Authorization");
+            listValidValues.Add("Read Only");
+            listValidValues.Add("Approval");
+
+            fieldskeysMap.Add("Name", "BDOSTaxAut");
+            fieldskeysMap.Add("TableName", "OUSR");
+            fieldskeysMap.Add("Description", "Tax Authorization");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 50);
+            fieldskeysMap.Add("ValidValues", listValidValues);
+            fieldskeysMap.Add("DefaultValue", "2");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSDecAtt");
+            fieldskeysMap.Add("TableName", "OUSR");
+            fieldskeysMap.Add("Description", "Attach Tax Invoice Declaration");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "Y");
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+            //////////////////////
+
+
+
             GC.Collect();           
         }
 

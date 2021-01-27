@@ -204,6 +204,7 @@ namespace BDO_Localisation_AddOn
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
                 BDO_WBReceivedDocs.setwaybillText(oForm);
+                FormsB1.WB_TAX_AuthorizationsItems(oForm);
             }
         }
 
@@ -221,6 +222,16 @@ namespace BDO_Localisation_AddOn
                     if (pVal.BeforeAction)
                     {
                         createFormItems(oForm, out errorText);
+                        FormsB1.WB_TAX_AuthorizationsItems(oForm);
+                    }
+                }
+                else if(pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE ||
+                    pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
+                {
+                    if (pVal.BeforeAction)
+                    {
+                     
+                        FormsB1.WB_TAX_AuthorizationsItems(oForm);
                     }
                 }
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
