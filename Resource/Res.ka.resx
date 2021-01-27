@@ -3649,4 +3649,13 @@
   <data name="TotalFC" xml:space="preserve">
     <value>ჯამი (FC)</value>
   </data>
+  <data name="PleaseFillWarehouse" xml:space="preserve">
+    <value>გთხოვთ შეავსეთ საწყობი</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>სტრიქონი</value>
+  </data>
+  <data name="PleaseFillTheProject" xml:space="preserve">
+    <value>გთხოვთ შეავსოთ პროექტი</value>
+  </data>
 </root>
