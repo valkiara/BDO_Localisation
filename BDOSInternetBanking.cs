@@ -5471,7 +5471,11 @@ namespace BDO_Localisation_AddOn
                         ""DocDate"" = '#DocDate#' and
                         ""Canceled"" = 'N'
                         Group By ""CardCode"")   as ""Docs""
-                        where ""DocTotal"" = '#DocTotal#'";
+                        where Case When ""DocTotalFC"" = 0 Then ""DocTotal"" 
+                        Else ""DocTotalFC""
+                        End = '#DocTotal#'";
+            //
+
             query = query.Replace("#CardCode#", BPCode);
             query = query.Replace("#DocCurr#", Currency);
             query = query.Replace("#DocDate#", DocDate);
