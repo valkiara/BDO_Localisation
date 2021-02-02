@@ -436,8 +436,7 @@ namespace BDO_Localisation_AddOn
                     //ძირითადი საშუალებების შემოწმება
                     if (BatchNumberSelection.SelectedBatches != null)
                     {
-                        bool rejectionAsset = false;
-                        CommonFunctions.blockAssetInvoice(oForm, "OWTR", out rejectionAsset);
+                        CommonFunctions.blockAssetInvoice(oForm, "OWTR", out var rejectionAsset);
                         if (rejectionAsset)
                         {
                             Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentCannotBeAdded") + " : " + BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem"));
