@@ -898,6 +898,32 @@ namespace BDO_Localisation_AddOn
         {
             StringBuilder query = new StringBuilder();
 
+            query.Append("SELECT \n");
+            query.Append("               T0.\"DistNumber\", \n");
+            query.Append("               T0.\"WhsCode\", \n");
+            query.Append("               T0.\"WhsName\", \n");
+            query.Append("               T0.\"PrjCode\", \n");
+            query.Append("               MAX(T0.\"InDate\") AS \"InDate\", \n");
+            query.Append("               MAX(T0.\"BaseType\") AS \"BaseType\", \n");
+            query.Append("               T0.\"LastDeprDocDate\", \n");
+            query.Append("               T0.\"ItemCode\", \n");
+            query.Append("               T0.\"ItemName\", \n");
+            query.Append("               T0.\"ItmsGrpCod\", \n");
+            query.Append("               T0.\"ItmsGrpNam\", \n");
+            query.Append("               T0.\"Quantity\", \n");
+            query.Append("               T0.\"QuantityAll\", \n");
+            query.Append("               T0.\"Coefficient\", \n");
+            query.Append("               T0.\"UsefulLife\", \n");
+            query.Append("               T0.\"AccumulatedDepreciationAmt\", \n");
+            query.Append("               T0.\"AlreadyDepreciatedAmt\", \n");
+            query.Append("               T0.\"DepreciationDocEntry\", \n");
+            query.Append("               T0.\"PurchasePrice\", \n");
+            query.Append("               T0.\"PurchaseCost\", \n");
+            query.Append("               T0.\"AllDeprDocQty\", \n");
+            query.Append("               T0.\"DepreciationAmt\", \n");
+            query.Append("               T0.\"NetBookValue\", \n");
+            query.Append("               T0.\"RemainingLife\" \n");
+            query.Append("FROM (");
             query.Append("SELECT T0.*, \n");
             query.Append("       CASE \n");
             query.Append("         WHEN T0.\"AlreadyDepreciatedAmt\" = 0 THEN \n");
@@ -1034,7 +1060,30 @@ namespace BDO_Localisation_AddOn
             query.Append("          WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0 AND \"OIBT\".\"Quantity\" > 0 \n");
             query.Append($"           AND (NEXT_DAY(LAST_DAY(\"OIBT\".\"InDate\")) < '{dateStr}' OR (\"OIBT\".\"BaseType\" = 67 AND LAST_DAY(\"OIBT\".\"InDate\") = '{dateStr}')) \n");
             query.Append("        ) AS T0 \n");
-            query.Append("ORDER BY T0.\"ItemCode\", T0.\"DistNumber\", T0.\"InDate\", T0.\"LastDeprDocDate\" DESC");
+            query.Append("ORDER BY T0.\"ItemCode\", T0.\"DistNumber\", T0.\"InDate\", T0.\"LastDeprDocDate\" DESC) AS T0 \n");
+            query.Append("GROUP BY \n");
+            query.Append("               T0.\"DistNumber\", \n");
+            query.Append("               T0.\"WhsCode\", \n");
+            query.Append("               T0.\"WhsName\", \n");
+            query.Append("               T0.\"PrjCode\", \n");
+            query.Append("               T0.\"LastDeprDocDate\", \n");
+            query.Append("               T0.\"ItemCode\", \n");
+            query.Append("               T0.\"ItemName\", \n");
+            query.Append("               T0.\"ItmsGrpCod\", \n");
+            query.Append("               T0.\"ItmsGrpNam\", \n");
+            query.Append("               T0.\"Quantity\", \n");
+            query.Append("               T0.\"QuantityAll\", \n");
+            query.Append("               T0.\"Coefficient\", \n");
+            query.Append("               T0.\"UsefulLife\", \n");
+            query.Append("               T0.\"AccumulatedDepreciationAmt\", \n");
+            query.Append("               T0.\"AlreadyDepreciatedAmt\", \n");
+            query.Append("               T0.\"DepreciationDocEntry\", \n");
+            query.Append("               T0.\"PurchasePrice\", \n");
+            query.Append("               T0.\"PurchaseCost\", \n");
+            query.Append("               T0.\"AllDeprDocQty\", \n");
+            query.Append("               T0.\"DepreciationAmt\", \n");
+            query.Append("               T0.\"NetBookValue\", \n");
+            query.Append("               T0.\"RemainingLife\"");
 
             return query;
         }
