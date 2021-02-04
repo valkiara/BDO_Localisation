@@ -227,15 +227,21 @@ namespace BDO_Localisation_AddOn
             oDPM.TaxDate = DocDate;
 
             string BPCurrency = bpCurrency;
+            string useBlaAgRt = oDataTable.GetValue("UseBlaAgRt", i);
+            string AgrNo = oDataTable.GetValue("BlnkAgr", i);
+            if (useBlaAgRt == "Y")
+            {
+                decimal rate = BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(AgrNo), out bpCurrency, DocDate);
+                oDPM.DocRate = Convert.ToDouble(rate);
+            }
+
+            
 
             oDPM.Lines.AccountCode = GLAccountCode;
             oDPM.Lines.ItemDescription = linesText;
-            //oDPM.Lines.Quantity = 1;
 
-            //if (partnerCurrencySapCode != currencySapCode)
-            //{
             oDPM.Lines.Currency = currencySapCode;
-            //}
+            
 
             oDPM.Lines.PriceAfterVAT = Convert.ToDouble(addDPAmt);
 

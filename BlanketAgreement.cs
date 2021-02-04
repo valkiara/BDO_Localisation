@@ -331,9 +331,9 @@ namespace BDO_Localisation_AddOn
 
                         BDOSInternetBankingDocuments.automaticPaymentInternetBanking = true;
                         BDOSInternetBankingDocuments.openFromBlnkAgr = true;
-                        BDOSInternetBankingDocuments.createForm(oForm, docDate, cardCode, cardName, bpCurrency, 0, locCurr, 0, 0, 0, 0, 0, out oFormInternetBankingDocuments, out errorText);
+                        BDOSInternetBankingDocuments.createForm(oForm, docDate, cardCode, cardName, bpCurrency, 0, locCurr, 0, 0, 0, 0, 0, "",out oFormInternetBankingDocuments, out errorText);
                         BDOSInternetBanking.TableExportMTRForDetail = BDOSInternetBanking.create_TableExportMTRForDetail();
-                        BDOSInternetBankingDocuments.fillInvoicesMTR(oFormInternetBankingDocuments, blnkAgr, out errorText);
+                        BDOSInternetBankingDocuments.fillInvoicesMTR(oFormInternetBankingDocuments, blnkAgr, "", out errorText);
                     }
                 }
             }

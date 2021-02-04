@@ -786,6 +786,8 @@ namespace BDO_Localisation_AddOn
         TransferFromBP,
         TransferToBP,
         TreasuryTransfer,
+        ReturnToCustomer,
+        ReturnFromSupplier,
         BankCharge,
         OtherIncomes,
         OtherExpenses,

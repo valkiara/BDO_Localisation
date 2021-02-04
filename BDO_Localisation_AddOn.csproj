@@ -123,6 +123,7 @@
     <Compile Include="BDOSFuelWriteOffWizard.cs" />
     <Compile Include="BDOSInterestAccrual.cs" />
     <Compile Include="BDOSInterestAccrualWizard.cs" />
+    <Compile Include="BDOSIncomingDocuments.cs" />
     <Compile Include="BDOSTasksForApproval.cs" />
     <Compile Include="BDOSWarehouseAddresses.cs" />
     <Compile Include="BDO_TaxInvoiceReceivedDetailed.cs" />
