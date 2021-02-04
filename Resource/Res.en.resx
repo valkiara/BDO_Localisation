@@ -3335,7 +3335,7 @@
     <value>Total Payment LC</value>
   </data>
   <data name="OnlyBlank" xml:space="preserve">
-    <value>Only blank</value>
+    <value>Only Blank</value>
   </data>
   <data name="BPBankAccount" xml:space="preserve">
     <value>BP Bank Account</value>
