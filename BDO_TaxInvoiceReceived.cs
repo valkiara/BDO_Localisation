@@ -4235,7 +4235,47 @@ namespace BDO_Localisation_AddOn
 
                             if (sCFL_ID == "PurchaseInvoice_CFL")
                             {
+                                bool isInTable = false;
+                                double baseDocsAmount = 0;
+
+                                for (int i = 1; i <= oMatrix.RowCount; i++)
+                                {
+                                    string U_baseDoc = oMatrix.Columns.Item("U_baseDoc").Cells.Item(i).Specific.Value;
+                                    string U_baseDocT = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i).Specific.Value;
+                                    double U_amtBsDc = Convert.ToDouble(oMatrix.Columns.Item("U_amtBsDc").Cells.Item(i).Specific.Value, CultureInfo.InvariantCulture);
+                                    if (i != oCFLEvento.Row)
+                                    {
+                                        if (Convert.ToString(docEntry) == U_baseDoc && U_baseDocT == "0")
+                                        {
+                                            isInTable = true;
+                                        }
+
+                                        if (U_baseDocT == "0")
+                                        {
+                                            baseDocsAmount = baseDocsAmount + U_amtBsDc;
+                                        }
+                                        else if (U_baseDocT == "1")
+                                        {
+                                            baseDocsAmount = baseDocsAmount - U_amtBsDc;
+                                        }
+                                    }
+                                }
+
+                                if (isInTable)
+                                {
+                                    uiApp.SetStatusBarMessage(BDOSResources.getTranslate("DocumentAlreadyAdded"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                                    return;
+                                }
+
+                                double U_amount = Convert.ToDouble(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_amount", 0), CultureInfo.InvariantCulture);
                                 APInvoice.getAmount(docEntry, out gTotal, out lineVat, out errorText);
+
+                                if (baseDocsAmount + gTotal > U_amount)
+                                {
+                                    uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TotalAmountOfDocumentIsGreaterThanTaxInvoiceAmount"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                                    return;
+                                }
+
                                 oBaseDoc = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
                                 if (oBaseDoc.GetByKey(docEntry))
                                 {
@@ -4244,7 +4284,48 @@ namespace BDO_Localisation_AddOn
                             }
                             else if (sCFL_ID == "PurchaseInvoiceCreditMemo_CFL")
                             {
+                                bool isInTable = false;
+                                double baseDocsAmount = 0;
+
+                                for (int i = 1; i <= oMatrix.RowCount; i++)
+                                {
+                                    if (i != oCFLEvento.Row)
+                                    {
+                                        string U_baseDoc = oMatrix.Columns.Item("U_baseDoc").Cells.Item(i).Specific.Value;
+                                        string U_baseDocT = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i).Specific.Value;
+                                        double U_amtBsDc = Convert.ToDouble(oMatrix.Columns.Item("U_amtBsDc").Cells.Item(i).Specific.Value, CultureInfo.InvariantCulture);
+                                        if (Convert.ToString(docEntry) == U_baseDoc && U_baseDocT == "1")
+                                        {
+                                            isInTable = true;
+                                        }
+
+                                        if (U_baseDocT == "0")
+                                        {
+                                            baseDocsAmount = baseDocsAmount + U_amtBsDc;
+                                        }
+                                        else if (U_baseDocT == "1")
+                                        {
+                                            baseDocsAmount = baseDocsAmount - U_amtBsDc;
+                                        }
+                                    }
+                                }
+
+                                if (isInTable)
+                                {
+                                     uiApp.SetStatusBarMessage(BDOSResources.getTranslate("DocumentAlreadyAdded"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                                    return;
+                                }
+
+                                double U_amount = Convert.ToDouble(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_amount", 0), CultureInfo.InvariantCulture);
+
                                 APCreditMemo.getAmount(docEntry, out gTotal, out lineVat, out errorText);
+
+                                if (baseDocsAmount + gTotal > U_amount)
+                                {
+                                    uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TotalAmountOfDocumentIsGreaterThanTaxInvoiceAmount"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                                    return;
+                                }
+
                                 oBaseDoc = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseCreditNotes);
                                 if (oBaseDoc.GetByKey(docEntry))
                                 {
@@ -4899,40 +4980,12 @@ namespace BDO_Localisation_AddOn
 
                     oComboBox.Select(docType, SAPbouiCOM.BoSearchKey.psk_ByValue);
 
-                //გადმოცემული დოკუმენტის ინფორმაციის მიღება
-                double gTotal =0 ;
-                double lineVat = 0;
-                string errorText = null;
-                string wbNumber = "";
-                SAPbobsCOM.Documents oBaseDoc = null;
-
                 if (docEntry > 0)
                 {
-                    if (docType == "0")
-                    {
-                        APInvoice.getAmount(docEntry, out gTotal, out lineVat, out errorText);
-                        oBaseDoc = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
-                        if (oBaseDoc.GetByKey(docEntry))
-                        {
-                            wbNumber = oBaseDoc.UserFields.Fields.Item("U_BDO_WBNo").Value;
-                        }
-                    }
-                    else if (docType == "1")
-                    {
-                        APCreditMemo.getAmount(docEntry, out gTotal, out lineVat, out errorText);
-                        oBaseDoc = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseCreditNotes);
-                        if (oBaseDoc.GetByKey(docEntry))
-                        {
-                            wbNumber = oBaseDoc.UserFields.Fields.Item("U_BDO_WBNo").Value;
-                        }
-                    }
-
                     oMatrix.Columns.Item("U_baseDoc").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
                     oMatrix.Columns.Item("U_baseDTxt").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
                 }
-                oMatrix.Columns.Item("U_amtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = gTotal;
-                oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(oMatrix.RowCount).Specific.Value = lineVat;
-                oMatrix.Columns.Item("U_wbNumber").Cells.Item(oMatrix.RowCount).Specific.Value = wbNumber;
+                
                 oMatrix.CommonSetting.SetRowBackColor(oMatrix.RowCount, -1);
             }
             catch (Exception ex)
@@ -6379,9 +6432,26 @@ namespace BDO_Localisation_AddOn
                         if (!pVal.BeforeAction)
                         {
                             if (pVal.ItemUID == "addMTRB")
+                            {
+                                checkDocStatusForBaseDocAdd(oForm, out errorText);
+                                if (errorText != null)
+                                {
+                                    Program.uiApp.MessageBox(errorText);
+                                    return;
+                                }
+
                                 addMatrixRow(oForm);
+
+                            }
                             else if (pVal.ItemUID == "addMult")
                             {
+                                checkDocStatusForBaseDocAdd(oForm, out errorText);
+                                if (errorText != null)
+                                {
+                                    Program.uiApp.MessageBox(errorText);
+                                    return;
+                                }
+
                                 string CardCode = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_cardCode", 0);
                                 string opDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_opDate", 0);
                                 SAPbouiCOM.Form oFormIncomingFormDocuments;
@@ -6389,9 +6459,27 @@ namespace BDO_Localisation_AddOn
                                 BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments,  out errorText);
                             }
                             else if (pVal.ItemUID == "addDPinv")
+
+                            {
+                                checkDocStatusForBaseDocAdd(oForm, out errorText);
+                                if (errorText != null)
+                                {
+                                    Program.uiApp.MessageBox(errorText);
+                                    return;
+                                }
+
                                 chooseInvoiceDoc(oForm, "DownPaymentInvoice");
+                            }
                             else if (pVal.ItemUID == "delMTRB" || pVal.ItemUID == "delDPinv")
+                            {
+                                checkDocStatusForBaseDocAdd(oForm, out errorText);
+                                if (errorText != null)
+                                {
+                                    Program.uiApp.MessageBox(errorText);
+                                    return;
+                                }
                                 deleteMatrixRow(oForm, pVal.ItemUID);
+                            }
                             else if (pVal.ItemUID == "postB")
                             {
                                 if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_UPDATE_MODE || oForm.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE)
@@ -6437,13 +6525,32 @@ namespace BDO_Localisation_AddOn
             }
         }
 
+        private static bool checkDocStatusForBaseDocAdd(SAPbouiCOM.Form oForm, out string ErrorText)
+        {
+            ErrorText = null;
+
+            string U_status = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_status", 0);
+            if(U_status!= "confirmed")
+            {
+                ErrorText = BDOSResources.getTranslate("TheDocumentStatusMustBeConfirmed");
+                return true;
+            }
+
+            return true;
+
+        }
+
         public static void AddMult(SAPbouiCOM.Form oForm, DataTable NewRowsTable)
         {
+
+            double U_amount = Convert.ToDouble(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_amount", 0), CultureInfo.InvariantCulture);
+            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
             foreach (DataRow dr in NewRowsTable.Rows)
             {
                 bool isInTable = false;
-                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+                double baseDocTotal = Convert.ToDouble(dr["Total"]);
 
+                double baseDocsAmount = 0;
                 for (int i = 1; i <= oMatrix.RowCount; i++)
                 {
                     string U_baseDoc = oMatrix.Columns.Item("U_baseDoc").Cells.Item(i).Specific.Value;
@@ -6451,14 +6558,33 @@ namespace BDO_Localisation_AddOn
                     if (Convert.ToString(dr["DocEntry"]) == U_baseDoc && Convert.ToString(dr["DocType"]) == U_baseDocT)
                     {
                         isInTable = true;
-                        break;
+                    }
+                    double U_amtBsDc = Convert.ToDouble(oMatrix.Columns.Item("U_amtBsDc").Cells.Item(i).Specific.Value, CultureInfo.InvariantCulture);
+
+                    if (U_baseDocT == "0")
+                    {
+                        baseDocsAmount = baseDocsAmount + U_amtBsDc;
+                    }
+                    else if (U_baseDocT == "1")
+                    {
+                        baseDocsAmount = baseDocsAmount - U_amtBsDc;
                     }
                 }
 
-                if (isInTable != true)
+                if (baseDocsAmount + baseDocTotal > U_amount)
                 {
-                    addMatrixRow(oForm, Convert.ToString(dr["DocType"]), Convert.ToInt32(dr["DocEntry"]));
+                    uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TotalAmountOfDocumentIsGreaterThanTaxInvoiceAmount"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                    return;
                 }
+
+                if (isInTable)
+                {
+                    uiApp.SetStatusBarMessage(BDOSResources.getTranslate("DocumentAlreadyAdded"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                    return;
+                }
+                    addMatrixRow(oForm, Convert.ToString(dr["DocType"]), Convert.ToInt32(dr["DocEntry"]));
+
+
             }
         }
 
