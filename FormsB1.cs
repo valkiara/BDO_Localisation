@@ -999,7 +999,7 @@ namespace BDO_Localisation_AddOn
             return Convert.ToDecimal(s, Nfi);
         }
 
-        public static decimal cleanStringOfNonDigits(string s)
+        public static decimal cleanStringOfNonDigits(string s, bool allowNegative = false)
         {
             if (string.IsNullOrEmpty(s))
                 return 0;
@@ -1020,7 +1020,7 @@ namespace BDO_Localisation_AddOn
             for (int i = cleaned.Length - 1; i >= 0; --i)
             {
                 char c = cleaned[i];
-                if (Char.IsNumber(c))
+                if (Char.IsNumber(c) || (allowNegative && c == '-'))
                 {
                     NewString = c.ToString() + NewString;
                     continue;
