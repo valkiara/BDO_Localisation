@@ -3688,4 +3688,10 @@
   <data name="TotalFC" xml:space="preserve">
     <value>Total (FC)</value>
   </data>
+  <data name="DocumentAlreadyAdded" xml:space="preserve">
+    <value>Document already added</value>
+  </data>
+  <data name="TotalAmountOfDocumentIsGreaterThanTaxInvoiceAmount" xml:space="preserve">
+    <value>Total amount of document is greater than tax invoice amount with VAT</value>
+  </data>
 </root>

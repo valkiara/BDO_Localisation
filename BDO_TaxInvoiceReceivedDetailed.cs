@@ -512,6 +512,8 @@ namespace BDO_Localisation_AddOn
 
                             NewRowsTable.Columns.Add("DocEntry", typeof(Int32));
                             NewRowsTable.Columns.Add("DocType", typeof(string));
+                            NewRowsTable.Columns.Add("Total", typeof(double));
+                            
 
                             string checkBox;
                             for (int i = 0; i < oDataTable.Rows.Count; i++)
@@ -522,6 +524,7 @@ namespace BDO_Localisation_AddOn
                                     DataRow dataRow = NewRowsTable.Rows.Add();
                                     dataRow["DocEntry"] = oDataTable.GetValue("DocEntry", i);
                                     dataRow["DocType"] = oDataTable.GetValue("DocType", i);
+                                    dataRow["Total"] = oDataTable.GetValue("Total", i);
                                 }
                             }
 
