@@ -636,6 +636,15 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
 
                                 BaseQueryResultIo oBaseQueryResultIo = MainMovementService.getAccountMovements(oMovementService, oAccountMovementFilterIo, out oAccountMovementDetailIo, out errorText);
 
+                                if (errorText != null) //
+                                {
+                                    BDOSInternetBanking.oAccountMovementDetailIoStc = null;
+                                    BDOSInternetBanking.oBaseQueryResultIoStc = null;
+
+                                    Program.uiApp.MessageBox(errorText);
+                                    return;
+                                }
+
                                 int totalCount = oBaseQueryResultIo.totalCount;
                                 int pageSize = oBaseQueryResultIo.pager.pageSize;
 
