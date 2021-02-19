@@ -3688,4 +3688,7 @@
   <data name="TotalFC" xml:space="preserve">
     <value>Total (FC)</value>
   </data>
+  <data name="DebitCreditValueIsNegativeInOneOrMoreRow" xml:space="preserve">
+    <value>Debit/Credit value is negative in one or more row</value>
+  </data>
 </root>

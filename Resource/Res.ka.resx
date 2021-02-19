@@ -3658,4 +3658,7 @@
   <data name="PleaseFillTheProject" xml:space="preserve">
     <value>გთხოვთ შეავსოთ პროექტი</value>
   </data>
+  <data name="Debit/CreditValueIsNegativeInOneOrMoreRow" xml:space="preserve">
+    <value>დებეტი/კრედიტის ველის მნიშვნელობა უარყოფითია</value>
+  </data>
 </root>

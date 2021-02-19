@@ -189,7 +189,7 @@ namespace BDO_Localisation_AddOn
                             } else
                             {
                                 oMatrix.DeleteRow(row);
-                                Program.uiApp.StatusBar.SetSystemMessage("debet krediti gaq uaryofiti chemo dzmao", SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DebitCreditValueIsNegativeInOneOrMoreRow"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                             }
                         }
                         oRecordSetCostVal.MoveNext();
@@ -208,16 +208,6 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSetCostVal);
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oForm.Freeze(false);
-            }
-        }
-
-        private static void deleteRowFromMatrix(SAPbouiCOM.Matrix oMatrix, int row)
-        {
-            oMatrix.DeleteRow(row);
-            for(int i=0; i<oMatrix.RowCount; i++)
-            {
-                oMatrix.Columns.Item("0").Cells.Item(i+1).Specific.Value = (i + 1).ToString();
-                //oMatrix.SetCellWithoutValidation(i + 1, "0", (i + 1).ToString());
             }
         }
 
