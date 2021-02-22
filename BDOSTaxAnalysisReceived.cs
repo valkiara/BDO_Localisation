@@ -13,7 +13,7 @@ namespace BDO_Localisation_AddOn
     {
         public static bool RSDataImported = false;
 
-        public static void createUDO( out string errorText)
+        public static void createUDO(out string errorText)
         {
             errorText = null;
 
@@ -24,7 +24,7 @@ namespace BDO_Localisation_AddOn
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
 
-            int result = UDO.addUserTable( tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObject, out errorText);
+            int result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_NoObject, out errorText);
 
             if (result != 0)
             {
@@ -40,7 +40,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // User
             fieldskeysMap.Add("Name", "User");
@@ -49,7 +49,8 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+            
             fieldskeysMap = new Dictionary<string, object>(); // ID
             fieldskeysMap.Add("Name", "ID");
             fieldskeysMap.Add("TableName", "BDOSTXANR");
@@ -57,7 +58,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // SELLER_UN_ID
             fieldskeysMap.Add("Name", "SELLERUNID");
@@ -66,7 +67,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // SEQ_NUM_B
             fieldskeysMap.Add("Name", "SEQNUMB");
@@ -75,7 +76,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // STATUS
             fieldskeysMap.Add("Name", "STATUS");
@@ -84,7 +85,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // WAS_REF
             fieldskeysMap.Add("Name", "WASREF");
@@ -93,7 +94,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // F_SERIES
             fieldskeysMap.Add("Name", "FSERIES");
@@ -102,7 +103,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // F_NUMBER
             fieldskeysMap.Add("Name", "FNUMBER");
@@ -111,7 +112,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
             fieldskeysMap = new Dictionary<string, object>(); // REG_DT
             fieldskeysMap.Add("Name", "REGDT");
             fieldskeysMap.Add("TableName", "BDOSTXANR");
@@ -119,7 +120,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // OPERATION_DT
             fieldskeysMap.Add("Name", "OPERATDT");
@@ -128,7 +129,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // S_USER_ID
             fieldskeysMap.Add("Name", "SUSERID");
@@ -137,7 +138,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // B_S_USER_ID
             fieldskeysMap.Add("Name", "BSUSERID");
@@ -146,7 +147,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // DOC_MOS_NOM_B
             fieldskeysMap.Add("Name", "DOCMOSNOMB");
@@ -155,7 +156,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // SA_IDENT_NO
             fieldskeysMap.Add("Name", "SAIDENTNO");
@@ -164,7 +165,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // ORG_NAME
             fieldskeysMap.Add("Name", "ORGNAME");
@@ -173,7 +174,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // NOTES
             fieldskeysMap.Add("Name", "NOTES");
@@ -182,7 +183,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // TANXA
             fieldskeysMap.Add("Name", "TANXA");
@@ -192,7 +193,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // VAT
             fieldskeysMap.Add("Name", "VAT");
@@ -202,7 +203,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // K_ID
             fieldskeysMap.Add("Name", "KID");
@@ -211,7 +212,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // AGREE_DATE
             fieldskeysMap.Add("Name", "AGREEDATE");
@@ -220,7 +221,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // AGREE_S_USER_ID
             fieldskeysMap.Add("Name", "AGREESUSID");
@@ -229,7 +230,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // REF_DATE
             fieldskeysMap.Add("Name", "REFDATE");
@@ -238,7 +239,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Date);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>(); // REF_S_USER_ID
             fieldskeysMap.Add("Name", "REFUSID");
@@ -247,33 +248,26 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 50);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
 
         }
 
-        public static void fillUserCode( SAPbouiCOM.Form oForm)
+        public static void fillUserCode(SAPbouiCOM.Form oForm)
         {
             oForm.Items.Item("1000033").Specific.Value = Program.oCompany.UserName;
             oForm.Items.Item("1000003").Click();
             oForm.Items.Item("1000033").Enabled = false;
         }
 
-        public static void addRecord(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void addRecord(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
-
-
             SAPbobsCOM.UserTable oUserTable = Program.oCompany.UserTables.Item("BDOSTXANR");
 
-            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
-            SAPbobsCOM.Recordset oRecordSetinsert = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string insertquery = "";
-
             //არსებული ჩანაწერების წაშლა ცხრილიდან
-            string clearquery = @"DELETE FROM ""@BDOSTXANR"" WHERE ""U_User"" = '" + Program.oCompany.UserName + @"'";
-            oRecordSet.DoQuery(clearquery);
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            string clearQuery = @"DELETE FROM ""@BDOSTXANR"" WHERE ""U_User"" = '" + Program.oCompany.UserName + @"'";
+            oRecordSet.DoQuery(clearQuery);
 
             //int keyCode = 0;
             //string maxquery = @"SELECT ""Code"" FROM ""@BDOSTXANR"" ORDER BY ""Code"" DESC";
@@ -285,28 +279,20 @@ namespace BDO_Localisation_AddOn
 
             DateTime startDate;
             string startDateStr = oForm.Items.Item("1000003").Specific.Value;
-            DateTime BeginDate = new DateTime(1, 1, 1);
-
-            if (DateTime.TryParseExact(startDateStr, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
-            {
-                BeginDate = startDate;
-            }
+            startDate = DateTime.TryParseExact(startDateStr, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate) ? startDate : DateTime.MinValue;
 
             DateTime endDate;
             string endDateStr = oForm.Items.Item("1000009").Specific.Value;
-            DateTime EndDate = DateTime.Today;
-
-            if (DateTime.TryParseExact(endDateStr, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
-            {
-                EndDate = endDate;
-            }
+            endDate = DateTime.TryParseExact(endDateStr, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate) ? endDate : DateTime.MinValue;
             endDate = endDate.AddDays(1).AddSeconds(-1);
+
             string invoice_no = oForm.Items.Item("1000021").Specific.Value;
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            string errorText;
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
-                Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
                 return;
             }
 
@@ -315,11 +301,11 @@ namespace BDO_Localisation_AddOn
 
             TaxInvoice oTaxInvoice = new TaxInvoice(rsSettings["ProtocolType"]);
 
-            bool chek_service_user = oTaxInvoice.check_usr( su, sp, out errorText);
+            bool chek_service_user = oTaxInvoice.check_usr(su, sp, out errorText);
             if (chek_service_user == false)
             {
                 errorText = BDOSResources.getTranslate("ServiceUserPasswordNotCorrect");
-                Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                Program.uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
                 return;
             }
 
@@ -327,11 +313,15 @@ namespace BDO_Localisation_AddOn
             DateTime startDateOp = new DateTime(1, 1, 1);
             DateTime endDateOp = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
             endDateOp = endDateOp.AddDays(1).AddSeconds(-1);
+
             DataTable TaxDataTable = oTaxInvoice.get_buyer_invoices(startDate, endDate, startDateOp, endDateOp, invoice_no, sa_identNum, "", "", out errorText);
 
+            SAPbobsCOM.Recordset oRecordSetInsert = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             try
             {
-                foreach(DataRow TaxDataRow in TaxDataTable.AsEnumerable())
+                string insertQuery = string.Empty;
+
+                foreach (DataRow TaxDataRow in TaxDataTable.AsEnumerable())
                 {
                     DataTable k_invoiceTableLines = new DataTable();
                     decimal TANXA_First = 0;
@@ -342,20 +332,17 @@ namespace BDO_Localisation_AddOn
                     if (k_ID != "-1")
                     {
                         k_invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt32(k_ID));
+                        
                         if (k_invoiceTableLines != null)
-                        {
                             k_invoiceTableLines_False = false;
-                        }
 
                         DataTable k_taxDataTable = oTaxInvoice.get_invoice_desc(Convert.ToInt32(k_ID));
-                        
+
                         foreach (DataRow k_taxDeclRow in k_taxDataTable.AsEnumerable())
                         {
-
                             if (k_taxDataTable.Columns.Contains("full_amount"))
                             {
-                                TANXA_First = TANXA_First + Convert.ToDecimal(k_taxDeclRow["full_amount"], CultureInfo.InvariantCulture); //თანხა დღგ-ის და აქციზის ჩათვლით
-
+                                TANXA_First += Convert.ToDecimal(k_taxDeclRow["full_amount"], CultureInfo.InvariantCulture); //თანხა დღგ-ის და აქციზის ჩათვლით
                             }
 
                             if (k_taxDataTable.Columns.Contains("drg_amount"))
@@ -363,7 +350,7 @@ namespace BDO_Localisation_AddOn
                                 decimal drg_amount = Convert.ToDecimal(k_taxDeclRow["drg_amount"], CultureInfo.InvariantCulture); //დღგ
                                 if (drg_amount > 0)
                                 {
-                                    VAT_First = VAT_First + drg_amount;
+                                    VAT_First += drg_amount;
                                 }
                             }
                         };
@@ -373,66 +360,60 @@ namespace BDO_Localisation_AddOn
                     DataTable invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt32(inv_ID));
                     if (invoiceTableLines != null || k_invoiceTableLines_False == false)
                     {
-                        fillValues( ref insertquery, TaxDataRow, "Error getting Waybill numbers", TANXA_First, VAT_First);
+                        fillValues(ref insertQuery, TaxDataRow, "Error getting Waybill numbers", TANXA_First, VAT_First);
                     }
                     else if (invoiceTableLines.Rows.Count > 0)
                     {
                         int quantityAddRows = 0;
 
-                        foreach(DataRow currDataRow in invoiceTableLines.AsEnumerable())
-                           {
-                               string overhead_no = currDataRow["overhead_no"].ToString();
-                               DataRow[] foundRows = k_invoiceTableLines.Select(@"overhead_no = '" + overhead_no + "'");
-                               if (foundRows.Length > 0)
-                               {
-                                   fillValues( ref  insertquery, TaxDataRow, overhead_no, TANXA_First, VAT_First);
-                                   quantityAddRows++;
-                               }
-                           };
+                        foreach (DataRow currDataRow in invoiceTableLines.AsEnumerable())
+                        {
+                            string overhead_no = currDataRow["overhead_no"].ToString();
+                            DataRow[] foundRows = k_invoiceTableLines.Select(@"overhead_no = '" + overhead_no + "'");
+                            if (foundRows.Length > 0)
+                            {
+                                fillValues(ref insertQuery, TaxDataRow, overhead_no, TANXA_First, VAT_First);
+                                quantityAddRows++;
+                            }
+                        };
 
                         if (quantityAddRows == 0)
                         {
-                            fillValues( ref  insertquery, TaxDataRow, "", TANXA_First, VAT_First);
+                            fillValues(ref insertQuery, TaxDataRow, "", TANXA_First, VAT_First);
                         }
                     }
                     else
                     {
-                        fillValues( ref  insertquery, TaxDataRow, "", TANXA_First, VAT_First);
+                        fillValues(ref insertQuery, TaxDataRow, "", TANXA_First, VAT_First);
                     }
 
                     try
                     {
-                        oRecordSetinsert.DoQuery(insertquery);
+                        oRecordSetInsert.DoQuery(insertQuery);
                     }
                     catch (Exception ex)
                     {
-                        int errCode;
-                        string errMsg;
-
-                        Program.oCompany.GetLastError(out errCode, out errMsg);
-                        string erText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                        Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+                        return;
                     }
-                };
-
+                }
             }
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                Program.uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
+                return;
             }
             finally
             {
+                Marshal.ReleaseComObject(oRecordSet);
+                Marshal.ReleaseComObject(oRecordSetInsert);
                 Marshal.ReleaseComObject(oUserTable);
-                oUserTable = null;
                 RSDataImported = true;
                 oForm.Items.Item("1").Click();
             }
         }
 
-        public static void fillValues_OLD( SAPbobsCOM.UserTable oUserTable, DataRow TaxDataRow, string overhead_no, decimal TANXA_First, decimal Vat_First, out string errorText)
+        public static void fillValues_OLD(SAPbobsCOM.UserTable oUserTable, DataRow TaxDataRow, string overhead_no, decimal TANXA_First, decimal Vat_First, out string errorText)
         {
             errorText = null;
 
@@ -497,14 +478,14 @@ namespace BDO_Localisation_AddOn
             if (TANXA != "")
             {
                 decimal Amount = Convert.ToDecimal(TaxDataRow["TANXA"], CultureInfo.InvariantCulture) - TANXA_First;
-                oUserTable.UserFields.Fields.Item("U_TANXA").Value = Convert.ToDouble(Amount, System.Globalization.CultureInfo.InvariantCulture);
+                oUserTable.UserFields.Fields.Item("U_TANXA").Value = Convert.ToDouble(Amount, CultureInfo.InvariantCulture);
             }
 
             string VAT = TaxDataRow["VAT"].ToString();
             if (VAT != "")
             {
                 decimal VatAmount = Convert.ToDecimal(TaxDataRow["VAT"], CultureInfo.InvariantCulture) - Vat_First;
-                oUserTable.UserFields.Fields.Item("U_VAT").Value = Convert.ToDouble(VatAmount, System.Globalization.CultureInfo.InvariantCulture);
+                oUserTable.UserFields.Fields.Item("U_VAT").Value = Convert.ToDouble(VatAmount, CultureInfo.InvariantCulture);
             }
 
             oUserTable.UserFields.Fields.Item("U_KID").Value = TaxDataRow["K_ID"].ToString();
@@ -541,9 +522,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void fillValues( ref string insertquery, DataRow TaxDataRow, string overhead_no, decimal TANXA_First, decimal Vat_First)
+        public static void fillValues(ref string insertquery, DataRow TaxDataRow, string overhead_no, decimal TANXA_First, decimal Vat_First)
         {
-
             string statusRS = TaxDataRow["STATUS"].ToString();
             DateTime REG_DT = new DateTime();
             DateTime OPERATION_DT = new DateTime();
@@ -645,12 +625,11 @@ namespace BDO_Localisation_AddOn
             //insertquery = insertquery + Environment.NewLine + Sbuilder.ToString();            
         }
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
 
-            if (pVal.ItemChanged & pVal.BeforeAction == false)
+            if (pVal.ItemChanged && pVal.BeforeAction == false)
             {
                 RSDataImported = false;
             }
@@ -659,29 +638,23 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (oForm.Title.Contains("Tax Invoice Received Analysis") != true || oForm.Title.Contains("Down Payment Tax Invoice Received Analysis") == true)
+                if (oForm.Title.Contains("Tax Invoice Received Analysis") != true || oForm.Title.Contains("Down Payment Tax Invoice Received Analysis"))
                 {
                     return;
                 }
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD && pVal.BeforeAction)
                 {
-                    fillUserCode( oForm);
+                    fillUserCode(oForm);
                 }
-
-                if (pVal.ItemUID == "1" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.BeforeAction == true)
+                else if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction)
                 {
                     if (RSDataImported == false)
                     {
-                        addRecord( oForm, out errorText);
+                        addRecord(oForm);
                     }
-
                 }
-
-
             }
         }
-
-
     }
 }
