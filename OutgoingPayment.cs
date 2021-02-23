@@ -3375,7 +3375,6 @@ namespace BDO_Localisation_AddOn
                 decimal pensEmployerAmtFC = docCurrency == "" ? 0 : pensEmployerAmt / docRate;
 
                 decimal pensEmployerDiffAmt = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnCoDiffAm", 0).ToString(), true); //დამსაქმებელი განსხვავების თანხა
-                decimal pensEmployerDiffAmtFC = docCurrency == "" ? 0 : pensEmployerDiffAmt / docRate;
 
                 if (pensEmployedAmt > 0 && pensEmployerAmt > 0)
                 {
@@ -3410,14 +3409,14 @@ namespace BDO_Localisation_AddOn
 
                     JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", debitAccount, creditAccount, pensEmployerAmt, pensEmployerAmtFC, docCurrency,
                                                         distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
-
+                    
                     if (pensEmployerDiffAmt > 0)
                     {
                         debitAccount = CommonFunctions.getPeriodsCategory("GLLossXdif", docDate.Year.ToString()); //საკურსო სხვაობის ხარჯი - დებეტი (Loss)
 
-                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, pensEmployerDiffAmt, pensEmployerDiffAmtFC, docCurrency,
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, pensEmployerDiffAmt, decimal.Zero, string.Empty,
                                     distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
-                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", debitAccount, "", pensEmployerDiffAmt, pensEmployerDiffAmtFC, docCurrency,
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", debitAccount, "", pensEmployerDiffAmt, decimal.Zero, string.Empty,
                                     distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
                     }
                     else if (pensEmployerDiffAmt < 0)
@@ -3425,9 +3424,9 @@ namespace BDO_Localisation_AddOn
                         debitAccount = creditAccount; //საპენსიო შუალედური - დებეტი
                         creditAccount = CommonFunctions.getPeriodsCategory("GLGainXdif", docDate.Year.ToString()); //საკურსო სხვაობის ხარჯი - კრედიტი (Gain)
 
-                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, Math.Abs(pensEmployerDiffAmt), Math.Abs(pensEmployerDiffAmtFC), docCurrency,
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, Math.Abs(pensEmployerDiffAmt), decimal.Zero, string.Empty,
                                     distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
-                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", debitAccount, "", Math.Abs(pensEmployerDiffAmt), Math.Abs(pensEmployerDiffAmtFC), docCurrency,
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", debitAccount, "", Math.Abs(pensEmployerDiffAmt), decimal.Zero, string.Empty,
                                     distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
                     }
                 }
