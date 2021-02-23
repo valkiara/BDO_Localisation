@@ -1,10 +1,9 @@
-﻿using System;
+﻿using SAPbobsCOM;
+using SAPbouiCOM;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using SAPbobsCOM;
-using SAPbouiCOM;
 using static BDO_Localisation_AddOn.BDOSResources;
 using static BDO_Localisation_AddOn.FormsB1;
 using static BDO_Localisation_AddOn.Program;
@@ -265,6 +264,14 @@ namespace BDO_Localisation_AddOn
 
             if (oForm.TypeEx != "70008") return;
 
+            if (businessObjectInfo.EventType == BoEventTypes.et_FORM_DATA_LOAD && businessObjectInfo.BeforeAction)
+            {
+                //when "Keep Visible" is not selected Program.uiApp.Forms.ActiveForm.Type = 10164, so we need check
+                if (uiApp.Forms.ActiveForm.Type == 70008) // Keep Visible Case
+                    oForm = uiApp.Forms.ActiveForm;
+                FormDataLoad(oForm, out _);
+            }
+
             if (businessObjectInfo.EventType == BoEventTypes.et_FORM_DATA_LOAD &
                 !businessObjectInfo.BeforeAction)
             {
@@ -294,7 +301,7 @@ namespace BDO_Localisation_AddOn
                 {
                     CreateFormItems(oForm, out _);
                     FormDataLoad(oForm, out _);
-                    
+
                 }
                 else
                 {
