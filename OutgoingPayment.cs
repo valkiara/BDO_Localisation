@@ -315,6 +315,16 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            //დამსაქმებლის საპენსიოების განსხვავების თანხა AP(AP Reserve) Invoice-სა და Payment-ს შორის
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "BDOSPnCoDiffAm");
+            fieldskeysMap.Add("TableName", "OVPM");
+            fieldskeysMap.Add("Description", "Company Pens. Difference Amount");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             // use blanket agreement rate ranges
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "UseBlaAgRt");
@@ -325,8 +335,6 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("DefaultValue", "N");
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-
-            GC.Collect();
         }
 
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
@@ -1185,7 +1193,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("WithhTax") + " (LC)");
             formItems.Add("LinkTo", "BDOSWhtAmt");
-            formItems.Add("Visible", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1206,9 +1213,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", true);
-            formItems.Add("Visible", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1247,7 +1251,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("PhysEntityPension") + " (LC)");
             formItems.Add("LinkTo", "BDOSPnPhAm");
-            formItems.Add("Visible", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1268,9 +1271,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", true);
-            formItems.Add("Visible", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1290,7 +1290,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("UID", itemName);
             formItems.Add("Caption", BDOSResources.getTranslate("CompPension") + " (LC)");
             formItems.Add("LinkTo", "BDOSPnCoAm");
-            formItems.Add("Visible", true);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1311,9 +1310,26 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", true);
-            formItems.Add("Visible", true);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                return;
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "PnCoDiffAm"; //10 characters
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OVPM");
+            formItems.Add("Alias", "U_BDOSPnCoDiffAm");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", left_e + width_e + 5);
+            formItems.Add("Width", 50);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -1667,10 +1683,12 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("BDOSWhtAmt").Visible = PensionVisible;
                 oForm.Items.Item("BDOSPnPhAm").Visible = PensionVisible;
                 oForm.Items.Item("BDOSPnCoAm").Visible = PensionVisible;
+                oForm.Items.Item("PnCoDiffAm").Visible = PensionVisible;
                 oForm.Items.Item("CalcPhcEnt").Visible = PensionVisible;
                 oForm.Items.Item("BDOSWhtAmt").Enabled = PensionVisible && docEntryIsEmpty;
                 oForm.Items.Item("BDOSPnPhAm").Enabled = PensionVisible && docEntryIsEmpty;
                 oForm.Items.Item("BDOSPnCoAm").Enabled = PensionVisible && docEntryIsEmpty;
+                oForm.Items.Item("PnCoDiffAm").Enabled = PensionVisible && docEntryIsEmpty;
                 oForm.Items.Item("CalcPhcEnt").Enabled = PensionVisible && docEntryIsEmpty;
                 //საშემოსავლო + საპენსიო
 
@@ -3211,6 +3229,7 @@ namespace BDO_Localisation_AddOn
                 BPDataSourceTable = docDBSources.Item("OCRD");
             }
 
+            DateTime docDate = DateTime.ParseExact(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "DocDate", 0).ToString(), "yyyyMMdd", CultureInfo.InvariantCulture);
             string CardCode = CommonFunctions.getChildOrDbDataSourceValue(BPDataSourceTable, null, DTSource, "CardCode", 0).ToString();
 
             SAPbobsCOM.BusinessPartners oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
@@ -3270,7 +3289,7 @@ namespace BDO_Localisation_AddOn
             if (ProfitTaxTypeIsSharing)
             {
                 string U_liablePrTx = CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_liablePrTx", 0).ToString(); //docDBSource.GetValue("U_liablePrTx", 0).Trim();
-                decimal NoDocSum = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "NoDocSum", 0).ToString()); ;
+                decimal NoDocSum = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "NoDocSum", 0).ToString());
 
                 string DebitAccount = CommonFunctions.getOADM("U_BDO_CapAcc").ToString();
                 string CreditAccount = CommonFunctions.getOADM("U_BDO_TaxAcc").ToString();
@@ -3355,9 +3374,11 @@ namespace BDO_Localisation_AddOn
                 decimal pensEmployerAmt = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnCoAm", 0).ToString()); //დამსაქმებელი
                 decimal pensEmployerAmtFC = docCurrency == "" ? 0 : pensEmployerAmt / docRate;
 
+                decimal pensEmployerDiffAmt = FormsB1.cleanStringOfNonDigits(CommonFunctions.getChildOrDbDataSourceValue(docDBSource, null, DTSource, "U_BDOSPnCoDiffAm", 0).ToString(), true); //დამსაქმებელი განსხვავების თანხა
+
                 if (pensEmployedAmt > 0 && pensEmployerAmt > 0)
                 {
-                    bool physicalEntityTax = CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wTCode).ToString() == "Y";
+                    //bool physicalEntityTax = CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wTCode).ToString() == "Y";
                     string pensionCoWTCode = CommonFunctions.getOADM("U_BDOSPnCoP").ToString();
                     string pensionPhWTCode = CommonFunctions.getOADM("U_BDOSPnPh").ToString();
 
@@ -3388,6 +3409,26 @@ namespace BDO_Localisation_AddOn
 
                     JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", debitAccount, creditAccount, pensEmployerAmt, pensEmployerAmtFC, docCurrency,
                                                         distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                    
+                    if (pensEmployerDiffAmt > 0)
+                    {
+                        debitAccount = CommonFunctions.getPeriodsCategory("GLLossXdif", docDate.Year.ToString()); //საკურსო სხვაობის ხარჯი - დებეტი (Loss)
+
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, pensEmployerDiffAmt, decimal.Zero, string.Empty,
+                                    distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", debitAccount, "", pensEmployerDiffAmt, decimal.Zero, string.Empty,
+                                    distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                    }
+                    else if (pensEmployerDiffAmt < 0)
+                    {
+                        debitAccount = creditAccount; //საპენსიო შუალედური - დებეტი
+                        creditAccount = CommonFunctions.getPeriodsCategory("GLGainXdif", docDate.Year.ToString()); //საკურსო სხვაობის ხარჯი - კრედიტი (Gain)
+
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyCredit", "", creditAccount, Math.Abs(pensEmployerDiffAmt), decimal.Zero, string.Empty,
+                                    distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                        JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "OnlyDebit", debitAccount, "", Math.Abs(pensEmployerDiffAmt), decimal.Zero, string.Empty,
+                                    distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
+                    }
                 }
             }
 
@@ -3760,6 +3801,7 @@ namespace BDO_Localisation_AddOn
                     decimal whTaxAmt = decimal.Zero;
                     decimal pensEmployedAmt = decimal.Zero; //დასაქმებული
                     decimal pensEmployerAmt = decimal.Zero; //დამსაქმებელი
+                    decimal pensEmployerDiffAmt = decimal.Zero; //დამსაქმებლის საპენსიოების განსხვავების თანხა AP(AP Reserve) Invoice-სა და Payment-ს შორის
 
                     //invoices
                     if (!isChangedWTaxBaseSum)
@@ -3772,17 +3814,20 @@ namespace BDO_Localisation_AddOn
                             {
                                 var invDocNum = oMatrix.GetCellSpecific("1", i).Value;
                                 var invType = oMatrix.GetCellSpecific("45", i).Value;
-                                var invWTCode = GetWTCodeFromInvoices(invType, invDocNum);
+                                var invDocDate = DateTime.ParseExact(oMatrix.GetCellSpecific("21", i).Value, "yyyyMMdd", CultureInfo.InvariantCulture);
+                                (string wtCode, decimal invDocRate)? invData = GetWTCodeFromInvoices(invType, invDocNum);
 
-                                if (string.IsNullOrEmpty(invWTCode)) continue;
+                                if (!invData.HasValue && string.IsNullOrEmpty(invData.Value.wtCode)) continue;
 
+                                var invWTCode = invData.Value.wtCode;
                                 var invWTaxAmt = FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("72", i).Value);
                                 string invTotalPaymentStr = oMatrix.GetCellSpecific("24", i).Value;
                                 var invTotalPayment = FormsB1.cleanStringOfNonDigits(invTotalPaymentStr);
                                 var invCurr = new string(invTotalPaymentStr.Where(char.IsLetter).ToArray());
 
                                 var invGrossAmt = invWTaxAmt + invTotalPayment;
-                                decimal invRate = 1;
+
+                                var invRate = 1.0m;
                                 if (invCurr != Program.LocalCurrency)
                                     invRate = invCurr == docCurr ? docRate : Convert.ToDecimal(oSBOBob.GetCurrencyRate(invCurr, docDate).Fields.Item("CurrencyRate").Value, NumberFormatInfo.InvariantInfo);
 
@@ -3790,6 +3835,16 @@ namespace BDO_Localisation_AddOn
                                 whTaxAmt += physicalEntityTaxesAmt.whTaxAmt;
                                 pensEmployedAmt += physicalEntityTaxesAmt.pensEmployedAmt;
                                 pensEmployerAmt += physicalEntityTaxesAmt.pensEmployerAmt;
+
+                                var invOldDocRate = 1.0m;
+                                var invOldPensEmployerAmtLC = 0.0m;
+                                if (invType == "18" && invCurr != Program.LocalCurrency && invCurr == docCurr) //Only for AP Invoice || AP Reserve Invoice
+                                {
+                                    invOldDocRate = invData.Value.invDocRate;
+                                    invOldPensEmployerAmtLC = physicalEntityTaxesAmt.pensEmployerAmt * invOldDocRate / docRate;
+                                }
+
+                                pensEmployerDiffAmt += invOldPensEmployerAmtLC > 0 ? physicalEntityTaxesAmt.pensEmployerAmt - invOldPensEmployerAmtLC : 0.0m;
                             }
                         }
                     }
@@ -3816,6 +3871,7 @@ namespace BDO_Localisation_AddOn
                     {
                         oForm.Items.Item("BDOSPnPhAm").Specific.Value = FormsB1.ConvertDecimalToString(CommonFunctions.roundAmountByGeneralSettings(pensEmployedAmt, "Sum"));
                         oForm.Items.Item("BDOSPnCoAm").Specific.Value = FormsB1.ConvertDecimalToString(CommonFunctions.roundAmountByGeneralSettings(pensEmployerAmt, "Sum"));
+                        oForm.Items.Item("PnCoDiffAm").Specific.Value = FormsB1.ConvertDecimalToString(CommonFunctions.roundAmountByGeneralSettings(pensEmployerDiffAmt, "Sum"));
                         oForm.Items.Item("BDOSWhtAmt").Specific.Value = FormsB1.ConvertDecimalToString(CommonFunctions.roundAmountByGeneralSettings(whTaxAmt, "Sum"));
                     }
 
@@ -3833,31 +3889,37 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string GetWTCodeFromInvoices(string invType, string invDocNum)
+        public static (string wtCode, decimal invDocRate)? GetWTCodeFromInvoices(string invType, string invDocNum)
         {
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             try
             {
                 StringBuilder qury = new StringBuilder();
-                qury.Append("SELECT T1.\"WTCode\" \n");
+                qury.Append("SELECT T1.\"WTCode\", \n");
+                qury.Append("T11.\"DocRate\" AS \"InvDocRate\" \n");
                 qury.Append("FROM \"PCH5\" AS T1 \n");
                 qury.Append("INNER JOIN \"OPCH\" T11 ON T1.\"AbsEntry\" = T11.\"DocEntry\" \n");
                 qury.Append($"WHERE T1.\"ObjType\" = {invType} AND T11.\"DocNum\" = {invDocNum} \n");
                 qury.Append("UNION \n");
-                qury.Append("SELECT T2.\"WTCode\" \n");
+                qury.Append("SELECT T2.\"WTCode\", \n");
+                qury.Append("T22.\"DocRate\" AS \"InvDocRate\" \n");
                 qury.Append("FROM \"DPO5\" AS T2 \n");
                 qury.Append("INNER JOIN \"ODPO\" T22 ON T2.\"AbsEntry\" = T22.\"DocEntry\" \n");
                 qury.Append($"WHERE T2.\"ObjType\" = {invType} AND T22.\"DocNum\" = {invDocNum} \n");
                 qury.Append("UNION \n");
-                qury.Append("SELECT T3.\"WTCode\" \n");
+                qury.Append("SELECT T3.\"WTCode\", \n");
+                qury.Append("T33.\"DocRate\" AS \"InvDocRate\" \n");
                 qury.Append("FROM \"RPC5\" AS T3 \n");
                 qury.Append("INNER JOIN \"ORPC\" T33 ON T3.\"AbsEntry\" = T33.\"DocEntry\" \n");
-                qury.Append($"WHERE T3.\"ObjType\" = {invType} AND T33.\"DocNum\" = {invDocNum}");
+                qury.Append($"WHERE T3.\"ObjType\" = {invType} AND T33.\"DocNum\" = {invDocNum} ");
 
                 oRecordSet.DoQuery(qury.ToString());
 
-                return !oRecordSet.EoF ? oRecordSet.Fields.Item("WTCode").Value : null;
+                if (!oRecordSet.EoF)
+                    return (oRecordSet.Fields.Item("WTCode").Value, Convert.ToDecimal(oRecordSet.Fields.Item("InvDocRate").Value, CultureInfo.InvariantCulture));
+                else
+                    return null;
             }
             catch (Exception ex)
             {
@@ -4459,7 +4521,7 @@ namespace BDO_Localisation_AddOn
                 {
                     AmountPr = AmountPr + Convert.ToDouble(CommonFunctions.roundAmountByGeneralSettings(Convert.ToDecimal(noDocSum / (100 - profitTaxRate) * profitTaxRate), "Sum"));
                 }
-                
+
                 SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("20").Specific;
                 for (int i = 1; i < oMatrix.RowCount + 1; i++)
                 {
@@ -5034,7 +5096,7 @@ namespace BDO_Localisation_AddOn
                 {
                     oRecordSet = CommonFunctions.getBPBankInfo(partnerAccountNumber + partnerCurrency, partnerTaxCode, "S");
                 }
-               
+
 
                 if (oRecordSet == null)
                 {
@@ -5071,9 +5133,9 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                oPayments.DocTypte = SAPbobsCOM.BoRcptTypes.rSupplier;
+                    oPayments.DocTypte = SAPbobsCOM.BoRcptTypes.rSupplier;
                 }
-                
+
                 oPayments.DocDate = docDate;
                 oPayments.TaxDate = docDate;
 

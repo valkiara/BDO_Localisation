@@ -762,6 +762,7 @@ namespace BDO_Localisation_AddOn
                     formItems.Add("Top", top);
                     formItems.Add("Height", heightMTR);
                     formItems.Add("UID", itemName);
+                    formItems.Add("ScrollBars", SAPbouiCOM.BoScrollBars.sb_Vertical);
 
                     FormsB1.createFormItem(oForm, formItems, out errorText);
                     if (errorText != null)
@@ -802,12 +803,14 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("CFWId", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 11);
                     oDataTable.Columns.Add("Description", SAPbouiCOM.BoFieldsType.ft_Text, 100);
                     oDataTable.Columns.Add("Comments", SAPbouiCOM.BoFieldsType.ft_Text, 254); //კომენტარი
-
+                    
                     if (CommonFunctions.IsDevelopment())
                     {
                         oDataTable.Columns.Add("BudgetCashFlowID", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric, 11);
                         oDataTable.Columns.Add("BudgetCashFlowName", SAPbouiCOM.BoFieldsType.ft_Text, 100);
                     }
+
+                    oDataTable.Columns.Add("InvDocRate", SAPbouiCOM.BoFieldsType.ft_Sum); //Invoice's rate
 
                     string uniqueID_lf_Budg_CFL = "Budg_CFL";
 
@@ -1009,6 +1012,13 @@ namespace BDO_Localisation_AddOn
                             oColumn.TitleObject.Caption = BDOSResources.getTranslate(columnName);
                             oColumn.DataBind.Bind("InvoiceMTR", columnName);
                         }
+                        else if (columnName == "InvDocRate")
+                        {
+                            oColumn = oColumns.Add("InvDocRate", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+                            oColumn.TitleObject.Caption = columnName;
+                            oColumn.Visible = false;
+                            oColumn.DataBind.Bind("InvoiceMTR", columnName);
+                        }
                         else
                         {
                             oColumn = oColumns.Add(columnName, SAPbouiCOM.BoFormItemTypes.it_EDIT);
@@ -1176,6 +1186,8 @@ namespace BDO_Localisation_AddOn
             DTSource.Columns.Add("NoDocSum");
             DTSource.Columns.Add("U_BDOSPnPhAm");
             DTSource.Columns.Add("U_BDOSPnCoAm");
+            DTSource.Columns.Add("U_BDOSPnCoDiffAm");
+            DTSource.Columns.Add("DocDate");
 
             string localCurrency = Program.LocalCurrency;
             string bpBankAccount = headerLine["BankAccount"].ToString();
@@ -1277,7 +1289,8 @@ namespace BDO_Localisation_AddOn
             oPayment.UserFields.Fields.Item("U_BDOSPnPhAm").Value = Convert.ToDouble(pensEmployedAmount, NumberFormatInfo.InvariantInfo);
             oPayment.UserFields.Fields.Item("U_BDOSPnCoAm").Value = Convert.ToDouble(pensEmployerAmount, NumberFormatInfo.InvariantInfo);
 
-            decimal noDocSum = 0;
+            var noDocSum = 0.0m;
+            var pensEmployerDiffAmount = 0.0m;
             //ცხრილური ნაწილი
             DataRow accountPaymentsLine;
             for (int i = 0; i < AccountPaymentsLines.Rows.Count; i++)
@@ -1304,6 +1317,8 @@ namespace BDO_Localisation_AddOn
                     decimal sumAppliedLC = Convert.ToDecimal(accountPaymentsLine["SumApplied"], NumberFormatInfo.InvariantInfo);
                     decimal sumAppliedFC = oPayment.DocCurrency != localCurrency ? sumAppliedLC / Convert.ToDecimal(oPayment.DocRate, NumberFormatInfo.InvariantInfo) : 0;
                     decimal balanceDue = Convert.ToDecimal(accountPaymentsLine["BalanceDue"], NumberFormatInfo.InvariantInfo);
+                    var invDocRate = Convert.ToDecimal(accountPaymentsLine["invDocRate"], NumberFormatInfo.InvariantInfo);
+                    var invPensEmployerAmount = Convert.ToDecimal(accountPaymentsLine["PensEmployerAmount"], NumberFormatInfo.InvariantInfo);
 
                     if (oPayment.DocCurrency == localCurrency)
                     {
@@ -1316,6 +1331,12 @@ namespace BDO_Localisation_AddOn
                         sumApplied = Math.Min(balanceDue, sumAppliedFC);
                         oPayment.Invoices.AppliedFC = Convert.ToDouble(sumApplied, NumberFormatInfo.InvariantInfo);
                         noDocSum += (sumAppliedFC - balanceDue);
+
+                        if (InvType == SAPbobsCOM.BoRcptInvTypes.it_PurchaseInvoice)
+                        {
+                            var invOldPensEmployerAmtLC = invPensEmployerAmount * invDocRate / docRate;
+                            pensEmployerDiffAmount += invOldPensEmployerAmtLC > 0 ? invPensEmployerAmount - invOldPensEmployerAmtLC : 0.0m;
+                        }
                     }
 
                     DataRow DTSourceRowVPM2 = DTSourceVPM2.Rows.Add();
@@ -1326,6 +1347,7 @@ namespace BDO_Localisation_AddOn
                     oPayment.Invoices.Add();
                 }
             }
+            oPayment.UserFields.Fields.Item("U_BDOSPnCoDiffAm").Value = Convert.ToDouble(pensEmployerDiffAmount, NumberFormatInfo.InvariantInfo);
 
             bool cashFlowRelevant = CommonFunctions.isAccountCashFlowRelevant(transferAccount);
             if (cashFlowRelevant)
@@ -1338,7 +1360,7 @@ namespace BDO_Localisation_AddOn
                 oPayment.PrimaryFormItems.Add();
             }
 
-            bool physicalEntityTax = (BusinessPartners.isWTLiable(cardCode) && CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
+            //bool physicalEntityTax = (BusinessPartners.isWTLiable(cardCode) && CommonFunctions.getValue("OWHT", "U_BDOSPhisTx", "WTCode", wtCode).ToString() == "Y");
 
             DataRow DTSourceRow = DTSource.Rows.Add();
 
@@ -1358,6 +1380,8 @@ namespace BDO_Localisation_AddOn
             DTSourceRow["U_BDOSWhtAmt"] = Convert.ToDouble(wtAmount, NumberFormatInfo.InvariantInfo);
             DTSourceRow["U_BDOSPnPhAm"] = Convert.ToDouble(pensEmployedAmount, NumberFormatInfo.InvariantInfo);
             DTSourceRow["U_BDOSPnCoAm"] = Convert.ToDouble(pensEmployerAmount, NumberFormatInfo.InvariantInfo);
+            DTSourceRow["U_BDOSPnCoDiffAm"] = Convert.ToDouble(pensEmployerDiffAmount, NumberFormatInfo.InvariantInfo);
+            DTSourceRow["DocDate"] = docDateS;
 
             if (noDocSum > 0)
                 oPayment.ControlAccount = headerLine["ControlAccount"].ToString();
@@ -2013,6 +2037,14 @@ namespace BDO_Localisation_AddOn
             colDecimal.DataType = Type.GetType("System.Decimal");
             accountPaymentsLines.Columns.Add(colDecimal);
 
+            colDecimal = new DataColumn("InvDocRate");
+            colDecimal.DataType = Type.GetType("System.Decimal");
+            accountPaymentsLines.Columns.Add(colDecimal);
+
+            colDecimal = new DataColumn("pensEmployerAmount");
+            colDecimal.DataType = Type.GetType("System.Decimal");
+            accountPaymentsLines.Columns.Add(colDecimal);
+
             SAPbouiCOM.DataTable oDataTable = oForm.DataSources.DataTables.Item("InvoiceMTR");
 
             for (int i = 0; i < oDataTable.Rows.Count; i++)
@@ -2046,6 +2078,7 @@ namespace BDO_Localisation_AddOn
                     int cashFlowID = string.IsNullOrEmpty(cashFlowIDStr) ? 0 : Convert.ToInt32(cashFlowIDStr);
                     string useBlaAgRt = oDataTable.GetValue("UseBlaAgRt", i);
                     string blnktAgr = oDataTable.GetValue("BlnktAgr", i);
+                    decimal invDocRate = Convert.ToDecimal(oDataTable.GetValue("InvDocRate", i), NumberFormatInfo.InvariantInfo);
 
                     if (totalPaymentLC == 0)
                         continue;
@@ -2121,6 +2154,8 @@ namespace BDO_Localisation_AddOn
                     AccountPaymentsRow["InstallmentId"] = installmentId;
                     AccountPaymentsRow["SumApplied"] = totalPaymentLC;
                     AccountPaymentsRow["BalanceDue"] = balanceDue;
+                    AccountPaymentsRow["InvDocRate"] = invDocRate;
+                    AccountPaymentsRow["pensEmployerAmount"] = pensEmployer;
 
                     payblAmtLCTotal += totalPaymentLC;
                     payblAmtFCTotal += totalPaymentFC;
@@ -2382,6 +2417,7 @@ namespace BDO_Localisation_AddOn
                  T0.""AgrNo"" as ""BlanketAgreement"",
                  T0.""DocEntry"" AS ""DocEntry"",
                  T0.""Project"",
+                 T0.""DocRate"",
 	             T0.""DocNum"" AS ""DocNum"",
                  T0.""DocCur"" AS ""DocCur"",
             	 T0.""CardCode"" AS ""CardCode"",
@@ -2406,6 +2442,7 @@ namespace BDO_Localisation_AddOn
                  TT0.""AgrNo"",
             	 TT0.""DocEntry"",
                  TT0.""Project"",
+                 TT0.""DocRate"",
             	 TT0.""DocNum"" AS ""DocNum"",
                  TT0.""DocCur"" AS ""DocCur"",
             	 T3.""CardCode"" AS ""CardCode"",
@@ -2436,6 +2473,7 @@ namespace BDO_Localisation_AddOn
                  TT0.""AgrNo"",
                  TT0.""DocEntry"",
             	 TT0.""Project"",
+                 TT0.""DocRate"",
             	 TT0.""DocNum"",
                  TT0.""DocCur"",
             	 T3.""CardCode"",
@@ -2450,6 +2488,7 @@ namespace BDO_Localisation_AddOn
                  TT0.""AgrNo"",
             	 TT0.""DocEntry"",
             	 TT0.""Project"",
+                 TT0.""DocRate"",
             	 TT0.""DocNum"" AS ""DocNum"",
                  TT0.""DocCur"" AS ""DocCur"",
             	 T3.""CardCode"" AS ""CardCode"",
@@ -2480,6 +2519,7 @@ namespace BDO_Localisation_AddOn
                  TT0.""AgrNo"",
                  TT0.""DocEntry"",
             	 TT0.""Project"",
+                 TT0.""DocRate"",
             	 TT0.""DocNum"",
                  TT0.""DocCur"",
             	 T3.""CardCode"",
@@ -2494,6 +2534,7 @@ namespace BDO_Localisation_AddOn
                  TT0.""AgrNo"",
             	 TT0.""DocEntry"",
             	 TT0.""Project"",
+                 TT0.""DocRate"",
             	 TT0.""DocNum"" AS ""DocNum"",
                  TT0.""DocCur"" AS ""DocCur"",
             	 T3.""CardCode"" AS ""CardCode"",
@@ -2525,6 +2566,7 @@ namespace BDO_Localisation_AddOn
                  TT0.""AgrNo"",
                  TT0.""DocEntry"",
             	 TT0.""Project"",
+                 TT0.""DocRate"",     
             	 TT0.""DocNum"",
                  TT0.""DocCur"",
             	 T3.""CardCode"",
@@ -2595,6 +2637,7 @@ namespace BDO_Localisation_AddOn
                         rate = Convert.ToDecimal(oSBOBob.GetCurrencyRate(docCur, date).Fields.Item("CurrencyRate").Value);
                         totalPaymentLC = totalPaymentFC * rate;
                     }
+                    var invDocRate = Convert.ToDecimal(oRecordSet.Fields.Item("DocRate").Value);
 
                     oDataTable.Rows.Add();
                     oDataTable.SetValue("LineNum", rowIndex, rowIndex + 1);
@@ -2631,6 +2674,7 @@ namespace BDO_Localisation_AddOn
 
                     oDataTable.SetValue("CFWId", rowIndex, oForm.DataSources.UserDataSources.Item("CashFlowI").ValueEx);
                     oDataTable.SetValue("Description", rowIndex, oForm.DataSources.UserDataSources.Item("Descrpt").ValueEx);
+                    oDataTable.SetValue("InvDocRate", rowIndex, Convert.ToDouble(invDocRate));
 
                     calculatePensionAmt(oForm, oDataTable, rowIndex + 1);
 
@@ -2638,7 +2682,7 @@ namespace BDO_Localisation_AddOn
                     rowIndex++;
                 }
 
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("InvoiceMTR").Specific));
+                SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("InvoiceMTR").Specific;
                 oForm.Freeze(true);
                 oMatrix.Clear();
                 oMatrix.LoadFromDataSource();

@@ -682,7 +682,7 @@ namespace BDO_Localisation_AddOn
                     oEditText.ChooseFromListAlias = "DocEntry";
                 }
 
-                
+
 
             }
             catch (Exception ex)
@@ -1289,7 +1289,14 @@ namespace BDO_Localisation_AddOn
                 DBDataSourceTable = docDBSources.Item("PCH1");
                 JEcount = DBDataSourceTable.Size;
 
-
+                var dpmCompanyPensionAmt = decimal.Zero;
+                var companyPensionAmtSum = decimal.Zero;
+                if (oForm.DataSources.DBDataSources.Item("PCH9").Size > 0) //Company Pension for AP Down Payment Request)
+                {
+                    dpmCompanyPensionAmt = GetAPDownPaymentDocsCompanyPensionAmt(oForm);
+                    for (int i = 0; i < JEcount; i++)
+                        companyPensionAmtSum += Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "U_BDOSPnCoAm", i), CultureInfo.InvariantCulture);
+                }
                 for (int i = 0; i < JEcount; i++)
                 {
                     CompanyPensionAmount = Convert.ToDecimal(CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "U_BDOSPnCoAm", i), CultureInfo.InvariantCulture);
@@ -1302,6 +1309,8 @@ namespace BDO_Localisation_AddOn
                     DistrRule3 = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "OcrCode3", i).ToString();
                     DistrRule4 = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "OcrCode4", i).ToString();
                     DistrRule5 = CommonFunctions.getChildOrDbDataSourceValue(DBDataSourceTable, null, DTSource, "OcrCode5", i).ToString();
+
+                    CompanyPensionAmount += companyPensionAmtSum == decimal.Zero ? decimal.Zero : CompanyPensionAmount * dpmCompanyPensionAmt / companyPensionAmtSum;
 
                     if (CompanyPensionAmount != 0)
                     {
@@ -1340,9 +1349,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             }
-
             return jeLines;
-
         }
 
         public static void JrnEntry(string DocEntry, string DocNum, DateTime DocDate, DataTable JrnLinesDT, DataTable reLines, out string errorText)
@@ -1370,6 +1377,57 @@ namespace BDO_Localisation_AddOn
             catch (Exception ex)
             {
                 errorText = ex.Message;
+            }
+        }
+
+        private static decimal GetAPDownPaymentDocsCompanyPensionAmt(SAPbouiCOM.Form oForm)
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            try
+            {
+                SAPbouiCOM.DBDataSource oDBDataSourceDrawnDpm = oForm.DataSources.DBDataSources.Item("PCH9");
+
+                StringBuilder dummyTable = new StringBuilder();
+                var dpmDatasourceSize = oDBDataSourceDrawnDpm.Size;
+                for (int i = 0; i < dpmDatasourceSize; i++)
+                {
+                    dummyTable.AppendLine($"SELECT {oDBDataSourceDrawnDpm.GetValue("BaseAbs", i)} AS \"BaseAbs\", {oDBDataSourceDrawnDpm.GetValue("Gross", i)} AS \"Gross\" ");
+                    if (Program.oCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB)
+                        dummyTable.Append(" FROM DUMMY ");
+                    if (i != (dpmDatasourceSize - 1))
+                        dummyTable.AppendLine(" UNION ALL ");
+                }
+
+                StringBuilder query = new StringBuilder();
+                query.Append("SELECT SUM(T0.\"Gross\" * T0.\"U_BDOSPnPhAm\" / T0.\"DocTotal\") AS \"DownPaymentPencCo\" \n");
+                query.Append("FROM   (SELECT T1.\"BaseAbs\", \n");
+                query.Append("               T1.\"Gross\", \n");
+                query.Append("               T2.\"DocTotal\", \n");
+                query.Append("               SUM(T3.\"U_BDOSPnPhAm\") AS \"U_BDOSPnPhAm\" \n");
+                query.Append($"        FROM  ({dummyTable}) T1 \n");
+                query.Append("               INNER JOIN \"ODPO\" T2 \n");
+                query.Append("                       ON T1.\"BaseAbs\" = T2.\"DocEntry\" \n");
+                query.Append("               INNER JOIN \"DPO1\" T3 \n");
+                query.Append("                       ON T1.\"BaseAbs\" = T3.\"DocEntry\" \n");
+                query.Append("        GROUP  BY T1.\"BaseAbs\", \n");
+                query.Append("                  T1.\"Gross\", \n");
+                query.Append("                  T2.\"DocTotal\") T0");
+
+                oRecordSet.DoQuery(query.ToString());
+
+                if (!oRecordSet.EoF)
+                    return Convert.ToDecimal(oRecordSet.Fields.Item("DownPaymentPencCo").Value);
+                else
+                    return decimal.Zero;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
             }
         }
 
