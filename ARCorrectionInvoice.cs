@@ -264,17 +264,11 @@ namespace BDO_Localisation_AddOn
 
             if (oForm.TypeEx != "70008") return;
 
-            if (businessObjectInfo.EventType == BoEventTypes.et_FORM_DATA_LOAD && businessObjectInfo.BeforeAction)
+            if (businessObjectInfo.EventType == BoEventTypes.et_FORM_DATA_LOAD && !businessObjectInfo.BeforeAction)
             {
                 //when "Keep Visible" is not selected Program.uiApp.Forms.ActiveForm.Type = 10164, so we need check
                 if (uiApp.Forms.ActiveForm.Type == 70008) // Keep Visible Case
                     oForm = uiApp.Forms.ActiveForm;
-                FormDataLoad(oForm, out _);
-            }
-
-            if (businessObjectInfo.EventType == BoEventTypes.et_FORM_DATA_LOAD &
-                !businessObjectInfo.BeforeAction)
-            {
                 FormDataLoad(oForm, out _);
             }
 
