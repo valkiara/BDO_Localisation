@@ -11,8 +11,6 @@ namespace BDO_Localisation_AddOn
 {
     class BDOSTaxAnalysisReceived
     {
-        public static bool RSDataImported = false;
-
         public static void createUDO(out string errorText)
         {
             errorText = null;
@@ -50,7 +48,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 50);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-            
+
             fieldskeysMap = new Dictionary<string, object>(); // ID
             fieldskeysMap.Add("Name", "ID");
             fieldskeysMap.Add("TableName", "BDOSTXANR");
@@ -332,7 +330,7 @@ namespace BDO_Localisation_AddOn
                     if (k_ID != "-1")
                     {
                         k_invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt32(k_ID));
-                        
+
                         if (k_invoiceTableLines != null)
                             k_invoiceTableLines_False = false;
 
@@ -389,7 +387,7 @@ namespace BDO_Localisation_AddOn
 
                     try
                     {
-                        oRecordSetInsert.DoQuery(insertQuery);
+                        oRecordSetInsert.DoQuery(insertQuery);  
                     }
                     catch (Exception ex)
                     {
@@ -397,6 +395,7 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
                 }
+                oForm.Items.Item("1").Click();
             }
             catch (Exception ex)
             {
@@ -408,8 +407,6 @@ namespace BDO_Localisation_AddOn
                 Marshal.ReleaseComObject(oRecordSet);
                 Marshal.ReleaseComObject(oRecordSetInsert);
                 Marshal.ReleaseComObject(oUserTable);
-                RSDataImported = true;
-                oForm.Items.Item("1").Click();
             }
         }
 
@@ -629,11 +626,6 @@ namespace BDO_Localisation_AddOn
         {
             BubbleEvent = true;
 
-            if (pVal.ItemChanged && pVal.BeforeAction == false)
-            {
-                RSDataImported = false;
-            }
-
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
@@ -647,12 +639,10 @@ namespace BDO_Localisation_AddOn
                 {
                     fillUserCode(oForm);
                 }
-                else if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction)
+
+                else if (pVal.ItemUID == "1" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && pVal.BeforeAction && !pVal.InnerEvent)
                 {
-                    if (RSDataImported == false)
-                    {
-                        addRecord(oForm);
-                    }
+                    addRecord(oForm);
                 }
             }
         }
