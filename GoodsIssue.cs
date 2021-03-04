@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Globalization;
 using System.Data;
+using System.Globalization;
+using System.Linq;
 
 namespace BDO_Localisation_AddOn
 {
@@ -1252,6 +1249,10 @@ namespace BDO_Localisation_AddOn
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
             {
+                //when "Keep Visible" is not selected Program.uiApp.Forms.ActiveForm.Type = 10059, so we need check
+                if (Program.uiApp.Forms.ActiveForm.Type == 720) // Keep Visible Case
+                    oForm = Program.uiApp.Forms.ActiveForm;
+
                 formDataLoad(oForm, out errorText);
             }
         }
@@ -1476,12 +1477,12 @@ namespace BDO_Localisation_AddOn
 
         private static void updateInStockByWarehouseAndDate(SAPbouiCOM.Form oForm, int rowIndex = 0)
         {
-            string docDate = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("DocDate", 0);         
+            string docDate = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("DocDate", 0);
             try
             {
                 oForm.Freeze(true);
 
-                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("13").Specific));             
+                SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("13").Specific));
                 int rowCount = rowIndex == 0 ? oMatrix.RowCount : rowIndex;
                 int i = rowIndex == 0 ? 1 : rowIndex;
 
@@ -1594,7 +1595,7 @@ namespace BDO_Localisation_AddOn
         }
 
         public static void fillAmountTaxes(SAPbouiCOM.Form oForm)
-        {          
+        {
             try
             {
                 oForm.Freeze(true);
@@ -1625,7 +1626,7 @@ namespace BDO_Localisation_AddOn
                     string ListNum = oForm.DataSources.DBDataSources.Item("OIGE").GetValue("GroupNum", 0);
 
                     SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                        
+
                     string isGrossPrc = "N";
                     string query = @"SELECT ""IsGrossPrc"" FROM ""OPLN"" WHERE ""OPLN"".""ListNum""='" + ListNum.Replace("'", "''") + "'";
                     oRecordSet.DoQuery(query);
@@ -1677,7 +1678,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.EditText oEditAmtVat = ((SAPbouiCOM.EditText)(oItemAmtVat.Specific));
                 oEditAmtVat.Value = FormsB1.ConvertDecimalToString(CommonFunctions.roundAmountByGeneralSettings(amtVat, "Sum"));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

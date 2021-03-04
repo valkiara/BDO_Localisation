@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace BDO_Localisation_AddOn
 {
@@ -562,9 +560,9 @@ namespace BDO_Localisation_AddOn
                     oForm.Items.Item("1000").Specific.Value = sdocDate;
                     oForm.PaneLevel = panelLevel;
                     oForm.Freeze(false);
-
                 }
             }
+
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
             {
                 if (BusinessObjectInfo.BeforeAction)
@@ -687,6 +685,10 @@ namespace BDO_Localisation_AddOn
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
+                //when "Keep Visible" is not selected Program.uiApp.Forms.ActiveForm.Type = 10162, so we need check
+                if (Program.uiApp.Forms.ActiveForm.Type == 70002) // Keep Visible Case
+                    oForm = Program.uiApp.Forms.ActiveForm;
+
                 formDataLoad(oForm, out string errorText);
                 setVisibleFormItems(oForm, out errorText);
                 BDO_WBReceivedDocs.setwaybillText(oForm);

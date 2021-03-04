@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace BDO_Localisation_AddOn
 {
@@ -339,11 +337,11 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string query = @"SELECT 
-            ""RPC1"".""DocEntry"" AS ""docEntry"", 
-            SUM(""RPC1"".""GTotal"") AS ""GTotal"", 
-            SUM(""RPC1"".""LineVat"") AS ""LineVat"" 
-            FROM ""RPC1"" AS ""RPC1"" 
-            WHERE ""RPC1"".""DocEntry"" = '" + docEntry + @"' 
+            ""RPC1"".""DocEntry"" AS ""docEntry"",
+            SUM(""RPC1"".""GTotal"") AS ""GTotal"",
+            SUM(""RPC1"".""LineVat"") AS ""LineVat""
+            FROM ""RPC1"" AS ""RPC1""
+            WHERE ""RPC1"".""DocEntry"" = '" + docEntry + @"'
             GROUP BY ""RPC1"".""DocEntry""";
 
             try
@@ -718,6 +716,10 @@ namespace BDO_Localisation_AddOn
 
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && BusinessObjectInfo.BeforeAction == false)
             {
+                //when "Keep Visible" is not selected Program.uiApp.Forms.ActiveForm.Type = 10018, so we need check
+                if (Program.uiApp.Forms.ActiveForm.Type == 181) // Keep Visible Case
+                    oForm = Program.uiApp.Forms.ActiveForm;
+
                 formDataLoad(oForm, out errorText);
                 setVisibleFormItems(oForm, out errorText);
                 BDO_WBReceivedDocs.setwaybillText(oForm);
@@ -924,9 +926,9 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string query = @"SELECT
-            	 ""RPC1"".""DocEntry"" 
-            FROM ""RPC1"" 
-            WHERE ""RPC1"".""BaseEntry"" IN (" + string.Join(",", docEntry) + @") 
+            	 ""RPC1"".""DocEntry""
+            FROM ""RPC1""
+            WHERE ""RPC1"".""BaseEntry"" IN (" + string.Join(",", docEntry) + @")
             AND ""RPC1"".""BaseType"" = '" + baseType + @"'
             GROUP BY ""RPC1"".""DocEntry""";
 
