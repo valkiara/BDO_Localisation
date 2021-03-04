@@ -716,6 +716,35 @@ namespace BDO_Localisation_AddOn
             oColumn.Width = 10;
             oColumn.Editable = false;
             oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_BDOSEmpID").DataBind.Alias);
+
+            //for new HR & Payroll Add-On
+            try
+            {
+                oColumn = oColumns.Add("SlryRule", oMatrix.Columns.Item("U_slryRuleCode").Type);
+                oColumn.TitleObject.Caption = oMatrix.Columns.Item("U_slryRuleCode").TitleObject.Caption;
+                oColumn.Width = 10;
+                oColumn.Editable = false;
+                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_slryRuleCode").DataBind.Alias);
+
+                oColumn = oColumns.Add("EmpCode", oMatrix.Columns.Item("U_empCode").Type);
+                oColumn.TitleObject.Caption = oMatrix.Columns.Item("U_empCode").TitleObject.Caption;
+                oColumn.Width = 10;
+                oColumn.Editable = false;
+                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_empCode").DataBind.Alias);
+
+                oColumn = oColumns.Add("AccrMnth", oMatrix.Columns.Item("U_accrMnth").Type);
+                oColumn.TitleObject.Caption = oMatrix.Columns.Item("U_accrMnth").TitleObject.Caption;
+                oColumn.Width = 10;
+                oColumn.Editable = false;
+                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_accrMnth").DataBind.Alias);
+
+                oColumn = oColumns.Add("WTaxCode", oMatrix.Columns.Item("U_wTaxCode").Type);
+                oColumn.TitleObject.Caption = oMatrix.Columns.Item("U_wTaxCode").TitleObject.Caption;
+                oColumn.Width = 10;
+                oColumn.Editable = false;
+                oColumn.DataBind.Bind("JDT1_BDO", oMatrix.Columns.Item("U_wTaxCode").DataBind.Alias);
+            }
+            catch { }
         }
 
         private static void ChooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.ChooseFromListEvent oCflEventO, out bool bubbleEvent)
@@ -897,14 +926,19 @@ namespace BDO_Localisation_AddOn
                         string CreatedBy = OJDT.GetValue("CreatedBy", 0).Trim();
 
                         oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                        string query = @"SELECT
-                                             ""JDT1"".*
-                                        FROM ""JDT1""
-                                        LEFT JOIN ""OJDT"" on ""OJDT"".""TransId"" = ""JDT1"".""TransId""
-                                        WHERE ""OJDT"".""Ref1"" = '" + CreatedBy + @"' 
-                                        AND ""OJDT"".""Ref2"" = '" + TransType + "' ";
 
-                        oRecordSet.DoQuery(query);
+                        StringBuilder query = new StringBuilder();
+                        query.Append("SELECT T1.* \n");
+                        query.Append("FROM   \"JDT1\" T1 \n");
+                        query.Append("       LEFT JOIN \"OJDT\" T0 \n");
+                        query.Append("              ON T0.\"TransId\" = T1.\"TransId\" \n");
+                        query.Append($"WHERE  ( T0.\"Ref1\" = '{CreatedBy}' \n");
+                        query.Append($"         AND T0.\"Ref2\" = '{TransType}' ) \n");
+                        query.Append($"        OR ( T0.\"Ref3\" = '{CreatedBy}' \n");
+                        query.Append($"             AND T0.\"Ref2\" = '{TransType}' \n");
+                        query.Append("             AND T0.\"U_byAddOn\" = 'Y' )");
+
+                        oRecordSet.DoQuery(query.ToString());
 
                         int GlCount = count;
 
@@ -931,6 +965,17 @@ namespace BDO_Localisation_AddOn
                             JDT1_BDO.SetValue("Project", GlCount, oRecordSet.Fields.Item("Project").Value);
                             JDT1_BDO.SetValue("prFrmItm", GlCount, getCashFlow(JDT1_BDO.GetValue("TransId", GlCount).ToString(), JDT1_BDO.GetValue("Line_ID", GlCount).ToString()));
                             JDT1_BDO.SetValue("U_BDOSEmpID", GlCount, oRecordSet.Fields.Item("U_BDOSEmpID").Value);
+
+                            //for new HR & Payroll Add-On
+                            try
+                            {
+                                JDT1_BDO.SetValue("U_slryRuleCode", GlCount, oRecordSet.Fields.Item("U_slryRuleCode").Value);
+                                JDT1_BDO.SetValue("U_empCode", GlCount, oRecordSet.Fields.Item("U_empCode").Value);
+                                JDT1_BDO.SetValue("U_accrMnth", GlCount, oRecordSet.Fields.Item("U_accrMnth").Value);
+                                JDT1_BDO.SetValue("U_wTaxCode", GlCount, oRecordSet.Fields.Item("U_wTaxCode").Value);
+                            }
+                            catch { }
+
                             GlCount++;
                             oRecordSet.MoveNext();
                         }
@@ -1293,7 +1338,7 @@ namespace BDO_Localisation_AddOn
                                 if (blaAgr.Specific.Value.Length > 0 && isMultiBp)
                                 {
                                     Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("CantChooseMultiBp"), SAPbouiCOM.BoMessageTime.bmt_Short);
-                                    oForm.Items.Item(pVal.ItemUID).Specific.GetCellSpecific(pVal.ColUID,pVal.Row).Value = "";
+                                    oForm.Items.Item(pVal.ItemUID).Specific.GetCellSpecific(pVal.ColUID, pVal.Row).Value = "";
                                 }
 
                                 else if (bpCode != BlanketAgreement.GetBPByBlAgreement(blaAgr.Specific.Value) && blaAgr.Specific.Value.Length > 0)
@@ -1306,7 +1351,7 @@ namespace BDO_Localisation_AddOn
                                     blaAgr.Enabled = false;
                                 }
 
-                                else if(!blaAgr.Enabled && bpCode.Length > 0)
+                                else if (!blaAgr.Enabled && bpCode.Length > 0)
                                 {
                                     blaAgr.Enabled = true;
                                     blaAgr.Specific.ChooseFromListUID = "BlanketAgreement_Cfl";
@@ -1328,7 +1373,7 @@ namespace BDO_Localisation_AddOn
 
                     else if (pVal.ItemUID == "6")
                     {
-                            CorrectJERateWithBlanketAgreementRateRanges(oForm);
+                        CorrectJERateWithBlanketAgreementRateRanges(oForm);
                     }
                 }
             }
@@ -1463,7 +1508,7 @@ namespace BDO_Localisation_AddOn
                 {
                     var postDate = DateTime.ParseExact(oForm.Items.Item("6").Specific.Value, "yyyyMMdd", CultureInfo.InvariantCulture);
                     var blanketAgreement = oForm.Items.Item("BDOSAgrNoE").Specific.Value;
-                    var oMatrix = (SAPbouiCOM.Matrix) oForm.Items.Item("76").Specific;
+                    var oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("76").Specific;
                     var rate = BlanketAgreement.GetBlAgremeentCurrencyRate(Convert.ToInt32(blanketAgreement), out string _, postDate);
 
                     for (var row = 1; row < oMatrix.RowCount; row++)
@@ -1488,12 +1533,12 @@ namespace BDO_Localisation_AddOn
                 {
                     var postDate = DateTime.ParseExact(oForm.Items.Item("6").Specific.Value, "yyyyMMdd", CultureInfo.InvariantCulture);
                     var oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("76").Specific;
-                    var isMultiBp = IsMultiBp(oForm, out var bpCode); 
+                    var isMultiBp = IsMultiBp(oForm, out var bpCode);
 
                     var currency = CommonFunctions.getBPBankInfo(bpCode)?.Fields.Item("Currency").Value;
-                    if(string.IsNullOrEmpty(currency) || currency == "##" || currency == "GEL") return;
+                    if (string.IsNullOrEmpty(currency) || currency == "##" || currency == "GEL") return;
 
-                    var oSboBob = (SAPbobsCOM.SBObob) Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                    var oSboBob = (SAPbobsCOM.SBObob)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
                     var rate = Convert.ToDecimal(oSboBob.GetCurrencyRate(currency, postDate).Fields.Item("CurrencyRate").Value);
 
                     for (var row = 1; row < oMatrix.RowCount; row++)
