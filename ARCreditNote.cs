@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 using System.Data;
+using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace BDO_Localisation_AddOn
 {
@@ -743,11 +740,11 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string query = @"SELECT 
-            ""RIN1"".""DocEntry"" AS ""docEntry"", 
-            SUM(""RIN1"".""GTotal"") AS ""GTotal"", 
-            SUM(""RIN1"".""LineVat"") AS ""LineVat"" 
-            FROM ""RIN1"" AS ""RIN1"" 
-            WHERE ""RIN1"".""DocEntry"" = '" + docEntry + @"' 
+            ""RIN1"".""DocEntry"" AS ""docEntry"",
+            SUM(""RIN1"".""GTotal"") AS ""GTotal"",
+            SUM(""RIN1"".""LineVat"") AS ""LineVat""
+            FROM ""RIN1"" AS ""RIN1""
+            WHERE ""RIN1"".""DocEntry"" = '" + docEntry + @"'
             GROUP BY ""RIN1"".""DocEntry""";
 
             try
@@ -837,66 +834,70 @@ namespace BDO_Localisation_AddOn
 
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(BusinessObjectInfo.FormTypeEx, Program.currentFormCount);
 
-            if (oForm.TypeEx == "179")
+            if (oForm.TypeEx != "179") return;
+
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
             {
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD & BusinessObjectInfo.BeforeAction == false)
-                {
-                    formDataLoad(oForm, out errorText);
-                    setVisibleFormItems(oForm, out errorText);
-                }
+                //when "Keep Visible" is not selected Program.uiApp.Forms.ActiveForm.Type = 10013, so we need check
+                if (Program.uiApp.Forms.ActiveForm.Type == 179) // Keep Visible Case
+                    oForm = Program.uiApp.Forms.ActiveForm;
+                formDataLoad(oForm, out errorText);
+                setVisibleFormItems(oForm, out errorText);
+            }
 
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
-                {
-                    if (BusinessObjectInfo.BeforeAction == true)
-                    {
-                        canUpdateDocument(oForm, out errorText);
-
-                        if (string.IsNullOrEmpty(errorText) == false)
-                        {
-                            Program.uiApp.MessageBox(errorText);
-                            BubbleEvent = false;
-                        }
-                    }
-                    else if (BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == true)
-                    {
-                        if (Program.canceledDocEntry != 0)
-                        {
-                            cancellation(oForm, Program.canceledDocEntry, out errorText);
-                            Program.canceledDocEntry = 0;
-                        }
-                    }
-                }
-
-                if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == true)
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
+            {
+                if (BusinessObjectInfo.BeforeAction == true)
                 {
                     canUpdateDocument(oForm, out errorText);
 
-                    if (errorText != null)
+                    if (string.IsNullOrEmpty(errorText) == false)
                     {
                         Program.uiApp.MessageBox(errorText);
                         BubbleEvent = false;
                     }
                 }
-
-                //if (BusinessObjectInfo.ActionSuccess & BusinessObjectInfo.BeforeAction == false)
-                //{
-                //    //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
-                //    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
-
-                //    string DocEntry = DocDBSource.GetValue("DocEntry", 0);
-                //    string DocNum = DocDBSource.GetValue("DocNum", 0);
-                //    string DocCurr = DocDBSource.GetValue("DocCur", 0);
-                //    decimal DocRate = FormsB1.cleanStringOfNonDigits( DocDBSource.GetValue("DocRate", 0));
-                //    DateTime DocDate = DateTime.ParseExact(DocDBSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
-                //    JrnEntry( DocEntry, DocNum, DocDate, DocRate, DocCurr, out errorText);
-                //    if (errorText != null)
-                //    {
-                //        Program.uiApp.MessageBox(errorText);
-                //        BubbleEvent = false;
-
-                //    }
-                //}
+                else if (BusinessObjectInfo.BeforeAction == false & BusinessObjectInfo.ActionSuccess == true)
+                {
+                    if (Program.canceledDocEntry != 0)
+                    {
+                        cancellation(oForm, Program.canceledDocEntry, out errorText);
+                        Program.canceledDocEntry = 0;
+                    }
+                }
             }
+
+            if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE & BusinessObjectInfo.BeforeAction == true)
+            {
+                canUpdateDocument(oForm, out errorText);
+
+                if (errorText != null)
+                {
+                    Program.uiApp.MessageBox(errorText);
+                    BubbleEvent = false;
+                }
+            }
+
+            #region Commented
+            //if (BusinessObjectInfo.ActionSuccess & BusinessObjectInfo.BeforeAction == false)
+            //{
+            //    //დოკუმენტის გატარების დროს გატარდეს ბუღლტრული გატარება
+            //    SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
+
+            //    string DocEntry = DocDBSource.GetValue("DocEntry", 0);
+            //    string DocNum = DocDBSource.GetValue("DocNum", 0);
+            //    string DocCurr = DocDBSource.GetValue("DocCur", 0);
+            //    decimal DocRate = FormsB1.cleanStringOfNonDigits( DocDBSource.GetValue("DocRate", 0));
+            //    DateTime DocDate = DateTime.ParseExact(DocDBSource.GetValue("DocDate", 0), "yyyyMMdd", CultureInfo.InvariantCulture);
+            //    JrnEntry( DocEntry, DocNum, DocDate, DocRate, DocCurr, out errorText);
+            //    if (errorText != null)
+            //    {
+            //        Program.uiApp.MessageBox(errorText);
+            //        BubbleEvent = false;
+
+            //    }
+            //}
+            #endregion
         }
 
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
@@ -914,6 +915,7 @@ namespace BDO_Localisation_AddOn
                     formDataLoad(oForm, out errorText);
                     setVisibleFormItems(oForm, out errorText);
                 }
+
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == false)
                 {
                     setValues(oForm, out errorText);
@@ -979,9 +981,9 @@ namespace BDO_Localisation_AddOn
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string query = @"SELECT
-            	 ""RIN1"".""DocEntry"" 
-            FROM ""RIN1"" 
-            WHERE ""RIN1"".""BaseEntry"" IN (" + string.Join(",", docEntry) + @") 
+            	 ""RIN1"".""DocEntry""
+            FROM ""RIN1""
+            WHERE ""RIN1"".""BaseEntry"" IN (" + string.Join(",", docEntry) + @")
             AND ""RIN1"".""BaseType"" = '" + baseType + @"'
             GROUP BY ""RIN1"".""DocEntry""";
 

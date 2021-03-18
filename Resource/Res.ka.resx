@@ -3649,6 +3649,12 @@
   <data name="TotalFC" xml:space="preserve">
     <value>ჯამი (FC)</value>
   </data>
+  <data name="DocumentAlreadyAdded" xml:space="preserve">
+    <value>დოკუმენტი უკვე დამატებულია</value>
+  </data>
+  <data name="TotalAmountOfDocumentIsGreaterThanTaxInvoiceAmount" xml:space="preserve">
+    <value>დოკუმენტების ჯამური თანხა აჭარბებს ფაქტურის თანხას</value>
+  </data>
   <data name="PleaseFillWarehouse" xml:space="preserve">
     <value>გთხოვთ შეავსეთ საწყობი</value>
   </data>

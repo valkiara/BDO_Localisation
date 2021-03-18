@@ -3607,6 +3607,12 @@
   <data name="TotalFC" xml:space="preserve">
     <value>Total (FC)</value>
   </data>
+  <data name="DocumentAlreadyAdded" xml:space="preserve">
+    <value>Document already added</value>
+  </data>
+  <data name="TotalAmountOfDocumentIsGreaterThanTaxInvoiceAmount" xml:space="preserve">
+    <value>Total amount of document is greater than tax invoice amount with VAT</value>
+  </data>
   <data name="DebitCreditValueIsNegativeInOneOrMoreRow" xml:space="preserve">
     <value>Debit/Credit value is negative in one or more row</value>
   </data>

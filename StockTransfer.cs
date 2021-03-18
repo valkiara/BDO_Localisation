@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 
 namespace BDO_Localisation_AddOn
 {
@@ -432,12 +430,11 @@ namespace BDO_Localisation_AddOn
                 }
 
                 if (BusinessObjectInfo.BeforeAction)
-                {                   
+                {
                     //ძირითადი საშუალებების შემოწმება
                     if (BatchNumberSelection.SelectedBatches != null)
                     {
-                        bool rejectionAsset = false;
-                        CommonFunctions.blockAssetInvoice(oForm, "OWTR", out rejectionAsset);
+                        CommonFunctions.blockAssetInvoice(oForm, "OWTR", out var rejectionAsset);
                         if (rejectionAsset)
                         {
                             Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentCannotBeAdded") + " : " + BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem"));
@@ -486,6 +483,10 @@ namespace BDO_Localisation_AddOn
             {
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
                 {
+                    //when "Keep Visible" is not selected Program.uiApp.Forms.ActiveForm.Type = 10066, so we need check
+                    if (Program.uiApp.Forms.ActiveForm.Type == 940) // Keep Visible Case
+                        oForm = Program.uiApp.Forms.ActiveForm;
+
                     formDataLoad(oForm, out errorText);
                     //setVisibleFormItems( oForm, out errorText);
                 }
@@ -838,6 +839,6 @@ namespace BDO_Localisation_AddOn
             {
                 GC.Collect();
             }
-        }      
+        }
     }
 }

@@ -1465,7 +1465,8 @@ namespace BDO_Localisation_AddOn
                     query.Append($"      INNER JOIN ({dummyTable}) ITEMS \n");
                     query.Append("               ON T1.\"U_ItemCode\" = ITEMS.\"ItemCode\" AND T1.\"U_DistNumber\" = ITEMS.\"DistNumber\" \n");
                     query.Append("WHERE  T0.\"Canceled\" = 'N' \n");
-                    query.Append($"       AND T0.\"U_AccrMnth\" >= '{docDateStr}'");
+                    query.Append($"       AND T0.\"U_AccrMnth\" >= '{docDateStr}' \n");
+                    query.Append("        AND T0.\"U_Retirement\" = 'N'");
 
                     oRecordSet.DoQuery(query.ToString());
                     while (!oRecordSet.EoF)
