@@ -364,7 +364,6 @@ namespace BDO_Localisation_AddOn
 
         public static void createStockRevaluation(SAPbouiCOM.Form oForm, SAPbouiCOM.Matrix oMatrix)
         {
-
             SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
             SAPbouiCOM.DBDataSource DocDBSource = oFormLC.DataSources.DBDataSources.Item(0);
             string docEntLC = DocDBSource.GetValue("DocEntry", 0);
