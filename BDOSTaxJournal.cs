@@ -1463,15 +1463,18 @@ namespace BDO_Localisation_AddOn
                     if (oOperation == 0) //დადასტურება
                     {
                         opText = BDOSResources.getTranslate("RSConfirm");
-
-                        if (statusDoc == "received" || statusDoc == "correctionReceived" || statusDoc == "cancellationProcess")
+                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttoconfirmdocument"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        if (answer == 1)
                         {
-                            BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "confirmation", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText, true);
-                        }
-                        else
-                        {
-                            errorText = BDOSResources.getTranslate("Operation") + " " + opText + " " + BDOSResources.getTranslate("NotBeComplete") + " " + BDOSResources.getTranslate("DocumentStatusMustBe") + " " + BDOSResources.getTranslate("Received") + " " + BDOSResources.getTranslate("Or") + " " + BDOSResources.getTranslate("CorrectionReceived") + " " + BDOSResources.getTranslate("Or") + " " + BDOSResources.getTranslate("CancellationProcess") + "!";
-                            opSuccess = false;
+                            if (statusDoc == "received" || statusDoc == "correctionReceived" || statusDoc == "cancellationProcess")
+                            {
+                                BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "confirmation", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText, true);
+                            }
+                            else
+                            {
+                                errorText = BDOSResources.getTranslate("Operation") + " " + opText + " " + BDOSResources.getTranslate("NotBeComplete") + " " + BDOSResources.getTranslate("DocumentStatusMustBe") + " " + BDOSResources.getTranslate("Received") + " " + BDOSResources.getTranslate("Or") + " " + BDOSResources.getTranslate("CorrectionReceived") + " " + BDOSResources.getTranslate("Or") + " " + BDOSResources.getTranslate("CancellationProcess") + "!";
+                                opSuccess = false;
+                            }
                         }
                     }
                     else if (oOperation == 1) //სტატუსების განახლება
@@ -1481,15 +1484,19 @@ namespace BDO_Localisation_AddOn
                     }
                     else if (oOperation == 2) //უარყოფა
                     {
-                        opText = BDOSResources.getTranslate("RSDeny");
-                        if (statusDoc == "received" || statusDoc == "correctionReceived")
+                        int answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("Doyouwanttodenydocument"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
+                        if (answer == 1)
                         {
-                            BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "deny", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText, true);
-                        }
-                        else
-                        {
-                            errorText = BDOSResources.getTranslate("Operation") + " " + opText + " " + BDOSResources.getTranslate("NotBeComplete") + " " + BDOSResources.getTranslate("DocumentStatusMustBe") + " " + BDOSResources.getTranslate("Received") + " " + BDOSResources.getTranslate("Or") + " " + BDOSResources.getTranslate("CorrectionReceived") + "!";
-                            opSuccess = false;
+                            opText = BDOSResources.getTranslate("RSDeny");
+                            if (statusDoc == "received" || statusDoc == "correctionReceived")
+                            {
+                                BDO_TaxInvoiceReceived.operationRS(oTaxInvoice, "deny", Convert.ToInt32(docEntry), -1, new DateTime(), null, out statusRS, out errorText, true);
+                            }
+                            else
+                            {
+                                errorText = BDOSResources.getTranslate("Operation") + " " + opText + " " + BDOSResources.getTranslate("NotBeComplete") + " " + BDOSResources.getTranslate("DocumentStatusMustBe") + " " + BDOSResources.getTranslate("Received") + " " + BDOSResources.getTranslate("Or") + " " + BDOSResources.getTranslate("CorrectionReceived") + "!";
+                                opSuccess = false;
+                            }
                         }
                     }
                     if (errorText != null)
