@@ -180,15 +180,24 @@ namespace BDO_Localisation_AddOn
                     {
                         allCostValByDocEnt = oRecordSetCostVal.Fields.Item("TtlCostLC").Value;
                         lastItemCode = oRecordSetCostVal.Fields.Item("ItemCode").Value;
-                        if(itemCode == lastItemCode) oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
+                        if (itemCode == lastItemCode)
+                        {
+                            double debitCredit = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
+                            if(debitCredit > 0)
+                            {
+                                oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
+                            } else
+                            {
+                                oMatrix.DeleteRow(row);
+                                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DebitCreditValueIsNegativeInOneOrMoreRow"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                            }
+                        }
                         oRecordSetCostVal.MoveNext();
                     }
                     
                     row += 1;
                     oRecordSet.MoveNext();
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -200,7 +209,6 @@ namespace BDO_Localisation_AddOn
                 Marshal.FinalReleaseComObject(oRecordSet);
                 oForm.Freeze(false);
             }
-            
         }
 
         public static string getDocEntry(string docEntry)
@@ -356,7 +364,6 @@ namespace BDO_Localisation_AddOn
 
         public static void createStockRevaluation(SAPbouiCOM.Form oForm, SAPbouiCOM.Matrix oMatrix)
         {
-
             SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
             SAPbouiCOM.DBDataSource DocDBSource = oFormLC.DataSources.DBDataSources.Item(0);
             string docEntLC = DocDBSource.GetValue("DocEntry", 0);
