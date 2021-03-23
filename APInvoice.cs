@@ -1379,7 +1379,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                errorText = ex.Message; 
             }
         }
 
