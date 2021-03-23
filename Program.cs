@@ -181,15 +181,15 @@ namespace BDO_Localisation_AddOn
                     return false;
                 }
 
-                CompanyDetails.createUserFields(out errorText);
+                //CompanyDetails.createUserFields(out errorText);
 
-                UDO.allUDOForAddOn(out errorText);
-                FormsB1.allUserFieldsForAddOn(out errorText);
+                //UDO.allUDOForAddOn(out errorText);
+                //FormsB1.allUserFieldsForAddOn(out errorText);
 
-                BDOSInternetBankingIntegrationServicesRules.updateUDO();
-                BDO_TaxInvoiceReceived.updateUDO();
+                //BDOSInternetBankingIntegrationServicesRules.updateUDO();
+                //BDO_TaxInvoiceReceived.updateUDO();
 
-                updateAddonVersion(version);
+                //updateAddonVersion(version);
 
                 FormsB1.addMenusForAddOn();
 
@@ -1173,7 +1173,7 @@ namespace BDO_Localisation_AddOn
                         else if (oForm.TypeEx == "181")
                         {
                             APCreditMemo.formDataLoad(oForm, out errorText);
-                            APCreditMemo.setVisibleFormItems(oForm, out errorText);
+                            APCreditMemo.setVisibleFormItems(oForm);
                             BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 

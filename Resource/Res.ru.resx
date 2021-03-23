@@ -3613,4 +3613,7 @@
   <data name="TotalAmountOfDocumentIsGreaterThanTaxInvoiceAmount" xml:space="preserve">
     <value>Total amount of document is greater than tax invoice amount with VAT</value>
   </data>
+  <data name="APCorrectionInvoice" xml:space="preserve">
+    <value>AP Correction Invoice</value>
+  </data>
 </root>
