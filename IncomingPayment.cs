@@ -824,7 +824,7 @@ namespace BDO_Localisation_AddOn
                 trsfrSumIN = Convert.ToDecimal(oDictionary["TrsfrSum"], NumberFormatInfo.InvariantInfo);
                 outDocIN = oDictionary["U_outDoc"].ToString();
                 docType = oDictionary["DocType"].ToString();
-
+                string U_crdtActCur = oDictionary["U_crdtActCur"].ToString();
                 U_PrjCode = oDictionary["PrjCode"].ToString();
 
                 if (docType == "A" && !string.IsNullOrEmpty(outDocIN))
@@ -839,7 +839,7 @@ namespace BDO_Localisation_AddOn
 
                         trsfrSum = trsfrSumIN - trsfrSumOUT;
 
-                        string currency = CommonFunctions.getLocalCurrency();
+                        string localcurrency = CommonFunctions.getLocalCurrency();
                         string year = DocDate.Year.ToString();
 
                         string accountCodeGain = CommonFunctions.getPeriodsCategory("GLGainXdif", year);
@@ -850,7 +850,7 @@ namespace BDO_Localisation_AddOn
 
                         int J = 0;
 
-                        string DocCurrencyIN = DocCurrency == CommonFunctions.getLocalCurrency() ? "" : DocCurrency;
+                        string DocCurrencyIN = DocCurrency == localcurrency ? "" : DocCurrency;
                         trsfrSumINFC = DocCurrencyIN == "" ? 0 : trsfrSumIN / DocRate;
 
                         jeLinesRow = jeLines.Rows.Add(J);
@@ -865,7 +865,7 @@ namespace BDO_Localisation_AddOn
                         J++;
 
                         decimal trsfrSumOUTFC = 0;
-                        if (DocCurrency == CommonFunctions.getLocalCurrency() && DocCurrencyOUT != CommonFunctions.getLocalCurrency())
+                        if (DocCurrency == localcurrency && DocCurrencyOUT != localcurrency)
                             trsfrSumOUTFC = DocRateOUT == 0 ? 0 : trsfrSumOUT / DocRateOUT;
                         else
                             DocCurrencyOUT = "";
@@ -907,7 +907,8 @@ namespace BDO_Localisation_AddOn
                         }
 
 
-                        if(DocCurrencyForConvert != "")
+
+                        if (U_crdtActCur != DocCurrencyIN && DocCurrencyIN!="" && U_crdtActCur!="GEL")
                         {
                             trsfrSumOUTFC = DocRateOUT == 0 ? 0 : trsfrSumOUT / DocRateOUT;
 
@@ -1012,6 +1013,7 @@ namespace BDO_Localisation_AddOn
                         oDictionary.Add("CardCode", oIncomingPayment.CardCode);
                         oDictionary.Add("TrsfrSum", oIncomingPayment.TransferSum);
                         oDictionary.Add("U_outDoc", oIncomingPayment.UserFields.Fields.Item("U_outDoc").Value.Trim());
+                        oDictionary.Add("U_crdtActCur", oIncomingPayment.UserFields.Fields.Item("U_crdtActCur").Value.Trim());
                         oDictionary.Add("DocType", "A");
                         oDictionary.Add("PrjCode", oIncomingPayment.ProjectCode);
                         DocDate = Convert.ToDateTime(oDictionary["DocDate"]);
@@ -2695,22 +2697,6 @@ namespace BDO_Localisation_AddOn
                         decimal DocRate = Convert.ToDecimal(oPaymentsNew.DocRate);
                         string DocCurrency = oPaymentsNew.DocCurrency;
                         DateTime DocDate = oPaymentsNew.DocDate;
-
-                        Dictionary<string, object> oDictionary = new Dictionary<string, object>();
-                        oDictionary.Add("CardCode", oPaymentsNew.CardCode);
-                        oDictionary.Add("TrsfrSum", oPaymentsNew.TransferSum);
-                        oDictionary.Add("U_outDoc", oPaymentsNew.UserFields.Fields.Item("U_outDoc").Value.Trim());
-                        oDictionary.Add("DocType", "A");
-                        oDictionary.Add("PrjCode", oPaymentsNew.ProjectCode);
-
-                        DataTable JrnLinesDT = createAdditionalEntries(oDictionary, DocCurrency, DocRate, DocDate, out errorText);
-                        if (errorText != null)
-                        {
-                            throw new Exception(errorText);
-                        }
-
-                        JrnEntry(docEntry.ToString(), docNum.ToString(), DocDate, JrnLinesDT, out errorText);
-
 
                         oDataTable.SetValue("DocEntry", i, docEntry.ToString());
                         oDataTable.SetValue("DocNum", i, docNum.ToString());
