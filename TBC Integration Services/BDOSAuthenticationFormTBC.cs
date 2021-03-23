@@ -660,7 +660,14 @@ namespace BDO_Localisation_AddOn.TBC_Integration_Services
                                         pager.pageSize = pageSize;
                                         oAccountMovementFilterIo.pager = pager;
 
-                                        oBaseQueryResultIo = MainMovementService.getAccountMovements(oMovementService, oAccountMovementFilterIo, out oAccountMovementDetailIoPage, out errorText);
+                                        BaseQueryResultIo oBaseQueryResultIoPage = MainMovementService.getAccountMovements(oMovementService, oAccountMovementFilterIo, out oAccountMovementDetailIoPage, out errorText);
+
+                                        if (errorText != null) 
+                                        {
+                                            Program.uiApp.MessageBox(errorText);
+                                            errorText = null;
+                                            break;
+                                        }
 
                                         AccountMovementDetailIo oAccountMovementDetailIoItem = null;
                                         int oldCount = oAccountMovementDetailIo.Count();
