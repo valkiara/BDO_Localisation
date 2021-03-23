@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace BDO_Localisation_AddOn
 {
@@ -1378,7 +1379,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                errorText = ex.Message; 
             }
         }
 
