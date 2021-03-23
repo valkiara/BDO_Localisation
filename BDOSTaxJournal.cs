@@ -4573,7 +4573,7 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "dwnldTax" & pVal.BeforeAction == false)
                 {
                     downloadTaxInvoiceReceived(oForm, out errorText);
-                    fillFromBaseTaxInvoiceReceived(oForm, true, out errorText);
+                    fillFromBaseTaxInvoiceReceived(oForm, false, out errorText); 
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK & pVal.ItemUID == "updtTax" & pVal.BeforeAction == false)
