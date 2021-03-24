@@ -3859,6 +3859,9 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string DocEntry = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0).Trim();
+                SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+                vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
 
                 setVisibleFormItems(oForm);
 
