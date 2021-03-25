@@ -2400,7 +2400,7 @@ namespace BDO_Localisation_AddOn
                                             break;
                                         }
                                         else
-                                        {
+                                        { if (docEntry > 0)
                                             MultDocEntry = MultDocEntry + docEntry + ",";
                                         }
                                     }
@@ -2420,7 +2420,7 @@ namespace BDO_Localisation_AddOn
                                             isError = true;
                                         }
                                         else
-                                        {
+                                        { if (docEntry > 0)
                                             MultDocEntry = MultDocEntry + docEntry + ",";
 
 

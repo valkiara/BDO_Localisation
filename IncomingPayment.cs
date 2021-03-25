@@ -2199,6 +2199,14 @@ namespace BDO_Localisation_AddOn
 
                 transferSumLC = CommonFunctions.roundAmountByGeneralSettings(transferSumLC, "Sum");
                 transferSumFC = CommonFunctions.roundAmountByGeneralSettings(transferSumFC, "Sum");
+
+                //როდესაც სავალუტო თანხა 0-ია(სიმცირის გამო) დოკუმენტი არ შექმნას
+                if (oPayments.DocRate > 0 && transferSumFC == 0)
+                {
+                    errorText = null;
+                    return "";
+                }
+
                 amount = CommonFunctions.roundAmountByGeneralSettings(amount, "Sum");
 
                 oPayments.TransferAccount = transferAccount;
