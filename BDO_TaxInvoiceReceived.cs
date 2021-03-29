@@ -2597,6 +2597,9 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Item("U_wbNumber");
             oColumn.DataBind.SetBound(true, "@BDO_TXR1", "U_wbNumber");
 
+            SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+            vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
             oMatrix.Clear();
             oDBDataSource.Query();
             oMatrix.LoadFromDataSource();
@@ -3859,8 +3862,8 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string DocEntry = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0).Trim();
-                SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
-                vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+                //SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+                //vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
 
 
                 setVisibleFormItems(oForm);
@@ -6315,6 +6318,15 @@ namespace BDO_Localisation_AddOn
                             }
                         }
                     }
+                    //if (pVal.ItemChanged && pVal.ItemUID == "wblMTR")
+                    //{
+                        //SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+                        //SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+                        //SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+                        //vatAmount.Editable = true;
+                        //vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+                        //vatAmount.Editable = false;
+                    //}
                 }
 
                 else
@@ -6379,7 +6391,7 @@ namespace BDO_Localisation_AddOn
                                 setVisibleFormItems(oForm);
                         }
                     }
-
+                    
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)
                     {
                         if (pVal.ItemUID == "wblMTR")
@@ -6392,6 +6404,74 @@ namespace BDO_Localisation_AddOn
                             matrixColumnSetCfl(oForm, pVal);
                     }
 
+                    if(pVal.ItemChanged && pVal.ColUID == "U_baseDTxt")
+                    {
+                        int a = 7;
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+
+                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+                        vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+                    }
+
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ALL_EVENTS && (pVal.ColUID == "U_baseDocT" || pVal.ColUID == "U_baseDTxt"))
+                    {
+                        int a = 7;
+                    }
+
+                    if(pVal.ItemUID == "addMTRB")
+                    {
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+
+                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+                        vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+                    }
+
+                    if (pVal.ItemUID == "delMTRB")
+                    {
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+
+                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+                        vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+                    }
+
+                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.ColUID == "U_baseDocT")
+                    {
+                        int a = 7;
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+
+                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+                        vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+                    }
+                    /*
+                    if(pVal.ItemUID == "addMTRB" || pVal.ItemUID == "delMTRB" || pVal.ItemUID == "addMult")
+                    {
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+
+                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+                        vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+
+                    }
+                    */
+                    if (pVal.ItemUID == "wblMTR")
+                    {
+                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+                        vatAmount.Editable = true;
+                        oMatrix.GetCellFocus();
+
+
+
+                        vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
+                        if (pVal.ColUID == "U_tAmtBsDc")
+                        {
+                            int a = 7;
+                            
+
+                            
+                            
+                        }
+                        //vatAmount.Editable = false;
+                    }
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                     {
                         itemPressed(oForm, pVal);
@@ -6426,7 +6506,7 @@ namespace BDO_Localisation_AddOn
                                 string opDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_opDate", 0);
                                 SAPbouiCOM.Form oFormIncomingFormDocuments;
                                 BDO_TaxInvoiceReceivedDetailed.createForm(oForm, out oFormIncomingFormDocuments, CardCode, opDate, out errorText);
-                                BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments,  out errorText);
+                                BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments, out errorText);
                             }
                             else if (pVal.ItemUID == "addDPinv")
 
@@ -6465,7 +6545,7 @@ namespace BDO_Localisation_AddOn
                                 if (Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantToCreateJEForDownPayment") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "") == 1)
                                 {
                                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                                    string taxDate=oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_taxDate", 0);
+                                    string taxDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_taxDate", 0);
                                     if (taxDate != null) postDocument(docEntry, out errorText, DateTime.ParseExact(taxDate, "yyyyMMdd", CultureInfo.InvariantCulture));
                                     else postDocument(docEntry, out errorText);
                                     if (!string.IsNullOrEmpty(errorText))
@@ -6475,7 +6555,7 @@ namespace BDO_Localisation_AddOn
 
                                 }
                             }
-                        }              
+                        }
                         else
                         {
                             if (pVal.ItemUID == "operationB")
