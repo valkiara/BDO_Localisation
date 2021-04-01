@@ -67,8 +67,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
             formItems.Add("AffectsFormMode", false);
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("Enabled", true);
             formItems.Add("ChooseFromListUID", uniqueID_TaxInvoiceReceivedCFL);
             formItems.Add("ChooseFromListAlias", "DocEntry");
 
@@ -169,8 +167,6 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
-
-            GC.Collect();
         }
         public static void createUserFields(out string errorText)
         {
@@ -192,11 +188,6 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("ValidValues", listValidValues);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-        }
-        public static void attachWBToDoc(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
-        {
-            errorText = null;
-            BDO_WBReceivedDocs.attachWBToDoc(oForm, oIncWaybDocForm, out errorText);
         }
         public static void formDataLoad(SAPbouiCOM.Form oForm)
         {
@@ -244,8 +235,7 @@ namespace BDO_Localisation_AddOn
                     taxDocEntry = 0;
                 }
 
-                //  oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = taxDocEntry == 0 ? "" : taxDocEntry.ToString();
-                oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = "";
+                oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = taxDocEntry == 0 ? "" : taxDocEntry.ToString();
                 oForm.DataSources.UserDataSources.Item("BDO_TaxSer").ValueEx = taxSeries;
                 oForm.DataSources.UserDataSources.Item("BDO_TaxNum").ValueEx = taxNumber;
                 oForm.DataSources.UserDataSources.Item("BDO_TaxDat").ValueEx = taxCreateDate;
@@ -253,7 +243,7 @@ namespace BDO_Localisation_AddOn
                 SAPbouiCOM.StaticText oStaticText = (SAPbouiCOM.StaticText)oForm.Items.Item("BDO_TaxTxt").Specific;
                 oStaticText.Caption = caption;
             }
-            catch (Exception ex)
+            catch
             {
                 oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx = "";
                 oForm.DataSources.UserDataSources.Item("BDO_TaxSer").ValueEx = "";
@@ -287,31 +277,32 @@ namespace BDO_Localisation_AddOn
                 throw ex;
             }
         }
-        public static void getAmount(int docEntry, out double gTotal, out double lineVat)
+        public static void getAmount(int docEntry, out double gTotal, out double lineVat, out string wblNumber)
         {
-            gTotal = 0;
-            lineVat = 0;
+            gTotal = 0.0;
+            lineVat = 0.0;
+            wblNumber = string.Empty;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             string query = @"SELECT 
             ""CPI1"".""DocEntry"" AS ""docEntry"", 
+            ""OCPI"".""U_BDO_WBNo"" AS ""WblNumber"",
             SUM(""CPI1"".""GTotal"") AS ""GTotal"", 
             SUM(""CPI1"".""LineVat"") AS ""LineVat"" 
-            FROM ""CPI1"" AS ""CPI1"" 
+            FROM ""CPI1"" AS ""CPI1""
+            INNER JOIN ""OCPI"" ON ""CPI1"".""DocEntry"" = ""OCPI"".""DocEntry""
             WHERE ""CPI1"".""DocEntry"" = '" + docEntry + @"' 
-            GROUP BY ""CPI1"".""DocEntry""";
-
+            GROUP BY ""CPI1"".""DocEntry"",
+                     ""OCPI"".""U_BDO_WBNo"" ";
             try
             {
                 oRecordSet.DoQuery(query);
 
-                while (!oRecordSet.EoF)
+                if (!oRecordSet.EoF)
                 {
                     gTotal = oRecordSet.Fields.Item("GTotal").Value;
                     lineVat = oRecordSet.Fields.Item("LineVat").Value;
-
-                    oRecordSet.MoveNext();
-                    break;
+                    wblNumber = oRecordSet.Fields.Item("WblNumber").Value;
                 }
             }
             catch (Exception ex)
@@ -389,14 +380,11 @@ namespace BDO_Localisation_AddOn
             {
                 string taxDocEntry = oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx;
                 string docEntryStr = oForm.DataSources.DBDataSources.Item("OCPI").GetValue("DocEntry", 0);
-                if (string.IsNullOrEmpty(taxDocEntry) == false && string.IsNullOrEmpty(docEntryStr) == false)
+                if (!string.IsNullOrEmpty(taxDocEntry) && !string.IsNullOrEmpty(docEntryStr))
                 {
                     int docEntry = Convert.ToInt32(docEntryStr);
-                    string wbNumber = oForm.DataSources.DBDataSources.Item("OCPI").GetValue("U_BDO_WBNo", 0).Trim();
-                    double baseDocGTotal = 0;
-                    double baseDocLineVat = 0;
-                    getAmount(docEntry, out baseDocGTotal, out baseDocLineVat);
-                    BDO_TaxInvoiceReceived.addBaseDoc(Convert.ToInt32(taxDocEntry), docEntry, BDO_TaxInvoiceReceived.BaseDocType.oCorrectionPurchaseInvoice, wbNumber, baseDocGTotal, baseDocLineVat);
+                    getAmount(docEntry, out var baseDocGTotal, out var baseDocLineVat, out var baseDocWblNmber);
+                    BDO_TaxInvoiceReceived.addBaseDoc(Convert.ToInt32(taxDocEntry), docEntry, BDO_TaxInvoiceReceived.BaseDocType.oCorrectionPurchaseInvoice, baseDocWblNmber, baseDocGTotal, baseDocLineVat);
                 }
             }
             catch (Exception ex)
@@ -406,30 +394,27 @@ namespace BDO_Localisation_AddOn
         }
         public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
         {
-            SAPbouiCOM.Item oItem;
             oForm.Freeze(true);
 
             try
             {
-                string docEntrySTR = oForm.DataSources.DBDataSources.Item("OPCI").GetValue("DocEntry", 0);
+                string docEntrySTR = oForm.DataSources.DBDataSources.Item("OCPI").GetValue("DocEntry", 0);
+                
+                oForm.Items.Item("16").Click(); //focus on remark item
 
                 if (oForm.DataSources.UserDataSources.Item("BDO_TaxDoc").ValueEx != "")
                 {
-                    oItem = oForm.Items.Item("BDO_TaxCan");
-                    oItem.Visible = true;
-                    oItem = oForm.Items.Item("BDO_TaxDoc");
-                    oItem.Enabled = false;
+                    oForm.Items.Item("BDO_TaxCan").Visible = true;
+                    oForm.Items.Item("BDO_TaxDoc").Enabled = false;
                 }
                 else if (string.IsNullOrEmpty(docEntrySTR))
                 {
-                    oItem = oForm.Items.Item("BDO_TaxDoc");
-                    oItem.Enabled = false;
+                    oForm.Items.Item("BDO_TaxDoc").Enabled = false;
                 }
                 else
                 {
-                    oItem = oForm.Items.Item("BDO_TaxCan");
-                    oItem.Visible = false;
-                    oItem = oForm.Items.Item("BDO_TaxDoc");
+                    oForm.Items.Item("BDO_TaxCan").Visible = false;
+                    var oItem = oForm.Items.Item("BDO_TaxDoc");
                     oItem.Enabled = true;
 
                     SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oItem.Specific;
@@ -545,8 +530,7 @@ namespace BDO_Localisation_AddOn
                         //დოკუმენტი არ დაემატოს ზედნადების გარეშე, თუ მომწოდებელს ჩართული აქვს
                         string CardCode = DocDBSource.GetValue("CardCode", 0);
 
-                        SAPbobsCOM.BusinessPartners oBP;
-                        oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
+                        SAPbobsCOM.BusinessPartners oBP = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners);
                         oBP.GetByKey(CardCode);
 
                         string RSControlType = oBP.UserFields.Fields.Item("U_BDO_MapCnt").Value;
@@ -752,8 +736,6 @@ namespace BDO_Localisation_AddOn
         }
         public static void JrnEntry(string DocEntry, string DocNum, DateTime DocDate, DataTable JrnLinesDT, out string errorText)
         {
-            errorText = null;
-
             try
             {
                 JournalEntry.JrnEntry(DocEntry, "163", "AP Correction Invoice: " + DocNum, DocDate, JrnLinesDT, out errorText);

@@ -15,17 +15,18 @@ namespace BDO_Localisation_AddOn
     {
         const int clientHeight = 730;
         const int clientWidth = 600;
+        public static NumberFormatInfo Nfi => new NumberFormatInfo() { NumberDecimalSeparator = "." };
+
+        [Flags]
         public enum BaseDocType { oPurchaseInvoices, oPurchaseCreditNotes, oPurchaseDownPayments, oCorrectionPurchaseInvoice };
 
         public static void createDocumentUDO(out string errorText)
         {
-            errorText = null;
             string tableName = "BDO_TAXR";
             string description = "Tax Invoice Received";
 
-            UserObjectsMD oUserObjectsMD = null;
-            oUserObjectsMD = (UserObjectsMD)oCompany.GetBusinessObject(BoObjectTypes.oUserObjectsMD);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
+            UserObjectsMD oUserObjectsMD = (UserObjectsMD)oCompany.GetBusinessObject(BoObjectTypes.oUserObjectsMD);
+            Marshal.ReleaseComObject(oUserObjectsMD);
 
             int result = UDO.addUserTable(tableName, description, BoUTBTableType.bott_Document, out errorText);
 
@@ -2572,8 +2573,7 @@ namespace BDO_Localisation_AddOn
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("WaybillNumber");
             oColumn.Editable = false;
 
-            SAPbouiCOM.DBDataSource oDBDataSource;
-            oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDO_TXR1");
+            SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Add("@BDO_TXR1");
 
             oColumn = oColumns.Item("LineID");
             oColumn.DataBind.SetBound(true, "@BDO_TXR1", "LineId");
@@ -2615,7 +2615,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("wblMTR2").Specific));
+            oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR2").Specific;
             oMatrix.SelectionMode = SAPbouiCOM.BoMatrixSelect.ms_Auto;
             oColumns = oMatrix.Columns;
 
@@ -2793,7 +2793,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("DPinvoices").Specific));
+            oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("DPinvoices").Specific;
             oMatrix.SelectionMode = SAPbouiCOM.BoMatrixSelect.ms_Auto;
             oColumns = oMatrix.Columns;
 
@@ -3570,21 +3570,19 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                SAPbouiCOM.ButtonCombo oButtonCombo = ((SAPbouiCOM.ButtonCombo)(oForm.Items.Item("operationB").Specific));
+                SAPbouiCOM.ButtonCombo oButtonCombo = (SAPbouiCOM.ButtonCombo)oForm.Items.Item("operationB").Specific;
 
                 if (pVal.BeforeAction)
                 {
                 }
-                else if (!pVal.BeforeAction)
+                else
                 {
                     if (pVal.ItemUID == "wblMTR" && pVal.ColUID == "U_baseDocT")
                     {
                         SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
                         SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
                         if (cellPos == null)
-                        {
                             return;
-                        }
 
                         if (pVal.ItemChanged)
                         {
@@ -3620,19 +3618,13 @@ namespace BDO_Localisation_AddOn
                     {
                         string selectedOperation = null;
                         if (oButtonCombo.Selected != null)
-                        {
                             selectedOperation = oButtonCombo.Selected.Value;
-                        }
                         else
-                        {
                             return;
-                        }
-
 
                         if (selectedOperation == "addToTheDeclaration")
                         {
-                            string errorText = null;
-                            FormsB1.TAXDeclaration_AuthorizationsOperations(out errorText);
+                            FormsB1.TAXDeclaration_AuthorizationsOperations(out var errorText);
                             if (errorText != null)
                             {
                                 uiApp.SetStatusBarMessage(errorText);
@@ -3642,8 +3634,7 @@ namespace BDO_Localisation_AddOn
                         }
                         else
                         {
-                            string errorText = null;
-                            FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out errorText);
+                            FormsB1.WB_TAX_AuthorizationsOperations("UDO_FT_UDO_F_BDO_TAXS_D", SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE, out var errorText);
                             if (errorText != null)
                             {
                                 uiApp.SetStatusBarMessage(errorText);
@@ -3667,8 +3658,7 @@ namespace BDO_Localisation_AddOn
 
                         if (selectedOperation != null)
                         {
-                            string errorText;
-                            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
+                            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out var errorText);
                             if (errorText != null)
                             {
                                 return;
@@ -3809,7 +3799,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -3834,24 +3824,24 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.ComboBox oComboBox = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i).Specific;
                     docEntry = oMatrix.Columns.Item("U_baseDTxt").Cells.Item(i).Specific.value.ToString();
 
-                    if (string.IsNullOrEmpty(docEntry) == false)
+                    if (!string.IsNullOrEmpty(docEntry))
                     {
                         bool cancelled = false;
-                        if (oComboBox.Value == "0") //შესყიდვა
+                        if (oComboBox.Value == ((int)BaseDocType.oPurchaseInvoices).ToString())
                         {
                             oDocument = oCompany.GetBusinessObject(BoObjectTypes.oPurchaseInvoices);
                             oDocument.GetByKey(Convert.ToInt32(docEntry));
                             if (oDocument.Cancelled == BoYesNoEnum.tYES)
                                 cancelled = true;
                         }
-                        else if (oComboBox.Value == "1") //დაბრუნება
+                        else if (oComboBox.Value == ((int)BaseDocType.oPurchaseCreditNotes).ToString())
                         {
                             oDocument = oCompany.GetBusinessObject(BoObjectTypes.oPurchaseCreditNotes);
                             oDocument.GetByKey(Convert.ToInt32(docEntry));
                             if (oDocument.Cancelled == BoYesNoEnum.tYES)
                                 cancelled = true;
                         }
-                        else if (oComboBox.Value == "3") //შესყიდვის კორექტირება
+                        else if (oComboBox.Value == ((int)BaseDocType.oCorrectionPurchaseInvoice).ToString())
                         {
                             oDocument = oCompany.GetBusinessObject(BoObjectTypes.oCorrectionPurchaseInvoice);
                             oDocument.GetByKey(Convert.ToInt32(docEntry));
@@ -3894,7 +3884,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -3963,7 +3953,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -3980,7 +3970,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.ComboBox oComboBox = oMatrix.Columns.Item("U_baseDocT").Cells.Item(pVal.Row).Specific;
                         SAPbouiCOM.Column oColumn;
 
-                        if (oComboBox.Value == "0")
+                        if (oComboBox.Value == ((int)BaseDocType.oPurchaseInvoices).ToString())
                         {
                             oColumn = oMatrix.Columns.Item(pVal.ColUID);
                             oColumn.ChooseFromListUID = "PurchaseInvoice_CFL";
@@ -3988,7 +3978,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = ((int)BoObjectTypes.oPurchaseInvoices).ToString(); //"18";
                         }
-                        else if (oComboBox.Value == "1")
+                        else if (oComboBox.Value == ((int)BaseDocType.oPurchaseCreditNotes).ToString())
                         {
                             oColumn = oMatrix.Columns.Item(pVal.ColUID);
                             oColumn.ChooseFromListUID = "PurchaseInvoiceCreditMemo_CFL";
@@ -3996,7 +3986,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = ((int)BoObjectTypes.oPurchaseCreditNotes).ToString(); //"19";
                         }
-                        else if (oComboBox.Value == "2")
+                        else if (oComboBox.Value == ((int)BaseDocType.oPurchaseDownPayments).ToString())
                         {
                             oColumn = oMatrix.Columns.Item(pVal.ColUID);
                             oColumn.ChooseFromListUID = "DownPaymentInvoice_CFL";
@@ -4004,7 +3994,7 @@ namespace BDO_Localisation_AddOn
                             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
                             oLink.LinkedObjectType = ((int)BoObjectTypes.oPurchaseDownPayments).ToString(); //"204";
                         }
-                        else if (oComboBox.Value == "3")
+                        else if (oComboBox.Value == ((int)BaseDocType.oCorrectionPurchaseInvoice).ToString())
                         {
                             oColumn = oMatrix.Columns.Item(pVal.ColUID);
                             oColumn.ChooseFromListUID = "PurchaseCorrectionInvoice_CFL";
@@ -4017,7 +4007,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -4102,15 +4092,12 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
 
-        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.IChooseFromListEvent oCFLEvento, string itemUID, bool beforeAction, out bool BubbleEvent)
+        public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.IChooseFromListEvent oCFLEvento)
         {
-            BubbleEvent = true;
-            NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
-
             try
             {
                 oForm.Freeze(true);
@@ -4118,19 +4105,17 @@ namespace BDO_Localisation_AddOn
                 string sCFL_ID = oCFLEvento.ChooseFromListUID;
                 SAPbouiCOM.ChooseFromList oCFL = oForm.ChooseFromLists.Item(sCFL_ID);
 
-                if (beforeAction)
+                if (pVal.BeforeAction)
                 {
-                    if (sCFL_ID == "PurchaseInvoice_CFL" || sCFL_ID == "PurchaseInvoiceCreditMemo_CFL" || sCFL_ID == "DownPaymentInvoice_CFL")
+                    if (sCFL_ID == "PurchaseInvoice_CFL" || sCFL_ID == "PurchaseInvoiceCreditMemo_CFL" || sCFL_ID == "DownPaymentInvoice_CFL" || sCFL_ID == "PurchaseCorrectionInvoice_CFL")
                     {
                         SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
                         SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
                         if (cellPos == null)
-                        {
                             return;
-                        }
 
                         SAPbouiCOM.EditText oEditText = oMatrix.Columns.Item("U_wbNumber").Cells.Item(cellPos.rowIndex).Specific;
-                        string wbNumber = oEditText.Value;
+                        string wblNumber = oEditText.Value;
 
                         if (sCFL_ID != null)
                         {
@@ -4151,15 +4136,11 @@ namespace BDO_Localisation_AddOn
                             {
                                 docEntry = Convert.ToInt32(docEntryStr);
 
-                                CompanyService oCompanyService = null;
-                                GeneralService oGeneralService = null;
-                                GeneralData oGeneralData = null;
-                                GeneralDataParams oGeneralParams = null;
-                                oCompanyService = oCompany.GetCompanyService();
-                                oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
-                                oGeneralData = (GeneralData)oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData);
+                                CompanyService oCompanyService = oCompany.GetCompanyService();
+                                GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
+                                GeneralData oGeneralData = (GeneralData)oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData);
 
-                                oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
+                                GeneralDataParams oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
                                 oGeneralParams.SetProperty("DocEntry", docEntry);
                                 oGeneralData = oGeneralService.GetByParams(oGeneralParams);
 
@@ -4173,7 +4154,7 @@ namespace BDO_Localisation_AddOn
                                     default: baseDocType = null; break;
                                 }
 
-                                DataTable baseDocs = getListBaseDoc(oGeneralData, wbNumber, baseDocType, docEntry);
+                                DataTable baseDocs = getListBaseDoc(oGeneralData, wblNumber, baseDocType, docEntry);
 
                                 int docCount = baseDocs.Rows.Count;
                                 if (docCount == 0)
@@ -4204,9 +4185,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("DPinvoices").Specific;
                         SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
                         if (cellPos == null)
-                        {
                             return;
-                        }
                     }
                 }
                 else
@@ -4244,8 +4223,7 @@ namespace BDO_Localisation_AddOn
                             var docEntryStr = Convert.ToString(docEntry);
                             double gTotal = 0;
                             double lineVat = 0;
-                            string wbNumber = null;
-                            Documents oBaseDoc = null;
+                            string wblNumber = null;
 
                             if (sCFL_ID == "PurchaseInvoice_CFL" || sCFL_ID == "PurchaseInvoiceCreditMemo_CFL" || sCFL_ID == "PurchaseCorrectionInvoice_CFL")
                             {
@@ -4253,17 +4231,10 @@ namespace BDO_Localisation_AddOn
                                 double baseDocsAmount = 0;
 
                                 var baseDocType = BaseDocType.oPurchaseInvoices;
-                                var objectType = BoObjectTypes.oPurchaseInvoices;
                                 if (sCFL_ID == "PurchaseInvoiceCreditMemo_CFL")
-                                {
                                     baseDocType = BaseDocType.oPurchaseCreditNotes;
-                                    objectType = BoObjectTypes.oPurchaseCreditNotes;
-                                }
                                 else if (sCFL_ID == "PurchaseCorrectionInvoice_CFL")
-                                {
                                     baseDocType = BaseDocType.oCorrectionPurchaseInvoice;
-                                    objectType = BoObjectTypes.oCorrectionPurchaseInvoice;
-                                }
 
                                 for (int i = 1; i <= oMatrix.RowCount; i++)
                                 {
@@ -4281,7 +4252,7 @@ namespace BDO_Localisation_AddOn
                                         else if (baseDocT == ((int)BaseDocType.oPurchaseCreditNotes).ToString())
                                             baseDocsAmount -= amtBsDc;
                                         else if (baseDocT == ((int)BaseDocType.oCorrectionPurchaseInvoice).ToString())
-                                            baseDocsAmount -= amtBsDc; //salomeidk
+                                            baseDocsAmount += amtBsDc;
                                     }
                                 }
 
@@ -4293,45 +4264,29 @@ namespace BDO_Localisation_AddOn
 
                                 var amount = Convert.ToDouble(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_amount", 0), CultureInfo.InvariantCulture);
 
-                                if (baseDocType == BaseDocType.oPurchaseInvoices)
-                                {
-                                    APInvoice.getAmount(docEntry, out gTotal, out lineVat);
-                                    baseDocsAmount += gTotal;
-                                }
-                                else if (baseDocType == BaseDocType.oPurchaseCreditNotes)
-                                {
-                                    APCreditMemo.getAmount(docEntry, out gTotal, out lineVat);
+                                GetAPDocumentAmts(baseDocType, docEntry, out gTotal, out lineVat, out wblNumber);
+                                if (baseDocType == BaseDocType.oPurchaseCreditNotes)
                                     baseDocsAmount -= gTotal;
-                                }
                                 else
-                                {
-                                    APCorrectionInvoice.getAmount(docEntry, out gTotal, out lineVat);
-                                    baseDocsAmount -= gTotal; //salomeidk
-                                }
+                                    baseDocsAmount += gTotal;  
 
                                 if (baseDocsAmount > amount)
                                 {
                                     uiApp.SetStatusBarMessage(BDOSResources.getTranslate("TotalAmountOfDocumentIsGreaterThanTaxInvoiceAmount"), SAPbouiCOM.BoMessageTime.bmt_Short);
                                     return;
                                 }
-                                
-                                oBaseDoc = oCompany.GetBusinessObject(objectType);
-                                if (oBaseDoc.GetByKey(docEntry))
-                                    wbNumber = oBaseDoc.UserFields.Fields.Item("U_BDO_WBNo").Value;
                             }
                             else if (sCFL_ID == "DownPaymentInvoice_CFL")
-                                APDownPaymentInvoice.getAmount(docEntry, out gTotal, out lineVat);
+                                GetAPDocumentAmts(BaseDocType.oPurchaseDownPayments, docEntry, out gTotal, out lineVat, out wblNumber);
 
                             LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_baseDTxt").Cells.Item(cellPos.rowIndex).Specific.Value = docEntry.ToString());
                             LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_baseDoc").Cells.Item(cellPos.rowIndex).Specific.Value = docEntry.ToString());
                             LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_amtBsDc").Cells.Item(cellPos.rowIndex).Specific.Value = FormsB1.ConvertDecimalToString(Convert.ToDecimal(gTotal)));
                             LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(cellPos.rowIndex).Specific.Value = FormsB1.ConvertDecimalToString(Convert.ToDecimal(lineVat)));
-                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_wbNumber").Cells.Item(cellPos.rowIndex).Specific.Value = wbNumber);
+                            LanguageUtils.IgnoreErrors<string>(() => oMatrix.Columns.Item("U_wbNumber").Cells.Item(cellPos.rowIndex).Specific.Value = wblNumber);
                         }
                         else if (sCFL_ID == "DPinvoiceCFL")
                         {
-                            BubbleEvent = false;
-
                             SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("DPinvoices").Specific;
                             SAPbouiCOM.CellPosition cellPos = oMatrix.GetCellFocus();
                             if (cellPos == null)
@@ -4368,6 +4323,19 @@ namespace BDO_Localisation_AddOn
             {
                 oForm.Freeze(false);
             }
+        }
+
+        public static void GetAPDocumentAmts(BaseDocType baseDocType, int docEntry, out double gTotal, out double lineVat, out string wblNumber)
+        {
+            wblNumber = string.Empty;
+            if (baseDocType == BaseDocType.oPurchaseInvoices)
+                APInvoice.getAmount(docEntry, out gTotal, out lineVat, out wblNumber);
+            else if (baseDocType == BaseDocType.oPurchaseCreditNotes)
+                APCreditMemo.getAmount(docEntry, out gTotal, out lineVat, out wblNumber);
+            else if (baseDocType == BaseDocType.oPurchaseDownPayments)
+                APDownPaymentInvoice.getAmount(docEntry, out gTotal, out lineVat);
+            else
+                APCorrectionInvoice.getAmount(docEntry, out gTotal, out lineVat, out wblNumber);
         }
 
         public static string getStatusValueByStatusNumber(string statusNumber)
@@ -4555,9 +4523,7 @@ namespace BDO_Localisation_AddOn
                         oRecordSet.MoveNext();
                     }
                     if (corrInv && corrDoc != 0)
-                    {
                         getPrimaryBaseDoc(corrDoc, baseDocType, cardCode, out baseDocList);
-                    }
                 }
             }
             catch (Exception ex)
@@ -4570,7 +4536,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static DataTable getListBaseDoc(GeneralData oGeneralData, string overhead_no, BaseDocType? baseDocType = null, int docEntryTaxInv = 0)
+        private static DataTable getListBaseDoc(GeneralData oGeneralData, string wblNumber, BaseDocType? baseDocType = null, int taxInvDocEntry = 0)
         {
             DataTable baseDocs = new DataTable();
             baseDocs.Columns.Add("DocEntry", typeof(int));
@@ -4587,128 +4553,62 @@ namespace BDO_Localisation_AddOn
             DateTime firstDayMonth = new DateTime(opDate.Year, opDate.Month, 1);
             DateTime lastDayMonth = firstDayMonth.AddMonths(1).AddDays(-1);
 
-            decimal amount = Convert.ToDecimal(oGeneralData.GetProperty("U_amount"));
-            decimal amountTX = Convert.ToDecimal(oGeneralData.GetProperty("U_amountTX"));
+            decimal taxInvAmt = Convert.ToDecimal(oGeneralData.GetProperty("U_amount"));
+            //decimal taxInvAmtTX = Convert.ToDecimal(oGeneralData.GetProperty("U_amountTX"));
             if (corrInv)
             {
-                amount = Convert.ToDecimal(oGeneralData.GetProperty("U_amtACor"));
-                amountTX = Convert.ToDecimal(oGeneralData.GetProperty("U_amtTXACr"));
+                taxInvAmt = Convert.ToDecimal(oGeneralData.GetProperty("U_amtACor"));
+                //taxInvAmtTX = Convert.ToDecimal(oGeneralData.GetProperty("U_amtTXACr"));
             }
+            bool isFromDoc = baseDocType.HasValue; 
 
-            string baseDocTable;
-            string baseDocRowTable;
-            bool fromDoc = baseDocType.HasValue;
+            if (taxInvAmt < 0)
+                taxInvAmt *= (-1);
+            //if (taxInvAmtTX < 0)
+            //    taxInvAmtTX *= (-1);
 
-            if (amount < 0)
-                amount *= (-1);
-            if (amountTX < 0)
-                amountTX *= (-1);
-
-            if (!baseDocType.HasValue)
-            {
-                if (downPaymnt)
-                    baseDocType = BaseDocType.oPurchaseDownPayments;
-                else if (corrInv)
-                    baseDocType = BaseDocType.oPurchaseCreditNotes;
-                else
-                    baseDocType = BaseDocType.oPurchaseInvoices; 
-            }
-
-            if (baseDocType.Value == BaseDocType.oPurchaseInvoices)
-            {
-                baseDocTable = "OPCH";
-                baseDocRowTable = "PCH1";
-            }
-            else if (baseDocType.Value == BaseDocType.oPurchaseCreditNotes)
-            {
-                baseDocTable = "ORPC";
-                baseDocRowTable = "RPC1";
-            }
-            else if (baseDocType.Value == BaseDocType.oPurchaseDownPayments)
-            {
-                baseDocTable = "ODPO";
-                baseDocRowTable = "DPO1";
-            }
-            else if (baseDocType.Value == BaseDocType.oCorrectionPurchaseInvoice)
-            {
-                baseDocTable = "OCPI";
-                baseDocRowTable = "CPI1";
-            }
-            else
-                return baseDocs;
-
-            List<int> primaryBaseDocList = new List<int>();
             List<int> connectedDocList = new List<int>();
             if (corrInv)
             {
+                List<int> primaryBaseDocList;
                 if (downPaymnt)
                 {
-                    getPrimaryBaseDoc(corrDoc, baseDocType, cardCode, out primaryBaseDocList);
-                    connectedDocList = APDownPaymentInvoice.getAllConnectedDoc(primaryBaseDocList);
+                    getPrimaryBaseDoc(corrDoc, BaseDocType.oPurchaseDownPayments, cardCode, out primaryBaseDocList);
+                    if (primaryBaseDocList.Count > 0)
+                        connectedDocList = APDownPaymentInvoice.getAllConnectedDoc(primaryBaseDocList);
                 }
                 else
                 {
                     getPrimaryBaseDoc(corrDoc, null, cardCode, out primaryBaseDocList);
-                    connectedDocList = APCreditMemo.getAllConnectedDoc(primaryBaseDocList, "18");
+                    if (primaryBaseDocList.Count > 0)
+                        connectedDocList = APCreditMemo.getAllConnectedDoc(primaryBaseDocList, "18");
                 }
             }
+            
+            StringBuilder query;
 
-            NumberFormatInfo Nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
+            if (downPaymnt || (baseDocType.HasValue && baseDocType.Value == BaseDocType.oPurchaseDownPayments))
+                query = GetQueryForAPDownPaymentType(isFromDoc, cardCode, firstDayMonth, lastDayMonth, taxInvDocEntry, taxInvAmt, connectedDocList);
+            else if (baseDocType.HasValue && baseDocType.Value == BaseDocType.oPurchaseCreditNotes)
+                query = GetQueryForAPCreditNoteType(isFromDoc, cardCode, firstDayMonth, lastDayMonth, taxInvDocEntry, taxInvAmt, wblNumber, connectedDocList);
+            else if (baseDocType.HasValue && baseDocType.Value == BaseDocType.oCorrectionPurchaseInvoice)
+                query = GetQueryForAPCorrectionInvoiceType(isFromDoc, cardCode, firstDayMonth, lastDayMonth, taxInvDocEntry, taxInvAmt, wblNumber, connectedDocList);
+            else if (!baseDocType.HasValue && corrInv)
+            {
+                var queryAPCreditNoteType = GetQueryForAPCreditNoteType(isFromDoc, cardCode, firstDayMonth, lastDayMonth, taxInvDocEntry, taxInvAmt, wblNumber, connectedDocList);
+                var queryAPCorrectionInvoiceType = GetQueryForAPCorrectionInvoiceType(isFromDoc, cardCode, firstDayMonth, lastDayMonth, taxInvDocEntry, taxInvAmt, wblNumber, connectedDocList);
+
+                query = queryAPCreditNoteType;
+                query.Append(" UNION ALL \n");
+                query.Append(queryAPCorrectionInvoiceType);
+            }
+            else
+                query = GetQueryForAPInvoiceType(isFromDoc, cardCode, firstDayMonth, lastDayMonth, taxInvDocEntry, taxInvAmt, wblNumber);
+
             Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
-
-            string query = @"SELECT
-	             ""TABL"".""DocEntry"",
-	             ""TABL"".""DocDate"",
-	             '" + ((int)baseDocType.Value).ToString() + @"' AS ""BaseDocType"",
-	             SUM(""TBL1"".""GTotal"") AS ""GTotal"",
-            	 SUM(""TBL1"".""LineVat"") AS ""LineVat"" 
-            FROM """ + baseDocTable + @""" AS ""TABL"" 
-            LEFT JOIN """ + baseDocRowTable + @""" AS ""TBL1"" ON ""TBL1"".""DocEntry"" = ""TABL"".""DocEntry"""
-            +
-            (baseDocType.Value == BaseDocType.oPurchaseInvoices ? @"LEFT JOIN ""OPDN"" ON ""TBL1"".""BaseEntry"" = ""OPDN"".""DocEntry""" : "")
-            +
-
-            @"WHERE ""TABL"".""CANCELED"" = 'N' 
-            AND ""TABL"".""CardCode"" = N'" + cardCode + @"'
-            AND ""TABL"".""DocDate"" >= '" + firstDayMonth.ToString("yyyyMMdd") + @"' AND ""TABL"".""DocDate"" <= '" + lastDayMonth.ToString("yyyyMMdd") + "'";
-
-            if (baseDocType.Value != BaseDocType.oPurchaseDownPayments && !string.IsNullOrEmpty(overhead_no)) //ვეძებთ ზედნადების ნომრით
-            {
-                query = query + @" AND (""TABL"".""U_BDO_WBNo"" = '" + overhead_no + "'" +
-                    (baseDocType.Value == BaseDocType.oPurchaseInvoices ? @" OR ""OPDN"".""U_BDO_WBNo""= '" + overhead_no + "' " : "") + ") ";
-            }
-            if (baseDocType.Value == BaseDocType.oPurchaseDownPayments)
-            {
-                query = query + @" AND ""TABL"".""Posted"" = 'Y'";
-            }
-            if (corrInv && connectedDocList.Count > 0)
-            {
-                query = query + @" AND ""TABL"".""DocEntry"" IN (" + string.Join(",", connectedDocList) + ")";
-            }
-            query = query + @" AND ""TABL"".""DocEntry"" NOT IN ( SELECT
-            	 ""BDO_TXR1"".""U_baseDoc"" 
-            	FROM ""@BDO_TAXR"" AS ""BDO_TAXR"" 
-            	INNER JOIN ""@BDO_TXR1"" AS ""BDO_TXR1"" ON ""BDO_TXR1"".""DocEntry"" = ""BDO_TAXR"".""DocEntry"" 
-            	WHERE ""BDO_TAXR"".""Canceled"" = 'N' 
-            		AND (""BDO_TAXR"".""U_status"" NOT IN ('removed',
-            	 'canceled') OR ""BDO_TAXR"".""U_status"" IS NULL) 
-            	AND ""BDO_TXR1"".""U_baseDocT"" = '" + ((int)baseDocType.Value).ToString() + @"' 
-            	AND ""BDO_TAXR"".""U_cardCode"" = N'" + cardCode + @"'  
-            	AND ""BDO_TXR1"".""DocEntry"" <> '" + docEntryTaxInv + @"' ) 
-            GROUP BY ""TABL"".""DocEntry"",
-            	 ""TABL"".""DocDate""";
-
-            if (string.IsNullOrEmpty(overhead_no) && !fromDoc) //ვეძებთ თანხით
-            {
-                decimal allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString());
-                decimal amountMax = amount + allowableDeviation;
-                decimal amountMin = amount - allowableDeviation;
-                query = query + @" HAVING(SUM(""TBL1"".""GTotal"") >= '" + amountMin.ToString(Nfi) + @"' AND SUM(""TBL1"".""GTotal"") <= '" + amountMax.ToString(Nfi) + "')";
-            }
-
             try
             {
-                oRecordSet.DoQuery(query);
+                oRecordSet.DoQuery(query.ToString());
 
                 while (!oRecordSet.EoF)
                 {
@@ -4733,6 +4633,176 @@ namespace BDO_Localisation_AddOn
             return baseDocs;
         }
 
+        public static StringBuilder GetQueryForAPInvoiceType(bool isFromDoc, string cardCode, DateTime firstDayMonth, DateTime lastDayMonth, int taxInvDocEntry, decimal taxInvAmt, string wblNumber)
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append("SELECT \"TABL\".\"DocEntry\", \n");
+            query.Append("       \"TABL\".\"DocDate\", \n");
+            query.Append($"       '{(int)BaseDocType.oPurchaseInvoices}'  AS \"BaseDocType\", \n");
+            query.Append("       Sum(\"TBL1\".\"GTotal\")  AS \"GTotal\", \n");
+            query.Append("       Sum(\"TBL1\".\"LineVat\") AS \"LineVat\" \n");
+            query.Append("FROM   \"OPCH\" AS \"TABL\" \n");
+            query.Append("       LEFT JOIN \"PCH1\" AS \"TBL1\" ON \"TBL1\".\"DocEntry\" = \"TABL\".\"DocEntry\" \n");
+            query.Append("       LEFT JOIN \"OPDN\" ON \"TBL1\".\"BaseEntry\" = \"OPDN\".\"DocEntry\" \n");
+            query.Append("WHERE  \"TABL\".\"CANCELED\" = 'N' \n");
+            query.Append($"       AND \"TABL\".\"CardCode\" = N'{cardCode}' \n");
+            query.Append($"       AND \"TABL\".\"DocDate\" >= '{firstDayMonth:yyyyMMdd}' \n");
+            query.Append($"       AND \"TABL\".\"DocDate\" <= '{lastDayMonth:yyyyMMdd}' \n");
+
+            if (!string.IsNullOrEmpty(wblNumber)) //ვეძებთ ზედნადების ნომრით
+                query.Append($"   AND (\"TABL\".\"U_BDO_WBNo\" = '{wblNumber}' OR \"OPDN\".\"U_BDO_WBNo\"= '{wblNumber}') \n");
+
+            query.Append("        AND \"TABL\".\"DocEntry\" NOT IN (SELECT \"BDO_TXR1\".\"U_baseDoc\" \n");
+            query.Append("                                     FROM   \"@BDO_TAXR\" AS \"BDO_TAXR\" \n");
+            query.Append("                                            INNER JOIN \"@BDO_TXR1\" AS \"BDO_TXR1\" ON \"BDO_TXR1\".\"DocEntry\" = \"BDO_TAXR\".\"DocEntry\" \n");
+            query.Append("                                     WHERE  \"BDO_TAXR\".\"Canceled\" = 'N' \n");
+            query.Append("                                            AND (\"BDO_TAXR\".\"U_status\" NOT IN ('removed', 'canceled') OR \"BDO_TAXR\".\"U_status\" IS NULL) \n");
+            query.Append($"                                            AND \"BDO_TXR1\".\"U_baseDocT\" = '{(int)BaseDocType.oPurchaseInvoices}' \n");
+            query.Append($"                                            AND \"BDO_TAXR\".\"U_cardCode\" = N'{cardCode}' \n");
+            query.Append($"                                            AND \"BDO_TXR1\".\"DocEntry\" <> '{taxInvDocEntry}') \n");
+            query.Append("GROUP  BY \"TABL\".\"DocEntry\", \n");
+            query.Append("          \"TABL\".\"DocDate\" \n");
+
+            if (string.IsNullOrEmpty(wblNumber) && !isFromDoc) //ვეძებთ თანხით
+            {
+                var allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString());
+                var amountMax = taxInvAmt + allowableDeviation;
+                var amountMin = taxInvAmt - allowableDeviation;
+                query.Append($"HAVING(Sum(\"TBL1\".\"GTotal\") >= {amountMin.ToString(Nfi)} AND Sum(\"TBL1\".\"GTotal\") <= {amountMax.ToString(Nfi)}) \n");
+            }
+
+            return query;
+        }
+
+        public static StringBuilder GetQueryForAPCreditNoteType(bool isFromDoc, string cardCode, DateTime firstDayMonth, DateTime lastDayMonth, int taxInvDocEntry, decimal taxInvAmt, string wblNumber, List<int> connectedDocList)
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append("SELECT \"TABL\".\"DocEntry\", \n");
+            query.Append("       \"TABL\".\"DocDate\", \n");
+            query.Append($"       '{(int)BaseDocType.oPurchaseCreditNotes}'  AS \"BaseDocType\", \n");
+            query.Append("       Sum(\"TBL1\".\"GTotal\")  AS \"GTotal\", \n");
+            query.Append("       Sum(\"TBL1\".\"LineVat\") AS \"LineVat\", \n");
+            query.Append("       0                         AS \"ShouldBeGTotal\" \n");
+            query.Append("FROM   \"ORPC\" AS \"TABL\" \n");
+            query.Append("       LEFT JOIN \"RPC1\" AS \"TBL1\" ON \"TBL1\".\"DocEntry\" = \"TABL\".\"DocEntry\" \n");           
+            query.Append("WHERE  \"TABL\".\"CANCELED\" = 'N' \n");
+            query.Append($"       AND \"TABL\".\"CardCode\" = N'{cardCode}' \n");
+            query.Append($"       AND \"TABL\".\"DocDate\" >= '{firstDayMonth:yyyyMMdd}' \n");
+            query.Append($"       AND \"TABL\".\"DocDate\" <= '{lastDayMonth:yyyyMMdd}' \n");
+
+            if (!string.IsNullOrEmpty(wblNumber)) //ვეძებთ ზედნადების ნომრით
+                query.Append($"   AND \"TABL\".\"U_BDO_WBNo\" = '{wblNumber}' \n");
+
+            if (connectedDocList.Count > 0)
+                query.Append($"   AND \"TABL\".\"DocEntry\" IN ({string.Join(",", connectedDocList)}) \n");
+
+            query.Append("        AND \"TABL\".\"DocEntry\" NOT IN (SELECT \"BDO_TXR1\".\"U_baseDoc\" \n");
+            query.Append("                                     FROM   \"@BDO_TAXR\" AS \"BDO_TAXR\" \n");
+            query.Append("                                            INNER JOIN \"@BDO_TXR1\" AS \"BDO_TXR1\" ON \"BDO_TXR1\".\"DocEntry\" = \"BDO_TAXR\".\"DocEntry\" \n");
+            query.Append("                                     WHERE  \"BDO_TAXR\".\"Canceled\" = 'N' \n");
+            query.Append("                                            AND (\"BDO_TAXR\".\"U_status\" NOT IN ('removed', 'canceled') OR \"BDO_TAXR\".\"U_status\" IS NULL) \n");
+            query.Append($"                                            AND \"BDO_TXR1\".\"U_baseDocT\" = '{(int)BaseDocType.oPurchaseCreditNotes}' \n");
+            query.Append($"                                            AND \"BDO_TAXR\".\"U_cardCode\" = N'{cardCode}' \n");
+            query.Append($"                                            AND \"BDO_TXR1\".\"DocEntry\" <> '{taxInvDocEntry}') \n");
+            query.Append("GROUP  BY \"TABL\".\"DocEntry\", \n");
+            query.Append("          \"TABL\".\"DocDate\" \n");
+
+            if (string.IsNullOrEmpty(wblNumber) && !isFromDoc) //ვეძებთ თანხით
+            {
+                var allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString());
+                var amountMax = taxInvAmt + allowableDeviation;
+                var amountMin = taxInvAmt - allowableDeviation;
+                query.Append($"HAVING(Sum(\"TBL1\".\"GTotal\") >= {amountMin.ToString(Nfi)} AND Sum(\"TBL1\".\"GTotal\") <= {amountMax.ToString(Nfi)}) \n");
+            }
+
+            return query;
+        }
+
+        public static StringBuilder GetQueryForAPDownPaymentType(bool isFromDoc, string cardCode, DateTime firstDayMonth, DateTime lastDayMonth, int taxInvDocEntry, decimal taxInvAmt, List<int> connectedDocList)
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append("SELECT \"TABL\".\"DocEntry\", \n");
+            query.Append("       \"TABL\".\"DocDate\", \n");
+            query.Append($"       '{(int)BaseDocType.oPurchaseDownPayments}'  AS \"BaseDocType\", \n");
+            query.Append("       Sum(\"TBL1\".\"GTotal\")  AS \"GTotal\", \n");
+            query.Append("       Sum(\"TBL1\".\"LineVat\") AS \"LineVat\" \n");
+            query.Append("FROM   \"ODPO\" AS \"TABL\" \n");
+            query.Append("       LEFT JOIN \"DPO1\" AS \"TBL1\" ON \"TBL1\".\"DocEntry\" = \"TABL\".\"DocEntry\" \n");
+            query.Append("WHERE  \"TABL\".\"CANCELED\" = 'N' \n");
+            query.Append($"       AND \"TABL\".\"CardCode\" = N'{cardCode}' \n");
+            query.Append($"       AND \"TABL\".\"DocDate\" >= '{firstDayMonth:yyyyMMdd}' \n");
+            query.Append($"       AND \"TABL\".\"DocDate\" <= '{lastDayMonth:yyyyMMdd}' \n");
+            query.Append("        AND \"TABL\".\"Posted\" = 'Y' \n");
+            
+            if (connectedDocList.Count > 0)
+                query.Append($"   AND \"TABL\".\"DocEntry\" IN ({string.Join(",", connectedDocList)}) \n");
+
+            query.Append("        AND \"TABL\".\"DocEntry\" NOT IN (SELECT \"BDO_TXR1\".\"U_baseDoc\" \n");
+            query.Append("                                     FROM   \"@BDO_TAXR\" AS \"BDO_TAXR\" \n");
+            query.Append("                                            INNER JOIN \"@BDO_TXR1\" AS \"BDO_TXR1\" ON \"BDO_TXR1\".\"DocEntry\" = \"BDO_TAXR\".\"DocEntry\" \n");
+            query.Append("                                     WHERE  \"BDO_TAXR\".\"Canceled\" = 'N' \n");
+            query.Append("                                            AND (\"BDO_TAXR\".\"U_status\" NOT IN ('removed', 'canceled') OR \"BDO_TAXR\".\"U_status\" IS NULL) \n");
+            query.Append($"                                            AND \"BDO_TXR1\".\"U_baseDocT\" = '{(int)BaseDocType.oPurchaseDownPayments}' \n");
+            query.Append($"                                            AND \"BDO_TAXR\".\"U_cardCode\" = N'{cardCode}' \n");
+            query.Append($"                                            AND \"BDO_TXR1\".\"DocEntry\" <> '{taxInvDocEntry}') \n");
+            query.Append("GROUP  BY \"TABL\".\"DocEntry\", \n");
+            query.Append("          \"TABL\".\"DocDate\" \n");
+
+            if (!isFromDoc) //ვეძებთ თანხით
+            {
+                var allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString());
+                var amountMax = taxInvAmt + allowableDeviation;
+                var amountMin = taxInvAmt - allowableDeviation;
+                query.Append($"HAVING(Sum(\"TBL1\".\"GTotal\") >= {amountMin.ToString(Nfi)} AND Sum(\"TBL1\".\"GTotal\") <= {amountMax.ToString(Nfi)}) \n");
+            }
+
+            return query;
+        }
+
+        public static StringBuilder GetQueryForAPCorrectionInvoiceType(bool isFromDoc, string cardCode, DateTime firstDayMonth, DateTime lastDayMonth, int taxInvDocEntry, decimal taxInvAmt, string wblNumber, List<int> connectedDocList)
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append("SELECT \"TABL\".\"DocEntry\", \n");
+            query.Append("       \"TABL\".\"DocDate\", \n");
+            query.Append($"       '{(int)BaseDocType.oCorrectionPurchaseInvoice}'  AS \"BaseDocType\", \n");
+            query.Append("       Sum(\"TBL1\".\"GTotal\")  AS \"GTotal\", \n");
+            query.Append("       Sum(\"TBL1\".\"LineVat\") AS \"LineVat\", \n");
+            query.Append("       Sum(CASE WHEN \"TBL1\".\"CEECFlag\" = 'S' THEN \"GTotal\" ELSE 0 END) AS \"ShouldBeGTotal\" \n");
+            query.Append("FROM   \"OCPI\" AS \"TABL\" \n");
+            query.Append("       LEFT JOIN \"CPI1\" AS \"TBL1\" ON \"TBL1\".\"DocEntry\" = \"TABL\".\"DocEntry\" \n");
+            query.Append("WHERE  \"TABL\".\"CANCELED\" = 'N' \n");
+            query.Append($"       AND \"TABL\".\"CardCode\" = N'{cardCode}' \n");
+            query.Append($"       AND \"TABL\".\"DocDate\" >= '{firstDayMonth:yyyyMMdd}' \n");
+            query.Append($"       AND \"TABL\".\"DocDate\" <= '{lastDayMonth:yyyyMMdd}' \n");
+
+            if (!string.IsNullOrEmpty(wblNumber)) //ვეძებთ ზედნადების ნომრით
+                query.Append($"   AND \"TABL\".\"U_BDO_WBNo\" = '{wblNumber}' \n");
+
+            if (connectedDocList.Count > 0)
+                query.Append($"   AND \"TABL\".\"DocEntry\" IN ({string.Join(",", connectedDocList)}) \n");
+
+            query.Append("        AND \"TABL\".\"DocEntry\" NOT IN (SELECT \"BDO_TXR1\".\"U_baseDoc\" \n");
+            query.Append("                                     FROM   \"@BDO_TAXR\" AS \"BDO_TAXR\" \n");
+            query.Append("                                            INNER JOIN \"@BDO_TXR1\" AS \"BDO_TXR1\" ON \"BDO_TXR1\".\"DocEntry\" = \"BDO_TAXR\".\"DocEntry\" \n");
+            query.Append("                                     WHERE  \"BDO_TAXR\".\"Canceled\" = 'N' \n");
+            query.Append("                                            AND (\"BDO_TAXR\".\"U_status\" NOT IN ('removed', 'canceled') OR \"BDO_TAXR\".\"U_status\" IS NULL) \n");
+            query.Append($"                                            AND \"BDO_TXR1\".\"U_baseDocT\" = '{(int)BaseDocType.oCorrectionPurchaseInvoice}' \n");
+            query.Append($"                                            AND \"BDO_TAXR\".\"U_cardCode\" = N'{cardCode}' \n");
+            query.Append($"                                            AND \"BDO_TXR1\".\"DocEntry\" <> '{taxInvDocEntry}') \n");
+            query.Append("GROUP  BY \"TABL\".\"DocEntry\", \n");
+            query.Append("          \"TABL\".\"DocDate\" \n");
+
+            if (string.IsNullOrEmpty(wblNumber) && !isFromDoc) //ვეძებთ თანხით
+            {
+                var allowableDeviation = Convert.ToDecimal(CommonFunctions.getOADM("U_BDOSAllDev").ToString());
+                var amountMax = taxInvAmt + allowableDeviation;
+                var amountMin = taxInvAmt - allowableDeviation;
+                query.Append($"HAVING(Sum(Case When \"TBL1\".\"CEECFlag\" = 'S' Then \"GTotal\" Else 0 End) >= {amountMin.ToString(Nfi)} AND Sum(Case When \"TBL1\".\"CEECFlag\" = 'S' Then \"GTotal\" Else 0 End) <= {amountMax.ToString(Nfi)}) \n");
+            }
+
+            return query;
+        }
+
         public static void addBaseDoc(int docEntry, int baseDocEntry, BaseDocType baseDocType, string wbNumber, double baseDocGTotal, double baseDocLineVat)
         {
             CompanyService oCompanyService = oCompany.GetCompanyService();
@@ -4751,8 +4821,7 @@ namespace BDO_Localisation_AddOn
 
                 if (string.IsNullOrEmpty(wbNumber))
                 {
-                    GeneralData oChild = null;
-                    oChild = oChildren.Add();
+                    GeneralData oChild = oChildren.Add();
                     oChild.SetProperty("U_baseDoc", baseDocEntry);
                     oChild.SetProperty("U_baseDTxt", baseDocEntry.ToString());
                     oChild.SetProperty("U_baseDocT", ((int)baseDocType).ToString());
@@ -4863,7 +4932,7 @@ namespace BDO_Localisation_AddOn
         {
             CompanyService oCompanyService = oCompany.GetCompanyService();
             try
-            {          
+            {
                 GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
                 GeneralData oGeneralData = (GeneralData)oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData);
 
@@ -4882,7 +4951,7 @@ namespace BDO_Localisation_AddOn
                         oChildren.Remove(i);
                         break;
                     }
-                    i = i + 1;
+                    i += 1;
                 }
 
                 oGeneralService.Update(oGeneralData);
@@ -4890,7 +4959,7 @@ namespace BDO_Localisation_AddOn
             catch (Exception ex)
             {
                 oCompany.GetLastError(out var errCode, out var errMsg);
-               throw new Exception(BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message);
+                throw new Exception(BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message);
             }
             finally
             {
@@ -4898,51 +4967,86 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void addMatrixRow(SAPbouiCOM.Form oForm, string docType = "0", int docEntry = 0)
+        public static void addMatrixRow(SAPbouiCOM.Form oForm, BaseDocType baseDocType = BaseDocType.oPurchaseInvoices, int docEntry = 0)
         {
             try
             {
                 oForm.Freeze(true);
 
+                var baseDocTypeTmp = baseDocType;
+                var downPaymnt = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_downPaymnt", 0) == "Y";
+                var corrInv = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_corrInv", 0) == "Y";
+
                 SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
-                int index = 0;
-                if (oMatrix.RowCount == 0)
+                oMatrix.FlushToDataSource();
+
+                SAPbouiCOM.DBDataSource oDBDataSourceMTR = oForm.DataSources.DBDataSources.Item("@BDO_TXR1");
+                var size = oDBDataSourceMTR.Size;
+                if (size == oMatrix.RowCount)
+                    oDBDataSourceMTR.InsertRecord(size);
+                var newSize = oDBDataSourceMTR.Size;
+
+                oDBDataSourceMTR.SetValue("LineId", newSize - 1, newSize.ToString());
+                if (downPaymnt)
                 {
-                    index = 1;
+                    oDBDataSourceMTR.SetValue("U_baseDocT", newSize - 1, ((int)BaseDocType.oPurchaseDownPayments).ToString());
+                    baseDocTypeTmp = BaseDocType.oPurchaseDownPayments;
+                }
+                else if (corrInv)
+                {
+                    oDBDataSourceMTR.SetValue("U_baseDocT", newSize - 1, ((int)BaseDocType.oPurchaseCreditNotes).ToString());
+                    baseDocTypeTmp = BaseDocType.oPurchaseCreditNotes;
                 }
                 else
-                {
-                    index = Convert.ToInt32(oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value) + 1;
-                }
-
-                oMatrix.AddRow(1, -1);
-                oMatrix.AutoResizeColumns();
-                oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value = index;
-
-                SAPbouiCOM.ComboBox oComboBox = oMatrix.Columns.Item("U_baseDocT").Cells.Item(oMatrix.RowCount).Specific;
-                string downPaymnt = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_downPaymnt", 0).Trim();
-                string corrInv = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_corrInv", 0).Trim();
-                if (downPaymnt == "Y")
-
-                    oComboBox.Select("2", SAPbouiCOM.BoSearchKey.psk_ByValue);
-                else if (corrInv == "Y")
-
-                    oComboBox.Select("1", SAPbouiCOM.BoSearchKey.psk_ByValue);
-                else
-
-                    oComboBox.Select(docType, SAPbouiCOM.BoSearchKey.psk_ByValue);
-
+                    oDBDataSourceMTR.SetValue("U_baseDocT", newSize - 1, ((int)baseDocType).ToString());
+                
                 if (docEntry > 0)
                 {
-                    oMatrix.Columns.Item("U_baseDoc").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
-                    oMatrix.Columns.Item("U_baseDTxt").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
+                    oDBDataSourceMTR.SetValue("U_baseDoc", newSize - 1, docEntry.ToString());
+                    oDBDataSourceMTR.SetValue("U_baseDTxt", newSize - 1, docEntry.ToString());
+
+                    GetAPDocumentAmts(baseDocTypeTmp, docEntry, out var gTotal, out var lineVat, out var wblNumber);
+                    oDBDataSourceMTR.SetValue("U_amtBsDc", newSize - 1, Convert.ToString(gTotal, CultureInfo.InvariantCulture));
+                    oDBDataSourceMTR.SetValue("U_tAmtBsDc", newSize - 1, Convert.ToString(lineVat, CultureInfo.InvariantCulture));
+                    oDBDataSourceMTR.SetValue("U_wbNumber", newSize - 1, wblNumber);
                 }
 
-                oMatrix.CommonSetting.SetRowBackColor(oMatrix.RowCount, -1);
+                oMatrix.LoadFromDataSource();
+
+                if (oForm.Mode == SAPbouiCOM.BoFormMode.fm_OK_MODE)
+                    oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
+
+                //int index = 0;
+                //if (oMatrix.RowCount == 0)
+                //    index = 1;
+                //else
+                //    index = Convert.ToInt32(oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value) + 1;
+
+                //oMatrix.AddRow(1, -1);
+                //oMatrix.AutoResizeColumns();
+                //oMatrix.Columns.Item("LineID").Cells.Item(oMatrix.RowCount).Specific.Value = index;
+
+                //SAPbouiCOM.ComboBox oComboBox = oMatrix.Columns.Item("U_baseDocT").Cells.Item(oMatrix.RowCount).Specific;
+                //string downPaymnt = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_downPaymnt", 0).Trim();
+                //string corrInv = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_corrInv", 0).Trim();
+                //if (downPaymnt == "Y")
+                //    oComboBox.Select(((int)BaseDocType.oPurchaseDownPayments).ToString(), SAPbouiCOM.BoSearchKey.psk_ByValue);
+                //else if (corrInv == "Y")
+                //    oComboBox.Select(((int)BaseDocType.oPurchaseCreditNotes).ToString(), SAPbouiCOM.BoSearchKey.psk_ByValue);
+                //else
+                //    oComboBox.Select(((int)baseDocType).ToString(), SAPbouiCOM.BoSearchKey.psk_ByValue);
+
+                //if (docEntry > 0)
+                //{
+                //    oMatrix.Columns.Item("U_baseDoc").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
+                //    oMatrix.Columns.Item("U_baseDTxt").Cells.Item(oMatrix.RowCount).Specific.Value = docEntry;
+                //}
+
+                //oMatrix.CommonSetting.SetRowBackColor(oMatrix.RowCount, -1);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -5277,7 +5381,7 @@ namespace BDO_Localisation_AddOn
 
                 else
                 {
-                    SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("DPinvoices").Specific));
+                    SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("DPinvoices").Specific;
                     oMatrix.FlushToDataSource();
                     int firstRow = 0;
                     int row = 0;
@@ -5301,7 +5405,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -5315,16 +5419,15 @@ namespace BDO_Localisation_AddOn
 
             if (amtBsDc == amount && tAmtBsDc == amountTX)
                 linkStatus = "1"; //მიბმული                        
-            else if (amtBsDc > 0)
+            else if (amtBsDc != 0)
                 linkStatus = "2"; //ნაწილობრივ მიბმული                        
             else
                 linkStatus = "0"; //მიუბმელი                      
             return linkStatus;
         }
 
-        public static void formDataAddUpdate(SAPbouiCOM.Form oForm, out string errorText)
+        public static void formDataAddUpdate(SAPbouiCOM.Form oForm)
         {
-            errorText = null;
             try
             {
                 SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDO_TXR1");
@@ -5335,11 +5438,9 @@ namespace BDO_Localisation_AddOn
                 oKeysDictionary.Add("U_baseDTxt", oDBDataSource);
                 oKeysDictionary.Add("U_wbNumber", oDBDataSource);
 
-                CommonFunctions.checkDuplicatesInDBDataSources(oDBDataSource, oKeysDictionary, out errorText);
+                CommonFunctions.checkDuplicatesInDBDataSources(oDBDataSource, oKeysDictionary, out var errorText);
                 if (!string.IsNullOrEmpty(errorText))
-                {
-                    return;
-                }
+                    throw new Exception(errorText);
 
                 decimal amount = Convert.ToDecimal(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_amount", 0), CultureInfo.InvariantCulture); //თანხა დღგ-ის ჩათვლით
                 decimal amountTX = Convert.ToDecimal(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_amountTX", 0), CultureInfo.InvariantCulture); //დღგ-ის თანხა
@@ -5363,7 +5464,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw ex;
             }
         }
 
@@ -5390,13 +5491,9 @@ namespace BDO_Localisation_AddOn
                 WHERE ""BDO_TAXR"".""Canceled"" = 'N'"; // AND ""BDO_TAXR"".""U_status"" NOT IN ('removed', 'canceled')
 
                 if (invID != null)
-                {
                     query = query + @"AND ""BDO_TAXR"".""U_invID"" = '" + invID + "'";
-                }
                 else
-                {
                     query = query + @"AND ""BDO_TAXR"".""U_number"" = '" + number + "'";
-                }
 
                 oRecordSet.DoQuery(query);
 
@@ -5412,7 +5509,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw ex;
             }
             finally
             {
@@ -5422,47 +5519,34 @@ namespace BDO_Localisation_AddOn
 
         public static void createDocumentTaxInvoiceType(TaxInvoice oTaxInvoice, bool isUpdate, DataRow taxDataRow, out string errorText)
         {
-            errorText = null;
-
-            int docEntry = 0;
-            decimal amtCor = 0;
-            decimal amtTXCor = 0;
-            string statusRS = null;
             string number = taxDataRow["F_NUMBER"].ToString(); //ა/ფ ნომერი
             string ID = taxDataRow["ID"].ToString(); //ა/ფ ID
-            List<string> wbNumberCor = new List<string>();
 
-            getInfoDoc(null, number, out docEntry, out amtCor, out amtTXCor, out wbNumberCor, out errorText);
+            getInfoDoc(null, number, out var docEntry, out var amtCor, out var amtTXCor, out var wbNumberCor, out errorText);
 
-            CompanyService oCompanyService = null;
-            GeneralService oGeneralService = null;
-            GeneralData oGeneralData = null;
-            GeneralDataParams oGeneralParams = null;
-            oCompanyService = oCompany.GetCompanyService();
-            oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
-            oGeneralData = ((GeneralData)(oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData)));
-            oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
+            CompanyService oCompanyService = oCompany.GetCompanyService();
+            GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
+            GeneralData oGeneralData = (GeneralData)oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralData);
 
             if (docEntry == 0)
             {
                 var response = oGeneralService.Add(oGeneralData);
                 docEntry = response.GetProperty("DocEntry");
 
-                operationRS(oTaxInvoice, "create", docEntry, -1, new DateTime(), taxDataRow, out statusRS, out errorText);
+                operationRS(oTaxInvoice, "create", docEntry, -1, new DateTime(), taxDataRow, out var statusRS, out errorText);
             }
             else if (isUpdate)
             {
-                oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
+                GeneralDataParams oGeneralParams = oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
                 oGeneralParams.SetProperty("DocEntry", docEntry);
                 oGeneralData = oGeneralService.GetByParams(oGeneralParams);
 
                 string status = oGeneralData.GetProperty("U_status");
 
                 if (status != "confirmed" && status != "correctionConfirmed")
-                {
-                    operationRS(oTaxInvoice, "update", docEntry, -1, new DateTime(), taxDataRow, out statusRS, out errorText);
-                }
+                    operationRS(oTaxInvoice, "update", docEntry, -1, new DateTime(), taxDataRow, out var statusRS, out errorText);
             }
+            Marshal.ReleaseComObject(oCompanyService);
         }
 
         public static void chooseFromListForBaseDocs(SAPbouiCOM.Form oForm, string taxDocEntryStr)
@@ -5519,59 +5603,51 @@ namespace BDO_Localisation_AddOn
                 oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
         }
 
-        public static void receiveVAT(int docEntry, DateTime declDate, string YesNoEmpty, out string errorText)
+        public static void receiveVAT(int docEntry, DateTime declDate, bool? yesNoEmpty)
         {
-            errorText = null;
-
-            CompanyService oCompanyService = null;
-            GeneralService oGeneralService = null;
-            GeneralData oGeneralData = null;
-            oCompanyService = oCompany.GetCompanyService();
-            oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
+            CompanyService oCompanyService = oCompany.GetCompanyService();
+            GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
 
             GeneralDataParams UDOParameter = (GeneralDataParams)oGeneralService.GetDataInterface(GeneralServiceDataInterfaces.gsGeneralDataParams);
             UDOParameter.SetProperty("DocEntry", docEntry);
 
-            oGeneralData = oGeneralService.GetByParams(UDOParameter);
+            GeneralData oGeneralData = oGeneralService.GetByParams(UDOParameter);
 
-            string U_recStatus = oGeneralData.GetProperty("U_TaxInRcvd");
+            bool isReceived = oGeneralData.GetProperty("U_TaxInRcvd") == "Y";
 
-
-            try
+            if (yesNoEmpty.HasValue)
             {
-                if (YesNoEmpty == "Y")
+                if (yesNoEmpty.Value)
                 {
-                    if (U_recStatus == "Y")
-                    {
-                        errorText = BDOSResources.getTranslate("TaxInvoiceAlreadyReceived");
-                        return;
-                    }
+                    if (isReceived)
+                        throw new Exception(BDOSResources.getTranslate("TaxInvoiceAlreadyReceived"));
+
                     oGeneralData.SetProperty("U_vatRDate", declDate);
                     oGeneralData.SetProperty("U_TaxInRcvd", "Y");
-                    oGeneralService.Update(oGeneralData);
                 }
-
-                else if (YesNoEmpty == "N")
+                else if (!yesNoEmpty.Value)
                 {
                     oGeneralData.SetProperty("U_vatRDate", "");
                     oGeneralData.SetProperty("U_TaxInRcvd", "N");
-                    oGeneralService.Update(oGeneralData);
                 }
-                else
-                {
-                    oGeneralData.SetProperty("U_vatRDate", "");
-                    oGeneralData.SetProperty("U_TaxInRcvd", "");
-                    oGeneralService.Update(oGeneralData);
-                }
-
+            }
+            else
+            {
+                oGeneralData.SetProperty("U_vatRDate", "");
+                oGeneralData.SetProperty("U_TaxInRcvd", "");
+            }
+            try
+            {
+                oGeneralService.Update(oGeneralData);
             }
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
-
-                oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                oCompany.GetLastError(out var errCode, out var errMsg);
+                throw new Exception(BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(oCompanyService);
             }
         }
 
@@ -5646,10 +5722,13 @@ namespace BDO_Localisation_AddOn
                     }
                     else
                     {
-                        formDataAddUpdate(oForm, out errorText);
-                        if (!string.IsNullOrEmpty(errorText))
+                        try
                         {
-                            uiApp.MessageBox(errorText);
+                            formDataAddUpdate(oForm);
+                        }
+                        catch (Exception ex)
+                        {
+                            uiApp.MessageBox(ex.Message);
                             BubbleEvent = false;
                         }
                     }
@@ -6329,7 +6408,7 @@ namespace BDO_Localisation_AddOn
                             }
                             catch (Exception ex)
                             {
-                                throw new Exception(ex.Message);
+                                throw ex;
                             }
                             finally
                             {
@@ -6348,7 +6427,8 @@ namespace BDO_Localisation_AddOn
                         if (pVal.ItemUID == "cardCodeE" || pVal.ItemUID == "confInfoE" || pVal.ItemUID == "wblMTR" || pVal.ItemUID == "DPinvoices" || pVal.ItemUID == "DPitems")
                         {
                             SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
-                            chooseFromList(oForm, oCFLEvento, pVal.ItemUID, pVal.BeforeAction, out BubbleEvent);
+                            chooseFromList(oForm, pVal, oCFLEvento);
+
                             if (!pVal.BeforeAction)
                                 setVisibleFormItems(oForm);
                         }
@@ -6377,51 +6457,27 @@ namespace BDO_Localisation_AddOn
                         {
                             if (pVal.ItemUID == "addMTRB")
                             {
-                                checkDocStatusForBaseDocAdd(oForm, out errorText);
-                                if (errorText != null)
-                                {
-                                    uiApp.MessageBox(errorText);
-                                    return;
-                                }
-
-                                addMatrixRow(oForm);
-
+                                if (IsStatusRelevantForBaseDocAdd(oForm))
+                                    addMatrixRow(oForm);
                             }
                             else if (pVal.ItemUID == "addMult")
                             {
-                                checkDocStatusForBaseDocAdd(oForm, out errorText);
-                                if (errorText != null)
+                                if (IsStatusRelevantForBaseDocAdd(oForm))
                                 {
-                                    uiApp.MessageBox(errorText);
-                                    return;
+                                    string cardCode = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_cardCode", 0);
+                                    string opDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_opDate", 0);
+                                    BDO_TaxInvoiceReceivedDetailed.createForm(oForm, out var oFormIncomingFormDocuments, cardCode, opDate, out errorText);
+                                    BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments);
                                 }
-
-                                string CardCode = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_cardCode", 0);
-                                string opDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_opDate", 0);
-                                SAPbouiCOM.Form oFormIncomingFormDocuments;
-                                BDO_TaxInvoiceReceivedDetailed.createForm(oForm, out oFormIncomingFormDocuments, CardCode, opDate, out errorText);
-                                BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments, out errorText);
                             }
                             else if (pVal.ItemUID == "addDPinv")
-
                             {
-                                checkDocStatusForBaseDocAdd(oForm, out errorText);
-                                if (errorText != null)
-                                {
-                                    uiApp.MessageBox(errorText);
-                                    return;
-                                }
-
-                                chooseInvoiceDoc(oForm, "DownPaymentInvoice");
+                                if (IsStatusRelevantForBaseDocAdd(oForm))
+                                    chooseInvoiceDoc(oForm, "DownPaymentInvoice");
                             }
                             else if (pVal.ItemUID == "delMTRB" || pVal.ItemUID == "delDPinv")
                             {
-                                checkDocStatusForBaseDocAdd(oForm, out errorText);
-                                if (errorText != null)
-                                {
-                                    uiApp.MessageBox(errorText);
-                                    return;
-                                }
+                                if (IsStatusRelevantForBaseDocAdd(oForm))
                                 deleteMatrixRow(oForm, pVal.ItemUID);
                             }
                             else if (pVal.ItemUID == "postB")
@@ -6440,13 +6496,14 @@ namespace BDO_Localisation_AddOn
                                 {
                                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
                                     string taxDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_taxDate", 0);
-                                    if (taxDate != null) postDocument(docEntry, out errorText, DateTime.ParseExact(taxDate, "yyyyMMdd", CultureInfo.InvariantCulture));
-                                    else postDocument(docEntry, out errorText);
+                                    if (taxDate != null)
+                                        postDocument(docEntry, out errorText, DateTime.ParseExact(taxDate, "yyyyMMdd", CultureInfo.InvariantCulture));
+                                    else
+                                        postDocument(docEntry, out errorText);
                                     if (!string.IsNullOrEmpty(errorText))
                                         uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
 
                                     FormsB1.SimulateRefresh();
-
                                 }
                             }
                         }
@@ -6469,19 +6526,15 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static bool checkDocStatusForBaseDocAdd(SAPbouiCOM.Form oForm, out string ErrorText)
+        private static bool IsStatusRelevantForBaseDocAdd(SAPbouiCOM.Form oForm)
         {
-            ErrorText = null;
-
-            string U_status = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_status", 0);
-            if (U_status != "confirmed")
+            string status = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_status", 0);
+            if (status != "confirmed")
             {
-                ErrorText = BDOSResources.getTranslate("TheDocumentStatusMustBeConfirmed");
-                return true;
+                uiApp.MessageBox(BDOSResources.getTranslate("TheDocumentStatusMustBeConfirmed"));
+                return false;
             }
-
             return true;
-
         }
 
         public static void AddMult(SAPbouiCOM.Form oForm, DataTable newRowsTable)
@@ -6492,7 +6545,7 @@ namespace BDO_Localisation_AddOn
             {
                 bool isInTable = false;
                 double baseDocTotal = Convert.ToDouble(dr["Total"]);
-                baseDocTotal = baseDocTotal * (dr["DocType"] == "0" ? 1 : -1);
+                baseDocTotal *= (dr["DocType"] == ((int)BaseDocType.oPurchaseInvoices).ToString() || dr["DocType"] == ((int)BaseDocType.oCorrectionPurchaseInvoice).ToString() ? 1 : -1);
 
                 double baseDocsAmount = 0;
                 for (int i = 1; i <= oMatrix.RowCount; i++)
@@ -6503,10 +6556,14 @@ namespace BDO_Localisation_AddOn
                         isInTable = true;
 
                     double U_amtBsDc = Convert.ToDouble(oMatrix.Columns.Item("U_amtBsDc").Cells.Item(i).Specific.Value, CultureInfo.InvariantCulture);
-                    if (U_baseDocT == "0")
+                    if (U_baseDocT == ((int)BaseDocType.oPurchaseInvoices).ToString())
                         baseDocsAmount += U_amtBsDc;
-                    else if (U_baseDocT == "1")
+                    else if (U_baseDocT == ((int)BaseDocType.oPurchaseCreditNotes).ToString())
                         baseDocsAmount -= U_amtBsDc;
+                    else if (U_baseDocT == ((int)BaseDocType.oCorrectionPurchaseInvoice).ToString())
+                        baseDocsAmount += U_amtBsDc; 
+                    else
+                        continue;
                 }
 
                 if (baseDocsAmount + baseDocTotal > U_amount)
@@ -6520,7 +6577,7 @@ namespace BDO_Localisation_AddOn
                     uiApp.SetStatusBarMessage(BDOSResources.getTranslate("DocumentAlreadyAdded"), SAPbouiCOM.BoMessageTime.bmt_Short);
                     return;
                 }
-                addMatrixRow(oForm, Convert.ToString(dr["DocType"]), Convert.ToInt32(dr["DocEntry"]));
+                addMatrixRow(oForm, (BaseDocType)Convert.ToInt32(dr["DocType"]), Convert.ToInt32(dr["DocEntry"]));
             }
         }
 
@@ -6831,10 +6888,8 @@ namespace BDO_Localisation_AddOn
             //}
         }
 
-        public static void linkToAPDocuments(int docEntry, out string errorText)
+        public static void linkToAPDocuments(int docEntry)
         {
-            errorText = null;
-
             CompanyService oCompanyService = oCompany.GetCompanyService();
             GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDO_TAXR_D");
 
@@ -6850,17 +6905,17 @@ namespace BDO_Localisation_AddOn
             {
                 if (oGeneralData.GetProperty("U_downPaymnt") == "N")
                 {
-                    ///----------------------------------------------->დოკუმენტების მიბმა (შესყიდვა/დაბრუნება)<-----------------------------------------------
+                    ///----------------------------------------------->შესყიდვის დოკუმენტების მიბმა<-----------------------------------------------
                     if (oChildrenCount != 0) //ზედნადების ნომრით, კონტრაგენტით, თარიღით
                     {
-
                         for (int i = 0; i < oChildrenCount; i++)
                         {
                             GeneralData oChildrenRow = oGeneralData.Child("BDO_TXR1").Item(i);
 
                             int baseDocEntry = oChildrenRow.GetProperty("U_baseDoc");
                             string overhead_no = oChildrenRow.GetProperty("U_wbNumber");
-                            if (baseDocEntry <= 0 && string.IsNullOrEmpty(overhead_no) == false)
+                            
+                            if (baseDocEntry <= 0 && !string.IsNullOrEmpty(overhead_no))
                             {
                                 searchByWbl = true;
                                 fillBaseDocs(oGeneralData, oChildren, oGeneralData.Child("BDO_TXR1").Item(i), overhead_no);
@@ -6873,7 +6928,7 @@ namespace BDO_Localisation_AddOn
                     fillBaseDocs(oGeneralData, oChildren, null, null);
                 }
 
-                if (errorText == null && (oChildrenCount != oChildren.Count || searchByWbl))
+                if (oChildrenCount != oChildren.Count || searchByWbl)
                 {
                     setLinkStatus(oGeneralData, oChildren);
                     oGeneralService.Update(oGeneralData);
@@ -6881,7 +6936,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
+                throw ex;
             }
             finally
             {
@@ -6890,7 +6945,6 @@ namespace BDO_Localisation_AddOn
                 Marshal.ReleaseComObject(oGeneralData);
                 Marshal.ReleaseComObject(oGeneralService);
             }
-            ///----------------------------------------------->დოკუმენტების მიბმა (შესყიდვა/დაბრუნება)<-----------------------------------------------
         }
 
         private static void get_buyer_invoices(TaxInvoice oTaxInvoice, GeneralService oGeneralService, GeneralData oGeneralData, string operation, DataRow taxDataRow, int k_type, out string errorText)
@@ -7081,9 +7135,8 @@ namespace BDO_Localisation_AddOn
 
                             oChildren = oGeneralData.Child("BDO_TXR2"); //მხოლოდ ზედნადების ნომრების ცხრილი
                             while (oChildren.Count > 0)
-                            {
                                 oChildren.Remove(0);
-                            }
+
                             for (int i = 0; i < invoiceTableLines.Rows.Count; i++)
                             {
                                 GeneralData oChildGeneralData = oChildren.Add();
@@ -7091,7 +7144,7 @@ namespace BDO_Localisation_AddOn
                                 oChildGeneralData.SetProperty("U_wbNumber", invoiceRow["overhead_no"].ToString());
                             }
 
-                            ///----------------------------------------------->დოკუმენტების მიბმა (შესყიდვა/დაბრუნება)<-----------------------------------------------
+                            ///----------------------------------------------->შესყიდვის დოკუმენტების მიბმა<-----------------------------------------------
                             if (invoiceTableLines.Rows.Count != 0) //ზედნადების ნომრით, კონტრაგენტით, თარიღით
                             {
                                 oChildren = oGeneralData.Child("BDO_TXR1");
@@ -7106,15 +7159,12 @@ namespace BDO_Localisation_AddOn
                                     overhead_dt_str = invoiceRow["overhead_dt_str"].ToString(); //ზედნადების თარიღი (სტრიქონი)                                  
 
                                     if (wbNumbersCor.Contains(overhead_no))
-                                    {
                                         continue;
-                                    }
-                                    if (searchByWbl == false)
+
+                                    if (!searchByWbl)
                                     {
                                         while (oChildren.Count > 0)
-                                        {
                                             oChildren.Remove(0);
-                                        }
                                         oGeneralService.Update(oGeneralData);
                                     }
                                     searchByWbl = true;
@@ -7122,12 +7172,12 @@ namespace BDO_Localisation_AddOn
                                 }
                             }
                         }
-                        if (searchByWbl == false && operation == "create") //თანხით, კონტრაგენტით
+                        if (!searchByWbl && operation == "create") //თანხით, კონტრაგენტით
                         {
                             oChildren = oGeneralData.Child("BDO_TXR1");
                             fillBaseDocs(oGeneralData, oChildren, null, null);
                         }
-                        ///----------------------------------------------->დოკუმენტების მიბმა (შესყიდვა/დაბრუნება)<-----------------------------------------------
+                        ///----------------------------------------------->შესყიდვის დოკუმენტების მიბმა<-----------------------------------------------
 
                         if (downPaymnt != "N")
                         {
@@ -7137,15 +7187,11 @@ namespace BDO_Localisation_AddOn
 
                             oChildren = oGeneralData.Child("BDO_TXR3"); //აითემების ცხრილი
                             while (oChildren.Count > 0)
-                            {
                                 oChildren.Remove(0);
-                            }
 
                             DataTable taxDataTable = oTaxInvoice.get_invoice_desc(inv_ID, out errorText);
-
                             for (int i = 0; i < taxDataTable.Rows.Count; i++)
                             {
-
                                 GeneralData oChildGeneralData = oChildren.Add();
 
                                 DataRow taxDeclRow = taxDataTable.Rows[i];
@@ -7220,11 +7266,11 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        private static void fillBaseDocs(GeneralData oGeneralData, GeneralDataCollection oChildren, GeneralData oChildGeneralData, string overhead_no)
+        private static void fillBaseDocs(GeneralData oGeneralData, GeneralDataCollection oChildren, GeneralData oChildGeneralData, string wblNumber)
         {
-            DataTable baseDocs = getListBaseDoc(oGeneralData, overhead_no);
+            DataTable baseDocs = getListBaseDoc(oGeneralData, wblNumber);
 
-            if (!string.IsNullOrEmpty(overhead_no)) //ვეძებთ ზედნადების ნომრით
+            if (!string.IsNullOrEmpty(wblNumber)) //ზედნადების ნომრით
             {
                 int baseDocsCount = baseDocs.Rows.Count;
 
@@ -7236,7 +7282,7 @@ namespace BDO_Localisation_AddOn
                         if (oChildGeneralData == null)
                         {
                             oChildGeneralData = oChildren.Add();
-                            oChildGeneralData.SetProperty("U_wbNumber", overhead_no);
+                            oChildGeneralData.SetProperty("U_wbNumber", wblNumber);
                         }
 
                         int baseDocEntry = Convert.ToInt32(dataRow["DocEntry"]);
@@ -7250,10 +7296,10 @@ namespace BDO_Localisation_AddOn
                 else if (oChildGeneralData == null)
                 {
                     oChildGeneralData = oChildren.Add();
-                    oChildGeneralData.SetProperty("U_wbNumber", overhead_no);
+                    oChildGeneralData.SetProperty("U_wbNumber", wblNumber);
                 }
             }
-            else //ვეძებთ თანხის მიხედვით
+            else //თანხის მიხედვით
             {
                 if (baseDocs.Rows.Count == 1)
                 {
@@ -7281,7 +7327,7 @@ namespace BDO_Localisation_AddOn
                     invID = taxDataRow["ID"].ToString();
                 }
 
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;
@@ -7334,7 +7380,7 @@ namespace BDO_Localisation_AddOn
                     string invoice_no = oGeneralData.GetProperty("U_number");
                     DateTime opDate = oGeneralData.GetProperty("U_opDate");
 
-                    if (String.IsNullOrEmpty(invoice_no) == false && opDate != new DateTime())
+                    if (!string.IsNullOrEmpty(invoice_no) && opDate != new DateTime())
                     {
                         get_buyer_invoices(oTaxInvoice, oGeneralService, oGeneralData, operation, taxDataRow, k_type, out errorText);
                     }
@@ -7354,7 +7400,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 string invID = oGeneralData.GetProperty("U_invID");
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return false;
@@ -7415,7 +7461,7 @@ namespace BDO_Localisation_AddOn
                 string invID = oGeneralData.GetProperty("U_invID");
                 string comment = oGeneralData.GetProperty("U_comment");
 
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;
@@ -7514,22 +7560,16 @@ namespace BDO_Localisation_AddOn
                 {
                     decimal amtACor = Convert.ToDecimal(oGeneralData.GetProperty("U_amtACor")); //თანხა დღგ-ის ჩათვლით (კორექტირების შემდეგ)
                     decimal amtTXACr = Convert.ToDecimal(oGeneralData.GetProperty("U_amtTXACr")); //დღგ-ის თანხა (კორექტირების შემდეგ)
-                    decimal full_amount;
-                    decimal drg_amount;
 
-                    get_invoice_desc(oTaxInvoice, oGeneralData, out full_amount, out drg_amount, out errorText);
-
+                    get_invoice_desc(oTaxInvoice, oGeneralData, out var full_amount, out var drg_amount, out errorText);
                     if (errorText != null)
-                    {
                         return;
-                    }
 
                     if (amtACor != full_amount || amtTXACr != drg_amount)
                     {
                         errorText = BDOSResources.getTranslate("TaxInvoiceAmountsNotEqualSiteNotUpdated");
                         return;
                     }
-
                     response = oTaxInvoice.acsept_invoice_status(inv_ID, newStatus, out errorText);
                 }
 
@@ -7544,9 +7584,7 @@ namespace BDO_Localisation_AddOn
                         //if (newStatus == 2)
                         //{
                         //დამდასტურებელი პირის შევსება
-                        string userName = "";
-                        int userID = 0;
-                        Users.getUserByCode(oCompany.UserName, out userName, out userID, out errorText);
+                        Users.getUserByCode(oCompany.UserName, out var userName, out var userID, out errorText);
                         if (errorText == null)
                         {
                             oGeneralData.SetProperty("U_confInfo", userID.ToString());
@@ -7578,7 +7616,7 @@ namespace BDO_Localisation_AddOn
             {
                 string invID = oGeneralData.GetProperty("U_invID");
 
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;
@@ -7638,13 +7676,13 @@ namespace BDO_Localisation_AddOn
 
                 string invID = oGeneralData.GetProperty("U_invID");
 
-                if (String.IsNullOrEmpty(invID))
+                if (string.IsNullOrEmpty(invID))
                 {
                     errorText = BDOSResources.getTranslate("TaxInvoiceIDNotFilled");
                     return;
                 }
 
-                if (String.IsNullOrEmpty(oGeneralData.GetProperty("U_declNumber")) == false)
+                if (string.IsNullOrEmpty(oGeneralData.GetProperty("U_declNumber")) == false)
                 {
                     errorText = BDOSResources.getTranslate("DeclarationNumberShouldBeEmpty");
                     return;
@@ -7694,7 +7732,6 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-
                     errorText = BDOSResources.getTranslate("Operation") + " \"" + BDOSResources.getTranslate("RSAddDeclaration") + "\" " + BDOSResources.getTranslate("DoneWithErrors");
                 }
             }

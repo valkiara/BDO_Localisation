@@ -3437,8 +3437,6 @@ namespace BDO_Localisation_AddOn
 
         public static void JrnEntry(string DocEntry, string DocNum, DateTime DocDate, DataTable JrnLinesDT, DataTable reLines, out string errorText)
         {
-            errorText = null;
-
             try
             {
                 JournalEntry.JrnEntry(DocEntry, "46", "Outgoing payment: " + DocNum, DocDate, JrnLinesDT, out errorText);

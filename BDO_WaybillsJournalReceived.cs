@@ -3996,19 +3996,19 @@ namespace BDO_Localisation_AddOn
                             {
                                 if (DocType == "1")
                                 {
-                                    APInvoice.attachWBToDoc(oForm, Program.oIncWaybDocFormAPInv, out errorText);
+                                    BDO_WBReceivedDocs.attachWBToDoc(oForm, Program.oIncWaybDocFormAPInv);
                                 }
                                 else if (DocType == "2")
                                 {
-                                    APCreditMemo.attachWBToDoc(oForm, Program.oIncWaybDocFormCrMemo, out errorText);
+                                    BDO_WBReceivedDocs.attachWBToDoc(oForm, Program.oIncWaybDocFormCrMemo);
                                 }
                                 else if (DocType == "3")
                                 {
-                                    GoodsReceiptPO.attachWBToDoc(oForm, Program.oIncWaybDocFormGdsRecpPO, out errorText);
+                                    BDO_WBReceivedDocs.attachWBToDoc(oForm, Program.oIncWaybDocFormGdsRecpPO);
                                 }
                                 else if (DocType == "4")
                                 {
-                                    APCorrectionInvoice.attachWBToDoc(oForm, Program.oIncWaybDocFormAPCorInv, out errorText);
+                                    BDO_WBReceivedDocs.attachWBToDoc(oForm, Program.oIncWaybDocFormAPCorInv);
                                 }
                             }
                             else
@@ -4025,9 +4025,6 @@ namespace BDO_Localisation_AddOn
                                 return;
 
                             }
-
-
-
 
                             int answer = 0;
 
@@ -4250,8 +4247,7 @@ namespace BDO_Localisation_AddOn
                     //}
                 }
             }
-        }
-        
+        }        
         public static void saveWBGoods(SAPbouiCOM.Matrix oMatrix)
         {
 
