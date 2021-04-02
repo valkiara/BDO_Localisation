@@ -498,7 +498,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -524,12 +524,11 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
                 oForm.Freeze(false);
-                GC.Collect();
             }
         }
 
@@ -567,7 +566,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -613,11 +612,12 @@ namespace BDO_Localisation_AddOn
             query.Append("T0.\"U_IntPblAcct\", \n");
             query.Append("T0.\"U_Type\", \n");
             query.Append("T0.\"U_NbrOfDays\", \n");
+            query.Append("T0.\"U_AccrDayAfter\", \n");
             query.Append("T1.\"U_StartDate\" AS \"U_EndDate\" \n");
             query.Append("FROM \"@BDOSCRLN\" AS T0 \n");
             query.Append("LEFT JOIN \"@BDOSCRLN\" AS T1 \n");
             query.Append("ON T0.\"Name\" = T1.\"Name\" AND T0.\"U_StartDate\" < T1.\"U_StartDate\" \n");
-            query.Append("WHERE T0.\"U_BankCode\" = '" + bankCode + "' AND T0.\"U_StartDate\" <= '" + docDateStr + "' \n");
+            query.Append($"WHERE T0.\"U_BankCode\" = '{bankCode}' AND T0.\"U_StartDate\" <= '{docDateStr}' \n");
             query.Append("ORDER BY T0.\"Name\", T0.\"U_StartDate\") AS T3 \n");
             query.Append("LEFT JOIN \n");
             query.Append("(SELECT \n");
@@ -626,7 +626,7 @@ namespace BDO_Localisation_AddOn
             query.Append("\"U_CrLnName\" \n");
             query.Append("FROM \"@BDOSINA1\" \n");
             query.Append("INNER JOIN \"@BDOSINAC\" ON \"@BDOSINAC\".\"DocEntry\" = \"@BDOSINA1\".\"DocEntry\" \n");
-            query.Append("WHERE \"Canceled\" = 'N' AND \"U_BankCode\" = '" + bankCode + "' \n");
+            query.Append($"WHERE \"Canceled\" = 'N' AND \"U_BankCode\" = '{bankCode}' \n");
             query.Append("GROUP BY \n");
             query.Append("\"U_CrLnCode\", \n");
             query.Append("\"U_CrLnName\", \n");
@@ -645,6 +645,9 @@ namespace BDO_Localisation_AddOn
                     DateTime creditLineStartDate = oRecordSet.Fields.Item("U_StartDate").Value;
                     DateTime lastInterestAccrualDocDate = oRecordSet.Fields.Item("U_DocDate").Value;
                     DateTime creditLineEndDate = oRecordSet.Fields.Item("U_EndDate").Value;
+
+                    if (oRecordSet.Fields.Item("U_AccrDayAfter").Value == "Y")
+                        docDate = docDate.AddDays(-1);
 
                     if (lastInterestAccrualDocDate >= docDate)
                     {
@@ -751,7 +754,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {

@@ -3616,4 +3616,7 @@
   <data name="DebitCreditValueIsNegativeInOneOrMoreRow" xml:space="preserve">
     <value>Debit/Credit value is negative in one or more row</value>
   </data>
+  <data name="AccrueDayAfter" xml:space="preserve">
+    <value>Accrue Day After</value>
+  </data>
 </root>
