@@ -3486,6 +3486,7 @@ namespace BDO_Localisation_AddOn
                     oRecordSetBN.DoQuery(queryBN);
                 }
 
+                string apCreditMemo= oMatrix.GetCellSpecific("CredMemo", row).Value;
 
                 //foreach (string[] goodsRow in array_GOODS)
                 for (int i = 0; i < array_GOODS.Length; i++)
@@ -3612,9 +3613,12 @@ namespace BDO_Localisation_AddOn
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, DistNumber);
                     Sbuilder.Append("</Value></Cell>");
 
-                    Sbuilder.Append("<Cell> <ColumnUid>WBPrjCode</ColumnUid> <Value>");
-                    Sbuilder = CommonFunctions.AppendXML(Sbuilder, WBPrjCode);
-                    Sbuilder.Append("</Value></Cell>");
+                    if (string.IsNullOrEmpty(apInvoice) && string.IsNullOrEmpty(apCreditMemo))
+                    {
+                        Sbuilder.Append("<Cell> <ColumnUid>WBPrjCode</ColumnUid> <Value>");
+                        Sbuilder = CommonFunctions.AppendXML(Sbuilder, WBPrjCode);
+                        Sbuilder.Append("</Value></Cell>");
+                    }
 
                     Sbuilder.Append("<Cell> <ColumnUid>WBQty</ColumnUid> <Value>");
                     Sbuilder = CommonFunctions.AppendXML(Sbuilder, strWBQty);
