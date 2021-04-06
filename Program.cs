@@ -1348,7 +1348,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->Tax Invoice Sent<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXS_D")
                         {
-                            BDO_TaxInvoiceSent.formDataLoad(oForm, out errorText);
+                            BDO_TaxInvoiceSent.formDataLoad(oForm);
                         }
                         //----------------------------->Profit Tax Accural<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")

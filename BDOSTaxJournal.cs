@@ -1288,7 +1288,7 @@ namespace BDO_Localisation_AddOn
                         DateTime DocDate = oRecordSet.Fields.Item("DocDate").Value;
                         string queryCardCode = oRecordSet.Fields.Item("CardCode").Value;
 
-                        DataTable сreditNotes = BDO_TaxInvoiceSent.getCorrDocs(Convert.ToInt32(CreditMemoEntry), DocDate, DocDate, Convert.ToInt32(BaseDoc), queryCardCode, out errorText);
+                        DataTable сreditNotes = BDO_TaxInvoiceSent.getCorrDocs(Convert.ToInt32(CreditMemoEntry), DocDate, DocDate, Convert.ToInt32(BaseDoc), queryCardCode);
                         if (сreditNotes != null)
                         {
                             int rowCount = сreditNotes.Rows.Count;
