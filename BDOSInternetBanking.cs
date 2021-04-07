@@ -130,6 +130,7 @@ namespace BDO_Localisation_AddOn
                                 }
                                 row++;
                             }
+
                             if (docEntryList.Count == 0)
                             {
                                 errorText = BDOSResources.getTranslate("HighlightTheRowsToPerformAnOperation") + "!"; //"ოპერაციის შესასრულებლად მონიშნეთ სასურველი სტრიქონები!";
@@ -494,7 +495,7 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, true);
                 return;
             }
-            
+
             var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "paymentToEmployee" : "";
 
             string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType);
@@ -534,7 +535,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.SetValue("DebitAccount", rowIndex, dataForImport["DebitAccount"] == null ? "" : dataForImport["DebitAccount"]);
                     oDataTable.SetValue("DebitAccountCurrencyCode", rowIndex, dataForImport["DebitAccountCurrencyCode"] == null ? "" : dataForImport["DebitAccountCurrencyCode"]);
                     oDataTable.SetValue("Amount", rowIndex, Convert.ToDouble(dataForImport["Amount"]));
-                    //oDataTable.SetValue("Amount", rowIndex, oRecordSet.Fields.Item("Amount").Value);                   
+                    //oDataTable.SetValue("Amount", rowIndex, oRecordSet.Fields.Item("Amount").Value);
                     oDataTable.SetValue("Currency", rowIndex, dataForImport["Currency"] == null ? "" : dataForImport["Currency"]);
                     oDataTable.SetValue("CardCode", rowIndex, dataForImport["CardCode"] == null ? "" : dataForImport["CardCode"]);
                     oDataTable.SetValue("BeneficiaryName", rowIndex, dataForImport["BeneficiaryName"] == null ? "" : dataForImport["BeneficiaryName"]);
@@ -575,7 +576,7 @@ namespace BDO_Localisation_AddOn
                 oRecordSet = null;
             }
         }
-        #endregion 
+        #endregion
 
         #region Get Data from Bank System
         public static void setVisibleFormItemsExport(SAPbouiCOM.Form oForm, out string errorText)
@@ -1035,7 +1036,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void getPaymentsDocument(string table, string paymentID, string ePaymentID, string docNumber, 
+        public static void getPaymentsDocument(string table, string paymentID, string ePaymentID, string docNumber,
             string transCode, string operationCode, out string docEntry, out string docNum, out string cFWId, out string cFWName, out string project, out string MultDocEntry)
         {
             MultDocEntry = "";
@@ -1060,10 +1061,10 @@ namespace BDO_Localisation_AddOn
                       ""PMNT"".""U_opCode"",
                       ""CFW"".""CFWId"",
                       ""CFW"".""CFWName""
-                 FROM """ + table + @""" AS ""PMNT"" 
-                 join 
-	                (SELECT 
-		                ""OCFW"".""CFWId"" as ""CFWId"", 
+                 FROM """ + table + @""" AS ""PMNT""
+                 join
+	                (SELECT
+		                ""OCFW"".""CFWId"" as ""CFWId"",
                         ""OCFW"".""CFWName"" as ""CFWName"",
                         ""OJDT"".""CreatedBy"" as ""CreatedBy""
                     FROM ""OJDT""
@@ -1074,21 +1075,21 @@ namespace BDO_Localisation_AddOn
                 on ""CFW"".""CreatedBy"" = ""PMNT"".""DocEntry""
 
                  WHERE ""PMNT"".""Canceled"" = 'N' AND ""PMNT"".""U_paymentID"" = '" + paymentID + @"'
-                 
-                 AND ((""PMNT"".""U_ePaymentID"" = '' OR ""PMNT"".""U_ePaymentID"" IS NULL) 
+
+                 AND ((""PMNT"".""U_ePaymentID"" = '' OR ""PMNT"".""U_ePaymentID"" IS NULL)
                        OR (""PMNT"".""U_ePaymentID"" = '" + ePaymentID + @"'))
-                 AND ((""PMNT"".""U_docNumber"" = '' OR ""PMNT"".""U_docNumber"" IS NULL) 
+                 AND ((""PMNT"".""U_docNumber"" = '' OR ""PMNT"".""U_docNumber"" IS NULL)
                        OR (""PMNT"".""U_docNumber"" = '" + docNumber + @"'))
-                 AND ((""PMNT"".""U_transCode"" = '' OR ""PMNT"".""U_transCode"" IS NULL) 
+                 AND ((""PMNT"".""U_transCode"" = '' OR ""PMNT"".""U_transCode"" IS NULL)
                        OR (""PMNT"".""U_transCode"" = '" + transCode + @"'))
-                 AND ((""PMNT"".""U_opCode"" = '' OR ""PMNT"".""U_opCode"" IS NULL) 
+                 AND ((""PMNT"".""U_opCode"" = '' OR ""PMNT"".""U_opCode"" IS NULL)
                        OR (""PMNT"".""U_opCode"" = '" + operationCode + @"'))";
 
                 if (string.IsNullOrEmpty(paymentID))
                 {
                     query = query +
-                       @" AND ""PMNT"".""U_ePaymentID"" = '" + ePaymentID + @"'  
-                       AND ""PMNT"".""U_docNumber"" = '" + docNumber + @"' 
+                       @" AND ""PMNT"".""U_ePaymentID"" = '" + ePaymentID + @"'
+                       AND ""PMNT"".""U_docNumber"" = '" + docNumber + @"'
                        AND ""PMNT"".""U_transCode"" = '" + transCode + @"'
                        AND ""PMNT"".""U_opCode"" = '" + operationCode + @"'";
                 }
@@ -1149,9 +1150,9 @@ namespace BDO_Localisation_AddOn
             {
                 string query = @"SELECT
 	                  ""PMNT"".""DocEntry""
-                 FROM """ + table + @""" AS ""PMNT"" 
+                 FROM """ + table + @""" AS ""PMNT""
                  WHERE ""PMNT"".""Canceled"" = 'N' AND ""PMNT"".""U_paymentID"" = '" + paymentID +
-                 @"' AND ((""PMNT"".""U_docNumber"" = '' OR ""PMNT"".""U_docNumber"" IS NULL) 
+                 @"' AND ((""PMNT"".""U_docNumber"" = '' OR ""PMNT"".""U_docNumber"" IS NULL)
                        OR (""PMNT"".""U_docNumber"" = '" + documentNumber + @"'))
                  AND ""PMNT"".""U_opType"" = '" + opType +
                  @"' AND (""PMNT"".""U_outDoc"" = '' OR ""PMNT"".""U_outDoc"" IS NULL)";
@@ -1280,12 +1281,12 @@ namespace BDO_Localisation_AddOn
                             if (debitCredit == 0) //გასვლა
                             {
                                 destinationCurrency = oAccountMovementDetailIo[rowIndex].amount.currency; //მიმღები
-                                sourceCurrency = destinationCurrency == currencyArray[0] ? currencyArray[1] : currencyArray[0]; //გამგზავნი 
+                                sourceCurrency = destinationCurrency == currencyArray[0] ? currencyArray[1] : currencyArray[0]; //გამგზავნი
                             }
                             else if (debitCredit == 1) //შემოსვლა
                             {
-                                sourceCurrency = oAccountMovementDetailIo[rowIndex].amount.currency; //გამგზავნი 
-                                destinationCurrency = sourceCurrency == currencyArray[0] ? currencyArray[1] : currencyArray[0]; //მიმღები                               
+                                sourceCurrency = oAccountMovementDetailIo[rowIndex].amount.currency; //გამგზავნი
+                                destinationCurrency = sourceCurrency == currencyArray[0] ? currencyArray[1] : currencyArray[0]; //მიმღები
                             }
                         }
                     }
@@ -1366,7 +1367,7 @@ namespace BDO_Localisation_AddOn
                         oPayments = null;
                     }
                     //ნაპოვნი დოკუმენტის განახლება <---
-                    //filterByTransType && 
+                    //filterByTransType &&
                     if (transTypeForFilter == OperationTypeFromIntBank.WithoutSalary.ToString())
                     {
                         if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.Salary.ToString() || oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.None.ToString())
@@ -1447,7 +1448,7 @@ namespace BDO_Localisation_AddOn
                         oDataTable.SetValue("CashFlowLineItemID", row, oRecordSet.Fields.Item("U_CFWId").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_CFWId").Value.ToString());
                         oDataTable.SetValue("CashFlowLineItemName", row, oRecordSet.Fields.Item("U_CFWName").Value.ToString() == null ? "" : oRecordSet.Fields.Item("U_CFWName").Value.ToString());
                     }
-                    
+
                     if (CommonFunctions.IsDevelopment())
                     {
                         if (oRecordSet != null)
@@ -1765,7 +1766,7 @@ namespace BDO_Localisation_AddOn
                         oPayments = null;
                     }
                     //ნაპოვნი დოკუმენტის განახლება <---
-                    //filterByTransType && 
+                    //filterByTransType &&
                     if (transTypeForFilter == OperationTypeFromIntBank.WithoutSalary.ToString())
                     {
                         if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.Salary.ToString() || oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.None.ToString())
@@ -2457,7 +2458,7 @@ namespace BDO_Localisation_AddOn
                                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
                                     oDataTable.SetValue("DocEntry", i, "");
                                     infoList.Add(String.IsNullOrEmpty(ex.Message) ? info : ex.Message);
-                                }                           
+                                }
                             }
                             else
                             {
@@ -3174,16 +3175,16 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.DataTable oDataTable;
                     oDataTable = oForm.DataSources.DataTables.Add("importMTR");
 
-                    oDataTable.Columns.Add("CheckBox", SAPbouiCOM.BoFieldsType.ft_Text, 1); // 0 - ინდექსი 
-                    oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50); // 0 - ინდექსი 
+                    oDataTable.Columns.Add("CheckBox", SAPbouiCOM.BoFieldsType.ft_Text, 1); // 0 - ინდექსი
+                    oDataTable.Columns.Add("LineNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50); // 0 - ინდექსი
                     oDataTable.Columns.Add("DocEntry", SAPbouiCOM.BoFieldsType.ft_Integer, 50); //1 //ენთრი
                     oDataTable.Columns.Add("DocNum", SAPbouiCOM.BoFieldsType.ft_Integer, 50); //2 //ნომერი
                     oDataTable.Columns.Add("DocDate", SAPbouiCOM.BoFieldsType.ft_Date, 50); //3 //თარიღი
-                    oDataTable.Columns.Add("OpType", SAPbouiCOM.BoFieldsType.ft_Text, 50); //4 //ოპერაციის ტიპი 
+                    oDataTable.Columns.Add("OpType", SAPbouiCOM.BoFieldsType.ft_Text, 50); //4 //ოპერაციის ტიპი
                     oDataTable.Columns.Add("TransferType", SAPbouiCOM.BoFieldsType.ft_Text, 50); //5 //ტრანსფერის სახე (ინტ.ბანკის ტიპები)
                     oDataTable.Columns.Add("PaymentID", SAPbouiCOM.BoFieldsType.ft_Text, 50); //6 //ტრანზაქციის ID
                     oDataTable.Columns.Add("BatchPaymentID", SAPbouiCOM.BoFieldsType.ft_Text, 50); //7 //პაკეტური ტრანზაქციის ID
-                    oDataTable.Columns.Add("Project", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric); //28 //სტატუსი 
+                    oDataTable.Columns.Add("Project", SAPbouiCOM.BoFieldsType.ft_AlphaNumeric); //28 //სტატუსი
                     oDataTable.Columns.Add("Status", SAPbouiCOM.BoFieldsType.ft_Text, 50); //8 //ინტ. ბანკში ტრანზაქციის სტატუსი
                     oDataTable.Columns.Add("BatchStatus", SAPbouiCOM.BoFieldsType.ft_Text, 50); //9 //ინტ. ბანკში პაკეტური ტრანზაქციის სტატუსი
                     oDataTable.Columns.Add("DebitAccount", SAPbouiCOM.BoFieldsType.ft_Text, 50); //10 //გამგზავნი ანგარიშის ნომერი
@@ -3204,7 +3205,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Columns.Add("BeneficiaryAddress", SAPbouiCOM.BoFieldsType.ft_Text, 50); //25 //მისამართი
                     oDataTable.Columns.Add("ChargeDetails", SAPbouiCOM.BoFieldsType.ft_Text, 50); //26 //ხარჯი (SHA, OUR)
                     oDataTable.Columns.Add("Comments", SAPbouiCOM.BoFieldsType.ft_Text, 50); //27 //კომენტარი
-                    oDataTable.Columns.Add("DocumentStatus", SAPbouiCOM.BoFieldsType.ft_Text, 50); //28 //სტატუსი 
+                    oDataTable.Columns.Add("DocumentStatus", SAPbouiCOM.BoFieldsType.ft_Text, 50); //28 //სტატუსი
 
                     SAPbouiCOM.LinkedButton oLink;
 
@@ -3750,7 +3751,7 @@ namespace BDO_Localisation_AddOn
                     //Budget Cash Flow - Chartulia Alami da Gashvebulia Construction
                     /*if (CommonFunctions.IsDevelopment())
                     {
-                        top = top + 2 * height + 1;      
+                        top = top + 2 * height + 1;
 
                         formItems = new Dictionary<string, object>();
                         itemName = "BDOSDefCfS"; //10 characters
@@ -3969,7 +3970,7 @@ namespace BDO_Localisation_AddOn
                     }
                     oForm.Items.Item("listView").Specific.Select("withoutDetl", SAPbouiCOM.BoSearchKey.psk_ByValue);
 
-                    //Automatic payment 
+                    //Automatic payment
                     left_s = left_s + 5 + width_s;
 
                     formItems = new Dictionary<string, object>();
@@ -4032,7 +4033,7 @@ namespace BDO_Localisation_AddOn
                         return;
                     }
 
-                    //Automatic payment 
+                    //Automatic payment
 
                     top = top + height + 1;
                     left_s = 6;
@@ -4106,8 +4107,8 @@ namespace BDO_Localisation_AddOn
 
                     oDataTable.Columns.Add("DownPaymentAmount", SAPbouiCOM.BoFieldsType.ft_Sum); //ავანსის თანხა
                     oDataTable.Columns.Add("InvoicesAmount", SAPbouiCOM.BoFieldsType.ft_Sum); //ინვოისის თანხა
-                    oDataTable.Columns.Add("PaymentOnAccount", SAPbouiCOM.BoFieldsType.ft_Sum); //ბპ. ანგარიშზე   
-                    oDataTable.Columns.Add("DocRateIN", SAPbouiCOM.BoFieldsType.ft_Rate); //ბპ. ვალუტის კურსი 
+                    oDataTable.Columns.Add("PaymentOnAccount", SAPbouiCOM.BoFieldsType.ft_Sum); //ბპ. ანგარიშზე
+                    oDataTable.Columns.Add("DocRateIN", SAPbouiCOM.BoFieldsType.ft_Rate); //ბპ. ვალუტის კურსი
                     oDataTable.Columns.Add("InDetail", SAPbouiCOM.BoFieldsType.ft_Text, 20);
 
                     //Automatic Payment
@@ -4231,7 +4232,7 @@ namespace BDO_Localisation_AddOn
                             oColumn.DisplayDesc = true;
                             oColumn.ExpandType = SAPbouiCOM.BoExpandType.et_DescriptionOnly;
 
-                            oColumn.ValidValues.Add("0", BDOSResources.getTranslate("Output")); //გასვლა 
+                            oColumn.ValidValues.Add("0", BDOSResources.getTranslate("Output")); //გასვლა
                             oColumn.ValidValues.Add("1", BDOSResources.getTranslate("Input")); //შემოსვლა
                             oColumn.ValidValues.Add("-1", BDOSResources.getTranslate("NONE")); //შემოსვლა
                         }
@@ -5168,7 +5169,7 @@ namespace BDO_Localisation_AddOn
                                 //}
                                 //oMatrix.FlushToDataSource();
 
-                                
+
                                 getData(oForm);
                             }
                             else if (pVal.ItemUID == "checkB2" || pVal.ItemUID == "unCheckB2")
@@ -5460,18 +5461,18 @@ namespace BDO_Localisation_AddOn
             string Currency = oDataTable.GetValue("Currency", i);
             string DebitCredit = oDataTable.GetValue("DebitCredit", i);
             double Amount = oDataTable.GetValue("Amount", i);
-            
+
 
             string query = @"Select * from
-                        (Select ""CardCode"", 
-                        Sum(""DocTotal"") as ""DocTotal"", 
+                        (Select ""CardCode"",
+                        Sum(""DocTotal"") as ""DocTotal"",
                         Sum(""DocTotalFC"") as ""DocTotalFC"" from #Table#
-                        where  ""CardCode"" = '#CardCode#' and 
-                        ""DocCurr"" = '#DocCurr#' and 
+                        where  ""CardCode"" = '#CardCode#' and
+                        ""DocCurr"" = '#DocCurr#' and
                         ""DocDate"" = '#DocDate#' and
                         ""Canceled"" = 'N'
                         Group By ""CardCode"")   as ""Docs""
-                        where Case When ""DocTotalFC"" = 0 Then ""DocTotal"" 
+                        where Case When ""DocTotalFC"" = 0 Then ""DocTotal""
                         Else ""DocTotalFC""
                         End = '#DocTotal#'";
             //
