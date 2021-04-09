@@ -2210,11 +2210,13 @@ namespace BDO_Localisation_AddOn
                     oAccountMovementFilterIo.periodFrom = startDate;
                     oAccountMovementFilterIo.periodFromSpecified = true;
                 }
+
                 if (endDate != new DateTime())
                 {
                     oAccountMovementFilterIo.periodTo = endDate;
                     oAccountMovementFilterIo.periodToSpecified = true;
                 }
+
                 BDOSAuthenticationFormTBC.createForm(oForm, selectedOperation, docEntryList, false, null, oAccountMovementFilterIo, out errorText);
             }
             else if (bankProgram == "BOG")

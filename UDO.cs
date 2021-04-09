@@ -247,6 +247,15 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "AuthForm");
+            fieldskeysMap.Add("TableName", "BDO_INTB");
+            fieldskeysMap.Add("Description", "AuthForm");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 10);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             SAPbobsCOM.UserKeysMD oUserKeysMD = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserKeys);
 
             oUserKeysMD.TableName = "BDO_INTB";
