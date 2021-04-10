@@ -1433,13 +1433,14 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Alias", "U_AuthForm");
             formItems.Add("Bound", true);
             formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
-            formItems.Add("Left", 230);
-            formItems.Add("Width", 250);
-            formItems.Add("Top", FirstItemHeight + 30);
+            formItems.Add("Left", left);
+            formItems.Add("Width", 200);
+            formItems.Add("Top", FirstItemHeight + 200);
             formItems.Add("Height", 14);
             formItems.Add("UID", itemName);
-            formItems.Add("FromPane", 12);
-            formItems.Add("ToPane", 12);
+            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
+            formItems.Add("FromPane", 200);
+            formItems.Add("ToPane", 200);
             formItems.Add("ValidValues", listValidValues);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
