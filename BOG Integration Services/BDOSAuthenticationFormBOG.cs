@@ -1,4 +1,6 @@
 ﻿using BDO_Localisation_AddOn.BOG_Integration_Services.Model;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -35,7 +37,18 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             string authorizeUrl = GetAuthorizeUrl(scope, clientId);
             //---> BOG
 
-            HandleInternetExplorerCase(authorizeUrl);
+            var authForm = GetAuthForm();
+
+            if (authForm == string.Empty)
+            {
+                errorText = "Auth form is not chosen";
+                return;
+            }
+
+            if (authForm == "Explorer")
+                HandleInternetExplorerCase(authorizeUrl);
+            else
+                HandleChromeCase(authorizeUrl);
 
             GC.Collect();
 
@@ -72,6 +85,52 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
                     scope = "corp";
                 }
             }
+        }
+
+        private static string GetAuthForm()
+        {
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            var getAuthFormQuery = @"SELECT ""U_AuthForm""
+                                        FROM ""@BDO_INTB""
+                                        WHERE ""@BDO_INTB"".""U_program"" = 'BOG'";
+
+            oRecordSet.DoQuery(getAuthFormQuery);
+
+            if(oRecordSet.RecordCount > 0)
+            {
+                return oRecordSet.Fields.Item("U_AuthForm").Value;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        private static void HandleChromeCase(string authorizeUrl)
+        {
+            var chromeDriverService = ChromeDriverService.CreateDefaultService();
+            chromeDriverService.HideCommandPromptWindow = true;
+            IWebDriver driver = new ChromeDriver(chromeDriverService, new ChromeOptions())
+            {
+                Url = authorizeUrl
+            };
+
+            while (true)
+            {
+                if (driver == null)
+                    return;
+
+                string url = driver.Url;
+                _authorizeResponse = GetAuthorizeResponse(url);
+
+                if (_authorizeResponse != null)
+                    break;
+            }
+
+            driver.Quit();
+
+            HandleResponse();
         }
 
         private static void HandleInternetExplorerCase(string authorizeUrl)

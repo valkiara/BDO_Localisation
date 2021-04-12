@@ -3697,4 +3697,7 @@
   <data name="DebitCreditValueIsNegativeInOneOrMoreRow" xml:space="preserve">
     <value>Debit/Credit value is negative in one or more row</value>
   </data>
+  <data name="BOGAuthForm" xml:space="preserve">
+    <value>BOG Auth. Form</value>
+  </data>
 </root>
