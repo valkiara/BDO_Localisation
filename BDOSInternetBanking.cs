@@ -1118,6 +1118,7 @@ namespace BDO_Localisation_AddOn
                         project = oRecordSet.Fields.Item("Project").Value.ToString();
                         if (oRecordSet.RecordCount > 1)
                         {
+                            if(MultDocEntry.IndexOf(docEntry + ",") <0)
                             MultDocEntry = MultDocEntry + docEntry + ",";
                     }
 
@@ -1391,7 +1392,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Rows.Add();
                     oDataTable.SetValue("LineNum", row, row + 1);
                     oDataTable.SetValue("CheckBox", row, "N");
-                    oDataTable.SetValue("DocEntry", row, docEntry);
+                    oDataTable.SetValue("DocEntry", row, (MultDocEntry == "" ? docEntry : MultDocEntry));
                     oDataTable.SetValue("Project", row, project);
                     oDataTable.SetValue("DocNum", row, docNum);
                     oDataTable.SetValue("PaymentID", row, paymentID);
