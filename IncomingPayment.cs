@@ -990,6 +990,7 @@ namespace BDO_Localisation_AddOn
                     oDictionary.Add("CardCode", oForm.DataSources.DBDataSources.Item("RCT4").GetValue("AcctCode", 0).Trim());
                     oDictionary.Add("TrsfrSum", oDBDataSource.GetValue("TrsfrSum", 0));
                     oDictionary.Add("U_outDoc", oDBDataSource.GetValue("U_outDoc", 0).Trim());
+                    oDictionary.Add("U_crdtActCur", oDBDataSource.GetValue("U_crdtActCur", 0).Trim());
                     oDictionary.Add("DocType", oDBDataSource.GetValue("DocType", 0).Trim());
                     oDictionary.Add("PrjCode", oDBDataSource.GetValue("PrjCode", 0).Trim());
                     DocDate = DateTime.ParseExact(oDictionary["DocDate"].ToString(), "yyyyMMdd", CultureInfo.InvariantCulture);
