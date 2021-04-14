@@ -646,9 +646,6 @@ namespace BDO_Localisation_AddOn
                     DateTime lastInterestAccrualDocDate = oRecordSet.Fields.Item("U_DocDate").Value;
                     DateTime creditLineEndDate = oRecordSet.Fields.Item("U_EndDate").Value;
 
-                    if (oRecordSet.Fields.Item("U_AccrDayAfter").Value == "Y")
-                        docDate = docDate.AddDays(-1);
-
                     if (lastInterestAccrualDocDate >= docDate)
                     {
                         oRecordSet.MoveNext();
@@ -674,6 +671,9 @@ namespace BDO_Localisation_AddOn
                     else
                         accrualStartDate = creditLineStartDate;
 
+                    if (oRecordSet.Fields.Item("U_AccrDayAfter").Value == "Y")
+                        accrualEndDate = accrualEndDate.AddDays(-1);
+
                     int numberOfDaysInYear = oRecordSet.Fields.Item("U_Type").Value == "F" ? Convert.ToInt32(oRecordSet.Fields.Item("U_NbrOfDays").Value) : new DateTime(DateTime.Today.Year, 12, 31).DayOfYear;
                     accrualDays = (accrualEndDate - accrualStartDate).Days;
                     accrualDays = accrualDays == 0 ? 1 : accrualDays;
@@ -686,7 +686,7 @@ namespace BDO_Localisation_AddOn
 
                     decimal dayRate = interestRate / numberOfDaysInYear;
                     string creditLineAccountCode = oRecordSet.Fields.Item("U_CrLnAcct").Value;
-                    string currencyForQuery = foreignCurrency ? " = '" + currency + "' " : " IS NULL ";
+                    string currencyForQuery = foreignCurrency ? $" = '{currency}' " : " IS NULL ";
 
                     decimal creditLineBalanceFC = decimal.Zero;
                     decimal creditLineBalanceLC = decimal.Zero;
@@ -700,9 +700,9 @@ namespace BDO_Localisation_AddOn
                         queryForBalances2.Append("Sum(\"Credit\") - Sum(\"Debit\") AS \"U_CrLnAmtLC\", \n");
                         queryForBalances2.Append("Sum(\"FCCredit\") - Sum(\"FCDebit\") AS \"U_CrLnAmtFC\" \n");
                         queryForBalances2.Append("FROM \"JDT1\" \n");
-                        queryForBalances2.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
-                        queryForBalances2.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
-                        queryForBalances2.Append("AND \"RefDate\" <= '" + accrualStartDate.AddDays(k).ToString("yyyyMMdd") + "' \n");
+                        queryForBalances2.Append($"WHERE \"Account\" = '{creditLineAccountCode}' \n");
+                        queryForBalances2.Append($"AND \"FCCurrency\" {currencyForQuery} \n");
+                        queryForBalances2.Append($"AND \"RefDate\" <= '{accrualStartDate.AddDays(k).ToString("yyyyMMdd")}' \n");
                         queryForBalances2.Append("GROUP BY \n");
                         queryForBalances2.Append("\"Account\", \n");
                         queryForBalances2.Append("\"FCCurrency\"");
