@@ -671,12 +671,13 @@ namespace BDO_Localisation_AddOn
                     else
                         accrualStartDate = creditLineStartDate;
 
-                    if (oRecordSet.Fields.Item("U_AccrDayAfter").Value == "Y")
+                    var isAccrDayAfter = oRecordSet.Fields.Item("U_AccrDayAfter").Value == "Y";
+                    if (isAccrDayAfter)
                         accrualEndDate = accrualEndDate.AddDays(-1);
 
                     int numberOfDaysInYear = oRecordSet.Fields.Item("U_Type").Value == "F" ? Convert.ToInt32(oRecordSet.Fields.Item("U_NbrOfDays").Value) : new DateTime(DateTime.Today.Year, 12, 31).DayOfYear;
                     accrualDays = (accrualEndDate - accrualStartDate).Days;
-                    accrualDays = accrualDays == 0 ? 1 : accrualDays;
+                    accrualDays = accrualDays == 0 && !isAccrDayAfter ? 1 : accrualDays;
 
                     if (accrualDays <= 0 || numberOfDaysInYear == 0)
                     {
