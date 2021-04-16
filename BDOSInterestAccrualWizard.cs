@@ -666,12 +666,13 @@ namespace BDO_Localisation_AddOn
                     else
                         accrualEndDate = docDate.AddDays(1);
 
+                    var isAccrDayAfter = oRecordSet.Fields.Item("U_AccrDayAfter").Value == "Y";
+
                     if (lastInterestAccrualDocDate.ToString("yyyyMMdd") != "18991230")
-                        accrualStartDate = lastInterestAccrualDocDate.AddDays(1);
+                        accrualStartDate = isAccrDayAfter ? lastInterestAccrualDocDate : lastInterestAccrualDocDate.AddDays(1);
                     else
                         accrualStartDate = creditLineStartDate;
 
-                    var isAccrDayAfter = oRecordSet.Fields.Item("U_AccrDayAfter").Value == "Y";
                     if (isAccrDayAfter)
                         accrualEndDate = accrualEndDate.AddDays(-1);
 
