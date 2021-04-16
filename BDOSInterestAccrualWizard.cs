@@ -704,7 +704,7 @@ namespace BDO_Localisation_AddOn
                         queryForBalances2.Append("FROM \"JDT1\" \n");
                         queryForBalances2.Append($"WHERE \"Account\" = '{creditLineAccountCode}' \n");
                         queryForBalances2.Append($"AND \"FCCurrency\" {currencyForQuery} \n");
-                        queryForBalances2.Append($"AND \"RefDate\" <= '{accrualStartDate.AddDays(k).ToString("yyyyMMdd")}' \n");
+                        queryForBalances2.Append($"AND \"RefDate\" <= '{accrualStartDate.AddDays(k):yyyyMMdd}' \n");
                         queryForBalances2.Append("GROUP BY \n");
                         queryForBalances2.Append("\"Account\", \n");
                         queryForBalances2.Append("\"FCCurrency\"");
