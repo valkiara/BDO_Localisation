@@ -495,7 +495,7 @@ namespace BDO_Localisation_AddOn
                 return;
             }
             
-            var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "paymentToEmployee" : "";
+            var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "PE" : "";
 
             string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType);
             string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(null, account, startDate, endDate, bankProgram, allDocuments);
@@ -1321,7 +1321,7 @@ namespace BDO_Localisation_AddOn
 
                         if (EntryComment.IndexOf(Sep) >= 0)
                         {
-                            oOperationTypeFromIntBank = OperationTypeFromIntBank.PaymentToEmployee;
+                            oOperationTypeFromIntBank = OperationTypeFromIntBank.Salary;
                         }
                     }
 
@@ -1369,7 +1369,7 @@ namespace BDO_Localisation_AddOn
                     //filterByTransType && 
                     if (transTypeForFilter == OperationTypeFromIntBank.WithoutSalary.ToString())
                     {
-                        if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.PaymentToEmployee.ToString() || oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.None.ToString())
+                        if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.Salary.ToString() || oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.None.ToString())
                         {
                             if (deleteFromUnsynchronized)
                             {
@@ -1720,7 +1720,7 @@ namespace BDO_Localisation_AddOn
 
                         if (EntryComment.IndexOf(Sep) >= 0)
                         {
-                            oOperationTypeFromIntBank = OperationTypeFromIntBank.PaymentToEmployee;
+                            oOperationTypeFromIntBank = OperationTypeFromIntBank.Salary;
                         }
                     }
 
@@ -1768,7 +1768,7 @@ namespace BDO_Localisation_AddOn
                     //filterByTransType && 
                     if (transTypeForFilter == OperationTypeFromIntBank.WithoutSalary.ToString())
                     {
-                        if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.PaymentToEmployee.ToString() || oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.None.ToString())
+                        if (oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.Salary.ToString() || oOperationTypeFromIntBank.ToString() == OperationTypeFromIntBank.None.ToString())
                         {
                             if (deleteFromUnsynchronized)
                             {
@@ -2970,7 +2970,7 @@ namespace BDO_Localisation_AddOn
                     listValidValuesDict = new Dictionary<string, string>
                     {
                         {"1", BDOSResources.getTranslate("All")},
-                        {"2", BDOSResources.getTranslate("Salary")}
+                        {"2", BDOSResources.getTranslate("PaymentToEmployee")}
                     };
 
                     formItems = new Dictionary<string, object>();
@@ -3714,8 +3714,7 @@ namespace BDO_Localisation_AddOn
                     listValidValuesDict.Add(OperationTypeFromIntBank.TreasuryTransfer.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TreasuryTransfer.ToString()));
                     listValidValuesDict.Add(OperationTypeFromIntBank.WithoutSalary.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.WithoutSalary.ToString()));
                     listValidValuesDict.Add(OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString()));
-                    listValidValuesDict.Add(OperationTypeFromIntBank.PaymentToEmployee.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.PaymentToEmployee.ToString()));
-
+                    
                     formItems = new Dictionary<string, object>();
                     itemName = "transTypCB"; //10 characters
                     formItems.Add("isDataSource", true);
@@ -5453,6 +5452,7 @@ namespace BDO_Localisation_AddOn
                 }
             }
         }
+
         private static bool CheckCreatedDcocument(SAPbouiCOM.DataTable oDataTable, int i)
         {
 
@@ -5495,9 +5495,7 @@ namespace BDO_Localisation_AddOn
 
                 return false;
         }
-
-
-
+        
         public static void createFolder(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;

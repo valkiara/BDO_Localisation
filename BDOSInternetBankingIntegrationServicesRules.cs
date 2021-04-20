@@ -791,8 +791,7 @@ namespace BDO_Localisation_AddOn
         BankCharge,
         OtherIncomes,
         OtherExpenses,
-        PaymentToEmployee,
-        //Salary,
+        Salary,
         WithoutSalary,
         TreasuryTransferPaymentOrderIoBP
     };
