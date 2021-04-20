@@ -3862,8 +3862,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string DocEntry = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0).Trim();
-
-
+                
                 setVisibleFormItems(oForm);
 
                 //// გატარებები
