@@ -6404,144 +6404,6 @@ namespace BDO_Localisation_AddOn
                             matrixColumnSetCfl(oForm, pVal);
                     }
 
-                    if(pVal.ItemChanged && pVal.ColUID == "U_baseDTxt")
-                    {
-                        int a = 7;
-                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
-
-                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
-                        decimal sum = 0;
-                        for(int i=0; i<oMatrix.RowCount; i++)
-                        {
-                            string docType = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i+1).Specific.Value;
-                            string docValue = oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(i+1).Specific.Value;
-                            decimal vatAmountValue = Convert.ToDecimal(docValue);
-                            if (docType == "1")
-                            {
-                                sum -= vatAmountValue;
-                            } else
-                            {
-                                sum += vatAmountValue;
-                            }
-                        }
-
-                        //vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Manual;
-                        vatAmount.ColumnSetting.SumValue = sum.ToString();
-                    }
-
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ALL_EVENTS && (pVal.ColUID == "U_baseDocT" || pVal.ColUID == "U_baseDTxt"))
-                    {
-                        int a = 7;
-                    }
-
-                    if(pVal.ItemUID == "addMTRB")
-                    {
-                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
-
-                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
-                        decimal sum = 0;
-                        for (int i = 0; i < oMatrix.RowCount; i++)
-                        {
-                            string docType = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i + 1).Specific.Value;
-                            string docValue = oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(i + 1).Specific.Value;
-                            decimal vatAmountValue = Convert.ToDecimal(docValue);
-                            if (docType == "1")
-                            {
-                                sum -= vatAmountValue;
-                            }
-                            else
-                            {
-                                sum += vatAmountValue;
-                            }
-                        }
-
-                        //vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Manual;
-                        vatAmount.ColumnSetting.SumValue = sum.ToString();
-                    }
-
-                    if (pVal.ItemUID == "delMTRB")
-                    {
-                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
-
-                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
-                        decimal sum = 0;
-                        for (int i = 0; i < oMatrix.RowCount; i++)
-                        {
-                            string docType = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i + 1).Specific.Value;
-                            string docValue = oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(i + 1).Specific.Value;
-                            decimal vatAmountValue = Convert.ToDecimal(docValue);
-                            if (docType == "1")
-                            {
-                                sum -= vatAmountValue;
-                            }
-                            else
-                            {
-                                sum += vatAmountValue;
-                            }
-                        }
-
-                        //vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Manual;
-                        vatAmount.ColumnSetting.SumValue = sum.ToString();
-                    }
-
-                    if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.ColUID == "U_baseDocT")
-                    {
-                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
-
-                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
-                        decimal sum = 0;
-                        for (int i = 0; i < oMatrix.RowCount; i++)
-                        {
-                            string docType = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i + 1).Specific.Value;
-                            string docValue = oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(i + 1).Specific.Value;
-                            decimal vatAmountValue = Convert.ToDecimal(docValue);
-                            if (docType == "1")
-                            {
-                                sum -= vatAmountValue;
-                            }
-                            else
-                            {
-                                sum += vatAmountValue;
-                            }
-                        }
-
-                        //vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Manual;
-                        vatAmount.ColumnSetting.SumValue = sum.ToString();
-                    }
-                    /*
-                    if(pVal.ItemUID == "addMTRB" || pVal.ItemUID == "delMTRB" || pVal.ItemUID == "addMult")
-                    {
-                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
-
-                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
-                        vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
-
-                    }
-                    */
-                    if (pVal.ItemUID == "wblMTR")
-                    {
-                        SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
-
-                        SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
-                        decimal sum = 0;
-                        for (int i = 0; i < oMatrix.RowCount; i++)
-                        {
-                            string docType = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i + 1).Specific.Value;
-                            string docValue = oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(i + 1).Specific.Value;
-                            decimal vatAmountValue = Convert.ToDecimal(docValue);
-                            if (docType == "1")
-                            {
-                                sum -= vatAmountValue;
-                            }
-                            else
-                            {
-                                sum += vatAmountValue;
-                            }
-                        }
-
-                        //vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Manual;
-                        vatAmount.ColumnSetting.SumValue = sum.ToString();
-                    }
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED)
                     {
                         itemPressed(oForm, pVal);
@@ -6641,8 +6503,32 @@ namespace BDO_Localisation_AddOn
                     {
                         comboSelect(oForm, pVal);
                     }
+
+                    if ((pVal.ItemChanged && pVal.ColUID == "U_baseDTxt") || (pVal.ItemUID == "addMTRB") || (pVal.ItemUID == "delMTRB") 
+                        || (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.ColUID == "U_baseDocT") || (pVal.ItemUID == "wblMTR"))
+                    {
+                        CalculateVatAmount(oForm);
+                    }
                 }
             }
+        }
+
+        private static void CalculateVatAmount(SAPbouiCOM.Form oForm)
+        {
+            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+
+            SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+            decimal sum = 0;
+            for (int i = 0; i < oMatrix.RowCount; i++)
+            {
+                string docType = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i + 1).Specific.Value;
+                string docValue = oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(i + 1).Specific.Value;
+                decimal vatAmountValue = Convert.ToDecimal(docValue);
+                if (docType == "1") sum -= vatAmountValue;
+                else sum += vatAmountValue;
+            }
+
+            vatAmount.ColumnSetting.SumValue = sum.ToString();
         }
 
         private static bool checkDocStatusForBaseDocAdd(SAPbouiCOM.Form oForm, out string ErrorText)
