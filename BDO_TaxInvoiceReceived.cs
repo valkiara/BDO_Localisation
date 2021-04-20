@@ -3862,8 +3862,6 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string DocEntry = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0).Trim();
-                //SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
-                //vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
 
 
                 setVisibleFormItems(oForm);
@@ -6318,15 +6316,6 @@ namespace BDO_Localisation_AddOn
                             }
                         }
                     }
-                    //if (pVal.ItemChanged && pVal.ItemUID == "wblMTR")
-                    //{
-                        //SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
-                        //SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
-                        //SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
-                        //vatAmount.Editable = true;
-                        //vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Auto;
-                        //vatAmount.Editable = false;
-                    //}
                 }
 
                 else
