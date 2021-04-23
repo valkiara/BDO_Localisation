@@ -86,6 +86,7 @@ namespace BDO_Localisation_AddOn
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
                 if (!Program.FORM_LOAD_FOR_ACTIVATE && pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
                 {
                     oForm.Items.Item("LandCostE").Specific.Value = "";
@@ -297,7 +298,7 @@ namespace BDO_Localisation_AddOn
             {
                 formDataLoad(oForm);
             }
-            if (!BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess)
+            if (!BusinessObjectInfo.BeforeAction && BusinessObjectInfo.ActionSuccess && BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
             {
                 SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("41").Specific;
                 createStockRevaluation(oForm, oMatrix);

@@ -127,7 +127,7 @@ namespace BDO_Localisation_AddOn
             BDOSCreditLine.createMasterDataUDO(out errorText);
             if (!oUserObjectsMD.GetByKey("UDO_F_BDOSCRLN_D"))
             {
-                BDOSCreditLine.registerUDO();                
+                BDOSCreditLine.registerUDO();
             }
             BDOSCreditLine.updateUDO();
 
@@ -145,7 +145,7 @@ namespace BDO_Localisation_AddOn
             }
             BDOSApprovalStages.createNoObjectUDO(out errorText);
             BDOSTasksForApproval.createNoObjectUDO(out errorText);
-            //Persona Tables 
+            //Persona Tables
 
             //მოგების გადასახადის ცხრილი (ბევრი დოკუმენტი გააკეთებს ჩანაწერებს)
             ProfitTax.createUDO(out errorText);
@@ -244,6 +244,15 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Description", "port");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
             fieldskeysMap.Add("EditSize", 11);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "AuthForm");
+            fieldskeysMap.Add("TableName", "BDO_INTB");
+            fieldskeysMap.Add("Description", "Authorization Form");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 10);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 

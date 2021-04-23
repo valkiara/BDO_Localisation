@@ -249,7 +249,7 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            fieldskeysMap = new Dictionary<string, object>(); // დაბეგვრის ობიექტი 
+            fieldskeysMap = new Dictionary<string, object>(); // დაბეგვრის ობიექტი
             fieldskeysMap.Add("Name", "prBase");
             fieldskeysMap.Add("TableName", "OVPM");
             fieldskeysMap.Add("Description", "Profit Base");
@@ -470,7 +470,7 @@ namespace BDO_Localisation_AddOn
                 listValidValuesDict.Add("transferToOwnAccount", BDOSResources.getTranslate("transferToOwnAccount")); //გადარიცხვა პირად ანგარიშზე
                 listValidValuesDict.Add("currencyExchange", BDOSResources.getTranslate("currencyExchange")); //კონვერტაცია
                 listValidValuesDict.Add("treasuryTransfer", BDOSResources.getTranslate("treasuryTransfer")); //სახაზინო გადარიცხვა
-                listValidValuesDict.Add("other", BDOSResources.getTranslate("other")); //სხვა              
+                listValidValuesDict.Add("other", BDOSResources.getTranslate("other")); //სხვა
 
                 formItems = new Dictionary<string, object>();
                 itemName = "opTypeCB"; //10 characters
@@ -2135,7 +2135,7 @@ namespace BDO_Localisation_AddOn
                 string docType = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocType", 0).Trim();
                 string opType = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_opType", 0).Trim();
                 string diffCurr = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DiffCurr", 0).Trim();
-                //string docCurr = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocCurr", 0).Trim();               
+                //string docCurr = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocCurr", 0).Trim();
                 string docCurr = CommonFunctions.getAccountCurrency(oForm.DataSources.DBDataSources.Item("OVPM").GetValue("TrsfrAcct", 0).Trim());
                 docCurr = docCurr == "##" ? Program.LocalCurrency : docCurr;
                 //docCurr = CommonFunctions.getCurrencyInternationalCode(docCurr);
@@ -2151,7 +2151,7 @@ namespace BDO_Localisation_AddOn
                 //კომპანიის მონაცემები (გამგზავნი) --->
                 string trsfrAcct = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("TrsfrAcct", 0).Trim(); // ბუღ. ანგარიში (გამგზავნი)
                 string bankProgram = CommonFunctions.getBankProgram(trsfrAcct); //ბანკის პროგრამა (გამგზავნი)
-                string bankCode = CommonFunctions.getBankCode(trsfrAcct); //ბანკის კოდი (გამგზავნი)           
+                string bankCode = CommonFunctions.getBankCode(trsfrAcct); //ბანკის კოდი (გამგზავნი)
                 //კომპანიის მონაცემები (გამგზავნი) <---
 
                 //კომპანიის/თანამშრომლის მონაცემები (მიმღები) --->
@@ -2205,7 +2205,7 @@ namespace BDO_Localisation_AddOn
                 string cardCode = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("CardCode", 0).Trim();
                 string isBPAccountTreasury = CommonFunctions.isBPAccountTreasury(cardCode, bpBnkCode, oForm.DataSources.DBDataSources.Item("OVPM").GetValue("PBnkAccnt", 0).Trim()) ? "Y" : "N";
                 treasuryCode = isBPAccountTreasury == "Y" ? bpBAccount : treasuryCode;
-                //კონტრაგენტის მონაცემები (მიმღები) <---                
+                //კონტრაგენტის მონაცემები (მიმღები) <---
 
                 Dictionary<string, string> dataForTransferType = new Dictionary<string, string>();
                 dataForTransferType.Add("docType", docType);
@@ -2266,7 +2266,7 @@ namespace BDO_Localisation_AddOn
                 //კომპანიის მონაცემები (გამგზავნი) --->
                 string trsfrAcct = oRecordSet.Fields.Item("TrsfrAcct").Value.ToString(); // ბუღ. ანგარიში (გამგზავნი)
                 string bankProgram = CommonFunctions.getBankProgram(trsfrAcct); //ბანკის პროგრამა (გამგზავნი)
-                string bankCode = CommonFunctions.getBankCode(trsfrAcct); //ბანკის კოდი (გამგზავნი)           
+                string bankCode = CommonFunctions.getBankCode(trsfrAcct); //ბანკის კოდი (გამგზავნი)
                 //კომპანიის მონაცემები (გამგზავნი) <---
 
                 //კომპანიის/თანამშრომლის მონაცემები (მიმღები) --->
@@ -2368,14 +2368,14 @@ namespace BDO_Localisation_AddOn
 
                 //კომპანიის მონაცემები (გამგზავნი) --->
                 string trsfrAcct = dataForTransferType["trsfrAcct"]; // ბუღ. ანგარიში (გამგზავნი)
-                string bankCode = dataForTransferType["bankCode"]; //ბანკის კოდი (გამგზავნი)           
-                string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)  
+                string bankCode = dataForTransferType["bankCode"]; //ბანკის კოდი (გამგზავნი)
+                string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)
                 //კომპანიის მონაცემები (გამგზავნი) <---
 
                 //კომპანიის/თანამშრომლის მონაცემები (მიმღები) --->
                 string creditAcct = dataForTransferType["creditAcct"]; //ანგარიში (მიმღები)
                 string creditBankCode = dataForTransferType["creditBankCode"]; //ბანკის კოდი (მიმღები)
-                string creditAcctCurrency = dataForTransferType["creditAcctCurrency"]; //ანგარიშის ვალუტა (მიმღები)          
+                string creditAcctCurrency = dataForTransferType["creditAcctCurrency"]; //ანგარიშის ვალუტა (მიმღები)
                 string exchangeCurrency = dataForTransferType["exchangeCurrency"]; //კონვერტაციის ვალუტა
                 //კომპანიის/თანამშრომლის მონაცემები (მიმღები) <---
 
@@ -2444,8 +2444,8 @@ namespace BDO_Localisation_AddOn
                     if (transferType == "TreasuryTransferPaymentOrderIo" || transferType == "TreasuryTransferPaymentOrderIoBP") //სახაზინო გადარიცხვა
                     {
                         CreditAccount = treasuryCode;
-                        BeneficiaryBankCode = "TRESGE22"; //მიმღები ბანკის RTGS კოდი / სავალდებულო 
-                        BeneficiaryName = "სახელმწიფო ხაზინა"; //მიმღების დასახელება  
+                        BeneficiaryBankCode = "TRESGE22"; //მიმღები ბანკის RTGS კოდი / სავალდებულო
+                        BeneficiaryName = "სახელმწიფო ხაზინა"; //მიმღების დასახელება
                     }
                 }
 
@@ -2454,11 +2454,16 @@ namespace BDO_Localisation_AddOn
                     CardCode = "";
                 }
 
-                decimal Amount;
+                var Amount = decimal.Zero;
+                var AmountFC = decimal.Zero;
+                var AmountLC = Math.Round(Convert.ToDecimal(oRecordSet.Fields.Item("TrsfrSum").Value), 2);
                 if (TransferCurrency == Program.LocalCurrency)
                     Amount = Convert.ToDecimal(oRecordSet.Fields.Item("TrsfrSum").Value);
                 else
+                {
                     Amount = Convert.ToDecimal(oRecordSet.Fields.Item("TrsfrSumFC").Value);
+                    AmountFC = Math.Round(Convert.ToDecimal(oRecordSet.Fields.Item("TrsfrSumFC").Value), 2);
+                }
                 Amount = Math.Round(Amount, 2); //დამრგვალება აუცილებლად უნდა იყოს 2 ციფრამდე, ინტ.ბანკის გამო
 
                 dataForImport.Add("DebitBankCode", bankCode);
@@ -2467,6 +2472,8 @@ namespace BDO_Localisation_AddOn
                 dataForImport.Add("Currency", TransferCurrency);
                 dataForImport.Add("BeneficiaryName", BeneficiaryName);
                 dataForImport.Add("Amount", Amount);
+                dataForImport.Add("AmountLC", AmountLC);
+                dataForImport.Add("AmountFC", AmountFC);
                 dataForImport.Add("BeneficiaryTaxCode", BeneficiaryTaxCode);
                 dataForImport.Add("BeneficiaryAddress", BeneficiaryAddress);
                 dataForImport.Add("RecipientCity", RecipientCity);
@@ -2523,14 +2530,14 @@ namespace BDO_Localisation_AddOn
 
             //კომპანიის მონაცემები (გამგზავნი) --->
             string trsfrAcct = dataForTransferType["trsfrAcct"] == null ? "" : dataForTransferType["trsfrAcct"]; // ბუღ. ანგარიში (გამგზავნი)
-            string bankCode = dataForTransferType["bankCode"] == null ? "" : dataForTransferType["bankCode"]; //ბანკის კოდი (გამგზავნი)           
-            string bankProgram = dataForTransferType["bankProgram"] == null ? "" : dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)  
+            string bankCode = dataForTransferType["bankCode"] == null ? "" : dataForTransferType["bankCode"]; //ბანკის კოდი (გამგზავნი)
+            string bankProgram = dataForTransferType["bankProgram"] == null ? "" : dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)
             //კომპანიის მონაცემები (გამგზავნი) <---
 
             //კომპანიის/თანამშრომლის მონაცემები (მიმღები) --->
             string creditAcct = dataForTransferType["creditAcct"] == null ? "" : dataForTransferType["creditAcct"]; //ანგარიში (მიმღები)
             string creditBankCode = dataForTransferType["creditBankCode"] == null ? "" : dataForTransferType["creditBankCode"]; //ბანკის კოდი (მიმღები)
-            string creditAcctCurrency = dataForTransferType["creditAcctCurrency"] == null ? "" : dataForTransferType["creditAcctCurrency"]; //ანგარიშის ვალუტა (მიმღები)          
+            string creditAcctCurrency = dataForTransferType["creditAcctCurrency"] == null ? "" : dataForTransferType["creditAcctCurrency"]; //ანგარიშის ვალუტა (მიმღები)
             string exchangeCurrency = dataForTransferType["exchangeCurrency"] == null ? "" : dataForTransferType["exchangeCurrency"]; //კონვერტაციის ვალუტა
             //კომპანიის/თანამშრომლის მონაცემები (მიმღები) <---
 
@@ -2735,14 +2742,14 @@ namespace BDO_Localisation_AddOn
 
             //კომპანიის მონაცემები (გამგზავნი) --->
             string trsfrAcct = dataForTransferType["trsfrAcct"]; // ბუღ. ანგარიში (გამგზავნი)
-            string bankCode = dataForTransferType["bankCode"]; //ბანკის კოდი (გამგზავნი)           
-            string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)  
+            string bankCode = dataForTransferType["bankCode"]; //ბანკის კოდი (გამგზავნი)
+            string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)
             //კომპანიის მონაცემები (გამგზავნი) <---
 
             //კომპანიის/თანამშრომლის მონაცემები (მიმღები) --->
             string creditAcct = dataForTransferType["creditAcct"]; //ანგარიში (მიმღები)
             string creditBankCode = dataForTransferType["creditBankCode"]; //ბანკის კოდი (მიმღები)
-            string creditAcctCurrency = dataForTransferType["creditAcctCurrency"]; //ანგარიშის ვალუტა (მიმღები)          
+            string creditAcctCurrency = dataForTransferType["creditAcctCurrency"]; //ანგარიშის ვალუტა (მიმღები)
             string exchangeCurrency = dataForTransferType["exchangeCurrency"]; //კონვერტაციის ვალუტა
             //კომპანიის/თანამშრომლის მონაცემები (მიმღები) <---
 
@@ -2897,14 +2904,14 @@ namespace BDO_Localisation_AddOn
 
             //კომპანიის მონაცემები (გამგზავნი) --->
             string trsfrAcct = dataForTransferType["trsfrAcct"]; // ბუღ. ანგარიში (გამგზავნი)
-            string bankCode = dataForTransferType["bankCode"]; //ბანკის კოდი (გამგზავნი)           
-            string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)  
+            string bankCode = dataForTransferType["bankCode"]; //ბანკის კოდი (გამგზავნი)
+            string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)
             //კომპანიის მონაცემები (გამგზავნი) <---
 
             //კომპანიის/თანამშრომლის მონაცემები (მიმღები) --->
             string creditAcct = dataForTransferType["creditAcct"]; //ანგარიში (მიმღები)
             string creditBankCode = dataForTransferType["creditBankCode"]; //ბანკის კოდი (მიმღები)
-            string creditAcctCurrency = dataForTransferType["creditAcctCurrency"]; //ანგარიშის ვალუტა (მიმღები)          
+            string creditAcctCurrency = dataForTransferType["creditAcctCurrency"]; //ანგარიშის ვალუტა (მიმღები)
             string exchangeCurrency = dataForTransferType["exchangeCurrency"]; //კონვერტაციის ვალუტა
             //კომპანიის/თანამშრომლის მონაცემები (მიმღები) <---
 
@@ -3409,7 +3416,7 @@ namespace BDO_Localisation_AddOn
 
                     JournalEntry.AddJournalEntryRow(AccountTable, jeLines, "Full", debitAccount, creditAccount, pensEmployerAmt, pensEmployerAmtFC, docCurrency,
                                                         distrRule1, distrRule2, distrRule3, distrRule4, distrRule5, project, "", "");
-                    
+
                     if (pensEmployerDiffAmt > 0)
                     {
                         debitAccount = CommonFunctions.getPeriodsCategory("GLLossXdif", docDate.Year.ToString()); //საკურსო სხვაობის ხარჯი - დებეტი (Loss)
@@ -4238,8 +4245,8 @@ namespace BDO_Localisation_AddOn
         //        string queryOPDF = @"update OPDF 
         //                            set 
         //                            ""DocDate"" = '" + newDate + @"',
-        //                            ""TaxDate"" = '" + newDate + @"', 
-        //                            ""VatDate"" = '" + newDate + @"', 
+        //                            ""TaxDate"" = '" + newDate + @"',
+        //                            ""VatDate"" = '" + newDate + @"',
         //                            ""DocDueDate"" = '" + newDate + @"'
 
         //                            where ""DocEntry"" = " + DocEntry + @"";
@@ -4258,8 +4265,8 @@ namespace BDO_Localisation_AddOn
         //        string queryOPDF = @"update OPDF 
         //                            set 
         //                            ""DocDate"" = '" + newDate + @"',
-        //                            ""TaxDate"" = '" + newDate + @"', 
-        //                            ""VatDate"" = '" + newDate + @"', 
+        //                            ""TaxDate"" = '" + newDate + @"',
+        //                            ""VatDate"" = '" + newDate + @"',
         //                            ""DocDueDate"" = '" + newDate + @"',
         //                            ""DocRate"" = " + DocRate.ToString(CultureInfo.InvariantCulture) + @"
         //                            where ""DocEntry"" = " + DocEntry + @"";
@@ -4321,8 +4328,8 @@ namespace BDO_Localisation_AddOn
         //        query = @"update OPDF 
         //                            set 
         //                            ""DocDate"" = '" + newDate + @"',
-        //                            ""TaxDate"" = '" + newDate + @"', 
-        //                            ""VatDate"" = '" + newDate + @"', 
+        //                            ""TaxDate"" = '" + newDate + @"',
+        //                            ""VatDate"" = '" + newDate + @"',
         //                            ""DocDueDate"" = '" + newDate + @"'" +
         //                            ((bpCurrency == "##") ? "" :
         //                            @",""DocRate"" = " + DocRate.ToString(CultureInfo.InvariantCulture) + @",
@@ -4853,13 +4860,13 @@ namespace BDO_Localisation_AddOn
             string query = "";
             if (DocType == "18")
             {
-                query = @"SELECT ""OPCH"".""U_nonEconExp"" AS ""PrTx"" 
+                query = @"SELECT ""OPCH"".""U_nonEconExp"" AS ""PrTx""
                         FROM ""OPCH""
                         WHERE ""OPCH"".""DocNum""='" + DocNum + "'";
             }
             else if (DocType == "204")
             {
-                query = @"SELECT ""ODPO"".""U_liablePrTx"" AS ""PrTx"" 
+                query = @"SELECT ""ODPO"".""U_liablePrTx"" AS ""PrTx""
                         FROM ""ODPO""
                         WHERE ""ODPO"".""DocNum""='" + DocNum + "'";
             }
@@ -5908,7 +5915,7 @@ namespace BDO_Localisation_AddOn
         //                    whtCoAp += pensionAmt;
         //                }
         //            }
-        //        } 
+        //        }
         //        else if(oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Checked && oMatrix.Columns.Item("45").Cells.Item(i).Specific.Value == "204")
         //        {
         //            string docNum = oMatrix.Columns.Item("1").Cells.Item(i).Specific.Value;
@@ -5940,7 +5947,7 @@ namespace BDO_Localisation_AddOn
         //                    whtCoAp += pensionAmt;
         //                }
         //            }
-        //        } 
+        //        }
         //        else if (oMatrix.Columns.Item("10000127").Cells.Item(i).Specific.Checked && oMatrix.Columns.Item("45").Cells.Item(i).Specific.Value == "19")
         //        {
         //            string docNum = oMatrix.Columns.Item("1").Cells.Item(i).Specific.Value;
@@ -6074,7 +6081,7 @@ namespace BDO_Localisation_AddOn
                     Dictionary<string, string> dataForTransferType = getDataForTransferType(oRecordSet);
                     string transferType = getTransferType(dataForTransferType, out errorText);
                     Dictionary<string, object> dataForImport = getDataForImport(oRecordSet, dataForTransferType, transferType);
-                    string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)  
+                    string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)
 
                     string transferProgram = bankProgram;
 
@@ -6286,7 +6293,7 @@ namespace BDO_Localisation_AddOn
                     Dictionary<string, string> dataForTransferType = getDataForTransferType(oRecordSet);
                     string transferType = getTransferType(dataForTransferType, out errorText);
                     Dictionary<string, object> dataForImport = getDataForImport(oRecordSet, dataForTransferType, transferType);
-                    string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)  
+                    string bankProgram = dataForTransferType["bankProgram"]; //ბანკის პროგრამა (გამგზავნი)
 
                     string transferProgram = bankProgram;
 
@@ -6894,15 +6901,15 @@ namespace BDO_Localisation_AddOn
             ""OVPM"".""U_rprtCode"" AS ""U_rprtCode"",
             ""OVPM"".""U_paymentID"" AS ""U_paymentID"",
             ""OVPM"".""U_bPaymentID"" AS ""U_bPaymentID"",
-            ""OVPM"".""U_creditAcct"" AS ""U_creditAcct"", 
-            ""OVPM"".""U_crdtActCur"" AS ""U_crdtActCur"",             
-            ""OVPM"".""U_tresrCode"" AS ""U_tresrCode"", 
+            ""OVPM"".""U_creditAcct"" AS ""U_creditAcct"",
+            ""OVPM"".""U_crdtActCur"" AS ""U_crdtActCur"",
+            ""OVPM"".""U_tresrCode"" AS ""U_tresrCode"",
             ""OVPM"".""U_dsptchType"" AS ""U_dsptchType"",
 
             ""VPM4"".""U_employee"" AS ""U_employee"",
 	        ""VPM4"".""U_employeeN"" AS ""U_employeeN"",
 	        ""VPM4"".""U_creditAcct"" AS ""U_creditAcctEmp"",
-	        ""VPM4"".""U_bankCode"" AS ""U_bankCodeEmp"",            
+	        ""VPM4"".""U_bankCode"" AS ""U_bankCodeEmp"",
 	        ""VPM4"".""govID"" AS ""BeneficiaryTaxCodeEmp"",
 	        ""VPM4"".""homeStreet"" AS ""BeneficiaryAddressEmp"",
             ""VPM4"".""homeCountr"" AS ""BeneficiaryRegistrationCountryCodeEmp"",
@@ -6914,31 +6921,31 @@ namespace BDO_Localisation_AddOn
             ""DSC1"".""IBAN"" AS ""IBAN"",
             ""DSC1"".""AcctName"" AS ""AcctName"",
             ""DSC1"".""U_program"" AS ""U_program"",
-            ""OCRD"".""LicTradNum"" AS ""BeneficiaryTaxCode"", 
-            ""OCRD"".""Address"" AS ""BeneficiaryAddress"", 
+            ""OCRD"".""LicTradNum"" AS ""BeneficiaryTaxCode"",
+            ""OCRD"".""Address"" AS ""BeneficiaryAddress"",
             ""OCRD"".""City"" AS ""RecipientCity"",
             ""OCRD"".""Country"" AS ""BeneficiaryRegistrationCountryCode"",
 
-            CASE 
+            CASE
             WHEN ""OACT"".""ActCurr"" = '##'
             THEN '" + Program.LocalCurrency + "' " +
             @"ELSE ""TempOCRN"".""DocCurrCod"" END AS ""DebitAccountCurrencyCode"",
-            
-            ""ODSC"".""BankName"" AS ""BeneficiaryBankName"",           
+
+            ""ODSC"".""BankName"" AS ""BeneficiaryBankName"",
             '' AS ""IntermediaryBankCode"",
             '' AS ""IntermediaryBankName"",
-            '' AS ""TaxpayerCode"", 
+            '' AS ""TaxpayerCode"",
             '' AS ""TaxpayerName"",
             ""BDO_INTB"".""U_WSDL"" AS ""WSDL"",
-            ""BDO_INTB"".""U_mode"" AS ""mode""       
-            
-            FROM ""OVPM"" AS ""OVPM"" 
+            ""BDO_INTB"".""U_mode"" AS ""mode""
+
+            FROM ""OVPM"" AS ""OVPM""
             INNER JOIN ""DSC1"" ON ""OVPM"".""TrsfrAcct"" = ""DSC1"".""GLAccount""
-            LEFT JOIN ""ODSC"" ON ""OVPM"".""PBnkCode"" = ""ODSC"".""BankCode""  
+            LEFT JOIN ""ODSC"" ON ""OVPM"".""PBnkCode"" = ""ODSC"".""BankCode""
             LEFT JOIN ""OCRD"" ON ""OVPM"".""CardCode"" = ""OCRD"".""CardCode""
-            INNER JOIN ""OACT"" ON ""OVPM"".""TrsfrAcct"" = ""OACT"".""AcctCode""                                  
-            INNER JOIN ""@BDO_INTB"" AS ""BDO_INTB"" ON ""DSC1"".""U_program"" = ""BDO_INTB"".""U_program""            
-            INNER JOIN ""OCRN"" ON ""OVPM"".""DocCurr"" = ""OCRN"".""CurrCode""            
+            INNER JOIN ""OACT"" ON ""OVPM"".""TrsfrAcct"" = ""OACT"".""AcctCode""
+            INNER JOIN ""@BDO_INTB"" AS ""BDO_INTB"" ON ""DSC1"".""U_program"" = ""BDO_INTB"".""U_program""
+            INNER JOIN ""OCRN"" ON ""OVPM"".""DocCurr"" = ""OCRN"".""CurrCode""
 
             LEFT JOIN (SELECT
             	 ""VPM4"".""DocNum"",
@@ -6949,11 +6956,11 @@ namespace BDO_Localisation_AddOn
             	 ""OHEM"".""govID"",
             	 ""OHEM"".""homeStreet"",
                  ""OHEM"".""homeCountr"",
-            	 ""ODSC"".""BankName"" 
+            	 ""ODSC"".""BankName""
             	FROM ""VPM4""
             	INNER JOIN ""OHEM"" AS ""OHEM"" ON ""VPM4"".""U_employee"" = ""OHEM"".""empID""
-            	INNER JOIN ""ODSC"" AS ""ODSC"" ON ""VPM4"".""U_bankCode"" = ""ODSC"".""BankCode"" 
-            	WHERE ""VPM4"".""U_creditAcct"" IS NOT NULL 
+            	INNER JOIN ""ODSC"" AS ""ODSC"" ON ""VPM4"".""U_bankCode"" = ""ODSC"".""BankCode""
+            	WHERE ""VPM4"".""U_creditAcct"" IS NOT NULL
             	AND ""VPM4"".""U_creditAcct"" != ''
                 GROUP BY ""VPM4"".""DocNum"",
             	 ""VPM4"".""U_employee"",
@@ -6963,14 +6970,14 @@ namespace BDO_Localisation_AddOn
             	 ""OHEM"".""govID"",
             	 ""OHEM"".""homeStreet"",
                  ""OHEM"".""homeCountr"",
-            	 ""ODSC"".""BankName"") AS ""VPM4"" ON (""OVPM"".""DocEntry"" = ""VPM4"".""DocNum"" 
+            	 ""ODSC"".""BankName"") AS ""VPM4"" ON (""OVPM"".""DocEntry"" = ""VPM4"".""DocNum""
             	AND ""OVPM"".""U_opType"" IN ('paymentToEmployee'))
-            
+
             LEFT JOIN (SELECT ""CurrCode"",  ""DocCurrCod"" FROM ""OCRN"") AS ""TempOCRN"" ON ""OACT"".""ActCurr""  = ""TempOCRN"".""CurrCode""
             LEFT JOIN (SELECT ""CurrCode"",  ""DocCurrCod"" FROM ""OCRN"") AS ""TempOCRN1"" ON ""OVPM"".""U_crdtActCur""  = ""TempOCRN1"".""CurrCode""
 
-            WHERE 
-            ""OVPM"".""Canceled"" = 'N'  
+            WHERE
+            ""OVPM"".""Canceled"" = 'N'
             AND (""OVPM"".""IsPaytoBnk"" = 'Y' OR ""OVPM"".""DocType"" = 'A') AND ""OVPM"".""U_status"" != 'notToUpload' AND ""OVPM"".""U_status"" != 'empty'";
 
             if (allDocuments == false) //სტატუსის მიხედვით ფილტრი
@@ -7037,15 +7044,15 @@ namespace BDO_Localisation_AddOn
             ""OVPM"".""U_rprtCode"" AS ""U_rprtCode"",
             ""OVPM"".""U_paymentID"" AS ""U_paymentID"",
             ""OVPM"".""U_bPaymentID"" AS ""U_bPaymentID"",
-            ""OVPM"".""U_creditAcct"" AS ""U_creditAcct"", 
-            ""OVPM"".""U_crdtActCur"" AS ""U_crdtActCur"",             
-            ""OVPM"".""U_tresrCode"" AS ""U_tresrCode"", 
+            ""OVPM"".""U_creditAcct"" AS ""U_creditAcct"",
+            ""OVPM"".""U_crdtActCur"" AS ""U_crdtActCur"",
+            ""OVPM"".""U_tresrCode"" AS ""U_tresrCode"",
             ""OVPM"".""U_dsptchType"" AS ""U_dsptchType"",
 
             '' AS ""U_employee"",
 	        '' AS ""U_employeeN"",
 	        '' AS ""U_creditAcctEmp"",
-	        '' AS ""U_bankCodeEmp"",            
+	        '' AS ""U_bankCodeEmp"",
 	        '' AS ""BeneficiaryTaxCodeEmp"",
 	        '' AS ""BeneficiaryAddressEmp"",
             '' AS ""BeneficiaryRegistrationCountryCodeEmp"",
@@ -7057,38 +7064,38 @@ namespace BDO_Localisation_AddOn
             ""DSC1"".""IBAN"" AS ""IBAN"",
             ""DSC1"".""AcctName"" AS ""AcctName"",
             ""DSC1"".""U_program"" AS ""U_program"",
-            ""OCRD"".""LicTradNum"" AS ""BeneficiaryTaxCode"", 
-            ""OCRD"".""Address"" AS ""BeneficiaryAddress"", 
+            ""OCRD"".""LicTradNum"" AS ""BeneficiaryTaxCode"",
+            ""OCRD"".""Address"" AS ""BeneficiaryAddress"",
             ""OCRD"".""City"" AS ""RecipientCity"",
             ""OCRD"".""Country"" AS ""BeneficiaryRegistrationCountryCode"",
 
 
-            CASE 
+            CASE
             WHEN ""OACT"".""ActCurr"" = '##'
             THEN '" + Program.LocalCurrency + "' " +
             @"ELSE ""TempOCRN"".""DocCurrCod"" END AS ""DebitAccountCurrencyCode"",
-            
-            ""ODSC"".""BankName"" AS ""BeneficiaryBankName"",           
+
+            ""ODSC"".""BankName"" AS ""BeneficiaryBankName"",
             '' AS ""IntermediaryBankCode"",
             '' AS ""IntermediaryBankName"",
-            '' AS ""TaxpayerCode"", 
+            '' AS ""TaxpayerCode"",
             '' AS ""TaxpayerName"",
             ""BDO_INTB"".""U_WSDL"" AS ""WSDL"",
-            ""BDO_INTB"".""U_mode"" AS ""mode""       
-            
-            FROM ""OVPM"" AS ""OVPM"" 
+            ""BDO_INTB"".""U_mode"" AS ""mode""
+
+            FROM ""OVPM"" AS ""OVPM""
             INNER JOIN ""DSC1"" ON ""OVPM"".""TrsfrAcct"" = ""DSC1"".""GLAccount""
-            LEFT JOIN ""ODSC"" ON ""OVPM"".""PBnkCode"" = ""ODSC"".""BankCode""  
+            LEFT JOIN ""ODSC"" ON ""OVPM"".""PBnkCode"" = ""ODSC"".""BankCode""
             LEFT JOIN ""OCRD"" ON ""OVPM"".""CardCode"" = ""OCRD"".""CardCode""
-            INNER JOIN ""OACT"" ON ""OVPM"".""TrsfrAcct"" = ""OACT"".""AcctCode""                                  
-            INNER JOIN ""@BDO_INTB"" AS ""BDO_INTB"" ON ""DSC1"".""U_program"" = ""BDO_INTB"".""U_program""            
-            INNER JOIN ""OCRN"" ON ""OVPM"".""DocCurr"" = ""OCRN"".""CurrCode""            
+            INNER JOIN ""OACT"" ON ""OVPM"".""TrsfrAcct"" = ""OACT"".""AcctCode""
+            INNER JOIN ""@BDO_INTB"" AS ""BDO_INTB"" ON ""DSC1"".""U_program"" = ""BDO_INTB"".""U_program""
+            INNER JOIN ""OCRN"" ON ""OVPM"".""DocCurr"" = ""OCRN"".""CurrCode""
 
             LEFT JOIN (SELECT ""CurrCode"",  ""DocCurrCod"" FROM ""OCRN"") AS ""TempOCRN"" ON ""OACT"".""ActCurr""  = ""TempOCRN"".""CurrCode""
             LEFT JOIN (SELECT ""CurrCode"",  ""DocCurrCod"" FROM ""OCRN"") AS ""TempOCRN1"" ON ""OVPM"".""U_crdtActCur""  = ""TempOCRN1"".""CurrCode""
 
-            WHERE 
-            ""OVPM"".""Canceled"" = 'N'  
+            WHERE
+            ""OVPM"".""Canceled"" = 'N'
             AND (""OVPM"".""IsPaytoBnk"" = 'Y' OR ""OVPM"".""DocType"" = 'A') AND ""OVPM"".""U_status"" != 'notToUpload' AND ""OVPM"".""U_status"" != 'empty'";
 
             if (allDocuments == false) //სტატუსის მიხედვით ფილტრი
@@ -7130,8 +7137,8 @@ namespace BDO_Localisation_AddOn
             ""OVPM"".""U_bPaymentID"" AS ""BatchPaymentID"",
             ""OVPM"".""U_posBPaymnt"" AS ""PositionBatchPayment""
 
-            FROM ""OVPM"" AS ""OVPM"" 
-           
+            FROM ""OVPM"" AS ""OVPM""
+
             WHERE ""OVPM"".""DocEntry"" IN (" + string.Join(",", docEntryList) + ") " +
             @"AND ((""OVPM"".""U_paymentID"" IS NOT NULL AND ""OVPM"".""U_paymentID"" != '')
             OR (""OVPM"".""U_bPaymentID"" IS NOT NULL AND ""OVPM"".""U_bPaymentID"" != ''))";
@@ -7175,7 +7182,7 @@ namespace BDO_Localisation_AddOn
                                     int errCode;
                                     string errMsg;
                                     Program.oCompany.GetLastError(out errCode, out errMsg);
-                                    info = BDOSResources.getTranslate("TheDocumentSStatusHasBeenUpdatedSuccessfully") + ", " + BDOSResources.getTranslate("ButTheDocumentFailedToUpdate") + "! " + errMsg + BDOSResources.getTranslate("Document") + " : " + docEntry + ", " + BDOSResources.getTranslate("PaymentID") + " : " + paymentID;  //სტატუსების განახლება წარმატებით შესრულდა, მაგრამ ვერ მოხერხდა დოკუმენტის განახლება                  
+                                    info = BDOSResources.getTranslate("TheDocumentSStatusHasBeenUpdatedSuccessfully") + ", " + BDOSResources.getTranslate("ButTheDocumentFailedToUpdate") + "! " + errMsg + BDOSResources.getTranslate("Document") + " : " + docEntry + ", " + BDOSResources.getTranslate("PaymentID") + " : " + paymentID;  //სტატუსების განახლება წარმატებით შესრულდა, მაგრამ ვერ მოხერხდა დოკუმენტის განახლება
                                 }
                                 else
                                 {
@@ -7275,8 +7282,8 @@ namespace BDO_Localisation_AddOn
             ""OVPM"".""U_posBPaymnt"" AS ""PositionBatchPayment"",
             ""OVPM"".""U_uniqueID"" AS ""UniqueID""
 
-            FROM ""OVPM"" AS ""OVPM"" 
-           
+            FROM ""OVPM"" AS ""OVPM""
+
             WHERE ""OVPM"".""DocEntry"" IN (" + string.Join(",", docEntryList) + ") " +
             @"AND ((""OVPM"".""U_paymentID"" IS NOT NULL AND ""OVPM"".""U_paymentID"" != '')
             OR (""OVPM"".""U_bPaymentID"" IS NOT NULL AND ""OVPM"".""U_bPaymentID"" != ''))";
@@ -7337,7 +7344,7 @@ namespace BDO_Localisation_AddOn
                                         int errCode;
                                         string errMsg;
                                         Program.oCompany.GetLastError(out errCode, out errMsg);
-                                        info = BDOSResources.getTranslate("TheDocumentSStatusHasBeenUpdatedSuccessfully") + ", " + BDOSResources.getTranslate("ButTheDocumentFailedToUpdate") + "! " + errMsg + BDOSResources.getTranslate("Document") + " : " + docEntry + ", " + BDOSResources.getTranslate("PaymentID") + " : " + paymentID;  //სტატუსების განახლება წარმატებით შესრულდა, მაგრამ ვერ მოხერხდა დოკუმენტის განახლება                  
+                                        info = BDOSResources.getTranslate("TheDocumentSStatusHasBeenUpdatedSuccessfully") + ", " + BDOSResources.getTranslate("ButTheDocumentFailedToUpdate") + "! " + errMsg + BDOSResources.getTranslate("Document") + " : " + docEntry + ", " + BDOSResources.getTranslate("PaymentID") + " : " + paymentID;  //სტატუსების განახლება წარმატებით შესრულდა, მაგრამ ვერ მოხერხდა დოკუმენტის განახლება
                                     }
                                     else
                                     {
@@ -7395,7 +7402,7 @@ namespace BDO_Localisation_AddOn
                                             int errCode;
                                             string errMsg;
                                             Program.oCompany.GetLastError(out errCode, out errMsg);
-                                            info = BDOSResources.getTranslate("TheDocumentSStatusHasBeenUpdatedSuccessfully") + ", " + BDOSResources.getTranslate("ButTheDocumentFailedToUpdate") + "! " + errMsg + BDOSResources.getTranslate("Document") + " : " + docEntry + ", " + BDOSResources.getTranslate("BatchPaymentID") + " : " + batchPaymentIDTXT;  //სტატუსების განახლება წარმატებით შესრულდა, მაგრამ ვერ მოხერხდა დოკუმენტის განახლება                  
+                                            info = BDOSResources.getTranslate("TheDocumentSStatusHasBeenUpdatedSuccessfully") + ", " + BDOSResources.getTranslate("ButTheDocumentFailedToUpdate") + "! " + errMsg + BDOSResources.getTranslate("Document") + " : " + docEntry + ", " + BDOSResources.getTranslate("BatchPaymentID") + " : " + batchPaymentIDTXT;  //სტატუსების განახლება წარმატებით შესრულდა, მაგრამ ვერ მოხერხდა დოკუმენტის განახლება
                                         }
                                         else
                                         {
@@ -7611,7 +7618,7 @@ namespace BDO_Localisation_AddOn
 
             string query = @"SELECT * 
             FROM (SELECT           
-	         T0.""DocEntry"" AS ""DocEntry"",	
+	         T0.""DocEntry"" AS ""DocEntry"",
 	         T0.""DocNum"" AS ""DocNum"",
 	         T0.""DocCur"" AS ""DocCur"",
 	         T0.""CardCode"" AS ""CardCode"",
@@ -7620,13 +7627,13 @@ namespace BDO_Localisation_AddOn
 	         T0.""DueDate"" AS ""DueDate"",
 	         T0.""OpenAmount"" AS ""OpenAmount"",
 	         T0.""InsTotal"" AS ""InsTotal"",
-	         T0.""OpenAmountFC"" AS ""OpenAmountFC"",	 
+	         T0.""OpenAmountFC"" AS ""OpenAmountFC"",
 	         T0.""InsTotalFC"" AS ""InsTotalFC"",
 	         T0.""ObjType"" AS ""ObjType"",
 	         T0.""Comments"" AS ""Comments"",
 	         T0.""InstlmntID"" AS ""InstallmentID"",
 	         T0.""LineID"" AS ""LineID""," + betweenDays + @"
-	         
+
 	        FROM ( SELECT
 	         TT0.""DocEntry"",
 	         TT0.""DocNum"" AS ""DocNum"",
@@ -7642,10 +7649,10 @@ namespace BDO_Localisation_AddOn
 	         SUM(TT1.""InsTotal"" - TT1.""PaidToDate""-TT1.""WTSum""+TT1.""WTApplied"") AS ""OpenAmount"",
 	 	         SUM(TT1.""InsTotal"") AS ""InsTotal"",
 	         SUM(TT1.""InsTotalFC"" - TT1.""PaidFC""-TT1.""WTSumFC""+TT1.""WTAppliedF"") AS ""OpenAmountFC"",
-	         SUM(TT1.""InsTotalFC"") AS ""InsTotalFC"" 
-		        FROM OPCH TT0 
-		        INNER JOIN PCH6 TT1 ON TT0.""DocEntry"" = TT1.""DocEntry"" 
-		        INNER JOIN OCRD T3 ON TT0.""CardCode"" = T3.""CardCode"" 
+	         SUM(TT1.""InsTotalFC"") AS ""InsTotalFC""
+		        FROM OPCH TT0
+		        INNER JOIN PCH6 TT1 ON TT0.""DocEntry"" = TT1.""DocEntry""
+		        INNER JOIN OCRD T3 ON TT0.""CardCode"" = T3.""CardCode""
 		        GROUP BY TT0.""DocEntry"",
 	         TT0.""DocNum"",
 	         TT0.""DocCur"",
@@ -7655,9 +7662,9 @@ namespace BDO_Localisation_AddOn
 	         TT1.""DueDate"",
 	         TT0.""ObjType"",
 	         TT0.""Comments"",
-	         TT1.""InstlmntID"" 
+	         TT1.""InstlmntID""
 		        UNION ALL SELECT
-	         TT0.""DocEntry"",	
+	         TT0.""DocEntry"",
 	         TT0.""DocNum"" AS ""DocNum"",
 	         TT0.""DocCur"" AS ""DocCur"",
 	         T3.""CardCode"" AS ""CardCode"",
@@ -7671,10 +7678,10 @@ namespace BDO_Localisation_AddOn
 	         -SUM(TT1.""InsTotal"" - TT1.""PaidToDate""-TT1.""WTSum""+TT1.""WTApplied"")*-1 AS ""OpenAmount"",
 	         -SUM(TT1.""InsTotal"")*-1 AS ""InsTotal"",
 	         -SUM(TT1.""InsTotalFC"" - TT1.""PaidFC""-TT1.""WTSumFC""+TT1.""WTAppliedF"")*-1 AS ""OpenAmountFC"",
-	         -SUM(TT1.""InsTotalFC"")*-1 AS ""InsTotalFC"" 
-		        FROM OCPI TT0 
-		        INNER JOIN CPI6 TT1 ON TT0.""DocEntry"" = TT1.""DocEntry"" 
-		        INNER JOIN OCRD T3 ON TT0.""CardCode"" = T3.""CardCode"" 
+	         -SUM(TT1.""InsTotalFC"")*-1 AS ""InsTotalFC""
+		        FROM OCPI TT0
+		        INNER JOIN CPI6 TT1 ON TT0.""DocEntry"" = TT1.""DocEntry""
+		        INNER JOIN OCRD T3 ON TT0.""CardCode"" = T3.""CardCode""
 		        GROUP BY TT0.""DocEntry"",
 	         TT0.""DocNum"",
 	         TT0.""DocCur"",
@@ -7701,10 +7708,10 @@ namespace BDO_Localisation_AddOn
 	         SUM(TT1.""InsTotal"" - TT1.""PaidToDate""-TT1.""WTSum""+TT1.""WTApplied"")*-1 AS ""OpenAmount"",
 	         SUM(TT1.""InsTotal"")*-1 AS ""InsTotal"",
 	         SUM(TT1.""InsTotalFC"" - TT1.""PaidFC""-TT1.""WTSumFC""+TT1.""WTAppliedF"")*-1 AS ""OpenAmountFC"",
-	         SUM(TT1.""InsTotalFC"")*-1 AS ""InsTotalFC"" 
-		        FROM ORPC TT0 
-		        INNER JOIN RPC6 TT1 ON TT0.""DocEntry"" = TT1.""DocEntry"" 
-		        INNER JOIN OCRD T3 ON TT0.""CardCode"" = T3.""CardCode"" 
+	         SUM(TT1.""InsTotalFC"")*-1 AS ""InsTotalFC""
+		        FROM ORPC TT0
+		        INNER JOIN RPC6 TT1 ON TT0.""DocEntry"" = TT1.""DocEntry""
+		        INNER JOIN OCRD T3 ON TT0.""CardCode"" = T3.""CardCode""
 		        GROUP BY TT0.""DocEntry"",
 	         TT0.""DocNum"",
 	         TT0.""DocCur"",
@@ -7715,9 +7722,9 @@ namespace BDO_Localisation_AddOn
 	         TT0.""ObjType"",
 	         TT0.""Comments"",
 	         TT1.""InstlmntID"" --
- 
+
 		        UNION ALL SELECT
-	         TT0.""DocEntry"",	
+	         TT0.""DocEntry"",
 	         TT0.""DocNum"" AS ""DocNum"",
 	         TT0.""DocCur"" AS ""DocCur"",
 	         T3.""CardCode"" AS ""CardCode"",
@@ -7731,10 +7738,10 @@ namespace BDO_Localisation_AddOn
 	         -SUM(TT1.""InsTotal"" - TT1.""PaidToDate""-TT1.""WTSum""+TT1.""WTApplied"")*-1 AS ""OpenAmount"",
 	         -SUM(TT1.""InsTotal"")*-1 AS ""InsTotal"",
 	         -SUM(TT1.""InsTotalFC"" - TT1.""PaidFC""-TT1.""WTSumFC""+TT1.""WTAppliedF"")*-1 AS ""OpenAmountFC"",
-	         -SUM(TT1.""InsTotalFC"")*-1 AS ""InsTotalFC"" 
-		        FROM ODPO TT0 
-		        INNER JOIN DPO6 TT1 ON TT0.""DocEntry"" = TT1.""DocEntry"" 
-		        INNER JOIN OCRD T3 ON TT0.""CardCode"" = T3.""CardCode"" 
+	         -SUM(TT1.""InsTotalFC"")*-1 AS ""InsTotalFC""
+		        FROM ODPO TT0
+		        INNER JOIN DPO6 TT1 ON TT0.""DocEntry"" = TT1.""DocEntry""
+		        INNER JOIN OCRD T3 ON TT0.""CardCode"" = T3.""CardCode""
 		        GROUP BY TT0.""DocEntry"",
 	         TT0.""DocNum"",
 	         TT0.""DocCur"",
@@ -7744,7 +7751,7 @@ namespace BDO_Localisation_AddOn
 	         TT1.""DueDate"",
 	         TT0.""ObjType"",
 	         TT0.""Comments"",
-	         TT1.""InstlmntID"" 
+	         TT1.""InstlmntID""
 		        UNION ALL SELECT
 	         TT0.""TransId"" AS ""DocEntry"",
 	         TT0.""Number"" AS ""DocNum"",
@@ -7760,17 +7767,17 @@ namespace BDO_Localisation_AddOn
 	         -SUM(TT1.""BalDueDeb"" - TT1.""BalDueCred"") AS ""OpenAmount"",
 	         -SUM(TT1.""Debit"" - TT1.""Credit"" ) AS ""InsTotal"",
 	         -SUM(TT1.""BalFcDeb"" - TT1.""BalFcCred"") AS ""OpenAmountFC"",
-	         -SUM(TT1.""FCDebit"" - TT1.""FCCredit"" ) AS ""InsTotalFC"" 
-		        FROM OJDT TT0 
-		        INNER JOIN JDT1 TT1 ON TT0.""TransId"" = TT1.""TransId"" 
-		        INNER JOIN OCRD T3 ON TT1.""ShortName"" = T3.""CardCode""  
-		        --AND TT1.""ShortName"" = N'"" + cardCodeE + @""' 
+	         -SUM(TT1.""FCDebit"" - TT1.""FCCredit"" ) AS ""InsTotalFC""
+		        FROM OJDT TT0
+		        INNER JOIN JDT1 TT1 ON TT0.""TransId"" = TT1.""TransId""
+		        INNER JOIN OCRD T3 ON TT1.""ShortName"" = T3.""CardCode""
+		        --AND TT1.""ShortName"" = N'"" + cardCodeE + @""'
 		        AND TT0.""TransType"" IN ('30',
 	         '24',
-	         '46') 
-		    AND TT0.""BtfStatus"" = 'O' 
-		    AND (""TT1"".""BalDueDeb"" > '0' 
-			    OR ""TT1"".""BalDueCred"" > '0') 
+	         '46')
+		    AND TT0.""BtfStatus"" = 'O'
+		    AND (""TT1"".""BalDueDeb"" > '0'
+			    OR ""TT1"".""BalDueCred"" > '0')
 		    AND ""TT1"".""DprId"" IS NULL
 		     GROUP BY TT0.""TransId"",
 	             	     TT0.""Number"",
@@ -7782,15 +7789,15 @@ namespace BDO_Localisation_AddOn
 	             	     TT0.""ObjType"",
 	             	     TT1.""LineMemo"",
                          TT1.""Line_ID"") T0
- 
-	        ) AS ""OrderedInvoicesWithOpenBalance"" 
-            INNER JOIN 
+
+	        ) AS ""OrderedInvoicesWithOpenBalance""
+            INNER JOIN
             (SELECT
                 ""PDF2"".""DocNum"" AS ""PaymentDocEntry"",
                 ""PDF2"".""DocEntry"" AS ""InvoiceDocEntry"",
 	            ""PDF2"".""InvType"",
                 ""PDF2"".""AppliedFC"",
-                ""PDF2"".""InstId"",	            
+                ""PDF2"".""InstId"",
                 ""PDF2"".""DocLine""
                 FROM ""PDF2"" AS ""PDF2""
                 WHERE ""PDF2"".""DocNum"" ='" + docEntry + @"'
@@ -7800,11 +7807,11 @@ namespace BDO_Localisation_AddOn
                 ""VPM2"".""DocEntry"" AS ""InvoiceDocEntry"",
 	            ""VPM2"".""InvType"",
                 ""VPM2"".""AppliedFC"",
-                ""VPM2"".""InstId"",	            
+                ""VPM2"".""InstId"",
                 ""VPM2"".""DocLine""
                 FROM ""VPM2"" AS ""VPM2""
-                WHERE ""VPM2"".""DocNum"" ='" + docEntry + @"') AS ""OutgoingPaymentInvoices"" 
-            ON (""ObjType"" = ""OutgoingPaymentInvoices"".""InvType"" 
+                WHERE ""VPM2"".""DocNum"" ='" + docEntry + @"') AS ""OutgoingPaymentInvoices""
+            ON (""ObjType"" = ""OutgoingPaymentInvoices"".""InvType""
             AND ""DocEntry"" = ""InvoiceDocEntry"" AND  ""InstallmentID"" = ""InstId"")
             WHERE ""PaymentDocEntry"" = " + docEntry +
             @" ORDER BY ""DueDate"", ""DocNum""";
