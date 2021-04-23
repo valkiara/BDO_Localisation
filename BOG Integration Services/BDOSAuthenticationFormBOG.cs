@@ -107,29 +107,40 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             }
         }
 
+        public class WebDriverController : IDisposable
+        {
+            public IWebDriver Driver { get; set; }
+
+            public void Dispose()
+            {
+                this.Driver.Dispose();
+            }
+        }
+
         private static void HandleChromeCase(string authorizeUrl)
         {
             var chromeDriverService = ChromeDriverService.CreateDefaultService();
             chromeDriverService.HideCommandPromptWindow = true;
-            IWebDriver driver = new ChromeDriver(chromeDriverService, new ChromeOptions())
+
+            using (var controller = new WebDriverController())
             {
-                Url = authorizeUrl
-            };
+                controller.Driver = new ChromeDriver(chromeDriverService, new ChromeOptions())
+                {
+                    Url = authorizeUrl
+                };
 
-            while (true)
-            {
-                if (driver == null)
-                    return;
+                while (true)
+                {
+                    if (controller.Driver == null)
+                        return;
 
-                string url = driver.Url;
-                _authorizeResponse = GetAuthorizeResponse(url);
+                    string url = controller.Driver.Url;
+                    _authorizeResponse = GetAuthorizeResponse(url);
 
-                if (_authorizeResponse != null)
-                    break;
+                    if (_authorizeResponse != null)
+                        break;
+                }
             }
-
-            driver.Quit();
-
             HandleResponse();
         }
 
