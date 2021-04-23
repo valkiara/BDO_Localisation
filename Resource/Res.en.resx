@@ -3700,4 +3700,7 @@
   <data name="AccrueDayAfter" xml:space="preserve">
     <value>Accrue Day After</value>
   </data>
+  <data name="BOGAuthForm" xml:space="preserve">
+    <value>BOG Auth. Form</value>
+  </data>
 </root>
