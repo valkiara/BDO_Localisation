@@ -500,8 +500,8 @@ namespace BDO_Localisation_AddOn
                 Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
                 return;
             }
-
-            var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "paymentToEmployee" : "";
+            
+            var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "PE" : "";
 
             string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType);
             string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(null, account, startDate, endDate, bankProgram, allDocuments);
@@ -1119,6 +1119,7 @@ namespace BDO_Localisation_AddOn
                         project = oRecordSet.Fields.Item("Project").Value.ToString();
                         if (oRecordSet.RecordCount > 1)
                         {
+                            if(MultDocEntry.IndexOf(docEntry + ",") <0)
                             MultDocEntry = MultDocEntry + docEntry + ",";
                         }
                     }
@@ -1389,7 +1390,7 @@ namespace BDO_Localisation_AddOn
                     oDataTable.Rows.Add();
                     oDataTable.SetValue("LineNum", row, row + 1);
                     oDataTable.SetValue("CheckBox", row, "N");
-                    oDataTable.SetValue("DocEntry", row, docEntry);
+                    oDataTable.SetValue("DocEntry", row, (MultDocEntry == "" ? docEntry : MultDocEntry));
                     oDataTable.SetValue("Project", row, project);
                     oDataTable.SetValue("DocNum", row, docNum);
                     oDataTable.SetValue("PaymentID", row, paymentID);
@@ -2983,7 +2984,7 @@ namespace BDO_Localisation_AddOn
                     listValidValuesDict = new Dictionary<string, string>
                     {
                         {"1", BDOSResources.getTranslate("All")},
-                        {"2", BDOSResources.getTranslate("Salary")}
+                        {"2", BDOSResources.getTranslate("PaymentToEmployee")}
                     };
 
                     formItems = new Dictionary<string, object>();
@@ -3845,7 +3846,7 @@ namespace BDO_Localisation_AddOn
                     listValidValuesDict.Add(OperationTypeFromIntBank.TreasuryTransfer.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TreasuryTransfer.ToString()));
                     listValidValuesDict.Add(OperationTypeFromIntBank.WithoutSalary.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.WithoutSalary.ToString()));
                     listValidValuesDict.Add(OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString(), BDOSResources.getTranslate(OperationTypeFromIntBank.TreasuryTransferPaymentOrderIoBP.ToString()));
-
+                    
                     formItems = new Dictionary<string, object>();
                     itemName = "transTypCB"; //10 characters
                     formItems.Add("isDataSource", true);

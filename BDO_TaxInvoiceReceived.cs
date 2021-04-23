@@ -2597,6 +2597,9 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Item("U_wbNumber");
             oColumn.DataBind.SetBound(true, "@BDO_TXR1", "U_wbNumber");
 
+            SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+            vatAmount.ColumnSetting.SumType = SAPbouiCOM.BoColumnSumType.bst_Manual;
+
             oMatrix.Clear();
             oDBDataSource.Query();
             oMatrix.LoadFromDataSource();
@@ -3859,7 +3862,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string DocEntry = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0).Trim();
-
+                
                 setVisibleFormItems(oForm);
 
                 //// გატარებები
@@ -6376,7 +6379,7 @@ namespace BDO_Localisation_AddOn
                                 setVisibleFormItems(oForm);
                         }
                     }
-
+                    
                     else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_GOT_FOCUS)
                     {
                         if (pVal.ItemUID == "wblMTR")
@@ -6423,7 +6426,7 @@ namespace BDO_Localisation_AddOn
                                 string opDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_opDate", 0);
                                 SAPbouiCOM.Form oFormIncomingFormDocuments;
                                 BDO_TaxInvoiceReceivedDetailed.createForm(oForm, out oFormIncomingFormDocuments, CardCode, opDate, out errorText);
-                                BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments,  out errorText);
+                                BDO_TaxInvoiceReceivedDetailed.fillInvoicesMTR(oFormIncomingFormDocuments, out errorText);
                             }
                             else if (pVal.ItemUID == "addDPinv")
 
@@ -6462,7 +6465,7 @@ namespace BDO_Localisation_AddOn
                                 if (Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouWantToCreateJEForDownPayment") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "") == 1)
                                 {
                                     int docEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("DocEntry", 0));
-                                    string taxDate=oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_taxDate", 0);
+                                    string taxDate = oForm.DataSources.DBDataSources.Item("@BDO_TAXR").GetValue("U_taxDate", 0);
                                     if (taxDate != null) postDocument(docEntry, out errorText, DateTime.ParseExact(taxDate, "yyyyMMdd", CultureInfo.InvariantCulture));
                                     else postDocument(docEntry, out errorText);
                                     if (!string.IsNullOrEmpty(errorText))
@@ -6472,7 +6475,7 @@ namespace BDO_Localisation_AddOn
 
                                 }
                             }
-                        }              
+                        }
                         else
                         {
                             if (pVal.ItemUID == "operationB")
@@ -6488,8 +6491,32 @@ namespace BDO_Localisation_AddOn
                     {
                         comboSelect(oForm, pVal);
                     }
+
+                    if ((pVal.ItemChanged && pVal.ColUID == "U_baseDTxt") || (pVal.ItemUID == "addMTRB") || (pVal.ItemUID == "delMTRB") 
+                        || (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.ColUID == "U_baseDocT") || (pVal.ItemUID == "wblMTR"))
+                    {
+                        CalculateVatAmount(oForm);
+                    }
                 }
             }
+        }
+
+        private static void CalculateVatAmount(SAPbouiCOM.Form oForm)
+        {
+            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("wblMTR").Specific;
+
+            SAPbouiCOM.Column vatAmount = oMatrix.Columns.Item("U_tAmtBsDc");
+            decimal sum = 0;
+            for (int i = 0; i < oMatrix.RowCount; i++)
+            {
+                string docType = oMatrix.Columns.Item("U_baseDocT").Cells.Item(i + 1).Specific.Value;
+                string docValue = oMatrix.Columns.Item("U_tAmtBsDc").Cells.Item(i + 1).Specific.Value;
+                decimal vatAmountValue = Convert.ToDecimal(docValue);
+                if (docType == "1") sum -= vatAmountValue;
+                else sum += vatAmountValue;
+            }
+
+            vatAmount.ColumnSetting.SumValue = sum.ToString();
         }
 
         private static bool checkDocStatusForBaseDocAdd(SAPbouiCOM.Form oForm, out string ErrorText)
