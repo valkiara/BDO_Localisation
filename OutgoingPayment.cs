@@ -2454,11 +2454,16 @@ namespace BDO_Localisation_AddOn
                     CardCode = "";
                 }
 
-                decimal Amount;
+                var Amount = decimal.Zero;
+                var AmountFC = decimal.Zero;
+                var AmountLC = Math.Round(Convert.ToDecimal(oRecordSet.Fields.Item("TrsfrSum").Value), 2);
                 if (TransferCurrency == Program.LocalCurrency)
                     Amount = Convert.ToDecimal(oRecordSet.Fields.Item("TrsfrSum").Value);
                 else
+                {
                     Amount = Convert.ToDecimal(oRecordSet.Fields.Item("TrsfrSumFC").Value);
+                    AmountFC = Math.Round(Convert.ToDecimal(oRecordSet.Fields.Item("TrsfrSumFC").Value), 2);
+                }
                 Amount = Math.Round(Amount, 2); //დამრგვალება აუცილებლად უნდა იყოს 2 ციფრამდე, ინტ.ბანკის გამო
 
                 dataForImport.Add("DebitBankCode", bankCode);
@@ -2467,6 +2472,8 @@ namespace BDO_Localisation_AddOn
                 dataForImport.Add("Currency", TransferCurrency);
                 dataForImport.Add("BeneficiaryName", BeneficiaryName);
                 dataForImport.Add("Amount", Amount);
+                dataForImport.Add("AmountLC", AmountLC);
+                dataForImport.Add("AmountFC", AmountFC);
                 dataForImport.Add("BeneficiaryTaxCode", BeneficiaryTaxCode);
                 dataForImport.Add("BeneficiaryAddress", BeneficiaryAddress);
                 dataForImport.Add("RecipientCity", RecipientCity);
