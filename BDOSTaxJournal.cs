@@ -624,7 +624,7 @@ namespace BDO_Localisation_AddOn
             DateTime DeclDate = new DateTime(DeclYear, DeclMonth, 1);
 
             //დეკლარაციის ნომრების მიღება
-            DataTable TaxDeclTable = oTaxInvoice.get_seq_nums(DeclDateString, out errorText);
+            DataTable TaxDeclTable = oTaxInvoice.get_seq_nums(DeclDateString);
 
             for (int i = 0; i < TaxDeclTable.Rows.Count; i++)
             {
@@ -1453,7 +1453,7 @@ namespace BDO_Localisation_AddOn
 
                 if (checkedLine)
                 {
-                    int TxId = Convert.ToInt32(oMatrix.Columns.Item("TxID").Cells.Item(row).Specific.Value);
+                    long TxId = Convert.ToInt64(oMatrix.Columns.Item("TxID").Cells.Item(row).Specific.Value);
                     int docEntry = Convert.ToInt32(oMatrix.Columns.Item("Document").Cells.Item(row).Specific.Value);
                     string statusDoc = oMatrix.Columns.Item("StatusDoc").Cells.Item(row).Specific.Value;
                     //oMatrix.Columns.Item("TxChkBx").Cells.Item(row).Specific.Checked = false;
@@ -1776,7 +1776,7 @@ namespace BDO_Localisation_AddOn
             DateTime DeclDate = new DateTime(DeclYear, DeclMonth, 1);
 
             //დეკლარაციის ნომრების მიღება
-            DataTable TaxDeclTable = oTaxInvoice.get_seq_nums(DeclDateString, out errorText);
+            DataTable TaxDeclTable = oTaxInvoice.get_seq_nums(DeclDateString);
 
             for (int i = 0; i < TaxDeclTable.Rows.Count; i++)
             {
