@@ -3667,4 +3667,7 @@
   <data name="Debit/CreditValueIsNegativeInOneOrMoreRow" xml:space="preserve">
     <value>დებეტი/კრედიტის ველის მნიშვნელობა უარყოფითია</value>
   </data>
+  <data name="AccrueDayAfter" xml:space="preserve">
+    <value>დარიცხვა შემდეგ დღეს</value>
+  </data>
 </root>
