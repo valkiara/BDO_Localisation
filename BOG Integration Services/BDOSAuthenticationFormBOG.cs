@@ -97,23 +97,13 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
 
             oRecordSet.DoQuery(getAuthFormQuery);
 
-            if(oRecordSet.RecordCount > 0)
+            if (oRecordSet.RecordCount > 0)
             {
                 return oRecordSet.Fields.Item("U_AuthForm").Value;
             }
             else
             {
                 return string.Empty;
-            }
-        }
-
-        private class WebDriverController : IDisposable
-        {
-            public IWebDriver Driver { get; set; }
-
-            public void Dispose()
-            {
-                this.Driver.Dispose();
             }
         }
 
@@ -486,6 +476,16 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             }
 
             return null;
+        }
+
+        private class WebDriverController : IDisposable
+        {
+            public IWebDriver Driver { get; set; }
+
+            public void Dispose()
+            {
+                this.Driver.Dispose();
+            }
         }
     }
 }
