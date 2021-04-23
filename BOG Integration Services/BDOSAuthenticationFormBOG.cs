@@ -107,7 +107,7 @@ namespace BDO_Localisation_AddOn.BOG_Integration_Services
             }
         }
 
-        public class WebDriverController : IDisposable
+        private class WebDriverController : IDisposable
         {
             public IWebDriver Driver { get; set; }
 
