@@ -82,10 +82,11 @@ namespace BDO_Localisation_AddOn
         {
             BubbleEvent = true;
             string errorText = null;
-            SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
+                SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
+
                 if (!Program.FORM_LOAD_FOR_ACTIVATE && pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_ACTIVATE && !pVal.BeforeAction)
                 {
                     oForm.Items.Item("LandCostE").Specific.Value = "";
