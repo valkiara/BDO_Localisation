@@ -57,7 +57,7 @@ namespace BDO_Localisation_AddOn
         public static string WBAUT = null;
         public static string TXAUT = null;
         public static bool DECAUT = false;
-        
+
 
     static void Main(string[] args)
         {
@@ -143,7 +143,7 @@ namespace BDO_Localisation_AddOn
 
                 MainCurrency = CurrencyB1.getMainCurrency(out errorText);
 
-                
+
 
                 return connectResult;
             }
@@ -319,11 +319,11 @@ namespace BDO_Localisation_AddOn
 
             if (!localisationAddonLicensed) return;
 
-            //preview  standart    
+            //preview  standart
             if (pVal.BeforeAction && pVal.MenuUID == "6005")
             {
                 SAPbouiCOM.Form oDocForm = uiApp.Forms.ActiveForm;
-                
+
 
                 if (oDocForm.TypeEx == "141" || oDocForm.TypeEx == "60092")
                 {
@@ -1154,7 +1154,7 @@ namespace BDO_Localisation_AddOn
                         {
                             BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
-                        
+
                         //----------------------------->A/P Invoice<-----------------------------
                         else if (oForm.TypeEx == "141")
                         {
@@ -2444,7 +2444,7 @@ namespace BDO_Localisation_AddOn
                     BDO_TaxInvoiceReceivedDetailed.uiApp_ItemEvent(FormUID, ref pVal, out BubbleEvent);
                 }
 
-                
+
                 //----------------------------->Incomig documents<-----------------------------
                 else if (pVal.FormUID == "BDOSINCDOC")
                 {
@@ -2511,7 +2511,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 //----------------------------->Withholding Tax Table<-----------------------------
-                else if (pVal.FormTypeEx == "60504") //from A/P Credit Memo, A/P Invoice, A/P Reserve Invoice, A/P Down Payment Request 
+                else if (pVal.FormTypeEx == "60504") //from A/P Credit Memo, A/P Invoice, A/P Reserve Invoice, A/P Down Payment Request
                 {
                     WithholdingTax.openTaxTableFromAPDocs(FormUID, ref pVal, out BubbleEvent);
                 }

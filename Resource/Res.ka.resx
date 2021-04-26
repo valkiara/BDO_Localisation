@@ -3670,4 +3670,7 @@
   <data name="AccrueDayAfter" xml:space="preserve">
     <value>დარიცხვა შემდეგ დღეს</value>
   </data>
+  <data name="BOGAuthForm" xml:space="preserve">
+    <value>საქართველოს ბანკის ავტორიზაციის ფორმა</value>
+  </data>
 </root>
