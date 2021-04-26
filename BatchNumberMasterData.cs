@@ -55,7 +55,7 @@ namespace BDO_Localisation_AddOn
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "UsefulLife");
+            fieldskeysMap.Add("Name", "BDOSUsLife");
             fieldskeysMap.Add("TableName", "OBTN");
             fieldskeysMap.Add("Description", "Useful Life");
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
