@@ -476,8 +476,6 @@ namespace BDO_Localisation_AddOn
 
         private static int CreateDocument(SAPbouiCOM.Form oForm, DateTime accrMnth, DateTime postingDate, bool isRetirement)
         {
-            string errorText = null;
-
             SAPbobsCOM.CompanyService oCompanyService = Program.oCompany.GetCompanyService();
             SAPbobsCOM.GeneralService oGeneralService = oCompanyService.GetGeneralService("UDO_F_BDOSDEPACR_D");
             SAPbobsCOM.GeneralData oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
@@ -517,7 +515,7 @@ namespace BDO_Localisation_AddOn
                 {
                     DataTable jrnLinesDT = BDOSDepreciationAccrualDocument.createAdditionalEntries(null, oGeneralData, 0, postingDate);
 
-                    BDOSDepreciationAccrualDocument.JrnEntry(docEntry.ToString(), docEntry.ToString(), postingDate, jrnLinesDT, "", out errorText);
+                    BDOSDepreciationAccrualDocument.JrnEntry(docEntry.ToString(), docEntry.ToString(), postingDate, jrnLinesDT, "", out var errorText);
 
                     if (errorText != null)
                         throw new Exception(errorText);
@@ -798,7 +796,13 @@ namespace BDO_Localisation_AddOn
             query.Append("               \"OITM\".\"ItmsGrpCod\", \n");
             query.Append("               \"OITB\".\"ItmsGrpNam\", \n");
             query.Append("               \"OIBT\".\"Quantity\", \n");
-            query.Append("               \"OITM\".\"U_BDOSUsLife\"                                        AS \"UsefulLife\", \n");
+
+            query.Append("               CASE WHEN IFNUll(\"OBTN\".\"U_UsefulLife\", 0) = 0 \n");
+            query.Append("                    THEN \n");
+            query.Append("                      CASE WHEN IFNUll(\"OITM\".\"U_BDOSUsLife\", 0) = 0 \n");
+            query.Append("                      THEN \"OITB\".\"U_BDOSUsLife\" ELSE \"OITM\".\"U_BDOSUsLife\" END \n");
+            query.Append("               ELSE \"OBTN\".\"U_UsefulLife\" END                                         AS \"UsefulLife\", \n");
+
             query.Append("               CASE WHEN T2.\"U_DeprAmt\" IS NULL THEN 0 ELSE T2.\"U_DeprAmt\" END        AS \"AlreadyDepreciatedAmt\", \n");
             query.Append("               T2.\"DepreciationDocEntry\", \n");
             query.Append("               \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\"                             AS \"PurchasePrice\", \n");
@@ -872,7 +876,15 @@ namespace BDO_Localisation_AddOn
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
             query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
             query.Append("                         AND T4.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("          WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0 AND \"OIBT\".\"Quantity\" > 0 \n");
+
+            query.Append("           WHERE \n");
+            query.Append("               (CASE WHEN IFNUll(\"OBTN\".\"U_UsefulLife\", 0) = 0 \n");
+            query.Append("                    THEN \n");
+            query.Append("                      CASE WHEN IFNUll(\"OITM\".\"U_BDOSUsLife\", 0) = 0 \n");
+            query.Append("                      THEN \"OITB\".\"U_BDOSUsLife\" ELSE \"OITM\".\"U_BDOSUsLife\" END \n");
+            query.Append("               ELSE \"OBTN\".\"U_UsefulLife\" END) > 0 \n");
+            query.Append("               AND \"OBTN\".\"Quantity\" > 0 AND \"OIBT\".\"Quantity\" > 0 \n");
+
             query.Append("        ) AS T0 \n");
             query.Append("ORDER BY T0.\"ItemCode\", T0.\"DistNumber\", \n");
             query.Append("T0.\"LastDeprDocDate\" DESC");
@@ -929,7 +941,13 @@ namespace BDO_Localisation_AddOn
             query.Append("               \"OITM\".\"ItmsGrpCod\", \n");
             query.Append("               \"OITB\".\"ItmsGrpNam\", \n");
             query.Append("               \"OIBT\".\"Quantity\", \n");
-            query.Append("               \"OITM\".\"U_BDOSUsLife\"                                        AS \"UsefulLife\", \n");
+
+            query.Append("               CASE WHEN IFNUll(\"OBTN\".\"U_UsefulLife\", 0) = 0 \n");
+            query.Append("                    THEN \n");
+            query.Append("                      CASE WHEN IFNUll(\"OITM\".\"U_BDOSUsLife\", 0) = 0 \n");
+            query.Append("                      THEN \"OITB\".\"U_BDOSUsLife\" ELSE \"OITM\".\"U_BDOSUsLife\" END \n");
+            query.Append("               ELSE \"OBTN\".\"U_UsefulLife\" END                                         AS \"UsefulLife\", \n");
+
             query.Append("               CASE WHEN T2.\"U_DeprAmt\" IS NULL THEN 0 ELSE T2.\"U_DeprAmt\" END        AS \"AlreadyDepreciatedAmt\", \n");
             query.Append("               T2.\"DepreciationDocEntry\", \n");
             query.Append("               \"OBTN\".\"CostTotal\" / \"OBTN\".\"Quantity\"                             AS \"PurchasePrice\", \n");
@@ -1025,7 +1043,15 @@ namespace BDO_Localisation_AddOn
             query.Append("                          GROUP BY \"@BDOSDEPAC1\".\"U_DistNumber\", \"@BDOSDEPAC1\".\"U_ItemCode\") AS T4 \n");
             query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
             query.Append("                         AND T4.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
-            query.Append("          WHERE \"OITM\".\"U_BDOSUsLife\" > 0 AND \"OBTN\".\"Quantity\" > 0 AND \"OIBT\".\"Quantity\" > 0 \n");
+
+            query.Append("           WHERE \n");
+            query.Append("               (CASE WHEN IFNUll(\"OBTN\".\"U_UsefulLife\", 0) = 0 \n");
+            query.Append("                    THEN \n");
+            query.Append("                      CASE WHEN IFNUll(\"OITM\".\"U_BDOSUsLife\", 0) = 0 \n");
+            query.Append("                      THEN \"OITB\".\"U_BDOSUsLife\" ELSE \"OITM\".\"U_BDOSUsLife\" END \n");
+            query.Append("               ELSE \"OBTN\".\"U_UsefulLife\" END) > 0 \n");
+            query.Append("               AND \"OBTN\".\"Quantity\" > 0 AND \"OIBT\".\"Quantity\" > 0 \n");
+
             query.Append($"           AND (NEXT_DAY(LAST_DAY(\"OIBT\".\"InDate\")) < '{dateStr}' OR (\"OIBT\".\"BaseType\" = 67 AND LAST_DAY(\"OIBT\".\"InDate\") = '{dateStr}')) \n");
             query.Append("        ) AS T0 \n");
             query.Append("ORDER BY T0.\"ItemCode\", T0.\"DistNumber\", T0.\"InDate\", T0.\"LastDeprDocDate\" DESC) AS T0 \n");
