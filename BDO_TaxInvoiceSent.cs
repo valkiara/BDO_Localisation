@@ -5452,7 +5452,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string invID_st = oGeneralData.GetProperty("U_invID");
-                int inv_ID = Convert.ToInt32((string.IsNullOrEmpty(invID_st) ? "0" : invID_st));
+                long inv_ID = Convert.ToInt64(string.IsNullOrEmpty(invID_st) ? "0" : invID_st);
                 DateTime operation_date = oGeneralData.GetProperty("U_opDate");
                 bool corrInv = oGeneralData.GetProperty("U_corrInv") == "N" ? false : true;
                 string overhead_no = "";
@@ -5526,7 +5526,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 string k_invID_st = oGeneralDataCorr.GetProperty("U_invID");
-                int k_inv_ID = Convert.ToInt32((string.IsNullOrEmpty(k_invID_st) ? "0" : k_invID_st));
+                long k_inv_ID = Convert.ToInt64(string.IsNullOrEmpty(k_invID_st) ? "0" : k_invID_st);
                 DateTime operation_date = oGeneralData.GetProperty("U_opDate");
                 bool corrInv = oGeneralData.GetProperty("U_corrInv") == "N" ? false : true;
                 string corrType = oGeneralData.GetProperty("U_corrType");
@@ -5535,14 +5535,14 @@ namespace BDO_Localisation_AddOn
                     errorText = BDOSResources.getTranslate("CorrectionReasonNotIndicated");
                     return;
                 }
-                int k_id = 0; //დაბრუნდება ა/ფ ის ID
+                long k_id = 0; //დაბრუნდება ა/ფ ის ID
                 int k_type = Convert.ToInt32(corrType);
                 string overhead_no = "";
                 int b_s_user_id = 0;
 
                 operation_date = DateTime.TryParse(operation_date.ToString("yyyyMMdd") == "18991230" ? "" : operation_date.ToString(), out operation_date) == false ? DateTime.Today : operation_date;
 
-                bool response = oTaxInvoice.k_invoice(k_inv_ID, k_type, out k_id, out errorText);
+                bool response = oTaxInvoice.k_invoice(k_inv_ID, k_type, out k_id);
 
                 if (response == false)
                 {
@@ -5551,7 +5551,7 @@ namespace BDO_Localisation_AddOn
                 }
 
                 oGeneralData.SetProperty("U_invID", k_id.ToString());
-                int inv_ID = k_id;
+                long inv_ID = k_id;
 
                 string downPaymnt = oGeneralData.GetProperty("U_downPaymnt");
                 if (downPaymnt == "Y") //საკომპენსაციო თანხის (ავანსის) ანგარიშ-ფაქტურები
@@ -5598,7 +5598,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>ზედნადებების ცხრილის დამატება (ჯერ იშლება)</summary>
-        private static bool save_ntos_invoices_inv_nos(TaxInvoice oTaxInvoice, GeneralData oGeneralData, GeneralData oGeneralDataCorr, int inv_ID, out string errorText)
+        private static bool save_ntos_invoices_inv_nos(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, SAPbobsCOM.GeneralData oGeneralDataCorr, long inv_ID, out string errorText)
         {
             errorText = null;
             try
@@ -5637,8 +5637,8 @@ namespace BDO_Localisation_AddOn
                     for (int i = 0; i < countRS; i++)
                     {
                         taxDataRowRS = taxDataTableRS.Rows[i];
-                        //int id = Convert.ToInt32(taxDataRowRS["id"]); //ზედნადების ჩანაწერის უნიკალური ID
-                        //int inv_id = Convert.ToInt32(taxDataRowRS["inv_id"]); //ანგარიშ-ფაქტურის უნიკალური ნომერი
+                        //long id = Convert.ToInt64(taxDataRowRS["id"]); //ზედნადების ჩანაწერის უნიკალური ID
+                        //long inv_id = Convert.ToInt64(taxDataRowRS["inv_id"]); //ანგარიშ-ფაქტურის უნიკალური ნომერი
                         wbNumber = taxDataRowRS["overhead_no"].ToString(); //ზედნადების ნომერი
                         overhead_dt = Convert.ToDateTime(taxDataRowRS["overhead_dt"]); //ზედნადების თარიღი
                         //string overhead_dt_str = taxDataRowRS["overhead_dt_str"].ToString(); //ზედნადების თარიღი (სტრიქონი)  
@@ -5734,7 +5734,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>საქონლის ცხრილის დამატება (ჯერ იშლება)</summary>
-        private static bool save_invoice_desc(TaxInvoice oTaxInvoice, GeneralData oGeneralData, int inv_ID, out string errorText)
+        private static bool save_invoice_desc(TaxInvoice oTaxInvoice, SAPbobsCOM.GeneralData oGeneralData, long inv_ID, out string errorText)
         {
             errorText = null;
             try
@@ -5841,8 +5841,8 @@ namespace BDO_Localisation_AddOn
 
                     while (!oRecordSet.EoF)
                     {
-                        int id = 0; //ანგარიშ-ფაქტურის საქონლის მონაცემის უნიკალური ნომერი
-                        int inv_id = inv_ID; //ანგარიშ-ფაქტურის უნიკალური ნომერი
+                        long id = 0; //ანგარიშ-ფაქტურის საქონლის მონაცემის უნიკალური ნომერი
+                        long inv_id = inv_ID; //ანგარიშ-ფაქტურის უნიკალური ნომერი
                         string goods = oRecordSet.Fields.Item("W_NAME").Value.ToString(); //საქონლის დასახელება
                         string docType = oRecordSet.Fields.Item("DocType").Value.ToString();
                         string g_unit = oRecordSet.Fields.Item("InvntItem").Value == "N" || docType == "S" ? "მომსახურება" : oRecordSet.Fields.Item("UNIT_TXT").Value.ToString(); //საქონლის ერთეული
@@ -5900,7 +5900,7 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                int inv_ID = Convert.ToInt32(invID);
+                long inv_ID = Convert.ToInt64(invID);
 
                 bool corrInv = oGeneralData.GetProperty("U_corrInv") == "N" ? false : true;
                 Dictionary<string, object> responseDictionary = oTaxInvoice.get_invoice(inv_ID, out errorText); //(- არ აბრუნებს დადასტურების თარიღს, არ აბრუნებს უარყოფილია თუ არა (წაშლილი ა/ფ ჩანს))
@@ -5927,7 +5927,7 @@ namespace BDO_Localisation_AddOn
                     int seller_un_id = Convert.ToInt32(responseDictionary["seller_un_id"]);
                     int buyer_un_id = Convert.ToInt32(responseDictionary["buyer_un_id"]);
                     string overhead_no = responseDictionary["overhead_no"] == null ? "" : responseDictionary["overhead_no"].ToString();
-                    int k_id = Convert.ToInt32(responseDictionary["k_id"]);
+                    long k_id = Convert.ToInt64(responseDictionary["k_id"]);
                     int r_un_id = Convert.ToInt32(responseDictionary["r_un_id"]);
                     int k_type = Convert.ToInt32(responseDictionary["k_type"]);
                     int b_s_user_id = Convert.ToInt32(responseDictionary["b_s_user_id"]);
@@ -5938,7 +5938,7 @@ namespace BDO_Localisation_AddOn
                     string status = getStatusValueByStatusNumber(statusRS.ToString(), corrInv, refInv);
                     string invoice_no = oGeneralData.GetProperty("U_number");
 
-                    if (string.IsNullOrEmpty(invoice_no))
+                    if (string.IsNullOrEmpty(invoice_no) || invoice_no == "-1")
                     {
                         invoice_no = f_number;
                     }
@@ -5977,7 +5977,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static string getQueryArrayGoodsARInvoiceARCreditNoteARCorrectionInvoiceType(List<int> docEntryARInvoiceList, List<int> docEntryARCreditNoteList, List<int> docEntryARCorrectionInvoiceList, int inv_ID)
+        public static string getQueryArrayGoodsARInvoiceARCreditNoteARCorrectionInvoiceType(List<int> docEntryARInvoiceList, List<int> docEntryARCreditNoteList, List<int> docEntryARCorrectionInvoiceList, long inv_ID)
         {
             if (docEntryARInvoiceList.Count == 0)
                 docEntryARInvoiceList.Add(-99);
@@ -6197,7 +6197,7 @@ namespace BDO_Localisation_AddOn
             return query;
         }
 
-        private static string getQueryArrayGoodsARDownPaymentVATType(string baseDocEntry, int inv_ID)
+        private static string getQueryArrayGoodsARDownPaymentVATType(string baseDocEntry, long inv_ID)
         {
             string query = @"SELECT
             	 ""MNTB"".""ID"" AS ""ID"",
@@ -6265,7 +6265,7 @@ namespace BDO_Localisation_AddOn
             return query;
         }
 
-        private static string getQueryArrayGoodsARDownPaymentRequestType(string baseDocEntry, int inv_ID)
+        private static string getQueryArrayGoodsARDownPaymentRequestType(string baseDocEntry, long inv_ID)
         {
             string query = @"SELECT
             	 ""MNTB"".""ID"" AS ""ID"",
@@ -6337,7 +6337,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>საქონლის ცხრ. ნაწილის წაშლა ფაქტურაში</summary>
-        private static void delete_invoice_desc(TaxInvoice oTaxInvoice, int inv_ID, out string errorText)
+        private static void delete_invoice_desc(TaxInvoice oTaxInvoice, long inv_ID, out string errorText)
         {
             DataTable taxDataTableRS = oTaxInvoice.get_invoice_desc(inv_ID, out errorText);
             DataRow taxDataRowRS;
@@ -6346,8 +6346,8 @@ namespace BDO_Localisation_AddOn
             for (int i = 0; i < countRS; i++)
             {
                 taxDataRowRS = taxDataTableRS.Rows[i];
-                int id = Convert.ToInt32(taxDataRowRS["id"]); //ანგარიშ-ფაქტურის საქონლის მონაცემის უნიკალური ნომერი
-                int inv_id = Convert.ToInt32(taxDataRowRS["inv_id"]); //ანგარიშ-ფაქტურის უნიკალური ნომერი
+                long id = Convert.ToInt64(taxDataRowRS["id"]); //ანგარიშ-ფაქტურის საქონლის მონაცემის უნიკალური ნომერი
+                long inv_id = Convert.ToInt64(taxDataRowRS["inv_id"]); //ანგარიშ-ფაქტურის უნიკალური ნომერი
                 string goods = taxDataRowRS["goods"].ToString(); //საქონლის დასახელება
                 //taxDataRowRS["g_unit"].ToString(); //საქონლის ერთეული
                 //taxDataRowRS["g_number"].ToString(); //რაოდენობა
@@ -6372,7 +6372,7 @@ namespace BDO_Localisation_AddOn
         }
 
         /// <summary>ზედნადების ცხრ. ნაწილის წაშლა ფაქტურაში</summary>
-        private static void delete_ntos_invoices_inv_nos(TaxInvoice oTaxInvoice, int inv_ID, out string errorText)
+        private static void delete_ntos_invoices_inv_nos(TaxInvoice oTaxInvoice, long inv_ID, out string errorText)
         {
             DataTable taxDataTableRS = oTaxInvoice.get_ntos_invoices_inv_nos(inv_ID, out errorText);
             DataRow taxDataRowRS;
@@ -6381,8 +6381,8 @@ namespace BDO_Localisation_AddOn
             for (int i = 0; i < countRS; i++)
             {
                 taxDataRowRS = taxDataTableRS.Rows[i];
-                int id = Convert.ToInt32(taxDataRowRS["id"]); //ზედნადების ჩანაწერის უნიკალური ID
-                int inv_id = Convert.ToInt32(taxDataRowRS["inv_id"]); //ანგარიშ-ფაქტურის უნიკალური ნომერი
+                long id = Convert.ToInt64(taxDataRowRS["id"]); //ზედნადების ჩანაწერის უნიკალური ID
+                long inv_id = Convert.ToInt64(taxDataRowRS["inv_id"]); //ანგარიშ-ფაქტურის უნიკალური ნომერი
                 string overhead_no = taxDataRowRS["overhead_no"].ToString(); //ზედნადების ნომერი
                 DateTime overhead_dt = Convert.ToDateTime(taxDataRowRS["overhead_dt"]); //ზედნადების თარიღი
                 string overhead_dt_str = taxDataRowRS["overhead_dt_str"].ToString(); //ზედნადების თარიღი (სტრიქონი)
@@ -6422,13 +6422,13 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                int inv_ID = Convert.ToInt32(invID);
+                long inv_ID = Convert.ToInt64(invID);
 
                 int statusRS = corrInv == false ? 1 : 5;
 
                 statusRS = diplomat ? 6 : statusRS;
 
-                bool response = oTaxInvoice.change_invoice_status(inv_ID, statusRS, out errorText);
+                bool response = oTaxInvoice.change_invoice_status(inv_ID, statusRS);
                 if (response == false)
                 {
                     errorText = BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("Send") + " " + BDOSResources.getTranslate("DoneWithErrors") + " : " + errorText;
@@ -6457,8 +6457,8 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                int inv_ID = Convert.ToInt32(invID);
-                bool response = oTaxInvoice.change_invoice_status(inv_ID, -1, out errorText);
+                long inv_ID = Convert.ToInt64(invID);
+                bool response = oTaxInvoice.change_invoice_status(inv_ID, -1);
                 if (response == false)
                 {
                     errorText = BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("Delete") + " " + BDOSResources.getTranslate("DoneWithErrors") + " : " + errorText;
@@ -6501,8 +6501,8 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                int inv_ID = Convert.ToInt32(invID);
-                bool response = oTaxInvoice.change_invoice_status(inv_ID, 6, out errorText);
+                long inv_ID = Convert.ToInt64(invID);
+                bool response = oTaxInvoice.change_invoice_status(inv_ID, 6);
                 if (response == false)
                 {
                     errorText = BDOSResources.getTranslate("Operation") + " " + BDOSResources.getTranslate("Cancel") + " " + BDOSResources.getTranslate("DoneWithErrors") + " : " + errorText;
@@ -6539,7 +6539,7 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                int inv_ID = Convert.ToInt32(invID);
+                long inv_ID = Convert.ToInt64(invID);
 
                 if (seqNum == -1) //დეკლარაციის ნომრების მიღება -->
                 {
@@ -6553,8 +6553,8 @@ namespace BDO_Localisation_AddOn
 
                     string period = new DateTime(declDate.Year, declDate.Month, 1).ToString("yyyyMM");
 
-                    DataTable taxDeclTable = oTaxInvoice.get_seq_nums(period, out errorText);
-                    if (errorText != null)
+                    DataTable taxDeclTable = oTaxInvoice.get_seq_nums(period);
+                    if (taxDeclTable == null || taxDeclTable.Rows.Count == 0)
                     {
                         errorText = BDOSResources.getTranslate("CantReceiveDeclarationDate") + " " + declDate;
                         return;
@@ -6574,7 +6574,7 @@ namespace BDO_Localisation_AddOn
                 } //<--
 
                 //დეკლარაციაში დამატება
-                bool response = oTaxInvoice.add_inv_to_decl(seqNum, inv_ID, out errorText);
+                bool response = oTaxInvoice.add_inv_to_decl(seqNum, inv_ID);
 
                 if (response)
                 {
@@ -6653,8 +6653,8 @@ namespace BDO_Localisation_AddOn
 
                 if (STATUS != null)
                 {
-                    bool corrInv = (K_ID != "-1"); //თუ არის კორექტირების ა/ფ
-                    bool refInv = (WAS_REF == 1); //თუ არის უარყოფილი ა/ფ
+                    bool corrInv = K_ID != "-1"; //თუ არის კორექტირების ა/ფ
+                    bool refInv = WAS_REF == 1; //თუ არის უარყოფილი ა/ფ
 
                     STATUS = getStatusValueByStatusNumber(STATUS.ToString(), corrInv, refInv);
 
@@ -6693,7 +6693,7 @@ namespace BDO_Localisation_AddOn
                     return;
                 }
 
-                int inv_ID = Convert.ToInt32(invID);
+                long inv_ID = Convert.ToInt64(invID);
 
                 //ზედნადებების ცხრილის დამატება
                 bool response = save_ntos_invoices_inv_nos(oTaxInvoice, oGeneralData, oGeneralDataCorr, inv_ID, out errorTextWb);

@@ -329,12 +329,12 @@ namespace BDO_Localisation_AddOn
                     string k_ID = TaxDataRow["K_ID"].ToString();
                     if (k_ID != "-1")
                     {
-                        k_invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt32(k_ID));
+                        k_invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt64(k_ID));
 
                         if (k_invoiceTableLines != null)
                             k_invoiceTableLines_False = false;
 
-                        DataTable k_taxDataTable = oTaxInvoice.get_invoice_desc(Convert.ToInt32(k_ID));
+                        DataTable k_taxDataTable = oTaxInvoice.get_invoice_desc(Convert.ToInt64(k_ID));
 
                         foreach (DataRow k_taxDeclRow in k_taxDataTable.AsEnumerable())
                         {
@@ -355,7 +355,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     string inv_ID = TaxDataRow["ID"].ToString();
-                    DataTable invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt32(inv_ID));
+                    DataTable invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt64(inv_ID));
                     if (invoiceTableLines != null || k_invoiceTableLines_False == false)
                     {
                         fillValues(ref insertQuery, TaxDataRow, "Error getting Waybill numbers", TANXA_First, VAT_First);

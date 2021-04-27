@@ -24,7 +24,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="NtosServiceSoap", Namespace="http://tempuri.org/")]
@@ -501,7 +501,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/save_invoice", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool save_invoice(int user_id, ref int invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp) {
+        public bool save_invoice(int user_id, ref long invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp) {
             object[] results = this.Invoke("save_invoice", new object[] {
                         user_id,
                         invois_id,
@@ -513,17 +513,17 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
                         b_s_user_id,
                         su,
                         sp});
-            invois_id = ((int)(results[1]));
+            invois_id = ((long)(results[1]));
             return ((bool)(results[0]));
         }
         
         /// <remarks/>
-        public void save_invoiceAsync(int user_id, int invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp) {
+        public void save_invoiceAsync(int user_id, long invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp) {
             this.save_invoiceAsync(user_id, invois_id, operation_date, seller_un_id, buyer_un_id, overhead_no, overhead_dt, b_s_user_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void save_invoiceAsync(int user_id, int invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp, object userState) {
+        public void save_invoiceAsync(int user_id, long invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp, object userState) {
             if ((this.save_invoiceOperationCompleted == null)) {
                 this.save_invoiceOperationCompleted = new System.Threading.SendOrPostCallback(this.Onsave_invoiceOperationCompleted);
             }
@@ -549,7 +549,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/save_invoice_a", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool save_invoice_a(int user_id, ref int invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp) {
+        public bool save_invoice_a(int user_id, ref long invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp) {
             object[] results = this.Invoke("save_invoice_a", new object[] {
                         user_id,
                         invois_id,
@@ -561,17 +561,17 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
                         b_s_user_id,
                         su,
                         sp});
-            invois_id = ((int)(results[1]));
+            invois_id = ((long)(results[1]));
             return ((bool)(results[0]));
         }
         
         /// <remarks/>
-        public void save_invoice_aAsync(int user_id, int invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp) {
+        public void save_invoice_aAsync(int user_id, long invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp) {
             this.save_invoice_aAsync(user_id, invois_id, operation_date, seller_un_id, buyer_un_id, overhead_no, overhead_dt, b_s_user_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void save_invoice_aAsync(int user_id, int invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp, object userState) {
+        public void save_invoice_aAsync(int user_id, long invois_id, System.DateTime operation_date, int seller_un_id, int buyer_un_id, string overhead_no, System.DateTime overhead_dt, int b_s_user_id, string su, string sp, object userState) {
             if ((this.save_invoice_aOperationCompleted == null)) {
                 this.save_invoice_aOperationCompleted = new System.Threading.SendOrPostCallback(this.Onsave_invoice_aOperationCompleted);
             }
@@ -599,11 +599,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/get_invoice", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public bool get_invoice(
                     int user_id, 
-                    int invois_id, 
+                    long invois_id, 
                     string su, 
                     string sp, 
                     out string f_series, 
-                    out string f_number, 
+                    out int f_number, 
                     out System.DateTime operation_dt, 
                     out System.DateTime reg_dt, 
                     out int seller_un_id, 
@@ -613,7 +613,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
                     out int status, 
                     out string seq_num_s, 
                     out string seq_num_b, 
-                    out int k_id, 
+                    out long k_id, 
                     out int r_un_id, 
                     out int k_type, 
                     out int b_s_user_id, 
@@ -624,7 +624,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
                         su,
                         sp});
             f_series = ((string)(results[1]));
-            f_number = ((string)(results[2]));
+            f_number = ((int)(results[2]));
             operation_dt = ((System.DateTime)(results[3]));
             reg_dt = ((System.DateTime)(results[4]));
             seller_un_id = ((int)(results[5]));
@@ -634,7 +634,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
             status = ((int)(results[9]));
             seq_num_s = ((string)(results[10]));
             seq_num_b = ((string)(results[11]));
-            k_id = ((int)(results[12]));
+            k_id = ((long)(results[12]));
             r_un_id = ((int)(results[13]));
             k_type = ((int)(results[14]));
             b_s_user_id = ((int)(results[15]));
@@ -643,12 +643,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void get_invoiceAsync(int user_id, int invois_id, string su, string sp) {
+        public void get_invoiceAsync(int user_id, long invois_id, string su, string sp) {
             this.get_invoiceAsync(user_id, invois_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void get_invoiceAsync(int user_id, int invois_id, string su, string sp, object userState) {
+        public void get_invoiceAsync(int user_id, long invois_id, string su, string sp, object userState) {
             if ((this.get_invoiceOperationCompleted == null)) {
                 this.get_invoiceOperationCompleted = new System.Threading.SendOrPostCallback(this.Onget_invoiceOperationCompleted);
             }
@@ -668,7 +668,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/get_invoice_desc", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public System.Data.DataTable get_invoice_desc(int user_id, int invois_id, string su, string sp) {
+        public System.Data.DataTable get_invoice_desc(int user_id, long invois_id, string su, string sp) {
             object[] results = this.Invoke("get_invoice_desc", new object[] {
                         user_id,
                         invois_id,
@@ -678,12 +678,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void get_invoice_descAsync(int user_id, int invois_id, string su, string sp) {
+        public void get_invoice_descAsync(int user_id, long invois_id, string su, string sp) {
             this.get_invoice_descAsync(user_id, invois_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void get_invoice_descAsync(int user_id, int invois_id, string su, string sp, object userState) {
+        public void get_invoice_descAsync(int user_id, long invois_id, string su, string sp, object userState) {
             if ((this.get_invoice_descOperationCompleted == null)) {
                 this.get_invoice_descOperationCompleted = new System.Threading.SendOrPostCallback(this.Onget_invoice_descOperationCompleted);
             }
@@ -703,7 +703,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/save_invoice_desc", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool save_invoice_desc(int user_id, ref int id, string su, string sp, int invois_id, string goods, string g_unit, decimal g_number, decimal full_amount, decimal drg_amount, decimal aqcizi_amount, int akciz_id) {
+        public bool save_invoice_desc(int user_id, ref long id, string su, string sp, long invois_id, string goods, string g_unit, decimal g_number, decimal full_amount, decimal drg_amount, decimal aqcizi_amount, int akciz_id) {
             object[] results = this.Invoke("save_invoice_desc", new object[] {
                         user_id,
                         id,
@@ -717,17 +717,17 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
                         drg_amount,
                         aqcizi_amount,
                         akciz_id});
-            id = ((int)(results[1]));
+            id = ((long)(results[1]));
             return ((bool)(results[0]));
         }
         
         /// <remarks/>
-        public void save_invoice_descAsync(int user_id, int id, string su, string sp, int invois_id, string goods, string g_unit, decimal g_number, decimal full_amount, decimal drg_amount, decimal aqcizi_amount, int akciz_id) {
+        public void save_invoice_descAsync(int user_id, long id, string su, string sp, long invois_id, string goods, string g_unit, decimal g_number, decimal full_amount, decimal drg_amount, decimal aqcizi_amount, int akciz_id) {
             this.save_invoice_descAsync(user_id, id, su, sp, invois_id, goods, g_unit, g_number, full_amount, drg_amount, aqcizi_amount, akciz_id, null);
         }
         
         /// <remarks/>
-        public void save_invoice_descAsync(int user_id, int id, string su, string sp, int invois_id, string goods, string g_unit, decimal g_number, decimal full_amount, decimal drg_amount, decimal aqcizi_amount, int akciz_id, object userState) {
+        public void save_invoice_descAsync(int user_id, long id, string su, string sp, long invois_id, string goods, string g_unit, decimal g_number, decimal full_amount, decimal drg_amount, decimal aqcizi_amount, int akciz_id, object userState) {
             if ((this.save_invoice_descOperationCompleted == null)) {
                 this.save_invoice_descOperationCompleted = new System.Threading.SendOrPostCallback(this.Onsave_invoice_descOperationCompleted);
             }
@@ -755,7 +755,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/delete_invoice_desc", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool delete_invoice_desc(int user_id, int id, int inv_id, string su, string sp) {
+        public bool delete_invoice_desc(int user_id, long id, long inv_id, string su, string sp) {
             object[] results = this.Invoke("delete_invoice_desc", new object[] {
                         user_id,
                         id,
@@ -766,12 +766,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void delete_invoice_descAsync(int user_id, int id, int inv_id, string su, string sp) {
+        public void delete_invoice_descAsync(int user_id, long id, long inv_id, string su, string sp) {
             this.delete_invoice_descAsync(user_id, id, inv_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void delete_invoice_descAsync(int user_id, int id, int inv_id, string su, string sp, object userState) {
+        public void delete_invoice_descAsync(int user_id, long id, long inv_id, string su, string sp, object userState) {
             if ((this.delete_invoice_descOperationCompleted == null)) {
                 this.delete_invoice_descOperationCompleted = new System.Threading.SendOrPostCallback(this.Ondelete_invoice_descOperationCompleted);
             }
@@ -792,7 +792,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/get_ntos_invoices_inv_nos", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public System.Data.DataTable get_ntos_invoices_inv_nos(int user_id, int invois_id, string su, string sp) {
+        public System.Data.DataTable get_ntos_invoices_inv_nos(int user_id, long invois_id, string su, string sp) {
             object[] results = this.Invoke("get_ntos_invoices_inv_nos", new object[] {
                         user_id,
                         invois_id,
@@ -802,12 +802,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void get_ntos_invoices_inv_nosAsync(int user_id, int invois_id, string su, string sp) {
+        public void get_ntos_invoices_inv_nosAsync(int user_id, long invois_id, string su, string sp) {
             this.get_ntos_invoices_inv_nosAsync(user_id, invois_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void get_ntos_invoices_inv_nosAsync(int user_id, int invois_id, string su, string sp, object userState) {
+        public void get_ntos_invoices_inv_nosAsync(int user_id, long invois_id, string su, string sp, object userState) {
             if ((this.get_ntos_invoices_inv_nosOperationCompleted == null)) {
                 this.get_ntos_invoices_inv_nosOperationCompleted = new System.Threading.SendOrPostCallback(this.Onget_ntos_invoices_inv_nosOperationCompleted);
             }
@@ -827,7 +827,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/save_ntos_invoices_inv_nos", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool save_ntos_invoices_inv_nos(int invois_id, int user_id, string overhead_no, System.DateTime overhead_dt, string su, string sp) {
+        public bool save_ntos_invoices_inv_nos(long invois_id, int user_id, string overhead_no, System.DateTime overhead_dt, string su, string sp) {
             object[] results = this.Invoke("save_ntos_invoices_inv_nos", new object[] {
                         invois_id,
                         user_id,
@@ -839,12 +839,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void save_ntos_invoices_inv_nosAsync(int invois_id, int user_id, string overhead_no, System.DateTime overhead_dt, string su, string sp) {
+        public void save_ntos_invoices_inv_nosAsync(long invois_id, int user_id, string overhead_no, System.DateTime overhead_dt, string su, string sp) {
             this.save_ntos_invoices_inv_nosAsync(invois_id, user_id, overhead_no, overhead_dt, su, sp, null);
         }
         
         /// <remarks/>
-        public void save_ntos_invoices_inv_nosAsync(int invois_id, int user_id, string overhead_no, System.DateTime overhead_dt, string su, string sp, object userState) {
+        public void save_ntos_invoices_inv_nosAsync(long invois_id, int user_id, string overhead_no, System.DateTime overhead_dt, string su, string sp, object userState) {
             if ((this.save_ntos_invoices_inv_nosOperationCompleted == null)) {
                 this.save_ntos_invoices_inv_nosOperationCompleted = new System.Threading.SendOrPostCallback(this.Onsave_ntos_invoices_inv_nosOperationCompleted);
             }
@@ -866,7 +866,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/delete_ntos_invoices_inv_nos", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool delete_ntos_invoices_inv_nos(int user_id, int id, int inv_id, string su, string sp) {
+        public bool delete_ntos_invoices_inv_nos(int user_id, long id, long inv_id, string su, string sp) {
             object[] results = this.Invoke("delete_ntos_invoices_inv_nos", new object[] {
                         user_id,
                         id,
@@ -877,12 +877,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void delete_ntos_invoices_inv_nosAsync(int user_id, int id, int inv_id, string su, string sp) {
+        public void delete_ntos_invoices_inv_nosAsync(int user_id, long id, long inv_id, string su, string sp) {
             this.delete_ntos_invoices_inv_nosAsync(user_id, id, inv_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void delete_ntos_invoices_inv_nosAsync(int user_id, int id, int inv_id, string su, string sp, object userState) {
+        public void delete_ntos_invoices_inv_nosAsync(int user_id, long id, long inv_id, string su, string sp, object userState) {
             if ((this.delete_ntos_invoices_inv_nosOperationCompleted == null)) {
                 this.delete_ntos_invoices_inv_nosOperationCompleted = new System.Threading.SendOrPostCallback(this.Ondelete_ntos_invoices_inv_nosOperationCompleted);
             }
@@ -1043,7 +1043,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/change_invoice_status", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool change_invoice_status(int user_id, int inv_id, int status, string su, string sp) {
+        public bool change_invoice_status(int user_id, long inv_id, int status, string su, string sp) {
             object[] results = this.Invoke("change_invoice_status", new object[] {
                         user_id,
                         inv_id,
@@ -1054,12 +1054,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void change_invoice_statusAsync(int user_id, int inv_id, int status, string su, string sp) {
+        public void change_invoice_statusAsync(int user_id, long inv_id, int status, string su, string sp) {
             this.change_invoice_statusAsync(user_id, inv_id, status, su, sp, null);
         }
         
         /// <remarks/>
-        public void change_invoice_statusAsync(int user_id, int inv_id, int status, string su, string sp, object userState) {
+        public void change_invoice_statusAsync(int user_id, long inv_id, int status, string su, string sp, object userState) {
             if ((this.change_invoice_statusOperationCompleted == null)) {
                 this.change_invoice_statusOperationCompleted = new System.Threading.SendOrPostCallback(this.Onchange_invoice_statusOperationCompleted);
             }
@@ -1080,7 +1080,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/acsept_invoice_status", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool acsept_invoice_status(int user_id, int inv_id, int status, string su, string sp) {
+        public bool acsept_invoice_status(int user_id, long inv_id, int status, string su, string sp) {
             object[] results = this.Invoke("acsept_invoice_status", new object[] {
                         user_id,
                         inv_id,
@@ -1091,12 +1091,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void acsept_invoice_statusAsync(int user_id, int inv_id, int status, string su, string sp) {
+        public void acsept_invoice_statusAsync(int user_id, long inv_id, int status, string su, string sp) {
             this.acsept_invoice_statusAsync(user_id, inv_id, status, su, sp, null);
         }
         
         /// <remarks/>
-        public void acsept_invoice_statusAsync(int user_id, int inv_id, int status, string su, string sp, object userState) {
+        public void acsept_invoice_statusAsync(int user_id, long inv_id, int status, string su, string sp, object userState) {
             if ((this.acsept_invoice_statusOperationCompleted == null)) {
                 this.acsept_invoice_statusOperationCompleted = new System.Threading.SendOrPostCallback(this.Onacsept_invoice_statusOperationCompleted);
             }
@@ -1117,7 +1117,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/ref_invoice_status", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool ref_invoice_status(int user_id, int inv_id, string ref_text, string su, string sp) {
+        public bool ref_invoice_status(int user_id, long inv_id, string ref_text, string su, string sp) {
             object[] results = this.Invoke("ref_invoice_status", new object[] {
                         user_id,
                         inv_id,
@@ -1128,12 +1128,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void ref_invoice_statusAsync(int user_id, int inv_id, string ref_text, string su, string sp) {
+        public void ref_invoice_statusAsync(int user_id, long inv_id, string ref_text, string su, string sp) {
             this.ref_invoice_statusAsync(user_id, inv_id, ref_text, su, sp, null);
         }
         
         /// <remarks/>
-        public void ref_invoice_statusAsync(int user_id, int inv_id, string ref_text, string su, string sp, object userState) {
+        public void ref_invoice_statusAsync(int user_id, long inv_id, string ref_text, string su, string sp, object userState) {
             if ((this.ref_invoice_statusOperationCompleted == null)) {
                 this.ref_invoice_statusOperationCompleted = new System.Threading.SendOrPostCallback(this.Onref_invoice_statusOperationCompleted);
             }
@@ -1154,24 +1154,24 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/k_invoice", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool k_invoice(int user_id, int inv_id, int k_type, string su, string sp, out int k_id) {
+        public bool k_invoice(int user_id, long inv_id, int k_type, string su, string sp, out long k_id) {
             object[] results = this.Invoke("k_invoice", new object[] {
                         user_id,
                         inv_id,
                         k_type,
                         su,
                         sp});
-            k_id = ((int)(results[1]));
+            k_id = ((long)(results[1]));
             return ((bool)(results[0]));
         }
         
         /// <remarks/>
-        public void k_invoiceAsync(int user_id, int inv_id, int k_type, string su, string sp) {
+        public void k_invoiceAsync(int user_id, long inv_id, int k_type, string su, string sp) {
             this.k_invoiceAsync(user_id, inv_id, k_type, su, sp, null);
         }
         
         /// <remarks/>
-        public void k_invoiceAsync(int user_id, int inv_id, int k_type, string su, string sp, object userState) {
+        public void k_invoiceAsync(int user_id, long inv_id, int k_type, string su, string sp, object userState) {
             if ((this.k_invoiceOperationCompleted == null)) {
                 this.k_invoiceOperationCompleted = new System.Threading.SendOrPostCallback(this.Onk_invoiceOperationCompleted);
             }
@@ -1192,23 +1192,23 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/g_invoice", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool g_invoice(int user_id, int inv_id, string su, string sp, out int k_id) {
+        public bool g_invoice(int user_id, long inv_id, string su, string sp, out long k_id) {
             object[] results = this.Invoke("g_invoice", new object[] {
                         user_id,
                         inv_id,
                         su,
                         sp});
-            k_id = ((int)(results[1]));
+            k_id = ((long)(results[1]));
             return ((bool)(results[0]));
         }
         
         /// <remarks/>
-        public void g_invoiceAsync(int user_id, int inv_id, string su, string sp) {
+        public void g_invoiceAsync(int user_id, long inv_id, string su, string sp) {
             this.g_invoiceAsync(user_id, inv_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void g_invoiceAsync(int user_id, int inv_id, string su, string sp, object userState) {
+        public void g_invoiceAsync(int user_id, long inv_id, string su, string sp, object userState) {
             if ((this.g_invoiceOperationCompleted == null)) {
                 this.g_invoiceOperationCompleted = new System.Threading.SendOrPostCallback(this.Ong_invoiceOperationCompleted);
             }
@@ -1228,23 +1228,23 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/get_makoreqtirebeli", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool get_makoreqtirebeli(int user_id, int inv_id, string su, string sp, out int k_id) {
+        public bool get_makoreqtirebeli(int user_id, long inv_id, string su, string sp, out long k_id) {
             object[] results = this.Invoke("get_makoreqtirebeli", new object[] {
                         user_id,
                         inv_id,
                         su,
                         sp});
-            k_id = ((int)(results[1]));
+            k_id = ((long)(results[1]));
             return ((bool)(results[0]));
         }
         
         /// <remarks/>
-        public void get_makoreqtirebeliAsync(int user_id, int inv_id, string su, string sp) {
+        public void get_makoreqtirebeliAsync(int user_id, long inv_id, string su, string sp) {
             this.get_makoreqtirebeliAsync(user_id, inv_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void get_makoreqtirebeliAsync(int user_id, int inv_id, string su, string sp, object userState) {
+        public void get_makoreqtirebeliAsync(int user_id, long inv_id, string su, string sp, object userState) {
             if ((this.get_makoreqtirebeliOperationCompleted == null)) {
                 this.get_makoreqtirebeliOperationCompleted = new System.Threading.SendOrPostCallback(this.Onget_makoreqtirebeliOperationCompleted);
             }
@@ -1662,7 +1662,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/add_inv_to_decl", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool add_inv_to_decl(int user_id, int seq_num, int inv_id, string su, string sp) {
+        public bool add_inv_to_decl(int user_id, int seq_num, long inv_id, string su, string sp) {
             object[] results = this.Invoke("add_inv_to_decl", new object[] {
                         user_id,
                         seq_num,
@@ -1673,12 +1673,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void add_inv_to_declAsync(int user_id, int seq_num, int inv_id, string su, string sp) {
+        public void add_inv_to_declAsync(int user_id, int seq_num, long inv_id, string su, string sp) {
             this.add_inv_to_declAsync(user_id, seq_num, inv_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void add_inv_to_declAsync(int user_id, int seq_num, int inv_id, string su, string sp, object userState) {
+        public void add_inv_to_declAsync(int user_id, int seq_num, long inv_id, string su, string sp, object userState) {
             if ((this.add_inv_to_declOperationCompleted == null)) {
                 this.add_inv_to_declOperationCompleted = new System.Threading.SendOrPostCallback(this.Onadd_inv_to_declOperationCompleted);
             }
@@ -1699,7 +1699,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/save_invoice_request", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool save_invoice_request(int inv_id, int user_id, int bayer_un_id, int seller_un_id, string overhead_no, System.DateTime dt, string notes, string su, string sp) {
+        public bool save_invoice_request(long inv_id, int user_id, int bayer_un_id, int seller_un_id, string overhead_no, System.DateTime dt, string notes, string su, string sp) {
             object[] results = this.Invoke("save_invoice_request", new object[] {
                         inv_id,
                         user_id,
@@ -1714,12 +1714,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void save_invoice_requestAsync(int inv_id, int user_id, int bayer_un_id, int seller_un_id, string overhead_no, System.DateTime dt, string notes, string su, string sp) {
+        public void save_invoice_requestAsync(long inv_id, int user_id, int bayer_un_id, int seller_un_id, string overhead_no, System.DateTime dt, string notes, string su, string sp) {
             this.save_invoice_requestAsync(inv_id, user_id, bayer_un_id, seller_un_id, overhead_no, dt, notes, su, sp, null);
         }
         
         /// <remarks/>
-        public void save_invoice_requestAsync(int inv_id, int user_id, int bayer_un_id, int seller_un_id, string overhead_no, System.DateTime dt, string notes, string su, string sp, object userState) {
+        public void save_invoice_requestAsync(long inv_id, int user_id, int bayer_un_id, int seller_un_id, string overhead_no, System.DateTime dt, string notes, string su, string sp, object userState) {
             if ((this.save_invoice_requestOperationCompleted == null)) {
                 this.save_invoice_requestOperationCompleted = new System.Threading.SendOrPostCallback(this.Onsave_invoice_requestOperationCompleted);
             }
@@ -1744,7 +1744,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/del_invoice_request", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool del_invoice_request(int inv_id, int user_id, int bayer_un_id, string su, string sp) {
+        public bool del_invoice_request(long inv_id, int user_id, int bayer_un_id, string su, string sp) {
             object[] results = this.Invoke("del_invoice_request", new object[] {
                         inv_id,
                         user_id,
@@ -1755,12 +1755,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void del_invoice_requestAsync(int inv_id, int user_id, int bayer_un_id, string su, string sp) {
+        public void del_invoice_requestAsync(long inv_id, int user_id, int bayer_un_id, string su, string sp) {
             this.del_invoice_requestAsync(inv_id, user_id, bayer_un_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void del_invoice_requestAsync(int inv_id, int user_id, int bayer_un_id, string su, string sp, object userState) {
+        public void del_invoice_requestAsync(long inv_id, int user_id, int bayer_un_id, string su, string sp, object userState) {
             if ((this.del_invoice_requestOperationCompleted == null)) {
                 this.del_invoice_requestOperationCompleted = new System.Threading.SendOrPostCallback(this.Ondel_invoice_requestOperationCompleted);
             }
@@ -1781,7 +1781,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/get_invoice_request", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool get_invoice_request(int inv_id, int user_id, string su, string sp, out int bayer_un_id, out int seller_un_id, out string overhead_no, out System.DateTime dt, out string notes) {
+        public bool get_invoice_request(long inv_id, int user_id, string su, string sp, out int bayer_un_id, out int seller_un_id, out string overhead_no, out System.DateTime dt, out string notes) {
             object[] results = this.Invoke("get_invoice_request", new object[] {
                         inv_id,
                         user_id,
@@ -1796,12 +1796,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void get_invoice_requestAsync(int inv_id, int user_id, string su, string sp) {
+        public void get_invoice_requestAsync(long inv_id, int user_id, string su, string sp) {
             this.get_invoice_requestAsync(inv_id, user_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void get_invoice_requestAsync(int inv_id, int user_id, string su, string sp, object userState) {
+        public void get_invoice_requestAsync(long inv_id, int user_id, string su, string sp, object userState) {
             if ((this.get_invoice_requestOperationCompleted == null)) {
                 this.get_invoice_requestOperationCompleted = new System.Threading.SendOrPostCallback(this.Onget_invoice_requestOperationCompleted);
             }
@@ -1821,7 +1821,7 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/acsept_invoice_request_status", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public bool acsept_invoice_request_status(int id, int user_id, int seller_un_id, string su, string sp) {
+        public bool acsept_invoice_request_status(long id, int user_id, int seller_un_id, string su, string sp) {
             object[] results = this.Invoke("acsept_invoice_request_status", new object[] {
                         id,
                         user_id,
@@ -1832,12 +1832,12 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public void acsept_invoice_request_statusAsync(int id, int user_id, int seller_un_id, string su, string sp) {
+        public void acsept_invoice_request_statusAsync(long id, int user_id, int seller_un_id, string su, string sp) {
             this.acsept_invoice_request_statusAsync(id, user_id, seller_un_id, su, sp, null);
         }
         
         /// <remarks/>
-        public void acsept_invoice_request_statusAsync(int id, int user_id, int seller_un_id, string su, string sp, object userState) {
+        public void acsept_invoice_request_statusAsync(long id, int user_id, int seller_un_id, string su, string sp, object userState) {
             if ((this.acsept_invoice_request_statusOperationCompleted == null)) {
                 this.acsept_invoice_request_statusOperationCompleted = new System.Threading.SendOrPostCallback(this.Onacsept_invoice_request_statusOperationCompleted);
             }
@@ -2051,13 +2051,13 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/get_invoice_id", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public int get_invoice_id(string f_series, string f_number, string su, string sp) {
+        public long get_invoice_id(string f_series, string f_number, string su, string sp) {
             object[] results = this.Invoke("get_invoice_id", new object[] {
                         f_series,
                         f_number,
                         su,
                         sp});
-            return ((int)(results[0]));
+            return ((long)(results[0]));
         }
         
         /// <remarks/>
@@ -2104,11 +2104,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void what_is_my_ipCompletedEventHandler(object sender, what_is_my_ipCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class what_is_my_ipCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2130,11 +2130,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void create_ser_userCompletedEventHandler(object sender, create_ser_userCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class create_ser_userCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2156,11 +2156,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void update_ser_userCompletedEventHandler(object sender, update_ser_userCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class update_ser_userCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2182,11 +2182,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_ser_usersCompletedEventHandler(object sender, get_ser_usersCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_ser_usersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2216,11 +2216,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_ser_users_notesCompletedEventHandler(object sender, get_ser_users_notesCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_ser_users_notesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2242,11 +2242,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void chekCompletedEventHandler(object sender, chekCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class chekCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2284,11 +2284,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void save_invoiceCompletedEventHandler(object sender, save_invoiceCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class save_invoiceCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2309,20 +2309,20 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public int invois_id {
+        public long invois_id {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((int)(this.results[1]));
+                return ((long)(this.results[1]));
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void save_invoice_aCompletedEventHandler(object sender, save_invoice_aCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class save_invoice_aCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2343,20 +2343,20 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public int invois_id {
+        public long invois_id {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((int)(this.results[1]));
+                return ((long)(this.results[1]));
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_invoiceCompletedEventHandler(object sender, get_invoiceCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_invoiceCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2465,10 +2465,10 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public int k_id {
+        public long k_id {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((int)(this.results[12]));
+                return ((long)(this.results[12]));
             }
         }
         
@@ -2506,11 +2506,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_invoice_descCompletedEventHandler(object sender, get_invoice_descCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_invoice_descCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2532,11 +2532,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void save_invoice_descCompletedEventHandler(object sender, save_invoice_descCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class save_invoice_descCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2557,20 +2557,20 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public int id {
+        public long id {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((int)(this.results[1]));
+                return ((long)(this.results[1]));
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void delete_invoice_descCompletedEventHandler(object sender, delete_invoice_descCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class delete_invoice_descCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2592,11 +2592,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_ntos_invoices_inv_nosCompletedEventHandler(object sender, get_ntos_invoices_inv_nosCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_ntos_invoices_inv_nosCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2618,11 +2618,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void save_ntos_invoices_inv_nosCompletedEventHandler(object sender, save_ntos_invoices_inv_nosCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class save_ntos_invoices_inv_nosCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2644,11 +2644,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void delete_ntos_invoices_inv_nosCompletedEventHandler(object sender, delete_ntos_invoices_inv_nosCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class delete_ntos_invoices_inv_nosCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2670,11 +2670,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_un_id_from_tinCompletedEventHandler(object sender, get_un_id_from_tinCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_un_id_from_tinCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2704,11 +2704,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_tin_from_un_idCompletedEventHandler(object sender, get_tin_from_un_idCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_tin_from_un_idCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2738,11 +2738,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_org_name_from_un_idCompletedEventHandler(object sender, get_org_name_from_un_idCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_org_name_from_un_idCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2764,11 +2764,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_un_id_from_user_idCompletedEventHandler(object sender, get_un_id_from_user_idCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_un_id_from_user_idCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2790,11 +2790,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void change_invoice_statusCompletedEventHandler(object sender, change_invoice_statusCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class change_invoice_statusCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2816,11 +2816,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void acsept_invoice_statusCompletedEventHandler(object sender, acsept_invoice_statusCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class acsept_invoice_statusCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2842,11 +2842,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void ref_invoice_statusCompletedEventHandler(object sender, ref_invoice_statusCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class ref_invoice_statusCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2868,11 +2868,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void k_invoiceCompletedEventHandler(object sender, k_invoiceCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class k_invoiceCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2893,20 +2893,20 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public int k_id {
+        public long k_id {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((int)(this.results[1]));
+                return ((long)(this.results[1]));
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void g_invoiceCompletedEventHandler(object sender, g_invoiceCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class g_invoiceCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2927,20 +2927,20 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public int k_id {
+        public long k_id {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((int)(this.results[1]));
+                return ((long)(this.results[1]));
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_makoreqtirebeliCompletedEventHandler(object sender, get_makoreqtirebeliCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_makoreqtirebeliCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2961,20 +2961,20 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public int k_id {
+        public long k_id {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((int)(this.results[1]));
+                return ((long)(this.results[1]));
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_seller_invoicesCompletedEventHandler(object sender, get_seller_invoicesCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_seller_invoicesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -2996,11 +2996,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_buyer_invoicesCompletedEventHandler(object sender, get_buyer_invoicesCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_buyer_invoicesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3022,11 +3022,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_invoice_numbersCompletedEventHandler(object sender, get_invoice_numbersCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_invoice_numbersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3048,11 +3048,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_invoice_tinsCompletedEventHandler(object sender, get_invoice_tinsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_invoice_tinsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3074,11 +3074,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_invoice_dCompletedEventHandler(object sender, get_invoice_dCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_invoice_dCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3100,11 +3100,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_seller_invoices_rCompletedEventHandler(object sender, get_seller_invoices_rCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_seller_invoices_rCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3126,11 +3126,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_buyer_invoices_rCompletedEventHandler(object sender, get_buyer_invoices_rCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_buyer_invoices_rCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3152,11 +3152,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void print_invoicesCompletedEventHandler(object sender, print_invoicesCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class print_invoicesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3178,11 +3178,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_akcizCompletedEventHandler(object sender, get_akcizCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_akcizCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3204,11 +3204,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_seq_numsCompletedEventHandler(object sender, get_seq_numsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_seq_numsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3230,11 +3230,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void add_inv_to_declCompletedEventHandler(object sender, add_inv_to_declCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class add_inv_to_declCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3256,11 +3256,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void save_invoice_requestCompletedEventHandler(object sender, save_invoice_requestCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class save_invoice_requestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3282,11 +3282,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void del_invoice_requestCompletedEventHandler(object sender, del_invoice_requestCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class del_invoice_requestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3308,11 +3308,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_invoice_requestCompletedEventHandler(object sender, get_invoice_requestCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_invoice_requestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3374,11 +3374,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void acsept_invoice_request_statusCompletedEventHandler(object sender, acsept_invoice_request_statusCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class acsept_invoice_request_statusCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3400,11 +3400,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_requested_invoicesCompletedEventHandler(object sender, get_requested_invoicesCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_requested_invoicesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3426,11 +3426,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_invoice_requestsCompletedEventHandler(object sender, get_invoice_requestsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_invoice_requestsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3452,11 +3452,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_seller_filter_countCompletedEventHandler(object sender, get_seller_filter_countCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_seller_filter_countCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3550,11 +3550,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_buyer_filter_countCompletedEventHandler(object sender, get_buyer_filter_countCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_buyer_filter_countCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3632,11 +3632,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_invoice_changesCompletedEventHandler(object sender, get_invoice_changesCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_invoice_changesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3658,11 +3658,11 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     public delegate void get_invoice_idCompletedEventHandler(object sender, get_invoice_idCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class get_invoice_idCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3675,10 +3675,10 @@ namespace BDO_Localisation_AddOn.TaxInvoiceService_HTTP {
         }
         
         /// <remarks/>
-        public int Result {
+        public long Result {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((int)(this.results[0]));
+                return ((long)(this.results[0]));
             }
         }
     }
