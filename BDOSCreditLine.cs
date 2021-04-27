@@ -287,11 +287,11 @@ namespace BDO_Localisation_AddOn
                     oUDOForm.FormColumnDescription = "Accrue Day After";
                     oUDOForm.Editable = SAPbobsCOM.BoYesNoEnum.tYES;
                     //oUDOForm.Add();
-                }
 
-                if (oUserObjectMD.Update() != 0)
-                {
-                    Program.uiApp.MessageBox(Program.oCompany.GetLastErrorDescription());
+                    if (oUserObjectMD.Update() != 0)
+                    {
+                        Program.uiApp.MessageBox(Program.oCompany.GetLastErrorDescription());
+                    }
                 }
             }
             Marshal.ReleaseComObject(oUserObjectMD);
