@@ -332,7 +332,7 @@ namespace BDO_Localisation_AddOn
         /// <param name="b_s_user_id"></param>
         /// <param name="errorText"></param>
         /// <returns></returns>
-        public bool save_invoice(ref int invoice_id, DateTime operation_date, int buyer_un_id, string overhead_no, int b_s_user_id, out string errorText)
+        public bool save_invoice(ref long invoice_id, DateTime operation_date, int buyer_un_id, string overhead_no, int b_s_user_id, out string errorText)
         {
             errorText = null;
 
@@ -363,7 +363,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public bool save_invoice_a(ref int invoice_id, DateTime operation_date, int buyer_un_id, string overhead_no, int b_s_user_id, out string errorText)
+        public bool save_invoice_a(ref long invoice_id, DateTime operation_date, int buyer_un_id, string overhead_no, int b_s_user_id, out string errorText)
         {
             errorText = null;
 
@@ -401,7 +401,7 @@ namespace BDO_Localisation_AddOn
         /// </summary>
         /// <param name="invois_id"></param>
         /// <returns></returns>
-        public DataTable get_ntos_invoices_inv_nos(int invois_id, out string errorText)
+        public DataTable get_ntos_invoices_inv_nos(long invois_id, out string errorText)
         {
             errorText = null;
 
@@ -429,7 +429,7 @@ namespace BDO_Localisation_AddOn
         /// </summary>
         /// <param name="invois_id"></param>
         /// <returns></returns>
-        public DataTable get_ntos_invoices_inv_nos(int invois_id)
+        public DataTable get_ntos_invoices_inv_nos(long invois_id)
         {
             try
             {
@@ -456,14 +456,14 @@ namespace BDO_Localisation_AddOn
         /// <param name="invois_id"></param>
         /// <param name="errorText"></param>
         /// <returns></returns>
-        public Dictionary<string, object> get_invoice(int invois_id, out string errorText)
+        public Dictionary<string, object> get_invoice(long invois_id, out string errorText)
         {
             errorText = null;
 
             Dictionary<string, object> ResponseStructure = null;
 
             string f_series = null;
-            string f_number = null;
+            int f_number;
             DateTime operation_dt = new DateTime(1, 1, 1);
             DateTime reg_dt = new DateTime(1, 1, 1);
             int seller_un_id = -1;
@@ -473,7 +473,7 @@ namespace BDO_Localisation_AddOn
             int status = -1;
             string seq_num_s = null;
             string seq_num_b = null;
-            int k_id = -1;
+            long k_id = -1;
             int r_un_id = -1;
             int k_type = -1;
             int b_s_user_id = -1;
@@ -549,10 +549,8 @@ namespace BDO_Localisation_AddOn
         /// </summary>
         /// <param name="period"></param>
         /// <returns></returns>
-        public DataTable get_seq_nums(string period, out string errorText)
+        public DataTable get_seq_nums(string period)
         {
-            errorText = null;
-
             if (protocolType == "HTTP")
             {
                 return TaxInvoice_soapClient_field_HTTP.get_seq_nums(period, user_id, su, sp);
@@ -571,10 +569,8 @@ namespace BDO_Localisation_AddOn
         /// <param name="inv_id"></param>
         /// <param name="errorText"></param>
         /// <returns></returns>
-        public bool add_inv_to_decl(int seq_num, int inv_id, out string errorText)
+        public bool add_inv_to_decl(int seq_num, long inv_id)
         {
-            errorText = null;
-
             if (protocolType == "HTTP")
             {
                 return TaxInvoice_soapClient_field_HTTP.add_inv_to_decl(user_id, seq_num, inv_id, su, sp);
@@ -589,10 +585,8 @@ namespace BDO_Localisation_AddOn
         /// <summary>
         /// change_invoice_status
         /// </summary>
-        public bool change_invoice_status(int inv_id, int status, out string errorText)
+        public bool change_invoice_status(long inv_id, int status)
         {
-            errorText = null;
-
             if (protocolType == "HTTP")
             {
                 return TaxInvoice_soapClient_field_HTTP.change_invoice_status(user_id, inv_id, status, su, sp);
@@ -608,7 +602,7 @@ namespace BDO_Localisation_AddOn
         /// ფაქტურის დადასტურება
         /// </summary>
         /// <param name="errorText"></param>
-        public bool acsept_invoice_status(int inv_id, int status, out string errorText)
+        public bool acsept_invoice_status(long inv_id, int status, out string errorText)
         {
             errorText = null;
 
@@ -626,11 +620,8 @@ namespace BDO_Localisation_AddOn
         /// <summary>
         /// acsept_invoice_request_status
         /// </summary>
-        /// <param name="errorText"></param>
-        public bool acsept_invoice_request_status(int id, int seller_un_id, out string errorText)
+        public bool acsept_invoice_request_status(long id, int seller_un_id)
         {
-            errorText = null;
-
             if (protocolType == "HTTP")
             {
                 return TaxInvoice_soapClient_field_HTTP.acsept_invoice_request_status(id, user_id, un_id, su, sp);
@@ -645,10 +636,8 @@ namespace BDO_Localisation_AddOn
         /// <summary>
         /// ref_invoice_status უარყოფა
         /// </summary>
-        public bool ref_invoice_status(int inv_id, string ref_text, out string errorText)
+        public bool ref_invoice_status(long inv_id, string ref_text)
         {
-            errorText = null;
-
             if (protocolType == "HTTP")
             {
                 return TaxInvoice_soapClient_field_HTTP.ref_invoice_status(user_id, inv_id, ref_text, su, sp);
@@ -664,10 +653,8 @@ namespace BDO_Localisation_AddOn
         /// კორექტირება
         /// </summary>
         /// <param name="errorText"></param>
-        public bool k_invoice(int inv_id, int k_type, out int k_id, out string errorText)
+        public bool k_invoice(long inv_id, int k_type, out long k_id)
         {
-            errorText = null;
-
             if (protocolType == "HTTP")
             {
                 return TaxInvoice_soapClient_field_HTTP.k_invoice(user_id, inv_id, k_type, su, sp, out k_id);
@@ -683,7 +670,7 @@ namespace BDO_Localisation_AddOn
         /// <summary>
         /// ზედნადების დამატება
         /// </summary>
-        public bool save_ntos_invoices_inv_nos(int invois_id, string overhead_no, DateTime overhead_dt, out string errorText)
+        public bool save_ntos_invoices_inv_nos(long invois_id, string overhead_no, DateTime overhead_dt, out string errorText)
         {
             errorText = null;
 
@@ -709,7 +696,7 @@ namespace BDO_Localisation_AddOn
         /// <summary>
         /// ზედნადების წაშლა
         /// </summary>
-        public bool delete_ntos_invoices_inv_nos(int id, int inv_id, out string errorText)
+        public bool delete_ntos_invoices_inv_nos(long id, long inv_id, out string errorText)
         {
             errorText = null;
             try
@@ -735,7 +722,7 @@ namespace BDO_Localisation_AddOn
         /// სტრიქონის ფაქტურაში დამატება
         /// </summary>
         /// <param name="errorText"></param>
-        public bool save_invoice_desc(int id, int invois_id, string goods, string g_unit, decimal g_number, decimal full_amount, decimal drg_amount, decimal aqcizi_amount, int akciz_id, out string errorText)
+        public bool save_invoice_desc(long id, long invois_id, string goods, string g_unit, decimal g_number, decimal full_amount, decimal drg_amount, decimal aqcizi_amount, int akciz_id, out string errorText)
         {
             errorText = null;
             try
@@ -762,7 +749,7 @@ namespace BDO_Localisation_AddOn
         /// </summary>
         /// <param name="errorText"></param>
         /// <returns></returns>
-        public bool delete_invoice_desc(int id, int inv_id, out string errorText)
+        public bool delete_invoice_desc(long id, long inv_id, out string errorText)
         {
             errorText = null;
             try
@@ -806,7 +793,7 @@ namespace BDO_Localisation_AddOn
         /// ფაქტურის ცხრილური ნაწილის მიღება
         /// </summary>
         /// <param name="errorText"></param>
-        public DataTable get_invoice_desc(int invois_id, out string errorText)
+        public DataTable get_invoice_desc(long invois_id, out string errorText)
         {
             errorText = null;
             try
@@ -831,7 +818,7 @@ namespace BDO_Localisation_AddOn
         /// <summary>
         /// ფაქტურის ცხრილური ნაწილის მიღება
         /// </summary>
-        public DataTable get_invoice_desc(int invois_id)
+        public DataTable get_invoice_desc(long invois_id)
         {     
             try
             {
@@ -875,7 +862,7 @@ namespace BDO_Localisation_AddOn
         /// მაკორექტირებელი ფაქტურის მიღება
         /// </summary>
         /// <param name="errorText"></param>
-        public bool get_makoreqtirebeli(int inv_id, out int k_id, out string errorText)
+        public bool get_makoreqtirebeli(long inv_id, out long k_id, out string errorText)
         {
             errorText = null;
 

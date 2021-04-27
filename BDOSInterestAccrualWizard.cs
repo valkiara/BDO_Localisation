@@ -498,7 +498,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -524,12 +524,11 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
                 oForm.Freeze(false);
-                GC.Collect();
             }
         }
 
@@ -567,7 +566,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -613,11 +612,12 @@ namespace BDO_Localisation_AddOn
             query.Append("T0.\"U_IntPblAcct\", \n");
             query.Append("T0.\"U_Type\", \n");
             query.Append("T0.\"U_NbrOfDays\", \n");
+            query.Append("T0.\"U_AccrDayAfter\", \n");
             query.Append("T1.\"U_StartDate\" AS \"U_EndDate\" \n");
             query.Append("FROM \"@BDOSCRLN\" AS T0 \n");
             query.Append("LEFT JOIN \"@BDOSCRLN\" AS T1 \n");
             query.Append("ON T0.\"Name\" = T1.\"Name\" AND T0.\"U_StartDate\" < T1.\"U_StartDate\" \n");
-            query.Append("WHERE T0.\"U_BankCode\" = '" + bankCode + "' AND T0.\"U_StartDate\" <= '" + docDateStr + "' \n");
+            query.Append($"WHERE T0.\"U_BankCode\" = '{bankCode}' AND T0.\"U_StartDate\" <= '{docDateStr}' \n");
             query.Append("ORDER BY T0.\"Name\", T0.\"U_StartDate\") AS T3 \n");
             query.Append("LEFT JOIN \n");
             query.Append("(SELECT \n");
@@ -626,7 +626,7 @@ namespace BDO_Localisation_AddOn
             query.Append("\"U_CrLnName\" \n");
             query.Append("FROM \"@BDOSINA1\" \n");
             query.Append("INNER JOIN \"@BDOSINAC\" ON \"@BDOSINAC\".\"DocEntry\" = \"@BDOSINA1\".\"DocEntry\" \n");
-            query.Append("WHERE \"Canceled\" = 'N' AND \"U_BankCode\" = '" + bankCode + "' \n");
+            query.Append($"WHERE \"Canceled\" = 'N' AND \"U_BankCode\" = '{bankCode}' \n");
             query.Append("GROUP BY \n");
             query.Append("\"U_CrLnCode\", \n");
             query.Append("\"U_CrLnName\", \n");
@@ -666,14 +666,19 @@ namespace BDO_Localisation_AddOn
                     else
                         accrualEndDate = docDate.AddDays(1);
 
+                    var isAccrDayAfter = oRecordSet.Fields.Item("U_AccrDayAfter").Value == "Y";
+
                     if (lastInterestAccrualDocDate.ToString("yyyyMMdd") != "18991230")
-                        accrualStartDate = lastInterestAccrualDocDate.AddDays(1);
+                        accrualStartDate = isAccrDayAfter ? lastInterestAccrualDocDate : lastInterestAccrualDocDate.AddDays(1);
                     else
                         accrualStartDate = creditLineStartDate;
 
+                    if (isAccrDayAfter)
+                        accrualEndDate = accrualEndDate.AddDays(-1);
+
                     int numberOfDaysInYear = oRecordSet.Fields.Item("U_Type").Value == "F" ? Convert.ToInt32(oRecordSet.Fields.Item("U_NbrOfDays").Value) : new DateTime(DateTime.Today.Year, 12, 31).DayOfYear;
                     accrualDays = (accrualEndDate - accrualStartDate).Days;
-                    accrualDays = accrualDays == 0 ? 1 : accrualDays;
+                    accrualDays = accrualDays == 0 && !isAccrDayAfter ? 1 : accrualDays;
 
                     if (accrualDays <= 0 || numberOfDaysInYear == 0)
                     {
@@ -683,7 +688,7 @@ namespace BDO_Localisation_AddOn
 
                     decimal dayRate = interestRate / numberOfDaysInYear;
                     string creditLineAccountCode = oRecordSet.Fields.Item("U_CrLnAcct").Value;
-                    string currencyForQuery = foreignCurrency ? " = '" + currency + "' " : " IS NULL ";
+                    string currencyForQuery = foreignCurrency ? $" = '{currency}' " : " IS NULL ";
 
                     decimal creditLineBalanceFC = decimal.Zero;
                     decimal creditLineBalanceLC = decimal.Zero;
@@ -697,9 +702,9 @@ namespace BDO_Localisation_AddOn
                         queryForBalances2.Append("Sum(\"Credit\") - Sum(\"Debit\") AS \"U_CrLnAmtLC\", \n");
                         queryForBalances2.Append("Sum(\"FCCredit\") - Sum(\"FCDebit\") AS \"U_CrLnAmtFC\" \n");
                         queryForBalances2.Append("FROM \"JDT1\" \n");
-                        queryForBalances2.Append("WHERE \"Account\" = '" + creditLineAccountCode + "' \n");
-                        queryForBalances2.Append("AND \"FCCurrency\" " + currencyForQuery + " \n");
-                        queryForBalances2.Append("AND \"RefDate\" <= '" + accrualStartDate.AddDays(k).ToString("yyyyMMdd") + "' \n");
+                        queryForBalances2.Append($"WHERE \"Account\" = '{creditLineAccountCode}' \n");
+                        queryForBalances2.Append($"AND \"FCCurrency\" {currencyForQuery} \n");
+                        queryForBalances2.Append($"AND \"RefDate\" <= '{accrualStartDate.AddDays(k):yyyyMMdd}' \n");
                         queryForBalances2.Append("GROUP BY \n");
                         queryForBalances2.Append("\"Account\", \n");
                         queryForBalances2.Append("\"FCCurrency\"");
@@ -751,7 +756,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {

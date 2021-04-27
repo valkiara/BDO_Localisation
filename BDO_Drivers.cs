@@ -1,15 +1,11 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 
 namespace BDO_Localisation_AddOn
 {
     static partial class BDO_Drivers
     {
-        public static void createMasterDataUDO( out string errorText)
+        public static void createMasterDataUDO(out string errorText)
         {
             errorText = null;
             string tableName = "BDO_DRVS";
@@ -18,8 +14,8 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.UserObjectsMD oUserObjectsMD = null;
             oUserObjectsMD = (SAPbobsCOM.UserObjectsMD)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oUserObjectsMD);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(oUserObjectsMD);
-            
-            int result = UDO.addUserTable( tableName, description, SAPbobsCOM.BoUTBTableType.bott_MasterData, out errorText);
+
+            int result = UDO.addUserTable(tableName, description, SAPbobsCOM.BoUTBTableType.bott_MasterData, out errorText);
 
             if (result != 0)
             {
@@ -28,23 +24,27 @@ namespace BDO_Localisation_AddOn
 
             Dictionary<string, object> fieldskeysMap;
 
-            fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "firstName");
-            fieldskeysMap.Add("TableName", "BDO_DRVS");
-            fieldskeysMap.Add("Description", "First Name");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            fieldskeysMap.Add("EditSize", 50);
+            fieldskeysMap = new Dictionary<string, object>
+            {
+                { "Name", "firstName" },
+                { "TableName", "BDO_DRVS" },
+                { "Description", "First Name" },
+                { "Type", SAPbobsCOM.BoFieldTypes.db_Alpha },
+                { "EditSize", 50 }
+            };
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            fieldskeysMap = new Dictionary<string, object>();
-            fieldskeysMap.Add("Name", "lastName");
-            fieldskeysMap.Add("TableName", "BDO_DRVS");
-            fieldskeysMap.Add("Description", "Last Name");
-            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            fieldskeysMap.Add("EditSize", 50);
+            fieldskeysMap = new Dictionary<string, object>
+            {
+                { "Name", "lastName" },
+                { "TableName", "BDO_DRVS" },
+                { "Description", "Last Name" },
+                { "Type", SAPbobsCOM.BoFieldTypes.db_Alpha },
+                { "EditSize", 50 }
+            };
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "tin");
@@ -53,7 +53,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 11);
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "notRsdnt");
@@ -63,12 +63,12 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "N");
 
-            UDO.addUserTableFields( fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
 
             GC.Collect();
-        }     
+        }
 
-        public static void registerUDO( out string errorText)
+        public static void registerUDO(out string errorText)
         {
             errorText = null;
             string code = "UDO_F_BDO_DRVS_D"; //20 characters (must include at least one alphabetical character).
@@ -87,7 +87,7 @@ namespace BDO_Localisation_AddOn
 
             List<Dictionary<string, object>> listFindColumns = new List<Dictionary<string, object>>();
             List<Dictionary<string, object>> listFormColumns = new List<Dictionary<string, object>>();
-            
+
             Dictionary<string, object> fieldskeysMap;
 
             fieldskeysMap = new Dictionary<string, object>();
@@ -122,10 +122,10 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("FormColumnAlias", "Code");
             fieldskeysMap.Add("FormColumnDescription", "Code"); //30 characters
             listFormColumns.Add(fieldskeysMap);
-            
+
             formProperties.Add("FormColumns", listFormColumns);
 
-            UDO.registerUDO( code, formProperties, out errorText);
+            UDO.registerUDO(code, formProperties, out errorText);
 
             GC.Collect();
         }
@@ -152,7 +152,7 @@ namespace BDO_Localisation_AddOn
             }
             catch
             {
-              
+
             }
         }
 
@@ -334,7 +334,7 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static void setSizeForm( SAPbouiCOM.Form oForm, out string errorText)
+        public static void setSizeForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -349,7 +349,7 @@ namespace BDO_Localisation_AddOn
                 oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
                 oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 3;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 errorText = ex.Message;
             }
@@ -359,11 +359,11 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void resizeForm( SAPbouiCOM.Form oForm, out string errorText)
+        public static void resizeForm(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
             SAPbouiCOM.Item oItem = null;
-           
+
             try
             {
                 oItem = oForm.Items.Item("1");
@@ -381,7 +381,7 @@ namespace BDO_Localisation_AddOn
                 GC.Collect();
             }
         }
-    
+
         //public static void formDataLoad(  SAPbouiCOM.Form oForm, out string errorText)
         //{
         //    errorText = null;
@@ -389,7 +389,7 @@ namespace BDO_Localisation_AddOn
         //    BDOSResources.getTranslate("DriverMasterData");
         //}
 
-        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -411,7 +411,7 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.Button oButton = (SAPbouiCOM.Button)oForm.Items.Item("BDO_TinBtn").Specific;
                         oButton.Image = "15886_MENU_CHECKED";
                         oForm.Freeze(true);
-                        BDO_TinBtn_OnClick( oForm, out errorText);
+                        BDO_TinBtn_OnClick(oForm, out errorText);
                         oForm.Freeze(false);
                         oButton.Image = "15886_MENU";
                         if (errorText != null)
@@ -425,7 +425,7 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE & pVal.BeforeAction == false & Program.FORM_LOAD_FOR_VISIBLE == true)
                 {
                     oForm.Freeze(true);
-                    BDO_Drivers.setSizeForm( oForm, out errorText);
+                    BDO_Drivers.setSizeForm(oForm, out errorText);
                     oForm.Title = BDOSResources.getTranslate("DriverMasterData");
                     oForm.Freeze(false);
                     Program.FORM_LOAD_FOR_VISIBLE = false;
@@ -434,15 +434,15 @@ namespace BDO_Localisation_AddOn
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE & pVal.BeforeAction == false)
                 {
                     oForm.Freeze(true);
-                    BDO_Drivers.resizeForm( oForm, out errorText);
+                    BDO_Drivers.resizeForm(oForm, out errorText);
                     oForm.Freeze(false);
                 }
-                
-                
+
+
             }
         }
 
-        public static void BDO_TinBtn_OnClick(  SAPbouiCOM.Form oForm, out string errorText)
+        public static void BDO_TinBtn_OnClick(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -454,13 +454,13 @@ namespace BDO_Localisation_AddOn
                 return;
             }
 
-            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings( out errorText);
+            Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorText);
             if (errorText != null)
             {
                 return;
             }
-                       
-            string name = BDO_Waybills.getInitFromTIN(tin,out errorText);
+
+            string name = BDO_Waybills.getInitFromTIN(tin, out errorText);
 
             if (name != "")
             {
@@ -470,26 +470,26 @@ namespace BDO_Localisation_AddOn
                 string firstName = oForm.DataSources.DBDataSources.Item(0).GetValue("U_firstName", 0).Trim();
                 string lastName = oForm.DataSources.DBDataSources.Item(0).GetValue("U_lastName", 0).Trim();
                 int changeCardName = 1;
-                
+
                 if (firstName != "")
                 {
                     changeCardName = Program.uiApp.MessageBox(BDOSResources.getTranslate("NameMismatchFromEnregDoYouWantEditDriver"), 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
-                 }
+                }
 
                 if (changeCardName == 1)
                 {
-                                      
-                    firstLetter = name.Substring(0,name.IndexOf("."));
-                    seccondLetter = name.Substring(name.IndexOf(".")+2);
-                    
+
+                    firstLetter = name.Substring(0, name.IndexOf("."));
+                    seccondLetter = name.Substring(name.IndexOf(".") + 2);
+
                     SAPbouiCOM.EditText ofirstName = ((SAPbouiCOM.EditText)(oForm.Items.Item("13_U_E").Specific));
                     ofirstName.Value = firstLetter;
 
                     SAPbouiCOM.EditText olastName = ((SAPbouiCOM.EditText)(oForm.Items.Item("14_U_E").Specific));
                     olastName.Value = seccondLetter;
-                    
+
                 }
-               
+
             }
             else
             {
@@ -498,8 +498,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_FormDataEvent(  ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
-                {
+        public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        {
             BubbleEvent = true;
             string errorText = null;
 
@@ -508,19 +508,19 @@ namespace BDO_Localisation_AddOn
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_DELETE)
             {
                 if (BusinessObjectInfo.BeforeAction == true)  //& pVal.InnerEvent == true)
+                {
+                    if (checkRemoving(oForm, out errorText) == true)
                     {
-                    if (checkRemoving( oForm, out errorText) == true)
-                        {
-                            Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("RecordIsUsedInDocuments"));
-                            Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
-                            BubbleEvent = false;
+                        Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("RecordIsUsedInDocuments"));
+                        Program.uiApp.MessageBox(BDOSResources.getTranslate("OperationUnsuccesfullSeeLog"));
+                        BubbleEvent = false;
+                    }
+                }
             }
-    }
-}
         }
 
 
-        public static bool checkRemoving( SAPbouiCOM.Form oForm, out string errorText)
+        public static bool checkRemoving(SAPbouiCOM.Form oForm, out string errorText)
         {
             errorText = null;
 
@@ -531,7 +531,7 @@ namespace BDO_Localisation_AddOn
             listTables.Add("@BDO_VECL", "U_drvCode"); //Vehicles
             listTables.Add("@BDO_WBLD", "U_drvCode"); //Waybills
 
-            return CommonFunctions.codeIsUsed( listTables, code);
+            return CommonFunctions.codeIsUsed(listTables, code);
         }
 
     }
