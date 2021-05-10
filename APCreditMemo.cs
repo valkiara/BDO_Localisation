@@ -547,7 +547,6 @@ namespace BDO_Localisation_AddOn
                     SAPbouiCOM.DBDataSource DocDBSource = oForm.DataSources.DBDataSources.Item(0);
                     if (DocDBSource.GetValue("CANCELED", 0) == "N")
                     {
-                        
                         //დოკუმენტი არ დაემატოს ზედნადების გარეშე, თუ მომწოდებელს ჩართული აქვს
                         string CardCode = DocDBSource.GetValue("CardCode", 0);
 
@@ -561,11 +560,13 @@ namespace BDO_Localisation_AddOn
                         NeedWB = NeedWB.Trim();
 
                         string DocType = DocDBSource.GetValue("DocType", 0);
-                        SAPbouiCOM.ComboBox opTyp = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_CNTp").Specific;
-                        if (opTyp.Value == "1")
+
+                        SAPbouiCOM.ComboBox opType = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_CNTp").Specific;
+                        if (opType.Value == "1")
                         {
                             BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
+
                         if ((RSControlType == "2" || RSControlType == "3") && (DocType == "I"))
                         {
                             SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBID").Specific;
@@ -677,20 +678,6 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                 }
-                SAPbouiCOM.ComboBox opType = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_CNTp").Specific;
-                if (opType.Value == "1")
-                {
-                    //SAPbobsCOM.Documents creditMemo = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oCreditNotes);
-                    //creditMemo.UserFields.Fields.Item("U_BDO_WBID").Value = "";
-
-                    //oForm.Items.Item("BDO_WBID").Specific.Value = "";
-
-                    //SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBID").Specific;
-                    //string WBID = oEditText.Value;
-                    
-                //SAPbobsCOM.Documents APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
-                    //APInv = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseInvoices);
-                }
             }
 
             //A/C Number Update
@@ -713,17 +700,6 @@ namespace BDO_Localisation_AddOn
                 {
                     Program.uiApp.MessageBox(errorText);
                     CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                }
-                SAPbouiCOM.ComboBox opType = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_CNTp").Specific;
-                if (opType.Value == "1")
-                {
-                    //SAPbobsCOM.Documents creditMemo = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oCreditNotes);
-                    //creditMemo.UserFields.Fields.Item("U_BDO_WBID").Value = "";
-
-                    //oForm.Items.Item("BDO_WBID").Specific.Value = "";
-
-                    //SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBID").Specific;
-                    //string WBID = oEditText.Value;
                 }
             }
 
@@ -761,17 +737,6 @@ namespace BDO_Localisation_AddOn
                 {
                     cancellation(oForm, Program.canceledDocEntry, out errorText);
                     Program.canceledDocEntry = 0;
-                }
-                SAPbouiCOM.ComboBox opType = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_CNTp").Specific;
-                if (opType.Value == "1")
-                {
-                    //SAPbobsCOM.Documents creditMemo = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oCreditNotes);
-                    //creditMemo.UserFields.Fields.Item("U_BDO_WBID").Value = "";
-
-                    //oForm.Items.Item("BDO_WBID").Specific.Value = "";
-                    
-                    //SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBID").Specific;
-                    //string WBID = oEditText.Value;
                 }
             }
         }
@@ -846,7 +811,6 @@ namespace BDO_Localisation_AddOn
                 if(pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
                 {
                     SAPbouiCOM.Form oForm2 = Program.uiApp.Forms.GetForm("181", pVal.FormTypeCount);
-                    //oForm2.Items.Item("BDO_WBID").Specific.Value = "";
                 }
             }
         }
