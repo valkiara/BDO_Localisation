@@ -992,6 +992,16 @@ namespace BDO_Localisation_AddOn
                         Program.uiApp.MessageBox(errorText);
                         BubbleEvent = false;
                     }
+                    if (BatchNumberSelection.SelectedBatches != null)
+                    {
+                        bool rejectionAsset = false;
+                        CommonFunctions.blockAssetInvoice(oForm, "OPCH", out rejectionAsset);
+                        if (rejectionAsset)
+                        {
+                            Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentCannotBeAdded") + " : " + BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem"));
+                            BubbleEvent = false;
+                        }
+                    }
                 }
                 else if (BusinessObjectInfo.BeforeAction == false && BusinessObjectInfo.ActionSuccess)
                 {
@@ -1129,6 +1139,28 @@ namespace BDO_Localisation_AddOn
                         }
                     }
                     else
+                    {
+                        BubbleEvent = false;
+                    }
+                }
+            }
+        }
+
+        public static void uiApp_MenuEvent(ref SAPbouiCOM.MenuEvent pVal, out bool BubbleEvent, out string errorText)
+        {
+            errorText = null;
+            BubbleEvent = true;
+
+            //----------------------------->Cancel <-----------------------------
+            SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+            if (BatchNumberSelection.SelectedBatches != null)
+            {
+                if (pVal.BeforeAction && pVal.MenuUID == "1284")
+                {
+                    //ძირითადი საშუალებების შემოწმება
+                    bool rejectionAsset = false;
+                    CommonFunctions.blockAssetInvoice(oForm, "OPCH", out rejectionAsset);
+                    if (rejectionAsset)
                     {
                         BubbleEvent = false;
                     }
@@ -1379,7 +1411,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message; 
+                errorText = ex.Message;
             }
         }
 
