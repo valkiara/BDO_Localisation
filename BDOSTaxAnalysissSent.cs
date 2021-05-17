@@ -348,13 +348,13 @@ namespace BDO_Localisation_AddOn
                     string k_ID = TaxDataRow["K_ID"].ToString();
                     if (k_ID != "-1")
                     {
-                        k_invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt32(k_ID));
+                        k_invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt64(k_ID));
                         if (k_invoiceTableLines != null)
                         {
                             k_invoiceTableLines_False = false;
                         }
 
-                        DataTable k_taxDataTable = oTaxInvoice.get_invoice_desc(Convert.ToInt32(k_ID));
+                        DataTable k_taxDataTable = oTaxInvoice.get_invoice_desc(Convert.ToInt64(k_ID));
                         Parallel.ForEach(k_taxDataTable.AsEnumerable(), k_taxDeclRow =>
                         {
                             if (k_taxDataTable.Columns.Contains("full_amount"))
@@ -375,7 +375,7 @@ namespace BDO_Localisation_AddOn
                     }
 
                     string inv_ID = TaxDataRow["ID"].ToString();
-                    DataTable invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt32(inv_ID));
+                    DataTable invoiceTableLines = oTaxInvoice.get_ntos_invoices_inv_nos(Convert.ToInt64(inv_ID));
                     if (invoiceTableLines != null || k_invoiceTableLines_False == false)
                     {
                         fillValues( ref insertquery, TaxDataRow, "Error getting Waybill numbers", TANXA_First, VAT_First, false);
@@ -450,8 +450,8 @@ namespace BDO_Localisation_AddOn
 
             string K_ID = TaxDataRow["K_ID"].ToString(); // კორექტირების ანგარიშ-ფაქტურის ID
             string WAS_REF = TaxDataRow["WAS_REF"].ToString(); // უარყოფილი მეორე მხარის მიერ 0 - არა 1 - კი
-            bool corrInv = (K_ID != "-1"); //თუ არის კორექტირების ა/ფ
-            bool refInv = (WAS_REF == "1"); //თუ არის უარყოფილი ა/ფ
+            bool corrInv = K_ID != "-1"; //თუ არის კორექტირების ა/ფ
+            bool refInv = WAS_REF == "1"; //თუ არის უარყოფილი ა/ფ
 
             string statusRS = TaxDataRow["STATUS"].ToString();
             oUserTable.UserFields.Fields.Item("U_STATUS").Value = BDO_TaxInvoiceSent.getStatusValueByStatusNumber(statusRS, corrInv, refInv);
@@ -545,8 +545,8 @@ namespace BDO_Localisation_AddOn
             string statusRS = TaxDataRow["STATUS"].ToString();
             string K_ID = TaxDataRow["K_ID"].ToString(); // კორექტირების ანგარიშ-ფაქტურის ID
             string WAS_REF = TaxDataRow["WAS_REF"].ToString(); // უარყოფილი მეორე მხარის მიერ 0 - არა 1 - კი
-            bool corrInv = (K_ID != "-1"); //თუ არის კორექტირების ა/ფ
-            bool refInv = (WAS_REF == "1"); //თუ არის უარყოფილი ა/ფ
+            bool corrInv = K_ID != "-1"; //თუ არის კორექტირების ა/ფ
+            bool refInv = WAS_REF == "1"; //თუ არის უარყოფილი ა/ფ
 
             DateTime REG_DT = new DateTime();
             DateTime OPERATION_DT = new DateTime();

@@ -116,7 +116,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="operation_date" type="s:dateTime" />
             <s:element minOccurs="1" maxOccurs="1" name="seller_un_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="buyer_un_id" type="s:int" />
@@ -132,7 +132,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="save_invoiceResult" type="s:boolean" />
-            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:long" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -140,7 +140,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="operation_date" type="s:dateTime" />
             <s:element minOccurs="1" maxOccurs="1" name="seller_un_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="buyer_un_id" type="s:int" />
@@ -156,7 +156,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="save_invoice_aResult" type="s:boolean" />
-            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:long" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -164,7 +164,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
           </s:sequence>
@@ -185,7 +185,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="status" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="seq_num_s" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="seq_num_b" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="k_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="k_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="r_un_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="k_type" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="b_s_user_id" type="s:int" />
@@ -197,7 +197,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
           </s:sequence>
@@ -221,10 +221,10 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="goods" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="g_unit" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="g_number" type="s:decimal" />
@@ -239,7 +239,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="save_invoice_descResult" type="s:boolean" />
-            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:long" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -247,8 +247,8 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:long" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
           </s:sequence>
@@ -265,7 +265,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
           </s:sequence>
@@ -288,7 +288,7 @@
       <s:element name="save_ntos_invoices_inv_nos">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="invois_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="overhead_no" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="overhead_dt" type="s:dateTime" />
@@ -308,8 +308,8 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:long" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
           </s:sequence>
@@ -395,7 +395,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="status" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
@@ -413,7 +413,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="status" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
@@ -431,7 +431,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="ref_text" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
@@ -449,7 +449,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="k_type" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
@@ -460,7 +460,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="k_invoiceResult" type="s:boolean" />
-            <s:element minOccurs="1" maxOccurs="1" name="k_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="k_id" type="s:long" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -468,7 +468,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
           </s:sequence>
@@ -478,7 +478,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="g_invoiceResult" type="s:boolean" />
-            <s:element minOccurs="1" maxOccurs="1" name="k_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="k_id" type="s:long" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -486,7 +486,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
           </s:sequence>
@@ -496,7 +496,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="get_makoreqtirebeliResult" type="s:boolean" />
-            <s:element minOccurs="1" maxOccurs="1" name="k_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="k_id" type="s:long" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -769,7 +769,7 @@
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="seq_num" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
           </s:sequence>
@@ -785,7 +785,7 @@
       <s:element name="save_invoice_request">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="bayer_un_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="seller_un_id" type="s:int" />
@@ -807,7 +807,7 @@
       <s:element name="del_invoice_request">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="bayer_un_id" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
@@ -825,7 +825,7 @@
       <s:element name="get_invoice_request">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inv_id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sp" type="s:string" />
@@ -847,7 +847,7 @@
       <s:element name="acsept_invoice_request_status">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:long" />
             <s:element minOccurs="1" maxOccurs="1" name="user_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="seller_un_id" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="su" type="s:string" />
@@ -998,7 +998,7 @@
       <s:element name="get_invoice_idResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="get_invoice_idResult" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="get_invoice_idResult" type="s:long" />
           </s:sequence>
         </s:complexType>
       </s:element>

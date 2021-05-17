@@ -1017,7 +1017,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -1045,7 +1045,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -1232,7 +1232,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -1358,7 +1358,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -1497,7 +1497,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -1526,7 +1526,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {

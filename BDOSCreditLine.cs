@@ -103,7 +103,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
             fieldskeysMap.Add("EditSize", 1);
             fieldskeysMap.Add("DefaultValue", "C");
-            fieldskeysMap.Add("ValidValues", validValues); 
+            fieldskeysMap.Add("ValidValues", validValues);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
@@ -116,7 +116,20 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            GC.Collect();
+            Dictionary<string, string> listValidValuesDict = new Dictionary<string, string>();
+            listValidValuesDict.Add("N", "N");
+            listValidValuesDict.Add("Y", "Y");
+
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "AccrDayAfter");
+            fieldskeysMap.Add("TableName", "BDOSCRLN");
+            fieldskeysMap.Add("Description", "Accrue Day After");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
+            fieldskeysMap.Add("EditSize", 1);
+            fieldskeysMap.Add("DefaultValue", "N");
+            fieldskeysMap.Add("ValidValues", listValidValuesDict);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
         }
 
         public static void registerUDO()
@@ -184,6 +197,9 @@ namespace BDO_Localisation_AddOn
                 oUDOFind.ColumnAlias = "U_NbrOfDays";
                 oUDOFind.ColumnDescription = "Number of Days";
                 oUDOFind.Add();
+                oUDOFind.ColumnAlias = "U_AccrDayAfter";
+                oUDOFind.ColumnDescription = "Accrue Day After";
+                oUDOFind.Add();
 
                 for (int i = 0; i < oUDOFind.Count - 1; i++)
                 {
@@ -231,32 +247,46 @@ namespace BDO_Localisation_AddOn
                 oUDOForm = oUserObjectMD.FormColumns;
                 oUDOEnhancedForm = oUserObjectMD.EnhancedFormColumns;
 
-                if (oUDOForm.Count < 11)
+                if (oUDOForm.Count < 12)
                 {
                     int oldCount = oUDOFind.Count - 1;
 
                     oUDOFind.SetCurrentLine(oldCount);
                     oUDOForm.SetCurrentLine(oldCount);
 
+                    ////Find
+                    //oUDOFind.ColumnAlias = "U_Type";
+                    //oUDOFind.ColumnDescription = "Type";
+                    //oUDOFind.Add();
+                    //oUDOFind.ColumnAlias = "U_NbrOfDays";
+                    //oUDOFind.ColumnDescription = "Number of Days";
+                    //oUDOFind.Add();
+
+                    ////Form
+                    //oUDOForm.FormColumnAlias = "U_Type";
+                    //oUDOForm.FormColumnDescription = "Type";
+                    //oUDOForm.Editable = SAPbobsCOM.BoYesNoEnum.tYES;
+                    //oUDOForm.Add();
+                    //oUDOForm.FormColumnAlias = "U_NbrOfDays";
+                    //oUDOForm.FormColumnDescription = "Number of Days";
+                    //oUDOForm.Editable = SAPbobsCOM.BoYesNoEnum.tYES;
+                    //oUDOForm.Add();
+
+                    //oUDOFind.SetCurrentLine(22);
+                    //oUDOForm.SetCurrentLine(22);
+
                     //Find
                     oUDOFind.Add();
-                    oUDOFind.ColumnAlias = "U_Type";
-                    oUDOFind.ColumnDescription = "Type";
-                    oUDOFind.Add();
-                    oUDOFind.ColumnAlias = "U_NbrOfDays";
-                    oUDOFind.ColumnDescription = "Number of Days";
-                    oUDOFind.Add();
+                    oUDOFind.ColumnAlias = "U_AccrDayAfter";
+                    oUDOFind.ColumnDescription = "Accrue Day After";
+                    //oUDOFind.Add();
 
                     //Form
                     oUDOForm.Add();
-                    oUDOForm.FormColumnAlias = "U_Type";
-                    oUDOForm.FormColumnDescription = "Type";
+                    oUDOForm.FormColumnAlias = "U_AccrDayAfter";
+                    oUDOForm.FormColumnDescription = "Accrue Day After";
                     oUDOForm.Editable = SAPbobsCOM.BoYesNoEnum.tYES;
-                    oUDOForm.Add();
-                    oUDOForm.FormColumnAlias = "U_NbrOfDays";
-                    oUDOForm.FormColumnDescription = "Number of Days";
-                    oUDOForm.Editable = SAPbobsCOM.BoYesNoEnum.tYES;
-                    oUDOForm.Add();
+                    //oUDOForm.Add();
 
                     if (oUserObjectMD.Update() != 0)
                     {
@@ -266,7 +296,6 @@ namespace BDO_Localisation_AddOn
             }
             Marshal.ReleaseComObject(oUserObjectMD);
         }
-
 
         public static void addMenus()
         {
@@ -402,6 +431,9 @@ namespace BDO_Localisation_AddOn
 
             oColumn = oColumns.Item("U_NbrOfDays");
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("NumberOfDays");
+
+            oColumn = oColumns.Item("U_AccrDayAfter");
+            oColumn.TitleObject.Caption = BDOSResources.getTranslate("AccrueDayAfter");
         }
 
         public static void setVisibleFormItems(SAPbouiCOM.Form oForm)
@@ -422,7 +454,7 @@ namespace BDO_Localisation_AddOn
 
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
 
             finally
@@ -510,7 +542,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -561,7 +593,7 @@ namespace BDO_Localisation_AddOn
             catch (Exception ex)
             {
                 Marshal.ReleaseComObject(oRecordSet);
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
     }
