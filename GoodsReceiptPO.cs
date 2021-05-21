@@ -18,8 +18,6 @@ namespace BDO_Localisation_AddOn
 
         public static void createFormItems(SAPbouiCOM.Form oForm, out string errorText)
         {
-            errorText = null;
-
             BDO_WBReceivedDocs.createFormItems(oForm, "OPDN", out errorText);
 
             Dictionary<string, object> formItems;
@@ -71,12 +69,6 @@ namespace BDO_Localisation_AddOn
                 return;
             }
         }
-
-        public static void attachWBToDoc(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
-        {
-            BDO_WBReceivedDocs.attachWBToDoc(oForm, oIncWaybDocForm, out errorText);
-        }
-
         public static void uiApp_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool bubbleEvent)
         {
             bubbleEvent = true;
@@ -225,12 +217,10 @@ namespace BDO_Localisation_AddOn
                         FormsB1.WB_TAX_AuthorizationsItems(oForm);
                     }
                 }
-                else if(pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE ||
-                    pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
+                else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE || pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
                 {
                     if (pVal.BeforeAction)
                     {
-                     
                         FormsB1.WB_TAX_AuthorizationsItems(oForm);
                     }
                 }
@@ -247,7 +237,7 @@ namespace BDO_Localisation_AddOn
                             oForm.Freeze(false);
                         }
                     }
-                }               
+                }
             }
         }
     }

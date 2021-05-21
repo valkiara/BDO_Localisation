@@ -469,7 +469,7 @@ namespace BDO_Localisation_AddOn
                 oForm.DataSources.UserDataSources.Item("BDO_TaxDat").ValueEx = "";
 
                 oStaticText = (StaticText)oForm.Items.Item("BDO_TaxTxt").Specific;
-                oStaticText.Caption = BDOSResources.getTranslate("CreateTaxInvoice");
+                oStaticText.Caption = getTranslate("CreateTaxInvoice");
 
                 errorText = ex.Message;
             }
@@ -491,22 +491,20 @@ namespace BDO_Localisation_AddOn
             try
             {
                 string query = "SELECT DISTINCT " +
-                               "\"CSI1\".\"BaseEntry\" AS \"BaseEntry\" " +
+                               "\"CSI1\".\"BaseEntry\", " +
+                               "\"CSI1\".\"BaseType\" " +
                                "FROM \"CSI1\" " +
-                               "WHERE \"CSI1\".\"DocEntry\" = '" + docEntry + "' AND \"CSI1\".\"BaseType\" = '13'";
+                               $"WHERE \"CSI1\".\"DocEntry\" = '{docEntry}'";
                 oRecordSet.DoQuery(query);
 
-                if (oRecordSet.RecordCount > 1)
-                {
-                    return;
-                }
-
-                while (!oRecordSet.EoF)
+                if (!oRecordSet.EoF)
                 {
                     baseEntry = oRecordSet.Fields.Item("BaseEntry").Value;
-
-                    oRecordSet.MoveNext();
-                    break;
+                    if (oRecordSet.Fields.Item("BaseType").Value != 13)
+                    {
+                        Marshal.ReleaseComObject(oRecordSet);
+                        GetBaseDoc(baseEntry, out baseEntry);
+                    }
                 }
             }
             catch
@@ -515,7 +513,7 @@ namespace BDO_Localisation_AddOn
             }
             finally
             {
-                Marshal.FinalReleaseComObject(oRecordSet);
+                Marshal.ReleaseComObject(oRecordSet);
             }
         }
 
@@ -667,12 +665,12 @@ namespace BDO_Localisation_AddOn
                             }
                             else if (cancelled != "N")
                             {
-                                errorText = BDOSResources.getTranslate("DocumentMustNotBeCancelledOrCancellation");
+                                errorText = getTranslate("DocumentMustNotBeCancelledOrCancellation");
                             }
                         }
                         else
                         {
-                            errorText = BDOSResources.getTranslate("ToCreateTaxInvoiceWriteDocument");
+                            errorText = getTranslate("ToCreateTaxInvoiceWriteDocument");
                         }
 
                         break;
