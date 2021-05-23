@@ -994,8 +994,7 @@ namespace BDO_Localisation_AddOn
                     }
                     if (BatchNumberSelection.SelectedBatches != null)
                     {
-                        bool rejectionAsset = false;
-                        CommonFunctions.blockAssetInvoice(oForm, "OPCH", out rejectionAsset);
+                        CommonFunctions.blockAssetInvoice(oForm, "OPCH", out var rejectionAsset);
                         if (rejectionAsset)
                         {
                             Program.uiApp.MessageBox(BDOSResources.getTranslate("DocumentCannotBeAdded") + " : " + BDOSResources.getTranslate("ThereIsDepreciationAmountsInCurrentMonthForItem"));
@@ -1158,8 +1157,7 @@ namespace BDO_Localisation_AddOn
                 if (pVal.BeforeAction && pVal.MenuUID == "1284")
                 {
                     //ძირითადი საშუალებების შემოწმება
-                    bool rejectionAsset = false;
-                    CommonFunctions.blockAssetInvoice(oForm, "OPCH", out rejectionAsset);
+                    CommonFunctions.blockAssetInvoice(oForm, "OPCH", out var rejectionAsset);
                     if (rejectionAsset)
                     {
                         BubbleEvent = false;
