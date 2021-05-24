@@ -455,7 +455,7 @@ namespace BDO_Localisation_AddOn
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception(ex.Message);
+                            throw ex;
                         }
                         finally
                         {
@@ -1342,8 +1342,6 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-            
-            GC.Collect();
         }
 
         public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.IChooseFromListEvent oCFLEvento)
@@ -1490,7 +1488,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -1510,7 +1508,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -1578,7 +1576,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -1603,7 +1601,7 @@ namespace BDO_Localisation_AddOn
 
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
 
             finally
@@ -1638,7 +1636,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -1688,11 +1686,10 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
-                GC.Collect();
                 oForm.Freeze(false);
             }
         }
@@ -1958,7 +1955,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -1991,7 +1988,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -2023,7 +2020,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
         /*
