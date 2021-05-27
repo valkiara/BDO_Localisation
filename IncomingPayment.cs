@@ -779,9 +779,9 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -1268,9 +1268,9 @@ namespace BDO_Localisation_AddOn
                     //oItem.Visible = false;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -1405,9 +1405,9 @@ namespace BDO_Localisation_AddOn
                     setVisibleFormItems(oForm);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -1487,9 +1487,9 @@ namespace BDO_Localisation_AddOn
                 oItem = oForm.Items.Item("outDocLB");
                 oItem.Top = top;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -1764,9 +1764,9 @@ namespace BDO_Localisation_AddOn
                 }
                 item.Enabled = enabled;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -3059,9 +3059,9 @@ namespace BDO_Localisation_AddOn
                     return true;
                 return false;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -3079,9 +3079,9 @@ namespace BDO_Localisation_AddOn
                     throw new Exception(errorText);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -3112,9 +3112,9 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
