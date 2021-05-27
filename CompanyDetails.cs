@@ -2915,6 +2915,8 @@ namespace BDO_Localisation_AddOn
 
                         SAPbobsCOM.UserTable oUserTable = Program.oCompany.UserTables.Item("BDO_INTB");
 
+                        var exists = oUserTable.GetByKey(code);
+
                         oUserTable.UserFields.Fields.Item("U_program").Value = program;
                         oUserTable.UserFields.Fields.Item("U_mode").Value = mode;
                         oUserTable.UserFields.Fields.Item("U_WSDL").Value = wsdl;
@@ -2922,7 +2924,7 @@ namespace BDO_Localisation_AddOn
                         oUserTable.UserFields.Fields.Item("U_URL").Value = url;
                         oUserTable.UserFields.Fields.Item("U_port").Value = port;
 
-                        returnCode = oUserTable.GetByKey(code) ? oUserTable.Update() : oUserTable.Add();
+                        returnCode = exists ? oUserTable.Update() : oUserTable.Add();
 
                         if (returnCode != 0)
                         {
