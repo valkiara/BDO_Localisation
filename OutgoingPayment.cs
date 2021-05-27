@@ -3623,9 +3623,9 @@ namespace BDO_Localisation_AddOn
 
                             else if (pVal.ItemUID == "UsBlaAgRtS" && !pVal.InnerEvent)
                             {
-                                SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
+                                //SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
                                 //if (oCheckBox.Checked)
-                                    CommonFunctions.fillDocRate(oForm, "OVPM");
+                                CommonFunctions.fillDocRate(oForm, "OVPM");
                             }
 
                             else if ((pVal.ItemUID == "liablePrTx" || pVal.ItemUID == "37") && !pVal.InnerEvent)
