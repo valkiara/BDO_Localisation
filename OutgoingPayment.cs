@@ -3777,8 +3777,11 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
             try
             {
-                var docEntry = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0);
-                if (!string.IsNullOrEmpty(docEntry))
+                //var docEntry = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0);
+                //if (!string.IsNullOrEmpty(docEntry))
+                //    return;
+                string transId = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("TransId", 0);
+                if (!string.IsNullOrEmpty(transId))
                     return;
 
                 var oDBDataSource = oForm.DataSources.DBDataSources.Item("OVPM");
