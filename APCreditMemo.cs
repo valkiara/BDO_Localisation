@@ -808,10 +808,6 @@ namespace BDO_Localisation_AddOn
                         BubbleEvent = false;
                     }
                 }
-                if(pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
-                {
-                    SAPbouiCOM.Form oForm2 = Program.uiApp.Forms.GetForm("181", pVal.FormTypeCount);
-                }
             }
         }
 
