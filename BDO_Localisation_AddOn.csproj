@@ -116,6 +116,7 @@
     <Compile Include="ARInvoice.cs" />
     <Compile Include="AssetClass.cs" />
     <Compile Include="BalanceSheet.cs" />
+    <Compile Include="BatchNumberMasterData.cs" />
     <Compile Include="BatchNumberSelection.cs" />
     <Compile Include="BDOSApprovalProcedures.cs" />
     <Compile Include="BDOSApprovalStages.cs" />
