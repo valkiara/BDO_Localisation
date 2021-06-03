@@ -86,26 +86,9 @@ namespace BDO_Localisation_AddOn
 
         static bool runAddOn()
         {
-            string errorText;
-
-            bool connectResult = ConnectB1.connectShared(out errorText);
+            bool connectResult = ConnectB1.connectShared(out var errorText);
             if (connectResult)
             {
-                string errorTextWB = null;
-                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
-                if (errorTextWB != null)
-                {
-                    WBAUT = "2";
-                    TXAUT = "2";
-                    DECAUT = true;
-                }
-                else
-                {
-                    WBAUT = rsSettings["WBAUT"];
-                    TXAUT = rsSettings["TXAUT"];
-                    DECAUT = rsSettings["DCAUT"] == "Y";
-                }
-
                 //SAPbouiCOM.ProgressBar ProgressBarForm;
                 //ProgressBarForm = uiApp.StatusBar.CreateProgressBar("", 20, true);
                 //ProgressBarForm.Value = 0;
@@ -136,10 +119,23 @@ namespace BDO_Localisation_AddOn
 
                 if (!runLocalisationAddOn()) return false;
 
-                SAPbobsCOM.SBObob oSBOBob = oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                SAPbobsCOM.SBObob oSBOBob = oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);            
                 LocalCurrency = CommonFunctions.getCurrencyInternationalCode(oSBOBob.GetLocalCurrency().Fields.Item("LocalCurrency").Value);
-
                 MainCurrency = CurrencyB1.getMainCurrency(out errorText);
+
+                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out var errorTextWB);
+                if (errorTextWB != null)
+                {
+                    WBAUT = "2";
+                    TXAUT = "2";
+                    DECAUT = true;
+                }
+                else
+                {
+                    WBAUT = rsSettings["WBAUT"];
+                    TXAUT = rsSettings["TXAUT"];
+                    DECAUT = rsSettings["DCAUT"] == "Y";
+                }
 
                 return connectResult;
             }
@@ -193,11 +189,10 @@ namespace BDO_Localisation_AddOn
 
                 CrystalReports.addDocumentTypeCrystalReportForAddOn(Application.StartupPath, out errorText);
 
-                uiApp.MessageBox(BDOSResources.getTranslate("Localisation") + " " + BDOSResources.getTranslate("AddonLoadingSuccesfully"));
+                uiApp.MessageBox(BDOSResources.getTranslate("Localisation") + " " + BDOSResources.getTranslate("AddonLoadingSuccesfully"));          
             }
 
             return true;
-
         }
 
         private static string AddonVersion()

@@ -539,7 +539,13 @@ namespace BDO_Localisation_AddOn
                         NeedWB = NeedWB.Trim();
 
                         string DocType = DocDBSource.GetValue("DocType", 0);
-
+                        
+                        SAPbouiCOM.ComboBox opTyp = (SAPbouiCOM.ComboBox)oForm.Items.Item("BDO_CNTp").Specific;
+                        if (opTyp.Value == "1")
+                        {
+                            BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
+                        }
+                        
                         if ((RSControlType == "2" || RSControlType == "3") && (DocType == "I"))
                         {
                             SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("BDO_WBID").Specific;

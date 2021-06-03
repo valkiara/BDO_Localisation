@@ -1038,6 +1038,8 @@ namespace BDO_Localisation_AddOn
                     createFormItems(oForm, out errorText);
                     formDataLoad(oForm);
                     setVisibleFormItems(oForm);
+
+                    Program.currentFormCount = pVal.FormTypeCount;
                 }
 
                 if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT && pVal.ItemUID == "WBOper" && !pVal.BeforeAction)

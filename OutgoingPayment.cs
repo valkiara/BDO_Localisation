@@ -1652,10 +1652,12 @@ namespace BDO_Localisation_AddOn
                 string CardCode = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("CardCode", 0).Trim();
                 string DocType = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocType", 0).Trim();
                 string draftKey = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0).Trim();
+                string transId = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("TransId", 0);
 
                 bool ProfitTaxValuesVisible = (ProfitTaxTypeIsSharing && DocType == "S");
 
                 bool docEntryIsEmpty = string.IsNullOrEmpty(docEntry);
+                bool transIdIsEmpty = string.IsNullOrEmpty(transId);
 
                 string liablePrTx = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("U_liablePrTx", 0).Trim();
                 oForm.Items.Item("liablePrTx").Enabled = (docEntryIsEmpty);
@@ -1685,23 +1687,15 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("BDOSPnCoAm").Visible = PensionVisible;
                 oForm.Items.Item("PnCoDiffAm").Visible = PensionVisible;
                 oForm.Items.Item("CalcPhcEnt").Visible = PensionVisible;
-                oForm.Items.Item("BDOSWhtAmt").Enabled = PensionVisible && docEntryIsEmpty;
-                oForm.Items.Item("BDOSPnPhAm").Enabled = PensionVisible && docEntryIsEmpty;
-                oForm.Items.Item("BDOSPnCoAm").Enabled = PensionVisible && docEntryIsEmpty;
-                oForm.Items.Item("PnCoDiffAm").Enabled = PensionVisible && docEntryIsEmpty;
-                oForm.Items.Item("CalcPhcEnt").Enabled = PensionVisible && docEntryIsEmpty;
+                oForm.Items.Item("BDOSWhtAmt").Enabled = PensionVisible && transIdIsEmpty;
+                oForm.Items.Item("BDOSPnPhAm").Enabled = PensionVisible && transIdIsEmpty;
+                oForm.Items.Item("BDOSPnCoAm").Enabled = PensionVisible && transIdIsEmpty;
+                oForm.Items.Item("PnCoDiffAm").Enabled = PensionVisible && transIdIsEmpty;
+                oForm.Items.Item("CalcPhcEnt").Enabled = PensionVisible && transIdIsEmpty;
                 //საშემოსავლო + საპენსიო
 
-                if (docEntryIsEmpty == false)
-                {
-                    oItem = oForm.Items.Item("opTypeCB");
-                    oItem.Enabled = false;
-                }
-                else
-                {
-                    oItem = oForm.Items.Item("opTypeCB");
-                    oItem.Enabled = true;
-                }
+                oItem = oForm.Items.Item("opTypeCB");
+                oItem.Enabled = docEntryIsEmpty;
 
                 if (string.IsNullOrEmpty(opType) || opType == "transferToOwnAccount" || opType == "currencyExchange" || opType == "treasuryTransfer")
                 {
@@ -3783,8 +3777,11 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
             try
             {
-                var docEntry = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0);
-                if (!string.IsNullOrEmpty(docEntry))
+                //var docEntry = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocEntry", 0);
+                //if (!string.IsNullOrEmpty(docEntry))
+                //    return;
+                string transId = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("TransId", 0);
+                if (!string.IsNullOrEmpty(transId))
                     return;
 
                 var oDBDataSource = oForm.DataSources.DBDataSources.Item("OVPM");
