@@ -667,17 +667,17 @@ namespace BDO_Localisation_AddOn
             }
             //DateTime deprMonth = Convert.ToDateTime(DateTime.ParseExact(dateStr, "yyyyMMdd", CultureInfo.InvariantCulture));
 
-            StringBuilder query;
+            string query;
 
             bool isRetirement = oForm.Items.Item("Rtrmnt").Specific.Selected;
 
             if (isRetirement)
-                query = getQueryForRetirement(dateStr);
+                query = getQueryForRetirement(dateStr).ToString();
             else
-                query = getQueryForDepreciation(dateStr);
+                query = getQueryForDepreciation(dateStr).ToString();
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            oRecordSet.DoQuery(query.ToString());
+            oRecordSet.DoQuery(query);
             int rowIndex = 0;
             //int i = 0;
             while (!oRecordSet.EoF)
@@ -879,6 +879,19 @@ namespace BDO_Localisation_AddOn
             query.Append("                      ON T4.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
             query.Append("                         AND T4.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
 
+            query.Append("               LEFT JOIN (SELECT t1.\"U_Project\", \n");
+            query.Append("                                 t1.\"U_DistNumber\", \n");
+            query.Append("                                 t1.\"U_ItemCode\" \n");
+            query.Append("                          FROM   \"@BDOSDEPAC1\" t1 \n");
+            query.Append("                                 INNER JOIN \"@BDOSDEPACR\" t \n");
+            query.Append("                                         ON t1.\"DocEntry\" = t.\"DocEntry\" \n");
+            query.Append("                          WHERE  t.\"Canceled\" = 'N' AND t.\"U_Retirement\" = 'Y' \n");
+            query.Append($"                                 AND t.\"U_AccrMnth\" <= '{dateStr}' \n");
+            query.Append("                          GROUP BY t1.\"U_DistNumber\", t1.\"U_ItemCode\", t1.\"U_Project\") AS T5 \n");
+            query.Append("                      ON T5.\"U_ItemCode\" = \"OIBT\".\"ItemCode\" \n");
+            query.Append("                         AND T5.\"U_DistNumber\" = \"OBTN\".\"DistNumber\" \n");
+            query.Append("                         AND T5.\"U_Project\" = \"OWHS\".\"U_BDOSPrjCod\" \n");
+
             query.Append("           WHERE \n");
             query.Append("               (CASE WHEN IFNUll(\"OBTN\".\"U_BDOSUsLife\", 0) = 0 \n");
             query.Append("                    THEN \n");
@@ -886,6 +899,7 @@ namespace BDO_Localisation_AddOn
             query.Append("                      THEN \"OITB\".\"U_BDOSUsLife\" ELSE \"OITM\".\"U_BDOSUsLife\" END \n");
             query.Append("               ELSE \"OBTN\".\"U_BDOSUsLife\" END) > 0 \n");
             query.Append("               AND \"OBTN\".\"Quantity\" > 0 AND \"OIBT\".\"Quantity\" > 0 \n");
+            query.Append("          AND (T5.\"U_ItemCode\" IS NULL AND T5.\"U_DistNumber\" IS NULL AND T5.\"U_Project\" IS NULL) \n");
 
             query.Append("        ) AS T0 \n");
             query.Append("ORDER BY T0.\"ItemCode\", T0.\"DistNumber\", \n");
