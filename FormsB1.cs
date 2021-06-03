@@ -88,6 +88,8 @@ namespace BDO_Localisation_AddOn
             Projects.createUserFields(out errorText);
 
             ArCorrectionInvoice.CreateUserFields(out errorText);
+
+            BatchNumberMasterData.createUserFields();
         }
 
         public static void addMenusForAddOn()

@@ -2452,8 +2452,6 @@ namespace BDO_Localisation_AddOn
             rsSettingsFromDB.Add("TXAUT", "");
             rsSettingsFromDB.Add("DCAUT", "");
 
-
-
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
             string query = @"SELECT ""U_BDO_SU"", ""U_BDO_SP"", ""U_BDO_ItmCod"", ""U_BDO_UsrTyp"", ""U_BDO_PrtTyp"", ""U_BDO_WblTyp"", ""U_BDOSWblAut"", ""U_BDOSTaxAut"", ""U_BDOSDecAtt"" FROM ""OADM""";
@@ -2474,6 +2472,7 @@ namespace BDO_Localisation_AddOn
                     rsSettingsFromDB["UserType"] = oRecordSet.Fields.Item("U_BDO_UsrTyp").Value.ToString();
                     rsSettingsFromDB["ProtocolType"] = oRecordSet.Fields.Item("U_BDO_PrtTyp").Value.ToString() == "0" ? "HTTP" : "HTTPS";
                     rsSettingsFromDB["WaybillType"] = oRecordSet.Fields.Item("U_BDO_WblTyp").Value.ToString();
+                   
                     oRecordSet.MoveNext();
                     break;
                 }
@@ -2500,17 +2499,13 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
+                Program.oCompany.GetLastError(out var errCode, out var errMsg);
                 errorText = BDOSResources.getTranslate("ErrorOfRSSettings") + " " + BDOSResources.getTranslate("ErrorDescription") + " " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "" + BDOSResources.getTranslate("OtherInfo") + ": " + ex.Message;
                 return rsSettingsFromDB;
             }
             finally
             {
                 Marshal.FinalReleaseComObject(oRecordSet);
-                GC.Collect();
             }
 
             return rsSettingsFromDB;
@@ -2915,6 +2910,8 @@ namespace BDO_Localisation_AddOn
 
                         SAPbobsCOM.UserTable oUserTable = Program.oCompany.UserTables.Item("BDO_INTB");
 
+                        var exists = oUserTable.GetByKey(code);
+
                         oUserTable.UserFields.Fields.Item("U_program").Value = program;
                         oUserTable.UserFields.Fields.Item("U_mode").Value = mode;
                         oUserTable.UserFields.Fields.Item("U_WSDL").Value = wsdl;
@@ -2922,7 +2919,7 @@ namespace BDO_Localisation_AddOn
                         oUserTable.UserFields.Fields.Item("U_URL").Value = url;
                         oUserTable.UserFields.Fields.Item("U_port").Value = port;
 
-                        returnCode = oUserTable.GetByKey(code) ? oUserTable.Update() : oUserTable.Add();
+                        returnCode = exists ? oUserTable.Update() : oUserTable.Add();
 
                         if (returnCode != 0)
                         {
