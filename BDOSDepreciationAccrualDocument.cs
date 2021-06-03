@@ -269,13 +269,14 @@ namespace BDO_Localisation_AddOn
                 {
                     if (Program.cancellationTrans && Program.canceledDocEntry != 0)
                     {
-                        Program.canceledDocEntry = 0;
                         int answer = 0;
                         answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouReallyWantCancelDoc") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                         if (answer == 1)
                             cancellation(oForm, Program.canceledDocEntry, out errorText);
                         else
                             BubbleEvent = false;
+
+                        Program.canceledDocEntry = 0;
                     }
                 }
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)
