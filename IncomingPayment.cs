@@ -1687,9 +1687,7 @@ namespace BDO_Localisation_AddOn
                     {
                         if (pVal.ItemUID == "UsBlaAgRtS" && !pVal.InnerEvent)
                         {
-                            SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
-                            if (oCheckBox.Checked)
-                                CommonFunctions.fillDocRate(oForm, "ORCT");
+                            CommonFunctions.fillDocRate(oForm, "ORCT");
                         }
                         else if (pVal.ItemUID == "57" || pVal.ItemUID == "56" || pVal.ItemUID == "58")
                         {
