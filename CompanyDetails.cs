@@ -1439,21 +1439,24 @@ namespace BDO_Localisation_AddOn
             formItems = new Dictionary<string, object>();
             itemName = "AuthForm";
             formItems.Add("isDataSource", true);
-            formItems.Add("DataSource", "DBDataSources");
-            formItems.Add("TableName", "@BDO_INTB");
-            formItems.Add("Alias", "U_AuthForm");
+            formItems.Add("DataSource", "UserDataSources");
+            formItems.Add("DataType", BoDataType.dt_SHORT_TEXT);
+            formItems.Add("Length", 20);
+            formItems.Add("TableName", "");
+            formItems.Add("Alias", itemName);
             formItems.Add("Bound", true);
-            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_COMBO_BOX);
+            formItems.Add("Type", BoFormItemTypes.it_COMBO_BOX);
+            formItems.Add("ExpandType", BoExpandType.et_DescriptionOnly);
+            formItems.Add("DisplayDesc", true);
             formItems.Add("Left", left + 150);
             formItems.Add("Width", 100);
             formItems.Add("Top", FirstItemHeight + 200);
             formItems.Add("Height", 14);
             formItems.Add("UID", itemName);
-            formItems.Add("ExpandType", SAPbouiCOM.BoExpandType.et_DescriptionOnly);
-            formItems.Add("DisplayDesc", true);
             formItems.Add("FromPane", 200);
             formItems.Add("ToPane", 200);
             formItems.Add("ValidValues", listValidValues);
+            formItems.Add("Value", SetAuthForm(oForm));
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
             if (errorText != null)
@@ -2472,7 +2475,7 @@ namespace BDO_Localisation_AddOn
                     rsSettingsFromDB["UserType"] = oRecordSet.Fields.Item("U_BDO_UsrTyp").Value.ToString();
                     rsSettingsFromDB["ProtocolType"] = oRecordSet.Fields.Item("U_BDO_PrtTyp").Value.ToString() == "0" ? "HTTP" : "HTTPS";
                     rsSettingsFromDB["WaybillType"] = oRecordSet.Fields.Item("U_BDO_WblTyp").Value.ToString();
-                   
+
                     oRecordSet.MoveNext();
                     break;
                 }
@@ -2963,6 +2966,21 @@ namespace BDO_Localisation_AddOn
             {
                 CommonFunctions.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
             }
+        }
+
+        private static string SetAuthForm(Form oForm)
+        {
+            Recordset oRecordSet = (Recordset)oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+            oRecordSet.DoQuery(@"select ""U_AuthForm"" From ""@BDO_INTB""
+                                 Where ""U_program"" = 'BOG'");
+            var authForm = string.Empty;
+
+            if (!oRecordSet.EoF)
+                authForm = oRecordSet.Fields.Item("U_AuthForm").Value;
+
+            Marshal.ReleaseComObject(oRecordSet);
+
+            return authForm;
         }
 
         public static void updateUsers(SAPbouiCOM.Form oForm, out string errorText)
