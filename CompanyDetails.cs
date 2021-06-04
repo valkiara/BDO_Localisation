@@ -2976,11 +2976,13 @@ namespace BDO_Localisation_AddOn
             var authForm = string.Empty;
 
             if (!oRecordSet.EoF)
+            {
                 authForm = oRecordSet.Fields.Item("U_AuthForm").Value;
+            }
 
             Marshal.ReleaseComObject(oRecordSet);
 
-            return authForm;
+            return authForm ?? string.Empty;
         }
 
         public static void updateUsers(SAPbouiCOM.Form oForm, out string errorText)
