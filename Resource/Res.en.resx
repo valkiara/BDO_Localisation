@@ -3706,4 +3706,7 @@
   <data name="APCorrectionInvoice" xml:space="preserve">
     <value>AP Correction Invoice</value>
   </data>
+  <data name="DailyTariff" xml:space="preserve">
+    <value>DailyTariff</value>
+  </data>
 </root>

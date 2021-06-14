@@ -3676,4 +3676,7 @@
   <data name="APCorrectionInvoice" xml:space="preserve">
     <value>შესყიდვის კორექტირება</value>
   </data>
+  <data name="DailyTariff" xml:space="preserve">
+    <value>დღიური ტარიფი</value>
+  </data>
 </root>

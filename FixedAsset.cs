@@ -42,6 +42,15 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "DayTariff");
+            fieldskeysMap.Add("TableName", "OITM");
+            fieldskeysMap.Add("Description", "Daily tariff");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Numeric);
+            fieldskeysMap.Add("EditSize", 11);
+
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
+
             GC.Collect();
         }
 
@@ -151,6 +160,50 @@ namespace BDO_Localisation_AddOn
             }
 
             oForm.DataSources.UserDataSources.Add("BDSDistCod", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 20);
+
+            top = oForm.Items.Item("1470002187").Top + height + 1;
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DayTariffS";
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_STATIC);
+            formItems.Add("Left", oForm.Items.Item("1470002187").Left);
+            formItems.Add("Width", width_s);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("Caption", BDOSResources.getTranslate("DailyTariff"));
+            formItems.Add("FromPane", fromPane);
+            formItems.Add("ToPane", toPane);
+            formItems.Add("Visible", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
+
+            formItems = new Dictionary<string, object>();
+            itemName = "DayTariffE";
+            formItems.Add("isDataSource", true);
+            formItems.Add("DataSource", "DBDataSources");
+            formItems.Add("TableName", "OITM");
+            formItems.Add("Alias", "U_DayTariff");
+            formItems.Add("Bound", true);
+            formItems.Add("Type", SAPbouiCOM.BoFormItemTypes.it_EDIT);
+            formItems.Add("Left", oForm.Items.Item("1470002208").Left);
+            formItems.Add("Width", width_e);
+            formItems.Add("Top", top);
+            formItems.Add("Height", height);
+            formItems.Add("UID", itemName);
+            formItems.Add("FromPane", fromPane);
+            formItems.Add("ToPane", toPane);
+            formItems.Add("Visible", false);
+
+            FormsB1.createFormItem(oForm, formItems, out errorText);
+            if (errorText != null)
+            {
+                throw new Exception(errorText);
+            }
 
             //string objectType = "87"; //DistRule
             //string uniqueID_DistCFL = "Dist_CFL";
