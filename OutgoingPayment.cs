@@ -3819,7 +3819,7 @@ namespace BDO_Localisation_AddOn
                                 var invDocDate = DateTime.ParseExact(oMatrix.GetCellSpecific("21", i).Value, "yyyyMMdd", CultureInfo.InvariantCulture);
                                 (string wtCode, decimal invDocRate)? invData = GetWTCodeFromInvoices(invType, invDocNum);
 
-                                if (!invData.HasValue && string.IsNullOrEmpty(invData.Value.wtCode)) continue;
+                                if (!invData.HasValue || string.IsNullOrEmpty(invData.Value.wtCode)) continue;
 
                                 var invWTCode = invData.Value.wtCode;
                                 var invWTaxAmt = FormsB1.cleanStringOfNonDigits(oMatrix.GetCellSpecific("72", i).Value);
