@@ -68,6 +68,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -115,6 +116,7 @@
     <Compile Include="ARInvoice.cs" />
     <Compile Include="AssetClass.cs" />
     <Compile Include="BalanceSheet.cs" />
+    <Compile Include="BatchNumberMasterData.cs" />
     <Compile Include="BatchNumberSelection.cs" />
     <Compile Include="BDOSApprovalProcedures.cs" />
     <Compile Include="BDOSApprovalStages.cs" />

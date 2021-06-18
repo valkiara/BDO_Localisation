@@ -86,28 +86,9 @@ namespace BDO_Localisation_AddOn
 
         static bool runAddOn()
         {
-            string errorText;
-
-            bool connectResult = ConnectB1.connectShared(out errorText);
+            bool connectResult = ConnectB1.connectShared(out var errorText);
             if (connectResult)
             {
-                string errorTextWB = null;
-                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out errorTextWB);
-                if (errorTextWB != null)
-                {
-                    WBAUT = "2";
-                    TXAUT = "2";
-                    DECAUT = true;
-                }
-                else
-                {
-                    WBAUT = rsSettings["WBAUT"];
-                    TXAUT = rsSettings["TXAUT"];
-                    DECAUT = rsSettings["DCAUT"] == "Y";
-
-                }
-
-
                 //SAPbouiCOM.ProgressBar ProgressBarForm;
                 //ProgressBarForm = uiApp.StatusBar.CreateProgressBar("", 20, true);
                 //ProgressBarForm.Value = 0;
@@ -122,7 +103,7 @@ namespace BDO_Localisation_AddOn
                 if (!UDO.UserDefinedFieldExists("OADM", "BDOSLocLic"))
                 {
                     License.createUserFields(out errorText);
-                    if (!String.IsNullOrEmpty(errorText))
+                    if (!string.IsNullOrEmpty(errorText))
                     {
                         uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                         uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("LocalisationLicensingDataCouldNotBeCreated") + BDOSResources.getTranslate("RetryStartingAddon"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
@@ -138,12 +119,23 @@ namespace BDO_Localisation_AddOn
 
                 if (!runLocalisationAddOn()) return false;
 
-                SAPbobsCOM.SBObob oSBOBob = oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                SAPbobsCOM.SBObob oSBOBob = oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);            
                 LocalCurrency = CommonFunctions.getCurrencyInternationalCode(oSBOBob.GetLocalCurrency().Fields.Item("LocalCurrency").Value);
-
                 MainCurrency = CurrencyB1.getMainCurrency(out errorText);
 
-
+                Dictionary<string, string> rsSettings = CompanyDetails.getRSSettings(out var errorTextWB);
+                if (errorTextWB != null)
+                {
+                    WBAUT = "2";
+                    TXAUT = "2";
+                    DECAUT = true;
+                }
+                else
+                {
+                    WBAUT = rsSettings["WBAUT"];
+                    TXAUT = rsSettings["TXAUT"];
+                    DECAUT = rsSettings["DCAUT"] == "Y";
+                }
 
                 return connectResult;
             }
@@ -170,9 +162,9 @@ namespace BDO_Localisation_AddOn
 
                 BDOSTablesLog.CreateTable(out errorText);
 
-                if ((UDO.UserDefinedTableExists("BDOSLOGS")) == false)
+                if (!UDO.UserDefinedTableExists("BDOSLOGS"))
                 {
-                    if (!String.IsNullOrEmpty(errorText))
+                    if (!string.IsNullOrEmpty(errorText))
                     {
                         uiApp.StatusBar.SetSystemMessage(errorText);
                     }
@@ -197,11 +189,10 @@ namespace BDO_Localisation_AddOn
 
                 CrystalReports.addDocumentTypeCrystalReportForAddOn(Application.StartupPath, out errorText);
 
-                uiApp.MessageBox(BDOSResources.getTranslate("Localisation") + " " + BDOSResources.getTranslate("AddonLoadingSuccesfully"));
+                uiApp.MessageBox(BDOSResources.getTranslate("Localisation") + " " + BDOSResources.getTranslate("AddonLoadingSuccesfully"));          
             }
 
             return true;
-
         }
 
         private static string AddonVersion()
@@ -1152,14 +1143,16 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->A/P Correction Invoice<-----------------------------
                         else if (oForm.TypeEx == "70002")
                         {
+                            APCorrectionInvoice.formDataLoad(oForm);
+                            APCorrectionInvoice.setVisibleFormItems(oForm);
                             BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
                         //----------------------------->A/P Invoice<-----------------------------
                         else if (oForm.TypeEx == "141")
                         {
-                            APInvoice.formDataLoad(oForm, out errorText);
-                            APInvoice.setVisibleFormItems(oForm, out errorText);
+                            APInvoice.formDataLoad(oForm);
+                            APInvoice.setVisibleFormItems(oForm);
                             BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
@@ -1172,8 +1165,8 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->A/P Credit Memo<-----------------------------
                         else if (oForm.TypeEx == "181")
                         {
-                            APCreditMemo.formDataLoad(oForm, out errorText);
-                            APCreditMemo.setVisibleFormItems(oForm, out errorText);
+                            APCreditMemo.formDataLoad(oForm);
+                            APCreditMemo.setVisibleFormItems(oForm);
                             BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
@@ -1210,7 +1203,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->A/P Down Payment Invoice<-----------------------------
                         else if (oForm.TypeEx == "65301")
                         {
-                            APDownPaymentInvoice.formDataLoad(oForm, out errorText);
+                            APDownPaymentInvoice.formDataLoad(oForm);
                         }
 
                         //----------------------------->A/R Down Payment Request<-----------------------------
@@ -1323,13 +1316,14 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->A/P Correction Invoice<-----------------------------
                         else if (oForm.TypeEx == "70002")
                         {
+                            APCorrectionInvoice.formDataLoad(oForm);
                             BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
                         //----------------------------->A/P Invoice<-----------------------------
                         else if (oForm.TypeEx == "141")
                         {
-                            APInvoice.formDataLoad(oForm, out errorText);
+                            APInvoice.formDataLoad(oForm);
                             BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
@@ -1342,14 +1336,14 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->A/P Credit Memo<-----------------------------
                         else if (oForm.TypeEx == "181")
                         {
-                            APCreditMemo.formDataLoad(oForm, out errorText);
+                            APCreditMemo.formDataLoad(oForm);
                             BDO_WBReceivedDocs.ClearWaybillItemsValues(oForm);
                         }
 
                         //----------------------------->Tax Invoice Sent<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXS_D")
                         {
-                            BDO_TaxInvoiceSent.formDataLoad(oForm, out errorText);
+                            BDO_TaxInvoiceSent.formDataLoad(oForm);
                         }
                         //----------------------------->Profit Tax Accural<-----------------------------
                         else if (oForm.TypeEx == "UDO_FT_UDO_F_BDO_TAXP_D")
@@ -1384,7 +1378,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->A/P Down Payment Invoice<-----------------------------
                         else if (oForm.TypeEx == "65301")
                         {
-                            APDownPaymentInvoice.formDataLoad(oForm, out errorText);
+                            APDownPaymentInvoice.formDataLoad(oForm);
                         }
 
                         //----------------------------->A/R Down Payment Request<-----------------------------
@@ -2570,14 +2564,15 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message;
                 try
                 {
-                    uiApp.StatusBar.SetSystemMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
+                    if (pVal.BeforeAction)
+                        BubbleEvent = false;
+                    uiApp.StatusBar.SetSystemMessage(ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
                 }
                 catch
                 {
-                }
+                }            
             }
         }
 

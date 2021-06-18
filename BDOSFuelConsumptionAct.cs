@@ -179,7 +179,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-            
+
             //ოდომეტრის საწყისი ჩვენება (სთ)
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "OdmtrStHr");
@@ -199,7 +199,7 @@ namespace BDO_Localisation_AddOn
             fieldskeysMap.Add("EditSize", 5);
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
-            
+
             //ნამუშევარი საათები
             fieldskeysMap = new Dictionary<string, object>();
             fieldskeysMap.Add("Name", "HrsWorked");
@@ -453,9 +453,9 @@ namespace BDO_Localisation_AddOn
 
                             Program.FORM_LOAD_FOR_ACTIVATE = false;
                         }
-                        catch (Exception ex)
+                        catch
                         {
-                            throw new Exception(ex.Message);
+                            throw;
                         }
                         finally
                         {
@@ -527,9 +527,9 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.ItemUID == "addMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
                     if (pVal.FormMode == 3)
-                    addMatrixRow(oForm);
+                        addMatrixRow(oForm);
                 }
-                 
+
                 else if (pVal.ItemUID == "delMTRB" && pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK && !pVal.BeforeAction)
                 {
                     if (pVal.FormMode == 3)
@@ -587,10 +587,10 @@ namespace BDO_Localisation_AddOn
                     {
                         if (string.IsNullOrEmpty(oDBDataSourceMTR.GetValue("U_ItemCode", i)) || Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_ActuallyCn", i), NumberFormatInfo.InvariantInfo) == 0)
                         {
-                               errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory")
-                                + "\", \"" + BDOSResources.getTranslate("AssetCode")
-                                + "\", \"" + BDOSResources.getTranslate("ActuallyConsumption")
-                                + "\" " + BDOSResources.getTranslate("TableRow") + ": " + (i + 1);
+                            errorText = BDOSResources.getTranslate("TheFollowingFieldsAreMandatory")
+                             + "\", \"" + BDOSResources.getTranslate("AssetCode")
+                             + "\", \"" + BDOSResources.getTranslate("ActuallyConsumption")
+                             + "\" " + BDOSResources.getTranslate("TableRow") + ": " + (i + 1);
                             Program.uiApp.SetStatusBarMessage(errorText, SAPbouiCOM.BoMessageTime.bmt_Short);
                             BubbleEvent = false;
                             return;
@@ -599,7 +599,7 @@ namespace BDO_Localisation_AddOn
 
                     //checkDuplicatesInDBDataSources
                     Dictionary<string, SAPbouiCOM.DBDataSource> oKeysDictionary = new Dictionary<string, SAPbouiCOM.DBDataSource>();
-                    oKeysDictionary.Add("U_ItemCode", oDBDataSourceMTR);                    
+                    oKeysDictionary.Add("U_ItemCode", oDBDataSourceMTR);
                     List<string> itemCodeList = CommonFunctions.checkDuplicatesInDBDataSources(oDBDataSourceMTR, oKeysDictionary, out errorText);
                     if (!string.IsNullOrEmpty(errorText))
                     {
@@ -1216,7 +1216,7 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Add("OdmtrEnd", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("EndingValueOfOdometer");
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrEnd");
-            
+
             oColumn = oColumns.Add("OdmtrStHr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("StartingValueOfOdometerInHours");
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrStHr");
@@ -1224,7 +1224,7 @@ namespace BDO_Localisation_AddOn
             oColumn = oColumns.Add("OdmtrEnHr", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("EndingValueOfOdometerInHours");
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_OdmtrEnHr");
-            
+
             oColumn = oColumns.Add("HrsWorked", SAPbouiCOM.BoFormItemTypes.it_EDIT);
             oColumn.TitleObject.Caption = BDOSResources.getTranslate("HoursWorked");
             oColumn.DataBind.SetBound(true, "@BDOSFUC1", "U_HrsWorked");
@@ -1342,8 +1342,6 @@ namespace BDO_Localisation_AddOn
             {
                 throw new Exception(errorText);
             }
-            
-            GC.Collect();
         }
 
         public static void chooseFromList(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal, SAPbouiCOM.IChooseFromListEvent oCFLEvento)
@@ -1443,7 +1441,7 @@ namespace BDO_Localisation_AddOn
                 else
                 {
                     SAPbouiCOM.DataTable oDataTable = oCFLEvento.SelectedObjects;
-                     
+
                     if (oDataTable != null)
                     {
                         SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("@BDOSFUCN");
@@ -1488,9 +1486,9 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
@@ -1508,9 +1506,9 @@ namespace BDO_Localisation_AddOn
                 oForm.Left = (Program.uiApp.Desktop.Width - oForm.Width) / 2;
                 oForm.Top = (Program.uiApp.Desktop.Height - oForm.Height) / 3;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
@@ -1555,7 +1553,7 @@ namespace BDO_Localisation_AddOn
                 oMatrix.Columns.Item("Dimension4").Width = mtrWidth;
                 oMatrix.Columns.Item("Dimension5").Width = mtrWidth;
                 oMatrix.Columns.Item("DocEntryGI").Width = mtrWidth;
-                
+
                 int height = 15;
                 int top = oForm.Items.Item("AssetMTR").Top - height - 1;
                 oForm.Items.Item("addMTRB").Top = top;
@@ -1576,9 +1574,9 @@ namespace BDO_Localisation_AddOn
                 oForm.Items.Item("1").Top = top;
                 oForm.Items.Item("2").Top = top;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
@@ -1601,9 +1599,9 @@ namespace BDO_Localisation_AddOn
                 //oForm.Items.Item("AssetMTR").Visible = !isFixed;
             }
 
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
 
             finally
@@ -1626,7 +1624,7 @@ namespace BDO_Localisation_AddOn
                     oDBDataSourceMTR.InsertRecord(oDBDataSourceMTR.Size);
                 }
                 oDBDataSourceMTR.SetValue("LineId", oDBDataSourceMTR.Size - 1, oDBDataSourceMTR.Size.ToString());
-                
+
                 oDBDataSourceMTR.SetValue("U_OdmtrStHr", oDBDataSourceMTR.Size - 1, "12:00");
                 oDBDataSourceMTR.SetValue("U_OdmtrEnHr", oDBDataSourceMTR.Size - 1, "12:00");
 
@@ -1636,9 +1634,9 @@ namespace BDO_Localisation_AddOn
                     oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
@@ -1686,13 +1684,12 @@ namespace BDO_Localisation_AddOn
                     oForm.Mode = SAPbouiCOM.BoFormMode.fm_UPDATE_MODE;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
-                GC.Collect();
                 oForm.Freeze(false);
             }
         }
@@ -1723,7 +1720,7 @@ namespace BDO_Localisation_AddOn
                     oDBDataSourceMTR.SetValue("U_FuelCode", i, oRecordSet.Fields.Item("U_ItemCode").Value);
                     oDBDataSourceMTR.SetValue("U_FuUomEntry", i, FormsB1.ConvertDecimalToString(Convert.ToDecimal(oRecordSet.Fields.Item("U_UomEntry").Value, CultureInfo.InvariantCulture)));
                     oDBDataSourceMTR.SetValue("U_FuUomCode", i, oRecordSet.Fields.Item("U_UomCode").Value);
-                    
+
                     Marshal.ReleaseComObject(oRecordSet);
                 }
                 decimal odmtrStart = getOdmtrStart(itemCode, docEntry);
@@ -1790,7 +1787,7 @@ namespace BDO_Localisation_AddOn
                 int rowCount = rowIndex == -1 ? oDBDataSourceMTR.Size - 1 : rowIndex;
                 int i = rowIndex == -1 ? 0 : rowIndex;
 
-                for (; i <= rowCount; i++) 
+                for (; i <= rowCount; i++)
                 {
                     string itemCode = oDBDataSourceMTR.GetValue("U_ItemCode", i);
                     if (!string.IsNullOrEmpty(itemCode))
@@ -1802,21 +1799,21 @@ namespace BDO_Localisation_AddOn
                         var hrsWorked = Convert.ToDecimal(oDBDataSourceMTR.GetValue("U_HrsWorked", i), CultureInfo.InvariantCulture);
                         decimal normConsumptionKm = fuPerKm / 100 * (odmtrEnd - odmtrStart);
 
-                        
+
                         int startHour = getOdmtrTimeInMinutes(oDBDataSourceMTR, i, "U_OdmtrStHr");
                         int endHour = getOdmtrTimeInMinutes(oDBDataSourceMTR, i, "U_OdmtrEnHr");
 
                         decimal minutesWorked = endHour - startHour;
-                        decimal hoursWorked = minutesWorked/60;
+                        decimal hoursWorked = minutesWorked / 60;
                         if (hoursWorked < 0)
                         {
                             minutesWorked = 24 * 60 - startHour + endHour;
                             hoursWorked = minutesWorked / 60;
                         }
-                        
+
                         decimal normConsumptionHr = fuPerHr * hoursWorked;
                         decimal normConsumption = normConsumptionKm + normConsumptionHr;
-                        
+
                         oDBDataSourceMTR.SetValue("U_NormCn", i, FormsB1.ConvertDecimalToString(normConsumption));
                         oDBDataSourceMTR.SetValue("U_ActuallyCn", i, FormsB1.ConvertDecimalToString(normConsumption));
                         oDBDataSourceMTR.SetValue("U_HrsWorked", i, FormsB1.ConvertDecimalToString(hoursWorked));
@@ -1956,9 +1953,9 @@ namespace BDO_Localisation_AddOn
                 }
                 return null;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -1989,9 +1986,9 @@ namespace BDO_Localisation_AddOn
                 }
                 return null;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -2000,7 +1997,7 @@ namespace BDO_Localisation_AddOn
             try
             {
                 SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-                
+
                 StringBuilder query = new StringBuilder();
                 query.Append("SELECT TOP 1 \"@BDOSFUC1\".\"U_OdmtrEnd\" \n");
                 query.Append("FROM \"@BDOSFUCN\" \n");
@@ -2021,9 +2018,9 @@ namespace BDO_Localisation_AddOn
                 }
                 return 0;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
         /*
@@ -2048,7 +2045,7 @@ namespace BDO_Localisation_AddOn
             + " from \"@BDOSFUC1\" " + "\n"
             + " INNER JOIN \"@BDOSFUCN\" " + "\n"
             + " ON \"@BDOSFUCN\".\"DocEntry\" = \"@BDOSFUC1\".\"DocEntry\" " + "\n"
-            + " where \"@BDOSFUC1\".\"U_ItemCode\" = '"+ itemCode + "'\n"
+            + " where \"@BDOSFUC1\".\"U_ItemCode\" = '" + itemCode + "'\n"
             + " ORDER BY " + "\n"
             + " \"@BDOSFUCN\".\"DocEntry\" desc";
 
@@ -2061,7 +2058,7 @@ namespace BDO_Localisation_AddOn
 
             return "";
         }
-        
+
         static int getOdmtrTimeInMinutes(SAPbouiCOM.DBDataSource oDBDataSourceMTR, int i, string fieldName)
         {
             int hours = 0;
