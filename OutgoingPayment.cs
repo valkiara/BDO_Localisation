@@ -3756,6 +3756,7 @@ namespace BDO_Localisation_AddOn
                                     oForm.Items.Item("234000005").Enabled = true;
                                     oForm.Items.Item("234000005").Specific.Value = "";
                                 }
+                                IncomingPayment.SetUsBlaAgRtSAvailability(oForm);
                             }
                         }
                         else if (pVal.ItemUID == "13" && !pVal.BeforeAction && !pVal.InnerEvent) //Item - Payment on Account (EditText)
