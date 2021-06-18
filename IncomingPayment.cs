@@ -681,7 +681,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Top", top);
             formItems.Add("Height", height);
             formItems.Add("UID", itemName);
-            formItems.Add("DisplayDesc", true);
             formItems.Add("ChooseFromListUID", uniqueID_lf_OutgoingPaymentCFL);
             formItems.Add("ChooseFromListAlias", "DocEntry");
 
@@ -734,10 +733,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Caption", BDOSResources.getTranslate("UseBlAgrRt"));
             formItems.Add("ValOff", "N");
             formItems.Add("ValOn", "Y");
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("SetAutoManaged", true);
-            formItems.Add("FromPane", 2);
-            formItems.Add("ToPane", 3);
             formItems.Add("Enabled", false);
 
             FormsB1.createFormItem(oForm, formItems, out errorText);
@@ -745,8 +740,6 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
-
-            GC.Collect();
         }
 
         public static void comboSelect(SAPbouiCOM.Form oForm, SAPbouiCOM.ItemEvent pVal)
@@ -786,9 +779,9 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
@@ -908,7 +901,7 @@ namespace BDO_Localisation_AddOn
 
 
 
-                        if (U_crdtActCur != DocCurrencyIN && DocCurrencyIN!="" && U_crdtActCur!="GEL")
+                        if (U_crdtActCur != DocCurrencyIN && DocCurrencyIN != "" && U_crdtActCur != "GEL")
                         {
                             trsfrSumOUTFC = DocRateOUT == 0 ? 0 : trsfrSumOUT / DocRateOUT;
 
@@ -1075,10 +1068,7 @@ namespace BDO_Localisation_AddOn
 
             try
             {
-                oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
-
-                string agrNo = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("AgrNo", 0);
-                oForm.Items.Item("UsBlaAgRtS").Enabled = !string.IsNullOrEmpty(agrNo);
+                oForm.Items.Item("26").Click();
 
                 oForm.Items.Item("statusCB").Enabled = false;
                 string docEntry = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("DocEntry", 0).Trim();
@@ -1089,16 +1079,7 @@ namespace BDO_Localisation_AddOn
                 //string PayNoDoc = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("PayNoDoc", 0).Trim();
                 //string CardCode = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("CardCode", 0).Trim();
 
-                bool docEntryIsEmpty = string.IsNullOrEmpty(docEntry);
-
-                if (!docEntryIsEmpty)
-                {
-                    oForm.Items.Item("opTypeCB").Enabled = false;
-                }
-                else
-                {
-                    oForm.Items.Item("opTypeCB").Enabled = true;
-                }
+                oForm.Items.Item("opTypeCB").Enabled = string.IsNullOrEmpty(docEntry);
 
                 if (string.IsNullOrEmpty(opType) || opType == "transferToOwnAccount" || opType == "currencyExchange" || opType == "treasuryTransfer")
                 {
@@ -1287,14 +1268,13 @@ namespace BDO_Localisation_AddOn
                     //oItem.Visible = false;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
                 oForm.Freeze(false);
-                oForm.Update();
             }
         }
 
@@ -1393,36 +1373,41 @@ namespace BDO_Localisation_AddOn
                         {
                             var agrNo = Convert.ToString(oDataTable.GetValue("AbsID", 0));
                             var prjCode = Convert.ToString(oDataTable.GetValue("Project", 0));
+                            var bpCurr = Convert.ToString(oDataTable.GetValue("BPCurr", 0));
 
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("95").Specific.Value = prjCode);
 
                             FilterInvoiceMatrix(oForm, agrNo, prjCode);
 
-                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular); //Remark
+                            oForm.Items.Item("26").Click(); //Remark
 
                             oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
                             oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
+
+                            SetUsBlaAgRtSAvailability(oForm, !string.IsNullOrEmpty(agrNo) && bpCurr != Program.LocalCurrency);
                         }
 
                         else if (oCFLEvento.ChooseFromListUID == "23") //Project
                         {
                             var prjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
+                            
+                            oForm.Items.Item("234000005").Enabled = true;
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("234000005").Specific.Value = string.Empty);
 
                             FilterInvoiceMatrix(oForm, null, prjCode);
 
-                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular); //Remark
-
+                            oForm.Items.Item("26").Click(); //Remark
                             oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
-                            oForm.Items.Item("234000005").Enabled = true;
+
+                            SetUsBlaAgRtSAvailability(oForm);
                         }
                     }
                     setVisibleFormItems(oForm);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
@@ -1502,9 +1487,9 @@ namespace BDO_Localisation_AddOn
                 oItem = oForm.Items.Item("outDocLB");
                 oItem.Top = top;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
@@ -1615,7 +1600,7 @@ namespace BDO_Localisation_AddOn
             {
                 if (Program.cancellationTrans && Program.canceledDocEntry != 0)
                 {
-                    cancellation(oForm, Program.canceledDocEntry, out errorText);
+                    cancellation(oForm, Program.canceledDocEntry);
                     Program.canceledDocEntry = 0;
                 }
             }
@@ -1631,7 +1616,7 @@ namespace BDO_Localisation_AddOn
         public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
-            string errorText = null;
+            string errorText;
 
             if (pVal.EventType != SAPbouiCOM.BoEventTypes.et_FORM_UNLOAD)
             {
@@ -1647,9 +1632,7 @@ namespace BDO_Localisation_AddOn
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_VISIBLE && !pVal.BeforeAction)
                 {
                     if (Program.FORM_LOAD_FOR_VISIBLE)
-                    {
                         Program.FORM_LOAD_FOR_VISIBLE = false;
-                    }
                 }
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_RESIZE && !pVal.BeforeAction)
@@ -1678,7 +1661,6 @@ namespace BDO_Localisation_AddOn
                         SAPbouiCOM.IChooseFromListEvent oCFLEvento = (SAPbouiCOM.IChooseFromListEvent)pVal;
                         chooseFromList(oForm, pVal, oCFLEvento, ref BubbleEvent);
                     }
-
                 }
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_COMBO_SELECT)
                 {
@@ -1703,13 +1685,9 @@ namespace BDO_Localisation_AddOn
                     }
                     else
                     {
-                        if (pVal.ItemUID == "UsBlaAgRtS")
+                        if (pVal.ItemUID == "UsBlaAgRtS" && !pVal.InnerEvent)
                         {
-                            SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
-                            if (oCheckBox.Checked)
-                            {
-                                CommonFunctions.fillDocRate(oForm, "ORCT");
-                            }
+                            CommonFunctions.fillDocRate(oForm, "ORCT");
                         }
                         else if (pVal.ItemUID == "57" || pVal.ItemUID == "56" || pVal.ItemUID == "58")
                         {
@@ -1717,6 +1695,8 @@ namespace BDO_Localisation_AddOn
 
                             oForm.Items.Item("95").Enabled = true;
                             oForm.Items.Item("234000005").Enabled = true;
+
+                            SetUsBlaAgRtSAvailability(oForm);
                         }
                     }
                 }
@@ -1738,6 +1718,8 @@ namespace BDO_Localisation_AddOn
                                 oForm.Items.Item("95").Specific.Value = "";
                                 oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
                                 oForm.Items.Item("234000005").Specific.Value = "";
+
+                                SetUsBlaAgRtSAvailability(oForm);
                             }
                         }
                     }
@@ -1757,9 +1739,36 @@ namespace BDO_Localisation_AddOn
                             oForm.Items.Item("95").Specific.Value = "";
                             oForm.Items.Item("234000005").Enabled = true;
                             oForm.Items.Item("234000005").Specific.Value = "";
+                            
+                            SetUsBlaAgRtSAvailability(oForm);
                         }
                     }
                 }
+            }
+        }
+
+       public static void SetUsBlaAgRtSAvailability(SAPbouiCOM.Form oForm, bool enabled = false)
+        {
+            try
+            {
+                oForm.Freeze(true);
+
+                var item = oForm.Items.Item("UsBlaAgRtS");
+                SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)item.Specific;
+                if (item.Enabled && oCheckBox.Checked)
+                {
+                    oCheckBox.Checked = false;
+                    oForm.Items.Item("26").Click(); //Remark
+                }
+                item.Enabled = enabled;
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                oForm.Freeze(false);
             }
         }
 
@@ -2065,7 +2074,7 @@ namespace BDO_Localisation_AddOn
                 }
                 else
                 {
-                oPayments.DocTypte = SAPbobsCOM.BoRcptTypes.rCustomer;
+                    oPayments.DocTypte = SAPbobsCOM.BoRcptTypes.rCustomer;
                 }
 
                 oPayments.DocDate = docDate;
@@ -2108,8 +2117,8 @@ namespace BDO_Localisation_AddOn
                     addDPAmt = Convert.ToDecimal(oDataTable.GetValue("AddDownPaymentAmount", i), NumberFormatInfo.InvariantInfo);
 
                 }
-                if(amount == 0)
-                    {
+                if (amount == 0)
+                {
                     amount = addDPAmt;
                 }
 
@@ -2227,37 +2236,37 @@ namespace BDO_Localisation_AddOn
 
                     }
 
-                DataRow[] foundRows = BDOSInternetBanking.TableExportMTRForDetail.Select(expression);
-                string docType;
-                if (foundRows.Count() > 0)
-                {
-                    for (int j = 0; j < foundRows.Count(); j++)
+                    DataRow[] foundRows = BDOSInternetBanking.TableExportMTRForDetail.Select(expression);
+                    string docType;
+                    if (foundRows.Count() > 0)
                     {
-                        docType = Convert.ToString(foundRows[j]["DocType"]);
-                        oPayments.Invoices.DocEntry = Convert.ToInt32(foundRows[j]["DocEntry"]);
-                        oPayments.Invoices.InstallmentId = Convert.ToInt32(foundRows[j]["InstallmentID"]);
+                        for (int j = 0; j < foundRows.Count(); j++)
+                        {
+                            docType = Convert.ToString(foundRows[j]["DocType"]);
+                            oPayments.Invoices.DocEntry = Convert.ToInt32(foundRows[j]["DocEntry"]);
+                            oPayments.Invoices.InstallmentId = Convert.ToInt32(foundRows[j]["InstallmentID"]);
 
-                        if (docType == "13")
-                            oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_Invoice;
-                        else if (docType == "14")
-                            oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_CredItnote;
-                        else if (docType == "203")
-                            oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_DownPayment;
+                            if (docType == "13")
+                                oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_Invoice;
+                            else if (docType == "14")
+                                oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_CredItnote;
+                            else if (docType == "203")
+                                oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_DownPayment;
                             else if (docType == "163")
                                 oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_APCorrectionInvoice;
-                        else if (docType == "30")
-                        {
-                            oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_JournalEntry;
-                            oPayments.Invoices.DocLine = Convert.ToInt32(foundRows[j]["LineID"]);
-                        }
+                            else if (docType == "30")
+                            {
+                                oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_JournalEntry;
+                                oPayments.Invoices.DocLine = Convert.ToInt32(foundRows[j]["LineID"]);
+                            }
 
-                        oPayments.Invoices.SumApplied = Convert.ToDouble(foundRows[j]["TotalPaymentLocal"], NumberFormatInfo.InvariantInfo);
-                        if (foundRows[j]["Currency"].ToString() != localCurrency)
-                            oPayments.Invoices.AppliedFC = Convert.ToDouble(foundRows[j]["TotalPayment"], NumberFormatInfo.InvariantInfo);
-                        oPayments.Invoices.Add();
+                            oPayments.Invoices.SumApplied = Convert.ToDouble(foundRows[j]["TotalPaymentLocal"], NumberFormatInfo.InvariantInfo);
+                            if (foundRows[j]["Currency"].ToString() != localCurrency)
+                                oPayments.Invoices.AppliedFC = Convert.ToDouble(foundRows[j]["TotalPayment"], NumberFormatInfo.InvariantInfo);
+                            oPayments.Invoices.Add();
+                        }
                     }
-                }
-                    
+
 
                     if (automaticPaymentInternetBanking)
                     {
@@ -2274,20 +2283,20 @@ namespace BDO_Localisation_AddOn
                             oPayments.Invoices.InvoiceType = SAPbobsCOM.BoRcptInvTypes.it_DownPayment;
 
                             oPayments.Invoices.SumApplied = Convert.ToDouble(addDPAmt);
-                            }
+                        }
 
                         if (!string.IsNullOrEmpty(errorText))
-                                {
+                        {
                             return null;
-                                }
-                            }
-                            }
+                        }
+                    }
+                }
                 else
-                            {
-                    if (addDPAmt > 0)
                 {
-                    int dpdocEntry;
-                    int dpdocNum;
+                    if (addDPAmt > 0)
+                    {
+                        int dpdocEntry;
+                        int dpdocNum;
 
                         oDataTable.SetValue("AddDownPaymentAmount", i, Convert.ToDouble(addDPAmt));
                         dpTxt = ARDownPaymentRequest.createDocumentTransferFromBPType(oDataTable, oForm, i, "", "", out dpdocEntry, out dpdocNum, out errorText);
@@ -3048,9 +3057,9 @@ namespace BDO_Localisation_AddOn
                     return true;
                 return false;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
@@ -3058,21 +3067,19 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void cancellation(SAPbouiCOM.Form oForm, int docEntry, out string errorText)
+        public static void cancellation(SAPbouiCOM.Form oForm, int docEntry)
         {
-            errorText = null;
-
             try
             {
-                JournalEntry.cancellation(oForm, docEntry, "24", out errorText);
+                JournalEntry.cancellation(oForm, docEntry, "24", out var errorText);
+                if (!string.IsNullOrEmpty(errorText))
+                {
+                    throw new Exception(errorText);
+                }
             }
-            catch (Exception ex)
+            catch
             {
-                errorText = ex.Message;
-            }
-            finally
-            {
-                GC.Collect();
+                throw;
             }
         }
 
@@ -3103,9 +3110,9 @@ namespace BDO_Localisation_AddOn
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {

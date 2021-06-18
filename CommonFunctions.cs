@@ -1100,7 +1100,11 @@ namespace BDO_Localisation_AddOn
                 return;
 
             string docCurr;
-            if (documentTable == "OINV" || documentTable == "OPCH" || documentTable == "ODPI" || documentTable == "ODPO")
+            var incOutPaymentDocTables = new List<string> { "OVPM", "ORCT" };
+            var invDocTables = new List<string> { "OINV", "OPCH" };
+            var invDpmDocTables = new List<string> { "OINV", "OPCH", "ODPI", "ODPO" };
+
+            if (invDpmDocTables.Contains(documentTable))
                 docCurr = oBDataSourceDocument.GetValue("DocCur", 0);
             else
                 docCurr = oBDataSourceDocument.GetValue("DocCurr", 0);
@@ -1123,32 +1127,35 @@ namespace BDO_Localisation_AddOn
                     docRateForWeightedAverage = docRate;
                 }
             }
-            if (documentTable == "OINV" || documentTable == "OPCH")
+
+            if (useBlaAgRt == "N")
             {
-                if (useBlaAgRt == "N")
-                {
-                    SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                    SAPbobsCOM.Recordset rateRecordset = oSBOBob.GetCurrencyRate(docCurr, docDate);
+                SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                SAPbobsCOM.Recordset rateRecordset = oSBOBob.GetCurrencyRate(docCurr, docDate);
 
-                    if (!rateRecordset.EoF)
-                        docRateForWeightedAverage = Convert.ToDecimal(rateRecordset.Fields.Item("CurrencyRate").Value);
+                if (!rateRecordset.EoF)
+                    docRateForWeightedAverage = Convert.ToDecimal(rateRecordset.Fields.Item("CurrencyRate").Value);
 
-                    Marshal.ReleaseComObject(rateRecordset);
-                    Marshal.ReleaseComObject(oSBOBob);
-                }
+                Marshal.ReleaseComObject(rateRecordset);
+                Marshal.ReleaseComObject(oSBOBob);
+            }
 
+            if (invDocTables.Contains(documentTable))
+            {
                 decimal weightedAverageRate = getWeightedAverageRateForInvoices(oForm, documentTable, docRateForWeightedAverage);
                 docRate = weightedAverageRate == decimal.Zero ? docRate : weightedAverageRate;
             }
+            else
+                docRate = docRateForWeightedAverage;
 
             if (docRate > 0)
             {
-                if (documentTable == "OINV" || documentTable == "OPCH" || documentTable == "ODPI" || documentTable == "ODPO")
+                if (invDpmDocTables.Contains(documentTable))
                 {
                     if (oForm.Items.Item("64").Enabled)
                         oForm.Items.Item("64").Specific.Value = FormsB1.ConvertDecimalToString(docRate);
                 }
-                else if ((documentTable == "OVPM" || documentTable == "ORCT") && (oForm.TypeEx == "196" || oForm.TypeEx == "146"))
+                else if (incOutPaymentDocTables.Contains(documentTable) && (oForm.TypeEx == "196" || oForm.TypeEx == "146"))
                 {
                     if (oForm.Items.Item("95").Enabled && oForm.Items.Item("95").Visible)
                         oForm.Items.Item("95").Specific.Value = FormsB1.ConvertDecimalToString(docRate);

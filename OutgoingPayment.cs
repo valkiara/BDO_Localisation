@@ -1365,8 +1365,6 @@ namespace BDO_Localisation_AddOn
             formItems.Add("Caption", BDOSResources.getTranslate("UseBlAgrRt"));
             formItems.Add("ValOff", "N");
             formItems.Add("ValOn", "Y");
-            formItems.Add("DisplayDesc", true);
-            formItems.Add("SetAutoManaged", true);
             formItems.Add("FromPane", 2);
             formItems.Add("ToPane", 3);
             formItems.Add("Enabled", false);
@@ -1376,8 +1374,6 @@ namespace BDO_Localisation_AddOn
             {
                 return;
             }
-
-            GC.Collect();
         }
 
         public static void CheckAccounts(SAPbouiCOM.Form oForm, out string errorText)
@@ -1446,7 +1442,7 @@ namespace BDO_Localisation_AddOn
                 oEdit = oForm.Items.Item("AmtPrTxE").Specific;
                 oEdit.Value = "";
 
-                oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                oForm.Items.Item("26").Click();
             }
 
             if (!payNoDoc && isWTLiable)
@@ -1723,9 +1719,6 @@ namespace BDO_Localisation_AddOn
                     }
                     catch { }
                 }
-
-                string agrNo = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("AgrNo", 0);
-                oForm.Items.Item("UsBlaAgRtS").Enabled = !string.IsNullOrEmpty(agrNo);
 
                 Dictionary<string, string> dataForTransferType = getDataForTransferType(oForm);
                 string transferType = getTransferType(dataForTransferType, out var errorText);
@@ -2014,28 +2007,33 @@ namespace BDO_Localisation_AddOn
                         {
                             var agrNo = Convert.ToString(oDataTable.GetValue("AbsID", 0));
                             var prjCode = Convert.ToString(oDataTable.GetValue("Project", 0));
+                            var bpCurr = Convert.ToString(oDataTable.GetValue("BPCurr", 0));
 
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("95").Specific.Value = prjCode);
 
                             FilterInvoiceMatrix(oForm, agrNo, prjCode);
 
-                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular); //Remark
+                            oForm.Items.Item("26").Click(); //Remark
 
                             oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
                             oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
+
+                            IncomingPayment.SetUsBlaAgRtSAvailability(oForm, !string.IsNullOrEmpty(agrNo) && bpCurr != Program.LocalCurrency);
                         }
 
                         else if (sCFL_ID == "23") //Project
                         {
                             var prjCode = Convert.ToString(oDataTable.GetValue("PrjCode", 0));
+
+                            oForm.Items.Item("234000005").Enabled = true;
                             LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("234000005").Specific.Value = string.Empty);
 
                             FilterInvoiceMatrix(oForm, null, prjCode);
 
-                            oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular); //Remark
-
+                            oForm.Items.Item("26").Click(); //Remark
                             oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
-                            oForm.Items.Item("234000005").Enabled = true;
+
+                            IncomingPayment.SetUsBlaAgRtSAvailability(oForm);
                         }
                     }
                     setVisibleFormItems(oForm);
@@ -3597,6 +3595,8 @@ namespace BDO_Localisation_AddOn
 
                                 oForm.Items.Item("95").Enabled = true;
                                 oForm.Items.Item("234000005").Enabled = true;
+
+                                IncomingPayment.SetUsBlaAgRtSAvailability(oForm);
                             }
 
                             else if (pVal.ItemUID == "ChngDcDt")
@@ -3613,13 +3613,9 @@ namespace BDO_Localisation_AddOn
                                 createFormNewDate(noForm, out errorText);
                             }
 
-                            else if (pVal.ItemUID == "UsBlaAgRtS")
+                            else if (pVal.ItemUID == "UsBlaAgRtS" && !pVal.InnerEvent)
                             {
-                                SAPbouiCOM.CheckBox oCheckBox = (SAPbouiCOM.CheckBox)oForm.Items.Item("UsBlaAgRtS").Specific;
-                                if (oCheckBox.Checked)
-                                {
-                                    CommonFunctions.fillDocRate(oForm, "OVPM");
-                                }
+                                CommonFunctions.fillDocRate(oForm, "OVPM");
                             }
 
                             else if ((pVal.ItemUID == "liablePrTx" || pVal.ItemUID == "37") && !pVal.InnerEvent)
@@ -3649,6 +3645,8 @@ namespace BDO_Localisation_AddOn
                                     oForm.Items.Item("95").Specific.Value = "";
                                     oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
                                     oForm.Items.Item("234000005").Specific.Value = "";
+
+                                    IncomingPayment.SetUsBlaAgRtSAvailability(oForm);
                                 }
                             }
                         }
@@ -3756,6 +3754,8 @@ namespace BDO_Localisation_AddOn
                                 oForm.Items.Item("95").Specific.Value = "";
                                 oForm.Items.Item("234000005").Enabled = true;
                                 oForm.Items.Item("234000005").Specific.Value = "";
+
+                                IncomingPayment.SetUsBlaAgRtSAvailability(oForm);
                             }
                         }
                         else if (pVal.ItemUID == "13" && !pVal.BeforeAction && !pVal.InnerEvent) //Item - Payment on Account (EditText)
@@ -3877,7 +3877,7 @@ namespace BDO_Localisation_AddOn
                         oForm.Items.Item("BDOSWhtAmt").Specific.Value = FormsB1.ConvertDecimalToString(CommonFunctions.roundAmountByGeneralSettings(whTaxAmt, "Sum"));
                     }
 
-                    oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                    oForm.Items.Item("26").Click();
                 }
             }
             catch (Exception ex)
@@ -4083,7 +4083,7 @@ namespace BDO_Localisation_AddOn
             }
 
             Program.openPaymentMeansByPostDateChange = true;
-            oForm.Items.Item("234000001").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+            oForm.Items.Item("234000001").Click();
         }
 
         //private static void changeDocDateRate(SAPbouiCOM.Form oFormDate, string newDate)
@@ -4549,7 +4549,7 @@ namespace BDO_Localisation_AddOn
 
                 oEditAmtPrTx.Value = FormsB1.ConvertDecimalToString(Convert.ToDecimal(AmountPr));
 
-                oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+                oForm.Items.Item("26").Click();
                 oItemPrTx.Enabled = false;
             }
             catch (Exception ex)
@@ -4662,7 +4662,7 @@ namespace BDO_Localisation_AddOn
         //                    oEdit1 = oForm.Items.Item("BDOSPnCoAm").Specific;
         //                    oEdit1.Value = FormsB1.ConvertDecimalToString(compPens);
 
-        //                    oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+        //                    oForm.Items.Item("26").Click();
         //                }
         //                else
         //                {
@@ -4703,7 +4703,7 @@ namespace BDO_Localisation_AddOn
         //                oEdit1 = oForm.Items.Item("BDOSPnCoAm").Specific;
         //                oEdit1.Value = FormsB1.ConvertDecimalToString(compPens);
 
-        //                oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+        //                oForm.Items.Item("26").Click();
         //            } else
         //            {
         //                decimal payOnAcct = Convert.ToDecimal(oForm.Items.Item("13").Specific.Value);
@@ -4828,7 +4828,7 @@ namespace BDO_Localisation_AddOn
         //                    oEdit1 = oForm.Items.Item("BDOSPnCoAm").Specific;
         //                    oEdit1.Value = FormsB1.ConvertDecimalToString(PnCoAm);
 
-        //                    oForm.Items.Item("26").Click(SAPbouiCOM.BoCellClickType.ct_Regular);
+        //                    oForm.Items.Item("26").Click();
 
         //                    oRecordSet.MoveNext();
         //                }
