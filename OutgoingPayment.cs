@@ -3750,11 +3750,12 @@ namespace BDO_Localisation_AddOn
                             }
                             else
                             {
-                                oForm.Items.Item("95").Enabled = true;
-                                oForm.Items.Item("95").Specific.Value = "";
-                                oForm.Items.Item("234000005").Enabled = true;
-                                oForm.Items.Item("234000005").Specific.Value = "";
-
+                                string docType = oForm.DataSources.DBDataSources.Item("OVPM").GetValue("DocType", 0).Trim();
+                                if (docType != "A")
+                                {
+                                    oForm.Items.Item("234000005").Enabled = true;
+                                    oForm.Items.Item("234000005").Specific.Value = "";
+                                }
                                 IncomingPayment.SetUsBlaAgRtSAvailability(oForm);
                             }
                         }
