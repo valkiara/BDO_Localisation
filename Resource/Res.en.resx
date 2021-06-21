@@ -3703,4 +3703,7 @@
   <data name="BOGAuthForm" xml:space="preserve">
     <value>BOG Auth. Form</value>
   </data>
+  <data name="APCorrectionInvoice" xml:space="preserve">
+    <value>AP Correction Invoice</value>
+  </data>
 </root>
