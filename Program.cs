@@ -973,6 +973,7 @@ namespace BDO_Localisation_AddOn
                         //----------------------------->A/P Invoice<-----------------------------
                         if (oForm.TypeEx == "141")
                         {
+                            APInvoice.uiApp_MenuEvent(ref pVal, out BubbleEvent, out errorText);
                             cancellationTrans = true;
                             canceledDocEntry = Convert.ToInt32(oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocEntry", 0));
                         }

@@ -956,6 +956,12 @@ namespace BDO_Localisation_AddOn
                         Program.uiApp.MessageBox(ex.Message);
                         BubbleEvent = false;
                     }
+                    CheckIfDepreciationIsAccrued(oForm, out string deprError);
+                    if (!string.IsNullOrEmpty(deprError))
+                    {
+                        Program.uiApp.MessageBox(deprError);
+                        BubbleEvent = false;
+                    }
                 }
                 else if (BusinessObjectInfo.BeforeAction == false && BusinessObjectInfo.ActionSuccess)
                 {
@@ -1023,8 +1029,8 @@ namespace BDO_Localisation_AddOn
                     }
 
                     if (pVal.ItemUID == "nonEconExp" && !pVal.BeforeAction)
-                    {                     
-                        nonEconExp_OnClick(oForm);                        
+                    {
+                        nonEconExp_OnClick(oForm);
                     }
                 }
 
@@ -1087,6 +1093,24 @@ namespace BDO_Localisation_AddOn
                             setVisibleFormItems(oForm);
                         }
                     }
+                }
+            }
+        }
+
+        public static void uiApp_MenuEvent(ref SAPbouiCOM.MenuEvent pVal, out bool BubbleEvent, out string errorText)
+        {
+            errorText = null;
+            BubbleEvent = true;
+
+            //----------------------------->Cancel <-----------------------------
+            SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
+            if (pVal.BeforeAction && pVal.MenuUID == "1284")
+            {
+                CheckIfDepreciationIsAccrued(oForm, out string deprError);
+                if (!string.IsNullOrEmpty(deprError))
+                {
+                    Program.uiApp.MessageBox(deprError);
+                    BubbleEvent = false;
                 }
             }
         }
@@ -1328,7 +1352,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                errorText = ex.Message; 
+                errorText = ex.Message;
             }
         }
 
@@ -1457,6 +1481,34 @@ namespace BDO_Localisation_AddOn
             return 0;
 
         }
+        private static void CheckIfDepreciationIsAccrued(SAPbouiCOM.Form oForm, out string deprError)
+        {
+            string DocDate = oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocDate", 0);
+            string DocNum = oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocNum", 0);
 
+            StringBuilder query = new StringBuilder();
+            query.Append("select distinct \"U_AccrMnth\",\"BatchNum\",\"ItemCode\" \n");
+            query.Append("from \"@BDOSDEPAC1\" as \"child\" \n");
+            query.Append("inner join \"OIBT\" as \"bt\" \n");
+            query.Append("on \"bt\".\"ItemCode\" =\"child\".\"U_ItemCode\" \n");
+            query.Append("inner join \"@BDOSDEPACR\" as \"mom\" \n");
+            query.Append("on \"mom\".\"DocEntry\"=\"child\".\"DocEntry\" \n");
+            query.Append($"where \"BaseNum\" = '{DocNum}' and \"U_AccrMnth\" >= '{DocDate}'");
+
+            SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+            oRecordSet.DoQuery(query.ToString());
+            List<string> recordsetValues = new List<string>();
+            if (!oRecordSet.EoF)
+            {
+                string docItem = oRecordSet.Fields.Item("ItemCode").Value;
+                string batchNum = oRecordSet.Fields.Item("BatchNum").Value;
+                deprError = BDOSResources.getTranslate("DepreciationIsAccrued") + " Item : " + docItem + " Batch : " + batchNum;
+            }
+            else
+            {
+                deprError = string.Empty;
+            }
+            Marshal.ReleaseComObject(oRecordSet);
+        }
     }
 }
