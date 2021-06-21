@@ -1528,7 +1528,7 @@ namespace BDO_Localisation_AddOn
         {
             string DocDate = oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocDate", 0);
             string DocNum = oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocNum", 0);
-           
+            
             StringBuilder query = new StringBuilder();
             query.Append("select distinct \"U_AccrMnth\",\"BatchNum\",\"ItemCode\" \n");
             query.Append("from \"@BDOSDEPAC1\" as \"child\" \n");
