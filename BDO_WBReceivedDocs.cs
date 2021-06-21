@@ -643,10 +643,8 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void attachWBToDoc(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm, out string errorText)
+        public static void attachWBToDoc(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oIncWaybDocForm)
         {
-            errorText = null;
-
             try
             {
                 oIncWaybDocForm.Select();
@@ -694,11 +692,7 @@ namespace BDO_Localisation_AddOn
             }
             catch (Exception ex)
             {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorDescription") + " : " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "! " + BDOSResources.getTranslate("OtherInfo") + " : " + ex.Message;
+                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("WaybiliiNotLinkedToDocument") + " " + ex.Message, SAPbouiCOM.BoMessageTime.bmt_Short);
             }
             finally
             {
@@ -706,12 +700,6 @@ namespace BDO_Localisation_AddOn
                 {
                     oIncWaybDocForm.Freeze(false);
                 }
-                GC.Collect();
-            }
-
-            if (errorText != null)
-            {
-                Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("WaybiliiNotLinkedToDocument") + " " + errorText, SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
             }
         }
 

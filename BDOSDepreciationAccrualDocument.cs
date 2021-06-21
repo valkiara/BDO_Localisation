@@ -132,23 +132,14 @@ namespace BDO_Localisation_AddOn
 
             UDO.addUserTableFields(fieldskeysMap, out errorText);
 
-            //fieldskeysMap = new Dictionary<string, object>();
-            //fieldskeysMap.Add("Name", "InvEntry");
-            //fieldskeysMap.Add("TableName", "BDOSDEPAC1");
-            //fieldskeysMap.Add("Description", "Invoice doc entry");
-            //fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            //fieldskeysMap.Add("EditSize", 150);
+            fieldskeysMap = new Dictionary<string, object>();
+            fieldskeysMap.Add("Name", "RetDprAmt");
+            fieldskeysMap.Add("TableName", "BDOSDEPAC1");
+            fieldskeysMap.Add("Description", "Retired Depreciation Amount");
+            fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Float);
+            fieldskeysMap.Add("SubType", SAPbobsCOM.BoFldSubTypes.st_Sum);
 
-            //UDO.addUserTableFields(fieldskeysMap, out errorText);
-
-            //fieldskeysMap = new Dictionary<string, object>();
-            //fieldskeysMap.Add("Name", "InvType");
-            //fieldskeysMap.Add("TableName", "BDOSDEPAC1");
-            //fieldskeysMap.Add("Description", "Invoice doc type");
-            //fieldskeysMap.Add("Type", SAPbobsCOM.BoFieldTypes.db_Alpha);
-            //fieldskeysMap.Add("EditSize", 150);
-
-            //UDO.addUserTableFields(fieldskeysMap, out errorText);
+            UDO.addUserTableFields(fieldskeysMap, out errorText);
         }
 
         public static void registerUDO(out string errorText)
@@ -278,13 +269,14 @@ namespace BDO_Localisation_AddOn
                 {
                     if (Program.cancellationTrans && Program.canceledDocEntry != 0)
                     {
-                        Program.canceledDocEntry = 0;
                         int answer = 0;
                         answer = Program.uiApp.MessageBox(BDOSResources.getTranslate("DoYouReallyWantCancelDoc") + "?", 1, BDOSResources.getTranslate("Yes"), BDOSResources.getTranslate("No"), "");
                         if (answer == 1)
                             cancellation(oForm, Program.canceledDocEntry, out errorText);
                         else
                             BubbleEvent = false;
+
+                        Program.canceledDocEntry = 0;
                     }
                 }
                 if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_LOAD && !BusinessObjectInfo.BeforeAction)

@@ -3619,4 +3619,7 @@
   <data name="AccrueDayAfter" xml:space="preserve">
     <value>Accrue Day After</value>
   </data>
+  <data name="APCorrectionInvoice" xml:space="preserve">
+    <value>AP Correction Invoice</value>
+  </data>
 </root>

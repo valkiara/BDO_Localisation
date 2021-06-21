@@ -3673,4 +3673,7 @@
   <data name="BOGAuthForm" xml:space="preserve">
     <value>საქართველოს ბანკის ავტორიზაციის ფორმა</value>
   </data>
+  <data name="APCorrectionInvoice" xml:space="preserve">
+    <value>შესყიდვის კორექტირება</value>
+  </data>
 </root>
