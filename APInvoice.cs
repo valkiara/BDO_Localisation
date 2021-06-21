@@ -956,7 +956,7 @@ namespace BDO_Localisation_AddOn
                         Program.uiApp.MessageBox(ex.Message);
                         BubbleEvent = false;
                     }
-                    CheckIfDepreciationIsAccrued(oForm, out string deprError);             
+                    CheckIfDepreciationIsAccrued(oForm, out string deprError);
                     if (!string.IsNullOrEmpty(deprError))
                     {
                         Program.uiApp.MessageBox(deprError);
@@ -1029,8 +1029,8 @@ namespace BDO_Localisation_AddOn
                     }
 
                     if (pVal.ItemUID == "nonEconExp" && !pVal.BeforeAction)
-                    {                     
-                        nonEconExp_OnClick(oForm);                        
+                    {
+                        nonEconExp_OnClick(oForm);
                     }
                 }
 
@@ -1115,7 +1115,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void cancellation(SAPbouiCOM.Form oForm, int docEntry, out string errorText)
+        public static void cancellation(SAPbouiCOM.Form oForm, int docEntry)
         {
             try
             {
@@ -1485,7 +1485,7 @@ namespace BDO_Localisation_AddOn
         {
             string DocDate = oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocDate", 0);
             string DocNum = oForm.DataSources.DBDataSources.Item("OPCH").GetValue("DocNum", 0);
-            
+
             StringBuilder query = new StringBuilder();
             query.Append("select distinct \"U_AccrMnth\",\"BatchNum\",\"ItemCode\" \n");
             query.Append("from \"@BDOSDEPAC1\" as \"child\" \n");
@@ -1504,9 +1504,11 @@ namespace BDO_Localisation_AddOn
                 string batchNum = oRecordSet.Fields.Item("BatchNum").Value;
                 deprError = BDOSResources.getTranslate("DepreciationIsAccrued") + " Item : " + docItem + " Batch : " + batchNum;
             }
-            else {
+            else
+            {
                 deprError = string.Empty;
             }
+            Marshal.ReleaseComObject(oRecordSet);
         }
     }
 }
