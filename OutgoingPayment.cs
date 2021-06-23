@@ -1966,14 +1966,11 @@ namespace BDO_Localisation_AddOn
                         if (sCFL_ID == "HouseBankAccount_CFL")
                         {
                             string account = Convert.ToString(oDataTable.GetValue("Account", 0));
-                            string currency;
-                            SAPbouiCOM.EditText oEditText = (SAPbouiCOM.EditText)oForm.Items.Item("creditActE").Specific;
-                            oEditText.Value = account;
-                            //oEditText.Value = CommonFunctions.accountParse(account, out currency);
+                            LanguageUtils.IgnoreErrors<string>(() => oForm.Items.Item("creditActE").Specific.Value = account);
                             try
                             {
                                 SAPbouiCOM.ComboBox oComboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("crdActCuCB").Specific;
-                                CommonFunctions.accountParse(account, out currency);
+                                CommonFunctions.accountParse(account, out var currency);
                                 oComboBox.Select(currency, SAPbouiCOM.BoSearchKey.psk_ByValue);
                             }
                             catch { }
