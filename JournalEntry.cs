@@ -1266,19 +1266,22 @@ namespace BDO_Localisation_AddOn
 
                 else if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_MATRIX_LINK_PRESSED && pVal.BeforeAction)
                 {
-                    SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("JDT1BDOS").Specific;
-                    SAPbouiCOM.Column oAccount = oMatrix.Columns.Item("Account");
-                    SAPbouiCOM.Column oControlAccount = oMatrix.Columns.Item("ContrlAct");
+                    if (pVal.ItemUID == "JDT1BDOS")
+                    {
+                        SAPbouiCOM.Matrix oMatrix = oForm.Items.Item("JDT1BDOS").Specific;
+                        SAPbouiCOM.Column oAccount = oMatrix.Columns.Item("Account");
+                        SAPbouiCOM.Column oControlAccount = oMatrix.Columns.Item("ContrlAct");
 
-                    if (oAccount.Cells.Item(pVal.Row).Specific.Value != oControlAccount.Cells.Item(pVal.Row).Specific.Value)
-                    {
-                        SAPbouiCOM.LinkedButton oLink = oAccount.ExtendedObject;
-                        oLink.LinkedObjectType = "2";
-                    }
-                    else
-                    {
-                        SAPbouiCOM.LinkedButton oLink = oAccount.ExtendedObject;
-                        oLink.LinkedObjectType = "1";
+                        if (oAccount.Cells.Item(pVal.Row).Specific.Value != oControlAccount.Cells.Item(pVal.Row).Specific.Value)
+                        {
+                            SAPbouiCOM.LinkedButton oLink = oAccount.ExtendedObject;
+                            oLink.LinkedObjectType = "2";
+                        }
+                        else
+                        {
+                            SAPbouiCOM.LinkedButton oLink = oAccount.ExtendedObject;
+                            oLink.LinkedObjectType = "1";
+                        }
                     }
                 }
 
