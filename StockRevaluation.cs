@@ -99,7 +99,7 @@ namespace BDO_Localisation_AddOn
                 }
             }
         }
-        
+
         public static void createUserFields(out string errorText)
         {
             Dictionary<string, object> fieldskeysMap;
@@ -120,7 +120,7 @@ namespace BDO_Localisation_AddOn
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             docEntry = getDocEntry(docEntLC);
             Program.uiApp.ActivateMenuItem("3086");
-            
+
             SAPbouiCOM.Form oForm = Program.uiApp.Forms.ActiveForm;
             oForm.Freeze(true);
 
@@ -136,7 +136,7 @@ namespace BDO_Localisation_AddOn
                   + "where \"DocEntry\" = (select \"DocEntry\" from OIPF where \"DocEntry\" = '" + docEntLC + "')";
 
                 oRecordSet.DoQuery(queryStockDoesNotExist);
-                
+
                 SAPbouiCOM.ComboBox ocomboBox = (SAPbouiCOM.ComboBox)oForm.Items.Item("1003").Specific;
                 ocomboBox.Select("M");
 
@@ -144,14 +144,16 @@ namespace BDO_Localisation_AddOn
 
                 while (!oRecordSet.EoF)
                 {
+                    if (oMatrix.RowCount == 0) break;
+
                     string str = oForm.Items.Item("1003").Specific.Value;
-                    itemCode = oRecordSet.Fields.Item("ItemCode").Value; 
+                    itemCode = oRecordSet.Fields.Item("ItemCode").Value;
                     oMatrix.Columns.Item("6").Cells.Item(row).Specific.Value = itemCode;
                     string whs = CommonFunctions.getOADM("U_StockRevWh").ToString();
                     if (whs != "") oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = whs;
                     else oMatrix.Columns.Item("4").Cells.Item(row).Specific.Value = oRecordSet.Fields.Item("WhsCode").Value;
                     oMatrix.Columns.Item("1").Cells.Item(row).Specific.Value = oRecordSet.Fields.Item("Quantity").Value;
-                    
+
                     SAPbouiCOM.Form oFormLC = Program.uiApp.Forms.GetForm("992", 1);
                     SAPbouiCOM.Matrix oMatrixLC = oFormLC.Items.Item("51").Specific;
 
@@ -176,6 +178,8 @@ namespace BDO_Localisation_AddOn
                      + "(select \"DocEntry\" from OIPF " + "\n"
                      + "where \"DocEntry\" = '" + docEntLC + "')";
 
+                    var latestDeletedRow = 0;
+
                     oRecordSetCostVal.DoQuery(query);
                     while (!oRecordSetCostVal.EoF)
                     {
@@ -184,19 +188,27 @@ namespace BDO_Localisation_AddOn
                         if (itemCode == lastItemCode)
                         {
                             double debitCredit = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
-                            if(debitCredit > 0)
+                            if (debitCredit > 0)
                             {
                                 oMatrix.Columns.Item("7").Cells.Item(row).Specific.Value = allCostValByDocEnt - lastAllCostVal(itemCode, docEntLC);
-                            } else
+                            }
+                            else
                             {
                                 oMatrix.DeleteRow(row);
+
+                                latestDeletedRow = row;
+
                                 Program.uiApp.StatusBar.SetSystemMessage(BDOSResources.getTranslate("DebitCreditValueIsNegativeInOneOrMoreRow"), SAPbouiCOM.BoMessageTime.bmt_Medium, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
                             }
                         }
                         oRecordSetCostVal.MoveNext();
                     }
-                    
-                    row += 1;
+
+                    if (latestDeletedRow > 0)
+                        row = latestDeletedRow;
+                    else
+                        row += 1;
+
                     oRecordSet.MoveNext();
                 }
             }
@@ -260,14 +272,14 @@ namespace BDO_Localisation_AddOn
             try
             {
                 if (DocNum == "") return string.Empty;
-                
-                string query ="select \"DocEntry\" from OIPF " + "\n"
+
+                string query = "select \"DocEntry\" from OIPF " + "\n"
                 + "where \"DocEntry\" = ( " + "\n"
                 + "select \"U_BsDocEntry\" from OMRV " + "\n"
                 + "where \"DocEntry\" = ( " + "\n"
                 + "select \"DocEntry\" from OMRV " + "\n"
                 + "where \"DocNum\" = '" + DocNum + "'))";
-                
+
                 //string query = "select \"DocEntry\" from OMRV " + "\n"
                 //+ "where \"DocNum\" = '" + DocNum + "'";
 
@@ -378,7 +390,7 @@ namespace BDO_Localisation_AddOn
             + "order by \"DocEntry\" desc)";
 
             oRecordSet.DoQuery(query);
-            
+
             LandedCosts.formDataLoad(oFormLC);
         }
     }
