@@ -1716,8 +1716,13 @@ namespace BDO_Localisation_AddOn
                                 var agrNo = oForm.DataSources.DBDataSources.Item("ORCT").GetValue("AgrNo", 0);
                                 oForm.Items.Item("95").Enabled = string.IsNullOrEmpty(prjCode);
                                 oForm.Items.Item("95").Specific.Value = "";
-                                oForm.Items.Item("234000005").Enabled = string.IsNullOrEmpty(agrNo);
-                                oForm.Items.Item("234000005").Specific.Value = "";
+                                
+                                var item = oForm.Items.Item("234000005");
+                                if (item.Visible)
+                                {
+                                    item.Enabled = string.IsNullOrEmpty(agrNo);
+                                    item.Specific.Value = "";
+                                }
 
                                 SetUsBlaAgRtSAvailability(oForm);
                             }
@@ -1737,9 +1742,13 @@ namespace BDO_Localisation_AddOn
                         {
                             oForm.Items.Item("95").Enabled = true;
                             oForm.Items.Item("95").Specific.Value = "";
-                            oForm.Items.Item("234000005").Enabled = true;
-                            oForm.Items.Item("234000005").Specific.Value = "";
-                            
+
+                            var item = oForm.Items.Item("234000005");
+                            if (item.Visible)
+                            {
+                                item.Enabled = true;
+                                item.Specific.Value = "";
+                            }                            
                             SetUsBlaAgRtSAvailability(oForm);
                         }
                     }
