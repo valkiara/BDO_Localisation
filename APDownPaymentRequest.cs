@@ -162,14 +162,14 @@ namespace BDO_Localisation_AddOn
                 string docEntry = oForm.DataSources.DBDataSources.Item("ODPO").GetValue("DocEntry", 0).Trim();
                 bool docEntryIsEmpty = string.IsNullOrEmpty(docEntry);
 
-                if (ProfitTaxTypeIsSharing == true)
+                if (ProfitTaxTypeIsSharing)
                 {
                     oForm.Items.Item("16").Click(SAPbouiCOM.BoCellClickType.ct_Regular); //მისაწვდომობის შეზღუდვისთვის
 
-                    oForm.Items.Item("liablePrTx").Enabled = (docEntryIsEmpty == true);
+                    oForm.Items.Item("liablePrTx").Enabled = (docEntryIsEmpty);
 
                     bool LiablePrTx = oForm.DataSources.DBDataSources.Item("ODPO").GetValue("U_liablePrTx", 0) == "Y";
-                    oForm.Items.Item("PrBaseE").Enabled = (LiablePrTx && docEntryIsEmpty == true);
+                    oForm.Items.Item("PrBaseE").Enabled = (LiablePrTx && docEntryIsEmpty);
 
                     string uniqueID_lf_ProfitBaseCFL = "CFL_ProfitBase";
                     oForm.Items.Item("PrBaseE").Specific.ChooseFromListUID = uniqueID_lf_ProfitBaseCFL;
@@ -250,7 +250,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (CardCode == "" || NoRecords == true)
+                if (CardCode == "" || NoRecords)
                 {
                     SAPbouiCOM.CheckBox oCheck = oForm.Items.Item("liablePrTx").Specific;
                     oCheck.Checked = false;
@@ -296,12 +296,12 @@ namespace BDO_Localisation_AddOn
             }
             if (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD)
             {
-                if (BusinessObjectInfo.BeforeAction == true)
+                if (BusinessObjectInfo.BeforeAction)
                 {
                     SAPbouiCOM.DBDataSource DocDBSourceOCRD = oForm.DataSources.DBDataSources.Item(0);
 
                     // მოგების გადასახადი
-                    if (ProfitTaxTypeIsSharing == true)
+                    if (ProfitTaxTypeIsSharing)
                     {
                         if (oForm.DataSources.DBDataSources.Item("ODPO").GetValue("U_liablePrTx", 0) == "Y")
                         {
@@ -326,7 +326,7 @@ namespace BDO_Localisation_AddOn
             {
                 SAPbouiCOM.Form oForm = Program.uiApp.Forms.GetForm(pVal.FormTypeEx, pVal.FormTypeCount);
 
-                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction == true)
+                if (pVal.EventType == SAPbouiCOM.BoEventTypes.et_FORM_LOAD & pVal.BeforeAction)
                 {
                     ProfitTaxTypeIsSharing = ProfitTax.ProfitTaxTypeIsSharing();
                     APDownPayment.createFormItems(oForm, out errorText);
@@ -351,14 +351,13 @@ namespace BDO_Localisation_AddOn
                         oForm.Freeze(false);
                     }
 
-                    if (pVal.ItemUID == "1" && pVal.BeforeAction == true)
+                    if (pVal.ItemUID == "1" && pVal.BeforeAction)
                     {
-                        CommonFunctions.fillDocRate(oForm, "ODPO");
+                        CommonFunctions.fillDocRate(oForm, "ODPO", true);
                     }
 
                     if (pVal.ItemUID == "UsBlaAgRtS" & pVal.BeforeAction == false)
                     {
-
                         SAPbouiCOM.EditText oBlankAgr = (SAPbouiCOM.EditText)oForm.Items.Item("1980002192").Specific;
 
                         if (string.IsNullOrEmpty(oBlankAgr.Value))
