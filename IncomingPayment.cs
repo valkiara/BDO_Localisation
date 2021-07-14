@@ -1681,7 +1681,7 @@ namespace BDO_Localisation_AddOn
                     if (pVal.BeforeAction)
                     {
                         if (pVal.ItemUID == "1")
-                            CommonFunctions.fillDocRate(oForm, "ORCT");
+                            CommonFunctions.fillDocRate(oForm, "ORCT", true);
                     }
                     else
                     {
