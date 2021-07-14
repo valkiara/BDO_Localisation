@@ -410,9 +410,9 @@ namespace BDO_Localisation_AddOn
                     else rateByBlnktAgr = TempRate;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
             return rateByBlnktAgr;
         }

@@ -3582,7 +3582,7 @@ namespace BDO_Localisation_AddOn
                         if (pVal.BeforeAction)
                         {
                             if (pVal.ItemUID == "1")
-                                CommonFunctions.fillDocRate(oForm, "OVPM");
+                                CommonFunctions.fillDocRate(oForm, "OVPM", true);
                         }
                         else
                         {

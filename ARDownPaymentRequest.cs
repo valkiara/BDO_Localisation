@@ -145,7 +145,7 @@ namespace BDO_Localisation_AddOn
                 {
                     if (pVal.ItemUID == "1" && pVal.BeforeAction)
                     {
-                        CommonFunctions.fillDocRate(oForm, "ODPI");
+                        CommonFunctions.fillDocRate(oForm, "ODPI", true);
                     }
 
                     else if(pVal.ItemUID == "UsBlaAgRtS" && !pVal.BeforeAction)

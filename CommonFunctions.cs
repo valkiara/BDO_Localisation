@@ -1093,7 +1093,7 @@ namespace BDO_Localisation_AddOn
             return activeDimensionsList;
         }
 
-        public static void fillDocRate(SAPbouiCOM.Form oForm, string documentTable)
+        public static void fillDocRate(SAPbouiCOM.Form oForm, string documentTable, bool whenAddingPaymentsDoc = false)
         {
             SAPbouiCOM.DBDataSource oBDataSourceDocument = oForm.DataSources.DBDataSources.Item(documentTable);
             if (oBDataSourceDocument.GetValue("CANCELED", 0) != "N")
@@ -1115,7 +1115,7 @@ namespace BDO_Localisation_AddOn
             DateTime docDate = DateTime.TryParseExact(docDateStr, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out docDate) == false ? DateTime.Now : docDate;
             string useBlaAgRt = oBDataSourceDocument.GetValue("U_UseBlaAgRt", 0);
             string blaAgrDocEntryStr = oBDataSourceDocument.GetValue("AgrNo", 0);
-            decimal docRate = decimal.Zero;
+            decimal docRate = Convert.ToDecimal(oBDataSourceDocument.GetValue("DocRate", 0)); //decimal.Zero;
             decimal docRateForWeightedAverage = decimal.Zero;
 
             if (!string.IsNullOrEmpty(blaAgrDocEntryStr))
@@ -1128,16 +1128,21 @@ namespace BDO_Localisation_AddOn
                 }
             }
 
-            if (useBlaAgRt == "N")
+            if (useBlaAgRt == "N" || (useBlaAgRt == "N" && whenAddingPaymentsDoc))
             {
-                SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                SAPbobsCOM.Recordset rateRecordset = oSBOBob.GetCurrencyRate(docCurr, docDate);
+                if (whenAddingPaymentsDoc && docRate > 0 && !invDocTables.Contains(documentTable))
+                    docRateForWeightedAverage = docRate;
+                else
+                {
+                    SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
+                    SAPbobsCOM.Recordset rateRecordset = oSBOBob.GetCurrencyRate(docCurr, docDate);
 
-                if (!rateRecordset.EoF)
-                    docRateForWeightedAverage = Convert.ToDecimal(rateRecordset.Fields.Item("CurrencyRate").Value);
+                    if (!rateRecordset.EoF)
+                        docRateForWeightedAverage = Convert.ToDecimal(rateRecordset.Fields.Item("CurrencyRate").Value);
 
-                Marshal.ReleaseComObject(rateRecordset);
-                Marshal.ReleaseComObject(oSBOBob);
+                    Marshal.ReleaseComObject(rateRecordset);
+                    Marshal.ReleaseComObject(oSBOBob);
+                }
             }
 
             if (invDocTables.Contains(documentTable))
