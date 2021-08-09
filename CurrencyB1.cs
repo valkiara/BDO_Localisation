@@ -9,22 +9,16 @@ namespace BDO_Localisation_AddOn
 {
     static partial class CurrencyB1
     {
-        public static List<string> getCurrencyList(out string errorText)
+        public static List<string> getCurrencyList()
         {
-            errorText = null;
             List<string> currencyListFromDB = null;
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-            string MainCurncy = getMainCurrency(out errorText);
+            string MainCurncy = getMainCurrency(out var errorText);
             if (errorText != null)
             {
                 return currencyListFromDB;
             }
-
-            //string query = "SELECT " + 
-            //    "\"CurrCode\" " + 
-            //    "FROM " + "\"" + Program.oCompany.CompanyDB + "\"" + "." + "\"OCRN\" " + 
-            //    "WHERE " + "\"CurrCode\"" + " != '" + MainCurncy + "'";
 
             string query = @"SELECT ""CurrCode"" FROM ""OCRN"" WHERE ""CurrCode"" != '" + MainCurncy + "'";
 
@@ -38,17 +32,16 @@ namespace BDO_Localisation_AddOn
                     currencyListFromDB.Add(oRecordSet.Fields.Item("CurrCode").Value.ToString());
                     oRecordSet.MoveNext();
                 }
+                return currencyListFromDB;
             }
-            catch (Exception ex)
+            catch
             {
-                int errCode;
-                string errMsg;
-
-                Program.oCompany.GetLastError(out errCode, out errMsg);
-                errorText = BDOSResources.getTranslate("ErrorOfCurrencyList") + " " + BDOSResources.getTranslate("ErrorDescription") + " " + errMsg + "! " + BDOSResources.getTranslate("Code") + " : " + errCode + "" + BDOSResources.getTranslate("OtherInfo") + ": " + ex.Message;
+                throw;
             }
-
-            return currencyListFromDB;
+            finally
+            {
+                Marshal.ReleaseComObject(oRecordSet);
+            }
         }
 
         public static string getMainCurrency(out string errorText)
@@ -82,60 +75,42 @@ namespace BDO_Localisation_AddOn
             return MainCurncy;
         }
 
-        public static bool importCurrencyRate(string dateStr, out string errorText, List<string> currencyList = null)
+        public static void importCurrencyRate(string dateStr, List<string> currencyList = null)
         {
-            errorText = null;
-            DateTime date = DateTime.TryParse(dateStr, out date) == false ? DateTime.Today : date;
+            DateTime date = DateTime.Today; //DateTime.TryParse(dateStr, out date) == false ? DateTime.Today : date;
 
             if (currencyList == null)
-            {
-                currencyList = getCurrencyList(out errorText);
-                if (errorText != null)
-                {
-                    return false;
-                }
-            }
+                currencyList = getCurrencyList();
 
             NBGCurrency NBGCurrencyObj = new NBGCurrency();
-            Dictionary<string, List<object>> currencyMapFromNBG = NBGCurrencyObj.GetCurrencyRateList(dateStr);
+            List<NBGCurrencyModel> currencyMapFromNBG = NBGCurrencyObj.GetCurrencyRateList();
 
-            List<object> currencyValueFromNBG = new List<object>();
             SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
 
             if (currencyMapFromNBG != null)
             {
                 for (int i = 0; i < currencyList.Count; i++)
                 {
-                    if (currencyMapFromNBG.TryGetValue(CommonFunctions.getCurrencyInternationalCode(currencyList[i]), out currencyValueFromNBG))
-                    {
-                        oSBOBob.SetCurrencyRate(currencyList[i], date, Convert.ToDouble(currencyValueFromNBG[1], CultureInfo.InvariantCulture), true);
-                    }
+                    double rate = currencyMapFromNBG.Where(x => x.Code == CommonFunctions.getCurrencyInternationalCode(currencyList[i])).Select(x => x.Rate).FirstOrDefault();
+
+                    if (rate != 0.0)
+                        oSBOBob.SetCurrencyRate(currencyList[i], date, rate, true);
                 }
             }
 
             Marshal.ReleaseComObject(oSBOBob);
-
-            return true;
         }
 
-        public static bool importCurrencyRate(string dateStr, out string errorText, ref Dictionary<string, Dictionary<int, double>> currencyListFromNBG, List<string> currencyList = null)
+        public static void importCurrencyRate(string dateStr, ref Dictionary<string, Dictionary<int, double>> currencyListFromNBG, List<string> currencyList = null)
         {
-            errorText = null;
-            DateTime date = DateTime.TryParse(dateStr, out date) == false ? DateTime.Today : date;
+            DateTime date = DateTime.Today; //DateTime.TryParse(dateStr, out date) == false ? DateTime.Today : date;
 
             if (currencyList == null)
-            {
-                currencyList = getCurrencyList(out errorText);
-                if (errorText != null)
-                {
-                    return false;
-                }
-            }
+                currencyList = getCurrencyList();
 
             NBGCurrency NBGCurrencyObj = new NBGCurrency();
-            Dictionary<string, List<object>> currencyMapFromNBG = NBGCurrencyObj.GetCurrencyRateList(dateStr);
+            List<NBGCurrencyModel> currencyMapFromNBG = NBGCurrencyObj.GetCurrencyRateList();
 
-            List<object> currencyValueFromNBG = new List<object>();
             Dictionary<int, double> dailyRate;
             string currencyInternationalCode;
 
@@ -145,23 +120,19 @@ namespace BDO_Localisation_AddOn
                 {
                     currencyInternationalCode = CommonFunctions.getCurrencyInternationalCode(currencyList[i]);
 
-                    if (currencyMapFromNBG.TryGetValue(currencyInternationalCode, out currencyValueFromNBG))
+                    double rate = currencyMapFromNBG.Where(x => x.Code == currencyInternationalCode).Select(x => x.Rate).FirstOrDefault();
+
+                    if (rate != 0.0)
                     {
                         dailyRate = new Dictionary<int, double>();
-                        dailyRate.Add(date.Day, Convert.ToDouble(currencyValueFromNBG[1], CultureInfo.InvariantCulture));
+                        dailyRate.Add(date.Day, rate);
                         if (currencyListFromNBG.Keys.Contains(currencyInternationalCode))
-                        {
-                            currencyListFromNBG[currencyInternationalCode].Add(date.Day, Convert.ToDouble(currencyValueFromNBG[1], CultureInfo.InvariantCulture));
-                        }
+                            currencyListFromNBG[currencyInternationalCode].Add(date.Day, rate);
                         else
-                        {
                             currencyListFromNBG.Add(currencyInternationalCode, dailyRate);
-                        }
                     }
                 }
             }
-
-            return true;
         }
     }
 }
