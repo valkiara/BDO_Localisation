@@ -375,7 +375,7 @@ namespace BDO_Localisation_AddOn
 
                         SAPbouiCOM.Column oColumn;
 
-                        if (opType == "paymentToEmployee")
+                        if (opType == "paymentToEmployee" || opType == "PE")
                         {
                             oColumn = oMatrix.Columns.Item(pVal.ColUID);
                             SAPbouiCOM.LinkedButton oLink = oColumn.ExtendedObject;
@@ -502,15 +502,23 @@ namespace BDO_Localisation_AddOn
             }
             
             var docType = oForm.DataSources.UserDataSources.Item("DocTypeCB").ValueEx == "2" ? "PE" : "";
-
-            string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType);
-            string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(null, account, startDate, endDate, bankProgram, allDocuments);
+               
             try
             {
-                oRecordSet.DoQuery(query);
+                string query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType, forNewHRAddOn: true);
+                try
+                {                    
+                    oRecordSet.DoQuery(query);
+                }
+                catch
+                {
+                    query = OutgoingPayment.getQueryForImport(null, account, startDate, endDate, bankProgram, allDocuments, docType);
+                    oRecordSet.DoQuery(query);
+                }
             }
             catch
             {
+                string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(null, account, startDate, endDate, bankProgram, allDocuments);
                 oRecordSet.DoQuery(queryOnlyLocalisationAddOn);
             }
             oDataTable.Rows.Clear();

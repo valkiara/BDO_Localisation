@@ -1820,7 +1820,7 @@ namespace BDO_Localisation_AddOn
                         oItem = oForm.Items.Item("tresrCodeE");
                         oItem.Visible = true;
                     }
-                    else if (opType == "paymentToEmployee" || opType == "salaryPayment")
+                    else if (opType == "paymentToEmployee" || opType == "salaryPayment" || opType == "PE")
                     {
                         if (transferType == "TransferToOtherBankForeignCurrencyPaymentOrderIo" || transferType == "TransferToForeignCurrencyPaymentOrderIo")
                         {
@@ -2148,7 +2148,7 @@ namespace BDO_Localisation_AddOn
                 string creditBankCode = null;
                 string creditAcctCurrency = null;
                 string exchangeCurrency = null;
-                if (opType == "paymentToEmployee")
+                if (opType == "paymentToEmployee" || opType == "PE")
                 {
                     try
                     {
@@ -2263,7 +2263,7 @@ namespace BDO_Localisation_AddOn
                 string creditBankCode = null;
                 string creditAcctCurrency = null;
                 string exchangeCurrency = null;
-                if (opType == "paymentToEmployee")
+                if (opType == "paymentToEmployee" || opType == "PE")
                 {
                     creditAcct = oRecordSet.Fields.Item("U_creditAcctEmp").Value.ToString(); //ანგარიში (მიმღები)
                     creditBankCode = oRecordSet.Fields.Item("U_bankCodeEmp").Value.ToString();//CommonFunctions.getBankCode( null, creditAcct); //ბანკის კოდი (მიმღები)
@@ -2388,7 +2388,7 @@ namespace BDO_Localisation_AddOn
                 string TransferCurrency = docCurr;
                 string BeneficiaryRegistrationCountryCode = oRecordSet.Fields.Item("BeneficiaryRegistrationCountryCode").Value.ToString();
 
-                if (opType == "paymentToEmployee")
+                if (opType == "paymentToEmployee" || opType == "PE")
                 {
                     CardCode = oRecordSet.Fields.Item("U_employee").Value.ToString();
                     CreditAccount = creditAcct;
@@ -2438,7 +2438,7 @@ namespace BDO_Localisation_AddOn
                     }
                 }
 
-                if (docType == "A" && opType != "paymentToEmployee")
+                if (docType == "A" && opType != "paymentToEmployee" && opType != "PE")
                 {
                     CardCode = "";
                 }
@@ -2547,13 +2547,13 @@ namespace BDO_Localisation_AddOn
             {
                 transferType = "TreasuryTransferPaymentOrderIo"; //საბიუჯეტო გადარიცხვა
             }
-            else if (docType == "A" && (opType == "transferToOwnAccount" || opType == "currencyExchange" || opType == "paymentToEmployee") && string.IsNullOrEmpty(creditBankCode) == false)
+            else if (docType == "A" && (opType == "transferToOwnAccount" || opType == "currencyExchange" || opType == "paymentToEmployee" || opType == "PE") && string.IsNullOrEmpty(creditBankCode) == false)
             {
                 if (opType == "currencyExchange" && creditBankCode == bankCode) //ერთნაირი ბანკის ანგარიშებია
                 {
                     transferType = "CurrencyExchangePaymentOrderIo"; //კონვერტაცია
                 }
-                else if (opType == "transferToOwnAccount" || opType == "paymentToEmployee")
+                else if (opType == "transferToOwnAccount" || opType == "paymentToEmployee" || opType == "PE")
                 {
                     if (creditBankCode == bankCode && bankCode == "TBCBGE22" && opType == "transferToOwnAccount") //ერთნაირი ბანკის ანგარიშებია  და TBC
                     {
@@ -2654,7 +2654,7 @@ namespace BDO_Localisation_AddOn
 
             if ((isPayToBank == "Y" || docType == "A") && opType != "other" && opType != "salaryPayment")
             {
-                if (opType == "paymentToEmployee")
+                if (opType == "paymentToEmployee" || opType == "PE")
                 {
                     List<int> oList = new List<int>();
                     SAPbouiCOM.DBDataSource oDBDataSource = oForm.DataSources.DBDataSources.Item("VPM4");
@@ -3100,7 +3100,7 @@ namespace BDO_Localisation_AddOn
                     if (oDBDataSource.GetValue("Canceled", 0) == "N" && !Program.cancellationTrans)
                     {
                         string opType = oDBDataSource.GetValue("U_opType", 0).Trim();
-                        if (opType != "salaryPayment" & opType != "paymentToEmployee")
+                        if (opType != "salaryPayment" && opType != "paymentToEmployee" && opType != "PE")
                         {
                             string DocEntry = oDBDataSource.GetValue("DocEntry", 0);
                             string DocCurrency = oDBDataSource.GetValue("DocCurr", 0);
@@ -6047,15 +6047,23 @@ namespace BDO_Localisation_AddOn
             List<string> infoList = new List<string>();
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
-            string query = getQueryForImport(docEntryList, null, null, null, "TBC", true);
-            string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(docEntryList, null, null, null, "TBC", true);
+           
             try
             {
-                oRecordSet.DoQuery(query);
+                string query = getQueryForImport(docEntryList, null, null, null, "TBC", true, forNewHRAddOn: true);
+                try
+                {
+                    oRecordSet.DoQuery(query);
+                }
+                catch
+                {
+                    query = getQueryForImport(docEntryList, null, null, null, "TBC", true);
+                    oRecordSet.DoQuery(query);
+                }
             }
             catch
             {
+                string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(docEntryList, null, null, null, "TBC", true);
                 oRecordSet.DoQuery(queryOnlyLocalisationAddOn);
             }
 
@@ -6258,15 +6266,23 @@ namespace BDO_Localisation_AddOn
             List<string> infoList = new List<string>();
 
             SAPbobsCOM.Recordset oRecordSet = (SAPbobsCOM.Recordset)Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
-
-            string query = getQueryForImport(docEntryList, null, null, null, "BOG", true);
-            string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(docEntryList, null, null, null, "BOG", true);
+                    
             try
             {
-                oRecordSet.DoQuery(query);
+                string query = getQueryForImport(docEntryList, null, null, null, "BOG", true, forNewHRAddOn: true);
+                try
+                {
+                    oRecordSet.DoQuery(query);
+                }
+                catch
+                {
+                    query = getQueryForImport(docEntryList, null, null, null, "BOG", true);
+                    oRecordSet.DoQuery(query);
+                }
             }
             catch
             {
+                string queryOnlyLocalisationAddOn = OutgoingPayment.getQueryForImportOnlyLocalisationAddOn(docEntryList, null, null, null, "BOG", true);
                 oRecordSet.DoQuery(queryOnlyLocalisationAddOn);
             }
 
@@ -6858,7 +6874,7 @@ namespace BDO_Localisation_AddOn
             return result;
         }
 
-        public static string getQueryForImport(List<int> docEntryList, string account, string startDate, string endDate, string program, bool allDocuments, string docType = "")
+        public static string getQueryForImport(List<int> docEntryList, string account, string startDate, string endDate, string program, bool allDocuments, string docType = "", bool forNewHRAddOn = false)
         {
             string query = @"SELECT
             ""OVPM"".""DocEntry"" AS ""DocEntry"",
@@ -6938,9 +6954,39 @@ namespace BDO_Localisation_AddOn
             LEFT JOIN ""OCRD"" ON ""OVPM"".""CardCode"" = ""OCRD"".""CardCode""
             INNER JOIN ""OACT"" ON ""OVPM"".""TrsfrAcct"" = ""OACT"".""AcctCode""
             INNER JOIN ""@BDO_INTB"" AS ""BDO_INTB"" ON ""DSC1"".""U_program"" = ""BDO_INTB"".""U_program""
-            INNER JOIN ""OCRN"" ON ""OVPM"".""DocCurr"" = ""OCRN"".""CurrCode""
+            INNER JOIN ""OCRN"" ON ""OVPM"".""DocCurr"" = ""OCRN"".""CurrCode""";
 
-            LEFT JOIN (SELECT
+            if (forNewHRAddOn)
+            {
+                query = query + @" LEFT JOIN (SELECT
+            	 ""VPM4"".""DocNum"",
+            	 ""VPM4"".""U_empId"" AS ""U_employee"",
+            	 ""VPM4"".""U_empName"" AS ""U_employeeN"",
+            	 ""VPM4"".""U_bankAccount"" AS ""U_creditAcct"",
+            	 ""VPM4"".""U_bankCode"",
+            	 ""OHEM"".""govID"",
+            	 ""OHEM"".""homeStreet"",
+                 ""OHEM"".""homeCountr"",
+            	 ""ODSC"".""BankName""
+            	FROM ""VPM4""
+            	INNER JOIN ""OHEM"" AS ""OHEM"" ON ""VPM4"".""U_empId"" = ""OHEM"".""empID""
+            	INNER JOIN ""ODSC"" AS ""ODSC"" ON ""VPM4"".""U_bankCode"" = ""ODSC"".""BankCode""
+            	WHERE ""VPM4"".""U_bankAccount"" IS NOT NULL
+            	AND ""VPM4"".""U_bankAccount"" != ''
+                GROUP BY ""VPM4"".""DocNum"",
+            	 ""VPM4"".""U_empId"",
+            	 ""VPM4"".""U_empName"",
+            	 ""VPM4"".""U_bankAccount"",
+            	 ""VPM4"".""U_bankCode"",
+            	 ""OHEM"".""govID"",
+            	 ""OHEM"".""homeStreet"",
+                 ""OHEM"".""homeCountr"",
+            	 ""ODSC"".""BankName"") AS ""VPM4"" ON (""OVPM"".""DocEntry"" = ""VPM4"".""DocNum""
+            	AND ""OVPM"".""U_opType"" IN ('paymentToEmployee', 'PE'))";
+            }
+            else
+            {
+                query = query + @" LEFT JOIN (SELECT
             	 ""VPM4"".""DocNum"",
             	 ""VPM4"".""U_employee"",
             	 ""VPM4"".""U_employeeN"",
@@ -6964,9 +7010,10 @@ namespace BDO_Localisation_AddOn
             	 ""OHEM"".""homeStreet"",
                  ""OHEM"".""homeCountr"",
             	 ""ODSC"".""BankName"") AS ""VPM4"" ON (""OVPM"".""DocEntry"" = ""VPM4"".""DocNum""
-            	AND ""OVPM"".""U_opType"" IN ('paymentToEmployee'))
+            	AND ""OVPM"".""U_opType"" IN ('paymentToEmployee', 'PE'))";
+            }
 
-            LEFT JOIN (SELECT ""CurrCode"",  ""DocCurrCod"" FROM ""OCRN"") AS ""TempOCRN"" ON ""OACT"".""ActCurr""  = ""TempOCRN"".""CurrCode""
+            query = query + @" LEFT JOIN (SELECT ""CurrCode"",  ""DocCurrCod"" FROM ""OCRN"") AS ""TempOCRN"" ON ""OACT"".""ActCurr""  = ""TempOCRN"".""CurrCode""
             LEFT JOIN (SELECT ""CurrCode"",  ""DocCurrCod"" FROM ""OCRN"") AS ""TempOCRN1"" ON ""OVPM"".""U_crdtActCur""  = ""TempOCRN1"".""CurrCode""
 
             WHERE
