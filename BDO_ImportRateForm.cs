@@ -10,7 +10,7 @@ namespace BDO_Localisation_AddOn
 {
     static partial class BDO_ImportRateForm
     {
-        public static void createForm(SAPbouiCOM.Form oExchangeFormRatesAndIndexes, out string errorText)
+        public static void createForm(  SAPbouiCOM.Form oExchangeFormRatesAndIndexes, out string errorText)
         {
             errorText = null;
 
@@ -41,7 +41,7 @@ namespace BDO_Localisation_AddOn
             SAPbouiCOM.Form oForm;
             bool newForm;
 
-            bool formExist = FormsB1.createForm(formProperties, out oForm, out newForm, out errorText);
+            bool formExist = FormsB1.createForm( formProperties, out oForm, out newForm, out errorText);
 
             if (errorText != null)
             {
@@ -216,7 +216,7 @@ namespace BDO_Localisation_AddOn
                     oColumn.Width = 40;
                     oColumn.Editable = false;
                     oColumn.Visible = false;
-
+                    
                     SAPbouiCOM.UserDataSource oUserDataSource;
                     SAPbouiCOM.DBDataSource oDBDataSource;
                     oUserDataSource = oForm.DataSources.UserDataSources.Add("YN", SAPbouiCOM.BoDataType.dt_SHORT_TEXT, 1);
@@ -229,7 +229,7 @@ namespace BDO_Localisation_AddOn
                     oColumn = oColumns.Item("DSCurrCode");
                     oColumn.DataBind.SetBound(true, "OCRN", "CurrCode");
 
-                    string MainCurncy = CurrencyB1.getMainCurrency(out errorText);
+                    string MainCurncy = CurrencyB1.getMainCurrency( out errorText);
 
                     oMatrix.Clear();
                     SAPbouiCOM.Conditions oConds = new SAPbouiCOM.Conditions();
@@ -249,7 +249,7 @@ namespace BDO_Localisation_AddOn
             GC.Collect();
         }
 
-        public static bool date_OnChanged(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oExchangeFormRatesAndIndexes, out string errorText)
+        public static bool date_OnChanged( SAPbouiCOM.Form oForm, SAPbouiCOM.Form oExchangeFormRatesAndIndexes, out string errorText)
         {
             errorText = null;
 
@@ -270,36 +270,40 @@ namespace BDO_Localisation_AddOn
 
                 if (startDate > endDate)
                 {
-                    Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("EndDate") + " " + BDOSResources.getTranslate("CannotBeEarlierThan") + " " + BDOSResources.getTranslate("StartDate"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                    Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("EndDate") + " "+BDOSResources.getTranslate("CannotBeEarlierThan")+" " + BDOSResources.getTranslate("StartDate"), SAPbouiCOM.BoMessageTime.bmt_Short, true);
                     return false;
                 }
 
                 if (startDate < startOfMonth || endDate > endOfMonth)
                 {
-                    Program.uiApp.MessageBox(BDOSResources.getTranslate("StartDate") + ": " + startDate + ", " + BDOSResources.getTranslate("EndDate") + ": " + endDate);
-                    Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("EnterStartEndDates") + " " + startOfMonth + " - " + endOfMonth, SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                    Program.uiApp.MessageBox(BDOSResources.getTranslate("StartDate")+": " + startDate + ", "+BDOSResources.getTranslate("EndDate")+": " + endDate);
+                    Program.uiApp.SetStatusBarMessage(BDOSResources.getTranslate("EnterStartEndDates")+" " + startOfMonth + " - " + endOfMonth, SAPbouiCOM.BoMessageTime.bmt_Short, true);
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 errorText = ex.Message;
                 return false;
             }
-            finally
+            finally 
             {
                 GC.Collect();
             }
             return true;
         }
 
-        public static void oK_OnClick(SAPbouiCOM.Form oForm, SAPbouiCOM.Form oExchangeFormRatesAndIndexes)
+        public static void oK_OnClick(  SAPbouiCOM.Form oForm, SAPbouiCOM.Form oExchangeFormRatesAndIndexes, out string errorText)
         {
-            if (date_OnChanged(oForm, oExchangeFormRatesAndIndexes, out var errorText) == false)
+            errorText = null;
+
+            if (BDO_ImportRateForm.date_OnChanged( oForm, oExchangeFormRatesAndIndexes, out errorText) == false)
+            {
                 return;
+            }
 
             string sXML = null;
-            SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)oForm.Items.Item("currMatrix").Specific;
+            SAPbouiCOM.Matrix oMatrix = ((SAPbouiCOM.Matrix)(oForm.Items.Item("currMatrix").Specific));
             sXML = oMatrix.SerializeAsXML(SAPbouiCOM.BoMatrixXmlSelect.mxs_All);
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(string.Format("<root>{0}</root>", sXML));
@@ -311,7 +315,9 @@ namespace BDO_Localisation_AddOn
                 string isImported = node.GetElementsByTagName("Column").Item(0).ChildNodes.Item(1).InnerText;
                 string currCode = node.GetElementsByTagName("Column").Item(2).ChildNodes.Item(1).InnerText;
                 if (isImported == "Y")
+                {
                     currencyList.Add(currCode);
+                }
             }
 
             string startDateStr = oForm.DataSources.UserDataSources.Item("startDate").ValueEx;
@@ -322,33 +328,38 @@ namespace BDO_Localisation_AddOn
 
             if (currencyList.Count != 0)
             {
+
+                DateTime startDate = FormsB1.DateFormats(startDateStr, "yyyyMMdd") == new DateTime() ? DateTime.Today : FormsB1.DateFormats(startDateStr, "yyyyMMdd");
+                DateTime endDate = FormsB1.DateFormats(endDateStr, "yyyyMMdd") == new DateTime() ? DateTime.Today : FormsB1.DateFormats(endDateStr, "yyyyMMdd");
+
+                Dictionary<string, Dictionary<int, double>> currencyListFromNBG = new Dictionary<string, Dictionary<int, double>>();
+
+                while (startDate <= endDate)
+                {
+                    startDateStr = startDate.ToString("yyyy-MM-dd");
+                    CurrencyB1.importCurrencyRate( startDateStr, out errorText, ref currencyListFromNBG, currencyList);
+                    startDate = startDate.AddDays(1);
+                }
+
+                if (errorText != null)
+                {
+                    return;
+                }
                 try
                 {
-                    //DateTime startDate = FormsB1.DateFormats(startDateStr, "yyyyMMdd") == new DateTime() ? DateTime.Today : FormsB1.DateFormats(startDateStr, "yyyyMMdd");
-                    //DateTime endDate = FormsB1.DateFormats(endDateStr, "yyyyMMdd") == new DateTime() ? DateTime.Today : FormsB1.DateFormats(endDateStr, "yyyyMMdd");
-
-                    Dictionary<string, Dictionary<int, double>> currencyListFromNBG = new Dictionary<string, Dictionary<int, double>>();
-
-                    //while (startDate <= endDate)
-                    //{
-                    startDateStr = DateTime.Today.ToString("yyyy-MM-dd"); //startDate.ToString("yyyy-MM-dd");
-                    CurrencyB1.importCurrencyRate(startDateStr, ref currencyListFromNBG, currencyList);
-                    //startDate = startDate.AddDays(1);
-                    //}
-
                     oExchangeFormRatesAndIndexes.Freeze(true);
 
-                    SAPbouiCOM.Matrix oMatrix1 = (SAPbouiCOM.Matrix)oExchangeFormRatesAndIndexes.Items.Item("4").Specific;
+                    SAPbouiCOM.Matrix oMatrix1 = ((SAPbouiCOM.Matrix)(oExchangeFormRatesAndIndexes.Items.Item("4").Specific));
                     SAPbouiCOM.EditText oEdit;
 
                     foreach (SAPbouiCOM.Column column in oMatrix1.Columns)
                     {
-                        if (column.Editable == true & column.Visible)
+                        if (column.Editable == true & column.Visible == true)
                         {
                             string title = column.Title;
-                            title = CommonFunctions.getCurrencyInternationalCode(title);
+                            title = CommonFunctions.getCurrencyInternationalCode( title);
 
-                            if (currencyListFromNBG.Keys.Contains(title))
+                            if (currencyListFromNBG.Keys.Contains(title) == true)
                             {
                                 foreach (KeyValuePair<int, double> dailyRate in currencyListFromNBG[title])
                                 {
@@ -361,15 +372,15 @@ namespace BDO_Localisation_AddOn
                             }
                         }
                     }
-                    Program.uiApp.SetStatusBarMessage($"{BDOSResources.getTranslate("CurrenciesHaveBeenImportedSuccessfully")}!", SAPbouiCOM.BoMessageTime.bmt_Short, false);
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
-                    Program.uiApp.SetStatusBarMessage($"{BDOSResources.getTranslate("CurrenciesHaveBeenImportedUnSuccessfully")}! {ex.Message}", SAPbouiCOM.BoMessageTime.bmt_Short, false);
+                    errorText = ex.Message;
                 }
-                finally
+                finally 
                 {
                     oExchangeFormRatesAndIndexes.Freeze(false);
+                    GC.Collect();
                 }
                 //sXML = oMatrix1.SerializeAsXML(SAPbouiCOM.BoMatrixXmlSelect.mxs_All);
                 //XmlDocument xmlDoc2 = new XmlDocument();
@@ -405,7 +416,7 @@ namespace BDO_Localisation_AddOn
             }
         }
 
-        public static void uiApp_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        public static void uiApp_ItemEvent(  string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
             string errorText = null;
@@ -422,7 +433,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.ItemUID == "startDate" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE & pVal.BeforeAction == false & pVal.InnerEvent == false)
                 {
-                    if (BDO_ImportRateForm.date_OnChanged(oForm, Program.oExchangeFormRatesAndIndexes, out errorText) == false)
+                    if (BDO_ImportRateForm.date_OnChanged( oForm, Program.oExchangeFormRatesAndIndexes, out errorText) == false)
                     {
                         SAPbouiCOM.EditText oStartDate = ((SAPbouiCOM.EditText)(oForm.Items.Item("startDate").Specific));
                         oStartDate.Value = startOfMonth.ToString("yyyyMMdd");
@@ -432,7 +443,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.ItemUID == "endDate" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_VALIDATE & pVal.BeforeAction == false & pVal.InnerEvent == false)
                 {
-                    if (date_OnChanged(oForm, Program.oExchangeFormRatesAndIndexes, out errorText) == false)
+                    if (BDO_ImportRateForm.date_OnChanged( oForm, Program.oExchangeFormRatesAndIndexes, out errorText) == false)
                     {
                         SAPbouiCOM.EditText oEndDate = ((SAPbouiCOM.EditText)(oForm.Items.Item("endDate").Specific));
                         oEndDate.Value = endOfMonth.ToString("yyyyMMdd");
@@ -442,7 +453,7 @@ namespace BDO_Localisation_AddOn
 
                 if (pVal.ItemUID == "3" & pVal.EventType == SAPbouiCOM.BoEventTypes.et_CLICK)
                 {
-                    oK_OnClick(oForm, Program.oExchangeFormRatesAndIndexes);
+                    BDO_ImportRateForm.oK_OnClick( oForm, Program.oExchangeFormRatesAndIndexes, out errorText);
                     Program.oExchangeFormRatesAndIndexes = null;
                 }
             }

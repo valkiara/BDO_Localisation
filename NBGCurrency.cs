@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
@@ -189,58 +187,6 @@ namespace BDO_Localisation_AddOn
 
             return currencyMap;
         }
-
-        public List<NBGCurrencyModel> GetCurrencyRateList()
-        {
-            try
-            {
-                List<NBGCurrencyModel> currencies = null;
-
-                using (WebClient wc = new WebClient())
-                {
-                    var jsonString = wc.DownloadString("https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/ka/json");
-                    var array = JArray.Parse(jsonString);
-                    foreach (var item in array.Children().Children())
-                    {
-                        if (item.Next == null)
-                        {
-                            var a = item.Children().Children().ToList();
-
-                            currencies = a.Select(p => new NBGCurrencyModel
-                            {
-                                Code = (string)p["code"],
-                                Quantity = (int)p["quantity"],
-                                RateFormated = (double)p["rateFormated"],
-                                DiffFormated = (double)p["diffFormated"],
-                                Rate = (double)p["rate"],
-                                Name = (string)p["name"],
-                                Diff = (double)p["diff"],
-                                Date = (DateTime)p["date"],
-                                ValidFromDate = (DateTime)p["validFromDate"]
-                            }).ToList();
-                        }
-                    }
-                }
-                return currencies;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-    }
-
-    class NBGCurrencyModel
-    {
-        public string Code { get; set; }
-        public int Quantity { get; set; }
-        public double RateFormated { get; set; }
-        public double DiffFormated { get; set; }
-        public double Rate { get; set; }
-        public string Name { get; set; }
-        public double Diff { get; set; }
-        public DateTime Date { get; set; }
-        public DateTime ValidFromDate { get; set; }
     }
 
     public enum Currency
