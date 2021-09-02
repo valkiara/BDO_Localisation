@@ -135,59 +135,51 @@ namespace BDO_Localisation_AddOn
         /// <summary>კურსების ჩამოტვირთვა ყველა ვალუტისთვის</summary>
         /// <param name="errorText"></param>
         /// <returns>აბრუნებს კურსებს ყველა ვალუტისთვის</returns>
-        public Dictionary<string, List<object>> GetCurrencyRateList(string dateStr)
+        public List<NBGCurrencyModelXml> GetCurrencyRateList(DateTime date)
         {
-            XmlDocument xDoc = null;
-            Dictionary<string, List<object>> currencyMap = null;
-
             try
             {
-                xDoc = new XmlDocument();
-                xDoc.Load("http://www.nbg.gov.ge/rss.php?date=" + dateStr);
-            }
+                XmlDocument xDoc = new XmlDocument();
+                //xDoc.Load("http://www.nbg.gov.ge/rss.php?date=" + date);
+                string dateStr = date.ToString("yyyy-MM-dd");
+                xDoc.Load("http://www.nbg.ge/rss.php?date=" + dateStr);
 
-            catch (Exception ex)
+                XmlNode currencyListNode = xDoc.SelectSingleNode("/rss/channel/item/description");
+
+                string valueXML = currencyListNode.InnerText;
+                string valueStr;
+
+                if (valueXML.Contains("gif" + '"'.ToString() + "/>"))
+                    valueStr = valueXML;
+                else
+                    valueStr = valueXML.Replace("gif" + '"'.ToString() + ">", "gif" + '"'.ToString() + "/>");
+
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(string.Format("<root>{0}</root>", valueStr));
+
+                List<NBGCurrencyModelXml> currencies = new List<NBGCurrencyModelXml>();
+
+                foreach (XmlElement node in xmlDoc.GetElementsByTagName("tr"))
+                {
+                    XmlNodeList childNodes = node.ChildNodes;
+                    string currency = childNodes[0].InnerText;
+                    string currencyDescription = childNodes[1].InnerText;
+                    int indexOf = currencyDescription.IndexOf(" ");
+                    string divider = currencyDescription.Substring(0, indexOf);
+                    double currencyRate = Convert.ToDouble(childNodes[2].InnerText, CultureInfo.InvariantCulture);
+                    currencyRate = currencyRate / Convert.ToDouble(divider, CultureInfo.InvariantCulture);
+                    string currencyGif = childNodes[3].ChildNodes[0].Attributes[0].Value;
+                    double currencyChange = Convert.ToDouble(childNodes[4].InnerText, CultureInfo.InvariantCulture) * (currencyGif.Contains("red") ? (-1) : 1);
+
+                    currencies.Add(new NBGCurrencyModelXml { Currency = currency, CurrencyDescription = currencyDescription, CurrencyRate = currencyRate, CurrencyGif = currencyGif, CurrencyChange = currencyChange });
+                }
+
+                return currencies;
+            }
+            catch
             {
-                throw new Exception(BDOSResources.getTranslate("ErrorWhileImportRateServiceCall") + " ERROR : " + ex.Message);
+                throw;
             }
-
-            string valueXML = null;
-
-            XmlNode currencyListNode = xDoc.SelectSingleNode("/rss/channel/item/description");
-
-            valueXML = currencyListNode.InnerText;
-            string valueStr = null;
-
-            if (valueXML.Contains("gif" + '"'.ToString() + "/>"))
-            {
-                valueStr = valueXML;
-            }
-            else
-            {
-                valueStr = valueXML.Replace("gif" + '"'.ToString() + ">", "gif" + '"'.ToString() + "/>");
-            }
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(string.Format("<root>{0}</root>", valueStr));
-
-            currencyMap = new Dictionary<string, List<object>>();
-
-            foreach (XmlElement node in xmlDoc.GetElementsByTagName("tr"))
-            {
-                XmlNodeList childNodes = node.ChildNodes;
-                string currency = childNodes[0].InnerText;
-                string currencyDescription = childNodes[1].InnerText;
-                int indexOf = currencyDescription.IndexOf(" ");
-                string divider = currencyDescription.Substring(0, indexOf);
-                double currencyRate = Convert.ToDouble(childNodes[2].InnerText, CultureInfo.InvariantCulture);
-                currencyRate = currencyRate / Convert.ToDouble(divider, CultureInfo.InvariantCulture);
-                string currencyGif = childNodes[3].ChildNodes[0].Attributes[0].Value;
-                double currencyChange = Convert.ToDouble(childNodes[4].InnerText, CultureInfo.InvariantCulture) * ((currencyGif.Contains("red")) ? (-1) : 1);
-
-                currencyMap.Add(currency, new List<object>() { currencyDescription, currencyRate, currencyGif, currencyChange });
-            }
-
-            return currencyMap;
         }
 
         public List<NBGCurrencyModel> GetCurrencyRateList()
@@ -241,6 +233,15 @@ namespace BDO_Localisation_AddOn
         public double Diff { get; set; }
         public DateTime Date { get; set; }
         public DateTime ValidFromDate { get; set; }
+    }
+
+    class NBGCurrencyModelXml
+    {
+        public string Currency { get; set; }
+        public string CurrencyDescription { get; set; }
+        public double CurrencyRate { get; set; }
+        public string CurrencyGif { get; set; }
+        public double CurrencyChange { get; set; }
     }
 
     public enum Currency
