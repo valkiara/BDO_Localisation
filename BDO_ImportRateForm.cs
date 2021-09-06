@@ -324,17 +324,17 @@ namespace BDO_Localisation_AddOn
             {
                 try
                 {
-                    //DateTime startDate = FormsB1.DateFormats(startDateStr, "yyyyMMdd") == new DateTime() ? DateTime.Today : FormsB1.DateFormats(startDateStr, "yyyyMMdd");
-                    //DateTime endDate = FormsB1.DateFormats(endDateStr, "yyyyMMdd") == new DateTime() ? DateTime.Today : FormsB1.DateFormats(endDateStr, "yyyyMMdd");
+                    DateTime startDate = FormsB1.DateFormats(startDateStr, "yyyyMMdd") == new DateTime() ? DateTime.Today : FormsB1.DateFormats(startDateStr, "yyyyMMdd");
+                    DateTime endDate = FormsB1.DateFormats(endDateStr, "yyyyMMdd") == new DateTime() ? DateTime.Today : FormsB1.DateFormats(endDateStr, "yyyyMMdd");
 
                     Dictionary<string, Dictionary<int, double>> currencyListFromNBG = new Dictionary<string, Dictionary<int, double>>();
 
-                    //while (startDate <= endDate)
-                    //{
-                    startDateStr = DateTime.Today.ToString("yyyy-MM-dd"); //startDate.ToString("yyyy-MM-dd");
-                    CurrencyB1.importCurrencyRate(startDateStr, ref currencyListFromNBG, currencyList);
-                    //startDate = startDate.AddDays(1);
-                    //}
+                    while (startDate <= endDate)
+                    {
+                        startDateStr = startDate.ToString("yyyy-MM-dd");
+                        CurrencyB1.importCurrencyRate(startDateStr, ref currencyListFromNBG, currencyList);
+                        startDate = startDate.AddDays(1);
+                    }
 
                     oExchangeFormRatesAndIndexes.Freeze(true);
 
