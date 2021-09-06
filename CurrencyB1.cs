@@ -77,21 +77,21 @@ namespace BDO_Localisation_AddOn
 
         public static void importCurrencyRate(string dateStr, List<string> currencyList = null)
         {
-            DateTime date = DateTime.Today; //DateTime.TryParse(dateStr, out date) == false ? DateTime.Today : date;
+            DateTime date = DateTime.TryParse(dateStr, out date) == false ? DateTime.Today : date;
 
             if (currencyList == null)
                 currencyList = getCurrencyList();
 
             NBGCurrency NBGCurrencyObj = new NBGCurrency();
-            List<NBGCurrencyModel> currencyMapFromNBG = NBGCurrencyObj.GetCurrencyRateList();
+            List<NBGCurrencyModelXml> currencyMapFromNBG = NBGCurrencyObj.GetCurrencyRateList(date);
 
             SAPbobsCOM.SBObob oSBOBob = Program.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
 
-            if (currencyMapFromNBG != null)
+            if (currencyMapFromNBG != null && currencyMapFromNBG.Count>0)
             {
                 for (int i = 0; i < currencyList.Count; i++)
                 {
-                    double rate = currencyMapFromNBG.Where(x => x.Code == CommonFunctions.getCurrencyInternationalCode(currencyList[i])).Select(x => x.Rate).FirstOrDefault();
+                    double rate = currencyMapFromNBG.Where(x => x.Currency == CommonFunctions.getCurrencyInternationalCode(currencyList[i])).Select(x => x.CurrencyRate).FirstOrDefault();
 
                     if (rate != 0.0)
                         oSBOBob.SetCurrencyRate(currencyList[i], date, rate, true);
@@ -103,24 +103,24 @@ namespace BDO_Localisation_AddOn
 
         public static void importCurrencyRate(string dateStr, ref Dictionary<string, Dictionary<int, double>> currencyListFromNBG, List<string> currencyList = null)
         {
-            DateTime date = DateTime.Today; //DateTime.TryParse(dateStr, out date) == false ? DateTime.Today : date;
+            DateTime date = DateTime.TryParse(dateStr, out date) == false ? DateTime.Today : date;
 
             if (currencyList == null)
                 currencyList = getCurrencyList();
 
             NBGCurrency NBGCurrencyObj = new NBGCurrency();
-            List<NBGCurrencyModel> currencyMapFromNBG = NBGCurrencyObj.GetCurrencyRateList();
+            List<NBGCurrencyModelXml> currencyMapFromNBG = NBGCurrencyObj.GetCurrencyRateList(date);
 
             Dictionary<int, double> dailyRate;
             string currencyInternationalCode;
 
-            if (currencyMapFromNBG != null)
+            if (currencyMapFromNBG != null && currencyMapFromNBG.Count > 0)
             {
                 for (int i = 0; i < currencyList.Count; i++)
                 {
                     currencyInternationalCode = CommonFunctions.getCurrencyInternationalCode(currencyList[i]);
 
-                    double rate = currencyMapFromNBG.Where(x => x.Code == currencyInternationalCode).Select(x => x.Rate).FirstOrDefault();
+                    double rate = currencyMapFromNBG.Where(x => x.Currency == currencyInternationalCode).Select(x => x.CurrencyRate).FirstOrDefault();
 
                     if (rate != 0.0)
                     {
