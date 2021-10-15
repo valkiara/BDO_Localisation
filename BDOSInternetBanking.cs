@@ -1651,12 +1651,12 @@ namespace BDO_Localisation_AddOn
                     senderAccountNumber = CommonFunctions.accountParse(senderAccountNumber);
                     beneficiaryAccountNumber = CommonFunctions.accountParse(beneficiaryAccountNumber);
 
-                    if (transactionType == "CCO") //swap
-                    {
-                        var tempAcc = senderAccountNumber;
-                        senderAccountNumber = beneficiaryAccountNumber;
-                        beneficiaryAccountNumber = tempAcc;
-                    }
+                    //if (transactionType == "CCO") //swap
+                    //{
+                    //    var tempAcc = senderAccountNumber;
+                    //    senderAccountNumber = beneficiaryAccountNumber;
+                    //    beneficiaryAccountNumber = tempAcc;
+                    //}
 
                     amount = oStatementDetail[rowIndex].EntryAmountDebit;
                     amountDc = 0;
